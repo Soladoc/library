@@ -28,6 +28,7 @@
 ## Offre
 
 - ajouter attribut calculé : en_ligne (définit par le nombre de ChangementEtat, comme expliqué dans le VPP)
+- Description détaillée: interdire null
 
 ## Classes sans attributs
 
