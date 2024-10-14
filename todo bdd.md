@@ -22,8 +22,12 @@
 
 ## TagRestauration
 
-- ajouter au dd
+- ajouter au dictionnaire de données
 - tag: ajouter domaine
+
+## Offre
+
+- ajouter attribut calculé : en_ligne (définit par le nombre de ChangementEtat, comme expliqué dans le VPP)
 
 ## Classes sans attributs
 
