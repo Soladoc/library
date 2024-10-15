@@ -29,12 +29,22 @@ footer > div > ul {
     display: flex;
     flex-direction: row;
     column-gap: 4em;
+    height: fit-content;
+    align-items: center;
+}
+
+footer > div > ul > li {
+    box-shadow: 0.2em 0.2em 0.2em 0.2em rgba(0, 0, 0, 0.2);
+}
+
+footer > div > ul > li > a {
+    display: block;
 }
 
 footer > div:first-child img {
     width: 100px;
     height: 100px;
-    border-radius: 41px;
+    border-radius: 3em;
 }
 
 footer > div:nth-child(2) {
