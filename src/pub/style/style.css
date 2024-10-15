@@ -1,3 +1,8 @@
+@font-face {
+    font-family: 'Tw Cen MT';
+    src: url('fonts/Tw Cen MT.ttf') format('truetype');
+}
+
 :root {
     --color-text: #0d0d0f;
     --color-background: #f3f3f8;
@@ -6,8 +11,10 @@
     --color-accent: #4051fd;
 }
 
-article {
+* {
     margin: 0;
+    padding: 0;
+    box-sizing: border-box;
 }
 
 footer > div:first-child {
@@ -15,6 +22,13 @@ footer > div:first-child {
     flex-direction: row;
     justify-content: space-between;
     background-color: var(--color-secondary);
+}
+
+footer > div > ul {
+    list-style: none;
+    display: flex;
+    flex-direction: row;
+    column-gap: 4em;
 }
 
 footer > div:first-child img {
@@ -25,18 +39,6 @@ footer > div:first-child img {
 
 footer > div:nth-child(2) {
     background-color: var(--color-primary);
-}
-
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
-
-
-@font-face {
-    font-family: 'Tw Cen MT';
-    src: url('fonts/Tw Cen MT.ttf') format('truetype');
 }
 
 body {
