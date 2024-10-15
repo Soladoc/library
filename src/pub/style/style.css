@@ -26,3 +26,76 @@ footer > div:first-child img {
 footer > div:nth-child(2) {
     background-color: var(--color-primary);
 }
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+
+@font-face {
+    font-family: 'Tw Cen MT';
+    src: url('fonts/Tw Cen MT.ttf') format('truetype');
+}
+
+body {
+    font-family: Arial, sans-serif;
+}
+
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #F3F3F8;
+    padding: 10px 20px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+    position: relative;
+}
+
+.logo {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.logo img {
+    height: 60px; /* ajuste la hauteur selon le besoin */
+}
+
+.auth-button {
+    display: flex;
+    align-items: center;
+    background-color: #4051FD;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 20px;
+    cursor: pointer;
+    margin-left: auto; /* Garde le bouton à droite */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+}
+
+.auth-button img {
+    height: 30px;
+    margin-right: 10px;
+}
+
+.auth-button span {
+    font-family: 'Tw Cen MT', sans-serif;
+    font-size: 16px;
+}
+
+@media (max-width: 768px) {
+    header {
+        padding: 10px;
+    }
+
+    .auth-button {
+        padding: 8px 15px;
+    }
+
+    .logo img {
+        height: 30px; /* Ajuster pour les plus petits écrans */
+    }
+}
+
