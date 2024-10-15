@@ -12,9 +12,7 @@
     echo "</pre>";
     if (isset($_POST)) { ?>
         <body>
-            <header>
-                <?php include("header.html") ?>
-            </header>
+            <?php include("header.html") ?>
             <section id="titre_creation_offre" >
                 <?php 
                 /*
