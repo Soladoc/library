@@ -27,6 +27,7 @@ git clone https://github.com/Matteo-K/PACT.git
 ```bash
 git checkout <nom-de-la-branche>
 ```
+
 #### Vérifier dans quelle branche on se situe
 
 ```bash

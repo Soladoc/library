@@ -10,8 +10,8 @@ CREATE TABLE pact._departement(
 CREATE TABLE pact._commune(
 	code_insee 	CHAR(5)	CONSTRAINT _commune_pk PRIMARY KEY,
 	nom 		VARCHAR(47)	NOT NULL,
-	numero CHAR(3) not null, 
-	constraint _commune_fk_numero foreign key (numero) references pact._departement(numero)
+	numero_dep CHAR(3) not null, 
+	constraint _commune_fk_numero_dep foreign key (numero_dep) references pact._departement(numero)
 );
 
 create table pact._adresse(
@@ -40,25 +40,31 @@ create table pact._image(
   taille int
 );
 
+create table pact._signalable(
+  id_signalable serial constraint _signalable_pk primary key
+);
+
 create table pact._offre(
   id_offre serial constraint _offre_pk primary key,
   titre varchar(255),
   resume varchar(1023),
   description_detaille text not null,
   url_site_web varchar(2047),
-  date_derniere_maj timestamp,
+  date_derniere_maj timestamp default now(),
   id_categorie integer,
   adresse integer,
   photoprincipale integer,
   abonnement varchar(63),
+  id_signalable integer,
   constraint _offre_fk_adresse foreign key (adresse) references pact._adresse(id_adresse),
   constraint _offre_fk_image foreign key (photoprincipale) references pact._image(id_image),
-  constraint _offre_fk_abonnement foreign key (abonnement) references pact._abonnement(libelle)
+  constraint _offre_fk_abonnement foreign key (abonnement) references pact._abonnement(libelle),
+  constraint _offre_fk_id_signalable foreign key (id_signalable) references pact._signalable(id_signalable)
 );
 
 create table pact._changement_etat(
   id_offre integer,
-  date_changement timestamp,
+  date_changement timestamp default now(),
   constraint _changement_etat_pk primary key (id_offre,date_changement),
   constraint _changement_etat_fk_id_offre foreign key (id_offre) references pact._offre(id_offre)
 );
@@ -138,12 +144,24 @@ create table pact._gallerie(
   constraint _gallerie_fk_id_image foreign key (id_image) references pact._image(id_image)
 );
 
+create table pact._identite(
+  id_identite serial constraint _identite_pk primary key
+);
+
+create table pact._visiteur(
+  ip int constraint visiteur_pk primary key,
+  id_identite integer,
+  constraint _visiteur_fk_id_identite foreign key (id_identite) references pact._identite(id_identite)
+);
+
 create table pact._compte(
   email varchar(319) constraint _compte_pk primary key,
   mdp_hash int,
   nom varchar(255),
   prenom varchar(255),
-  telephone char(10)
+  telephone char(10),
+  id_identite integer,
+  constraint _compte_fk_id_identite foreign key (id_identite) references pact._identite(id_identite)
 );
 
 create table pact._professionnel(
@@ -155,8 +173,14 @@ create table pact._professionnel(
 
 create table pact._prive(
   id_pro integer constraint _prive_pk primary key,
-  siren char(9),
+  siren char(9) unique,
   constraint _prive_fk_id_pro foreign key (id_pro) references pact._professionnel(id_professionnel)
+);
+
+create table pact._moyenpaiement(
+  id_moyenpaiement serial constraint _moyenpaiement_pk primary key,
+  siren char(9), 
+  constraint _moyenpaiement_fk_siren foreign key (siren) references pact._prive(siren)
 );
 
 create table pact._public(
@@ -166,10 +190,28 @@ create table pact._public(
 
 create table pact._membre(
   id_membre serial constraint _membre_pk primary key,
-  pseudo varchar(63),
+  pseudo varchar(63) unique,
   existe bool,
   email varchar(319),
   constraint _membre_fk_email foreign key (email) references pact._compte(email)
+);
+
+create table pact._signalement(
+  id_membre integer,
+  id_signalable integer,
+  raison varchar(2047),
+  constraint _signalement_pk primary key (id_membre,id_signalable),
+  constraint _signalement_fk_id_membre foreign key (id_membre) references pact._membre(id_membre),
+  constraint _signalement_fk_id_signalable foreign key (id_signalable) references pact._signalable(id_signalable)
+);
+
+create table pact._facture(
+  id_facture serial constraint _facture_pk primary key,
+  date_facture timestamp,
+  remise_ht decimal,
+  montant_deja_verse decimal,
+  id_offre integer,
+  constraint _facture_fk_id_offre foreign key (id_offre) references pact._offre(id_offre)
 );
 
 create table pact._prestation(
@@ -177,14 +219,9 @@ create table pact._prestation(
   description varchar(255),
   prix_unitaire_ht decimal,
   tva decimal,
-  qte int
-);
-
-create table pact._facture(
-  id_facture serial constraint _facture_pk primary key,
-  date_facture timestamp,
-  remise_ht decimal,
-  montant_deja_verse decimal
+  qte int,
+  id_facture integer,
+  constraint _prestation_fk_id_facture foreign key (id_facture) references pact._facture(id_facture)
 );
 
 create table pact._tarif(
@@ -202,4 +239,58 @@ create table pact._souscriptionoption(
   nom_souscription char(10),
   constraint _souscriptionoption_fk_id_offre foreign key (id_offre) references pact._offre(id_offre),
   constraint _souscriptionoption_fk_nom_souscription foreign key (nom_souscription) references pact._option(nom)
+);
+
+create table pact._avis(
+  auteur varchar(63),
+  offre integer,
+  commentaire varchar(2047),
+  note int check (note>=1 and note<=5),
+  moment_publication timestamp default now(),
+  date_experience date,
+  lu bool default false,
+  id_signalable integer,
+  blackliste bool default false,
+  constraint _avis_pk primary key (auteur,offre),
+  constraint _avis_fk_auteur foreign key (auteur) references pact._membre(pseudo),
+  constraint _avis_fk_offre foreign key (offre) references pact._offre(id_offre),
+  constraint _offre_fk_id_signalable foreign key (id_signalable) references pact._signalable(id_signalable)
+);
+
+create table pact._approuve(
+  id_identite integer,
+  auteur varchar(63),
+  offre integer,
+  constraint _approuve_fk_id_identite foreign key (id_identite) references pact._identite(id_identite),
+  constraint _approuve_fk_auteur_offre foreign key (auteur,offre) references pact._avis(auteur,offre)
+);
+
+create table pact._desapprouve(
+  id_identite integer,
+  auteur varchar(63),
+  offre integer,
+  constraint _desapprouve_fk_id_identite foreign key (id_identite) references pact._identite(id_identite),
+  constraint _desapprouve_fk_auteur_offre foreign key (auteur,offre) references pact._avis(auteur,offre)
+);
+
+create table pact._avis_resto(
+  auteur varchar(63),
+  offre integer,
+  note_cuisine int check (note_cuisine>=1 and note_cuisine<=5),
+  note_service int check (note_service>=1 and note_service<=5),
+  note_ambiance int check (note_ambiance>=1 and note_ambiance<=5),
+  note_qualite_prix int check (note_qualite_prix>=1 and note_qualite_prix<=5),
+  constraint _avis_resto_pk primary key (auteur,offre),
+  constraint _avis_resto_fk_auteur_offre foreign key (auteur,offre) references pact._avis(auteur,offre),
+  constraint _avis_resto_fk_offre_2 foreign key (offre) references pact._restaurant(id_restaurant)
+);
+
+create table pact._reponse(
+  id_reponse serial constraint _reponse_pk primary key,
+  contenu varchar(2047),
+  auteur varchar(63),
+  offre integer,
+  id_signalable integer,
+  constraint _reponse_fk_auteur_offre foreign key (auteur,offre) references pact._avis(auteur,offre),
+  constraint _reponse_fk_id_signalable foreign key (id_signalable) references pact._signalable(id_signalable)
 );

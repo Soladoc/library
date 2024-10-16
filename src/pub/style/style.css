@@ -17,8 +17,15 @@
     box-sizing: border-box;
 }
 
+button  {
+    font-family: 'Tw Cen MT', sans-serif;
+}
+
+
+
 p {
     margin: .5em;
+    font-family: 'Tw Cen MT', sans-serif;
 }
 
 p, figcaption {
@@ -141,9 +148,14 @@ header {
 
 h1, h2, h3 {
     color: #333;
+    font-family: 'Tw Cen MT', sans-serif;
+    font-size: 35px;
 }
 
-
+h1{
+    padding: 1em;
+    text-align: center; 
+ }
 
 /* Section de recherche */
 .search-section {
@@ -154,10 +166,11 @@ h1, h2, h3 {
 }
 
 .search-bar input {
-    width: 70%;
+    width: 50%;
     padding: 10px;
     border: 1px solid #ccc;
     border-radius: 5px;
+    box-shadow: 0 6px 8px rgba(0, 0, 0, 0.1);
 }
 
 .btn-search {
@@ -168,6 +181,7 @@ h1, h2, h3 {
     border-radius: 5px;
     margin-left: 10px;
     cursor: pointer;
+    box-shadow: 0 6px 8px rgba(0, 0, 0, 0.1);
 }
 .btn-search:hover {
     background-color: #357ABD;
@@ -185,7 +199,7 @@ h1, h2, h3 {
 .offer-card {
     background-color: white;
     border: 1px solid #ccc;
-    border-radius: 8px;
+    border-radius: 15px;
     width: 30%;
     margin-bottom: 20px;
     padding: 15px;
@@ -212,6 +226,7 @@ h1, h2, h3 {
 .offer-card p {
     margin: 5px 0;
     color: #555;
+    font-family: 'Tw Cen MT', sans-serif;
 }
 
 .offer-card .location,
@@ -226,6 +241,7 @@ h1, h2, h3 {
     color: red;
     font-weight: bold;
     font-size: 14px;
+    font-family: 'Tw Cen MT', sans-serif;
 }
 
 .btn-more-info {
@@ -235,7 +251,7 @@ h1, h2, h3 {
     background-color: #4A90E2;
     color: white;
     border: none;
-    border-radius: 5px;
+    border-radius: 8px;
     text-align: center;
     margin-top: 10px;
     cursor: pointer;
@@ -250,9 +266,10 @@ h1, h2, h3 {
 .highlight-offers, .new-offers, .recently-viewed {
     margin: 20px;
     padding: 20px;
+    border: 2px solid #0d0d0f;
     background-color: white;
-    border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 15px;
+    box-shadow: 0 8px 8px rgba(0, 0, 0, 0.3);
 }
 
 .highlight-offers h2, .new-offers h2, .recently-viewed h2 {
@@ -278,3 +295,134 @@ h1, h2, h3 {
 }
 
 
+
+
+
+/*---------acc pro------*/
+/* offres en ligne et offres hors ligne*/
+.offline-offers, .online-offers {
+    padding: 20px;
+    margin: 20px;
+    border: 2px solid #0d0d0f;
+    background-color: white;
+    border-radius: 15px;
+    box-shadow: 0 8px 8px rgba(0, 0, 0, 0.3);
+}
+
+
+
+.offer-carousel, .offer-list {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    padding: 20px;
+    background-color: white;
+}
+
+
+
+
+/* Create offer button */
+.create-offer {
+    text-align: center;
+    margin-top: 20px;
+    margin-bottom: 0.5em;
+}
+
+.btn-create {
+    background-color: #4A90E2;
+    color: white;
+    padding: 15px 25px;
+    font-size: 1.1em;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+.btn-create:hover {
+    background-color: #357ABD;
+}
+
+/* Page de connexion */
+.connexion {
+    padding: 20px;
+    display: block;
+    width: fit-content;
+    margin-left: auto;
+    margin-right: auto;
+    border: 2px solid #0d0d0f;
+    background-color: white;
+    border-radius: 15px;
+    box-shadow: 0 8px 8px rgba(0, 0, 0, 0.3);
+}
+
+.connexion h2 {
+    font-size: 24px;
+    margin-bottom: 20px;
+}
+
+@media (max-width: 1300px) {
+    .connexion {
+        margin-left: 20px;
+        margin-right: 20px;
+    }
+}
+
+.champ-connexion input {
+    width: 50%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+
+    box-shadow: 0 6px 8px rgba(0, 0, 0, 0.1);
+}
+
+@media (max-width: 576px) {
+    .champ-connexion {
+        width: 70%;
+    }
+}
+
+.btn-connexion {
+    background-color: #3366cc;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    margin-left: 10px;
+    cursor: pointer;
+    box-shadow: 0 6px 8px rgba(0, 0, 0, 0.1);
+}
+.btn-connexion:hover {
+    background-color: #357ABD;
+}
+
+.champ {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    margin-bottom: 15px;
+}
+
+.champ p {
+    margin: 0 0 5px 0;/
+}
+
+.champ input {
+    width: 100%;
+}
+
+.champ-connexion {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 300px;
+}
+
+.connexion {
+    margin-left : auto;
+    margin-right : auto;
+}
+main > h3{
+    padding-left: 0.6em;
+}

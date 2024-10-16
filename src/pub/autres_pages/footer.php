@@ -1,4 +1,4 @@
-<link rel="stylesheet" href="../style/style.css">
+
 <footer>
     <div>
         <div>
