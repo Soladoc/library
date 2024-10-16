@@ -7,10 +7,10 @@
     <title>Création d'une offre</title>
 </head>
 <body>
+    <?php include("header.php") ?>
     <section id="titre_creation_offre" >
 <?php 
     if (isset($_POST)) { ?>
-        <?php include("header.html") ?>
             <?php 
             /*
                 afin d'afficher le tire correctement j'effectu un switch sur le type d'offre
@@ -39,14 +39,17 @@
                 break;
                 } ?>
         <h1>Créer <?php echo $type_offre_affichable; ?></h1>
-    </section>
     <?php
     }else{ ?> <!-- post is unset-->
         <h1>Erreur de methode d'acces</h1>
         <p>Une erreur dans la requette de la page est survenu merci de réessayer plus tard</p>
-    </section>
     <?php } ?>
-        <h1>Créer <?php echo $type_offre_affichable; ?></h1>
+    </section>
+    <section id="image_creation_offre" style="background-color: gray;">
+        
+    </section>
+    <section name="tarif">
+
     </section>
 </body>
     <footer>
