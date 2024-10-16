@@ -17,8 +17,14 @@
     box-sizing: border-box;
 }
 
+button  {
+    font-family: 'Tw Cen MT', sans-serif;
+}
+
+
 p {
     margin: .5em;
+    font-family: 'Tw Cen MT', sans-serif;
 }
 
 p, figcaption {
@@ -141,9 +147,14 @@ header {
 
 h1, h2, h3 {
     color: #333;
+    font-family: 'Tw Cen MT', sans-serif;
+    font-size: 35px;
 }
 
-
+h1{
+    padding: 1em;
+    text-align: center; 
+ }
 
 /* Section de recherche */
 .search-section {
@@ -154,10 +165,11 @@ h1, h2, h3 {
 }
 
 .search-bar input {
-    width: 70%;
+    width: 50%;
     padding: 10px;
     border: 1px solid #ccc;
     border-radius: 5px;
+    box-shadow: 0 6px 8px rgba(0, 0, 0, 0.1);
 }
 
 .btn-search {
@@ -168,6 +180,7 @@ h1, h2, h3 {
     border-radius: 5px;
     margin-left: 10px;
     cursor: pointer;
+    box-shadow: 0 6px 8px rgba(0, 0, 0, 0.1);
 }
 .btn-search:hover {
     background-color: #357ABD;
@@ -185,7 +198,7 @@ h1, h2, h3 {
 .offer-card {
     background-color: white;
     border: 1px solid #ccc;
-    border-radius: 8px;
+    border-radius: 15px;
     width: 30%;
     margin-bottom: 20px;
     padding: 15px;
@@ -212,6 +225,7 @@ h1, h2, h3 {
 .offer-card p {
     margin: 5px 0;
     color: #555;
+    font-family: 'Tw Cen MT', sans-serif;
 }
 
 .offer-card .location,
@@ -226,6 +240,7 @@ h1, h2, h3 {
     color: red;
     font-weight: bold;
     font-size: 14px;
+    font-family: 'Tw Cen MT', sans-serif;
 }
 
 .btn-more-info {
@@ -235,7 +250,7 @@ h1, h2, h3 {
     background-color: #4A90E2;
     color: white;
     border: none;
-    border-radius: 5px;
+    border-radius: 8px;
     text-align: center;
     margin-top: 10px;
     cursor: pointer;
@@ -250,9 +265,10 @@ h1, h2, h3 {
 .highlight-offers, .new-offers, .recently-viewed {
     margin: 20px;
     padding: 20px;
+    border: 2px solid #0d0d0f;
     background-color: white;
-    border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 15px;
+    box-shadow: 0 8px 8px rgba(0, 0, 0, 0.3);
 }
 
 .highlight-offers h2, .new-offers h2, .recently-viewed h2 {
@@ -278,3 +294,48 @@ h1, h2, h3 {
 }
 
 
+
+
+
+/*---------acc pro------*/
+/* offres en ligne et offres crées*/
+.professional-offers, .online-offers {
+    padding: 20px;
+    background-color: white;
+    margin: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+
+
+.offer-carousel, .offer-list {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    padding: 20px;
+    background-color: white;
+}
+
+
+
+
+/* Create offer button */
+.create-offer {
+    text-align: center;
+    margin-top: 20px;
+}
+
+.btn-create {
+    background-color: #4A90E2;
+    color: white;
+    padding: 15px 25px;
+    font-size: 1.1em;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+.btn-create:hover {
+    background-color: #357ABD;
+}

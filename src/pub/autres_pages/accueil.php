@@ -23,6 +23,7 @@
         <!-- Section de recherche -->
         <section class="search-section">
             <h1>Accueil</h1>
+            <br>
             <div class="search-bar">
                 <input type="text" placeholder="Rechercher des activités, restaurants, spectacles...">
                 <button class="btn-search">Rechercher</button>
@@ -66,6 +67,7 @@
                     <p class="price">Prix : 15-45€</p>
                     <p class="rating">Note : 4.3 ★ (210 avis)</p>
                     <p class="professional">Proposé par : Parc de l'Aventure</p>
+                    <span class="closing-soon">Ferme bientôt à 19h30</span>
                     <button class="btn-more-info">En savoir plus</button>
                 </div>
            
@@ -119,9 +121,9 @@
         </section>
     </main>
 
-    <footer>
-        <p>&copy; 2024 Parc du Radôme. Tous droits réservés.</p>
-    </footer>
+    <?php
+        include("footer.php");
+    ?>
 </body>
 
 </html>
