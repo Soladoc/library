@@ -1,3 +1,14 @@
+<?php
+if (isset($_POST['motdepasse'])) {
+    print 'Votre pseudo :'.$_POST['pseudo'];
+    print 'Votre nom :'.$_POST['nom'];
+    print 'Votre prenom :'.$_POST['prenom'];
+    print 'Votre numero de telephone :'.$_POST['telephone'];
+    print 'Votre mail :'.$_POST['email'];
+    print 'Votre mot de passe :'.$_POST['motdepasse'];
+}
+else {
+?>
 <!DOCTYPE html>
 <html lang="en">
    <head>
@@ -36,3 +47,6 @@
       </form>
    </body>
 </html>
+<?php
+}
+?>
