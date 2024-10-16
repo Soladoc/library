@@ -56,7 +56,9 @@
                 <article>
                     <h3>Tarifs</h3>
                     <!-- ajouter la taille dans le css -->
-                    <button onclick="ajoutTarif();"><img src="../images/icon/icons8-ajouter-90.png" alt="Ajouter tarif"></button>
+                    <button type="button" onclick="ajoutTarif();">
+                        <img src="../images/icon/icons8-ajouter-90.png" alt="Ajouter tarif">
+                    </button>
                 </article>
                 <article id="tarif_ajoute">
                     
