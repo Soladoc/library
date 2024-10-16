@@ -1,3 +1,10 @@
+<?php
+$nb_offre = 6;
+$offre_en_ligne = 2;
+$offre_hors_ligne = $nb_offre - $offre_en_ligne;
+
+?>
+
 <!DOCTYPE html>
 <html lang="fr">
 
@@ -15,9 +22,41 @@
 
     <main>
         <h1>Accueil Professionnel</h1>
-        <section class="professional-offers">
-            <h2>Mes offres</h2>
-            <p>Vos dernières offres postées</p>
+
+        <h3><?php echo $nb_offre ?> offres</h3>
+        <section class="online-offers">
+            <h2>Mes offres en ligne</h2>
+            <p>Vos offres actuellement disponibles en ligne : <?php echo $offre_en_ligne;?></p>
+
+            <div class="offer-list">
+                <!-- Offre en ligne 1 -->
+                <div class="offer-card">
+                    <img src="telecom.jpg" alt="Découverte interactive de la cité des Télécoms">
+                    <h3>Découverte interactive de la cité des Télécoms</h3>
+                    <p class="location">Pleumeur-Bodou (22560)</p>
+                    <p class="category">Restauration</p>
+                    <p class="rating">Note : 4.7/5  ★ (256 avis)</p>
+                    <button class="btn-more-info">En savoir plus</button>
+                
+                </div>
+
+                <!-- Offre en ligne 2 -->
+                <div class="offer-card">
+                    <img src="vallee_saints.jpg" alt="Randonnée dans la vallée des Saints">
+                    <h3>Randonnée dans la vallée des Saints</h3>
+                    <p class="location">Boudes (63340))</p>
+                    <p class="category">Restauration</p>
+                    <p class="rating">Note : 4.2/5  ★ (54 avis)</p>
+                    <button class="btn-more-info">En savoir plus</button>
+                </div>
+
+               
+            </div>
+        </section>
+
+        <section class="offline-offers">
+            <h2>Mes offres hors ligne</h2>
+            <p>Vos offres hors-ligne : <?php echo $offre_hors_ligne?> </p>
 
             <div class="offer-carousel">
                 <!-- Offre 1 -->
@@ -60,36 +99,6 @@
                     <p class="rating">Note : 4.4/5 ★ (24 avis)</p>
                     <button class="btn-more-info">En savoir plus</button>
                 </div>
-            </div>
-        </section>
-
-        <section class="online-offers">
-            <h2>Mes offres en ligne</h2>
-            <p>Vos offres actuellement disponibles en ligne</p>
-
-            <div class="offer-list">
-                <!-- Offre en ligne 1 -->
-                <div class="offer-card">
-                    <img src="telecom.jpg" alt="Découverte interactive de la cité des Télécoms">
-                    <h3>Découverte interactive de la cité des Télécoms</h3>
-                    <p class="location">Pleumeur-Bodou (22560)</p>
-                    <p class="category">Restauration</p>
-                    <p class="rating">Note : 4.7/5  ★ (256 avis)</p>
-                    <button class="btn-more-info">En savoir plus</button>
-                
-                </div>
-
-                <!-- Offre en ligne 2 -->
-                <div class="offer-card">
-                    <img src="vallee_saints.jpg" alt="Randonnée dans la vallée des Saints">
-                    <h3>Randonnée dans la vallée des Saints</h3>
-                    <p class="location">Boudes (63340))</p>
-                    <p class="category">Restauration</p>
-                    <p class="rating">Note : 4.2/5  ★ (54 avis)</p>
-                    <button class="btn-more-info">En savoir plus</button>
-                </div>
-
-               
             </div>
         </section>
 

@@ -22,6 +22,7 @@ button  {
 }
 
 
+
 p {
     margin: .5em;
     font-family: 'Tw Cen MT', sans-serif;
@@ -298,8 +299,8 @@ h1{
 
 
 /*---------acc pro------*/
-/* offres en ligne et offres crées*/
-.professional-offers, .online-offers {
+/* offres en ligne et offres hors ligne*/
+.offline-offers, .online-offers {
     padding: 20px;
     margin: 20px;
     border: 2px solid #0d0d0f;
@@ -325,6 +326,7 @@ h1{
 .create-offer {
     text-align: center;
     margin-top: 20px;
+    margin-bottom: 0.5em;
 }
 
 .btn-create {
@@ -339,4 +341,8 @@ h1{
 
 .btn-create:hover {
     background-color: #357ABD;
+}
+
+main > h3{
+    padding-left: 0.6em;
 }
