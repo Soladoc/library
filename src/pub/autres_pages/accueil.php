@@ -1,29 +1,28 @@
+<?php ?>
+
+
+
+
 <!DOCTYPE html>
 <html lang="fr">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Accueil - Parc du Radôme</title>
-    <link rel="stylesheet" href="styleaccueil.css">
+    <title>Accueil</title>
+    <link rel="stylesheet" href="../style/style.css">
 </head>
 
 <body>
-    <header>
-        <div class="header-container">
-            <div class="logo">
-                <img src="logo.png" alt="Logo Parc du Radôme">
-            </div>
-            <div class="login">
-                <button class="btn-login">Se connecter</button>
-            </div>
-        </div>
-    </header>
+
+    <?php
+        include("header.php");
+    ?>
 
     <main>
         <!-- Section de recherche -->
         <section class="search-section">
-            <h1>Parc du Radôme</h1>
+            <h1>Accueil</h1>
             <div class="search-bar">
                 <input type="text" placeholder="Rechercher des activités, restaurants, spectacles...">
                 <button class="btn-search">Rechercher</button>
