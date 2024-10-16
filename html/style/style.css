@@ -343,6 +343,86 @@ h1{
     background-color: #357ABD;
 }
 
+/* Page de connexion */
+.connexion {
+    padding: 20px;
+    display: block;
+    width: fit-content;
+    margin-left: auto;
+    margin-right: auto;
+    border: 2px solid #0d0d0f;
+    background-color: white;
+    border-radius: 15px;
+    box-shadow: 0 8px 8px rgba(0, 0, 0, 0.3);
+}
+
+.connexion h2 {
+    font-size: 24px;
+    margin-bottom: 20px;
+}
+
+@media (max-width: 1300px) {
+    .connexion {
+        margin-left: 20px;
+        margin-right: 20px;
+    }
+}
+
+.champ-connexion input {
+    width: 50%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+
+    box-shadow: 0 6px 8px rgba(0, 0, 0, 0.1);
+}
+
+@media (max-width: 576px) {
+    .champ-connexion {
+        width: 70%;
+    }
+}
+
+.btn-connexion {
+    background-color: #3366cc;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    margin-left: 10px;
+    cursor: pointer;
+    box-shadow: 0 6px 8px rgba(0, 0, 0, 0.1);
+}
+.btn-connexion:hover {
+    background-color: #357ABD;
+}
+
+.champ {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    margin-bottom: 15px;
+}
+
+.champ p {
+    margin: 0 0 5px 0;/
+}
+
+.champ input {
+    width: 100%;
+}
+
+.champ-connexion {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 300px;
+}
+
+.connexion {
+    margin-left : auto;
+    margin-right : auto;
+}
 main > h3{
     padding-left: 0.6em;
 }
