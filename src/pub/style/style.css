@@ -151,7 +151,10 @@ h1, h2, h3 {
     font-size: 35px;
 }
 
-
+h1{
+    padding: 1em;
+    text-align: center; 
+ }
 
 /* Section de recherche */
 .search-section {
@@ -291,3 +294,48 @@ h1, h2, h3 {
 }
 
 
+
+
+
+/*---------acc pro------*/
+/* offres en ligne et offres crées*/
+.professional-offers, .online-offers {
+    padding: 20px;
+    background-color: white;
+    margin: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+
+
+.offer-carousel, .offer-list {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    padding: 20px;
+    background-color: white;
+}
+
+
+
+
+/* Create offer button */
+.create-offer {
+    text-align: center;
+    margin-top: 20px;
+}
+
+.btn-create {
+    background-color: #4A90E2;
+    color: white;
+    padding: 15px 25px;
+    font-size: 1.1em;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+.btn-create:hover {
+    background-color: #357ABD;
+}

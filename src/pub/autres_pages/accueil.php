@@ -121,9 +121,9 @@
         </section>
     </main>
 
-    <footer>
-        <p>&copy; 2024 Parc du Radôme. Tous droits réservés.</p>
-    </footer>
+    <?php
+        include("footer.php");
+    ?>
 </body>
 
 </html>
