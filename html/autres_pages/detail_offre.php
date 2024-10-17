@@ -7,25 +7,12 @@
     <title>Détail de l'offre - Parc du Radôme</title>
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
     <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
-        <link rel="stylesheet" href="../style/style.css.css">
+    <link rel="stylesheet" href="../style/style.css">
 </head>
 
 <body>
     <!-- Header -->
-    <header>
-        <div class="header-container">
-            <div class="logo">
-                <img src="logo.png" alt="Logo Parc du Radôme">
-            </div>
-            <div class="search-bar">
-                <input type="text" placeholder="Rechercher">
-            </div>
-            <div class="account-section">
-                <a href="#" class="btn-account">Créer un compte</a>
-                <a href="#" class="btn-login">Accueil</a>
-            </div>
-        </div>
-    </header>
+    <?php include("header.php");?>
 
     <!-- Offer Details -->
     <main>
@@ -106,6 +93,8 @@
             </div>
         </section>
     </main>
+    <!-- Footer -->
+     <?php include("footer.php");?>
 
     <script>
         // OpenStreetMap Integration
