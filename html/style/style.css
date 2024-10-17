@@ -438,3 +438,145 @@ h1{
 .btn-connexion:hover {
     background-color: #357ABD;
 }
+/*----------offre détaillée*/
+
+/* Bloc 1 : Informations de l'offre */
+.offer-details {
+    display: flex;
+    justify-content: space-around;
+    background-color: white;
+    padding: 20px;
+    margin: 20px 0;
+}
+
+.offer-main-photo {
+    width: 50%;
+}
+
+.offer-photo-large {
+    width: 100%;
+    border-radius: 8px;
+}
+
+.offer-photo-gallery {
+    display: flex;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+.offer-photo-small {
+    width: 48%;
+    border-radius: 8px;
+}
+
+.offer-info {
+    width: 40%;
+}
+
+.description {
+    font-size: 1.2em;
+    margin-bottom: 10px;
+}
+
+.offer-status {
+    background-color: #f9f9f9;
+    padding: 15px;
+    border-radius: 8px;
+}
+
+.price, .status, .rating, .hours {
+    margin-bottom: 8px;
+}
+
+.open {
+    color: green;
+}
+
+.btn-reserve {
+    background-color: #4A90E2;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+/* Bloc 2 : Carte et contact */
+.offer-location {
+    background-color: white;
+    padding: 20px;
+    margin-bottom: 20px;
+}
+
+.map {
+    height: 300px;
+    width: 100%;
+    border-radius: 8px;
+    margin-bottom: 15px;
+}
+
+.contact-info {
+    text-align: center;
+}
+
+.contact-info p {
+    margin: 5px 0;
+}
+
+/* Bloc 3 : Avis */
+.offer-reviews {
+    background-color: white;
+    padding: 20px;
+    margin-bottom: 20px;
+}
+
+.review-form {
+    margin-bottom: 20px;
+}
+
+textarea {
+    width: 100%;
+    height: 80px;
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+}
+
+.review-rating {
+    margin-bottom: 10px;
+}
+
+.btn-publish {
+    background-color: #4A90E2;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.review-summary {
+    margin-bottom: 20px;
+}
+
+.rating-distribution {
+    margin-top: 10px;
+}
+
+.review-list {
+    background-color: #f9f9f9;
+    padding: 15px;
+    border-radius: 8px;
+}
+
+.review {
+    margin-bottom: 15px;
+}
+
+.review p {
+    margin: 0;
+}
+
+
+/*------------fin offre detaillé------------*/ 
