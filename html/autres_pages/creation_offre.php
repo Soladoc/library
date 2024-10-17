@@ -52,12 +52,12 @@
         </section>
         <form action="" method="post">
 
-            <section name="tarif">
+            <section id="tarif">
                 <article>
                     <h3>Tarifs</h3>
                     <!-- ajouter la taille dans le css -->
                     <button type="button" onclick="ajoutTarif();">
-                        <img src="../images/icon/icons8-ajouter-90.png" alt="Ajouter tarif">
+                        <img src="../icon/icons8-ajouter-90.png" alt="Ajouter tarif">
                     </button>
                 </article>
                 <article id="tarif_ajoute">
@@ -66,6 +66,9 @@
                 <section>
 
                 </section>
+            </section>
+            <section id="horraires">
+                
             </section>
             <button type="submit">Créer <?php echo $type_offre_affichable; ?></button>
         </form>
