@@ -1,3 +1,7 @@
+<?php
+?>
+
+
 <!DOCTYPE html>
 <html lang="fr">
 
@@ -18,10 +22,10 @@
     <main>
         <section class="offer-details">
             <div class="offer-main-photo">
-                <img src="offer1-photo1.jpg" alt="Main Photo" class="offer-photo-large">
+                <img src="../images/offre/Radôme1.jpg" alt="Main Photo" class="offer-photo-large">
                 <div class="offer-photo-gallery">
-                    <img src="offer1-photo2.jpg" alt="Photo 2" class="offer-photo-small">
-                    <img src="offer1-photo3.jpg" alt="Photo 3" class="offer-photo-small">
+                    <img src="../images/offre/Radôme2.jpg" alt="Photo 2" class="offer-photo-small">
+                    <img src="../images/offre/Radôme3.jpg" alt="Photo 3" class="offer-photo-small">
                 </div>
             </div>
 
@@ -107,6 +111,7 @@
         L.marker([48.779, -3.518]).addTo(map)
             .bindPopup('Découverte interactive de la cité des Télécoms')
             .openPopup();
+            
         L.marker([45.779, -3.518]).addTo(map)
             .bindPopup('hihihihihihihihihui')
             L.marker([45.779, -4.518]).addTo(map)
