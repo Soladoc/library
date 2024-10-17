@@ -38,8 +38,9 @@
                 <button class="btn-connexion">Se connecter</button>
                 <br><br>
                 <p>Pas de compte ?</p>
-                <br>
-                <button class="btn-connexion">Créer un compte</button>
+                <button class="btn-creer">Créer un compte personnel</button>
+                <p>OU</p>
+                <button class="btn-creer">Créer un compte professionnel</button>
                 <br>
             </div>
         </section>
