@@ -4,9 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Choix de l'offre</title>
+    <link rel="stylesheet" href="../style/style.css">
 </head>
 <body>
-    <?php include("header.html") ;?>
+    <?php include("header.php") ;?>
     <form action="creation_offre.php" method="post">
         <button type="submit" name="type_offre" value="spectacle">Spectacle</button>
         <button type="submit" name="type_offre" value="parc_attraction">Parc d'atraction</button>
