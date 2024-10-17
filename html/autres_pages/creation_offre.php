@@ -63,21 +63,100 @@
                 <article id="tarif_ajoute">
                     
                 </article>
-                <section>
-
-                </section>
             </section>
             <section id="horraires">
-                
+                <article>
+                    <h2>horraires</h2>
+                </article>
+                <div>
+                    <article id="lundi">
+                        <div>
+                            <h3>lundi</h3>
+                            <button type="button" onclick="ajoutHorraire('lundi')">
+                                <img src="../icon/icons8-ajouter-90.png" alt="Ajouter Horraire">
+                            </button>
+                        </div>
+                        <!-- ici se trouverons les horraires ajoutés en javaScript -->
+                    </article>
+                    <article id="mardi">
+                        <div>
+                            <h3>mardi</h3>
+                            <button type="button" onclick="ajoutHorraire('mardi')">
+                                <img src="../icon/icons8-ajouter-90.png" alt="Ajouter Horraire">
+                            </button>
+                        </div>
+
+                    </article>
+                    <article id="mercredi">
+                        <div>
+                            <h3>mercredi</h3>
+                            <button type="button" onclick="ajoutHorraire('mercredi')">
+                                <img src="../icon/icons8-ajouter-90.png" alt="Ajouter Horraire">
+                            </button>
+                        </div>
+
+                    </article>
+                    <article id="jeudi">
+                        <div>
+                            <h3>Jeudi</h3>
+                        <button type="button" onclick="ajoutHorraire('jeudi')">
+                                <img src="../icon/icons8-ajouter-90.png" alt="Ajouter Horraire">
+                            </button>
+
+                        </div>
+
+                    </article>
+                    <article id="vendredi">
+                        <div>
+                            <h3>Vendredi</h3>
+                            <button type="button" onclick="ajoutHorraire('vendredi')">
+                                <img src="../icon/icons8-ajouter-90.png" alt="Ajouter Horraire">
+                            </button>
+
+                        </div>
+
+                    </article>
+                    <article id="samedi">
+                        <div>
+                            <h3>Samedi</h3>
+                            <button type="button" onclick="ajoutHorraire('samedi')">
+                                <img src="../icon/icons8-ajouter-90.png" alt="Ajouter Horraire">
+                            </button>
+                        </div>
+
+                    </article>
+                    <article id="dimanche">
+                        <div>
+                            <h3>Dimanche</h3>
+                            <button type="button" onclick="ajoutHorraire('dimanche')">
+                                <img src="../icon/icons8-ajouter-90.png" alt="Ajouter Horraire">
+                            </button>
+                        </div>
+
+                    </article>
+                </div>
             </section>
-            <button type="submit">Créer <?php echo $type_offre_affichable; ?></button>
+            <section id="info_localisation">
+                <h3>Info/Localisation</h3>
+
+                <label for="adresse">Adresse*</label>
+                <input type="text" name="adresse" id="adresse" required>
+
+                <label for="tel">Tel</label>
+                <input type="text" name="tel" id="tel">
+
+                <label for="site">Site Web</label>
+                <input type="text" name="site" id="site">
+
+
+            </section>
+            <section id="description">
+                <label for="description">Description</label>
+                <textarea name="description" id="description"></textarea>
+            </section>
+            <button type="submit">Valider</button>
         </form>
     </main>
-    <footer>
-        <?php
-            //include("footer.html"); TODO
-            ?>
-    </footer>
+    <?php include("footer.php"); ?>
 </body>
-
 </html>
