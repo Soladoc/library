@@ -5,7 +5,9 @@ if (isset($_POST['motdepasse'])) {
     print 'Votre prenom :'.$_POST['prenom'];
     print 'Votre numero de telephone :'.$_POST['telephone'];
     print 'Votre mail :'.$_POST['email'];
-    print 'Votre mot de passe :'.$_POST['motdepasse'];
+    print 'Votre mot de passe :'.$_POST['motdepasse'];à
+    lmù
+
 }
 else {
 ?>
