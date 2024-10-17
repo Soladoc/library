@@ -1,5 +1,5 @@
 <?php
-const DB_SERVER = 'dbadmin-413.ventsdouest.dev';
+const DB_SERVER = '413.ventsdouest.dev';
 const DB_DRIVER = 'pgsql';
 const DB_NAME = 'postgres';
 const DB_USER   = 'sae';
