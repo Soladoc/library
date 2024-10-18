@@ -12,42 +12,43 @@
     <title>Connexion</title>
     <link rel="stylesheet" href="../style/style.css">
 </head>
-        
+
 <body>
 
     <?php
         include("header.php");
+        require '../../db.php';
+        $pdo = db_connect();
     ?>
 
     <main>
-        <?php require '../../db.php';
-        $pdo = db_connect();
-        ?>
         <!-- Section des offres à la une -->
         <h1>Connexion</h1>
-        <section class="connexion">
+        <section class="connexion" action="../connexion/login.php" method="post" enctype="multipart/form-data">
             <div class="champ-connexion">
                 <br>
+                <form action="crea.php" method="post" enctype="multipart/form-data">
                 <div class="champ">
-                    <p>E-mail *</p>
-                    <input type="text" placeholder="exemple@mail.fr">
+                    <label for="login">E-mail *</label>
+                    <input type="text" placeholder="exemple@mail.fr" id="login" required>
                 </div>
                 <br>
                 <div class="champ">
-                    <p>Mot de passe *</p>
-                    <input type="text" placeholder="**********">
+                    <label for="mdp">Mot de passe *</label>
+                    <input type="text" placeholder="**********" id="mdp" required>
                 </div>
                 <br>
+                </form>
                 <!-- php -->
                 <a href="">
                     <button class="btn-connexion">Se connecter</button>
                 </a>
                 <br><br>
-                <p>Pas de compte ?</p>
+                <label>Pas de compte ?</label>
                 <a href="creation_membre.php">
                     <button class="btn-creer">Créer un compte personnel</button>
                 </a>
-                <p>OU</p>
+                <label>OU</label>
                 <a href="creation_comptePro.php">
                     <button class="btn-creer">Créer un compte professionnel</button>
                 </a>
