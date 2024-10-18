@@ -12,7 +12,7 @@
     <title>Connexion</title>
     <link rel="stylesheet" href="../style/style.css">
 </head>
-
+        
 <body>
 
     <?php
@@ -20,6 +20,9 @@
     ?>
 
     <main>
+        <?php require '../../db.php';
+        $pdo = db_connect();
+        ?>
         <!-- Section des offres à la une -->
         <h1>Connexion</h1>
         <section class="connexion">
