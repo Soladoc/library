@@ -22,7 +22,17 @@ if (isset($_POST['mdp'])) {
     // insert in compte
 
     if ($estprive) {
-        // insert in pro_prive
+        $sql = "INSERT INTO comptes (email, password) VALUES (:email, :password)";
+        $stmt = $pdo->prepare($sql);
+
+        // 3. Exécuter la requête avec les valeurs
+        $stmt->execute([
+            'email' => $_POST['email'],       // Email du formulaire
+            'password' => password_hash($_POST['password'], PASSWORD_BCRYPT)  // Mot de passe sécurisé avec hashage
+        ]);
+
+echo "Données insérées avec succès!";
+        
     } else {
         // insert in pro_public
     }
