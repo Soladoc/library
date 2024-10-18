@@ -26,7 +26,9 @@
             <br>
             <div class="search-bar">
                 <input type="text" placeholder="Rechercher des activités, restaurants, spectacles...">
-                <button class="btn-search">Rechercher</button>
+                <a href="">
+                    <button class="btn-search">Rechercher</button>
+                </a>
             </div>
         </section>
 
@@ -44,7 +46,9 @@
                     <p class="rating">Note : 4.5 ★ (120 avis)</p>
                     <p class="professional">Proposé par : Parc du Radôme</p>
                     <span class="closing-soon">Ferme bientôt à 18h30</span>
-                    <button class="btn-more-info">En savoir plus</button>
+                    <a href="">
+                        <button class="btn-more-info">En savoir plus</button>
+                    </a>
                 </div>
                 <!-- Offre 2 -->
                 <div class="offer-card">
@@ -56,7 +60,9 @@
                     <p class="rating">Note : 4.8 ★ (80 avis)</p>
                     <p class="professional">Proposé par : Lannion Tourisme</p>
                     <span class="closing-soon">Ferme bientôt à 19h00</span>
-                    <button class="btn-more-info">En savoir plus</button>
+                    <a href="">
+                        <button class="btn-more-info">En savoir plus</button>
+                    </a>
                 </div>
                 <!-- Offre 3 -->
                 <div class="offer-card">
@@ -68,7 +74,9 @@
                     <p class="rating">Note : 4.3 ★ (210 avis)</p>
                     <p class="professional">Proposé par : Parc de l'Aventure</p>
                     <span class="closing-soon">Ferme bientôt à 19h30</span>
-                    <button class="btn-more-info">En savoir plus</button>
+                    <a href="">
+                        <button class="btn-more-info">En savoir plus</button>
+                    </a>
                 </div>
            
                 <!-- Offre 4 -->
@@ -80,7 +88,9 @@
                     <p class="price">Prix : 12-30€</p>
                     <p class="rating">Note : 4.6 ★ (90 avis)</p>
                     <p class="professional">Proposé par : Brest Maritime</p>
-                    <button class="btn-more-info">En savoir plus</button>
+                    <a href="">
+                        <button class="btn-more-info">En savoir plus</button>
+                    </a>
                 </div>
                 <!-- Offre 5 -->
                 <div class="offer-card">
