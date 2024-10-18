@@ -103,9 +103,11 @@ $offre_hors_ligne = $nb_offre - $offre_en_ligne;
         </section>
 
         <!-- Bouton pour créer une nouvelle offre -->
-        <div class="create-offer">
-            <button class="btn-create">Créer une offre</button>
-        </div>
+        <a href="choix_categorie_creation_offre.php">
+            <div class="create-offer">
+                <button class="btn-create">Créer une offre</button>
+            </div>
+        </a>
     </main>
     <?php
         include("footer.php");
