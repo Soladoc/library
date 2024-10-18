@@ -35,12 +35,19 @@
                     <input type="text" placeholder="**********">
                 </div>
                 <br>
-                <button class="btn-connexion">Se connecter</button>
+                <!-- php -->
+                <a href="">
+                    <button class="btn-connexion">Se connecter</button>
+                </a>
                 <br><br>
                 <p>Pas de compte ?</p>
-                <button class="btn-creer">Créer un compte personnel</button>
+                <a href="creation_membre.php">
+                    <button class="btn-creer">Créer un compte personnel</button>
+                </a>
                 <p>OU</p>
-                <button class="btn-creer">Créer un compte professionnel</button>
+                <a href="creation_comptePro.php">
+                    <button class="btn-creer">Créer un compte professionnel</button>
+                </a>
                 <br>
             </div>
         </section>

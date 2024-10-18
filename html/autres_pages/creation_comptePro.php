@@ -89,8 +89,9 @@
                 
                 <br /><br>
                 <p>Se connecter ?</p>
-                <button class="btn-creer">Se connecter</button>
-                
+                <a href="connexion.php">
+                    <button class="btn-creer">Se connecter</button>
+                </a>
                 <br>
             </div>
         </section>
