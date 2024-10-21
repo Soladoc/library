@@ -4,8 +4,8 @@ $pdo=db_connect();
 $stmt = $pdo->prepare('SELECT COUNT(*) FROM offres WHERE id_professionnel = :id_professionnnel');
 $stmt->execute(['id_professionnel' => ]);
 $nb_offre = $stmt->fetchColumn();
-$stmt = $pdo->prepare('SELECT COUNT(*) FROM offres WHERE id_professionnel = :id_professionnnel');
-$stmt->execute(['id_professionnel' => );
+$stmt = $pdo->prepare('COUNT(SELECT * FROM offres WHERE id_professionnel = :id_professionnnel) ');
+$stmt->execute(['id_professionnel' => ]);
 $offre_en_ligne = $stmt->fetchColumn();
 $offre_hors_ligne = $nb_offre - $offre_en_ligne;
 ?>
