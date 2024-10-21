@@ -4,15 +4,15 @@ require_once "../../db.php";
 if (isset($_POST['table'])) {
 
     print 'Votre nom :'.$_POST['table'];
-
+    $table = $_POST['table'];
 
 
     $pdo=db_connect();
-    $stmt = $pdo->prepare(query: 'SELECT COUNT(*) FROM pact.:tabl ');
-    $stmt->execute([ 'tabl' => $_POST['table']]);
-    
-       exit;
-    
+    $stmt = $pdo->prepare(query: 'SELECT COUNT(*) FROM pact.' . $table );
+    $stmt->execute();
+
+    $count = $stmt->fetchColumn(); // Récupérer le nombre de lignes
+    echo "Nombre de lignes dans la table $table : $count";
 }
 else {
 ?>
