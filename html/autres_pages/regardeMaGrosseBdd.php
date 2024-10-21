@@ -45,7 +45,7 @@ else {
                         <input type="text" placeholder="" id="table" name="table" required>
                     </div>
                    
-                    <button type="submit" class="btn-connexion" >Créer un compte professionnel</button>
+                    <button type="submit" class="btn-connexion" >regarde</button>
                 </form>
             <br /><br>
             </a>
