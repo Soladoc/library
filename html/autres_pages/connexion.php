@@ -24,10 +24,10 @@ require_once "../../db.php";
     <main>
         <!-- Section des offres à la une -->
         <h1>Connexion</h1>
-        <section class="connexion" action="../connexion/login.php" method="post" enctype="multipart/form-data">
+        <section class="connexion">
             <div class="champ-connexion">
                 <br>
-                <form action="crea.php" method="post" enctype="multipart/form-data">
+                <form action="../connexion/login.ph" method="POST">
                 <div class="champ">
                     <label for="login">E-mail *</label>
                     <input type="text" placeholder="exemple@mail.fr" id="login" required>
