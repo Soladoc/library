@@ -44,12 +44,6 @@ if (isset($_POST['table'])) {
     } catch (Exception $e) {
         echo "Erreur : " . $e->getMessage();
     }
-    ?>
-    $stmt = $pdo->prepare(query: 'SELECT * FROM pact.' . $table );
-    $stmt->execute();
-
-    $count = $stmt->fetchColumn(); // Récupérer le nombre de lignes
-    echo "Nombre de lignes dans la table $table : $count";
 }
 else {
 ?>
