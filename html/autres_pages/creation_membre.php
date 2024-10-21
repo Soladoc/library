@@ -33,40 +33,47 @@ else {
    <head>
       <meta charset="UTF-8" />
       <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      <link rel="stylesheet" href="../style/style.css">
       <title>Création de compte</title>
    </head>
    <body>
       <?php
         include("header.php");
       ?>
+      <br><br><br><br>
       <main>
-         <form action="creation_membre.php" method="post" enctype="multipart/form-data">
-            <label for="pseudo">Pseudo :</label>
-            <input type="text" id="pseudo" name="pseudo" required />
-            <br />
+         <section class="connexion">
+            <div class="champ-connexion">
+               <form action="creation_membre.php" method="post" enctype="multipart/form-data">
+                  <label for="pseudo">Pseudo :</label>
+                  <input type="text" id="pseudo" name="pseudo" required />
+                  <br />
 
-            <label for="nom">Nom :</label>
-            <input type="text" id="nom" name="nom" required />
-            <br />
+                  <label for="nom">Nom :</label>
+                  <input type="text" id="nom" name="nom" required />
+                  <br />
 
-            <label for="prenom">Prenom :</label>
-            <input type="text" id="prenom" name="prenom" required />
-            <br />
+                  <label for="prenom">Prenom :</label>
+                  <input type="text" id="prenom" name="prenom" required />
+                  <br />
 
-            <label for="telephone">Téléphone :</label>
-            <input type="text" id="telephone" name="telephone" required />
-            <br />
+                  <label for="telephone">Téléphone :</label>
+                  <input type="text" id="telephone" name="telephone" required />
+                  <br />
 
-            <label for="email">Email :</label>
-            <input type="mail" id="email" name="email" required />
-            <br />
+                  <label for="email">Email :</label>
+                  <input type="mail" id="email" name="email" required />
+                  <br />
 
-            <label for="motdepasse">Mot de passe :</label>
-            <input type="password" id="motdepasse" name="motdepasse" required />
+                  <label for="motdepasse">Mot de passe :</label>
+                  <input type="password" id="motdepasse" name="motdepasse" required />
 
-            <input type="submit" value="Valider" />
-      </form>
+                  <input type="submit" value="Valider" />
+               </form>
+            </div>
+         </section>
       </main>
+      <br><br><br><br>
       <?php
         include("footer.php");
       ?>

@@ -1,6 +1,6 @@
 @font-face {
     font-family: 'Tw Cen MT';
-    src: url('fonts/Tw Cen MT.ttf') format('truetype');
+    src: url('../fonts/Tw Cen MT.ttf') format('truetype');
 }
 
 :root {
@@ -60,7 +60,8 @@ footer > div:first-child ul {
 }
 
 footer > div:first-child ul li img {
-    box-shadow: 0.2em 0.2em 0.2em 0.2em rgba(0, 0, 0, 0.2);
+    -webkit-filter: drop-shadow(5px 5px 5px rgba(0, 0, 0, 0.2));
+    filter: drop-shadow(5px 5px 5px rgba(0, 0, 0, 0.2));
 }
 
 footer > div:first-child > div:first-child {
