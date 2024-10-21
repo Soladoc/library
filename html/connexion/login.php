@@ -28,7 +28,7 @@ $stmt->execute();
 $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
 // Vérifier si l'utilisateur existe
-if (bool($user['existe'])==true) {
+if (!empty($user['existe'])){
     
     $hashed_password = $user['mdp_hash'];
     echo "Hash récupéré : " . $hashed_password;
@@ -54,7 +54,7 @@ if (bool($user['existe'])==true) {
         exit();
     }
 } else {
-    echo "test02";
+    echo "test03";
     //echo "<script>window.location.href='../autres_pages/connexion.php';</script>";
     exit();
 }
