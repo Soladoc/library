@@ -28,7 +28,6 @@ $stmt->bindValue(':email', $username, PDO::PARAM_STR);
 $stmt->execute();
 $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
-echo "ko";
 // Vérifier si l'utilisateur existe
 if ($user) {
     
