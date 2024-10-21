@@ -28,7 +28,7 @@ if (isset($_POST['mdp'])) {
     if ($estprive) {
         
         // insert in pro_prive
-        $sql = "INSERT INTO comptes (email, mdp_hash, nom, prenom, telephone, denomination, siren) VALUES (:email, :mdp_hash, :nom, :prenom, :telephone, :denomination, :siren)";
+        $sql = "INSERT INTO  pro_prive (email, mdp_hash, nom, prenom, telephone, denomination, siren) VALUES (:email, :mdp_hash, :nom, :prenom, :telephone, :denomination, :siren)";
         $stmt = $pdo->prepare($sql);
 
             $stmt->bindParam(':email', $_POST['email']);
@@ -56,7 +56,7 @@ echo "Données insérées avec succès!";
         
     } else {
         // insert in pro_public
-        $sql = "INSERT INTO comptes (email, mdp_hash, nom, prenom, telephone, denomination) VALUES (:email, :mdp_hash, :nom, :prenom, :telephone, :denomination)";
+        $sql = "INSERT INTO comptes pro_prive (email, mdp_hash, nom, prenom, telephone, denomination) VALUES (:email, :mdp_hash, :nom, :prenom, :telephone, :denomination)";
         $stmt = $pdo->prepare($sql);
 
             $stmt->bindParam(':email', $_POST['email']);
@@ -151,24 +151,24 @@ else {
 
                     <div class="radio_entr">
                         <div>
-                            <input type="radio" id="public" name="privé" value="huey" checked />
+                            <input type="radio" id="public" name="type" value="huey" onclick="gererAffichage()" checked />
                             <label for="public" style="font-family:'Tw Cen MT'">Public</label>
                         </div>
 
                         <div>
-                            <input type="radio" id="prive" name="privé" value="prive" />
+                            <input type="radio" id="prive" name="type" value="prive" onclick="gererAffichage()"/>
                             <label for="prive" style="font-family:'Tw Cen MT'">Privé</label>
                         </div>
                     </div>
-                
+                    
                     <br>
-                    <div class="champ">
+                    <div class="champ" id="siren">
                         <!-- Texte avec label -->
                         <p>SIREN*:</p>
                         <input type="text" id="siren" name="siren" placeholder="231 654 987     12315" required />
                     </div>
                     <br>
-                    <button type="submit" class="btn-connexion">Créer un compte professionnel</button>
+                    <button type="submit" class="btn-connexion" >Créer un compte professionnel</button>
             </form>
             <br /><br>
             <p>Se connecter ?</p>
@@ -185,7 +185,29 @@ else {
     <?php
         include("footer.php");
     ?>
+
+<script>
+    // Fonction pour afficher ou masquer la ligne supplémentaire
+    function gererAffichage() {
+        // Récupère tous les boutons radio
+        let radios = document.querySelectorAll('input[name="type"]');
+        let ligneSupplementaire = document.getElementById("siren");
+
+        // Parcourt chaque bouton radio pour voir s'il est sélectionné
+        radios.forEach(radio => {
+            if (radio.checked && radio.value === 'prive') {
+                // Si Option 2 est sélectionnée, on affiche la ligne
+                ligneSupplementaire.style.display = 'block';
+            } else if (radio.checked) {
+                // Si une autre option est sélectionnée, on masque la ligne
+                ligneSupplementaire.style.display = 'none';
+            }
+        });
+    }
+    
+</script>
 </body>
+
 
 </html>
 <?php
