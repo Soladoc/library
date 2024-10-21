@@ -32,7 +32,8 @@ $user = $stmt->fetch(PDO::FETCH_ASSOC);
 if ($user) {
     
     $hashed_password = $user['mdp_hash'];
-
+    echo "Hash récupéré : " . $hashed_password;
+    
     if (password_verify($password, $hashed_password)) {
         session_regenerate_id(true);
         $_SESSION['username'] = $username;

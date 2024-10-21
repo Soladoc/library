@@ -39,7 +39,7 @@ $stmt->bindParam(':mdp_hash', $mdp_hash);
                     <br>
                     <div class="champ">
                         <label for="mdp">Mot de passe *</label>
-                        <input type="text" name="mdp" placeholder="**********" id="mdp" required>
+                        <input type="password" name="mdp" placeholder="**********" id="mdp" required>
                     </div>
                     <br>
                     <button type="submit" class="btn-connexion">Se connecter</button>
