@@ -9,6 +9,7 @@ if (isset($_POST['mdp'])) {
     print 'Votre adresse :'.$_POST['adresse'];
     print 'Votre type de compte :'.$type;
     $estprive = isset($_POST['prive']);
+    $mdp_hash = hash($_POST["mdp"], PASSWORD_DEFAULT);
 
     $pdo=db_connect();
     $stmt = $pdo->prepare('SELECT COUNT(*) FROM comptes WHERE email = :email');
@@ -22,19 +23,59 @@ if (isset($_POST['mdp'])) {
     // insert in compte
 
     if ($estprive) {
-        $sql = "INSERT INTO comptes (email, password) VALUES (:email, :password)";
+        
+        // insert in pro_prive
+        $sql = "INSERT INTO comptes (email, mdp_hash, nom, prenom, telephone, denomination, siren) VALUES (:email, :mdp_hash, :nom, :prenom, :telephone, :denomination, :siren)";
         $stmt = $pdo->prepare($sql);
 
+            $stmt->bindParam(':email', $_POST['email']);
+            $stmt->bindParam(':mdp_hash', $mdp_hash);
+            $stmt->bindParam(':nom', $_POST['nom']);
+            $stmt->bindParam(':prenom', $_POST['prenom']);
+            $stmt->bindParam(':telephone', $_POST['telephone']);
+            $stmt->bindParam(':denomination', $_POST['denomination']);
+            $stmt->bindParam(':siren', $_POST['siren']);
+
+    
         // 3. Exécuter la requête avec les valeurs
         $stmt->execute([
-            'email' => $_POST['email'],       // Email du formulaire
-            'password' => password_hash($_POST['password'], PASSWORD_BCRYPT)  // Mot de passe sécurisé avec hashage
+            ':email' => $_POST['email'],
+            ':mdp_hash' => $mdp_hash,
+            ':nom' => $_POST['nom'],
+            ':prenom' => $_POST['prenom'],
+            ':telephone' => $_POST['telephone'],
+            ':denomination' => $_POST['denomination'],
+            ':siren' => $_POST['siren']
         ]);
+        
 
 echo "Données insérées avec succès!";
         
     } else {
         // insert in pro_public
+        $sql = "INSERT INTO comptes (email, mdp_hash, nom, prenom, telephone, denomination) VALUES (:email, :mdp_hash, :nom, :prenom, :telephone, :denomination)";
+        $stmt = $pdo->prepare($sql);
+
+            $stmt->bindParam(':email', $_POST['email']);
+            $stmt->bindParam(':mdp_hash', $mdp_hash);
+            $stmt->bindParam(':nom', $_POST['nom']);
+            $stmt->bindParam(':prenom', $_POST['prenom']);
+            $stmt->bindParam(':telephone', $_POST['telephone']);
+            $stmt->bindParam(':denomination', $_POST['denomination']);
+
+
+    
+        // 3. Exécuter la requête avec les valeurs
+        $stmt->execute([
+            ':email' => $_POST['email'],
+            ':mdp_hash' => $mdp_hash,
+            ':nom' => $_POST['nom'],
+            ':prenom' => $_POST['prenom'],
+            ':telephone' => $_POST['telephone'],
+            ':denomination' => $_POST['denomination'],
+
+        ]);
+        
     }
 
 }
