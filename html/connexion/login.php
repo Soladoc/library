@@ -45,7 +45,7 @@ if ($user) {
         exit();
     }
 } else {
-    header("Location: ../autres_pages/connexion.php?error=Nom d'utilisateur ou mot de passe incorrect.");
+    echo "echec";
     exit();
 }
 
