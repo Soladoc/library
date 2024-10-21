@@ -54,7 +54,7 @@ if (bool($user['existe'])==true) {
         exit();
     }
 } else {
-    echo "teSte";
+    echo "test02";
     //echo "<script>window.location.href='../autres_pages/connexion.php';</script>";
     exit();
 }
