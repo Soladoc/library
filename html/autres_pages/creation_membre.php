@@ -20,7 +20,7 @@ if (isset($_POST['motdepasse'])){
    $mdp_hash = password_hash($_POST["motdepasse"], PASSWORD_DEFAULT);
    
 
-   $stmt = $pdo->prepare('INSERT INTO membres (pseudo, nom, prenom, telephone, email, motdepasse) VALUES (:pseudo, :nom, :prenom, :telephone, :email, :motdepasse)');
+   $stmt = $pdo->prepare('INSERT INTO membres (pseudo, nom, prenom, telephone, email, mdp_hash) VALUES (:pseudo, :nom, :prenom, :telephone, :email, :mdp_hash)');
    
             $stmt->bindParam(':pseudo', $_POST['pseudo']);
             $stmt->bindParam(':email', $_POST['email']);
