@@ -20,6 +20,11 @@
 button  {
     font-family: 'Tw Cen MT', sans-serif;
     cursor: pointer;
+    padding: .25em;
+}
+
+input {
+    padding: .25em;
 }
 
 
