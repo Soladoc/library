@@ -6,6 +6,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="../style/style.css">
+    <link rel="stylesheet" href="../style/creation_offre.css">
     <title>Création d'une offre</title>
 </head>
 
@@ -40,40 +41,34 @@ const TYPE_OFFRE_AFFICHABLE = [
             <?php } ?>
         </section>
         <section id="image_creation_offre" style="background-color: gray;">
+            <h2>Image</h2>
             <p style="background-color: gray;">À ajouter plus tard</p>
             <!-- Choisit 1 photo principale + 0 ou plus photos dans la gallerie -->
         </section>
         <form action="" method="post">
             <section id="tarif">
-                <article>
-                    <h3>Tarifs</h3>
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>Dénomination</th>
-                                <th>Montant</th>
-                            </tr>
-                        </thead>
-                        <tbody id="tbody_tarifs">
+                <h2>Tarifs</h2>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Dénomination</th>
+                            <th>Montant</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tbody_tarifs">
 
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                            <td><input id="nom_tarif" type="text" placeholder="Nom"></td>
+                            <td><input id="montant_tarif" type="number" min="0" placeholder="Montant"> €</td>
+                            <td><button id="button_add_tarif" type="button">+</button></td>
+                        </tr>
                         </tbody>
-                        <tfoot>
-                            <tr>
-                                <td><input id="nom_tarif" type="text" placeholder="Nom"></td>
-                                <td><input id="montant_tarif" type="number" min="0" placeholder="Montant"> €</td>
-                                <td><button id="button_add_tarif" type="button">+</button></td>
-                            </tr>
-                            </tbody>
-                    </table>
-                </article>
-                <article id="tarif_ajoute">
-
-                </article>
+                </table>
             </section>
             <section id="horaires">
-                <article>
-                    <h2>Horaires</h2>
-                </article>
+                <h2>Horaires</h2>
                 <div>
                     <article id="lundi">
                         <div>
@@ -91,7 +86,6 @@ const TYPE_OFFRE_AFFICHABLE = [
                                 <img src="../icon/icons8-ajouter-90.png" alt="Ajouter Horraire">
                             </button>
                         </div>
-
                     </article>
                     <article id="mercredi">
                         <div>
@@ -100,7 +94,6 @@ const TYPE_OFFRE_AFFICHABLE = [
                                 <img src="../icon/icons8-ajouter-90.png" alt="Ajouter Horraire">
                             </button>
                         </div>
-
                     </article>
                     <article id="jeudi">
                         <div>
@@ -108,9 +101,7 @@ const TYPE_OFFRE_AFFICHABLE = [
                             <button type="button" onclick="ajoutHorraire('jeudi')">
                                 <img src="../icon/icons8-ajouter-90.png" alt="Ajouter Horraire">
                             </button>
-
                         </div>
-
                     </article>
                     <article id="vendredi">
                         <div>
@@ -118,9 +109,7 @@ const TYPE_OFFRE_AFFICHABLE = [
                             <button type="button" onclick="ajoutHorraire('vendredi')">
                                 <img src="../icon/icons8-ajouter-90.png" alt="Ajouter Horraire">
                             </button>
-
                         </div>
-
                     </article>
                     <article id="samedi">
                         <div>
@@ -129,7 +118,6 @@ const TYPE_OFFRE_AFFICHABLE = [
                                 <img src="../icon/icons8-ajouter-90.png" alt="Ajouter Horraire">
                             </button>
                         </div>
-
                     </article>
                     <article id="dimanche">
                         <div>
@@ -138,25 +126,30 @@ const TYPE_OFFRE_AFFICHABLE = [
                                 <img src="../icon/icons8-ajouter-90.png" alt="Ajouter Horraire">
                             </button>
                         </div>
-
                     </article>
                 </div>
             </section>
             <section id="info_localisation">
-                <h3>Info/Localisation</h3>
-
-                <label for="adresse">Adresse*</label>
-                <input type="text" name="adresse" id="adresse" required>
-
-                <label for="tel">Tel</label>
-                <input type="text" name="tel" id="tel">
-
-                <label for="site">Site Web</label>
-                <input type="text" name="site" id="site">
-
+                <h2>Info / Localisation</h2>
+                <p>
+                    <label for="adresse">Adresse*</label>
+                    <input type="text" name="adresse" id="adresse" required>
+                    <button type="button">&hellip;</button>
+                </p>
+                <p>
+                    <label for="tel">Tel</label>
+                    <input type="text" name="tel" id="tel">
+                </p>
+                <p>
+                    <label for="site">Site Web</label>
+                    <input type="text" name="site" id="site">
+                </p>
+            </section>
+            <section id="tags">
+                <h2>Tags</h2>
             </section>
             <section id="description">
-                <label for="description">Description</label>
+                <h2>Description</h2>
                 <textarea name="description" id="description"></textarea>
             </section>
             <button type="submit">Valider</button>
