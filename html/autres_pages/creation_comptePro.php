@@ -15,7 +15,7 @@ if (isset($_POST['mdp'])) {
 
 
     $pdo=db_connect();
-    $stmt = $pdo->prepare('SELECT COUNT(*) FROM comptes WHERE email = :email');
+    $stmt = $pdo->prepare('SELECT COUNT(*) FROM _compte WHERE email = :email');
     $stmt->execute([ 'email' => $_POST['email']]);
     $count = $stmt->fetchColumn();
     if ($count > 0) {
