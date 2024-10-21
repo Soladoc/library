@@ -1,7 +1,7 @@
 <?php
 require '../../db.php';
 $pdo=db_connect();
-$stmt = $pdo->prepare('SELECT COUNT(*) FROM offres WHERE id_professionnel = :id_professionnnel');
+$stmt = $pdo->prepare('SELECT COUNT(*) FROM pact.offres WHERE id_professionnel = :id_professionnnel');
 $stmt->execute(['id_professionnel' => ]);
 $nb_offre = $stmt->fetchColumn();
 $stmt = $pdo->prepare('');

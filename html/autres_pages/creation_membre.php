@@ -2,14 +2,14 @@
 require '../../db.php';
 if (isset($_POST['motdepasse'])){
    $pdo=db_connect();
-   $stmt = $pdo->prepare('SELECT COUNT(*) FROM membres WHERE pseudo = :pseudo');
+   $stmt = $pdo->prepare('SELECT COUNT(*) FROM pact.membres WHERE pseudo = :pseudo');
    $stmt->execute(['pseudo' => $_POST['pseudo']]);
    $count = $stmt->fetchColumn();
    if ($count > 0) {
       echo 'Ce pseudo est déjà utilisé.';
       exit();
    }
-   $stmt = $pdo->prepare('SELECT COUNT(*) FROM membres WHERE email = :email');
+   $stmt = $pdo->prepare('SELECT COUNT(*) FROM pact.membres WHERE email = :email');
    $stmt->execute(['email' => $_POST['email']]);
    $count = $stmt->fetchColumn();
    if ($count > 0) {

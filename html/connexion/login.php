@@ -28,16 +28,16 @@ $stmt->bindValue(':email', $username, PDO::PARAM_STR);
 $stmt->execute();
 $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
-echo "ko";
 // Vérifier si l'utilisateur existe
 if ($user) {
     
     $hashed_password = $user['mdp_hash'];
-
+    echo "Hash récupéré : " . $hashed_password;
+    echo "2";
     if (password_verify($password, $hashed_password)) {
         session_regenerate_id(true);
         $_SESSION['username'] = $username;
-        header("Location: ../autres_pages/accueil.php");
+        echo "connecté";
         exit();
     } else {
         // Mot de passe incorrect
@@ -45,7 +45,7 @@ if ($user) {
         exit();
     }
 } else {
-    header("Location: ../autres_pages/connexion.php?error=Nom d'utilisateur ou mot de passe incorrect.");
+    echo "echec";
     exit();
 }
 

@@ -3,16 +3,47 @@
 require_once "../../db.php";
 if (isset($_POST['table'])) {
 
-    print 'Votre nom :'.$_POST['table'];
-
+    print 'table :'.$_POST['table'];
+    $table = $_POST['table'];
 
 
     $pdo=db_connect();
-    $stmt = $pdo->prepare(query: 'SELECT COUNT(*) FROM pact.:table ');
-    $stmt->execute([ 'table' => $_POST['table']]);
+    try {
+        // Construire la requête SQL pour sélectionner toutes les lignes de la table validée
+        $query = 'SELECT * FROM pact.' . $table;
+        $stmt = $pdo->prepare($query);
+        $stmt->execute();
     
-       exit;
+        // Récupérer toutes les lignes de la table
+        $results = $stmt->fetchAll(PDO::FETCH_ASSOC); // Récupère les données sous forme de tableau associatif
     
+        // Vérifier s'il y a des résultats
+        if ($results) {
+            echo "<table border='1'>";
+            echo "<tr>";
+    
+            // Afficher les en-têtes du tableau en fonction des colonnes récupérées
+            foreach (array_keys($results[0]) as $column) {
+                echo "<th>" . htmlspecialchars($column) . "</th>";
+            }
+            echo "</tr>";
+    
+            // Afficher chaque ligne
+            foreach ($results as $row) {
+                echo "<tr>";
+                foreach ($row as $value) {
+                    echo "<td>" . htmlspecialchars($value) . "</td>"; // Sécuriser l'affichage des données
+                }
+                echo "</tr>";
+            }
+            echo "</table>";
+        } else {
+            echo "Aucune donnée trouvée dans la table $table.";
+        }
+    
+    } catch (Exception $e) {
+        echo "Erreur : " . $e->getMessage();
+    }
 }
 else {
 ?>
@@ -22,7 +53,7 @@ else {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Créer un compte pro</title>
+    <title>regarde dans la bdd</title>
     <link rel="stylesheet" href="../style/style.css">
 </head>
 
@@ -34,7 +65,7 @@ else {
 
     <main>
         <!-- Section des offres à la une -->
-        <h1>Créer un compte professionnel</h1>
+        <h1>regarde dans la bdd</h1>
         <section class="connexion">
                 <div class="champ-connexion">
                 <form action="regardeMaGrosseBdd.php" method="post" enctype="multipart/form-data">
