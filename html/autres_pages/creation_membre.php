@@ -40,35 +40,46 @@ else {
       <?php
         include("header.php");
       ?>
-      <br><br><br><br>
+      <br>
       <main>
+         <h1>Créer un compte membre</h1>
          <section class="connexion">
             <div class="champ-connexion">
                <form action="creation_membre.php" method="post" enctype="multipart/form-data">
-                  <label for="pseudo">Pseudo :</label>
-                  <input type="text" id="pseudo" name="pseudo" required />
-                  <br />
+                  <div class="champ">
+                     <label for="pseudo">Pseudo :</label>
+                     <input type="text" id="pseudo" name="pseudo" required />
+                  </div>
 
-                  <label for="nom">Nom :</label>
-                  <input type="text" id="nom" name="nom" required />
-                  <br />
+                  <div class="champ">
+                     <label for="nom">Nom :</label>
+                     <input type="text" id="nom" name="nom" required />
+                  </div>
 
-                  <label for="prenom">Prenom :</label>
-                  <input type="text" id="prenom" name="prenom" required />
-                  <br />
+                  <div class="champ">
+                     <label for="prenom">Prenom :</label>
+                     <input type="text" id="prenom" name="prenom" required />
+                  </div>
 
-                  <label for="telephone">Téléphone :</label>
-                  <input type="text" id="telephone" name="telephone" required />
-                  <br />
+                  <div class="champ">
+                     <label for="telephone">Téléphone :</label>
+                     <input type="text" id="telephone" name="telephone" required />
+                  </div>
 
-                  <label for="email">Email :</label>
-                  <input type="mail" id="email" name="email" required />
-                  <br />
+                  <div class="champ">
+                     <label for="email">Email :</label>
+                     <input type="mail" id="email" name="email" required />
+                  </div>
 
-                  <label for="motdepasse">Mot de passe :</label>
-                  <input type="password" id="motdepasse" name="motdepasse" required />
-
-                  <input type="submit" value="Valider" />
+                  <div class="champ">
+                     <label for="motdepasse">Mot de passe :</label>
+                     <input type="password" id="motdepasse" name="motdepasse" required />
+                     <br>
+                  </div>
+                     
+                  <div class="champ">
+                     <input type="submit" value="Valider" />
+                  </div>
                </form>
             </div>
          </section>
