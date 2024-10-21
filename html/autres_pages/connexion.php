@@ -5,8 +5,8 @@ $pdo = db_connect();
 // Hacher le mot de passe avant l'insertion
 $mdp_hash = password_hash('123', PASSWORD_DEFAULT);
 
-$sql = "INSERT INTO pact._compte(email, mdp_hash, nom, prenom, telephone, id_identite) 
-        VALUES ('maelanpotier05@gmail.com', :mdp_hash, 'bob', 'charles', '01226262', 5)";
+$sql = "INSERT INTO membre(pseudo,existe,email, mdp_hash, nom, prenom, telephone, id_identite) 
+        VALUES ('Mange',true,'maelanpotier05@gmail.com', :mdp_hash, 'bob', 'charles', '01226262', 5)";
 $stmt = $pdo->prepare($sql);
 $stmt->bindParam(':mdp_hash', $mdp_hash);
 
@@ -47,7 +47,7 @@ if ($stmt->execute()) {
                     <br>
                     <div class="champ">
                         <label for="mdp">Mot de passe *</label>
-                        <input type="password" name="mdp" placeholder="**********" id="mdp" required>
+                        <input type="text" name="mdp" placeholder="**********" id="mdp" required>
                     </div>
                     <br>
                     <button type="submit" class="btn-connexion">Se connecter</button>
