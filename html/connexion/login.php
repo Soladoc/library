@@ -56,7 +56,7 @@ if ($user['existe'] == true) {
     }
 } else {
     echo "teste";
-    echo "<script>window.location.href='../autres_pages/connexion.php';</script>";
+    //echo "<script>window.location.href='../autres_pages/connexion.php';</script>";
     exit();
 }
 
