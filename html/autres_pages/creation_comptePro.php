@@ -1,4 +1,6 @@
 <?php
+
+require_once "../../db.php";
 if (isset($_POST['mdp'])) {
 
     print 'Votre nom :'.$_POST['nom'];
@@ -7,9 +9,10 @@ if (isset($_POST['mdp'])) {
     print 'Votre mail :'.$_POST['email'];
     print 'Votre mot de passe :'.$_POST['mdp'];
     print 'Votre adresse :'.$_POST['adresse'];
-    print 'Votre type de compte :'.$type;
+    // print 'Votre type de compte :'.$type;
     $estprive = isset($_POST['prive']);
-    $mdp_hash = hash($_POST["mdp"], PASSWORD_DEFAULT);
+    $mdp_hash = password_hash($_POST["mdp"], PASSWORD_DEFAULT);
+
 
     $pdo=db_connect();
     $stmt = $pdo->prepare('SELECT COUNT(*) FROM comptes WHERE email = :email');
