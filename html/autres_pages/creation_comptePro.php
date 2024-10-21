@@ -28,7 +28,7 @@ if (isset($_POST['mdp'])) {
     if ($estprive) {
         
         // insert in pro_prive
-        $sql = "INSERT INTO  pro_prive (email, mdp_hash, nom, prenom, telephone, denomination, siren) VALUES (:email, :mdp_hash, :nom, :prenom, :telephone, :denomination, :siren)";
+        $sql = "INSERT INTO  pact.pro_prive (email, mdp_hash, nom, prenom, telephone, denomination, siren) VALUES (:email, :mdp_hash, :nom, :prenom, :telephone, :denomination, :siren)";
         $stmt = $pdo->prepare($sql);
 
             $stmt->bindParam(':email', $_POST['email']);
@@ -56,7 +56,7 @@ echo "Données insérées avec succès!";
         
     } else {
         // insert in pro_public
-        $sql = "INSERT INTO  pro_public (email, mdp_hash, nom, prenom, telephone, denomination) VALUES (:email, :mdp_hash, :nom, :prenom, :telephone, :denomination)";
+        $sql = "INSERT INTO  pact.pro_public (email, mdp_hash, nom, prenom, telephone, denomination) VALUES (:email, :mdp_hash, :nom, :prenom, :telephone, :denomination)";
         $stmt = $pdo->prepare($sql);
 
             $stmt->bindParam(':email', $_POST['email']);
