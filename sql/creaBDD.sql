@@ -50,7 +50,7 @@ CREATE TABLE pact._identite
 CREATE TABLE pact._compte
 (
   email         VARCHAR(319) CONSTRAINT _compte_pk PRIMARY KEY,
-  mdp_hash      INT,
+  mdp_hash      varchar(255),
   nom           VARCHAR(255),
   prenom        VARCHAR(255),
   telephone     CHAR(10),

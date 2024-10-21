@@ -589,6 +589,58 @@ textarea {
 a{
     font-style: none;
     text-decoration: none;
+
+
+/* BOUTONS RADIO */
+
+.radio_entr {
+    display: flex;
+    gap: 15px;
+    align-items: center;
+}
+  
+.radio_entr div {
+    display: flex;
+    align-items: center;
+}
+  
+.radio_entr input[type="radio"] {
+    appearance: none;
+    width: 20px;
+    height: 20px;
+    border: 2px solid #999;
+    border-radius: 50%;
+    display: inline-block;
+    margin-right: 8px;
+    position: relative;
+    cursor: pointer;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+  
+.radio_entr input[type="radio"]:checked::before {
+    content: '';
+    display: block;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background-color: #3498db;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+  
+.radio_entr label {
+    font-family: 'Tw Cen MT', sans-serif;
+    font-size: 16px;
+    color: #333;
+    cursor: pointer;
+}
     
 
+}
+
+
+#siren {
+    display: block;
 }

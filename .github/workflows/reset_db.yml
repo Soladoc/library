@@ -1,0 +1,28 @@
+name: Reset Database
+on: workflow_dispatch
+jobs:
+  reset_db:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Reset Database
+        run: |
+          env
+          set -xeuo pipefail
+          mkdir -p ~/.ssh
+          echo "${{ secrets.ARTIFACT_SSH_KEY }}" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+          ssh-keyscan -p 22 ${{ secrets.ARTIFACT_HOST }} >> ~/.ssh/known_hosts
+          ssh debian@${{ secrets.ARTIFACT_HOST }} << 'EOF'
+              cd /docker/sae/data/sql
+              for f in *.sql; do
+                sudo docker cp "$f" postgresdb:/"$f"
+              done
+              sudo docker exec -w / postgresdb bash -c '
+                for f in /creaBDD.sql /vuesBDD.sql /fonctions_triggers.sql
+                  do echo run "$f"
+                  psql -U sae -d postgres -f "$f"
+                done
+              '
+          EOF

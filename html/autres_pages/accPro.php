@@ -8,7 +8,6 @@ $stmt = $pdo->prepare('COUNT(SELECT * FROM offres WHERE id_professionnel = :id_p
 $stmt->execute(['id_professionnel' => ]);
 $offre_en_ligne = $stmt->fetchColumn();
 $offre_hors_ligne = $nb_offre - $offre_en_ligne;
-
 ?>
 
 <!DOCTYPE html>

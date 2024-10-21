@@ -5,7 +5,7 @@ session_start();
 require '../db.php';
 $pdo = db_connect();
 
-
+print 'ok';
 // Vérifier la connexion
 if ($pdo->connect_error) {
     die("Échec de la connexion : " . $pdo->connect_error);
@@ -26,12 +26,11 @@ $stmt = $pdo->prepare("SELECT email, mdp_hash FROM users WHERE username = ?");
 $stmt->bind_param("s", $username);
 $stmt->execute();
 $stmt->store_result();
-
+echo "ko";
 // Vérifier si l'utilisateur existe
 if ($stmt->num_rows > 0) {
     $stmt->bind_result($id, $hashed_password);
     $stmt->fetch();
-
     // Vérifier le mot de passe
     if (password_verify($password, $hashed_password)) {
         session_regenerate_id(true);

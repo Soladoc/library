@@ -1,4 +1,6 @@
 <?php
+
+require_once "../../db.php";
 if (isset($_POST['mdp'])) {
 
     print 'Votre nom :'.$_POST['nom'];
@@ -7,9 +9,10 @@ if (isset($_POST['mdp'])) {
     print 'Votre mail :'.$_POST['email'];
     print 'Votre mot de passe :'.$_POST['mdp'];
     print 'Votre adresse :'.$_POST['adresse'];
-    print 'Votre type de compte :'.$type;
+    // print 'Votre type de compte :'.$type;
     $estprive = isset($_POST['prive']);
-    $mdp_hash = hash($_POST["mdp"], PASSWORD_DEFAULT);
+    $mdp_hash = password_hash($_POST["mdp"], PASSWORD_DEFAULT);
+
 
     $pdo=db_connect();
     $stmt = $pdo->prepare('SELECT COUNT(*) FROM comptes WHERE email = :email');
@@ -25,7 +28,7 @@ if (isset($_POST['mdp'])) {
     if ($estprive) {
         
         // insert in pro_prive
-        $sql = "INSERT INTO comptes (email, mdp_hash, nom, prenom, telephone, denomination, siren) VALUES (:email, :mdp_hash, :nom, :prenom, :telephone, :denomination, :siren)";
+        $sql = "INSERT INTO  pro_prive (email, mdp_hash, nom, prenom, telephone, denomination, siren) VALUES (:email, :mdp_hash, :nom, :prenom, :telephone, :denomination, :siren)";
         $stmt = $pdo->prepare($sql);
 
             $stmt->bindParam(':email', $_POST['email']);
@@ -53,7 +56,7 @@ echo "Données insérées avec succès!";
         
     } else {
         // insert in pro_public
-        $sql = "INSERT INTO comptes (email, mdp_hash, nom, prenom, telephone, denomination) VALUES (:email, :mdp_hash, :nom, :prenom, :telephone, :denomination)";
+        $sql = "INSERT INTO comptes pro_prive (email, mdp_hash, nom, prenom, telephone, denomination) VALUES (:email, :mdp_hash, :nom, :prenom, :telephone, :denomination)";
         $stmt = $pdo->prepare($sql);
 
             $stmt->bindParam(':email', $_POST['email']);
@@ -87,7 +90,7 @@ else {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Connexion</title>
+    <title>Créer un compte pro</title>
     <link rel="stylesheet" href="../style/style.css">
 </head>
 
@@ -99,7 +102,7 @@ else {
 
     <main>
         <!-- Section des offres à la une -->
-        <h1>Connexion</h1>
+        <h1>Créer un compte professionnel</h1>
         <section class="connexion">
                 <div class="champ-connexion">
                 <form action="creation_comptePro.php" method="post" enctype="multipart/form-data">
@@ -117,56 +120,54 @@ else {
                     <br>
                     <!-- Texte avec label -->
                     <div class="champ">
-                        <label for="nom">Nom :</label>
+                        <p>Nom :</p>
                         <input type="text" id="nom" name="nom" placeholder="Nyx" required />
                     </div>
                     <br />
                     <div class="champ">
                         <!-- Texte avec label -->
-                        <label for="prenom">PreNom :</label>
+                        <p>Prenom :</p>
                         <input type="text" id="prenom" name="prenom" placeholder="Icelos" required />
                     </div>
                     <br />
                     <div class="champ">
                         <!-- Texte avec label -->
-                        <label for="telephone">Telephone :</label>
+                        <p>Téléphone :</p>
                         <input type="text" id="telephone"name="telephone" placeholder="00 00 00 00 00" required />
                         </div>
                     <br />
                     <div class="champ">
                         <!-- Texte avec label -->
-                        <label for="denomination">Denomination (raison social)  *:</label>
+                        <p>Dénomination (raison sociale)  *:</p>
                         <input type="text" id="denomination" name="denomination" placeholder="Panthéon de la nuit étoilée"  required />
                     </div>
                     <br />
                     <div class="champ">
                         <!-- Email -->
-                        <label for="adresse">adresse *:</label>
+                        <p>Adresse *:</p>
                         <input type="text" id="adresse" placeholder="1 rue che 22050 truc" name="adresse" />
                     </div>
                     <br />
 
                     <div class="radio_entr">
                         <div>
-                            <input type="radio" id="public" name="privé" value="huey" checked />
-                            <label for="public">Public</label>
+                            <input type="radio" id="prive" name="type" value="prive" onclick="gererAffichage()" checked/>
+                            <label for="prive" style="font-family:'Tw Cen MT'">Privé</label>
                         </div>
-
                         <div>
-                            <input type="radio" id="prive" name="privé" value="prive" />
-                            <label for="prive">Privé</label>
+                            <input type="radio" id="public" name="type" value="huey" onclick="gererAffichage()"  />
+                            <label for="public" style="font-family:'Tw Cen MT'">Public</label>
                         </div>
                     </div>
-                
+                    
                     <br>
-                    <div class="champ">
+                    <div class="champ" id="siren">
                         <!-- Texte avec label -->
-                        <label for="siren">SIREN*:</label>
+                        <label>SIREN*:</label>
                         <input type="text" id="siren" name="siren" placeholder="231 654 987     12315" required />
                     </div>
                     <br>
-                    <input type="submit" value="Rechercher" />
-                    <button class="btn-connexion">Créer un compte professionnel</button>
+                    <button type="submit" class="btn-connexion" >Créer un compte professionnel</button>
             </form>
             <br /><br>
             <p>Se connecter ?</p>
@@ -183,7 +184,29 @@ else {
     <?php
         include("footer.php");
     ?>
+
+<script>
+    // Fonction pour afficher ou masquer la ligne supplémentaire
+    function gererAffichage() {
+        // Récupère tous les boutons radio
+        let radios = document.querySelectorAll('input[name="type"]');
+        let ligneSupplementaire = document.getElementById("siren");
+
+        // Parcourt chaque bouton radio pour voir s'il est sélectionné
+        radios.forEach(radio => {
+            if (radio.checked && radio.value === 'prive') {
+                // Si Option 2 est sélectionnée, on affiche la ligne
+                ligneSupplementaire.style.display = 'block';
+            } else if (radio.checked) {
+                // Si une autre option est sélectionnée, on masque la ligne
+                ligneSupplementaire.style.display = 'none';
+            }
+        });
+    }
+    
+</script>
 </body>
+
 
 </html>
 <?php
