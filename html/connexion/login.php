@@ -2,13 +2,13 @@
 session_start();
 
 // Configuration de la base de données
-require '../db.php';
-$pdo = db_connect();
+require '../../db.php';
 
-print 'ok';
-// Vérifier la connexion
-if ($pdo->connect_error) {
-    die("Échec de la connexion : " . $pdo->connect_error);
+try {
+    $pdo = db_connect(); // Essaie de te connecter à la base de données
+} catch (PDOException $e) {
+    // Gérer l'erreur de connexion
+    die("Échec de la connexion à la base de données : " . $e->getMessage());
 }
 
 // Récupérer les données du formulaire
@@ -22,10 +22,10 @@ if (empty($username) || empty($password)) {
 }
 
 // Préparer et exécuter la requête pour éviter les injections SQL
-$stmt = $pdo->prepare("SELECT email, mdp_hash FROM users WHERE username = ?");
-$stmt->bind_param("s", $username);
+$stmt = $pdo->prepare("SELECT email, mdp_hash FROM pact._compte WHERE email = :email");
+$stmt->bindValue(':email', $username, PDO::PARAM_STR);
 $stmt->execute();
-$stmt->store_result();
+$user = $stmt->fetch(PDO::FETCH_ASSOC);
 echo "ko";
 // Vérifier si l'utilisateur existe
 if ($stmt->num_rows > 0) {
