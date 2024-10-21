@@ -37,7 +37,7 @@ if ($user) {
     if (password_verify($password, $hashed_password)) {
         session_regenerate_id(true);
         $_SESSION['username'] = $username;
-        header("Location: ../autres_pages/accueil.php");
+        echo "connecté";
         exit();
     } else {
         // Mot de passe incorrect
