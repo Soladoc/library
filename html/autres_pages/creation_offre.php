@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="fr">
+
 <head>
     <script src="../script_js/creation_offre.js"></script>
     <meta charset="UTF-8">
@@ -7,45 +8,47 @@
     <link rel="stylesheet" href="../style/style.css">
     <title>Création d'une offre</title>
 </head>
+
 <body>
-    <?php include("header.php") ?>
+    <?php require 'header.php' ?>
     <main>
-        <section id="titre_creation_offre" >
-        <?php 
-        if (isset($_POST)) { ?>
-                <?php 
-                /*
-                    afin d'afficher le tire correctement j'effectu un switch sur le type d'offre
-                    je ne fais pas <h1>Créer <?php echo ucfirst(str_replace('_',' ',$_POST['type_offre'])) ; \⸮><h1>
-                    car il faut gérer le préfixe "un/une" qui nécéssite de toute facons un switch
-                */
-                $type_offre_affichable = '';
-                switch ($_POST["type_offre"]) {
-                    case 'spectacle':
-                        $type_offre_affichable = "un spectacle";
+        <section id="titre_creation_offre">
+            <?php if (isset($_POST)) { ?>
+            <?php
+
+            /*
+             * afin d'afficher le tire correctement j'effectu un switch sur le type d'offre
+             * je ne fais pas <h1>Créer <?php echo ucfirst(str_replace('_',' ',$_POST['type_offre'])) ; \⸮><h1>
+             * car il faut gérer le préfixe "un/une" qui nécéssite de toute facons un switch
+             */
+            $type_offre_affichable = '';
+            switch ($_POST['type_offre']) {
+                case 'spectacle':
+                    $type_offre_affichable = 'un spectacle';
                     break;
-                    case 'parc_attraction':
-                        $type_offre_affichable = "un parc d'attraction";
+                case 'parc_attraction':
+                    $type_offre_affichable = "un parc d'attraction";
                     break;
-                    case 'visite':
-                        $type_offre_affichable = "une visite";
+                case 'visite':
+                    $type_offre_affichable = 'une visite';
                     break;
-                    case 'restauration':
-                        $type_offre_affichable = "une restauration";
+                case 'restauration':
+                    $type_offre_affichable = 'une restauration';
                     break;
-                    case 'activite':
-                        $type_offre_affichable = "une activité";
+                case 'activite':
+                    $type_offre_affichable = 'une activité';
                     break;
-                    default:
-                        $type_offre_affichable = "une offre";
+                default:
+                    $type_offre_affichable = 'une offre';
                     break;
-                    } ?>
+            }
+            ?>
             <h1>Créer <?php echo $type_offre_affichable; ?></h1>
-        <?php
-        }else{ ?> <!-- post is unset-->
+            <?php } else { ?>
+            <!-- post is unset-->
             <h1>Erreur de methode d'acces</h1>
             <p>Une erreur dans la requette de la page est survenu merci de réessayer plus tard</p>
-        <?php } ?>
+            <?php } ?>
         </section>
         <section id="image_creation_offre" style="background-color: gray;">
             <p style="background-color: gray;">À ajouter plus tard</p>
@@ -61,7 +64,7 @@
                     </button>
                 </article>
                 <article id="tarif_ajoute">
-                    
+
                 </article>
             </section>
             <section id="horraires">
@@ -99,7 +102,7 @@
                     <article id="jeudi">
                         <div>
                             <h3>Jeudi</h3>
-                        <button type="button" onclick="ajoutHorraire('jeudi')">
+                            <button type="button" onclick="ajoutHorraire('jeudi')">
                                 <img src="../icon/icons8-ajouter-90.png" alt="Ajouter Horraire">
                             </button>
 
@@ -148,7 +151,6 @@
                 <label for="site">Site Web</label>
                 <input type="text" name="site" id="site">
 
-
             </section>
             <section id="description">
                 <label for="description">Description</label>
@@ -157,6 +159,7 @@
             <button type="submit">Valider</button>
         </form>
     </main>
-    <?php include("footer.php"); ?>
+    <?php include ('footer.php'); ?>
 </body>
+
 </html>
