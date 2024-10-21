@@ -16,6 +16,9 @@ if (isset($_POST['motdepasse'])){
       echo 'Cette adresse e-mail est déjà utilisée.';
       exit();
    }
+
+   $motdepasse = password_hash($_POST["motdepasse"], PASSWORD_DEFAULT);
+
    $stmt = $pdo->prepare('INSERT INTO membres (pseudo, nom, prenom, telephone, email, motdepasse) VALUES (:pseudo, :nom, :prenom, :telephone, :email, :motdepasse)');
    
             $stmt->bindParam(':pseudo', $_POST['pseudo']);
@@ -35,7 +38,7 @@ if (isset($_POST['motdepasse'])){
       'prenom' => $_POST['prenom'],
       'telephone' => $_POST['telephone'],
       'email' => $_POST['email'],
-      'motdepasse' => password_hash($_POST['motdepasse'], PASSWORD_DEFAULT),
+      'motdepasse' => $mdp_hash
    ]);
 }
 else {
