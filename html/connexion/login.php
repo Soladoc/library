@@ -3,12 +3,12 @@ session_start();
 
 // Configuration de la base de données
 require '../../db.php';
-$pdo = db_connect();
 
-print 'ok';
-// Vérifier la connexion
-if ($pdo->connect_error) {
-    die("Échec de la connexion : " . $pdo->connect_error);
+try {
+    $pdo = db_connect(); // Essaie de te connecter à la base de données
+} catch (PDOException $e) {
+    // Gérer l'erreur de connexion
+    die("Échec de la connexion à la base de données : " . $e->getMessage());
 }
 
 // Récupérer les données du formulaire
