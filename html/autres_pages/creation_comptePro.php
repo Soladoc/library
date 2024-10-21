@@ -151,20 +151,19 @@ else {
 
                     <div class="radio_entr">
                         <div>
-                            <input type="radio" id="public" name="type" value="huey" onclick="gererAffichage()" checked />
-                            <label for="public" style="font-family:'Tw Cen MT'">Public</label>
-                        </div>
-
-                        <div>
-                            <input type="radio" id="prive" name="type" value="prive" onclick="gererAffichage()"/>
+                            <input type="radio" id="prive" name="type" value="prive" onclick="gererAffichage()" checked/>
                             <label for="prive" style="font-family:'Tw Cen MT'">Privé</label>
+                        </div>
+                        <div>
+                            <input type="radio" id="public" name="type" value="huey" onclick="gererAffichage()"  />
+                            <label for="public" style="font-family:'Tw Cen MT'">Public</label>
                         </div>
                     </div>
                     
                     <br>
                     <div class="champ" id="siren">
                         <!-- Texte avec label -->
-                        <p>SIREN*:</p>
+                        <label>SIREN*:</label>
                         <input type="text" id="siren" name="siren" placeholder="231 654 987     12315" required />
                     </div>
                     <br>
