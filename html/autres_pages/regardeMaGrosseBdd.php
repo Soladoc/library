@@ -1,10 +1,10 @@
 <?php
 
 require_once "../../db.php";
-if (isset($_POST['table'])) {
+if (isset($_GET['table'])) {
 
-    print 'table :'.$_POST['table'];
-    $table = $_POST['table'];
+    print 'table :'.$_GET['table'];
+    $table = $_GET['table'];
 
 
     $pdo=db_connect();
@@ -68,7 +68,7 @@ else {
         <h1>regarde dans la bdd</h1>
         <section class="connexion">
                 <div class="champ-connexion">
-                <form action="regardeMaGrosseBdd.php" method="post" enctype="multipart/form-data">
+                <form action="regardeMaGrosseBdd.php" method="get" enctype="multipart/form-data">
 
                     <br>
                     <div class="champ">
