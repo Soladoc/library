@@ -17,6 +17,18 @@ if (isset($_POST['motdepasse'])){
       exit();
    }
    $stmt = $pdo->prepare('INSERT INTO membres (pseudo, nom, prenom, telephone, email, motdepasse) VALUES (:pseudo, :nom, :prenom, :telephone, :email, :motdepasse)');
+   
+            $stmt->bindParam(':pseudo', $_POST['pseudo']);
+            $stmt->bindParam(':email', $_POST['email']);
+            $stmt->bindParam(':mdp_hash', $mdp_hash);
+            $stmt->bindParam(':nom', $_POST['nom']);
+            $stmt->bindParam(':prenom', $_POST['prenom']);
+            $stmt->bindParam(':telephone', $_POST['telephone']);
+            
+            
+
+  
+  
    $stmt->execute([
       'pseudo' => $_POST['pseudo'],
       'nom' => $_POST['nom'],
