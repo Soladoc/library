@@ -8,7 +8,7 @@ if (isset($_POST['table'])) {
 
 
     $pdo=db_connect();
-    $stmt = $pdo->prepare(query: 'SELECT COUNT(*) FROM pact.' . $table );
+    $stmt = $pdo->prepare(query: 'SELECT * FROM pact.' . $table );
     $stmt->execute();
 
     $count = $stmt->fetchColumn(); // Récupérer le nombre de lignes
