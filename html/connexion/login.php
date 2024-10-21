@@ -24,14 +24,16 @@ if (empty($username) || empty($password)) {
 // Préparer et exécuter la requête pour éviter les injections SQL
 $stmt = $pdo->prepare("SELECT email, mdp_hash FROM pact._compte WHERE email = :email");
 $stmt->bindValue(':email', $username, PDO::PARAM_STR);
+
 $stmt->execute();
 $user = $stmt->fetch(PDO::FETCH_ASSOC);
+
 echo "ko";
 // Vérifier si l'utilisateur existe
-if ($stmt->num_rows > 0) {
-    $stmt->bind_result($id, $hashed_password);
-    $stmt->fetch();
-    // Vérifier le mot de passe
+if ($user) {
+    
+    $hashed_password = $user['mdp_hash'];
+
     if (password_verify($password, $hashed_password)) {
         session_regenerate_id(true);
         $_SESSION['username'] = $username;
@@ -47,6 +49,6 @@ if ($stmt->num_rows > 0) {
     exit();
 }
 
-$stmt->close();
-$pdo->close();
+$stmt = null;
+$pdo = null;
 ?>

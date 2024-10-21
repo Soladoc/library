@@ -9,7 +9,7 @@
 </head>
 <body>
     <?php include ('header.php'); ?>
-    <form action="creation_offre.php" method="post">
+    <form action="creation_offre.php" method="get">
         <p>Choisissez la catégorie de votre offre</p>
         <button type="submit" name="type_offre" value="spectacle">Spectacle</button>
         <button type="submit" name="type_offre" value="parc_attraction">Parc d'atraction</button>
