@@ -5,7 +5,7 @@ session_start();
 require '../db.php';
 $pdo = db_connect();
 
-
+print_r("ok");
 // Vérifier la connexion
 if ($pdo->connect_error) {
     die("Échec de la connexion : " . $pdo->connect_error);
