@@ -3,7 +3,6 @@ require_once "../../db.php";
  $pdo=db_connect();
  $sql = "INSERT INTO pact._compte(email, mdp_hash, nom, prenom,telephone,id_identite) VALUES ('maelanpotier05@gmail.com',123,'bob','charles','01226262',5)";
  $stmt = $pdo->prepare($sql);
- echo "ko";
 ?>
 
 <!DOCTYPE html>
