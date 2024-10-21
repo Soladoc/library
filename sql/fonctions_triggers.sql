@@ -10,7 +10,7 @@ begin
   return new;
 end;
 $$ language 'plpgsql';
-create trigger tg_membres_insert
+create or replace trigger tg_membres_insert
 instead of insert
 on membres for each row
 execute procedure membres_insert();
@@ -26,7 +26,7 @@ begin
   return new;
 end;
 $$ language 'plpgsql';
-create trigger tg_pro_prive_insert
+create or replace trigger tg_pro_prive_insert
 instead of insert
 on pro_prive for each row
 execute procedure pro_prive_insert();
@@ -42,7 +42,19 @@ begin
   return new;
 end;
 $$ language 'plpgsql';
-create trigger tg_pro_public_insert
+create or replace trigger tg_pro_public_insert
 instead of insert
 on pro_public for each row
 execute procedure pro_public_insert();
+create or replace function est_en_ligne(id_offre_cherche integer) returns bool as $$
+declare
+  nb_change_etat integer;
+begin
+  nb_change_etat= count(*) from _changement_etat where id_offre=id_offre_cherche;
+  if nb_change_etat%2==0 then
+    return true;
+  else
+    return false;
+  end if;
+end;
+$$ language 'plpgsql';
