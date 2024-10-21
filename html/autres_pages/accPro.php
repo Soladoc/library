@@ -36,7 +36,7 @@ $offre_hors_ligne = $nb_offre - $offre_en_ligne;
                     <p class="location">Pleumeur-Bodou (22560)</p>
                     <p class="category">Restauration</p>
                     <p class="rating">Note : 4.7/5  ★ (256 avis)</p>
-                    <button class="btn-more-info">En savoir plus</button>
+                    <button class="btn-more-info" href="">En savoir plus</button>
                 
                 </div>
 
@@ -47,7 +47,7 @@ $offre_hors_ligne = $nb_offre - $offre_en_ligne;
                     <p class="location">Boudes (63340))</p>
                     <p class="category">Restauration</p>
                     <p class="rating">Note : 4.2/5  ★ (54 avis)</p>
-                    <button class="btn-more-info">En savoir plus</button>
+                    <button class="btn-more-info"  href="">En savoir plus</button>
                 </div>
 
                
@@ -66,7 +66,7 @@ $offre_hors_ligne = $nb_offre - $offre_en_ligne;
                     <p class="location">Pleumeur-Bodou (22560)</p>
                     <p class="category">Restauration</p>
                     <p class="rating">Note : 4.7/5  ★ (256 avis)</p>
-                    <button class="btn-more-info">En savoir plus</button>
+                    <button class="btn-more-info" href="">En savoir plus</button>
                 
                 </div>
 
@@ -77,7 +77,7 @@ $offre_hors_ligne = $nb_offre - $offre_en_ligne;
                     <p class="location">Boudes (63340))</p>
                     <p class="category">Restauration</p>
                     <p class="rating">Note : 4.2/5  ★ (54 avis)</p>
-                    <button class="btn-more-info">En savoir plus</button>
+                    <button class="btn-more-info" href="">En savoir plus</button>
                 </div>
 
                 <!-- Offre 3 -->
@@ -87,7 +87,7 @@ $offre_hors_ligne = $nb_offre - $offre_en_ligne;
                     <p class="location">Guingamp (22200)</p>
                     <p class="category">Activité Nature</p>
                     <p class="rating">Note : 3.7/5 ★ (122 avis)</p>
-                    <button class="btn-more-info">En savoir plus</button>
+                    <button class="btn-more-info" href="">En savoir plus</button>
                 </div>
 
                 <!-- Offre 4 -->
@@ -97,15 +97,17 @@ $offre_hors_ligne = $nb_offre - $offre_en_ligne;
                     <p class="location">Pléneuf-Val-André (22370)</p>
                     <p class="category">Sport nautique</p>
                     <p class="rating">Note : 4.4/5 ★ (24 avis)</p>
-                    <button class="btn-more-info">En savoir plus</button>
+                    <button class="btn-more-info" href="">En savoir plus</button>
                 </div>
             </div>
         </section>
 
         <!-- Bouton pour créer une nouvelle offre -->
-        <div class="create-offer">
-            <button class="btn-create">Créer une offre</button>
-        </div>
+        <a href="choix_categorie_creation_offre.php">
+            <div class="create-offer">
+                <button class="btn-create">Créer une offre</button>
+            </div>
+        </a>
     </main>
     <?php
         include("footer.php");

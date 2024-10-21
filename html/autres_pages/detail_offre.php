@@ -1,3 +1,7 @@
+<?php
+?>
+
+
 <!DOCTYPE html>
 <html lang="fr">
 
@@ -7,34 +11,21 @@
     <title>Détail de l'offre - Parc du Radôme</title>
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
     <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
-        <link rel="stylesheet" href="../style/style.css.css">
+    <link rel="stylesheet" href="../style/style.css">
 </head>
 
 <body>
     <!-- Header -->
-    <header>
-        <div class="header-container">
-            <div class="logo">
-                <img src="logo.png" alt="Logo Parc du Radôme">
-            </div>
-            <div class="search-bar">
-                <input type="text" placeholder="Rechercher">
-            </div>
-            <div class="account-section">
-                <a href="#" class="btn-account">Créer un compte</a>
-                <a href="#" class="btn-login">Accueil</a>
-            </div>
-        </div>
-    </header>
+    <?php include("header.php");?>
 
     <!-- Offer Details -->
     <main>
         <section class="offer-details">
             <div class="offer-main-photo">
-                <img src="offer1-photo1.jpg" alt="Main Photo" class="offer-photo-large">
+                <img src="../images/offre/Radôme1.jpg" alt="Main Photo" class="offer-photo-large">
                 <div class="offer-photo-gallery">
-                    <img src="offer1-photo2.jpg" alt="Photo 2" class="offer-photo-small">
-                    <img src="offer1-photo3.jpg" alt="Photo 3" class="offer-photo-small">
+                    <img src="../images/offre/Radôme2.jpg" alt="Photo 2" class="offer-photo-small">
+                    <img src="../images/offre/Radôme3.jpg" alt="Photo 3" class="offer-photo-small">
                 </div>
             </div>
 
@@ -106,6 +97,8 @@
             </div>
         </section>
     </main>
+    <!-- Footer -->
+     <?php include("footer.php");?>
 
     <script>
         // OpenStreetMap Integration
@@ -118,6 +111,7 @@
         L.marker([48.779, -3.518]).addTo(map)
             .bindPopup('Découverte interactive de la cité des Télécoms')
             .openPopup();
+            
         L.marker([45.779, -3.518]).addTo(map)
             .bindPopup('hihihihihihihihihui')
             L.marker([45.779, -4.518]).addTo(map)

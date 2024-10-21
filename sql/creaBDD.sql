@@ -172,9 +172,9 @@ create table pact._professionnel(
 );
 
 create table pact._prive(
-  id_pro integer constraint _prive_pk primary key,
+  id_prive integer constraint _prive_pk primary key,
   siren char(9) unique,
-  constraint _prive_fk_id_pro foreign key (id_pro) references pact._professionnel(id_professionnel)
+  constraint _prive_fk_id_prive foreign key (id_prive) references pact._professionnel(id_professionnel)
 );
 
 create table pact._moyenpaiement(

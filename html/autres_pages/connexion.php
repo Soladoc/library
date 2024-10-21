@@ -14,30 +14,41 @@
 
     <?php
         include("header.php");
+        require '../../db.php';
+        $pdo = db_connect();
     ?>
 
     <main>
         <!-- Section des offres à la une -->
         <h1>Connexion</h1>
-        <section class="connexion">
-            <form action="" class="champ-connexion">
+        <section class="connexion" action="../connexion/login.php" method="post" enctype="multipart/form-data">
+            <div class="champ-connexion">
                 <br>
+                <form action="crea.php" method="post" enctype="multipart/form-data">
                 <div class="champ">
-                    <label for="email_conexion">E-mail *</label>
-                    <input type="email" name="email_conexion" id="email_conexion"  placeholder="exemple@mail.fr">
+                    <label for="login">E-mail *</label>
+                    <input type="text" placeholder="exemple@mail.fr" id="login" required>
                 </div>
                 <br>
                 <div class="champ">
-                    <label for="mdp_conexion">Mot de passe *</label>
-                    <input type="password" name="mdp_conexion" id="mdp_conexion" placeholder="**********">
+                    <label for="mdp">Mot de passe *</label>
+                    <input type="text" placeholder="**********" id="mdp" required>
                 </div>
                 <br>
-                <button type="submit" class="btn-connexion">Se connecter</button>
+                </form>
+                <!-- php -->
+                <a href="">
+                    <button class="btn-connexion">Se connecter</button>
+                </a>
                 <br><br>
-                <p>Pas de compte ?</p>
-                <button class="btn-creer">Créer un compte personnel</button>
-                <p>OU</p>
-                <button class="btn-creer">Créer un compte professionnel</button>
+                <label>Pas de compte ?</label>
+                <a href="creation_membre.php">
+                    <button class="btn-creer">Créer un compte personnel</button>
+                </a>
+                <label>OU</label>
+                <a href="creation_comptePro.php">
+                    <button class="btn-creer">Créer un compte professionnel</button>
+                </a>
                 <br>
             </form>
         </section>
