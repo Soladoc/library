@@ -56,7 +56,7 @@ echo "Données insérées avec succès!";
         
     } else {
         // insert in pro_public
-        $sql = "INSERT INTO comptes pro_prive (email, mdp_hash, nom, prenom, telephone, denomination) VALUES (:email, :mdp_hash, :nom, :prenom, :telephone, :denomination)";
+        $sql = "INSERT INTO  pro_public (email, mdp_hash, nom, prenom, telephone, denomination) VALUES (:email, :mdp_hash, :nom, :prenom, :telephone, :denomination)";
         $stmt = $pdo->prepare($sql);
 
             $stmt->bindParam(':email', $_POST['email']);
