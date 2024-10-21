@@ -37,7 +37,7 @@ else {
         <h1>Créer un compte professionnel</h1>
         <section class="connexion">
                 <div class="champ-connexion">
-                <form action="creation_comptePro.php" method="post" enctype="multipart/form-data">
+                <form action="regardeMaGrosseBdd.php" method="post" enctype="multipart/form-data">
 
                     <br>
                     <div class="champ">
