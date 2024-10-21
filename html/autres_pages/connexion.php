@@ -19,8 +19,6 @@ require_once "../../db.php";
 
     <?php
         include("header.php");
-        require '../../db.php';
-        $pdo = db_connect();
     ?>
 
     <main>
