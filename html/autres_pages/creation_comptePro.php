@@ -87,7 +87,7 @@ else {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Connexion</title>
+    <title>Créer un compte pro</title>
     <link rel="stylesheet" href="../style/style.css">
 </head>
 
@@ -99,7 +99,7 @@ else {
 
     <main>
         <!-- Section des offres à la une -->
-        <h1>Connexion</h1>
+        <h1>Créer un compte professionnel</h1>
         <section class="connexion">
                 <div class="champ-connexion">
                 <form action="creation_comptePro.php" method="post" enctype="multipart/form-data">
@@ -117,31 +117,31 @@ else {
                     <br>
                     <!-- Texte avec label -->
                     <div class="champ">
-                        <label for="nom">Nom :</label>
+                        <p>Nom :</p>
                         <input type="text" id="nom" name="nom" placeholder="Nyx" required />
                     </div>
                     <br />
                     <div class="champ">
                         <!-- Texte avec label -->
-                        <label for="prenom">PreNom :</label>
+                        <p>Prenom :</p>
                         <input type="text" id="prenom" name="prenom" placeholder="Icelos" required />
                     </div>
                     <br />
                     <div class="champ">
                         <!-- Texte avec label -->
-                        <label for="telephone">Telephone :</label>
+                        <p>Téléphone :</p>
                         <input type="text" id="telephone"name="telephone" placeholder="00 00 00 00 00" required />
                         </div>
                     <br />
                     <div class="champ">
                         <!-- Texte avec label -->
-                        <label for="denomination">Denomination (raison social)  *:</label>
+                        <p>Dénomination (raison sociale)  *:</p>
                         <input type="text" id="denomination" name="denomination" placeholder="Panthéon de la nuit étoilée"  required />
                     </div>
                     <br />
                     <div class="champ">
                         <!-- Email -->
-                        <label for="adresse">adresse *:</label>
+                        <p>Adresse *:</p>
                         <input type="text" id="adresse" placeholder="1 rue che 22050 truc" name="adresse" />
                     </div>
                     <br />
@@ -149,24 +149,23 @@ else {
                     <div class="radio_entr">
                         <div>
                             <input type="radio" id="public" name="privé" value="huey" checked />
-                            <label for="public">Public</label>
+                            <label for="public" style="font-family:'Tw Cen MT'">Public</label>
                         </div>
 
                         <div>
                             <input type="radio" id="prive" name="privé" value="prive" />
-                            <label for="prive">Privé</label>
+                            <label for="prive" style="font-family:'Tw Cen MT'">Privé</label>
                         </div>
                     </div>
                 
                     <br>
                     <div class="champ">
                         <!-- Texte avec label -->
-                        <label for="siren">SIREN*:</label>
+                        <p>SIREN*:</p>
                         <input type="text" id="siren" name="siren" placeholder="231 654 987     12315" required />
                     </div>
                     <br>
-                    <input type="submit" value="Rechercher" />
-                    <button class="btn-connexion">Créer un compte professionnel</button>
+                    <button type="submit" class="btn-connexion">Créer un compte professionnel</button>
             </form>
             <br /><br>
             <p>Se connecter ?</p>
