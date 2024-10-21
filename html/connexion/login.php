@@ -22,7 +22,7 @@ if (empty($username) || empty($password)) {
 }
 
 // Préparer et exécuter la requête pour éviter les injections SQL
-$stmt = $pdo->prepare("SELECT c.email, c.mdp_hash, m.existe FROM pact._compte AS c JOIN pact._membre AS m ON c.email = m.email WHERE c.email = :email AND m.existe = true");
+$stmt = $pdo->prepare("SELECT c.email, c.mdp_hash, m.existe FROM pact._compte AS c JOIN pact._membre AS m ON c.email = m.email WHERE c.email = :email");
 $stmt->bindValue(':email', $username, PDO::PARAM_STR);
 
 $stmt->execute();
@@ -45,7 +45,7 @@ if ($user['existe'] == true) {
         exit();
     }
 } else {
-    echo "echec";
+    echo "echec pas reussi a trouvé existe";
     exit();
 }
 
