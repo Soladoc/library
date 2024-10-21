@@ -29,7 +29,7 @@ $stmt->execute();
 $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
 // Vérifier si l'utilisateur existe
-if ($user['existe'] == true) {
+if ($user !== false && $user['existe'] == true) {
     
     $hashed_password = $user['mdp_hash'];
     echo "Hash récupéré : " . $hashed_password;
@@ -40,7 +40,6 @@ if ($user['existe'] == true) {
         echo "connecté";
         exit();
     } else {
-        // Mot de passe incorrect
         header("Location: ../autres_pages/connexion.php?error=Nom d'utilisateur ou mot de passe incorrect.");
         exit();
     }
