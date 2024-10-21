@@ -5,7 +5,7 @@
     <a href="connexion.php">
         <div class="auth-button">
             <img src="../images/profile-icon.png" alt="Profil">
-            <span>Connection</span>
+            <span>Connexion</span>
         </div>
     </a>
 </header>
