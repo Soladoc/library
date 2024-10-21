@@ -22,7 +22,7 @@ if (empty($username) || empty($password)) {
 }
 
 // Préparer et exécuter la requête pour éviter les injections SQL
-$stmt = $pdo->prepare("SELECT email, mdp_hash FROM users WHERE username = ?");
+$stmt = $pdo->prepare("SELECT email, mdp_hash FROM users WHERE email = :email");
 $stmt->bindValue(':username', $username, PDO::PARAM_STR);
 $stmt->execute();
 $stmt->store_result();
