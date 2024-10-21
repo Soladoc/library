@@ -2,7 +2,6 @@
 $nb_offre = 6;
 $offre_en_ligne = 2;
 $offre_hors_ligne = $nb_offre - $offre_en_ligne;
-
 ?>
 
 <!DOCTYPE html>
