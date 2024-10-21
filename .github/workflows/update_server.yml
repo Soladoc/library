@@ -26,4 +26,4 @@ jobs:
               sudo docker compose up -d
           EOF
 
-          sudo docker cp data/php.ini web:/usr/local/etc/php/php.ini
+          sudo docker cp /docker/sae/data/php.ini web:/usr/local/etc/php/php.ini
