@@ -2,20 +2,12 @@
 require_once "../../db.php";
 $pdo = db_connect();
 
-// Hacher le mot de passe avant l'insertion
 $mdp_hash = password_hash('123', PASSWORD_DEFAULT);
 
 $sql = "INSERT INTO pact.membres(pseudo,existe,email, mdp_hash, nom, prenom, telephone, id_identite) 
         VALUES ('Mange',true,'maelanpotier05@gmail.com', :mdp_hash, 'bob', 'charles', '01226262', 5)";
 $stmt = $pdo->prepare($sql);
 $stmt->bindParam(':mdp_hash', $mdp_hash);
-
-// Exécuter l'insertion
-if ($stmt->execute()) {
-    echo "Insertion réussie !";
-} else {
-    echo "Erreur lors de l'insertion.";
-}
 ?>
 
 <!DOCTYPE html>

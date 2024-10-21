@@ -2,7 +2,7 @@
 session_start();
 
 // Configuration de la base de données
-require '../db.php';
+require '../../db.php';
 $pdo = db_connect();
 
 print 'ok';
