@@ -37,14 +37,25 @@ if ($user !== false && $user['existe'] == true) {
     if (password_verify($password, $hashed_password)) {
         session_regenerate_id(true);
         $_SESSION['username'] = $username;
-        echo "connecté";
-        exit();
+
+        $stmt = $pdo->prepare("SELECT COUNT(*) as count FROM pact._professionnel WHERE email = :email");
+        $stmt->bindValue(':email', $username, PDO::PARAM_STR);
+        $stmt->execute();
+        $result = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        if ($result['count'] > 0) {
+            echo "<script>window.location.href='../autres_pages/accPro.php';</script>";
+            exit();
+        } else {
+            echo "<script>window.location.href='../autres_pages/accueil.php';</script>";
+            exit();
+        }
     } else {
         header("Location: ../autres_pages/connexion.php?error=Nom d'utilisateur ou mot de passe incorrect.");
         exit();
     }
 } else {
-    echo "echec pas reussi a trouvé existe";
+    echo "<script>window.location.href='../autres_pages/connexion.php';</script>";
     exit();
 }
 
