@@ -24,12 +24,12 @@ if (empty($username) || empty($password)) {
 // Préparer et exécuter la requête pour éviter les injections SQL
 $stmt = $pdo->prepare("SELECT c.email, c.mdp_hash, m.existe FROM pact._compte AS c JOIN pact._membre AS m ON c.email = m.email WHERE c.email = :email");
 $stmt->bindValue(':email', $username, PDO::PARAM_STR);
-
+echo $stmt;
 $stmt->execute();
 $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
 // Vérifier si l'utilisateur existe
-if ($user && (bool)$user['existe']) {
+if ($result['count'] > 0) {
     
     $hashed_password = $user['mdp_hash'];
     echo "Hash récupéré : " . $hashed_password;

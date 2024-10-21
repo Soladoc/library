@@ -1,13 +1,6 @@
 <?php
 require_once "../../db.php";
 $pdo = db_connect();
-
-$mdp_hash = password_hash('123', PASSWORD_DEFAULT);
-
-$sql = "INSERT INTO pact.membres(pseudo,existe,email, mdp_hash, nom, prenom, telephone, id_identite) 
-        VALUES ('Mange',true,'maelanpotier05@gmail.com', :mdp_hash, 'bob', 'charles', '01226262', 5)";
-$stmt = $pdo->prepare($sql);
-$stmt->bindParam(':mdp_hash', $mdp_hash);
 ?>
 
 <!DOCTYPE html>
