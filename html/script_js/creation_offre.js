@@ -1,36 +1,56 @@
-let id_ajout_tarif = 0;
-let id_ajout_horraire = 0;
+"use strict";
 
-function ajoutTarif() {
-    id_ajout_tarif++;
-    document.getElementById('tarif_ajoute').innerHTML+='<br class="br_'+id_ajout_tarif+'"/><input id="nom_tarif_'+id_ajout_tarif+'" type="text" required name="nom_tarif_'+id_ajout_tarif+'" placeholder="Nom du tarif n°'+id_ajout_tarif+'"  />';
-    document.getElementById('tarif_ajoute').innerHTML+='<br class="br_'+id_ajout_tarif+'"/><input id="prix_tarif_'+id_ajout_tarif+'" required type="number" name="prix_tarif_'+id_ajout_tarif+'" placeholder="Prix du tarif n°'+id_ajout_tarif+'"  />';
-    document.getElementById('tarif_ajoute').innerHTML+='<br class="br_'+id_ajout_tarif+'"/><button type="button" id="sup_tarif_'+id_ajout_tarif+'" onClick="supTarif('+id_ajout_tarif+')">Supprimer tarif n°'+id_ajout_tarif+'</button>';
+/** @type {HTMLTableSectionElement} */
+const tbody_tarifs = document.getElementById('tbody_tarifs');
+
+/** @type {HTMLTemplateElement} */
+const template_tarif_row = document.getElementById('template_tarif_row');
+
+/**
+ * @param {string} nom 
+ * @param {number} montant
+ * @returns {HTMLTableRowElement}
+ */
+function create_tarif_row(nom, montant) {
+    // Clone the template
+    /** @type {HTMLTableRowElement} */
+    const tarif_row = template_tarif_row.content.children[0].cloneNode(true);
+    
+    tarif_row.id = `tr_tarif_${nom}`;
+    tarif_row.children[0].innerText = nom;
+    
+    tarif_row.children[1].children[0].value = montant;
+
+    /** @type {HTMLButtonElement} */
+    const remove_button = tarif_row.children[2];
+    remove_button.addEventListener('click', () => tarif_row.remove());
+
+    return tarif_row;
 }
 
-function supTarif(num){
-    e = document.getElementsByClassName("br_"+num);
-    for (let i = 0; i < e.length; i++) {
-        e[i].remove();
-        console.log(i);
+/** @type {HTMLButtonElement} */
+const button_add_tarif = document.getElementById('button_add_tarif');
+
+/** @type {HTMLInputElement} */
+const nom_tarif = document.getElementById('nom_tarif');
+
+/** @type {HTMLInputElement} */
+const montant_tarif = document.getElementById('montant_tarif');
+
+button_add_tarif.addEventListener('click', () => {
+    // Custom validation logic
+    if (!nom_tarif.value) {
+        alert('Nom du tarif manquant');
+        return;
+    }
+    if (isNaN(montant_tarif.valueAsNumber)) {
+        alert('Montant du tarif manquant');
+        return;
+    }
+    if (document.getElementById(`tr_tarif_${nom_tarif.value}`) !== null) {
+        alert('Un tarif de même nom exite déjà.')
+        return;
     }
 
-    document.getElementById("nom_tarif_"+num).remove();
-    document.getElementById("prix_tarif_"+num).remove();
-    document.getElementById("sup_tarif_"+num).remove();
-
-    // me demandez pas pourquoi je dois le mettre avant et apres sinon il en reste un
-    // il en reste un si je met que le premier et il en reste un si je ne met que celui la 
-    //donc j'ai opté pour du quick and dirty et je le met deux fois... (problem solved ig)
-    e = document.getElementsByClassName("br_"+num);
-    for (let i = 0; i < e.length; i++) {
-        e[i].remove();
-        console.log(i);
-    }
-}
-
-function ajoutHorraire(jour) {
-    id_ajout_horraire++;
-    //TODO
-
-}
+    tbody_tarifs.appendChild(create_tarif_row(nom_tarif.value, montant_tarif.valueAsNumber))
+});

@@ -2,74 +2,77 @@
 <html lang="fr">
 
 <head>
-    <script src="../script_js/creation_offre.js"></script>
+    <script async src="../script_js/creation_offre.js"></script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="../style/style.css">
     <title>Création d'une offre</title>
 </head>
 
+<?php
+const TYPE_OFFRE_AFFICHABLE = [
+    'spectacle' => 'un spectacle',
+    'parc_attraction' => "un parc d'attraction",
+    'visite' => 'une visite',
+    'restauration' => 'une restauration',
+    'activite' => 'une activité',
+    '' => 'une offre'
+];
+?>
+
 <body>
+    <template id="template_tarif_row">
+        <tr>
+            <td></td>
+            <td><input name="montant_tarif" type="number" placeholder="montant" required> €</td>
+            <td><button type="button">-</button></td>
+        </tr>
+    </template>
     <?php require 'header.php' ?>
     <main>
         <section id="titre_creation_offre">
-            <?php if (isset($_POST)) { ?>
-            <?php
-
-            /*
-             * afin d'afficher le tire correctement j'effectu un switch sur le type d'offre
-             * je ne fais pas <h1>Créer <?php echo ucfirst(str_replace('_',' ',$_POST['type_offre'])) ; \⸮><h1>
-             * car il faut gérer le préfixe "un/une" qui nécéssite de toute facons un switch
-             */
-            $type_offre_affichable = '';
-            switch ($_POST['type_offre']) {
-                case 'spectacle':
-                    $type_offre_affichable = 'un spectacle';
-                    break;
-                case 'parc_attraction':
-                    $type_offre_affichable = "un parc d'attraction";
-                    break;
-                case 'visite':
-                    $type_offre_affichable = 'une visite';
-                    break;
-                case 'restauration':
-                    $type_offre_affichable = 'une restauration';
-                    break;
-                case 'activite':
-                    $type_offre_affichable = 'une activité';
-                    break;
-                default:
-                    $type_offre_affichable = 'une offre';
-                    break;
-            }
-            ?>
-            <h1>Créer <?php echo $type_offre_affichable; ?></h1>
+            <?php if (isset($_GET)) { ?>
+            <h1>Créer <?= TYPE_OFFRE_AFFICHABLE[$_GET['type_offre'] ?? ''] ?></h1>
             <?php } else { ?>
             <!-- post is unset-->
-            <h1>Erreur de methode d'acces</h1>
-            <p>Une erreur dans la requette de la page est survenu merci de réessayer plus tard</p>
+            <h1>Erreur de méthode d'accès</h1>
+            <p>Une erreur dans la requette de la page est survenue, merci de réessayer plus tard</p>
             <?php } ?>
         </section>
         <section id="image_creation_offre" style="background-color: gray;">
             <p style="background-color: gray;">À ajouter plus tard</p>
+            <!-- Choisit 1 photo principale + 0 ou plus photos dans la gallerie -->
         </section>
         <form action="" method="post">
-
             <section id="tarif">
                 <article>
                     <h3>Tarifs</h3>
-                    <!-- ajouter la taille dans le css -->
-                    <button type="button" onclick="ajoutTarif();">
-                        <img src="../icon/icons8-ajouter-90.png" alt="Ajouter tarif">
-                    </button>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Dénomination</th>
+                                <th>Montant</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tbody_tarifs">
+
+                        </tbody>
+                        <tfoot>
+                            <tr>
+                                <td><input id="nom_tarif" type="text" placeholder="Nom"></td>
+                                <td><input id="montant_tarif" type="number" min="0" placeholder="Montant"> €</td>
+                                <td><button id="button_add_tarif" type="button">+</button></td>
+                            </tr>
+                            </tbody>
+                    </table>
                 </article>
                 <article id="tarif_ajoute">
 
                 </article>
             </section>
-            <section id="horraires">
+            <section id="horaires">
                 <article>
-                    <h2>horraires</h2>
+                    <h2>Horaires</h2>
                 </article>
                 <div>
                     <article id="lundi">
@@ -79,7 +82,7 @@
                                 <img src="../icon/icons8-ajouter-90.png" alt="Ajouter Horraire">
                             </button>
                         </div>
-                        <!-- ici se trouverons les horraires ajoutés en javaScript -->
+                        <!-- ici se trouverons les horaires ajoutés en javaScript -->
                     </article>
                     <article id="mardi">
                         <div>
@@ -159,7 +162,7 @@
             <button type="submit">Valider</button>
         </form>
     </main>
-    <?php include ('footer.php'); ?>
+    <?php require 'footer.php' ?>
 </body>
 
 </html>
