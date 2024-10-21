@@ -7,8 +7,8 @@ $pdo = db_connect();
 
 
 // Vérifier la connexion
-if ($conn->connect_error) {
-    die("Échec de la connexion : " . $conn->connect_error);
+if ($pdo->connect_error) {
+    die("Échec de la connexion : " . $pdo->connect_error);
 }
 
 // Récupérer les données du formulaire
@@ -22,7 +22,7 @@ if (empty($username) || empty($password)) {
 }
 
 // Préparer et exécuter la requête pour éviter les injections SQL
-$stmt = $conn->prepare("SELECT email, mdp_hash FROM users WHERE username = ?");
+$stmt = $pdo->prepare("SELECT email, mdp_hash FROM users WHERE username = ?");
 $stmt->bind_param("s", $username);
 $stmt->execute();
 $stmt->store_result();
@@ -49,5 +49,5 @@ if ($stmt->num_rows > 0) {
 }
 
 $stmt->close();
-$conn->close();
+$pdo->close();
 ?>
