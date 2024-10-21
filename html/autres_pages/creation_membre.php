@@ -39,7 +39,7 @@ if (isset($_POST['motdepasse'])){
       'prenom' => $_POST['prenom'],
       'telephone' => $_POST['telephone'],
       'email' => $_POST['email'],
-      'motdepasse' => $mdp_hash
+      'mdp_hash' => $mdp_hash
    ]);
 }
 else {
