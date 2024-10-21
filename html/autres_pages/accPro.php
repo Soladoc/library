@@ -1,6 +1,12 @@
 <?php
-$nb_offre = 6;
-$offre_en_ligne = 2;
+require '../../db.php';
+$pdo=db_connect();
+$stmt = $pdo->prepare('SELECT COUNT(*) FROM offres WHERE id_professionnel = :id_professionnnel');
+$stmt->execute(['id_professionnel' => ]);
+$nb_offre = $stmt->fetchColumn();
+$stmt = $pdo->prepare('SELECT COUNT(*) FROM offres WHERE id_professionnel = :id_professionnnel');
+$stmt->execute(['id_professionnel' => ]);
+$offre_en_ligne = $stmt->fetchColumn();
 $offre_hors_ligne = $nb_offre - $offre_en_ligne;
 
 ?>
@@ -44,7 +50,7 @@ $offre_hors_ligne = $nb_offre - $offre_en_ligne;
                 <div class="offer-card">
                     <img src="vallee_saints.jpg" alt="Randonnée dans la vallée des Saints">
                     <h3>Randonnée dans la vallée des Saints</h3>
-                    <p class="location">Boudes (63340))</p>
+                    <p class="location">Boudes (63340)</p>
                     <p class="category">Restauration</p>
                     <p class="rating">Note : 4.2/5  ★ (54 avis)</p>
                     <button class="btn-more-info"  href="">En savoir plus</button>
