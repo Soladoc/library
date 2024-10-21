@@ -2,10 +2,10 @@
 require '../../db.php';
 $pdo=db_connect();
 $stmt = $pdo->prepare('SELECT COUNT(*) FROM offres WHERE id_professionnel = :id_professionnnel');
-$stmt->execute(['id_professionnel' => ]);
+$stmt->execute(['id_professionnel' => ":id_professionnnel"]);
 $nb_offre = $stmt->fetchColumn();
 $stmt = $pdo->prepare('SELECT COUNT(*) FROM offres WHERE id_professionnel = :id_professionnnel');
-$stmt->execute(['id_professionnel' => ]);
+$stmt->execute(['id_professionnel' => ":id_professionnnel"]);
 $offre_en_ligne = $stmt->fetchColumn();
 $offre_hors_ligne = $nb_offre - $offre_en_ligne;
 ?>
