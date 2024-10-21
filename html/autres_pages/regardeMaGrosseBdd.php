@@ -8,8 +8,8 @@ if (isset($_POST['table'])) {
 
 
     $pdo=db_connect();
-    $stmt = $pdo->prepare(query: 'SELECT COUNT(*) FROM pact.:table ');
-    $stmt->execute([ 'table' => $_POST['table']]);
+    $stmt = $pdo->prepare(query: 'SELECT COUNT(*) FROM pact.:tabl ');
+    $stmt->execute([ 'tabl' => $_POST['table']]);
     
        exit;
     
