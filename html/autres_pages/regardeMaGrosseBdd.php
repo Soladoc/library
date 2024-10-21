@@ -3,7 +3,7 @@
 require_once "../../db.php";
 if (isset($_POST['table'])) {
 
-    print 'Votre nom :'.$_POST['table'];
+    print 'table :'.$_POST['table'];
     $table = $_POST['table'];
 
 
@@ -53,7 +53,7 @@ else {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Créer un compte pro</title>
+    <title>regarde dans la bdd</title>
     <link rel="stylesheet" href="../style/style.css">
 </head>
 
@@ -65,7 +65,7 @@ else {
 
     <main>
         <!-- Section des offres à la une -->
-        <h1>Créer un compte professionnel</h1>
+        <h1>regarde dans la bdd</h1>
         <section class="connexion">
                 <div class="champ-connexion">
                 <form action="regardeMaGrosseBdd.php" method="post" enctype="multipart/form-data">
