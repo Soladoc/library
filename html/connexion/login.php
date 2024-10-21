@@ -26,12 +26,11 @@ $stmt = $pdo->prepare("SELECT email, mdp_hash FROM users WHERE username = ?");
 $stmt->bind_param("s", $username);
 $stmt->execute();
 $stmt->store_result();
-
+echo "ko";
 // Vérifier si l'utilisateur existe
 if ($stmt->num_rows > 0) {
     $stmt->bind_result($id, $hashed_password);
     $stmt->fetch();
-    echo "ko";
     // Vérifier le mot de passe
     if (password_verify($password, $hashed_password)) {
         session_regenerate_id(true);
