@@ -1,8 +1,3 @@
-<?php ?>
-
-
-
-
 <!DOCTYPE html>
 <html lang="fr">
 
@@ -14,11 +9,7 @@
 </head>
 
 <body>
-
-    <?php
-        include("header.php");
-    ?>
-
+    <?php require 'component/header.php' ?>
     <main>
         <!-- Section de recherche -->
         <section class="search-section">
@@ -36,40 +27,40 @@
         <section class="highlight-offers">
             <h2>Offres à la une</h2>
             <div class="offer-list">
-            <?php
-                // 1. Connexion à la base de données
-                $pdo = db_connect();
+                <?php
+                    // 1. Connexion à la base de données
+                    $pdo = db_connect();
 
-                // 2. Préparer et exécuter la requête SQL pour récupérer toutes les offres
-                $sql = "SELECT image, title, location, category, price, rating, reviews, professional, closing_time FROM offres";
-                $stmt = $pdo->query($sql); // Exécute la requête SQL
+                    // 2. Préparer et exécuter la requête SQL pour récupérer toutes les offres
+                    $sql = 'SELECT image, title, location, category, price, rating, reviews, professional, closing_time FROM offres';
+                    $stmt = $pdo->query($sql);  // Exécute la requête SQL
 
-                // 3. Boucler sur les résultats pour afficher chaque offre
-                while ($offre = $stmt->fetch(PDO::FETCH_ASSOC)) {
-                    // Calculer si l'offre ferme bientôt (exemple si elle ferme dans moins d'une heure)
-                    $current_time = new DateTime(); // Heure actuelle
-                    $closing_time = new DateTime($offre['closing_time']);
-                    $closing_soon = ($closing_time > $current_time && $closing_time->diff($current_time)->h < 1);
+                    // 3. Boucler sur les résultats pour afficher chaque offre
+                    while ($offre = $stmt->fetch(PDO::FETCH_ASSOC)) {
+                        // Calculer si l'offre ferme bientôt (exemple si elle ferme dans moins d'une heure)
+                        $current_time = new DateTime();  // Heure actuelle
+                        $closing_time = new DateTime($offre['closing_time']);
+                        $closing_soon = ($closing_time > $current_time && $closing_time->diff($current_time)->h < 1);
 
-                    // 4. Afficher les détails de chaque offre dans du HTML
-                    echo '<div class="offer-card">';
-                    echo '    <img src="' . htmlspecialchars($offre['image']) . '" alt="' . htmlspecialchars($offre['title']) . '">';
-                    echo '    <h3>' . htmlspecialchars($offre['title']) . '</h3>';
-                    echo '    <p class="location">' . htmlspecialchars($offre['location']) . '</p>';
-                    echo '    <p class="category">' . htmlspecialchars($offre['category']) . '</p>';
-                    echo '    <p class="price">Prix : ' . htmlspecialchars($offre['price']) . '</p>';
-                    echo '    <p class="rating">Note : ' . htmlspecialchars($offre['rating']) . ' ★ (' . htmlspecialchars($offre['reviews']) . ' avis)</p>';
-                    echo '    <p class="professional">Proposé par : ' . htmlspecialchars($offre['professional']) . '</p>';
-                    
-                    // 5. Afficher un message si l'offre ferme bientôt
-                    if ($closing_soon) {
-                        echo '    <span class="closing-soon">Ferme bientôt à ' . $closing_time->format('H:i') . '</span>';
+                        // 4. Afficher les détails de chaque offre dans du HTML
+                        echo '<div class="offer-card">';
+                        echo '    <img src="' . htmlspecialchars($offre['image']) . '" alt="' . htmlspecialchars($offre['title']) . '">';
+                        echo '    <h3>' . htmlspecialchars($offre['title']) . '</h3>';
+                        echo '    <p class="location">' . htmlspecialchars($offre['location']) . '</p>';
+                        echo '    <p class="category">' . htmlspecialchars($offre['category']) . '</p>';
+                        echo '    <p class="price">Prix : ' . htmlspecialchars($offre['price']) . '</p>';
+                        echo '    <p class="rating">Note : ' . htmlspecialchars($offre['rating']) . ' ★ (' . htmlspecialchars($offre['reviews']) . ' avis)</p>';
+                        echo '    <p class="professional">Proposé par : ' . htmlspecialchars($offre['professional']) . '</p>';
+
+                        // 5. Afficher un message si l'offre ferme bientôt
+                        if ($closing_soon) {
+                            echo '    <span class="closing-soon">Ferme bientôt à ' . $closing_time->format('H:i') . '</span>';
+                        }
+
+                        // Lien vers plus d'infos sur l'offre (mettre l'URL correcte dans href)
+                        echo '    <a href="#">Voir l\'offre</a>';
+                        echo '</div>';
                     }
-
-                    // Lien vers plus d'infos sur l'offre (mettre l'URL correcte dans href)
-                    echo '    <a href="#">Voir l\'offre</a>';
-                    echo '</div>';
-                }
                 ?>
 
                 <!-- Offre 1 -->
@@ -114,7 +105,7 @@
                         <button class="btn-more-info">En savoir plus</button>
                     </a>
                 </div>
-           
+
                 <!-- Offre 4 -->
                 <div class="offer-card">
                     <img src="aquarium.jpg" alt="Aquarium de Bretagne">
@@ -139,7 +130,7 @@
                     <p class="professional">Proposé par : Dunes Resort</p>
                     <button class="btn-more-info">En savoir plus</button>
                 </div>
-            
+
                 <!-- Offre 6 -->
                 <div class="offer-card">
                     <img src="camping.jpg" alt="Camping des Pins">
@@ -166,10 +157,7 @@
             </div>
         </section>
     </main>
-
-    <?php
-        include("footer.php");
-    ?>
+    <?php require 'component/footer.php' ?>
 </body>
 
 </html>

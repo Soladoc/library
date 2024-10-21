@@ -22,6 +22,7 @@ const TYPE_OFFRE_AFFICHABLE = [
 ?>
 
 <body>
+    <?php require 'component/header.php' ?>
     <template id="template_tarif_row">
         <tr>
             <td></td>
@@ -29,7 +30,6 @@ const TYPE_OFFRE_AFFICHABLE = [
             <td><button type="button">-</button></td>
         </tr>
     </template>
-    <?php require 'header.php' ?>
     <main>
         <section id="titre_creation_offre">
             <?php if (isset($_GET)) { ?>
@@ -155,7 +155,7 @@ const TYPE_OFFRE_AFFICHABLE = [
             <button type="submit">Valider</button>
         </form>
     </main>
-    <?php require 'footer.php' ?>
+    <?php require 'component/footer.php' ?>
 </body>
 
 </html>

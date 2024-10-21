@@ -1,51 +1,47 @@
 <?php
 
-require_once "../../db.php";
+require_once 'db.php';
 if (isset($_GET['table'])) {
-
-    print 'table :'.$_GET['table'];
+    print 'table :' . $_GET['table'];
     $table = $_GET['table'];
 
-
-    $pdo=db_connect();
+    $pdo = db_connect();
     try {
         // Construire la requête SQL pour sélectionner toutes les lignes de la table validée
         $query = 'SELECT * FROM pact.' . $table;
         $stmt = $pdo->prepare($query);
         $stmt->execute();
-    
+
         // Récupérer toutes les lignes de la table
-        $results = $stmt->fetchAll(PDO::FETCH_ASSOC); // Récupère les données sous forme de tableau associatif
-    
+        $results = $stmt->fetchAll(PDO::FETCH_ASSOC);  // Récupère les données sous forme de tableau associatif
+
         // Vérifier s'il y a des résultats
         if ($results) {
             echo "<table border='1'>";
-            echo "<tr>";
-    
+            echo '<tr>';
+
             // Afficher les en-têtes du tableau en fonction des colonnes récupérées
             foreach (array_keys($results[0]) as $column) {
-                echo "<th>" . htmlspecialchars($column) . "</th>";
+                echo '<th>' . htmlspecialchars($column) . '</th>';
             }
-            echo "</tr>";
-    
+            echo '</tr>';
+
             // Afficher chaque ligne
             foreach ($results as $row) {
-                echo "<tr>";
+                echo '<tr>';
                 foreach ($row as $value) {
-                    echo "<td>" . htmlspecialchars($value) . "</td>"; // Sécuriser l'affichage des données
+                    echo '<td>' . htmlspecialchars($value) . '</td>';  // Sécuriser l'affichage des données
                 }
-                echo "</tr>";
+                echo '</tr>';
             }
-            echo "</table>";
+            echo '</table>';
         } else {
             echo "Aucune donnée trouvée dans la table $table.";
         }
-    
     } catch (Exception $e) {
-        echo "Erreur : " . $e->getMessage();
+        echo 'Erreur : ' . $e->getMessage();
     }
-}
-else {
+} else {
 ?>
 <!DOCTYPE html>
 <html lang="fr">
@@ -58,16 +54,12 @@ else {
 </head>
 
 <body>
-
-    <?php
-        include("header.php");
-    ?>
-
+    <?php require 'component/header.php' ?>
     <main>
         <!-- Section des offres à la une -->
         <h1>regarde dans la bdd</h1>
         <section class="connexion">
-                <div class="champ-connexion">
+            <div class="champ-connexion">
                 <form action="regardeMaGrosseBdd.php" method="get" enctype="multipart/form-data">
 
                     <br>
@@ -75,25 +67,18 @@ else {
                         <p>donne le nom de la table </p>
                         <input type="text" placeholder="" id="table" name="table" required>
                     </div>
-                   
-                    <button type="submit" class="btn-connexion" >regarde</button>
+
+                    <button type="submit" class="btn-connexion">regarde</button>
                 </form>
-            <br /><br>
-            </a>
-            <br>
+                <br /><br>
+                </a>
+                <br>
             </div>
         </section>
     </main>
-    <br>
-    <br>
-    <br>
-    <?php
-        include("footer.php");
-    ?>
-
+    <?php require 'component/footer.php' ?>
 
 </body>
-
 
 </html>
 <?php

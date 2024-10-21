@@ -1,10 +1,11 @@
 <?php
-require_once "../../db.php";
+require_once 'db.php';
 $pdo = db_connect();
 ?>
 
 <!DOCTYPE html>
 <html lang="fr">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -13,11 +14,7 @@ $pdo = db_connect();
 </head>
 
 <body>
-
-    <?php
-        include("header.php");
-    ?>
-
+    <?php require 'component/header.php' ?>
     <main>
         <h1>Connexion</h1>
         <section class="connexion">
@@ -50,11 +47,7 @@ $pdo = db_connect();
             </div>
         </section>
     </main>
-
-    <br><br><br>
-    <?php
-        include("footer.php");
-    ?>
+    <?php require 'component/footer.php' ?>
 </body>
 
 </html>

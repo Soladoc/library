@@ -15,10 +15,10 @@ function create_tarif_row(nom, montant) {
     // Clone the template
     /** @type {HTMLTableRowElement} */
     const tarif_row = template_tarif_row.content.children[0].cloneNode(true);
-    
+
     tarif_row.id = `tr_tarif_${nom}`;
     tarif_row.children[0].innerText = nom;
-    
+
     tarif_row.children[1].children[0].value = montant;
 
     /** @type {HTMLButtonElement} */
@@ -48,9 +48,9 @@ button_add_tarif.addEventListener('click', () => {
         return;
     }
     if (document.getElementById(`tr_tarif_${nom_tarif.value}`) !== null) {
-        alert('Un tarif de même nom exite déjà.')
+        alert('Un tarif de même nom exite déjà.');
         return;
     }
 
-    tbody_tarifs.appendChild(create_tarif_row(nom_tarif.value, montant_tarif.valueAsNumber))
+    tbody_tarifs.appendChild(create_tarif_row(nom_tarif.value, montant_tarif.valueAsNumber));
 });

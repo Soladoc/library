@@ -1,45 +1,41 @@
 <?php
 
-require_once "../../db.php";
+require_once 'db.php';
 if (isset($_POST['mdp'])) {
+    print 'Votre nom :' . $_POST['nom'];
+    print 'Votre prenom :' . $_POST['mdp'];
+    print 'Votre numero de telephone :' . $_POST['telephone'];
+    print 'Votre mail :' . $_POST['email'];
+    print 'Votre mot de passe :' . $_POST['mdp'];
+    print 'Votre adresse :' . $_POST['adresse'];
 
-    print 'Votre nom :'.$_POST['nom'];
-    print 'Votre prenom :'.$_POST['mdp'];
-    print 'Votre numero de telephone :'.$_POST['telephone'];
-    print 'Votre mail :'.$_POST['email'];
-    print 'Votre mot de passe :'.$_POST['mdp'];
-    print 'Votre adresse :'.$_POST['adresse'];
-   
     $estprive = isset($_POST['prive']);
-    $mdp_hash = password_hash($_POST["mdp"], PASSWORD_DEFAULT);
+    $mdp_hash = password_hash($_POST['mdp'], PASSWORD_DEFAULT);
 
-
-    $pdo=db_connect();
+    $pdo = db_connect();
     $stmt = $pdo->prepare('SELECT COUNT(*) FROM pact._compte WHERE email = :email');
-    $stmt->execute([ 'email' => $_POST['email']]);
+    $stmt->execute(['email' => $_POST['email']]);
     $count = $stmt->fetchColumn();
     if ($count > 0) {
-       echo 'Cette adresse e-mail est déjà utilisée.';
-       exit;
+        echo 'Cette adresse e-mail est déjà utilisée.';
+        exit;
     }
 
     // insert in compte
 
     if ($estprive) {
-        
         // insert in pro_prive
-        $sql = "INSERT INTO  pact.pro_prive (email, mdp_hash, nom, prenom, telephone, denomination, siren) VALUES (:email, :mdp_hash, :nom, :prenom, :telephone, :denomination, :siren)";
+        $sql = 'INSERT INTO  pact.pro_prive (email, mdp_hash, nom, prenom, telephone, denomination, siren) VALUES (:email, :mdp_hash, :nom, :prenom, :telephone, :denomination, :siren)';
         $stmt = $pdo->prepare($sql);
 
-            $stmt->bindParam(':email', $_POST['email']);
-            $stmt->bindParam(':mdp_hash', $mdp_hash);
-            $stmt->bindParam(':nom', $_POST['nom']);
-            $stmt->bindParam(':prenom', $_POST['prenom']);
-            $stmt->bindParam(':telephone', $_POST['telephone']);
-            $stmt->bindParam(':denomination', $_POST['denomination']);
-            $stmt->bindParam(':siren', $_POST['siren']);
+        $stmt->bindParam(':email', $_POST['email']);
+        $stmt->bindParam(':mdp_hash', $mdp_hash);
+        $stmt->bindParam(':nom', $_POST['nom']);
+        $stmt->bindParam(':prenom', $_POST['prenom']);
+        $stmt->bindParam(':telephone', $_POST['telephone']);
+        $stmt->bindParam(':denomination', $_POST['denomination']);
+        $stmt->bindParam(':siren', $_POST['siren']);
 
-    
         // 3. Exécuter la requête avec les valeurs
         $stmt->execute([
             ':email' => $_POST['email'],
@@ -50,24 +46,20 @@ if (isset($_POST['mdp'])) {
             ':denomination' => $_POST['denomination'],
             ':siren' => $_POST['siren']
         ]);
-        
 
-echo "Données insérées avec succès!";
-        
+        echo 'Données insérées avec succès!';
     } else {
         // insert in pro_public
-        $sql = "INSERT INTO  pact.pro_public (email, mdp_hash, nom, prenom, telephone, denomination) VALUES (:email, :mdp_hash, :nom, :prenom, :telephone, :denomination)";
+        $sql = 'INSERT INTO  pact.pro_public (email, mdp_hash, nom, prenom, telephone, denomination) VALUES (:email, :mdp_hash, :nom, :prenom, :telephone, :denomination)';
         $stmt = $pdo->prepare($sql);
 
-            $stmt->bindParam(':email', $_POST['email']);
-            $stmt->bindParam(':mdp_hash', $mdp_hash);
-            $stmt->bindParam(':nom', $_POST['nom']);
-            $stmt->bindParam(':prenom', $_POST['prenom']);
-            $stmt->bindParam(':telephone', $_POST['telephone']);
-            $stmt->bindParam(':denomination', $_POST['denomination']);
+        $stmt->bindParam(':email', $_POST['email']);
+        $stmt->bindParam(':mdp_hash', $mdp_hash);
+        $stmt->bindParam(':nom', $_POST['nom']);
+        $stmt->bindParam(':prenom', $_POST['prenom']);
+        $stmt->bindParam(':telephone', $_POST['telephone']);
+        $stmt->bindParam(':denomination', $_POST['denomination']);
 
-
-    
         // 3. Exécuter la requête avec les valeurs
         $stmt->execute([
             ':email' => $_POST['email'],
@@ -76,13 +68,9 @@ echo "Données insérées avec succès!";
             ':prenom' => $_POST['prenom'],
             ':telephone' => $_POST['telephone'],
             ':denomination' => $_POST['denomination'],
-
         ]);
-        
     }
-
-}
-else {
+} else {
 ?>
 <!DOCTYPE html>
 <html lang="fr">
@@ -95,16 +83,12 @@ else {
 </head>
 
 <body>
-
-    <?php
-        include("header.php");
-    ?>
-
+    <?php require 'component/header.php' ?>
     <main>
         <!-- Section des offres à la une -->
         <h1>Créer un compte professionnel</h1>
         <section class="connexion">
-                <div class="champ-connexion">
+            <div class="champ-connexion">
                 <form action="creation_comptePro.php" method="post" enctype="multipart/form-data">
 
                     <br>
@@ -133,13 +117,13 @@ else {
                     <div class="champ">
                         <!-- Texte avec label -->
                         <p>Téléphone :</p>
-                        <input type="text" id="telephone"name="telephone" placeholder="00 00 00 00 00" required />
-                        </div>
+                        <input type="text" id="telephone" name="telephone" placeholder="00 00 00 00 00" required />
+                    </div>
                     <br />
                     <div class="champ">
                         <!-- Texte avec label -->
-                        <p>Dénomination (raison sociale)  *:</p>
-                        <input type="text" id="denomination" name="denomination" placeholder="Panthéon de la nuit étoilée"  required />
+                        <p>Dénomination (raison sociale) *:</p>
+                        <input type="text" id="denomination" name="denomination" placeholder="Panthéon de la nuit étoilée" required />
                     </div>
                     <br />
                     <div class="champ">
@@ -151,15 +135,15 @@ else {
 
                     <div class="radio_entr">
                         <div>
-                            <input type="radio" id="prive" name="type" value="prive" onclick="gererAffichage()" checked/>
+                            <input type="radio" id="prive" name="type" value="prive" onclick="gererAffichage()" checked />
                             <label for="prive" style="font-family:'Tw Cen MT'">Privé</label>
                         </div>
                         <div>
-                            <input type="radio" id="public" name="type" value="huey" onclick="gererAffichage()"  />
+                            <input type="radio" id="public" name="type" value="huey" onclick="gererAffichage()" />
                             <label for="public" style="font-family:'Tw Cen MT'">Public</label>
                         </div>
                     </div>
-                    
+
                     <br>
                     <div class="champ" id="siren">
                         <!-- Texte avec label -->
@@ -167,31 +151,25 @@ else {
                         <input type="text" id="siren" name="siren" placeholder="231 654 987     12315" required />
                     </div>
                     <br>
-                    <button type="submit" class="btn-connexion" >Créer un compte professionnel</button>
-            </form>
-            <br /><br>
-            <p>Se connecter ?</p>
-            <a href="connexion.php">
-                <button class="btn-creer">Se connecter</button>
-            </a>
-            <br>
+                    <button type="submit" class="btn-connexion">Créer un compte professionnel</button>
+                </form>
+                <br /><br>
+                <p>Se connecter ?</p>
+                <a href="connexion.php">
+                    <button class="btn-creer">Se connecter</button>
+                </a>
+                <br>
             </div>
         </section>
     </main>
-    <br>
-    <br>
-    <br>
-    <?php
-        include("footer.php");
-    ?>
+    <?php require 'component/footer.php' ?>
 
-<script>
+    <script>
     // Fonction pour afficher ou masquer la ligne supplémentaire
     function gererAffichage() {
         // Récupère tous les boutons radio
         let radios = document.querySelectorAll('input[name="type"]');
         let ligneSupplementaire = document.getElementById("siren");
-
         // Parcourt chaque bouton radio pour voir s'il est sélectionné
         radios.forEach(radio => {
             if (radio.checked && radio.value === 'prive') {
@@ -203,10 +181,8 @@ else {
             }
         });
     }
-    
-</script>
+    </script>
 </body>
-
 
 </html>
 <?php

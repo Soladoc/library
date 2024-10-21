@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,8 +8,9 @@
     <link rel="stylesheet" href="/style/style.css">
     <link rel="stylesheet" href="/style/choix_categorie_creation_offre.css">
 </head>
+
 <body>
-    <?php include ('header.php'); ?>
+    <?php require 'component/header.php' ?>
     <form action="creation_offre.php" method="get">
         <p>Choisissez la catégorie de votre offre</p>
         <button type="submit" name="type_offre" value="spectacle">Spectacle</button>
@@ -19,6 +21,7 @@
     </form>
 
 </body>
+
 </html>
 <!--
     @brief: fichier qui redirige un professionel vers la pagef de création adapté a l'offre qu'il 

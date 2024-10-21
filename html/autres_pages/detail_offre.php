@@ -1,7 +1,6 @@
 <?php
 ?>
 
-
 <!DOCTYPE html>
 <html lang="fr">
 
@@ -15,9 +14,7 @@
 </head>
 
 <body>
-    <!-- Header -->
-    <?php include("header.php");?>
-
+    <?php require 'component/header.php' ?>
     <!-- Offer Details -->
     <main>
         <section class="offer-details">
@@ -97,26 +94,21 @@
             </div>
         </section>
     </main>
-    <!-- Footer -->
-     <?php include("footer.php");?>
+    <?php require 'component/footer.php' ?>
 
     <script>
-        // OpenStreetMap Integration
-        var map = L.map('map').setView([48.779, -3.518], 13);
-
-        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-        }).addTo(map);
-
-        L.marker([48.779, -3.518]).addTo(map)
-            .bindPopup('Découverte interactive de la cité des Télécoms')
-            .openPopup();
-            
-        L.marker([45.779, -3.518]).addTo(map)
-            .bindPopup('hihihihihihihihihui')
-            L.marker([45.779, -4.518]).addTo(map)
-            .bindPopup('hihihihihihihihihui')
-    
+    // OpenStreetMap Integration
+    var map = L.map('map').setView([48.779, -3.518], 13);
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+    }).addTo(map);
+    L.marker([48.779, -3.518]).addTo(map)
+        .bindPopup('Découverte interactive de la cité des Télécoms')
+        .openPopup();
+    L.marker([45.779, -3.518]).addTo(map)
+        .bindPopup('hihihihihihihihihui')
+    L.marker([45.779, -4.518]).addTo(map)
+        .bindPopup('hihihihihihihihihui')
     </script>
 </body>
 

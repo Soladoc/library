@@ -1,5 +1,5 @@
 <?php
-require '../../db.php';
+require_once 'db.php';
 $pdo=db_connect();
 $stmt = $pdo->prepare('SELECT COUNT(*) FROM pact.offres WHERE id_professionnel = :id_professionnnel');
 $stmt->execute(['id_professionnel' => ]);
@@ -21,10 +21,7 @@ $offre_hors_ligne = $nb_offre - $offre_en_ligne;
 </head>
 
 <body>
-    <?php
-        include("header.php");
-    ?>
-
+    <?php require 'component/header.php' ?>
     <main>
         <h1>Accueil Professionnel</h1>
 
@@ -40,9 +37,9 @@ $offre_hors_ligne = $nb_offre - $offre_en_ligne;
                     <h3>Découverte interactive de la cité des Télécoms</h3>
                     <p class="location">Pleumeur-Bodou (22560)</p>
                     <p class="category">Restauration</p>
-                    <p class="rating">Note : 4.7/5  ★ (256 avis)</p>
+                    <p class="rating">Note : 4.7/5 ★ (256 avis)</p>
                     <button class="btn-more-info" href="">En savoir plus</button>
-                
+
                 </div>
 
                 <!-- Offre en ligne 2 -->
@@ -51,11 +48,10 @@ $offre_hors_ligne = $nb_offre - $offre_en_ligne;
                     <h3>Randonnée dans la vallée des Saints</h3>
                     <p class="location">Boudes (63340)</p>
                     <p class="category">Restauration</p>
-                    <p class="rating">Note : 4.2/5  ★ (54 avis)</p>
-                    <button class="btn-more-info"  href="">En savoir plus</button>
+                    <p class="rating">Note : 4.2/5 ★ (54 avis)</p>
+                    <button class="btn-more-info" href="">En savoir plus</button>
                 </div>
 
-               
             </div>
         </section>
 
@@ -70,9 +66,9 @@ $offre_hors_ligne = $nb_offre - $offre_en_ligne;
                     <h3>Découverte interactive de la cité des Télécoms</h3>
                     <p class="location">Pleumeur-Bodou (22560)</p>
                     <p class="category">Restauration</p>
-                    <p class="rating">Note : 4.7/5  ★ (256 avis)</p>
+                    <p class="rating">Note : 4.7/5 ★ (256 avis)</p>
                     <button class="btn-more-info" href="">En savoir plus</button>
-                
+
                 </div>
 
                 <!-- Offre 2 -->
@@ -81,7 +77,7 @@ $offre_hors_ligne = $nb_offre - $offre_en_ligne;
                     <h3>Randonnée dans la vallée des Saints</h3>
                     <p class="location">Boudes (63340))</p>
                     <p class="category">Restauration</p>
-                    <p class="rating">Note : 4.2/5  ★ (54 avis)</p>
+                    <p class="rating">Note : 4.2/5 ★ (54 avis)</p>
                     <button class="btn-more-info" href="">En savoir plus</button>
                 </div>
 
@@ -114,9 +110,7 @@ $offre_hors_ligne = $nb_offre - $offre_en_ligne;
             </div>
         </a>
     </main>
-    <?php
-        include("footer.php");
-    ?>
+    <?php require 'component/footer.php' ?>
 </body>
 
 </html>
