@@ -28,7 +28,7 @@ $stmt->execute();
 $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
 // Vérifier si l'utilisateur existe
-if ($user['email']==$username) {
+if (isset($user['email']) && $user['email'] === $username) {
     
     $hashed_password = $user['mdp_hash'];
     echo "Hash récupéré : " . $hashed_password;
