@@ -64,7 +64,7 @@ function db_connect(): PDO
 
         $driver = 'pgsql';
         // Pour le dév. en localhost: on a accès au conteneur postgresdb, on utilise donc le FQDN.
-        $host = 'postgresdb';
+        $host = _is_localhost() ? '413.ventsdouest.dev' : 'postgresdb';
         $port = notfalse(getenv('PGDB_PORT'), 'PGDB_PORT not set');
         $dbname = 'postgres';
 
