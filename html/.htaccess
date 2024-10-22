@@ -16,7 +16,6 @@ ErrorDocument 414 https://http.cat/414
 ErrorDocument 415 https://http.cat/415
 ErrorDocument 416 https://http.cat/416
 ErrorDocument 417 https://http.cat/417
-ErrorDocument 418 https://http.cat/418
 ErrorDocument 419 https://http.cat/419
 ErrorDocument 420 https://http.cat/420
 ErrorDocument 421 https://http.cat/421
