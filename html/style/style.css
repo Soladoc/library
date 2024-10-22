@@ -9,6 +9,8 @@
     --color-primary: #4a55c5;
     --color-secondary: #8b94ee;
     --color-accent: #4051fd;
+    --color-accent-hover: #4051fd80;
+    font-size: 1.1em;
 }
 
 * {
@@ -412,7 +414,7 @@ h1 {
 }
 
 .champ p {
-    margin: 0 0 5px 0;/
+    margin: 0 0 5px 0;
 }
 
 .champ input {
@@ -591,7 +593,6 @@ textarea {
 
 /*------------fin offre detaillé------------*/
 a {
-    font-style: none;
     text-decoration: none;
 
     /* BOUTONS RADIO */

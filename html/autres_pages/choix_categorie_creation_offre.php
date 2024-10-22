@@ -13,11 +13,11 @@
     <?php require 'component/header.php' ?>
     <form action="creation_offre.php" method="get">
         <p>Choisissez la catégorie de votre offre</p>
-        <button type="submit" name="type_offre" value="spectacle">Spectacle</button>
-        <button type="submit" name="type_offre" value="parc_attraction">Parc d'atraction</button>
-        <button type="submit" name="type_offre" value="visite">Visite</button>
-        <button type="submit" name="type_offre" value="restauration">Restauration</button>
-        <button type="submit" name="type_offre" value="activite">Activité</button>
+        <button type="submit" name="type-offre" value="spectacle">Spectacle</button>
+        <button type="submit" name="type-offre" value="parc-attraction">Parc d'atraction</button>
+        <button type="submit" name="type-offre" value="visite">Visite</button>
+        <button type="submit" name="type-offre" value="restauration">Restauration</button>
+        <button type="submit" name="type-offre" value="activite">Activité</button>
     </form>
 
 </body>

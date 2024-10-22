@@ -1,3 +1,72 @@
+
 h2 {
     text-align: center;
+    margin-bottom: 1em;
+}
+
+main {
+    display: grid;
+    justify-content: center;
+    grid-auto-flow: row;
+}
+
+section {
+    border: 1px #D9D9D9 solid;
+    border-radius: 1em;
+    padding: 1em;
+    margin: 1em 0;
+}
+
+#table-tarifs {
+    margin: 0 auto;
+
+    td {
+        padding: .5em;
+    }
+
+    button {
+        font-size: 1.25em;
+        width: 1.25em;
+        height: 1.25em;
+        padding: 0;
+    }
+
+    input[type=number] {
+        width: 6em;
+    }
+}
+
+#form-offre {
+    display: flex;
+    flex-direction: row-reverse;
+    font-size: 2em;
+}
+
+#list-tag {
+    list-style: none;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1em;
+    justify-content: center;
+
+    label {
+        background-color: #D9D9D9;
+        border-radius: calc(1px * Infinity); /* for a border radius that adapts to the shortest side */
+        padding: .3em .6em;
+        display: list-item;
+        cursor: pointer;
+        border: 1px solid var(--color-text);
+
+        &:has(input:is(:hover, :focus-within, :focus)) {
+            background-color: var(--color-accent-hover);
+        }
+
+        &:has(input:checked) {
+            background-color: var(--color-accent);
+        }
+    }
+
+    input {
+        display: none;
+    }
 }
