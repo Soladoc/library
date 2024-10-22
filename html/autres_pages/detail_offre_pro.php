@@ -1,4 +1,33 @@
 <?php
+// // Vérifier si l'ID est présent dans l'URL
+// if (isset($_GET['id']) && is_numeric($_GET['id'])) {
+//     $id = $_GET['id'];
+
+//     // Connexion à la base de données
+//     $pdo = db_connect();
+
+//     // Préparer la requête pour récupérer les détails de l'offre
+//     $query = "SELECT * FROM offres WHERE id = :id";
+//     $stmt = $pdo->prepare($query);
+//     $stmt->execute(['id' => $id]);
+
+//     // Récupérer les données de l'offre
+//     $offre = $stmt->fetch(PDO::FETCH_ASSOC);
+
+//     // Si l'offre est trouvée, afficher ses détails
+//     if ($offre) {
+//         echo '<h3>' . htmlspecialchars($offre['title']) . '</h3>';
+//         echo '<p class="location">' . htmlspecialchars($offre['location']) . '</p>';
+//         echo '<p class="category">Catégorie : ' . htmlspecialchars($offre['category']) . '</p>';
+//         echo '<p class="price">Prix : ' . htmlspecialchars($offre['price']) . '</p>';
+//         echo '<p class="rating">Note : ' . htmlspecialchars($offre['rating']) . ' ★ (' . htmlspecialchars($offre['reviews']) . ' avis)</p>';
+//         echo '<p class="professional">Proposé par : ' . htmlspecialchars($offre['professional']) . '</p>';
+//     } else {
+//         echo 'Aucune offre trouvée avec cet ID.';
+//     }
+// } else {
+//     echo 'ID d\'offre invalide.';
+// }
 ?>
 
 <!DOCTYPE html>
@@ -14,7 +43,7 @@
 </head>
 
 <body>
-    <?php require 'component/header.php' ?>
+    <?php require 'include/component/header.php' ?>
     <!-- Offer Details -->
     <main>
         <section class="modif">
@@ -101,7 +130,7 @@
             </div>
         </section>
     </main>
-    <?php require 'component/footer.php' ?>
+    <?php require 'include/component/footer.php' ?>
 
     <script>
     // OpenStreetMap Integration
