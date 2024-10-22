@@ -1,5 +1,5 @@
 <?php
-require_once '../../include/db.php';
+require_once 'db.php';
 if (isset($_POST['motdepasse'])) {
     $pdo = db_connect();
     $stmt = $pdo->prepare('SELECT COUNT(*) FROM pact.membres WHERE pseudo = :pseudo');
