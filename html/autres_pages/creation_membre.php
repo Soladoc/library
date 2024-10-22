@@ -72,7 +72,7 @@ if (isset($_POST['motdepasse'])) {
 
                     <div class="champ">
                         <label for="telephone">Téléphone :</label>
-                        <input type="text" id="telephone" name="telephone" required />
+                        <input id="telephone" name="telephone" type="tel" placeholder="Format: 0123456789" pattern="[0-9]{10}" required>
                     </div>
 
                     <div class="champ">
