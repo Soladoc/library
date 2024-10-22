@@ -117,7 +117,7 @@ if (isset($_POST['mdp'])) {
                     <div class="champ">
                         <!-- Texte avec label -->
                         <p>Téléphone :</p>
-                        <input type="text" id="telephone" name="telephone" placeholder="00 00 00 00 00" required />
+                        <input id="telephone" name="telephone" type="tel" placeholder="Format: 0123456789" pattern="[0-9]{10}" required>
                     </div>
                     <br />
                     <div class="champ">
