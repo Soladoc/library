@@ -30,15 +30,16 @@ const TYPE_OFFRE_AFFICHABLE = [
             <td><button type="button">-</button></td>
         </tr>
     </template>
+    <?php if (!isset($_GET) || !($type_offre = $_GET['type_offre'])) { ?>
+    <!-- post is unset-->
+    <h1>Erreur de méthode d'accès</h1>
+    <p>Une erreur dans la requette de la page est survenue, merci de réessayer plus tard</p>
+
+    <?php exit;
+} ?>
     <main>
         <section id="titre_creation_offre">
-            <?php if (isset($_GET)) { ?>
-            <h1>Créer <?= TYPE_OFFRE_AFFICHABLE[$_GET['type_offre'] ?? ''] ?></h1>
-            <?php } else { ?>
-            <!-- post is unset-->
-            <h1>Erreur de méthode d'accès</h1>
-            <p>Une erreur dans la requette de la page est survenue, merci de réessayer plus tard</p>
-            <?php } ?>
+            <h1>Créer <?= TYPE_OFFRE_AFFICHABLE[$type_offre] ?></h1>
         </section>
         <section id="image_creation_offre" style="background-color: gray;">
             <h2>Image</h2>
@@ -147,6 +148,14 @@ const TYPE_OFFRE_AFFICHABLE = [
             </section>
             <section id="tags">
                 <h2>Tags</h2>
+                <ul>
+                <?php
+                    require_once 'tags.php';
+                    foreach ($type_offre === 'restauration' ? TAGS_RESTAURATION : DEFAULT_TAGS as $id => $name) {
+                ?><li><label for="tag-<?= $id ?>"><?= $tag ?><input type="checkbox" name="tag-<?= $id ?>" id="tag-<?= $id ?>" vaelu></li></label><?php
+                    }
+                ?>
+                </ul>
             </section>
             <section id="description">
                 <h2>Description</h2>

@@ -1,6 +1,6 @@
 <?php
 
-require_once '../../include/db.php';
+require_once 'db.php';
 if (isset($_POST['mdp'])) {
     print 'Votre nom :' . $_POST['nom'];
     print 'Votre prenom :' . $_POST['mdp'];
