@@ -99,7 +99,7 @@ if (isset($_POST['mdp'])) {
                     <br>
                     <div class="champ">
                         <p>Mot de passe *</p>
-                        <input type="text" placeholder="**********" id="mdp" name="mdp" required>
+                        <input type="password" placeholder="**********" id="mdp" name="mdp" required>
                     </div>
                     <br>
                     <!-- Texte avec label -->
