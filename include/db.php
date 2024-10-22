@@ -26,7 +26,8 @@ function load_dotenv()
         return;
     }
 
-    $env = notfalse(file_get_contents(__DIR__ . '/.env'), 'dotenv file missing');
+    $envfile = __DIR__ . '/.env';
+    $env = notfalse(file_get_contents($envfile), "dotenv file missing at $envfile");
     foreach (explode("\n", $env) as $line) {
         preg_match('/([^#]+)\=(.*)/', $line, $matches);
         if (isset($matches[2])) {
@@ -58,17 +59,22 @@ function _is_localhost(): bool
 
 function db_connect(): PDO
 {
-    load_dotenv();
+    try {
+        load_dotenv();
 
-    $driver = 'pgsql';
-    // Pour le dév. en localhost: on a accès au conteneur postgresdb, on utilise donc le FQDN.
-    $host = _is_localhost() ? '413.ventsdouest.dev' : 'postgresdb';
-    $port = notfalse(getenv('PGDB_PORT'), 'PGDB_PORT not set');
-    $dbname = 'postgres';
+        $driver = 'pgsql';
+        // Pour le dév. en localhost: on a accès au conteneur postgresdb, on utilise donc le FQDN.
+        $host = 'postgresdb';
+        $port = notfalse(getenv('PGDB_PORT'), 'PGDB_PORT not set');
+        $dbname = 'postgres';
 
-    return new PDO(
-        "$driver:host=$host;port=$port;dbname=$dbname",
-        notfalse(getenv('DB_USER'), 'DB_USER not set'),
-        notfalse(getenv('DB_ROOT_PASSWORD'), 'DB_ROOT_PASSWORD not set'),
-    );
+        return new PDO(
+            "$driver:host=$host;port=$port;dbname=$dbname",
+            notfalse(getenv('DB_USER'), 'DB_USER not set'),
+            notfalse(getenv('DB_ROOT_PASSWORD'), 'DB_ROOT_PASSWORD not set'),
+        );
+    } catch (Exception $e) {
+        ?><pre><?php print_r($e) ?></pre><?php
+        exit($e->getCode());
+    }
 }
