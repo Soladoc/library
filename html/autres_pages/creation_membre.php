@@ -36,6 +36,7 @@ if (isset($_POST['motdepasse'])) {
         'email' => $_POST['email'],
         'mdp_hash' => $mdp_hash
     ]);
+    echo "<script>window.location.href='../autres_pages/connexion.php';</script>";
 } else {
 ?>
 <!DOCTYPE html>

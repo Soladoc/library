@@ -69,6 +69,7 @@ if (isset($_POST['mdp'])) {
             ':telephone' => $_POST['telephone'],
             ':denomination' => $_POST['denomination'],
         ]);
+        echo "<script>window.location.href='../autres_pages/connexion.php';</script>";
     }
 } else {
 ?>
