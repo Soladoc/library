@@ -2,7 +2,7 @@
 session_start();
 
 // Configuration de la base de données
-require_once 'db.php';
+require_once '../../include/db.php';
 
 try {
     $pdo = db_connect();  // Essaie de te connecter à la base de données
