@@ -35,7 +35,8 @@ const TYPE_OFFRE_AFFICHABLE = [
     <h1>Erreur de méthode d'accès</h1>
     <p>Une erreur dans la requette de la page est survenue, merci de réessayer plus tard</p>
 
-    <?php exit; } ?>
+    <?php exit;
+} ?>
     <main>
         <section id="titre_creation_offre">
             <h1>Créer <?= TYPE_OFFRE_AFFICHABLE[$type_offre] ?></h1>
@@ -149,10 +150,10 @@ const TYPE_OFFRE_AFFICHABLE = [
                 <h2>Tags</h2>
                 <ul>
                 <?php
-                require_once 'tags.php';
-                foreach ($type_offre === 'restauration' ? TAGS_RESTAURATION : DEFAULT_TAGS as $tag) {
-                    ?><li><?= $tag ?></li><?php
-                }
+                    require_once 'tags.php';
+                    foreach ($type_offre === 'restauration' ? TAGS_RESTAURATION : DEFAULT_TAGS as $id => $name) {
+                ?><li><label for="tag-<?= $id ?>"><?= $tag ?><input type="checkbox" name="tag-<?= $id ?>" id="tag-<?= $id ?>" vaelu></li></label><?php
+                    }
                 ?>
                 </ul>
             </section>
