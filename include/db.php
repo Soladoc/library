@@ -26,7 +26,8 @@ function load_dotenv()
         return;
     }
 
-    $env = notfalse(file_get_contents(__DIR__ . '/.env'), 'dotenv file missing');
+    $envfile = __DIR__ . '/.env';
+    $env = notfalse(file_get_contents($envfile), "dotenv file missing at $envfile");
     foreach (explode("\n", $env) as $line) {
         preg_match('/([^#]+)\=(.*)/', $line, $matches);
         if (isset($matches[2])) {
