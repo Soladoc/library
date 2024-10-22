@@ -14,9 +14,17 @@
 </head>
 
 <body>
-    <?php require 'include/component/header.php' ?>
+    <?php require 'component/header.php' ?>
     <!-- Offer Details -->
     <main>
+        <section class="modif">
+            <div class='online'>
+                <button class="en_ligne">en ligne</button>
+                <button class="hors_ligne">hors ligne</button>
+            </div>
+            <button class="modifier" >modifier</button>
+
+        </section>
         <section class="offer-details">
             <div class="offer-main-photo">
                 <img src="../images/offre/Radôme1.jpg" alt="Main Photo" class="offer-photo-large">
@@ -34,7 +42,6 @@
                     <p class="status">Statut : <span class="open">Ouvert</span></p>
                     <p class="rating">Note : ★★★★☆ (4.7/5, 256 avis)</p>
                     <p class="hours">Horaires : 9h30 - 18h30</p>
-                    <button class="btn-reserve">Réserver</button>
                 </div>
             </div>
         </section>
