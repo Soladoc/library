@@ -94,7 +94,7 @@ if (isset($_POST['mdp'])) {
                     <br>
                     <div class="champ">
                         <p>E-mail *</p>
-                        <input type="text" placeholder="exemple@mail.fr" id="email" name="email" required>
+                        <input type="mail" placeholder="exemple@mail.fr" id="email" name="email" required>
                     </div>
                     <br>
                     <div class="champ">
