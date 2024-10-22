@@ -43,7 +43,7 @@
 </head>
 
 <body>
-    <?php require 'include/component/header.php' ?>
+    <?php require 'component/header.php' ?>
     <!-- Offer Details -->
     <main>
         <section class="offer-details">
@@ -123,7 +123,7 @@
             </div>
         </section>
     </main>
-    <?php require 'include/component/footer.php' ?>
+    <?php require 'component/footer.php' ?>
 
     <script>
     // OpenStreetMap Integration
