@@ -1,6 +1,6 @@
 <?php
 
-require_once 'db.php';
+require_once '../../include/db.php';
 if (isset($_GET['table'])) {
     print 'table :' . $_GET['table'];
     $table = $_GET['table'];
