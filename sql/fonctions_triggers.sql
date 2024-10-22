@@ -47,11 +47,53 @@ create or replace function est_en_ligne(id_offre_cherche integer) returns bool a
 declare
   nb_change_etat integer;
 begin
-  nb_change_etat= count(*) from _changement_etat where id_offre=id_offre_cherche;
-  if nb_change_etat%2==0 then
+  nb_change_etat:= count(*) from _changement_etat where id_offre=id_offre_cherche;
+  if nb_change_etat%2=0 then
     return true;
   else
     return false;
   end if;
+end;
+$$ language 'plpgsql';
+create or replace function nb_offres_en_ligne(id_pro_cherche integer) returns table(id_offre integer,
+  titre varchar(255),
+  resume varchar(1023),
+  description_detaille text,
+  url_site_web varchar(2047),
+  date_derniere_maj timestamp,
+  id_categorie integer,
+  adresse integer,
+  photoprincipale integer,
+  abonnement varchar(63),
+  id_signalable integer,
+  id_professionnel integer) as $$
+declare
+  id_offre_temp integer;
+  boucle integer;
+begin
+  create or replace view _offres as select * from _offre where id_professionnel=id_pro_cherche;
+  create table offres_en_ligne(
+    id_offre serial constraint _offre_pk primary key,
+    titre varchar(255),
+    resume varchar(1023),
+    description_detaille text,
+    url_site_web varchar(2047),
+    date_derniere_maj timestamp,
+    id_categorie integer,
+    adresse integer,
+    photoprincipale integer,
+    abonnement varchar(63),
+    id_signalable integer,
+    id_professionnel integer
+  );
+  for i in 1..count(*) from _offres loop
+    boucle:=i-1;
+    id_offre_temp:= (select id_offre from _offres offset boucle rows fetch first row only); 
+    if est_en_ligne(id_offre_temp) then
+      insert into offres_en_ligne(id_offre,titre,resume,description_detaille,url_site_web,date_derniere_maj,id_categorie,adresse,photoprincipale,
+      abonnement,id_signalable,id_professionnel) values (select * from _offres offset boucle rows fetch first row only);
+    end if;
+  end loop;
+  return offres_en_ligne;
 end;
 $$ language 'plpgsql';
