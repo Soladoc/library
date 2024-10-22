@@ -53,8 +53,7 @@ if (!empty($user) && $user['existe'] == 1) {
         exit();
     }
 } else {
-    echo 'test03';
-    // echo "<script>window.location.href='../autres_pages/connexion.php';</script>";
+    echo "<script>window.location.href='../autres_pages/connexion.php';</script>";
     exit();
 }
 
