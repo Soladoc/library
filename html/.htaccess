@@ -20,7 +20,6 @@ ErrorDocument 421 https://http.cat/421
 ErrorDocument 422 https://http.cat/422
 ErrorDocument 423 https://http.cat/423
 ErrorDocument 424 https://http.cat/424
-ErrorDocument 425 https://http.cat/425
 ErrorDocument 426 https://http.cat/426
 ErrorDocument 428 https://http.cat/428
 ErrorDocument 429 https://http.cat/429
