@@ -30,6 +30,14 @@
 // }
 ?>
 
+<?php
+    // $pdo = db_connect();
+
+    //  $sql = 'INSERT INTO  pact._changement_etat (id_offre) VALUES (:id_offre)';
+    //  $stmt = $pdo->prepare($sql);
+
+    //  $stmt->bindParam(':id_offre', $_GET['id']);
+?>
 <!DOCTYPE html>
 <html lang="fr">
 
@@ -50,6 +58,8 @@
             <div class='online'>
                 <button class="en_ligne">en ligne</button>
                 <button class="hors_ligne">hors ligne</button>
+
+
             </div>
             <button class="modifier" >modifier</button>
 
