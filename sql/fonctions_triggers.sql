@@ -107,7 +107,7 @@ create or replace function est_en_ligne(id_offre_cherche integer)
 declare
     nb_change_etat integer;
 begin
-    nb_change_etat: = count(*)
+    nb_change_etat := count(*)
 from
     _changement_etat
 where
@@ -165,8 +165,8 @@ begin
     for i in 1..count(*)
 from
     _offres loop
-        boucle: = i - 1;
-        id_offre_temp: =(
+        boucle := i - 1;
+        id_offre_temp :=(
             select
                 id_offre
             from
@@ -246,8 +246,8 @@ begin
     for i in 1..count(*)
 from
     _offres loop
-        boucle: = i - 1;
-        id_offre_temp: =(
+        boucle := i - 1;
+        id_offre_temp :=(
             select
                 id_offre
             from
