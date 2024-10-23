@@ -26,7 +26,7 @@ create table pact._adresse(
     latitude decimal,
     longitude decimal,
     code_insee char(5),
-    check (latitude is null = longitude is null),
+    check ((latitude is null) = (longitude is null)),
     constraint _adresse_fk_code_insee foreign key (code_insee) references pact._commune(code_insee)
 );
 

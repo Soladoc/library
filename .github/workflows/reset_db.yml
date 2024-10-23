@@ -1,5 +1,10 @@
 name: Reset Database
-on: workflow_dispatch
+on:
+  push:
+    branches:
+      - 'main'
+    paths:
+      - '**.sql'
 jobs:
   reset_db:
     runs-on: ubuntu-latest
