@@ -155,7 +155,7 @@ if (isset($_POST['mdp'])) {
                     <div class="champ" id="siren">
                         <!-- Texte avec label -->
                         <label>SIREN*:</label>
-                        <input type="text" id="siren" name="siren" placeholder="231 654 987     12315" />
+                        <input type="text" id="siren" name="siren" placeholder="231 654 988" oninput="formatInput(this)" maxlength="12"/>
                     </div>
                     <br>
                     <button type="submit" class="btn-connexion">Créer un compte professionnel</button>
@@ -191,6 +191,20 @@ if (isset($_POST['mdp'])) {
             }
         });
     }
+    </script>
+    <script>
+        // texte siren
+        function formatInput(input) {
+            // Supprimer tous les espaces
+            let value = input.value.replace(/\s/g, '');
+            // Limiter à 9 caractères
+            if (value.length > 9) {
+                value = value.substring(0, 9);
+            }
+            // Ajouter un espace tous les 3 caractères
+            let formattedValue = value.replace(/(.{3})/g, '$1 ').trim();
+            input.value = formattedValue;
+        }
     </script>
 </body>
 
