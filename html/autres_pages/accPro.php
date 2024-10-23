@@ -16,7 +16,7 @@ require_once 'db.php';
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Accueil Professionnel - Parc du Radôme</title>
+    <title>Accueil Professionnel</title>
     <link rel="stylesheet" href="../style/style.css">
 </head>
 
@@ -32,15 +32,21 @@ require_once 'db.php';
 
             <div class="offer-list">
                 <!-- Offre en ligne 1 -->
-                <div class="offer-card">
-                    <img src="telecom.jpg" alt="Découverte interactive de la cité des Télécoms">
-                    <h3>Découverte interactive de la cité des Télécoms</h3>
-                    <p class="location">Pleumeur-Bodou (22560)</p>
-                    <p class="category">Restauration</p>
-                    <p class="rating">Note : 4.7/5 ★ (256 avis)</p>
-                    <button class="btn-more-info" href="">En savoir plus</button>
-
-                </div>
+                 <?php
+                 $stmt = $pdo->prepare('CALL nb_offres_en_ligne(:id_professionnel)');
+                 $stmt->execute(['id_professionnel' => $_GET['id_professionnel']]);
+                 $liste_offre_en_ligne = $stmt;
+                 while ($offre = $liste_offre_en_ligne->fetch()) {
+                    ?>
+                    <div class="offer-card">
+                        <img src="<?php $offre[8] ?>" alt="Découverte interactive de la cité des Télécoms">
+                        <h3><?php $offre[1] ?></h3>
+                        <p class="location"><?php $offre[7] ?></p>
+                        <p class="category"><?php $stmt = $pdo->prepare('CALL category(:id_offre)');
+                        $stmt->execute(['id_offre' => $offre[0]]);?></p>
+                        <p class="rating">Note : 4.7/5 ★ (256 avis)</p>
+                        <button class="btn-more-info" href="">En savoir plus</button>
+                    </div>
 
                 <!-- Offre en ligne 2 -->
                 <div class="offer-card">
