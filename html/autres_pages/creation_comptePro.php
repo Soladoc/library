@@ -2,7 +2,6 @@
 
 require_once 'db.php';
 if (isset($_POST['mdp'])) {
-    echo "ici on est bien";
     print 'Votre nom :' . $_POST['nom'];
     print 'Votre prenom :' . $_POST['prenom'];
     print 'Votre numero de telephone :' . $_POST['telephone'];
@@ -25,10 +24,12 @@ if (isset($_POST['mdp'])) {
 
 
     if ($estprive) {
-        echo 'oeoeeo';
+        // on passe parle la 
         // insert in pro_prive
         $sql = 'INSERT INTO  pact.pro_prive (email, mdp_hash, nom, prenom, telephone, denomination, siren) VALUES (:email, :mdp_hash, :nom, :prenom, :telephone, :denomination, :siren)';
         $stmt = $pdo->prepare($sql);
+
+        echo 'ICI';
 
         $stmt->bindParam(':email', $_POST['email']);
         $stmt->bindParam(':mdp_hash', $mdp_hash);
@@ -37,6 +38,8 @@ if (isset($_POST['mdp'])) {
         $stmt->bindParam(':telephone', $_POST['telephone']);
         $stmt->bindParam(':denomination', $_POST['denomination']);
         $stmt->bindParam(':siren', $_POST['siren']);
+
+        echo 'ou LA';
 
         // 3. Exécuter la requête avec les valeurs
         $stmt->execute([
