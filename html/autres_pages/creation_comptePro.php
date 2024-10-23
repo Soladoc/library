@@ -47,6 +47,7 @@ if (isset($_POST['mdp'])) {
             ':siren' => $_POST['siren']
         ]);
 
+        echo "caca";
         echo "<script>window.location.href='../autres_pages/connexion.php';</script>";
     } else {
         // insert in pro_public
