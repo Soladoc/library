@@ -1,4 +1,20 @@
 set schema 'pact';
+create or replace function offres_insert() returns trigger as $$
+declare
+  id_temp integer;
+begin
+  insert into pact._signalable default values returning id_signalable into id_temp;
+  insert into offres_en_ligne(id_offre,titre,resume,description_detaille,url_site_web,date_derniere_maj,id_categorie,adresse,photoprincipale,abonnement,id_signalable,
+  id_professionnel,id_signalable) 
+  values (new.id_offre,new.titre,new.resume,new.description_detaille,new.url_site_web,new.date_derniere_maj,new.id_categorie,new.adresse,new.photoprincipale,
+  new.abonnement,new.id_signalable,new.id_professionnel,id-temp);
+  return new;
+end;
+$$ language 'plpgsql';
+create or replace trigger offres_insert
+instead of insert
+on offres for each row
+execute procedure offres_insert();
 create or replace function membres_insert() returns trigger as $$
 declare
   id_temp integer;
@@ -55,7 +71,7 @@ begin
   end if;
 end;
 $$ language 'plpgsql';
-create or replace function nb_offres_en_ligne(id_pro_cherche integer) returns table(id_offre integer,
+create or replace function nb_offres_en_ligne(id_pro_cherche integer) returns table (id_offre integer,
   titre varchar(255),
   resume varchar(1023),
   description_detaille text,
@@ -71,9 +87,9 @@ declare
   id_offre_temp integer;
   boucle integer;
 begin
-  create or replace view _offres as select * from _offre where id_professionnel=id_pro_cherche;
+  create view _offres as select * from _offre where id_professionnel=id_pro_cherche;
   create table offres_en_ligne(
-    id_offre serial constraint _offre_pk primary key,
+    id_offre integer,
     titre varchar(255),
     resume varchar(1023),
     description_detaille text,
@@ -91,9 +107,12 @@ begin
     id_offre_temp:= (select id_offre from _offres offset boucle rows fetch first row only); 
     if est_en_ligne(id_offre_temp) then
       insert into offres_en_ligne(id_offre,titre,resume,description_detaille,url_site_web,date_derniere_maj,id_categorie,adresse,photoprincipale,
-      abonnement,id_signalable,id_professionnel) values (select * from _offres offset boucle rows fetch first row only);
+      abonnement,id_signalable,id_professionnel) select id_offre,titre,resume,description_detaille,url_site_web,date_derniere_maj,id_categorie,adresse,photoprincipale,
+      abonnement,id_signalable,id_professionnel from _offres offset boucle rows fetch first row only;
     end if;
   end loop;
-  return offres_en_ligne;
+  return query select * from offres_en_ligne;
+  drop view _offres;
+  drop table offres_en_ligne;
 end;
 $$ language 'plpgsql';
