@@ -23,7 +23,7 @@ if (isset($_POST['mdp'])) {
 
     // insert in compte
 
-    if ($estprive) {
+    if (!$estprive) {
         // insert in pro_prive
         $sql = 'INSERT INTO  pact.pro_prive (email, mdp_hash, nom, prenom, telephone, denomination, siren) VALUES (:email, :mdp_hash, :nom, :prenom, :telephone, :denomination, :siren)';
         $stmt = $pdo->prepare($sql);
@@ -47,7 +47,6 @@ if (isset($_POST['mdp'])) {
             ':siren' => $_POST['siren']
         ]);
 
-        echo 'Données insérées avec succès!';
         echo "<script>window.location.href='../autres_pages/connexion.php';</script>";
     } else {
         // insert in pro_public
