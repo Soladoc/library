@@ -11,6 +11,7 @@ create table pact._commune(
     code_insee char(5) constraint _commune_pk primary key,
     nom varchar(47) not null,
     numero_dep char(3) not null,
+    code_postal char(5) not null,
     constraint _commune_fk_numero_dep foreign key (numero_dep) references pact._departement(numero)
 );
 
@@ -20,12 +21,12 @@ create table pact._adresse(
     complement_numero varchar(10),
     nom_voie varchar(255),
     localite varchar(255),
-    code_postal char(5),
     precision_int varchar(255),
     precision_ext varchar(255),
     latitude decimal,
     longitude decimal,
     code_insee char(5),
+    check (latitude is null = longitude is null),
     constraint _adresse_fk_code_insee foreign key (code_insee) references pact._commune(code_insee)
 );
 
