@@ -2,28 +2,30 @@
 
 require_once 'db.php';
 if (isset($_POST['mdp'])) {
+    echo "ici on est bien";
     print 'Votre nom :' . $_POST['nom'];
-    print 'Votre prenom :' . $_POST['mdp'];
+    print 'Votre prenom :' . $_POST['prenom'];
     print 'Votre numero de telephone :' . $_POST['telephone'];
     print 'Votre mail :' . $_POST['email'];
     print 'Votre mot de passe :' . $_POST['mdp'];
     print 'Votre adresse :' . $_POST['adresse'];
 
-    $estprive = isset($_POST['prive']);
+    $estprive = isset($_POST['type']); 
     $mdp_hash = password_hash($_POST['mdp'], PASSWORD_DEFAULT);
 
     $pdo = db_connect();
     $stmt = $pdo->prepare('SELECT COUNT(*) FROM pact._compte WHERE email = :email');
     $stmt->execute(['email' => $_POST['email']]);
     $count = $stmt->fetchColumn();
+    
     if ($count > 0) {
         echo 'Cette adresse e-mail est déjà utilisée.';
         exit;
     }
 
-    // insert in compte
 
     if ($estprive) {
+        echo 'oeoeeo';
         // insert in pro_prive
         $sql = 'INSERT INTO  pact.pro_prive (email, mdp_hash, nom, prenom, telephone, denomination, siren) VALUES (:email, :mdp_hash, :nom, :prenom, :telephone, :denomination, :siren)';
         $stmt = $pdo->prepare($sql);
@@ -35,7 +37,7 @@ if (isset($_POST['mdp'])) {
         $stmt->bindParam(':telephone', $_POST['telephone']);
         $stmt->bindParam(':denomination', $_POST['denomination']);
         $stmt->bindParam(':siren', $_POST['siren']);
-
+        echo 'aaaaaaaaaaaaaaa';
         // 3. Exécuter la requête avec les valeurs
         $stmt->execute([
             ':email' => $_POST['email'],
@@ -47,7 +49,7 @@ if (isset($_POST['mdp'])) {
             ':siren' => $_POST['siren']
         ]);
 
-        echo 'Données insérées avec succès!';
+        echo "<script>window.location.href='../autres_pages/connexion.php';</script>";
     } else {
         // insert in pro_public
         $sql = 'INSERT INTO  pact.pro_public (email, mdp_hash, nom, prenom, telephone, denomination) VALUES (:email, :mdp_hash, :nom, :prenom, :telephone, :denomination)';
@@ -67,10 +69,12 @@ if (isset($_POST['mdp'])) {
             ':nom' => $_POST['nom'],
             ':prenom' => $_POST['prenom'],
             ':telephone' => $_POST['telephone'],
-            ':denomination' => $_POST['denomination'],
+            ':denomination' => $_POST['denomination']
         ]);
         echo "<script>window.location.href='../autres_pages/connexion.php';</script>";
     }
+    echo "okkkkkkk";
+    echo "<script>window.location.href='../autres_pages/accPro.php';</script>";
 } else {
 ?>
 <!DOCTYPE html>
@@ -118,7 +122,7 @@ if (isset($_POST['mdp'])) {
                     <div class="champ">
                         <!-- Texte avec label -->
                         <p>Téléphone :</p>
-                        <input id="telephone" name="telephone" type="tel" placeholder="Format: 0123456789" pattern="[0-9]{10}" required>
+                        <input id="telephone" name="telephone" type="tel" placeholder="Format: 0123456789" pattern="[0-9]{10}" maxlength="10" required>
                     </div>
                     <br />
                     <div class="champ">
@@ -140,7 +144,7 @@ if (isset($_POST['mdp'])) {
                             <label for="prive" style="font-family:'Tw Cen MT'">Privé</label>
                         </div>
                         <div>
-                            <input type="radio" id="public" name="type" value="huey" onclick="gererAffichage()" />
+                            <input type="radio" id="public" name="type" value="public" onclick="gererAffichage()" />
                             <label for="public" style="font-family:'Tw Cen MT'">Public</label>
                         </div>
                     </div>
@@ -149,7 +153,7 @@ if (isset($_POST['mdp'])) {
                     <div class="champ" id="siren">
                         <!-- Texte avec label -->
                         <label>SIREN*:</label>
-                        <input type="text" id="siren" name="siren" placeholder="231 654 987     12315" required />
+                        <input type="text" id="siren" name="siren" placeholder="231 654 988" oninput="formatInput(this)" maxlength="12"/>
                     </div>
                     <br>
                     <button type="submit" class="btn-connexion">Créer un compte professionnel</button>
@@ -176,12 +180,29 @@ if (isset($_POST['mdp'])) {
             if (radio.checked && radio.value === 'prive') {
                 // Si Option 2 est sélectionnée, on affiche la ligne
                 ligneSupplementaire.style.display = 'block';
+                ligneSupplementaire.setAttribute('required','required');
+
             } else if (radio.checked) {
                 // Si une autre option est sélectionnée, on masque la ligne
                 ligneSupplementaire.style.display = 'none';
+                ligneSupplementaire.removeAttribute('required');
             }
         });
     }
+    </script>
+    <script>
+        // texte siren
+        function formatInput(input) {
+            // Supprimer tous les espaces
+            let value = input.value.replace(/\s/g, '');
+            // Limiter à 9 caractères
+            if (value.length > 9) {
+                value = value.substring(0, 9);
+            }
+            // Ajouter un espace tous les 3 caractères
+            let formattedValue = value.replace(/(.{3})/g, '$1 ').trim();
+            input.value = formattedValue;
+        }
     </script>
 </body>
 

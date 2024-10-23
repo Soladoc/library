@@ -22,39 +22,47 @@ if (empty($username) || empty($password)) {
 }
 
 // Préparer et exécuter la requête pour éviter les injections SQL
-$stmt = $pdo->prepare('SELECT email, mdp_hash, existe FROM pact.tous_comptes WHERE email = :email');
+$stmt = $pdo->prepare('SELECT email, mdp_hash, existe FROM pact.membres WHERE email = :email');
 $stmt->bindValue(':email', $username, PDO::PARAM_STR);
 $stmt->execute();
 $user = $stmt->fetch(PDO::FETCH_ASSOC);
 echo $user['existe'],$user['email'],$user['mdp_hash'];
-// Vérifier si l'utilisateur existe
+
 if (!empty($user) && $user['existe'] == 1) {
     $hashed_password = $user['mdp_hash'];
-    echo 'Hash récupéré : ' . $hashed_password;
-    echo '2';
     if (password_verify($password, $hashed_password)) {
         session_regenerate_id(true);
         $_SESSION['username'] = $username;
+        header("Location: ../autres_pages/accueil.php");
+        exit();
+        
+    } else {
+        header("Location: ../autres_pages/connexion.php?error=Nom d'utilisateur ou mot de passe incorrect.");
+        exit();
+    }
+} else {
+    // Vérifier si l'utilisateur existe dans la table professionnel
+    $stmt = $pdo->prepare('SELECT email, mdp_hash, existe FROM pact.tous_comptes_pro WHERE email = :email');
+    $stmt->bindValue(':email', $username, PDO::PARAM_STR);
+    $stmt->execute();
+    $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
-        $stmt = $pdo->prepare('SELECT COUNT(*) as count FROM pact._professionnel WHERE email = :email');
-        $stmt->bindValue(':email', $username, PDO::PARAM_STR);
-        $stmt->execute();
-        $result = $stmt->fetch(PDO::FETCH_ASSOC);
+    if (!empty($user) && $user['existe'] == 1) {
+        $hashed_password = $user['mdp_hash'];
+        if (password_verify($password, $hashed_password)) {
+            session_regenerate_id(true);
+            $_SESSION['username'] = $username;
 
-        if ($result['count'] > 0) {
-            echo "<script>window.location.href='../autres_pages/accPro.php';</script>";
+            header("Location: ../autres_pages/accPro.php");
             exit();
         } else {
-            echo "<script>window.location.href='../autres_pages/accueil.php';</script>";
+            header("Location: ../autres_pages/connexion.php?error=Nom d'utilisateur ou mot de passe incorrect.");
             exit();
         }
     } else {
         header("Location: ../autres_pages/connexion.php?error=Nom d'utilisateur ou mot de passe incorrect.");
         exit();
     }
-} else {
-    echo "<script>window.location.href='../autres_pages/connexion.php';</script>";
-    exit();
 }
 
 $stmt = null;
