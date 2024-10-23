@@ -48,6 +48,7 @@ if (isset($_POST['mdp'])) {
         ]);
 
         echo 'Données insérées avec succès!';
+        echo "<script>window.location.href='../autres_pages/connexion.php';</script>";
     } else {
         // insert in pro_public
         $sql = 'INSERT INTO  pact.pro_public (email, mdp_hash, nom, prenom, telephone, denomination) VALUES (:email, :mdp_hash, :nom, :prenom, :telephone, :denomination)';
