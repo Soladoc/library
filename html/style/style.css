@@ -341,7 +341,7 @@ h1 {
     border-radius: 8px;
     cursor: pointer;
 
-    &:is(:hover, :focus, :focus-within)hover {
+    &:is(:hover, :focus, :focus-within) {
         background-color: #357ABD;
     }
 }
