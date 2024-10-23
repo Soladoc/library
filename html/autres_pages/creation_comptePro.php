@@ -71,6 +71,7 @@ if (isset($_POST['mdp'])) {
         ]);
         echo "<script>window.location.href='../autres_pages/connexion.php';</script>";
     }
+    echo "<script>window.location.href='../autres_pages/creation_comptePro.php';</script>";
 } else {
 ?>
 <!DOCTYPE html>
