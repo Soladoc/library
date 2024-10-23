@@ -181,7 +181,7 @@ CREATE TABLE pact._prive
 CREATE TABLE pact._moyenpaiement
 (
   id_moyenpaiement   SERIAL CONSTRAINT _moyenpaiement_pk PRIMARY KEY,
-  siren              CHAR(9),
+  siren              CHAR(12),
   CONSTRAINT _moyenpaiement_fk_siren FOREIGN KEY (siren) REFERENCES pact._prive (siren)
 );
 CREATE TABLE pact._public
