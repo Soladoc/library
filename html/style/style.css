@@ -159,9 +159,8 @@ footer {
 h1,
 h2,
 h3 {
-    color: #333;
+    color: var(--color-text);
     font-family: 'Tw Cen MT', sans-serif;
-    font-size: 35px;
 }
 
 h1 {
