@@ -55,6 +55,7 @@ CREATE TABLE pact._compte
   prenom        VARCHAR(255),
   telephone     CHAR(10),
   id_identite   INTEGER,
+  existe      BOOL,
   CONSTRAINT _compte_fk_id_identite FOREIGN KEY (id_identite) REFERENCES pact._identite (id_identite)
 );
 CREATE TABLE pact._professionnel
@@ -62,7 +63,6 @@ CREATE TABLE pact._professionnel
   id_professionnel   SERIAL CONSTRAINT _professionnel_pk PRIMARY KEY,
   denomination       VARCHAR(255),
   email              VARCHAR(319),
-  existe      BOOL,
   CONSTRAINT _professionnel_fk_email FOREIGN KEY (email) REFERENCES pact._compte (email)
 );
 create table pact._offre(
@@ -194,7 +194,6 @@ CREATE TABLE pact._membre
 (
   id_membre   SERIAL CONSTRAINT _membre_pk PRIMARY KEY,
   pseudo      VARCHAR(63) UNIQUE,
-  existe      BOOL,
   email       VARCHAR(319),
   CONSTRAINT _membre_fk_email FOREIGN KEY (email) REFERENCES pact._compte (email)
 );
