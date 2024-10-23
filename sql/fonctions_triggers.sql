@@ -35,7 +35,7 @@ declare
 begin
   insert into pact._identite default values returning id_identite into id_temp;
   insert into pact._compte(email,mdp_hash,nom,prenom,telephone,id_identite) values (new.email,new.mdp_hash,new.nom,new.prenom,new.telephone,id_temp);
-  insert into pact._professionnel(denomination,email) values (new.denomination,new.email) returning id_professionnel into id_temp;
+  insert into pact._professionnel(denomination,email,existe) values (new.denomination,new.email,true) returning id_professionnel into id_temp;
   insert into pact._prive(id_prive,siren) values (id_temp,new.siren);
   return new;
 end;
@@ -50,7 +50,7 @@ declare
 begin
   insert into pact._identite default values returning id_identite into id_temp;
   insert into pact._compte(email,mdp_hash,nom,prenom,telephone,id_identite) values (new.email,new.mdp_hash,new.nom,new.prenom,new.telephone,id_temp);
-  insert into pact._professionnel(denomination,email) values (new.denomination,new.email) returning id_professionnel into id_temp;
+  insert into pact._professionnel(denomination,email,existe) values (new.denomination,new.email,true) returning id_professionnel into id_temp;
   insert into pact._public(id_public) values (id_temp);
   return new;
 end;
