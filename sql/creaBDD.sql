@@ -175,7 +175,7 @@ CREATE TABLE pact._visiteur
 CREATE TABLE pact._prive
 (
   id_prive   INTEGER CONSTRAINT _prive_pk PRIMARY KEY,
-  siren      CHAR(9) UNIQUE,
+  siren      CHAR(12) UNIQUE,
   CONSTRAINT _prive_fk_id_prive FOREIGN KEY (id_prive) REFERENCES pact._professionnel (id_professionnel)
 );
 CREATE TABLE pact._moyenpaiement
