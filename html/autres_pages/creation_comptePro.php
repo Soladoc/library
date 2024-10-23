@@ -9,7 +9,7 @@ if (isset($_POST['mdp'])) {
     print 'Votre mot de passe :' . $_POST['mdp'];
     print 'Votre adresse :' . $_POST['adresse'];
 
-    $estprive = ($_POST['type'] === 'prive');
+    $estprive = isset($_POST['prive']);
     $mdp_hash = password_hash($_POST['mdp'], PASSWORD_DEFAULT);
 
     $pdo = db_connect();
