@@ -12,13 +12,13 @@ const JOURS_SEMAINE = ['lundi', 'mardi', 'mercredi', 'jeudi', 'vendredi', 'samed
 
 $type_offre = $_GET['type-offre'] ?? null;
 
-if ($type_offre && $_POST) {
+if ($type_offre && $_POST) {//_POST est set et _GET est set
 ?>
     <pre><?php htmlspecialchars(print_r($_GET)) ?></pre>
     <pre><?php htmlspecialchars(print_r($_POST)) ?></pre>
     <pre><?php htmlspecialchars(print_r($_FILES)) ?></pre>
 <?php
-} else { ?>
+} else { ?><!-- _POST ou _GET ne seont pas set-->
 
     <!DOCTYPE html>
     <html lang="fr">
@@ -152,9 +152,11 @@ if ($type_offre && $_POST) {
                 <input form="form-offre" type="file" id="gallerie" name="gallerie" accept="image/*" multiple>
                 <ul id="gallerie-preview"></ul>
             </section>
+            <!-- du coup en sois on a pas de formulaire a check avec Raphael -->
             <form id="form-offre" action="creation_offre.php?type-offre=<?= $type_offre ?>" method="post" enctype="multipart/form-data">
                 <button type="submit">Valider</button>
             </form>
+
         </main>
         <?php require 'component/footer.php' ?>
     </body>

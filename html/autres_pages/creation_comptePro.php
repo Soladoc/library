@@ -140,7 +140,7 @@ if (isset($_POST['mdp'])) {
                             <label for="prive" style="font-family:'Tw Cen MT'">Privé</label>
                         </div>
                         <div>
-                            <input type="radio" id="public" name="type" value="huey" onclick="gererAffichage()" />
+                            <input type="radio" id="public" name="type" value="public" onclick="gererAffichage()" />
                             <label for="public" style="font-family:'Tw Cen MT'">Public</label>
                         </div>
                     </div>
@@ -149,7 +149,7 @@ if (isset($_POST['mdp'])) {
                     <div class="champ" id="siren">
                         <!-- Texte avec label -->
                         <label>SIREN*:</label>
-                        <input type="text" id="siren" name="siren" placeholder="231 654 987     12315" required />
+                        <input type="text" id="siren" name="siren" placeholder="231 654 987     12315" />
                     </div>
                     <br>
                     <button type="submit" class="btn-connexion">Créer un compte professionnel</button>
@@ -176,9 +176,12 @@ if (isset($_POST['mdp'])) {
             if (radio.checked && radio.value === 'prive') {
                 // Si Option 2 est sélectionnée, on affiche la ligne
                 ligneSupplementaire.style.display = 'block';
+                ligneSupplementaire.setAttribute('required','required');
+
             } else if (radio.checked) {
                 // Si une autre option est sélectionnée, on masque la ligne
                 ligneSupplementaire.style.display = 'none';
+                ligneSupplementaire.removeAttribute('required');
             }
         });
     }
