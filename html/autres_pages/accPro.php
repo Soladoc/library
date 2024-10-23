@@ -45,7 +45,11 @@ require_once 'db.php';
                         <p class="category"><?php $stmt = $pdo->prepare('CALL category(:id_offre)');
                         $stmt->execute(['id_offre' => $offre[0]]);
                         echo $stmt?></p>
-                        <p class="rating">Note : 4.7/5 ★ (256 avis)</p>
+                        <p class="rating">Note : <?php $stmt = $pdo->prepare('CALL moyenne(:id_offre)');
+                        $stmt->execute(['id_offre' => $offre[0]]);
+                        echo $stmt?>/5 ★ (<?php $stmt = $pdo->prepare('select count(*) from avis where offre=:id_offre');
+                        $stmt->execute(['id_offre' => $offre[0]]);
+                        echo $stmt?> avis)</p>
                         <button class="btn-more-info" href="<?php $offre[4] ?>">En savoir plus</button>
                     </div>
                     <?php
@@ -83,7 +87,11 @@ require_once 'db.php';
                         <p class="category"><?php $stmt = $pdo->prepare('CALL category(:id_offre)');
                         $stmt->execute(['id_offre' => $offre[0]]);
                         echo $stmt?></p>
-                        <p class="rating">Note : 4.7/5 ★ (256 avis)</p>
+                        <p class="rating">Note : <?php $stmt = $pdo->prepare('CALL moyenne(:id_offre)');
+                        $stmt->execute(['id_offre' => $offre[0]]);
+                        echo $stmt?>/5 ★ (<?php $stmt = $pdo->prepare('select count(*) from avis where offre=:id_offre');
+                        $stmt->execute(['id_offre' => $offre[0]]);
+                        echo $stmt?> avis)</p>
                         <button class="btn-more-info" href="<?php $offre[4] ?>">En savoir plus</button>
                     </div>
                     <?php
