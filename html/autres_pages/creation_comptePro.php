@@ -39,15 +39,7 @@ if (isset($_POST['mdp'])) {
         $stmt->bindParam(':siren', $_POST['siren']);
 
         // 3. Exécuter la requête avec les valeurs
-        $stmt->execute([
-            ':email' => $_POST['email'],
-            ':mdp_hash' => $mdp_hash,
-            ':nom' => $_POST['nom'],
-            ':prenom' => $_POST['prenom'],
-            ':telephone' => $_POST['telephone'],
-            ':denomination' => $_POST['denomination'],
-            ':siren' => $_POST['siren']
-        ]);
+        $stmt->execute();
 
         echo "<script>window.location.href='../autres_pages/connexion.php';</script>";
     } else {
@@ -122,7 +114,7 @@ if (isset($_POST['mdp'])) {
                     <div class="champ">
                         <!-- Texte avec label -->
                         <p>Téléphone :</p>
-                        <input id="telephone" name="telephone" type="tel" placeholder="Format: 0123456789" pattern="[0-9]{10}" required>
+                        <input id="telephone" name="telephone" type="tel" placeholder="Format: 0123456789" pattern="[0-9]{10}" maxlength="10" required>
                     </div>
                     <br />
                     <div class="champ">
