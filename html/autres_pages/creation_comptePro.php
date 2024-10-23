@@ -106,13 +106,13 @@ if (isset($_POST['mdp'])) {
                     <!-- Texte avec label -->
                     <div class="champ">
                         <p>Nom :</p>
-                        <input type="text" id="nom" name="nom" placeholder="Nyx" required />
+                        <input type="text" id="nom" name="nom" placeholder="Breton" required />
                     </div>
                     <br />
                     <div class="champ">
                         <!-- Texte avec label -->
                         <p>Prenom :</p>
-                        <input type="text" id="prenom" name="prenom" placeholder="Icelos" required />
+                        <input type="text" id="prenom" name="prenom" placeholder="Louis" required />
                     </div>
                     <br />
                     <div class="champ">
@@ -124,13 +124,13 @@ if (isset($_POST['mdp'])) {
                     <div class="champ">
                         <!-- Texte avec label -->
                         <p>Dénomination (raison sociale) *:</p>
-                        <input type="text" id="denomination" name="denomination" placeholder="Panthéon de la nuit étoilée" required />
+                        <input type="text" id="denomination" name="denomination" placeholder="Amazon" required />
                     </div>
                     <br />
                     <div class="champ">
                         <!-- Email -->
                         <p>Adresse *:</p>
-                        <input type="text" id="adresse" placeholder="1 rue che 22050 truc" name="adresse" />
+                        <input type="text" id="adresse" placeholder="22300 1 rue Edouard Branly" name="adresse" />
                     </div>
                     <br />
 

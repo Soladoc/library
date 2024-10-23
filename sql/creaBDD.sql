@@ -62,6 +62,7 @@ CREATE TABLE pact._professionnel
   id_professionnel   SERIAL CONSTRAINT _professionnel_pk PRIMARY KEY,
   denomination       VARCHAR(255),
   email              VARCHAR(319),
+  existe      BOOL,
   CONSTRAINT _professionnel_fk_email FOREIGN KEY (email) REFERENCES pact._compte (email)
 );
 create table pact._offre(
