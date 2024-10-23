@@ -9,7 +9,7 @@ if (isset($_POST['mdp'])) {
     print 'Votre mot de passe :' . $_POST['mdp'];
     print 'Votre adresse :' . $_POST['adresse'];
 
-    $estprive = isset($_POST['prive']);
+    $estprive = ($_POST['type'] === 'prive');
     $mdp_hash = password_hash($_POST['mdp'], PASSWORD_DEFAULT);
 
     $pdo = db_connect();
@@ -47,7 +47,6 @@ if (isset($_POST['mdp'])) {
             ':siren' => $_POST['siren']
         ]);
 
-        echo 'Données insérées avec succès!';
         echo "<script>window.location.href='../autres_pages/connexion.php';</script>";
     } else {
         // insert in pro_public
@@ -62,7 +61,14 @@ if (isset($_POST['mdp'])) {
         $stmt->bindParam(':denomination', $_POST['denomination']);
 
         // 3. Exécuter la requête avec les valeurs
-        $stmt->execute();
+        $stmt->execute([
+            ':email' => $_POST['email'],
+            ':mdp_hash' => $mdp_hash,
+            ':nom' => $_POST['nom'],
+            ':prenom' => $_POST['prenom'],
+            ':telephone' => $_POST['telephone'],
+            ':denomination' => $_POST['denomination']
+        ]);
         echo "<script>window.location.href='../autres_pages/connexion.php';</script>";
     }
 } else {
@@ -134,7 +140,7 @@ if (isset($_POST['mdp'])) {
                             <label for="prive" style="font-family:'Tw Cen MT'">Privé</label>
                         </div>
                         <div>
-                            <input type="radio" id="public" name="type" value="huey" onclick="gererAffichage()" />
+                            <input type="radio" id="public" name="type" value="public" onclick="gererAffichage()" />
                             <label for="public" style="font-family:'Tw Cen MT'">Public</label>
                         </div>
                     </div>
