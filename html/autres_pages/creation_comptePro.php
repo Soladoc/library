@@ -62,14 +62,7 @@ if (isset($_POST['mdp'])) {
         $stmt->bindParam(':denomination', $_POST['denomination']);
 
         // 3. Exécuter la requête avec les valeurs
-        $stmt->execute([
-            ':email' => $_POST['email'],
-            ':mdp_hash' => $mdp_hash,
-            ':nom' => $_POST['nom'],
-            ':prenom' => $_POST['prenom'],
-            ':telephone' => $_POST['telephone'],
-            ':denomination' => $_POST['denomination'],
-        ]);
+        $stmt->execute();
         echo "<script>window.location.href='../autres_pages/connexion.php';</script>";
     }
 } else {
