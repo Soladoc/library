@@ -34,7 +34,6 @@ for (const jour of ['lundi', 'mardi', 'mercredi', 'jeudi', 'vendredi', 'samedi',
     const button_add_horaire = document.getElementById('button-add-horaire-' + jour);
     const tbody_horaires = document.getElementById('table-horaires-' + jour).querySelector('tbody');
     button_add_horaire.addEventListener('click', () => tbody_horaires.appendChild(create_horaire_tr(jour)));
-    button_add_horaire.click();
 }
 
 /**
@@ -69,7 +68,7 @@ function add_tarif_tr(nom, montant) {
     const tr_tarif = template_tarif_tr.content.children[0].cloneNode(true); // Clone the template
 
     tr_tarif.id = tr_tarif_id_prefix + nom;
-    tr_tarif.children[0].innerText = nom;
+    tr_tarif.children[0].children[0].value = nom;
 
     tr_tarif.children[1].children[0].value = montant;
 
