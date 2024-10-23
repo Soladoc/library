@@ -24,12 +24,9 @@ if (isset($_POST['mdp'])) {
 
 
     if ($estprive) {
-        // on passe parle la 
         // insert in pro_prive
         $sql = 'INSERT INTO  pact.pro_prive (email, mdp_hash, nom, prenom, telephone, denomination, siren) VALUES (:email, :mdp_hash, :nom, :prenom, :telephone, :denomination, :siren)';
         $stmt = $pdo->prepare($sql);
-
-        echo 'ICI';
 
         $stmt->bindParam(':email', $_POST['email']);
         $stmt->bindParam(':mdp_hash', $mdp_hash);
@@ -39,7 +36,8 @@ if (isset($_POST['mdp'])) {
         $stmt->bindParam(':denomination', $_POST['denomination']);
         $stmt->bindParam(':siren', $_POST['siren']);
 
-        echo 'ou LA';
+        print 'Votre  siren :' . $_POST['siren'];
+        
 
         // 3. Exécuter la requête avec les valeurs
         $stmt->execute([
@@ -51,7 +49,8 @@ if (isset($_POST['mdp'])) {
             ':denomination' => $_POST['denomination'],
             ':siren' => $_POST['siren']
         ]);
-
+        
+        echo "eh oh";
         echo "<script>window.location.href='../autres_pages/connexion.php';</script>";
     } else {
         // insert in pro_public
