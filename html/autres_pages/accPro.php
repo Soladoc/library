@@ -43,11 +43,15 @@ require_once 'db.php';
                         <h3><?php $offre[1] ?></h3>
                         <p class="location"><?php $offre[7] ?></p>
                         <p class="category"><?php $stmt = $pdo->prepare('CALL category(:id_offre)');
-                        $stmt->execute(['id_offre' => $offre[0]]);?></p>
+                        $stmt->execute(['id_offre' => $offre[0]]);
+                        echo $stmt?></p>
                         <p class="rating">Note : 4.7/5 ★ (256 avis)</p>
-                        <button class="btn-more-info" href="">En savoir plus</button>
+                        <button class="btn-more-info" href="<?php $offre[4] ?>">En savoir plus</button>
                     </div>
-
+                    <?php
+                 }
+                 $liste_offre_en_ligne->closeCursor();
+                 ?>
                 <!-- Offre en ligne 2 -->
                 <div class="offer-card">
                     <img src="vallee_saints.jpg" alt="Randonnée dans la vallée des Saints">
@@ -66,7 +70,26 @@ require_once 'db.php';
             <p>Vos offres hors-ligne : <?php echo $offre_hors_ligne?> </p>
 
             <div class="offer-carousel">
-                <!-- Offre 1 -->
+            <?php
+                $stmt = $pdo->prepare('CALL nb_offres_hors_ligne(:id_professionnel)');
+                $stmt->execute(['id_professionnel' => $_GET['id_professionnel']]);
+                $liste_offre_hors_ligne = $stmt;
+                while ($offre = $liste_offre_hors_ligne->fetch()) {
+                    ?>
+                    <div class="offer-card">
+                        <img src="<?php $offre[8] ?>" alt="Découverte interactive de la cité des Télécoms">
+                        <h3><?php $offre[1] ?></h3>
+                        <p class="location"><?php $offre[7] ?></p>
+                        <p class="category"><?php $stmt = $pdo->prepare('CALL category(:id_offre)');
+                        $stmt->execute(['id_offre' => $offre[0]]);
+                        echo $stmt?></p>
+                        <p class="rating">Note : 4.7/5 ★ (256 avis)</p>
+                        <button class="btn-more-info" href="<?php $offre[4] ?>">En savoir plus</button>
+                    </div>
+                    <?php
+                }
+                $liste_offre_hors_ligne->closeCursor();
+            ?>
                 <div class="offer-card">
                     <img src="telecom.jpg" alt="Découverte interactive de la cité des Télécoms">
                     <h3>Découverte interactive de la cité des Télécoms</h3>

@@ -182,3 +182,11 @@ BEGIN
   RETURN categorie;
 END;
 $$ LANGUAGE 'plpgsql';
+CREATE OR REPLACE FUNCTION note(id_offre_cherche INTEGER) RETURNS float AS $$
+DECLARE
+  note float;
+BEGIN
+  note := (select avg(note) from avis where offre=id_offre_cherche);
+  RETURN note;
+END;
+$$ LANGUAGE 'plpgsql';
