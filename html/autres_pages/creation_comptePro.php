@@ -140,7 +140,7 @@ if (isset($_POST['mdp'])) {
                             <label for="prive" style="font-family:'Tw Cen MT'">Privé</label>
                         </div>
                         <div>
-                            <input type="radio" id="public" name="type" value="huey" onclick="gererAffichage()" />
+                            <input type="radio" id="public" name="type" value="public" onclick="gererAffichage()" />
                             <label for="public" style="font-family:'Tw Cen MT'">Public</label>
                         </div>
                     </div>
