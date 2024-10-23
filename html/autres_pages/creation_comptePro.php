@@ -16,12 +16,12 @@ if (isset($_POST['mdp'])) {
     $stmt = $pdo->prepare('SELECT COUNT(*) FROM pact._compte WHERE email = :email');
     $stmt->execute(['email' => $_POST['email']]);
     $count = $stmt->fetchColumn();
+    
     if ($count > 0) {
         echo 'Cette adresse e-mail est déjà utilisée.';
         exit;
     }
 
-    // insert in compte
 
     if ($estprive) {
         // insert in pro_prive
@@ -71,7 +71,7 @@ if (isset($_POST['mdp'])) {
         ]);
         echo "<script>window.location.href='../autres_pages/connexion.php';</script>";
     }
-    echo "<script>window.location.href='../autres_pages/creation_comptePro.php';</script>";
+    echo "<script>window.location.href='../autres_pages/accPro.php';</script>";
 } else {
 ?>
 <!DOCTYPE html>
