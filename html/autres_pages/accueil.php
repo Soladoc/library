@@ -49,7 +49,7 @@ require_once 'db.php';
                         echo 'test';
                         $id_offre = $offre['id_offre'];
                         $image = $offre['photoprincipale'];
-                        $titre = $offre['title'];
+                        $titre = $offre['titre'];
                         $adresse=  $offre['adresse'];
                         $id_professionnel =  $offre['id_professionnel'];
                         // $categorie = $offre['category'];
