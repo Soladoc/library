@@ -30,8 +30,8 @@ insert into _professionnel(denomination, email)
     returning
         id_professionnel
 ), image as (
-insert into _image(legende, taille)
-        values ('legende', 100)
+insert into _image(legende, taille, mime_type)
+        values ('legende', 100, 'image/jpeg')
     returning
         id_image)
     insert into _offre(titre, resume, description_detaille, url_site_web, adresse, id_signalable, id_professionnel, photoprincipale)

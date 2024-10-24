@@ -54,6 +54,7 @@ create table _image(
     id_image serial
         constraint image_pk primary key,
     taille int not null,
+    mime_type text not null,
     legende varchar(255) not null default ''
 );
 
