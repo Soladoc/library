@@ -1,3 +1,5 @@
+set schema 'pact';
+
 insert into
     _departement (numero, nom)
 values

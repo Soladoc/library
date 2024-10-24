@@ -27,7 +27,7 @@ create table _commune(
 create table _adresse(
     id_adresse serial
         constraint adresse_pk primary key,
-    numero_voie int default null,
+    numero_voie int not null default 0,
     complement_numero varchar(10) not null default '',
     nom_voie varchar(255) not null default '',
     localite varchar(255) not null default '',
@@ -54,7 +54,7 @@ create table _image(
     id_image serial
         constraint image_pk primary key,
     taille int not null,
-    legende varchar(255)
+    legende varchar(255) not null default ''
 );
 
 create table _signalable(
@@ -103,7 +103,7 @@ create table _offre(
         constraint offre_fk_professionnel references _professionnel(id_professionnel),
     id_signalable integer unique
         constraint offre_inherits_signalable references _signalable(id_signalable),
-    url_site_web varchar(2047)
+    url_site_web varchar(2047) not null default ''
 );
 
 create table _changement_etat(

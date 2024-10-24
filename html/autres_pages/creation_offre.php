@@ -63,12 +63,12 @@ if ($type_offre && $_POST) {
         // todo: adresses localisées
         $stmt = notfalse($pdo->prepare('insert into pact._adresse (numero_voie, complement_numero, nom_voie, localite, precision_int, precision_ext, commune_code_insee, commune_code_postal) values (?,?,?,?,?,?,?,?) returning id_adresse'));
         notfalse($stmt->execute([
-            $_POST['adresse']['num_voie'] ?? null,
-            $_POST['adresse']['compl_numero'] ?? null,
-            $_POST['adresse']['nom_voie'] ?? null,
-            $_POST['adresse']['localite'] ?? null,
-            $_POST['adresse']['precision_int'] ?? null,
-            $_POST['adresse']['precision_ext'] ?? null,
+            $_POST['adresse']['num_voie'] ?? 0,
+            $_POST['adresse']['compl_numero'] ?? '',
+            $_POST['adresse']['nom_voie'] ?? '',
+            $_POST['adresse']['localite'] ?? '',
+            $_POST['adresse']['precision_int'] ?? '',
+            $_POST['adresse']['precision_ext'] ?? '',
             $commune['code_insee'],
             $commune['code_postal']
         ]));
@@ -89,8 +89,8 @@ if ($type_offre && $_POST) {
         notfalse($stmt->execute([
             $_POST['titre'],
             $_POST['resume'],
-            $_POST['description'],
-            $_POST['site'] ?? null,
+            $_POST['description'] ?? '',
+            $_POST['site'] ?? '',
             $id_adresse,
             $id_image_photo_principale,
             'gratuit',
