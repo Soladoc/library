@@ -36338,5 +36338,6 @@ values
   insert into _adresse(id_adresse,nom_voie,commune_code_insee,commune_code_postal) values (1,'aaaaaaaaaaaaaaaaaaa','1001','1400');
   insert into _compte(id_identite,email) values (1,'a.gmail');
   insert into _professionnel(id_professionnel,email) values (1,'a.gmail');
+  insert into _image(id_image,legende) values (123,'legende');
   insert into _offre(titre,resume,description_detaille,url_site_web,adresse,id_signalable,id_professionnel,photoprincipale) 
   values ('barraque à frites','aaaaaaaaaaa','cest une barraque à frite','blabla.fr',1,1,1,123);
