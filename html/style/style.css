@@ -26,6 +26,10 @@ main {
     flex: 1;
 }
 
+footer {
+    margin-top: 40px;
+}
+
 * {
     margin: 0;
     padding: 0;
