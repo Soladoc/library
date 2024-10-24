@@ -26,16 +26,16 @@ $stmt = $pdo->prepare('SELECT email, mdp_hash, existe FROM pact.membres WHERE em
 $stmt->bindValue(':email', $username, PDO::PARAM_STR);
 $stmt->execute();
 $user = $stmt->fetch(PDO::FETCH_ASSOC);
-echo $user['existe'],$user['email'],$user['mdp_hash'];
+echo $user['existe'], $user['email'], $user['mdp_hash'];
 
 if (!empty($user) && $user['existe'] == 1) {
     $hashed_password = $user['mdp_hash'];
     if (password_verify($password, $hashed_password)) {
         session_regenerate_id(true);
         $_SESSION['username'] = $username;
+        $_SESSION['log'] = true;
         header("Location: ../autres_pages/accueil.php");
         exit();
-        
     } else {
         header("Location: ../autres_pages/connexion.php?error=Nom d'utilisateur ou mot de passe incorrect.");
         exit();
@@ -52,7 +52,7 @@ if (!empty($user) && $user['existe'] == 1) {
         if (password_verify($password, $hashed_password)) {
             session_regenerate_id(true);
             $_SESSION['username'] = $username;
-
+            $_SESSION['log'] = true;
             header("Location: ../autres_pages/accPro.php");
             exit();
         } else {
