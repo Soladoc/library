@@ -43,7 +43,7 @@ require_once 'db.php';
                     
                     // 3. Boucler sur les résultats pour afficher chaque offre
                     while ($offre = $stmt->fetch(PDO::FETCH_ASSOC)) {
-                        echo $offre;
+                        
                         // // Calculer si l'offre ferme bientôt (exemple si elle ferme dans moins d'une heure)
                         // $current_time = new DateTime();  // Heure actuelle
                         // $closing_time = new DateTime($offre['closing_time']);
@@ -66,10 +66,10 @@ require_once 'db.php';
                         // }
 
                         // Lien vers plus d'infos sur l'offre (mettre l'URL correcte dans href)
-                        $query = "SELECT * FROM pact._adresse WHERE id_adresse = :id";
-                        $stmt = $pdo->prepare($query);
-                        $stmt->execute(['id' => $adresse]);
-                        $info_adresse = $stmt->fetch(PDO::FETCH_ASSOC);
+                        $requete = "SELECT * FROM pact._adresse WHERE id_adresse = :id";
+                        $stmt2 = $pdo->prepare($query);
+                        $stmt2->execute(['id' => $adresse]);
+                        $info_adresse = $stmt2->fetch(PDO::FETCH_ASSOC);
                 
 
 
