@@ -32,12 +32,12 @@ require_once 'db.php';
         <section class="highlight-offers">
             <h2>Offres à la une</h2>
             <div class="offer-list">
-                <?php echo 'test';
+                <?php 
                     // 1. Connexion à la base de données
                     $pdo = db_connect();
-                    echo 'test';
+                    
                     // 2. Préparer et exécuter la requête SQL pour récupérer toutes les offres
-                    $sql = 'SELECT * FROM _offre';
+                    $sql = 'SELECT * FROM pact._offre';
                     $stmt = $pdo->query($sql);  // Exécute la requête SQL
 
                     // 3. Boucler sur les résultats pour afficher chaque offre
