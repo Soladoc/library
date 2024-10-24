@@ -6,10 +6,8 @@ declare
 begin
   insert into pact._signalable default values returning id_signalable into id_temp;
   insert into adresse(nom_voie) values (new.adresse) returning id_adresse into id_adresse_temp;
-  insert into _offre(id_offre,titre,resume,description_detaille,url_site_web,date_derniere_maj,id_categorie,adresse,photoprincipale,abonnement,id_signalable,
-  id_professionnel,id_signalable) 
-  values (new.id_offre,new.titre,new.resume,new.description_detaille,new.url_site_web,new.date_derniere_maj,new.id_categorie,new.adresse,new.photoprincipale,
-  new.abonnement,new.id_signalable,new.id_professionnel,id-temp);
+  insert into _offre(titre,resume,description_detaille,url_site_web,adresse,photoprincipale,abonnement,id_professionnel,id_signalable) 
+  values (new.titre,new.resume,new.description_detaille,new.url_site_web,new.adresse,new.photoprincipale,new.abonnement,new.id_professionnel,id-temp);
   return new;
 end;
 $$ language 'plpgsql';
@@ -73,13 +71,13 @@ begin
   end if;
 end;
 $$ language 'plpgsql';
+DROP FUNCTION nb_offres_en_ligne(integer);
 create or replace function nb_offres_en_ligne(id_pro_cherche integer) returns table (id_offre integer,
   titre varchar(255),
   resume varchar(1023),
   description_detaille text,
   url_site_web varchar(2047),
   date_derniere_maj timestamp,
-  id_categorie integer,
   adresse integer,
   photoprincipale integer,
   abonnement varchar(63),
@@ -97,7 +95,6 @@ begin
     description_detaille text,
     url_site_web varchar(2047),
     date_derniere_maj timestamp,
-    id_categorie integer,
     adresse integer,
     photoprincipale integer,
     abonnement varchar(63),
@@ -108,8 +105,8 @@ begin
     boucle:=i-1;
     id_offre_temp:= (select id_offre from _offres offset boucle rows fetch first row only); 
     if est_en_ligne(id_offre_temp) then
-      insert into offres_en_ligne(id_offre,titre,resume,description_detaille,url_site_web,date_derniere_maj,id_categorie,adresse,photoprincipale,
-      abonnement,id_signalable,id_professionnel) select id_offre,titre,resume,description_detaille,url_site_web,date_derniere_maj,id_categorie,adresse,photoprincipale,
+      insert into offres_en_ligne(id_offre,titre,resume,description_detaille,url_site_web,adresse,photoprincipale,
+      abonnement,id_signalable,id_professionnel) select id_offre,titre,resume,description_detaille,url_site_web,adresse,photoprincipale,
       abonnement,id_signalable,id_professionnel from _offres offset boucle rows fetch first row only;
     end if;
   end loop;
@@ -142,7 +139,6 @@ begin
     description_detaille text,
     url_site_web varchar(2047),
     date_derniere_maj timestamp,
-    id_categorie integer,
     adresse integer,
     photoprincipale integer,
     abonnement varchar(63),
@@ -153,8 +149,8 @@ begin
     boucle:=i-1;
     id_offre_temp:= (select id_offre from _offres offset boucle rows fetch first row only); 
     if !est_en_ligne(id_offre_temp) then
-      insert into offres_hors_ligne(id_offre,titre,resume,description_detaille,url_site_web,date_derniere_maj,id_categorie,adresse,photoprincipale,
-      abonnement,id_signalable,id_professionnel) select id_offre,titre,resume,description_detaille,url_site_web,date_derniere_maj,id_categorie,adresse,photoprincipale,
+      insert into offres_hors_ligne(id_offre,titre,resume,description_detaille,url_site_web,date_derniere_maj,adresse,photoprincipale,
+      abonnement,id_signalable,id_professionnel) select id_offre,titre,resume,description_detaille,url_site_web,date_derniere_maj,adresse,photoprincipale,
       abonnement,id_signalable,id_professionnel from _offres offset boucle rows fetch first row only;
     end if;
   end loop;
@@ -192,3 +188,7 @@ BEGIN
   RETURN note;
 END;
 $$ LANGUAGE 'plpgsql';
+  insert into pact._signalable default values;
+  insert into _adresse(nom_voie) values ('aaaaaaaaaaaaaaaaaaa');
+  insert into _offre(titre,resume,description_detaille,url_site_web,adresse,id_signalable,id_professionnel) 
+  values ('barraque à frites','aaaaaaaaaaa','cest une barraque à frite','blabla.fr',1,1,1);
