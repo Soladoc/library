@@ -2,7 +2,6 @@
 
 require_once 'db.php';
 if (isset($_POST['mdp'])) {
-    echo "ici on est bien";
     print 'Votre nom :' . $_POST['nom'];
     print 'Votre prenom :' . $_POST['prenom'];
     print 'Votre numero de telephone :' . $_POST['telephone'];
@@ -25,7 +24,6 @@ if (isset($_POST['mdp'])) {
 
 
     if ($estprive) {
-        echo 'oeoeeo';
         // insert in pro_prive
         $sql = 'INSERT INTO  pact.pro_prive (email, mdp_hash, nom, prenom, telephone, denomination, siren) VALUES (:email, :mdp_hash, :nom, :prenom, :telephone, :denomination, :siren)';
         $stmt = $pdo->prepare($sql);
@@ -37,7 +35,7 @@ if (isset($_POST['mdp'])) {
         $stmt->bindParam(':telephone', $_POST['telephone']);
         $stmt->bindParam(':denomination', $_POST['denomination']);
         $stmt->bindParam(':siren', $_POST['siren']);
-        echo 'aaaaaaaaaaaaaaa';
+
         // 3. Exécuter la requête avec les valeurs
         $stmt->execute([
             ':email' => $_POST['email'],
@@ -73,7 +71,6 @@ if (isset($_POST['mdp'])) {
         ]);
         echo "<script>window.location.href='../autres_pages/connexion.php';</script>";
     }
-    echo "okkkkkkk";
     echo "<script>window.location.href='../autres_pages/accPro.php';</script>";
 } else {
 ?>
