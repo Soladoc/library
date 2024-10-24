@@ -35,7 +35,7 @@
                 <!-- Offre en ligne 1 -->
                  <?php
                  $stmt = $pdo->prepare('CALL nb_offres_en_ligne(:id_professionnel)');
-                 $stmt->execute(['id_professionnel' => $_SESSION['id_professionnel']]);
+                 $stmt->execute(['id_professionnel' => $_SESSION['id']]);
                  $liste_offre_en_ligne = $stmt;
                  while ($offre = $liste_offre_en_ligne->fetch()) {
                     ?>
@@ -77,7 +77,7 @@
             <div class="offer-carousel">
             <?php
                 $stmt = $pdo->prepare('CALL nb_offres_hors_ligne(:id_professionnel)');
-                $stmt->execute(['id_professionnel' => $_SESSION['id_professionnel']]);
+                $stmt->execute(['id_professionnel' => $_SESSION['id']]);
                 $liste_offre_hors_ligne = $stmt;
                 while ($offre = $liste_offre_hors_ligne->fetch()) {
                     ?>
