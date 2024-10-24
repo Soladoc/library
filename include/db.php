@@ -16,16 +16,8 @@ function notfalse(mixed $value, string $msg): mixed
     return $value;
 }
 
-$_dotenv_loaded = false;
-
 function load_dotenv()
 {
-    global $_dotenv_loaded;
-
-    if ($_dotenv_loaded) {
-        return;
-    }
-
     $envfile = __DIR__ . '/.env';
     $env = notfalse(file_get_contents($envfile), "dotenv file missing at $envfile");
     foreach (explode("\n", $env) as $line) {
@@ -34,8 +26,6 @@ function load_dotenv()
             putenv(trim($line));
         }
     }
-
-    $_dotenv_loaded = true;
 }
 
 function _is_localhost(): bool
@@ -57,8 +47,14 @@ function _is_localhost(): bool
     return empty(filter_var($server_ip, FILTER_VALIDATE_IP, FILTER_FLAG_NO_RES_RANGE | FILTER_FLAG_NO_PRIV_RANGE));
 }
 
+$_PDO = null;
+
 function db_connect(): PDO
 {
+    global $_PDO;
+    if ($_PDO !== null) {
+        return $_PDO;
+    }
     try {
         load_dotenv();
 
@@ -68,7 +64,7 @@ function db_connect(): PDO
         $port = notfalse(getenv('PGDB_PORT'), 'PGDB_PORT not set');
         $dbname = 'postgres';
 
-        return new PDO(
+        return $_PDO = new PDO(
             "$driver:host=$host;port=$port;dbname=$dbname",
             notfalse(getenv('DB_USER'), 'DB_USER not set'),
             notfalse(getenv('DB_ROOT_PASSWORD'), 'DB_ROOT_PASSWORD not set'),

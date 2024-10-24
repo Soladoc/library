@@ -46,3 +46,4 @@ select
 from
     _compte
     natural join _professionnel;
+

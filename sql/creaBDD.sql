@@ -8,10 +8,11 @@ create table pact._departement(
 );
 
 create table pact._commune(
-    code_insee char(5) constraint _commune_pk primary key,
+    code_insee char(5) not null,
     nom varchar(47) not null,
     numero_dep char(3) not null,
     code_postal char(5) not null,
+    constraint _commune_pk primary key (code_insee, code_postal), -- une commune peut avoir plusieurs codes postaux (ex. Rangiroa)
     constraint _commune_fk_numero_dep foreign key (numero_dep) references pact._departement(numero)
 );
 
@@ -25,9 +26,10 @@ create table pact._adresse(
     precision_ext varchar(255),
     latitude decimal,
     longitude decimal,
-    code_insee char(5),
-    check ((latitude is null) = (longitude is null)),
-    constraint _adresse_fk_code_insee foreign key (code_insee) references pact._commune(code_insee)
+    commune_code_insee char(5) not null,
+    commune_code_postal char(5) not null,
+    check ((latitude is null) =(longitude is null)),
+    constraint _adresse_fk_code_insee foreign key (commune_code_insee, commune_code_postal) references pact._commune(code_insee, code_postal)
 );
 
 create table pact._abonnement(
@@ -296,3 +298,4 @@ create table pact._reponse(
     constraint _reponse_fk_auteur_offre foreign key (auteur, offre) references pact._avis(auteur, offre),
     constraint _reponse_fk_id_signalable foreign key (id_signalable) references pact._signalable(id_signalable)
 );
+

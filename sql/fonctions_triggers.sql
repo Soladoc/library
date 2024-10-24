@@ -10,18 +10,16 @@ begin
         values
         returning
             id_signalable into id_temp;
-    insert into offres_en_ligne(id_offre, titre, resume, description_detaille, url_site_web, date_derniere_maj,
-	id_categorie, adresse, photoprincipale, abonnement, id_signalable, id_professionnel, id_signalable)
-	values (new.id_offre, new.titre, new.resume, new.description_detaille, new.url_site_web, new.date_derniere_maj,
-	    new.id_categorie, new.adresse, new.photoprincipale, new.abonnement, new.id_signalable,
-	    new.id_professionnel, id - temp);
+    insert into offres_en_ligne(id_offre, titre, resume, description_detaille, url_site_web, date_derniere_maj, id_categorie, adresse, photoprincipale, abonnement, id_signalable, id_professionnel, id_signalable)
+        values (new.id_offre, new.titre, new.resume, new.description_detaille, new.url_site_web, new.date_derniere_maj, new.id_categorie, new.adresse, new.photoprincipale, new.abonnement, new.id_signalable, new.id_professionnel, id - temp);
     return new;
 end;
 $$
 language 'plpgsql';
 
 create or replace trigger offres_insert
-    instead of insert on offres for each row
+    instead of insert on offres
+    for each row
     execute procedure offres_insert();
 
 create or replace function membres_insert()
@@ -44,7 +42,8 @@ $$
 language 'plpgsql';
 
 create or replace trigger tg_membres_insert
-    instead of insert on membres for each row
+    instead of insert on membres
+    for each row
     execute procedure membres_insert();
 
 create or replace function pro_prive_insert()
@@ -71,7 +70,8 @@ $$
 language 'plpgsql';
 
 create or replace trigger tg_pro_prive_insert
-    instead of insert on pro_prive for each row
+    instead of insert on pro_prive
+    for each row
     execute procedure pro_prive_insert();
 
 create or replace function pro_public_insert()
@@ -98,7 +98,8 @@ $$
 language 'plpgsql';
 
 create or replace trigger tg_pro_public_insert
-    instead of insert on pro_public for each row
+    instead of insert on pro_public
+    for each row
     execute procedure pro_public_insert();
 
 create or replace function est_en_ligne(id_offre_cherche integer)
@@ -172,8 +173,7 @@ from
             from
                 _offres offset boucle rows fetch first row only);
         if est_en_ligne(id_offre_temp) then
-	    insert into offres_en_ligne(id_offre, titre, resume, description_detaille, url_site_web, date_derniere_maj,
-		id_categorie, adresse, photoprincipale, abonnement, id_signalable, id_professionnel)
+            insert into offres_en_ligne(id_offre, titre, resume, description_detaille, url_site_web, date_derniere_maj, id_categorie, adresse, photoprincipale, abonnement, id_signalable, id_professionnel)
             select
                 id_offre,
                 titre,
@@ -253,8 +253,7 @@ from
             from
                 _offres offset boucle rows fetch first row only);
         if ! est_en_ligne(id_offre_temp) then
-	    insert into offres_hors_ligne(id_offre, titre, resume, description_detaille, url_site_web,
-		date_derniere_maj, id_categorie, adresse, photoprincipale, abonnement, id_signalable, id_professionnel)
+            insert into offres_hors_ligne(id_offre, titre, resume, description_detaille, url_site_web, date_derniere_maj, id_categorie, adresse, photoprincipale, abonnement, id_signalable, id_professionnel)
             select
                 id_offre,
                 titre,
@@ -355,3 +354,4 @@ begin
 end;
 $$
 language 'plpgsql';
+

@@ -12,13 +12,14 @@ const JOURS_SEMAINE = ['lundi', 'mardi', 'mercredi', 'jeudi', 'vendredi', 'samed
 
 $type_offre = $_GET['type-offre'] ?? null;
 
-if ($type_offre && $_POST) {//_POST est set et _GET est set
-?>
+if ($type_offre && $_POST) {  // _POST est set et _GET est set
+    ?>
     <pre><?php htmlspecialchars(print_r($_GET)) ?></pre>
     <pre><?php htmlspecialchars(print_r($_POST)) ?></pre>
     <pre><?php htmlspecialchars(print_r($_FILES)) ?></pre>
 <?php
-} else { ?><!-- _POST ou _GET ne seont pas set-->
+} else {
+?><!-- _POST ou _GET ne seont pas set-->
 
     <!DOCTYPE html>
     <html lang="fr">
@@ -40,7 +41,7 @@ if ($type_offre && $_POST) {//_POST est set et _GET est set
             <p>Une erreur dans la requette de la page est survenue, merci de réessayer plus tard</p>
 
         <?php exit;
-        } ?>
+    } ?>
         <main>
             <section id="titre-creation-offre">
                 <h1>Créer <?= TYPE_OFFRE_AFFICHABLE[$type_offre] ?></h1>
@@ -58,8 +59,10 @@ if ($type_offre && $_POST) {//_POST est set et _GET est set
                     </p>
                     <label for="adresse">Adresse*</label>
                     <p>
-                        <input form="form-offre" type="text" name="adresse" id="adresse" required>
-                        <button type="button">&hellip;</button>
+                        <?php
+                        require_once 'component/input_address.php';
+                        put_input_address('form-offre');
+                        ?>
                     </p>
                     <label for="tel">Tel</label>
                     <p>
@@ -107,7 +110,8 @@ if ($type_offre && $_POST) {//_POST est set et _GET est set
                 <h2>Horaires</h2>
                 <div>
                     <?php
-                    foreach (JOURS_SEMAINE as $jour) { ?>
+                    foreach (JOURS_SEMAINE as $jour) {
+                        ?>
                         <article id="<?= $jour ?>">
                             <h3><?= ucfirst($jour) ?></h3>
                             <button id="button-add-horaire-<?= $jour ?>" type="button">+</button>
@@ -129,8 +133,9 @@ if ($type_offre && $_POST) {//_POST est set et _GET est set
                                 <td><button type="button">-</button></td>
                             </tr>
                         </template>
-                    <?php }
-                    ?>
+                    <?php
+                    }
+                                    ?>
                 </div>
             </section>
             <section id="tags">
@@ -138,7 +143,8 @@ if ($type_offre && $_POST) {//_POST est set et _GET est set
                 <ul id="list-tag">
                     <?php
                     require_once 'tags.php';
-                    foreach ($type_offre === 'restauration' ? TAGS_RESTAURATION : DEFAULT_TAGS as $id => $name) { ?>
+                    foreach ($type_offre === 'restauration' ? TAGS_RESTAURATION : DEFAULT_TAGS as $id => $name) {
+                        ?>
                         <li><label for="tag-<?= $id ?>"><?= $name ?><input form="form-offre" type="checkbox" name="tags[<?= $id ?>]" id="tag-<?= $id ?>" value="<?= $id ?>"></li></label>
                     <?php } ?>
                 </ul>
