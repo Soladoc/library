@@ -6,10 +6,10 @@
     require_once 'db.php';
     $pdo=db_connect();
     $stmt = $pdo->prepare('SELECT COUNT(*) FROM pact.offres WHERE id_professionnel = :id_professionnel');
-    $stmt->execute([':id_professionnel' => $_SESSION['id']]);
+    $stmt->execute([':id_professionnel' => $_SESSION['id'].T_INT_CAST]);
     $nb_offre = $stmt->fetchColumn();
     $stmt = $pdo->prepare('CALL nb_offres_en_ligne(:id_professionnel)');
-    $stmt->execute([':id_professionnel' => $_SESSION['id']]);
+    $stmt->execute([':id_professionnel' => $_SESSION['id'].T_INT_CAST]);
     $offre_en_ligne = $stmt->fetchColumn();
     $offre_hors_ligne = $nb_offre - $offre_en_ligne;
 ?>
