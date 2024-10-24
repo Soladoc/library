@@ -71,7 +71,6 @@ if (isset($_POST['mdp'])) {
         ]);
         echo "<script>window.location.href='../autres_pages/connexion.php';</script>";
     }
-    echo "okkkkkkk";
     echo "<script>window.location.href='../autres_pages/accPro.php';</script>";
 } else {
 ?>
