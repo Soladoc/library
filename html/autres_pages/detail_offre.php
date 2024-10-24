@@ -7,7 +7,7 @@ if (isset($_GET['id']) && is_numeric($_GET['id'])) {
     $pdo = db_connect();
 
     // Préparer la requête pour récupérer les détails de l'offre
-    $query = "SELECT * FROM pact.offre WHERE id = :id";
+    $query = "SELECT * FROM pact._offre WHERE id = :id";
     $stmt = $pdo->prepare($query);
     $stmt->execute(['id' => $id]);
 
