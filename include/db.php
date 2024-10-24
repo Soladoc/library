@@ -7,11 +7,11 @@
  * @param string $msg Assertion message.
  * @return T Result, not false.
  */
-function notfalse(mixed $value, string $msg): mixed
+function notfalse(mixed $value, string $msg = 'was false'): mixed
 {
     if ($value === false) {
 ?><pre><?= $msg ?></pre><?php
-        exit(1);
+        throw new Exception($msg);
     }
     return $value;
 }

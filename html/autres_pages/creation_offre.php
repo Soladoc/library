@@ -1,4 +1,12 @@
 <?php
+session_start();
+
+require_once 'db.php';
+require_once 'connexion.php';
+
+// $id_pro = exiger_connecte_pro();
+$id_pro = 1;
+
 const TYPE_OFFRE_AFFICHABLE = [
     'spectacle' => 'un spectacle',
     'parc-attraction' => "un parc d'attraction",
@@ -11,55 +19,113 @@ const TYPE_OFFRE_AFFICHABLE = [
 const JOURS_SEMAINE = ['lundi', 'mardi', 'mercredi', 'jeudi', 'vendredi', 'samedi', 'dimanche'];
 
 $type_offre = $_GET['type-offre'] ?? null;
-require_once 'db.php';
+
+// Conserve les images uploadées durant cette transaction pour les supprimer en cas d'erreur. Comme ça on ne pollue pas le dossier.
+$uploaded_images = [];
+
+function remove_uploaded_images()
+{
+    global $uploaded_images;
+    foreach ($uploaded_images as $file) {
+        unlink($file);
+    }
+}
+
+function insert_image(PDO $pdo, array $img)
+{
+    global $uploaded_images;
+    $stmt = notfalse($pdo->prepare('insert into pact._image (legende, taille) values (?,?) returning id_image'));
+    notfalse($stmt->execute([null, $img['size']]));  // todo: legende
+    $id_image = $stmt->fetchColumn();
+
+    move_uploaded_file($img['tmp_name'], __DIR__ . "/../images_utilisateur/$id_image");
+}
 
 if ($type_offre && $_POST) {
-/*    $pdo = db_connect();
-
-    // Insérer l'adresse
-    // todo: adresses localisées
-    $pdo->prepare('insert into pact._adresse (numero_voie, complement_numero, nom_voie, localite, precision_int, precision_ext, commune_code_insee, commune_code_postal) values (?,?,?,?,?,?,?,?)')
-        ->execute([
-            
-        ])
-
-    // Insérer la photo principale
-
-    // Insérer la gallerie
-
-    // Insérer le signalable
-
-    // Insérer l'offre
-    // todo: offre payantes standard et premium
-
-    $pdo->prepare('INSERT INTO pact._offre ( titre, resume, description_detaille, url_site_web, adresse) VALUES ( :titre, :resume, :description_detaille, :url_site_web, :adresse)')
-       ->execute([
-           ':titre' => $_POST['titre'],
-           ':resume' => $_POST['resume'],
-           ':description_detaille' => $_POST['description'],
-           ':url_site_web' => $_POST['site'],
-           ':adresse' => $_POST['adresse']
-       ]);
-*/
     ?>
-    <pre><?php htmlspecialchars(print_r($_GET, true)) ?></pre>
-    <pre><?php htmlspecialchars(print_r($_POST, true)) ?></pre>
-    <pre><?php htmlspecialchars(print_r($_FILES, true)) ?></pre>
+    <pre><?= htmlspecialchars(print_r($_GET, true)) ?></pre>
+    <pre><?= htmlspecialchars(print_r($_POST, true)) ?></pre>
+    <pre><?= htmlspecialchars(print_r($_FILES, true)) ?></pre>
+    <?php
 
-    
-<?php
+    try {
+        $pdo = db_connect();
+        notfalse($pdo->beginTransaction());
+
+        // Récupérer le code de la commune
+        // todo: il faut un code postal avec (car une commune peut avoir plusieurs codes postaux)
+        $stmt = notfalse($pdo->prepare('select code_insee, code_postal from pact._commune where nom=?'));
+        echo 'fetching commune ' . $_POST['adresse']['commune'];
+        notfalse($stmt->execute([$_POST['adresse']['commune']]));
+        $commune = notfalse($stmt->fetch(PDO::FETCH_ASSOC));
+
+        // Insérer l'adresse
+        // todo: adresses localisées
+        $stmt = notfalse($pdo->prepare('insert into pact._adresse (numero_voie, complement_numero, nom_voie, localite, precision_int, precision_ext, commune_code_insee, commune_code_postal) values (?,?,?,?,?,?,?,?) returning id_adresse'));
+        notfalse($stmt->execute([
+            $_POST['adresse']['num_voie'] ?? null,
+            $_POST['adresse']['compl_numero'] ?? null,
+            $_POST['adresse']['nom_voie'] ?? null,
+            $_POST['adresse']['localite'] ?? null,
+            $_POST['adresse']['precision_int'] ?? null,
+            $_POST['adresse']['precision_ext'] ?? null,
+            $commune['code_insee'],
+            $commune['code_postal']
+        ]));
+        $id_adresse = notfalse($stmt->fetchColumn());
+
+        // Insérer la gallerie la photo principale
+        $id_image_photo_principale = insert_image($pdo, $_FILES['photo_principale']);
+
+        // Insérer le signalable
+        $stmt = notfalse($pdo->prepare('insert into pact._signalable default values returning id_signalable'));
+        notfalse($stmt->execute());
+        $id_signalable = notfalse($stmt->fetchColumn());
+
+        // Insérer l'offre
+        // todo: offre payantes standard et premium
+
+        $stmt = notfalse($pdo->prepare('INSERT INTO pact._offre (titre, resume, description_detaille, url_site_web, adresse, photoprincipale, abonnement, id_signalable, id_professionnel) VALUES (?,?,?,?,?,?,?,?,?) returning id_offre'));
+        notfalse($stmt->execute([
+            $_POST['titre'],
+            $_POST['resume'],
+            $_POST['description'],
+            $_POST['site'] ?? null,
+            $id_adresse,
+            $id_image_photo_principale,
+            'gratuit',
+            $id_signalable,
+            $id_pro
+        ]));
+        $id_offre = notfalse($stmt->fetchColumn());
+
+        // Insérer la gallerie
+
+        foreach ($_FILES['gallerie'] as $img) {
+            $id_image = insert_image($pdo, $img);
+            $stmt = notfalse($pdo->prepare('insert into pact._gallerie (id_offre, id_image) values (?,?)'));
+            notfalse($stmt->execute([$id_offre, $id_image]));
+        }
+
+        notfalse($pdo->rollBack());
+        echo "j'ai réussi";
+    } catch (Throwable $e) {
+        remove_uploaded_images();
+        echo "j'ai échoué";
+        throw $e;
+    }
 } else {
     ?>
     <!DOCTYPE html>
     <html lang="fr">
 
     <head>
-        <script async src="../script_js/creation_offre.js"></script>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link rel="stylesheet" href="../style/style.css">
         <link rel="stylesheet" href="../style/creation_offre.css">
         <title>Création d'une offre</title>
+        <script async src="../script_js/creation_offre.js"></script>
     </head>
 
     <body>
@@ -95,7 +161,7 @@ if ($type_offre && $_POST) {
                     </p>
                     <label for="tel">Tel</label>
                     <p>
-                        <input form="form-offre" type="tel" name="tel" id="tel">
+                        <input form="form-offre" type="tel" name="tel" id="tel" pattern="0\d{9}" title="10 chiffres (France uniquement)" placeholder="0123456789">
                     </p>
                     <label for="site">Site Web</label>
                     <p>
@@ -105,7 +171,7 @@ if ($type_offre && $_POST) {
             </section>
             <section>
                 <h2>Photo principale</h2>
-                <input form="form-offre" type="file" id="photo-principale" name="photo-principale" accept="image/*" required>
+                <input form="form-offre" type="file" id="photo-principale" name="photo_principale" accept="image/*" required>
                 <div id="photo-principale-preview"></div>
             </section>
             <section id="tarif">
@@ -157,8 +223,8 @@ if ($type_offre && $_POST) {
                         </article>
                         <template id="template-horaire-tr-<?= $jour ?>">
                             <tr>
-                                <td><input form="form-offre" type="time" name="horaires_deb[<?= $jour ?>]" required></td>
-                                <td><input form="form-offre" type="time" name="horaires_fin[<?= $jour ?>]" required></td>
+                                <td><input form="form-offre" type="time" name="horaires_deb[<?= $jour ?>][]" required></td>
+                                <td><input form="form-offre" type="time" name="horaires_fin[<?= $jour ?>][]" required></td>
                                 <td><button type="button">-</button></td>
                             </tr>
                         </template>
@@ -178,11 +244,11 @@ if ($type_offre && $_POST) {
             </section>
             <section id="description">
                 <h2>Description</h2>
-                <textarea name="description" id="description"></textarea>
+                <textarea form="form-offre" name="description" id="description" minlength="1" required></textarea>
             </section>
             <section id="image-creation-offre">
                 <h2>Gallerie</h2>
-                <input form="form-offre" type="file" id="gallerie" name="gallerie" accept="image/*" multiple>
+                <input form="form-offre" type="file" id="gallerie" name="gallerie[]" accept="image/*" multiple>
                 <ul id="gallerie-preview"></ul>
             </section>
             <section id="infos-detaillees">
@@ -222,7 +288,7 @@ if ($type_offre && $_POST) {
                             <p><label><input type="checkbox" name="<?= $type_offre ?>[sert][boissons]"> Boissons</label></p>
                         </fieldset>
                         <p>Carte</p>
-                        <textarea name="<?= $type_offre ?>[carte]"></textarea>
+                        <textarea form="form-offre" name="<?= $type_offre ?>[carte]"></textarea>
                         <?php
                         break;
                     case 'activite':
@@ -230,9 +296,9 @@ if ($type_offre && $_POST) {
                         <p><label>Durée indiquée&nbsp;: <input name="<?= $type_offre ?>[indication_duree]" type="time" required></label></p>
                         <p><label>Âge requis&nbsp;: <input name="<?= $type_offre ?>[age_requis]" type="number" min="1"> an</label></p>
                         <p>Prestations incluses</p>
-                        <textarea name="<?= $type_offre ?>[prestations_incluses]"></textarea>
+                        <textarea form="form-offre" name="<?= $type_offre ?>[prestations_incluses]"></textarea>
                         <p>Prestations non incluses</p>
-                        <textarea name="<?= $type_offre ?>[prestations_non_incluses]"></textarea>
+                        <textarea form="form-offre" name="<?= $type_offre ?>[prestations_non_incluses]"></textarea>
                         <?php
                         break;
                 }

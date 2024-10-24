@@ -4,12 +4,12 @@
 
 function connecter_pro(string $email, int $id_pro) {
     $_SESSION['email'] = $email;
-    $_SESSION['id_pro'] = $id_pro;
+    $_SESSION['id'] = $id_pro;
 }
 
 function connecter_membre(string $email, int $id_membre) {
     $_SESSION['email'] = $email;
-    $_SESSION['id_membre'] = $id_membre;
+    $_SESSION['id'] = $id_membre;
 }
 
 /**
@@ -19,14 +19,14 @@ function connecter_membre(string $email, int $id_membre) {
  * 
  * Cette fonction appelle <i>header</i>. Elle doit donc être appelé <b>avant</b> tout envoi de HTML.
  * 
- * @return array{'email': string, 'id': int}
+ * @return int id pro
  */
-function exiger_connecte_pro(): array {
-    if (($email = $_SESSION['email'] ?? null) || ($id = $_SESSION['id_pro'] ?? null)) {
+function exiger_connecte_pro(): int {
+    if (!($id = $_SESSION['id_pro'] ?? null)) {
         header('Location: /autres_pages/connexion.php');
         exit;
     }
-    return ['email' => $email, 'id' => $id];
+    return $id;
 }
 
 /**
@@ -36,12 +36,12 @@ function exiger_connecte_pro(): array {
  * 
  * Cette fonction appelle <i>header</i>. Elle doit donc être appelé <b>avant</b> tout envoi de HTML.
  * 
- * @return array{'email': string, 'id': int}
+ * @return int id membre
  */
-function exiger_connecte_membre(): array {
-    if (($email = $_SESSION['email'] ?? null) || ($id = $_SESSION['id_membre'] ?? null)) {
+function exiger_connecte_membre(): int {
+    if (!($id = $_SESSION['id_membre'] ?? null)) {
         header('Location: /autres_pages/connexion.php');
         exit;
     }
-    return ['email' => $email, 'id' => $id];
+    return $id;
 }

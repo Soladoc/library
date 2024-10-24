@@ -1,6 +1,13 @@
 set schema 'pact';
 
 insert into
+    _abonnement (libelle, prix)
+values
+    ('gratuit', 0),
+    ('standard', 5), -- ébauche
+    ('premium', 10); -- ébauche
+
+insert into
     _departement (numero, nom)
 values
     ('1','Ain'),
