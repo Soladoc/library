@@ -38,17 +38,10 @@ require_once 'db.php';
                     
                     // 2. Préparer et exécuter la requête SQL pour récupérer toutes les offres
                     $sql = 'SELECT * FROM pact._offre';
-                    $stmt = $pdo->query($query);  // Exécution de la requête
-
-                    // Récupérer toutes les offres
-                    $offres = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
-                    // Débogage pour vérifier le contenu récupéré
-                    if ($offres) {
-                        echo 'Nombre d\'offres récupérées : ' . count($offres) . '<br><br>';
+                    $stmt = $pdo->query($sql);  // Exécute la requête SQL
 
                     // 3. Boucler sur les résultats pour afficher chaque offre
-                    foreach ($offres as $offre) {
+                    while ($offre = $stmt->fetch(PDO::FETCH_ASSOC)) {
                         // // Calculer si l'offre ferme bientôt (exemple si elle ferme dans moins d'une heure)
                         // $current_time = new DateTime();  // Heure actuelle
                         // $closing_time = new DateTime($offre['closing_time']);
