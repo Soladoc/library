@@ -6,23 +6,37 @@ insert into _abonnement(libelle, prix)
 ('premium', 10);
 
 -- ébauche
-insert into _signalable default values;
+insert into _compte(email, mdp_hash, nom, prenom, telephone)
+    values ('a.gmail', 'hashça', 'Abraham', 'Lincoln', '0123456789');
 
-insert into _identite(id_identite)
-    values (1);
-
-insert into _adresse(id_adresse, nom_voie, commune_code_insee, commune_code_postal)
-    values (1, 'aaaaaaaaaaaaaaaaaaa', '1001', '1400');
-
-insert into _compte(id_identite, email, mdp_hash, nom, prenom, telephone)
-    values (1, 'a.gmail', 'hashça', 'Abraham', 'Lincoln', '0123456789');
-
-insert into _professionnel(id_professionnel, denomination, email)
-    values (1, 'MERTREM Solutions', 'a.gmail');
-
-insert into _image(id_image, legende, taille)
-    values (123, 'legende', 100);
-
-insert into _offre(titre, resume, description_detaille, url_site_web, adresse, id_signalable, id_professionnel, photoprincipale)
-    values ('barraque à frites', 'aaaaaaaaaaa', 'cest une barraque à frite', 'blabla.fr', 1, 1, 1, 123);
+with signalable as (
+insert into _signalable default
+        values
+        returning
+            id_signalable
+), identite as (
+insert into _identite default
+        values
+        returning
+            id_identite
+), adresse as (
+insert into _adresse(nom_voie, commune_code_insee, commune_code_postal)
+        values ('aaaaaaaaaaaaaaaaaaa', '1001', '1400')
+    returning
+        id_adresse
+), professionnel as (
+insert into _professionnel(denomination, email)
+        values ('MERTREM Solutions', 'a.gmail')
+    returning
+        id_professionnel
+), image as (
+insert into _image(legende, taille)
+        values ('legende', 100)
+    returning
+        id_image)
+    insert into _offre(titre, resume, description_detaille, url_site_web, adresse, id_signalable, id_professionnel, photoprincipale)
+        values ('barraque à frites', 'aaaaaaaaaaa', 'cest une barraque à frite', 'blabla.fr',(table adresse),
+(table signalable),
+(table professionnel),
+(table image));
 
