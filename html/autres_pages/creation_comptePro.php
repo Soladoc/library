@@ -25,7 +25,6 @@ if (isset($_POST['mdp'])) {
 
 
     if ($estprive) {
-        echo 'oeoeeo';
         // insert in pro_prive
         $sql = 'INSERT INTO  pact.pro_prive (email, mdp_hash, nom, prenom, telephone, denomination, siren) VALUES (:email, :mdp_hash, :nom, :prenom, :telephone, :denomination, :siren)';
         $stmt = $pdo->prepare($sql);
@@ -37,7 +36,7 @@ if (isset($_POST['mdp'])) {
         $stmt->bindParam(':telephone', $_POST['telephone']);
         $stmt->bindParam(':denomination', $_POST['denomination']);
         $stmt->bindParam(':siren', $_POST['siren']);
-        echo 'aaaaaaaaaaaaaaa';
+        
         // 3. Exécuter la requête avec les valeurs
         $stmt->execute([
             ':email' => $_POST['email'],
