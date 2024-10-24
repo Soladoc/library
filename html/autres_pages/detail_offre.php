@@ -46,7 +46,6 @@ if (isset($_GET['id']) && is_numeric($_GET['id'])) {
             $adresse_complete = $numero_voie . ' ' . $complement_numero . ' ' . $nom_voie . ', ' . $localite . ', ' . $code_postal;
 
             // Afficher ou retourner l'adresse complète
-            echo 'Adresse complète : ' . htmlspecialchars($adresse_complete);
 } else {
     echo 'Adresse introuvable.';
 }
