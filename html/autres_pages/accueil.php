@@ -42,6 +42,7 @@ require_once 'db.php';
 
                     // 3. Boucler sur les résultats pour afficher chaque offre
                     while ($offre = $stmt->fetch(PDO::FETCH_ASSOC)) {
+                        echo "test";
                         // // Calculer si l'offre ferme bientôt (exemple si elle ferme dans moins d'une heure)
                         // $current_time = new DateTime();  // Heure actuelle
                         // $closing_time = new DateTime($offre['closing_time']);
