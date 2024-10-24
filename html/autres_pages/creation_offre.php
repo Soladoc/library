@@ -256,6 +256,7 @@ if ($type_offre && $_POST) {
             <section id="image-creation-offre">
                 <h2>Gallerie</h2>
                 <input form="form-offre" type="file" id="gallerie" name="gallerie[]" accept="image/*" multiple>
+                <div id="gallerie-preview"></div>
             </section>
             <section id="infos-detaillees">
                 <h2>Informations détailées</h2>
