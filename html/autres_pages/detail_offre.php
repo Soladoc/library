@@ -26,11 +26,9 @@ if (isset($_GET['id']) && is_numeric($_GET['id'])) {
         $description = $offre['description_detaille'];
         $adresse = $offre['adresse'];
         $site_web = $offre['url_site_web'];
+        $image_pricipale = $offre['photoprincipale'];
         
-        echo '<h3>' . htmlspecialchars($titre) . '</h3>';
-        echo '<p class="location">Adresse ID : ' . htmlspecialchars($adresse) . '</p>';
-        echo '<p class="description">Description : ' . htmlspecialchars($description) . '</p>';
-        echo '<p class="website">Site web : <a href="' . htmlspecialchars($site_web) . '">' . htmlspecialchars($site_web) . '</a></p>';
+       
     } else {
         echo 'Aucune offre trouvée avec cet ID.';
     }
@@ -59,11 +57,11 @@ if (isset($_GET['id']) && is_numeric($_GET['id'])) {
     <main>
         <section class="offer-details">
             <div class="offer-main-photo">
-                <img src="../images/offre/Radôme1.jpg" alt="Main Photo" class="offer-photo-large">
-                <div class="offer-photo-gallery">
-                    <img src="../images/offre/Radôme2.jpg" alt="Photo 2" class="offer-photo-small">
-                    <img src="../images/offre/Radôme3.jpg" alt="Photo 3" class="offer-photo-small">
-                </div>
+                <img src="../images/offre/<?php echo $image_pricipale ?>.png" alt="Main Photo" class="offer-photo-large">
+                <!-- <div class="offer-photo-gallery">
+                     <img src="../images/offre/Radôme2.jpg" alt="Photo 2" class="offer-photo-small">
+                    <img src="../images/offre/Radôme3.jpg" alt="Photo 3" class="offer-photo-small"> 
+                </div> -->
             </div>
 
             <div class="offer-info">
