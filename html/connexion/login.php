@@ -33,7 +33,8 @@ if (!empty($user) && $user['existe'] == 1) {
     if (password_verify($password, $hashed_password)) {
         session_regenerate_id(true);
         $_SESSION['username'] = $username;
-        header('Location: ../autres_pages/accueil.php');
+        $_SESSION['log'] = true;
+        header("Location: ../autres_pages/accueil.php");
         exit();
     } else {
         header("Location: ../autres_pages/connexion.php?error=Nom d'utilisateur ou mot de passe incorrect.");
@@ -51,8 +52,8 @@ if (!empty($user) && $user['existe'] == 1) {
         if (password_verify($password, $hashed_password)) {
             session_regenerate_id(true);
             $_SESSION['username'] = $username;
-
-            header('Location: ../autres_pages/accPro.php');
+            $_SESSION['log'] = true;
+            header("Location: ../autres_pages/accPro.php");
             exit();
         } else {
             header("Location: ../autres_pages/connexion.php?error=Nom d'utilisateur ou mot de passe incorrect.");
