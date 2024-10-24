@@ -36328,7 +36328,7 @@ values
     ('97617','Tsingoni','976','97680');
     insert into pact._signalable default values;
   insert into _identite(id_identite) values (1);
-  insert into _adresse(id_adresse,code_insee,nom_voie) values (1,'1001','aaaaaaaaaaaaaaaaaaa');
+  insert into _adresse(id_adresse,nom_voie,code_insee) values (1,'aaaaaaaaaaaaaaaaaaa','1001');
   insert into _compte(id_identite,email) values (1,'a.gmail');
   insert into _professionnel(id_professionnel,email) values (1,'a.gmail');
   insert into _offre(titre,resume,description_detaille,url_site_web,adresse,id_signalable,id_professionnel) 
