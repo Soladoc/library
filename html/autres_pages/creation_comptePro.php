@@ -2,12 +2,12 @@
 
 require_once 'db.php';
 if (isset($_POST['mdp'])) {
-    // print 'Votre nom :' . $_POST['nom'];
-    // print 'Votre prenom :' . $_POST['prenom'];
-    // print 'Votre numero de telephone :' . $_POST['telephone'];
-    // print 'Votre mail :' . $_POST['email'];
-    // print 'Votre mot de passe :' . $_POST['mdp'];
-    // print 'Votre adresse :' . $_POST['adresse'];
+    print 'Votre nom :' . $_POST['nom'];
+    print 'Votre prenom :' . $_POST['prenom'];
+    print 'Votre numero de telephone :' . $_POST['telephone'];
+    print 'Votre mail :' . $_POST['email'];
+    print 'Votre mot de passe :' . $_POST['mdp'];
+    print 'Votre adresse :' . $_POST['adresse'];
 
     $estprive = isset($_POST['type']); 
     $mdp_hash = password_hash($_POST['mdp'], PASSWORD_DEFAULT);
