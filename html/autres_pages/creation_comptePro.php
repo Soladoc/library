@@ -37,7 +37,7 @@ if (isset($_POST['mdp'])) {
         $stmt->bindParam(':telephone', $_POST['telephone']);
         $stmt->bindParam(':denomination', $_POST['denomination']);
         $stmt->bindParam(':siren', $_POST['siren']);
-
+        echo 'aaaaaaaaaaaaaaa';
         // 3. Exécuter la requête avec les valeurs
         $stmt->execute([
             ':email' => $_POST['email'],
@@ -122,7 +122,7 @@ if (isset($_POST['mdp'])) {
                     <div class="champ">
                         <!-- Texte avec label -->
                         <p>Téléphone :</p>
-                        <input id="telephone" name="telephone" type="tel" placeholder="Format: 0123456789" pattern="[0-9]{10}" required>
+                        <input id="telephone" name="telephone" type="tel" placeholder="Format: 0123456789" pattern="[0-9]{10}" maxlength="10" required>
                     </div>
                     <br />
                     <div class="champ">
@@ -152,7 +152,7 @@ if (isset($_POST['mdp'])) {
                     <br>
                     <div class="champ" id="siren">
                         <label>SIREN*:</label>
-                        <input type="text" id="siren" name="siren" placeholder="231 654 987" maxlength="9" pattern="\d{9}" title="Veuillez entrer un SIREN valide de 9 chiffres" />
+                        <input type="text" id="siren" name="siren" placeholder="231 654 988" oninput="formatInput(this)" maxlength="12"/>
                     </div>
                     <br>
                     <button type="submit" class="btn-connexion">Créer un compte professionnel</button>
@@ -188,6 +188,20 @@ if (isset($_POST['mdp'])) {
             }
         });
     }
+    </script>
+    <script>
+        // texte siren
+        function formatInput(input) {
+            // Supprimer tous les espaces
+            let value = input.value.replace(/\s/g, '');
+            // Limiter à 9 caractères
+            if (value.length > 9) {
+                value = value.substring(0, 9);
+            }
+            // Ajouter un espace tous les 3 caractères
+            let formattedValue = value.replace(/(.{3})/g, '$1 ').trim();
+            input.value = formattedValue;
+        }
     </script>
 </body>
 
