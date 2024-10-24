@@ -12,15 +12,14 @@ const JOURS_SEMAINE = ['lundi', 'mardi', 'mercredi', 'jeudi', 'vendredi', 'samed
 
 $type_offre = $_GET['type-offre'] ?? null;
 
-if ($type_offre && $_POST) {  // _POST est set et _GET est set
+if ($type_offre && $_POST) {
     ?>
     <pre><?php htmlspecialchars(print_r($_GET)) ?></pre>
     <pre><?php htmlspecialchars(print_r($_POST)) ?></pre>
     <pre><?php htmlspecialchars(print_r($_FILES)) ?></pre>
 <?php
 } else {
-?><!-- _POST ou _GET ne seont pas set-->
-
+?>
     <!DOCTYPE html>
     <html lang="fr">
 
@@ -133,9 +132,7 @@ if ($type_offre && $_POST) {  // _POST est set et _GET est set
                                 <td><button type="button">-</button></td>
                             </tr>
                         </template>
-                    <?php
-                    }
-                                    ?>
+                    <?php } ?>
                 </div>
             </section>
             <section id="tags">
@@ -164,49 +161,52 @@ if ($type_offre && $_POST) {  // _POST est set et _GET est set
                 switch ($type_offre) {
                     case 'spectacle':
                         ?>
-                        <p><label>Durée indiquée&nbsp;: <input name="<?=$type_offre?>[indication_duree]" type="time" required></label></p>
-                        <p><label>Capacité d'accueil&nbsp;: <input name="<?=$type_offre?>[capacite_accueil]" type="number" min="0"></label> pers.</p>
+                        <p><label>Durée indiquée&nbsp;: <input name="<?= $type_offre ?>[indication_duree]" type="time" required></label></p>
+                        <p><label>Capacité d'accueil&nbsp;: <input name="<?= $type_offre ?>[capacite_accueil]" type="number" min="0"></label> pers.</p>
                         <?php
                         break;
                     case 'parc-attraction':
+                        ?>
+                        <p><label>Âge requis&nbsp;: <input name="<?= $type_offre ?>[age_requis]" type="number" min="1"> an</label></p>
+                        <?php
                         break;
                     case 'visite':
                         ?>
-                        <p><label>Durée indiquée&nbsp;: <input name="<?=$type_offre?>[indication_duree]" type="time" required></label></p>
+                        <p><label>Durée indiquée&nbsp;: <input name="<?= $type_offre ?>[indication_duree]" type="time" required></label></p>
                         <?php
                         break;
                     case 'restauration':
                         ?>
                         <fieldset>
                             <legend>Niveau de richesse</legend>
-                            <p><label><input type="radio" name="<?=$type_offre?>[richesse]" value="1" checked> €</label></p>
-                            <p><label><input type="radio" name="<?=$type_offre?>[richesse]" value="2"> €€</label></p>
-                            <p><label><input type="radio" name="<?=$type_offre?>[richesse]" value="3"> €€€</label></p>
+                            <p><label><input type="radio" name="<?= $type_offre ?>[richesse]" value="1" checked> €</label></p>
+                            <p><label><input type="radio" name="<?= $type_offre ?>[richesse]" value="2"> €€</label></p>
+                            <p><label><input type="radio" name="<?= $type_offre ?>[richesse]" value="3"> €€€</label></p>
                         </fieldset>
                         <fieldset>
                             <legend>Repas</legend>
-                            <p><label><input type="checkbox" name="<?=$type_offre?>[sert][petit_dejeuner]"> Petit déjeuner</label></p>
-                            <p><label><input type="checkbox" name="<?=$type_offre?>[sert][brunch]"> Brunch</label></p>
-                            <p><label><input type="checkbox" name="<?=$type_offre?>[sert][dejeuner]"> Déjeuner</label></p>
-                            <p><label><input type="checkbox" name="<?=$type_offre?>[sert][diner]"> Dîner</label></p>
-                            <p><label><input type="checkbox" name="<?=$type_offre?>[sert][boissons]"> Boissons</label></p>
+                            <p><label><input type="checkbox" name="<?= $type_offre ?>[sert][petit_dejeuner]"> Petit déjeuner</label></p>
+                            <p><label><input type="checkbox" name="<?= $type_offre ?>[sert][brunch]"> Brunch</label></p>
+                            <p><label><input type="checkbox" name="<?= $type_offre ?>[sert][dejeuner]"> Déjeuner</label></p>
+                            <p><label><input type="checkbox" name="<?= $type_offre ?>[sert][diner]"> Dîner</label></p>
+                            <p><label><input type="checkbox" name="<?= $type_offre ?>[sert][boissons]"> Boissons</label></p>
                         </fieldset>
                         <p>Carte</p>
-                        <textarea name="<?=$type_offre?>[carte]"></textarea>
-                        <?php 
+                        <textarea name="<?= $type_offre ?>[carte]"></textarea>
+                        <?php
                         break;
                     case 'activite':
                         ?>
-                        <p><label>Durée indiquée&nbsp;: <input name="<?=$type_offre?>[indication_duree]" type="time" required></label></p>
-                        <p><label>Âge requis&nbsp;: <input name="<?=$type_offre?>[age_requis]" type="number" min="1"> an</label></p>
+                        <p><label>Durée indiquée&nbsp;: <input name="<?= $type_offre ?>[indication_duree]" type="time" required></label></p>
+                        <p><label>Âge requis&nbsp;: <input name="<?= $type_offre ?>[age_requis]" type="number" min="1"> an</label></p>
                         <p>Prestations incluses</p>
-                        <textarea name="<?=$type_offre?>[prestations_incluses]"></textarea>
+                        <textarea name="<?= $type_offre ?>[prestations_incluses]"></textarea>
                         <p>Prestations non incluses</p>
-                        <textarea name="<?=$type_offre?>[prestations_non_incluses]"></textarea>
+                        <textarea name="<?= $type_offre ?>[prestations_non_incluses]"></textarea>
                         <?php
                         break;
                 }
-                ?>
+                                    ?>
             </section>
             <!-- du coup en sois on a pas de formulaire a check avec Raphael -->
             <form id="form-offre" action="creation_offre.php?type-offre=<?= $type_offre ?>" method="post" enctype="multipart/form-data">

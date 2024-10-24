@@ -7,13 +7,11 @@ function put_input_address(?string $form_id = null, string $name = 'adresse')
     $communes = $pdo->query('select code_insee, code_postal, nom from pact._commune', PDO::FETCH_ASSOC)->fetchAll();
 ?>
 <details>
-    <datalist id="datalist-input-address-communes">
-        <?php
-        foreach ($communes as $c) {
-            ?>
-            <option value="<?= $c['code_insee'] ?>:<?= $c['code_postal'] ?>"><?= $c['nom'] ?></option>
-        <?php } ?>
-    </datalist>
+    <datalist id="datalist-input-address-communes"><?php
+    foreach ($communes as $c) {
+?><option value="<?= $c['code_insee'] ?>:<?= $c['code_postal'] ?>"><?= $c['nom'] ?></option><?php
+    }
+?></datalist>
     <summary>
         <input <?= $form_id === null ? '' : "form=\" $form_id\"" ?> type="text"  readonly required>
     </summary>
