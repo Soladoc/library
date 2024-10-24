@@ -14,33 +14,42 @@ $type_offre = $_GET['type-offre'] ?? null;
 require_once 'db.php';
 
 if ($type_offre && $_POST) {
-    $pdo    = db_connect();
-    $sql    = 'INSERT INTO pact._offre ( titre, resume, description_detaille, url_site_web, adresse) VALUES ( :titre, :resume, :description_detaille, :url_site_web, :adresse)';
-    $stmt   = $pdo->prepare($sql);
+/*    $pdo = db_connect();
 
-    $stmt->bindParam(':titre',$_POST['titre']);
-    $stmt->bindParam(':resume',$_POST['resume']);
-    $stmt->bindParam(':description_detaille',$_POST['description']);
-    $stmt->bindParam(':url_site_web',$_POST['site']);
-    $stmt->bindParam(':adresse',$_POST['adresse']);
+    // Insérer l'adresse
+    // todo: adresses localisées
+    $pdo->prepare('insert into pact._adresse (numero_voie, complement_numero, nom_voie, localite, precision_int, precision_ext, commune_code_insee, commune_code_postal) values (?,?,?,?,?,?,?,?)')
+        ->execute([
+            
+        ])
 
-    $stmt->execute([
-        ':titre' => $_POST['titre'],
-        ':resume' => $_POST['resume'],
-        ':description_detaille' => $_POST['description'],
-        ':url_site_web' => $_POST['site'],
-        ':adresse' => $_POST['adresse']
-    ]);
+    // Insérer la photo principale
 
+    // Insérer la gallerie
+
+    // Insérer le signalable
+
+    // Insérer l'offre
+    // todo: offre payantes standard et premium
+
+    $pdo->prepare('INSERT INTO pact._offre ( titre, resume, description_detaille, url_site_web, adresse) VALUES ( :titre, :resume, :description_detaille, :url_site_web, :adresse)')
+       ->execute([
+           ':titre' => $_POST['titre'],
+           ':resume' => $_POST['resume'],
+           ':description_detaille' => $_POST['description'],
+           ':url_site_web' => $_POST['site'],
+           ':adresse' => $_POST['adresse']
+       ]);
+*/
     ?>
-    <pre><?php htmlspecialchars(print_r($_GET)) ?></pre>
-    <pre><?php htmlspecialchars(print_r($_POST)) ?></pre>
-    <pre><?php htmlspecialchars(print_r($_FILES)) ?></pre>
+    <pre><?php htmlspecialchars(print_r($_GET, true)) ?></pre>
+    <pre><?php htmlspecialchars(print_r($_POST, true)) ?></pre>
+    <pre><?php htmlspecialchars(print_r($_FILES, true)) ?></pre>
 
     
 <?php
 } else {
-?>
+    ?>
     <!DOCTYPE html>
     <html lang="fr">
 
