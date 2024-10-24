@@ -1,4 +1,7 @@
 <?php
+    ini_set('display_errors', 1);
+    ini_set('display_startup_errors', 1);
+    error_reporting(E_ALL);    
     session_start();
     require_once 'db.php';
     $pdo=db_connect();
@@ -37,24 +40,32 @@
                  $stmt = $pdo->prepare('CALL nb_offres_en_ligne(:id_professionnel)');
                  $stmt->execute([':id_professionnel' => $_SESSION['id']]);
                  $liste_offre_en_ligne = $stmt;
-                 while ($offre = $liste_offre_en_ligne->fetch()) {
+                 while ($offre = $liste_offre_en_ligne->fetch(PDO::FETCH_ASSOC)) {
                     ?>
                     <div class="offer-card">
-                        <img src="<?php $offre[8] ?>" alt="Découverte interactive de la cité des Télécoms">
-                        <h3><?php $offre[1] ?></h3>
-                        <p class="location"><?php $offre[7] ?></p>
-                        <p class="category"><?php $stmt = $pdo->prepare('CALL category(:id_offre)');
-                        $stmt->execute([':id_offre' => $offre[0]]);
-                        echo $stmt?></p>
-                        <p class="rating">Note : <?php $stmt = $pdo->prepare('CALL moyenne(:id_offre)');
-                        $stmt->execute([':id_offre' => $offre[0]]);
-                        echo $stmt?>/5 ★ (<?php $stmt = $pdo->prepare('select count(*) from avis where offre=:id_offre');
-                        $stmt->execute([':id_offre' => $offre[0]]);
-                        echo $stmt?> avis)</p>
-                        <button class="btn-more-info" href="<?php echo $offre[4] ?>">En savoir plus</button>
+                        <img src="<?php echo $offre['image_url']; ?>" alt="Image de l'offre">
+                        <h3><?php echo $offre['titre']; ?></h3>
+                        <p class="location"><?php echo $offre['localisation']; ?></p>
+                        <p class="category"><?php
+                            $stmtCat = $pdo->prepare('CALL category(:id_offre)');
+                            $stmtCat->execute([':id_offre' => $offre['id']]);
+                            echo $stmtCat->fetchColumn();
+                        ?></p>
+                        <p class="rating">Note : <?php
+                            $stmtRating = $pdo->prepare('CALL moyenne(:id_offre)');
+                            $stmtRating->execute([':id_offre' => $offre['id']]);
+                            echo $stmtRating->fetchColumn();
+                        ?>/5 ★ (<?php
+                            $stmtCount = $pdo->prepare('SELECT COUNT(*) FROM avis WHERE offre = :id_offre');
+                            $stmtCount->execute([':id_offre' => $offre['id']]);
+                            echo $stmtCount->fetchColumn();
+                        ?> avis)</p>
+                        <a href="<?php echo $offre['lien']; ?>">
+                            <button class="btn-more-info">En savoir plus</button>
+                        </a>
                     </div>
                     <?php
-                 }
+                }                
                  $liste_offre_en_ligne->closeCursor();
                  ?>
                 <!-- Offre en ligne 2 -->
