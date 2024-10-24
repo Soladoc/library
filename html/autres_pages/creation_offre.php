@@ -11,12 +11,33 @@ const TYPE_OFFRE_AFFICHABLE = [
 const JOURS_SEMAINE = ['lundi', 'mardi', 'mercredi', 'jeudi', 'vendredi', 'samedi', 'dimanche'];
 
 $type_offre = $_GET['type-offre'] ?? null;
+require_once 'db.php';
 
 if ($type_offre && $_POST) {
+    $pdo    = db_connect();
+    $sql    = 'INSERT INTO pact._offre ( titre, resume, description_detaille, url_site_web, adresse) VALUES ( :titre, :resume, :description_detaille, :url_site_web, :adresse)';
+    $stmt   = $pdo->prepare($sql);
+
+    $stmt->bindParam(':titre',$_POST['titre']);
+    $stmt->bindParam(':resume',$_POST['resume']);
+    $stmt->bindParam(':description_detaille',$_POST['description']);
+    $stmt->bindParam(':url_site_web',$_POST['site']);
+    $stmt->bindParam(':adresse',$_POST['adresse']);
+
+    $stmt->execute([
+        ':titre' => $_POST['titre'],
+        ':resume' => $_POST['resume'],
+        ':description_detaille' => $_POST['description'],
+        ':url_site_web' => $_POST['site'],
+        ':adresse' => $_POST['adresse']
+    ]);
+
     ?>
     <pre><?php htmlspecialchars(print_r($_GET)) ?></pre>
     <pre><?php htmlspecialchars(print_r($_POST)) ?></pre>
     <pre><?php htmlspecialchars(print_r($_FILES)) ?></pre>
+
+    
 <?php
 } else {
 ?>
