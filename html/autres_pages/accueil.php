@@ -50,7 +50,7 @@ require_once 'db.php';
                         $id_offre = $offre['id_offre'];
                         $image = $offre['photoprincipale'];
                         $titre = $offre['title'];
-                        $adresse=  $offre['location'];
+                        $adresse=  $offre['adresse'];
                         $id_professionnel =  $offre['id_professionnel'];
                         // $categorie = $offre['category'];
                         // // Calculer si l'offre ferme bientôt (exemple si elle ferme dans moins d'une heure)
