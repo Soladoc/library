@@ -80,7 +80,7 @@ if (isset($_GET['id']) && is_numeric($_GET['id'])) {
         <!-- Location -->
         <section class="offer-location">
             <h3>Emplacement et coordonnées</h3>
-            <div id="map" class="map"></div>
+            <!-- <div id="map" class="map"></div> -->
             <div class="contact-info">
                 <p><strong>Adresse :</strong> <?php echo $adresse ?></p>
                 <p><strong>Site web :</strong> <a href="<?php echo $site_web ?>"><?php echo $site_web ?></a></p>
