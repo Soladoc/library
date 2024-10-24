@@ -2,12 +2,12 @@
 
 require_once 'db.php';
 if (isset($_POST['mdp'])) {
-    print 'Votre nom :' . $_POST['nom'];
-    print 'Votre prenom :' . $_POST['prenom'];
-    print 'Votre numero de telephone :' . $_POST['telephone'];
-    print 'Votre mail :' . $_POST['email'];
-    print 'Votre mot de passe :' . $_POST['mdp'];
-    print 'Votre adresse :' . $_POST['adresse'];
+    // print 'Votre nom :' . $_POST['nom'];
+    // print 'Votre prenom :' . $_POST['prenom'];
+    // print 'Votre numero de telephone :' . $_POST['telephone'];
+    // print 'Votre mail :' . $_POST['email'];
+    // print 'Votre mot de passe :' . $_POST['mdp'];
+    // print 'Votre adresse :' . $_POST['adresse'];
 
     $estprive = isset($_POST['type']); 
     $mdp_hash = password_hash($_POST['mdp'], PASSWORD_DEFAULT);
@@ -22,12 +22,11 @@ if (isset($_POST['mdp'])) {
         exit;
     }
 
-    echo "ok";
+    
     if ($estprive) {
         // insert in pro_prive
         $sql = 'INSERT INTO  pact.pro_prive (email, mdp_hash, nom, prenom, telephone, denomination, siren) VALUES (:email, :mdp_hash, :nom, :prenom, :telephone, :denomination, :siren)';
         $stmt = $pdo->prepare($sql);
-        echo "stop";
         $stmt->bindParam(':email', $_POST['email']);
         $stmt->bindParam(':mdp_hash', $mdp_hash);
         $stmt->bindParam(':nom', $_POST['nom']);
@@ -35,7 +34,6 @@ if (isset($_POST['mdp'])) {
         $stmt->bindParam(':telephone', $_POST['telephone']);
         $stmt->bindParam(':denomination', $_POST['denomination']);
         $stmt->bindParam(':siren', $_POST['siren']);
-
         // 3. Exécuter la requête avec les valeurs
         
         $stmt->execute([
