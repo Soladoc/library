@@ -1,5 +1,7 @@
 <?php
 
+/* todo: mettre les bonnes clés dans $_SESSION */
+
 function connecter_pro(string $email, int $id_pro) {
     $_SESSION['email'] = $email;
     $_SESSION['id_pro'] = $id_pro;
