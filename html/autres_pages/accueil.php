@@ -46,7 +46,6 @@ require_once 'db.php';
                         // $current_time = new DateTime();  // Heure actuelle
                         // $closing_time = new DateTime($offre['closing_time']);
                         // $closing_soon = ($closing_time > $current_time && $closing_time->diff($current_time)->h < 1);
-                        echo 'test';
                         $id_offre = $offre['id_offre'];
                         $image = $offre['photoprincipale'];
                         $titre = $offre['titre'];
@@ -94,7 +93,7 @@ require_once 'db.php';
                     <h3><?php echo $titre ?>  </h3>
                     <p class="location"><?php echo $adresse_complete ?></p>
                     <p class="category"><?php echo $categorie ?></p>
-                    <a href="https://413.ventsdouest.dev/autres_pages/detail_offre.php?=<?php echo $id_offre ?>">
+                    <a href="https://413.ventsdouest.dev/autres_pages/detail_offre.php?id=<?php echo $id_offre ?>">
                         <button class="btn-more-info">En savoir plus</button>
                     </a>
                 </div>
