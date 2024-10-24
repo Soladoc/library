@@ -51,7 +51,7 @@
                         echo $stmt?>/5 ★ (<?php $stmt = $pdo->prepare('select count(*) from avis where offre=:id_offre');
                         $stmt->execute(['id_offre' => $offre[0]]);
                         echo $stmt?> avis)</p>
-                        <button class="btn-more-info" href="<?php $offre[4] ?>">En savoir plus</button>
+                        <button class="btn-more-info" href="<?php echo $offre[4] ?>">En savoir plus</button>
                     </div>
                     <?php
                  }
@@ -93,7 +93,7 @@
                         echo $stmt?>/5 ★ (<?php $stmt = $pdo->prepare('select count(*) from avis where offre=:id_offre');
                         $stmt->execute(['id_offre' => $offre[0]]);
                         echo $stmt?> avis)</p>
-                        <button class="btn-more-info" href="<?php $offre[4] ?>">En savoir plus</button>
+                        <button class="btn-more-info" href="<?php echo $offre[4] ?>">En savoir plus</button>
                     </div>
                     <?php
                 }
