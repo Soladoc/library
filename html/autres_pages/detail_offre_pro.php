@@ -92,7 +92,7 @@
             <div class="contact-info">
                 <p><strong>Adresse :</strong> Pleumeur-Bodou (22560), Bretagne, France</p>
                 <p><strong>Site web :</strong> <a href="https://parcduradome.com">https://parcduradome.com</a></p>
-                <p><strong>Téléphone :</strong> 02 96 46 63 80</p>
+                <!-- <p><strong>Téléphone :</strong> 02 96 46 63 80</p> -->
             </div>
         </section>
 
