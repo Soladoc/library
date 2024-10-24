@@ -1,7 +1,7 @@
 // @ts-nocheck
 "use strict";
 
-document.addEventListener('onload', () => {
+document.addEventListener('DOMContentLoaded', () => {
     const tbody_tarifs = document.getElementById('table-tarifs').querySelector('tbody');
     /** @type {HTMLTemplateElement} */
     const template_tarif_tr = document.getElementById('template-tarif-tr');

@@ -100,8 +100,15 @@ if ($type_offre && $_POST) {
         $id_offre = notfalse($stmt->fetchColumn());
 
         // Insérer la gallerie
-
-        foreach ($_FILES['gallerie'] as $img) {
+        $gallerie = [];
+        // convert from SOA (structure of arrays) to AOS (array of structures)
+        foreach($_FILES['gallerie'] as $key => $all) {
+            foreach($all as $i => $val) {
+                $gallerie[$i][$key] = $val;
+            }
+        }
+        
+        foreach ($gallerie as $img) {
             $id_image = insert_image($pdo, $img);
             $stmt = notfalse($pdo->prepare('insert into pact._gallerie (id_offre, id_image) values (?,?)'));
             notfalse($stmt->execute([$id_offre, $id_image]));
@@ -125,7 +132,7 @@ if ($type_offre && $_POST) {
         <link rel="stylesheet" href="../style/style.css">
         <link rel="stylesheet" href="../style/creation_offre.css">
         <title>Création d'une offre</title>
-        <script async src="../script_js/creation_offre.js"></script>
+        <script src="../script_js/creation_offre.js"></script>
     </head>
 
     <body>
@@ -249,7 +256,6 @@ if ($type_offre && $_POST) {
             <section id="image-creation-offre">
                 <h2>Gallerie</h2>
                 <input form="form-offre" type="file" id="gallerie" name="gallerie[]" accept="image/*" multiple>
-                <ul id="gallerie-preview"></ul>
             </section>
             <section id="infos-detaillees">
                 <h2>Informations détailées</h2>

@@ -70,6 +70,7 @@ header {
     position: relative;
 }
 
+footer {
     p > a {
         font-size: x-large;
     }
