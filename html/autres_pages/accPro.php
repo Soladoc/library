@@ -1,7 +1,7 @@
 <?php
     ini_set('display_errors', 1);
     ini_set('display_startup_errors', 1);
-    error_reporting(E_ALL);    
+    error_reporting(E_ALL);
     session_start();
     require_once 'db.php';
     $pdo=db_connect();
@@ -9,7 +9,7 @@
     $stmt->execute([':id_professionnel' => intval($_SESSION['id'])]);
     $nb_offre = $stmt->fetchColumn();
     $stmt = $pdo->prepare('CALL nb_offres_en_ligne(:id_professionnel)');
-    $stmt->execute([':id_professionnel' => int($_SESSION['id'])]);
+    $stmt->execute([':id_professionnel' => intval($_SESSION['id'])]);
     $offre_en_ligne = $stmt->fetchColumn();
     $offre_hors_ligne = $nb_offre - $offre_en_ligne;
 ?>

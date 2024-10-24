@@ -35,7 +35,7 @@ function insert_image(PDO $pdo, array $img)
 {
     global $uploaded_images;
     $stmt = notfalse($pdo->prepare('insert into pact._image (legende, taille) values (?,?) returning id_image'));
-    notfalse($stmt->execute([null, $img['size']]));  // todo: legende
+    notfalse($stmt->execute(['', $img['size']]));  // todo: legende
     $id_image = $stmt->fetchColumn();
 
     move_uploaded_file($img['tmp_name'], __DIR__ . "/../images_utilisateur/$id_image");
@@ -114,10 +114,11 @@ if ($type_offre && $_POST) {
             notfalse($stmt->execute([$id_offre, $id_image]));
         }
 
-        notfalse($pdo->rollBack());
+        $pdo->commit();
         echo "j'ai réussi";
     } catch (Throwable $e) {
         remove_uploaded_images();
+        notfalse($pdo->rollBack());
         echo "j'ai échoué";
         throw $e;
     }
