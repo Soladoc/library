@@ -2,7 +2,6 @@
 
 require_once 'db.php';
 if (isset($_POST['mdp'])) {
-    echo "ici on est bien";
     print 'Votre nom :' . $_POST['nom'];
     print 'Votre prenom :' . $_POST['prenom'];
     print 'Votre numero de telephone :' . $_POST['telephone'];
@@ -36,7 +35,7 @@ if (isset($_POST['mdp'])) {
         $stmt->bindParam(':telephone', $_POST['telephone']);
         $stmt->bindParam(':denomination', $_POST['denomination']);
         $stmt->bindParam(':siren', $_POST['siren']);
-        
+
         // 3. Exécuter la requête avec les valeurs
         $stmt->execute([
             ':email' => $_POST['email'],
