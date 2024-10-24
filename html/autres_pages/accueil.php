@@ -86,8 +86,9 @@ require_once 'db.php';
                         } else {
                             echo 'Adresse introuvable.';
                         }
-                    }
-                ?>
+                        ?>
+        
+                
                 <div class="offer-card">
                     <img src="<?php echo $offre['image']?>" alt="Crêperie de l'Abbaye">
                     <h3><?php echo $titre ?>  </h3>
@@ -97,20 +98,7 @@ require_once 'db.php';
                         <button class="btn-more-info">En savoir plus</button>
                     </a>
                 </div>
-                <!-- Offre 1 -->
-                <div class="offer-card">
-                    <img src="creperie.jpg" alt="Crêperie de l'Abbaye">
-                    <h3>Crêperie de l'Abbaye de Beauport</h3>
-                    <p class="location">Paimpol</p>
-                    <p class="category">Restauration</p>
-                    <p class="price">Prix : 13-39€</p>
-                    <p class="rating">Note : 4.5 ★ (120 avis)</p>
-                    <p class="professional">Proposé par : Parc du Radôme</p>
-                    <span class="closing-soon">Ferme bientôt à 18h30</span>
-                    <a href="">
-                        <button class="btn-more-info">En savoir plus</button>
-                    </a>
-                </div>
+                <?php }?>
             </div>
         </section>
     </main>
