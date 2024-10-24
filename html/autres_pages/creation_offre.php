@@ -20,34 +20,29 @@ const JOURS_SEMAINE = ['lundi', 'mardi', 'mercredi', 'jeudi', 'vendredi', 'samed
 
 $type_offre = $_GET['type-offre'] ?? null;
 
-// Conserve les images uploadées durant cette transaction pour les supprimer en cas d'erreur. Comme ça on ne pollue pas le dossier.
-$uploaded_images = [];
-
-function remove_uploaded_images()
-{
-    global $uploaded_images;
-    foreach ($uploaded_images as $file) {
-        unlink($file);
-    }
-}
-
+/**
+ * @return array{string, int}
+ */
 function insert_image(PDO $pdo, array $img)
 {
-    global $uploaded_images;
-    $stmt = notfalse($pdo->prepare('insert into pact._image (legende, taille) values (?,?) returning id_image'));
-    notfalse($stmt->execute(['', $img['size']]));  // todo: legende
+    $stmt = notfalse($pdo->prepare('insert into pact._image (legende, taille, mime_type) values (?,?,?) returning id_image'));
+    notfalse($stmt->execute(['', $img['size'], $img['type']]));  // todo: legende
     $id_image = $stmt->fetchColumn();
 
-    move_uploaded_file($img['tmp_name'], __DIR__ . "/../images_utilisateur/$id_image");
+    $filename = __DIR__ . "/../images_utilisateur/$id_image";
+    move_uploaded_file($img['tmp_name'], $filename);
+
+    return [$filename, $id_image];
 }
 
 if ($type_offre && $_POST) {
-    ?>
+?>
 <pre><?= htmlspecialchars(print_r($_GET, true)) ?></pre>
 <pre><?= htmlspecialchars(print_r($_POST, true)) ?></pre>
 <pre><?= htmlspecialchars(print_r($_FILES, true)) ?></pre>
 <?php
-
+    // Conserve les images uploadées durant cette transaction pour les supprimer en cas d'erreur. Comme ça on ne pollue pas le dossier.
+    $uploaded_files = [];
     try {
         $pdo = db_connect();
         notfalse($pdo->beginTransaction());
@@ -55,7 +50,6 @@ if ($type_offre && $_POST) {
         // Récupérer le code de la commune
         // todo: il faut un code postal avec (car une commune peut avoir plusieurs codes postaux)
         $stmt = notfalse($pdo->prepare('select code_insee, code_postal from pact._commune where nom=?'));
-        echo 'fetching commune ' . $_POST['adresse']['commune'];
         notfalse($stmt->execute([$_POST['adresse']['commune']]));
         $commune = notfalse($stmt->fetch(PDO::FETCH_ASSOC));
 
@@ -75,7 +69,7 @@ if ($type_offre && $_POST) {
         $id_adresse = notfalse($stmt->fetchColumn());
 
         // Insérer la gallerie la photo principale
-        $id_image_photo_principale = insert_image($pdo, $_FILES['photo_principale']);
+        [$uploaded_files[], $id_image_photo_principale] = insert_image($pdo, $_FILES['photo_principale']);
 
         // Insérer le signalable
         $stmt = notfalse($pdo->prepare('insert into pact._signalable default values returning id_signalable'));
@@ -83,8 +77,6 @@ if ($type_offre && $_POST) {
         $id_signalable = notfalse($stmt->fetchColumn());
 
         // Insérer l'offre
-        // todo: offre payantes standard et premium
-
         $stmt = notfalse($pdo->prepare('INSERT INTO pact._offre (titre, resume, description_detaille, url_site_web, adresse, photoprincipale, abonnement, id_signalable, id_professionnel) VALUES (?,?,?,?,?,?,?,?,?) returning id_offre'));
         notfalse($stmt->execute([
             $_POST['titre'],
@@ -93,7 +85,7 @@ if ($type_offre && $_POST) {
             $_POST['site'] ?? '',
             $id_adresse,
             $id_image_photo_principale,
-            'gratuit',
+            'gratuit', // todo: standard et premium
             $id_signalable,
             $id_pro
         ]));
@@ -109,21 +101,21 @@ if ($type_offre && $_POST) {
         }
 
         foreach ($gallerie as $img) {
-            $id_image = insert_image($pdo, $img);
+            [$uploaded_files[], $id_image] = insert_image($pdo, $img);
             $stmt = notfalse($pdo->prepare('insert into pact._gallerie (id_offre, id_image) values (?,?)'));
             notfalse($stmt->execute([$id_offre, $id_image]));
         }
 
         $pdo->commit();
-        echo "j'ai réussi";
     } catch (Throwable $e) {
-        remove_uploaded_images();
         notfalse($pdo->rollBack());
-        echo "j'ai échoué";
         throw $e;
+        foreach ($uploaded_files as $file) {
+            unlink($file);
+        }
     }
 } else {
-    ?>
+?>
 <!DOCTYPE html>
 <html lang="fr">
 
@@ -163,9 +155,9 @@ if ($type_offre && $_POST) {
                 <label for="adresse">Adresse*</label>
                 <p>
                     <?php
-                        require_once 'component/input_address.php';
-                        put_input_address('form-offre');
-                        ?>
+                    require_once 'component/input_address.php';
+                    put_input_address('form-offre');
+                    ?>
                 </p>
                 <label for="tel">Tel</label>
                 <p>
@@ -213,8 +205,8 @@ if ($type_offre && $_POST) {
             <h2>Horaires</h2>
             <div>
                 <?php
-                    foreach (JOURS_SEMAINE as $jour) {
-                        ?>
+                foreach (JOURS_SEMAINE as $jour) {
+                ?>
                 <article id="<?= $jour ?>">
                     <h3><?= ucfirst($jour) ?></h3>
                     <button id="button-add-horaire-<?= $jour ?>" type="button">+</button>
@@ -243,9 +235,9 @@ if ($type_offre && $_POST) {
             <h2>Tags</h2>
             <ul id="list-tag">
                 <?php
-                    require_once 'tags.php';
-                    foreach ($type_offre === 'restauration' ? TAGS_RESTAURATION : DEFAULT_TAGS as $id => $name) {
-                        ?>
+                require_once 'tags.php';
+                foreach ($type_offre === 'restauration' ? TAGS_RESTAURATION : DEFAULT_TAGS as $id => $name) {
+                ?>
                 <li><label for="tag-<?= $id ?>"><?= $name ?><input form="form-offre" type="checkbox" name="tags[<?= $id ?>]" id="tag-<?= $id ?>" value="<?= $id ?>"></li></label>
                 <?php } ?>
             </ul>
@@ -262,25 +254,25 @@ if ($type_offre && $_POST) {
         <section id="infos-detaillees">
             <h2>Informations détailées</h2>
             <?php
-                switch ($type_offre) {
-                    case 'spectacle':
-                        ?>
+            switch ($type_offre) {
+                case 'spectacle':
+            ?>
             <p><label>Durée indiquée&nbsp;: <input name="<?= $type_offre ?>[indication_duree]" type="time" required></label></p>
             <p><label>Capacité d'accueil&nbsp;: <input name="<?= $type_offre ?>[capacite_accueil]" type="number" min="0"></label> pers.</p>
             <?php
-                        break;
-                    case 'parc-attraction':
-                        ?>
+                    break;
+                case 'parc-attraction':
+            ?>
             <p><label>Âge requis&nbsp;: <input name="<?= $type_offre ?>[age_requis]" type="number" min="1"> an</label></p>
             <?php
-                        break;
-                    case 'visite':
-                        ?>
+                    break;
+                case 'visite':
+            ?>
             <p><label>Durée indiquée&nbsp;: <input name="<?= $type_offre ?>[indication_duree]" type="time" required></label></p>
             <?php
-                        break;
-                    case 'restauration':
-                        ?>
+                    break;
+                case 'restauration':
+            ?>
             <fieldset>
                 <legend>Niveau de richesse</legend>
                 <p><label><input type="radio" name="<?= $type_offre ?>[richesse]" value="1" checked> €</label></p>
@@ -298,9 +290,9 @@ if ($type_offre && $_POST) {
             <p>Carte</p>
             <textarea form="form-offre" name="<?= $type_offre ?>[carte]"></textarea>
             <?php
-                        break;
-                    case 'activite':
-                        ?>
+                    break;
+                case 'activite':
+            ?>
             <p><label>Durée indiquée&nbsp;: <input name="<?= $type_offre ?>[indication_duree]" type="time" required></label></p>
             <p><label>Âge requis&nbsp;: <input name="<?= $type_offre ?>[age_requis]" type="number" min="1"> an</label></p>
             <p>Prestations incluses</p>
@@ -308,9 +300,9 @@ if ($type_offre && $_POST) {
             <p>Prestations non incluses</p>
             <textarea form="form-offre" name="<?= $type_offre ?>[prestations_non_incluses]"></textarea>
             <?php
-                        break;
-                }
-                                    ?>
+                    break;
+            }
+                    ?>
         </section>
         <!-- du coup en sois on a pas de formulaire a check avec Raphael -->
         <form id="form-offre" action="creation_offre.php?type-offre=<?= $type_offre ?>" method="post" enctype="multipart/form-data">

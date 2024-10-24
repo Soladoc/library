@@ -22,7 +22,7 @@ if (isset($_GET['table'])) {
 
             // Afficher les en-têtes du tableau en fonction des colonnes récupérées
             foreach (array_keys($results[0]) as $column) {
-                echo '<th>' . htmlspecialchars($column) . '</th>';
+                echo '<th>' . htmlspecialchars($column ?? '') . '</th>';
             }
             echo '</tr>';
 
@@ -30,13 +30,13 @@ if (isset($_GET['table'])) {
             foreach ($results as $row) {
                 echo '<tr>';
                 foreach ($row as $value) {
-                    echo '<td>' . htmlspecialchars($value) . '</td>';  // Sécuriser l'affichage des données
+                    echo '<td>' . htmlspecialchars($value ?? '') . '</td>';  // Sécuriser l'affichage des données
                 }
                 echo '</tr>';
             }
             echo '</table>';
         } else {
-            echo "Aucune donnée trouvée dans la table $table.";
+            echo "<p>Aucune donnée trouvée dans la table $table.</p>";
         }
     } catch (Exception $e) {
         echo 'Erreur : ' . $e->getMessage();
