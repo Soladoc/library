@@ -41,7 +41,7 @@
                         $current_time = new DateTime();  // Heure actuelle
                         $closing_time = new DateTime($offre['closing_time']);
                         $closing_soon = ($closing_time > $current_time && $closing_time->diff($current_time)->h < 1);
-
+                        echo 'test';
                         // 4. Afficher les détails de chaque offre dans du HTML
                         echo '<div class="offer-card">';
                         echo '    <img src="' . htmlspecialchars($offre['image']) . '" alt="' . htmlspecialchars($offre['title']) . '">';
