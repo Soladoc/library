@@ -27,7 +27,29 @@ if (isset($_GET['id']) && is_numeric($_GET['id'])) {
         $adresse = $offre['adresse'];
         $site_web = $offre['url_site_web'];
         $image_pricipale = $offre['photoprincipale'];
-        
+
+        $query = "SELECT * FROM pact._adresse WHERE id_adresse = :id";
+        $stmt = $pdo->prepare($query);
+        $stmt->execute(['id' => $adresse]);
+        $info_adresse = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        // Vérifier si l'adresse existe
+        if ($info_adresse) {
+            // Construire une chaîne lisible pour l'adresse
+            $numero_voie = $info_adresse['numero_voie'];
+            $complement_numero = $info_adresse['complement_numero'];
+            $nom_voie = $info_adresse['nom_voie'];
+            $localite = $info_adresse['localite'];
+            $code_postal = $info_adresse['commune_code_postal'];
+
+            // Concaténer les informations pour former une adresse complète
+            $adresse_complete = $numero_voie . ' ' . $complement_numero . ' ' . $nom_voie . ', ' . $localite . ', ' . $code_postal;
+
+            // Afficher ou retourner l'adresse complète
+            echo 'Adresse complète : ' . htmlspecialchars($adresse_complete);
+} else {
+    echo 'Adresse introuvable.';
+}
        
     } else {
         echo 'Aucune offre trouvée avec cet ID.';
@@ -82,7 +104,7 @@ if (isset($_GET['id']) && is_numeric($_GET['id'])) {
             <h3>Emplacement et coordonnées</h3>
             <!-- <div id="map" class="map"></div> -->
             <div class="contact-info">
-                <p><strong>Adresse :</strong> <?php echo $adresse ?></p>
+                <p><strong>Adresse :</strong> <?php echo $adresse_complete ?></p>
                 <p><strong>Site web :</strong> <a href="<?php echo $site_web ?>"><?php echo $site_web ?></a></p>
                 <!-- <p><strong>Téléphone :</strong> 02 96 46 63 80</p> -->
             </div>
