@@ -57,7 +57,7 @@ if (isset($_GET['id']) && is_numeric($_GET['id'])) {
     <main>
         <section class="offer-details">
             <div class="offer-main-photo">
-                <img src="../images/offre/<?php echo $image_pricipale ?>.png" alt="Main Photo" class="offer-photo-large">
+                <img src="../images/offre/<?php echo $image_pricipale ?>.jpg" alt="Main Photo" class="offer-photo-large">
                 <!-- <div class="offer-photo-gallery">
                      <img src="../images/offre/Radôme2.jpg" alt="Photo 2" class="offer-photo-small">
                     <img src="../images/offre/Radôme3.jpg" alt="Photo 3" class="offer-photo-small"> 
