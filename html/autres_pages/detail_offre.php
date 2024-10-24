@@ -1,5 +1,5 @@
 <?php
-
+require_once 'db.php';
 // Activer l'affichage des erreurs pour le débogage
 ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
@@ -26,11 +26,9 @@ if (isset($_GET['id']) && is_numeric($_GET['id'])) {
         $description = $offre['description_detaille'];
         $adresse = $offre['adresse'];
         $site_web = $offre['url_site_web'];
+        $image_pricipale = $offre['photoprincipale'];
         
-        echo '<h3>' . htmlspecialchars($titre) . '</h3>';
-        echo '<p class="location">Adresse ID : ' . htmlspecialchars($adresse) . '</p>';
-        echo '<p class="description">Description : ' . htmlspecialchars($description) . '</p>';
-        echo '<p class="website">Site web : <a href="' . htmlspecialchars($site_web) . '">' . htmlspecialchars($site_web) . '</a></p>';
+       
     } else {
         echo 'Aucune offre trouvée avec cet ID.';
     }
@@ -59,11 +57,11 @@ if (isset($_GET['id']) && is_numeric($_GET['id'])) {
     <main>
         <section class="offer-details">
             <div class="offer-main-photo">
-                <img src="../images/offre/Radôme1.jpg" alt="Main Photo" class="offer-photo-large">
-                <div class="offer-photo-gallery">
-                    <img src="../images/offre/Radôme2.jpg" alt="Photo 2" class="offer-photo-small">
-                    <img src="../images/offre/Radôme3.jpg" alt="Photo 3" class="offer-photo-small">
-                </div>
+                <img src="../images/offre/<?php echo $image_pricipale ?>.jpg" alt="Main Photo" class="offer-photo-large">
+                <!-- <div class="offer-photo-gallery">
+                     <img src="../images/offre/Radôme2.jpg" alt="Photo 2" class="offer-photo-small">
+                    <img src="../images/offre/Radôme3.jpg" alt="Photo 3" class="offer-photo-small"> 
+                </div> -->
             </div>
 
             <div class="offer-info">
@@ -82,7 +80,7 @@ if (isset($_GET['id']) && is_numeric($_GET['id'])) {
         <!-- Location -->
         <section class="offer-location">
             <h3>Emplacement et coordonnées</h3>
-            <div id="map" class="map"></div>
+            <!-- <div id="map" class="map"></div> -->
             <div class="contact-info">
                 <p><strong>Adresse :</strong> <?php echo $adresse ?></p>
                 <p><strong>Site web :</strong> <a href="<?php echo $site_web ?>"><?php echo $site_web ?></a></p>
