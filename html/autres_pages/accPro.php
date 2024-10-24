@@ -2,7 +2,7 @@
     session_start();
     require_once 'db.php';
     $pdo=db_connect();
-    $stmt = $pdo->prepare('SELECT COUNT(*) FROM pact.offres WHERE id_professionnel = :id_professionnnel');
+    $stmt = $pdo->prepare('SELECT COUNT(*) FROM pact.offres WHERE id_professionnel = :id_professionnel');
     $stmt->execute(['id_professionnel' => $_SESSION['id']]);
     $nb_offre = $stmt->fetchColumn();
     $stmt = $pdo->prepare('CALL nb_offres_en_ligne(:id_professionnel)');
