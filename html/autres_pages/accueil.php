@@ -38,9 +38,9 @@ require_once 'db.php';
                     
                     // 2. Préparer et exécuter la requête SQL pour récupérer toutes les offres
                     $sql = 'SELECT * FROM pact._offre';
-                    echo $sql;
+                    
                     $stmt = $pdo->query($sql);  // Exécute la requête SQL
-
+                    echo $stmt;
                     // 3. Boucler sur les résultats pour afficher chaque offre
                     while ($offre = $stmt->fetch(PDO::FETCH_ASSOC)) {
                         
