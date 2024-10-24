@@ -38,7 +38,7 @@
                 <!-- Offre en ligne 1 -->
                  <?php
                  $stmt = $pdo->prepare('CALL nb_offres_en_ligne(:id_professionnel)');
-                 $stmt->execute([':id_professionnel' => $_SESSION['id']]);
+                 $stmt->execute([':id_professionnel' => $_SESSION['id'].T_INT_CAST]);
                  $liste_offre_en_ligne = $stmt;
                  while ($offre = $liste_offre_en_ligne->fetch(PDO::FETCH_ASSOC)) {
                     ?>
@@ -48,16 +48,16 @@
                         <p class="location"><?php echo $offre['localisation']; ?></p>
                         <p class="category"><?php
                             $stmtCat = $pdo->prepare('CALL category(:id_offre)');
-                            $stmtCat->execute([':id_offre' => $offre['id']]);
+                            $stmtCat->execute([':id_offre' => $offre['id'].T_INT_CAST]);
                             echo $stmtCat->fetchColumn();
                         ?></p>
                         <p class="rating">Note : <?php
                             $stmtRating = $pdo->prepare('CALL moyenne(:id_offre)');
-                            $stmtRating->execute([':id_offre' => $offre['id']]);
+                            $stmtRating->execute([':id_offre' => $offre['id'].T_INT_CAST]);
                             echo $stmtRating->fetchColumn();
                         ?>/5 ★ (<?php
                             $stmtCount = $pdo->prepare('SELECT COUNT(*) FROM avis WHERE offre = :id_offre');
-                            $stmtCount->execute([':id_offre' => $offre['id']]);
+                            $stmtCount->execute([':id_offre' => $offre['id'].T_INT_CAST]);
                             echo $stmtCount->fetchColumn();
                         ?> avis)</p>
                         <a href="<?php echo $offre['lien']; ?>">
@@ -88,7 +88,7 @@
             <div class="offer-carousel">
             <?php
                 $stmt = $pdo->prepare('CALL nb_offres_hors_ligne(:id_professionnel)');
-                $stmt->execute([':id_professionnel' => $_SESSION['id']]);
+                $stmt->execute([':id_professionnel' => $_SESSION['id'].T_INT_CAST]);
                 $liste_offre_hors_ligne = $stmt;
                 while ($offre = $liste_offre_hors_ligne->fetch()) {
                     ?>
@@ -100,9 +100,9 @@
                         $stmt->execute([':id_offre' => $offre[0]]);
                         echo $stmt?></p>
                         <p class="rating">Note : <?php $stmt = $pdo->prepare('CALL moyenne(:id_offre)');
-                        $stmt->execute([':id_offre' => $offre[0]]);
+                        $stmt->execute([':id_offre' => $offre[0].T_INT_CAST]);
                         echo $stmt?>/5 ★ (<?php $stmt = $pdo->prepare('select count(*) from avis where offre=:id_offre');
-                        $stmt->execute([':id_offre' => $offre[0]]);
+                        $stmt->execute([':id_offre' => $offre[0].T_INT_CAST]);
                         echo $stmt?> avis)</p>
                         <button class="btn-more-info" href="<?php echo $offre[4] ?>">En savoir plus</button>
                     </div>
