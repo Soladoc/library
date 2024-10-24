@@ -93,7 +93,7 @@ require_once 'db.php';
                     <!-- <img src="<?php //echo $offre['image']?>" alt="Crêperie de l'Abbaye"> -->
                     <h3><?php echo $titre ?>  </h3>
                     <p class="location"><?php echo $adresse_complete ?></p>
-                    <p class="category"><?php echo $categorie ?></p>
+                    <!-- <p class="category"><?php //echo $categorie ?></p> -->
                     <a href="https://413.ventsdouest.dev/autres_pages/detail_offre.php?id=<?php echo $id_offre ?>">
                         <button class="btn-more-info">En savoir plus</button>
                     </a>
