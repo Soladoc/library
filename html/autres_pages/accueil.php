@@ -24,10 +24,9 @@
         </section>
     
         <!-- Section des offres à la une -->
-        <section class="highlight-offers">s
+        <section class="highlight-offers">
             <h2>Offres à la une</h2>
             <div class="offer-list">
-                test
                 <?php echo 'test';
                     // 1. Connexion à la base de données
                     $pdo = db_connect();
