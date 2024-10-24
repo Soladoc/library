@@ -14,7 +14,7 @@ if (isset($_POST['mdp'])) {
 
     $pdo = db_connect();
     $stmt = $pdo->prepare('SELECT COUNT(*) FROM pact._compte WHERE email = :email');
-    $stmt->execute(['email' => $_POST['email']]);
+    $stmt->execute([':email' => $_POST['email']]);
     $count = $stmt->fetchColumn();
     
     if ($count > 0) {
@@ -47,7 +47,7 @@ if (isset($_POST['mdp'])) {
             ':denomination' => $_POST['denomination'],
             ':siren' => $_POST['siren']
         ]);
-        
+
         echo "<script>window.location.href='../autres_pages/connexion.php';</script>";
     } else {
         // insert in pro_public
