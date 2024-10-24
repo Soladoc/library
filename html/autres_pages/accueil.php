@@ -90,7 +90,7 @@ require_once 'db.php';
         
                 
                 <div class="offer-card">
-                    <img src="<?php echo $offre['image']?>" alt="Crêperie de l'Abbaye">
+                    <!-- <img src="<?php //echo $offre['image']?>" alt="Crêperie de l'Abbaye"> -->
                     <h3><?php echo $titre ?>  </h3>
                     <p class="location"><?php echo $adresse_complete ?></p>
                     <p class="category"><?php echo $categorie ?></p>
