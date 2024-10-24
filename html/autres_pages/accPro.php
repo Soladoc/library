@@ -8,7 +8,7 @@
     $stmt = $pdo->prepare('SELECT COUNT(*) FROM pact.offres WHERE id_professionnel = :id_professionnel');
     $stmt->execute([':id_professionnel' => intval($_SESSION['id'])]);
     $nb_offre = $stmt->fetchColumn();
-    $stmt = $pdo->prepare('CALL nb_offres_en_ligne(:id_professionnel integer)');
+    $stmt = $pdo->prepare('CALL nb_offres_en_ligne(:id_professionnel)');
     $stmt->execute([':id_professionnel' => intval($_SESSION['id'])]);
     $offre_en_ligne = $stmt->fetchColumn();
     $offre_hors_ligne = $nb_offre - $offre_en_ligne;
