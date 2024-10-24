@@ -7,7 +7,7 @@ if (isset($_GET['id']) && is_numeric($_GET['id'])) {
     $pdo = db_connect();
 
     // Préparer la requête pour récupérer les détails de l'offre
-    $query = "SELECT * FROM offres WHERE id = :id";
+    $query = "SELECT * FROM pact.offre WHERE id = :id";
     $stmt = $pdo->prepare($query);
     $stmt->execute(['id' => $id]);
 
@@ -63,11 +63,11 @@ if (isset($_GET['id']) && is_numeric($_GET['id'])) {
                 <h2><?php echo $titre ?></h2>
                 <p class="description"><?php echo $description ?></p>
                 <div class="offer-status">
-                    <p class="price">Prix : 13-39€</p>
+                    <!-- <p class="price">Prix : 13-39€</p>
                     <p class="status">Statut : <span class="open">Ouvert</span></p>
                     <p class="rating">Note : ★★★★☆ (4.7/5, 256 avis)</p>
                     <p class="hours">Horaires : 9h30 - 18h30</p>
-                    <button class="btn-reserve">Réserver</button>
+                    <button class="btn-reserve">Réserver</button> -->
                 </div>
             </div>
         </section>
@@ -79,7 +79,7 @@ if (isset($_GET['id']) && is_numeric($_GET['id'])) {
             <div class="contact-info">
                 <p><strong>Adresse :</strong> <?php echo $adresse ?></p>
                 <p><strong>Site web :</strong> <a href="<?php echo $site_web ?>"><?php echo $site_web ?></a></p>
-                <p><strong>Téléphone :</strong> 02 96 46 63 80</p>
+                <!-- <p><strong>Téléphone :</strong> 02 96 46 63 80</p> -->
             </div>
         </section>
 
