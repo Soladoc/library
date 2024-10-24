@@ -104,7 +104,10 @@ values
     ('973', 'Guyane'),
     ('972', 'Martinique'),
     ('974', 'Réunion');
-insert into _commune (code_insee, nom, numero_dep, code_postal)
+
+insert into
+    _commune (code_insee, nom, numero_dep, code_postal)
+values
     ('1001','L''Abergement-Clémenciat','1','1400'),
     ('1002','L''Abergement-de-Varey','1','1640'),
     ('1004','Ambérieu-en-Bugey','1','1500'),
