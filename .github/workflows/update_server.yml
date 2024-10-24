@@ -3,8 +3,8 @@ on:
   push:
     branches:
       - main
-    paths:
-      - 'html/**'
+    paths-ignore:
+      - '**.sql'
 jobs:
   update_server:
     runs-on: ubuntu-latest
