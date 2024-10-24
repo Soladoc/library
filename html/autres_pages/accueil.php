@@ -51,6 +51,7 @@ require_once 'db.php';
                         $titre = $offre['titre'];
                         $adresse=  $offre['adresse'];
                         $id_professionnel =  $offre['id_professionnel'];
+                        $resume = $offre['resume'];
                         // $categorie = $offre['category'];
                         // // Calculer si l'offre ferme bientôt (exemple si elle ferme dans moins d'une heure)
                         // $current_time = new DateTime();  // Heure actuelle
@@ -93,6 +94,7 @@ require_once 'db.php';
                     <!-- <img src="<?php //echo $offre['image']?>" alt="Crêperie de l'Abbaye"> -->
                     <h3><?php echo $titre ?>  </h3>
                     <p class="location"><?php echo $adresse_complete ?></p>
+                    <p><?php echo $resume ?></p>
                     <!-- <p class="category"><?php //echo $categorie ?></p> -->
                     <a href="https://413.ventsdouest.dev/autres_pages/detail_offre.php?id=<?php echo $id_offre ?>">
                         <button class="btn-more-info">En savoir plus</button>
