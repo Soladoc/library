@@ -4,7 +4,7 @@ require_once 'db.php';
 function put_input_address(?string $form_id = null, string $name = 'adresse')
 {
     $pdo = db_connect();
-    $communes = $pdo->query('select code_insee, code_postal, nom from pact._commune', PDO::FETCH_ASSOC)->fetchAll();
+    $communes = $pdo->query('select code_insee, code_postal, nom from pact._commune fetch first 1000 rows only', PDO::FETCH_ASSOC)->fetchAll();
 ?>
 <details>
     <datalist id="datalist-input-address-communes"><?php
