@@ -30,7 +30,7 @@
                 <?php
                     // 1. Connexion à la base de données
                     $pdo = db_connect();
-
+                    echo 'test';
                     // 2. Préparer et exécuter la requête SQL pour récupérer toutes les offres
                     $sql = 'SELECT * FROM _offre';
                     $stmt = $pdo->query($sql);  // Exécute la requête SQL
@@ -46,8 +46,12 @@
                         $image = $offre['photoprincipale'];
                         $titre = $offre['title'];
                         $adresse=  $offre['location'];
-                        // $categorie = $offre['category'];
                         $id_professionnel =  $offre['id_professionnel'];
+                        // $categorie = $offre['category'];
+                        // // Calculer si l'offre ferme bientôt (exemple si elle ferme dans moins d'une heure)
+                        // $current_time = new DateTime();  // Heure actuelle
+                        // $closing_time = new DateTime($offre['closing_time']);
+                        // $closing_soon = ($closing_time > $current_time && $closing_time->diff($current_time)->h < 1);
 
                         // 5. Afficher un message si l'offre ferme bientôt
                         // if ($closing_soon) {
@@ -61,7 +65,7 @@
                         $info_adresse = $stmt->fetch(PDO::FETCH_ASSOC);
                 
 
-                        
+
                         // Vérifier si l'adresse existe
                         if ($info_adresse) {
                             // Construire une chaîne lisible pour l'adresse
