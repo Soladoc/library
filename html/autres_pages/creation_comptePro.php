@@ -151,9 +151,8 @@ if (isset($_POST['mdp'])) {
 
                     <br>
                     <div class="champ" id="siren">
-                        <!-- Texte avec label -->
                         <label>SIREN*:</label>
-                        <input type="text" id="siren" name="siren" placeholder="231 654 987     12315" />
+                        <input type="text" id="siren" name="siren" placeholder="231 654 987" maxlength="9" pattern="\d{9}" title="Veuillez entrer un SIREN valide de 9 chiffres" />
                     </div>
                     <br>
                     <button type="submit" class="btn-connexion">Créer un compte professionnel</button>
