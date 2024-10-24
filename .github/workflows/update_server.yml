@@ -4,7 +4,7 @@ on:
     branches:
       - main
     paths:
-      - '!**.sql'
+      - 'html/**'
 jobs:
   update_server:
     runs-on: ubuntu-latest
