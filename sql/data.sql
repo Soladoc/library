@@ -38,8 +38,8 @@ insert into _image(legende, taille, mime_type)
         values ('barraque à frites', 'aaaaaaaaaaa', 'cest une barraque à frite', 'blabla.fr',(table adresse),
 (table signalable),
 (table professionnel),
-(table image)),
-        values ('maison', 'maison toute simple', 'MMMMMMMMMMMMMMMMMaisonnnnnnnnnnnnn', 'blabla.fr',(table adresse),
+(table image)), 
+('maison', 'maison toute simple', 'MMMMMMMMMMMMMMMMMaisonnnnnnnnnnnnn', 'blabla.fr',(table adresse),
 (table signalable),
 (table professionnel),
 (table image));
