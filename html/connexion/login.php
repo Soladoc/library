@@ -33,6 +33,7 @@ if (!empty($user) && $user['existe'] == 1) {
     if (password_verify($password, $hashed_password)) {
         session_regenerate_id(true);
         $_SESSION['username'] = $username;
+        $_SESSION['log'] = true;
         header("Location: ../autres_pages/accueil.php");
         exit();
         
@@ -52,7 +53,7 @@ if (!empty($user) && $user['existe'] == 1) {
         if (password_verify($password, $hashed_password)) {
             session_regenerate_id(true);
             $_SESSION['username'] = $username;
-
+            $_SESSION['log'] = true;
             header("Location: ../autres_pages/accPro.php");
             exit();
         } else {
