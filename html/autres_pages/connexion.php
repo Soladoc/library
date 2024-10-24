@@ -35,7 +35,7 @@ $pdo = db_connect();
                     <button type="submit" class="btn-connexion">Se connecter</button>
                 </form>
                 <br><br>
-                <label>Pas de compte ?</label>
+                <label>Pas de compte&nbsp;?</label>
                 <a href="creation_membre.php">
                     <button class="btn-creer">Créer un compte personnel</button>
                 </a>
