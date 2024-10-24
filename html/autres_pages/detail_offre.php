@@ -1,33 +1,37 @@
 <?php
-// // Vérifier si l'ID est présent dans l'URL
-// if (isset($_GET['id']) && is_numeric($_GET['id'])) {
-//     $id = $_GET['id'];
+// Vérifier si l'ID est présent dans l'URL
+if (isset($_GET['id']) && is_numeric($_GET['id'])) {
+    $id = $_GET['id'];
 
-//     // Connexion à la base de données
-//     $pdo = db_connect();
+    // Connexion à la base de données
+    $pdo = db_connect();
 
-//     // Préparer la requête pour récupérer les détails de l'offre
-//     $query = "SELECT * FROM offres WHERE id = :id";
-//     $stmt = $pdo->prepare($query);
-//     $stmt->execute(['id' => $id]);
+    // Préparer la requête pour récupérer les détails de l'offre
+    $query = "SELECT * FROM offres WHERE id = :id";
+    $stmt = $pdo->prepare($query);
+    $stmt->execute(['id' => $id]);
 
-//     // Récupérer les données de l'offre
-//     $offre = $stmt->fetch(PDO::FETCH_ASSOC);
+    // Récupérer les données de l'offre
+    $offre = $stmt->fetch(PDO::FETCH_ASSOC);
 
-//     // Si l'offre est trouvée, afficher ses détails
-//     if ($offre) {
-//         echo '<h3>' . htmlspecialchars($offre['title']) . '</h3>';
-//         echo '<p class="location">' . htmlspecialchars($offre['location']) . '</p>';
-//         echo '<p class="category">Catégorie : ' . htmlspecialchars($offre['category']) . '</p>';
-//         echo '<p class="price">Prix : ' . htmlspecialchars($offre['price']) . '</p>';
-//         echo '<p class="rating">Note : ' . htmlspecialchars($offre['rating']) . ' ★ (' . htmlspecialchars($offre['reviews']) . ' avis)</p>';
-//         echo '<p class="professional">Proposé par : ' . htmlspecialchars($offre['professional']) . '</p>';
-//     } else {
-//         echo 'Aucune offre trouvée avec cet ID.';
-//     }
-// } else {
-//     echo 'ID d\'offre invalide.';
-// }
+    // Si l'offre est trouvée, afficher ses détails
+    if ($offre) {
+        $titre  = $offre['title'];
+        $description = $offre['description'];
+        $adresse = $offre['adresse'];
+        $site_web =$offre['url_site_web'];
+        echo '<h3>' . htmlspecialchars($offre['title']) . '</h3>';
+        echo '<p class="location">' . htmlspecialchars($offre['location']) . '</p>';
+        echo '<p class="category">Catégorie : ' . htmlspecialchars($offre['category']) . '</p>';
+        // echo '<p class="price">Prix : ' . htmlspecialchars($offre['price']) . '</p>';
+        // echo '<p class="rating">Note : ' . htmlspecialchars($offre['rating']) . ' ★ (' . htmlspecialchars($offre['reviews']) . ' avis)</p>';
+        // echo '<p class="professional">Proposé par : ' . htmlspecialchars($offre['professional']) . '</p>';
+    } else {
+        echo 'Aucune offre trouvée avec cet ID.';
+    }
+} else {
+    echo 'ID d\'offre invalide.';
+}
 ?>
 
 <!DOCTYPE html>
@@ -36,7 +40,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Détail de l'offre - Parc du Radôme</title>
+    <title>offre : <?php echo $id ?></title>
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
     <script async src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
     <link rel="stylesheet" href="../style/style.css">
@@ -56,8 +60,8 @@
             </div>
 
             <div class="offer-info">
-                <h2>Découverte interactive de la cité des Télécoms</h2>
-                <p class="description">Venez découvrir l'histoire passionnante des télécommunications dans un cadre unique et interactif à Pleumeur-Bodou.</p>
+                <h2><?php echo $titre ?></h2>
+                <p class="description"><?php echo $description ?></p>
                 <div class="offer-status">
                     <p class="price">Prix : 13-39€</p>
                     <p class="status">Statut : <span class="open">Ouvert</span></p>
@@ -73,8 +77,8 @@
             <h3>Emplacement et coordonnées</h3>
             <div id="map" class="map"></div>
             <div class="contact-info">
-                <p><strong>Adresse :</strong> Pleumeur-Bodou (22560), Bretagne, France</p>
-                <p><strong>Site web :</strong> <a href="https://parcduradome.com">https://parcduradome.com</a></p>
+                <p><strong>Adresse :</strong> <?php echo $adresse ?></p>
+                <p><strong>Site web :</strong> <a href="<?php echo $site_web ?>"><?php echo $site_web ?></a></p>
                 <p><strong>Téléphone :</strong> 02 96 46 63 80</p>
             </div>
         </section>
