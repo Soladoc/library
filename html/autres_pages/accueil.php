@@ -32,35 +32,63 @@
                     $pdo = db_connect();
 
                     // 2. Préparer et exécuter la requête SQL pour récupérer toutes les offres
-                    $sql = 'SELECT image, title, location, category, price, rating, reviews, professional, closing_time FROM offres';
+                    $sql = 'SELECT * FROM _offre';
                     $stmt = $pdo->query($sql);  // Exécute la requête SQL
 
                     // 3. Boucler sur les résultats pour afficher chaque offre
                     while ($offre = $stmt->fetch(PDO::FETCH_ASSOC)) {
-                        // Calculer si l'offre ferme bientôt (exemple si elle ferme dans moins d'une heure)
-                        $current_time = new DateTime();  // Heure actuelle
-                        $closing_time = new DateTime($offre['closing_time']);
-                        $closing_soon = ($closing_time > $current_time && $closing_time->diff($current_time)->h < 1);
+                        // // Calculer si l'offre ferme bientôt (exemple si elle ferme dans moins d'une heure)
+                        // $current_time = new DateTime();  // Heure actuelle
+                        // $closing_time = new DateTime($offre['closing_time']);
+                        // $closing_soon = ($closing_time > $current_time && $closing_time->diff($current_time)->h < 1);
                         echo 'test';
-                        // 4. Afficher les détails de chaque offre dans du HTML
-                        echo '<div class="offer-card">';
-                        echo '    <img src="' . htmlspecialchars($offre['image']) . '" alt="' . htmlspecialchars($offre['title']) . '">';
-                        echo '    <h3>' . htmlspecialchars($offre['title']) . '</h3>';
-                        echo '    <p class="location">' . htmlspecialchars($offre['location']) . '</p>';
-                        echo '    <p class="category">' . htmlspecialchars($offre['category']) . '</p>';
-                        echo '    <p class="professional">Proposé par : ' . htmlspecialchars($offre['professional']) . '</p>';
+                        $id_offre = $offre['id_offre'];
+                        $image = $offre['photoprincipale'];
+                        $titre = $offre['title'];
+                        $adresse=  $offre['location'];
+                        // $categorie = $offre['category'];
+                        $id_professionnel =  $offre['id_professionnel'];
 
                         // 5. Afficher un message si l'offre ferme bientôt
-                        if ($closing_soon) {
-                            echo '    <span class="closing-soon">Ferme bientôt à ' . $closing_time->format('H:i') . '</span>';
-                        }
+                        // if ($closing_soon) {
+                        //     echo '    <span class="closing-soon">Ferme bientôt à ' . $closing_time->format('H:i') . '</span>';
+                        // }
 
                         // Lien vers plus d'infos sur l'offre (mettre l'URL correcte dans href)
-                        echo '    <a href="#">Voir l\'offre</a>';
-                        echo '</div>';
+                        $query = "SELECT * FROM pact._adresse WHERE id_adresse = :id";
+                        $stmt = $pdo->prepare($query);
+                        $stmt->execute(['id' => $adresse]);
+                        $info_adresse = $stmt->fetch(PDO::FETCH_ASSOC);
+                
+
+                        
+                        // Vérifier si l'adresse existe
+                        if ($info_adresse) {
+                            // Construire une chaîne lisible pour l'adresse
+                            $numero_voie = $info_adresse['numero_voie'];
+                            $complement_numero = $info_adresse['complement_numero'];
+                            $nom_voie = $info_adresse['nom_voie'];
+                            $localite = $info_adresse['localite'];
+                            $code_postal = $info_adresse['commune_code_postal'];
+                
+                            // Concaténer les informations pour former une adresse complète
+                            $adresse_complete = $numero_voie . ' ' . $complement_numero . ' ' . $nom_voie . ', ' . $localite . ', ' . $code_postal;
+                
+                            // Afficher ou retourner l'adresse complète
+                        } else {
+                            echo 'Adresse introuvable.';
+                        }
                     }
                 ?>
-
+                <div class="offer-card">
+                    <img src="<?php echo $offre['image']?>" alt="Crêperie de l'Abbaye">
+                    <h3><?php echo $titre ?>  </h3>
+                    <p class="location"><?php echo $adresse_complete ?></p>
+                    <p class="category"><?php echo $categorie ?></p>
+                    <a href="https://413.ventsdouest.dev/autres_pages/detail_offre.php?=<?php echo $id_offre ?>">
+                        <button class="btn-more-info">En savoir plus</button>
+                    </a>
+                </div>
                 <!-- Offre 1 -->
                 <div class="offer-card">
                     <img src="creperie.jpg" alt="Crêperie de l'Abbaye">
