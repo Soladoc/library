@@ -36333,3 +36333,10 @@ values
     ('97615','Pamandzi','976','97615'),
     ('97616','Sada','976','97640'),
     ('97617','Tsingoni','976','97680');
+    insert into pact._signalable default values;
+  insert into _identite(id_identite) values (1);
+  insert into _adresse(id_adresse,nom_voie,commune_code_insee,commune_code_postal) values (1,'aaaaaaaaaaaaaaaaaaa','1001','1400');
+  insert into _compte(id_identite,email) values (1,'a.gmail');
+  insert into _professionnel(id_professionnel,email) values (1,'a.gmail');
+  insert into _offre(titre,resume,description_detaille,url_site_web,adresse,id_signalable,id_professionnel) 
+  values ('barraque à frites','aaaaaaaaaaa','cest une barraque à frite','blabla.fr',1,1,1);

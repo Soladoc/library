@@ -77,10 +77,10 @@
                 <h2>Découverte interactive de la cité des Télécoms</h2>
                 <p class="description">Venez découvrir l'histoire passionnante des télécommunications dans un cadre unique et interactif à Pleumeur-Bodou.</p>
                 <div class="offer-status">
-                    <p class="price">Prix : 13-39€</p>
+                    <!-- <p class="price">Prix : 13-39€</p>
                     <p class="status">Statut : <span class="open">Ouvert</span></p>
                     <p class="rating">Note : ★★★★☆ (4.7/5, 256 avis)</p>
-                    <p class="hours">Horaires : 9h30 - 18h30</p>
+                    <p class="hours">Horaires : 9h30 - 18h30</p> -->
                 </div>
             </div>
         </section>
@@ -88,19 +88,19 @@
         <!-- Location -->
         <section class="offer-location">
             <h3>Emplacement et coordonnées</h3>
-            <div id="map" class="map"></div>
+            <!-- <div id="map" class="map"></div> -->
             <div class="contact-info">
                 <p><strong>Adresse :</strong> Pleumeur-Bodou (22560), Bretagne, France</p>
                 <p><strong>Site web :</strong> <a href="https://parcduradome.com">https://parcduradome.com</a></p>
-                <p><strong>Téléphone :</strong> 02 96 46 63 80</p>
+                <!-- <p><strong>Téléphone :</strong> 02 96 46 63 80</p> -->
             </div>
         </section>
 
-        <!-- User Reviews -->
+        <!-- User Reviews 
         <section class="offer-reviews">
             <h3>Avis des utilisateurs</h3>
 
-            <!-- Review Form -->
+             Review Form 
             <div class="review-form">
                 <textarea placeholder="Votre avis..."></textarea>
                 <label for="rating">Note :</label>
@@ -114,7 +114,7 @@
                 <button class="btn-publish">Publier</button>
             </div>
 
-            <!-- Summary of reviews -->
+             Summary of reviews 
             <div class="review-summary">
                 <h4>Résumé des notes</h4>
                 <p>Moyenne : 4.7/5 ★</p>
@@ -127,7 +127,7 @@
                 </div>
             </div>
 
-            <!-- List of reviews -->
+             List of reviews 
             <div class="review-list">
                 <div class="review">
                     <p><strong>Jean Dupont</strong> - ★★★★★</p>
@@ -138,23 +138,23 @@
                     <p>Une belle visite, mais quelques parties étaient fermées...</p>
                 </div>
             </div>
-        </section>
+        </section>-->
     </main>
     <?php require 'include/component/footer.php' ?>
 
     <script>
-    // OpenStreetMap Integration
-    var map = L.map('map').setView([48.779, -3.518], 13);
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-    }).addTo(map);
-    L.marker([48.779, -3.518]).addTo(map)
-        .bindPopup('Découverte interactive de la cité des Télécoms')
-        .openPopup();
-    L.marker([45.779, -3.518]).addTo(map)
-        .bindPopup('hihihihihihihihihui')
-    L.marker([45.779, -4.518]).addTo(map)
-        .bindPopup('hihihihihihihihihui')
+    // // OpenStreetMap Integration
+    // var map = L.map('map').setView([48.779, -3.518], 13);
+    // L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    //     attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+    // }).addTo(map);
+    // L.marker([48.779, -3.518]).addTo(map)
+    //     .bindPopup('Découverte interactive de la cité des Télécoms')
+    //     .openPopup();
+    // L.marker([45.779, -3.518]).addTo(map)
+    //     .bindPopup('hihihihihihihihihui')
+    // L.marker([45.779, -4.518]).addTo(map)
+    //     .bindPopup('hihihihihihihihihui')
     </script>
 </body>
 

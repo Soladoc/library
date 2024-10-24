@@ -1,13 +1,19 @@
 <?php
+
+// Activer l'affichage des erreurs pour le débogage
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
+
 // Vérifier si l'ID est présent dans l'URL
 if (isset($_GET['id']) && is_numeric($_GET['id'])) {
-    $id = $_GET['id'];
+    $id = (int)$_GET['id']; // Cast pour plus de sécurité
 
     // Connexion à la base de données
     $pdo = db_connect();
 
     // Préparer la requête pour récupérer les détails de l'offre
-    $query = "SELECT * FROM offres WHERE id = :id";
+    $query = "SELECT * FROM pact._offre WHERE id_offre = :id";
     $stmt = $pdo->prepare($query);
     $stmt->execute(['id' => $id]);
 
@@ -16,23 +22,24 @@ if (isset($_GET['id']) && is_numeric($_GET['id'])) {
 
     // Si l'offre est trouvée, afficher ses détails
     if ($offre) {
-        $titre  = $offre['title'];
-        $description = $offre['description'];
+        $titre  = $offre['titre'];  // Assurez-vous que le nom des colonnes correspond à la base de données
+        $description = $offre['description_detaille'];
         $adresse = $offre['adresse'];
-        $site_web =$offre['url_site_web'];
-        echo '<h3>' . htmlspecialchars($offre['title']) . '</h3>';
-        echo '<p class="location">' . htmlspecialchars($offre['location']) . '</p>';
-        echo '<p class="category">Catégorie : ' . htmlspecialchars($offre['category']) . '</p>';
-        // echo '<p class="price">Prix : ' . htmlspecialchars($offre['price']) . '</p>';
-        // echo '<p class="rating">Note : ' . htmlspecialchars($offre['rating']) . ' ★ (' . htmlspecialchars($offre['reviews']) . ' avis)</p>';
-        // echo '<p class="professional">Proposé par : ' . htmlspecialchars($offre['professional']) . '</p>';
+        $site_web = $offre['url_site_web'];
+        
+        echo '<h3>' . htmlspecialchars($titre) . '</h3>';
+        echo '<p class="location">Adresse ID : ' . htmlspecialchars($adresse) . '</p>';
+        echo '<p class="description">Description : ' . htmlspecialchars($description) . '</p>';
+        echo '<p class="website">Site web : <a href="' . htmlspecialchars($site_web) . '">' . htmlspecialchars($site_web) . '</a></p>';
     } else {
         echo 'Aucune offre trouvée avec cet ID.';
     }
 } else {
     echo 'ID d\'offre invalide.';
 }
+
 ?>
+
 
 <!DOCTYPE html>
 <html lang="fr">
@@ -63,11 +70,11 @@ if (isset($_GET['id']) && is_numeric($_GET['id'])) {
                 <h2><?php echo $titre ?></h2>
                 <p class="description"><?php echo $description ?></p>
                 <div class="offer-status">
-                    <p class="price">Prix : 13-39€</p>
+                    <!-- <p class="price">Prix : 13-39€</p>
                     <p class="status">Statut : <span class="open">Ouvert</span></p>
                     <p class="rating">Note : ★★★★☆ (4.7/5, 256 avis)</p>
                     <p class="hours">Horaires : 9h30 - 18h30</p>
-                    <button class="btn-reserve">Réserver</button>
+                    <button class="btn-reserve">Réserver</button> -->
                 </div>
             </div>
         </section>
@@ -79,15 +86,15 @@ if (isset($_GET['id']) && is_numeric($_GET['id'])) {
             <div class="contact-info">
                 <p><strong>Adresse :</strong> <?php echo $adresse ?></p>
                 <p><strong>Site web :</strong> <a href="<?php echo $site_web ?>"><?php echo $site_web ?></a></p>
-                <p><strong>Téléphone :</strong> 02 96 46 63 80</p>
+                <!-- <p><strong>Téléphone :</strong> 02 96 46 63 80</p> -->
             </div>
         </section>
 
         <!-- User Reviews -->
-        <section class="offer-reviews">
+        <!-- <section class="offer-reviews">
             <h3>Avis des utilisateurs</h3>
 
-            <!-- Review Form -->
+             Review Form 
             <div class="review-form">
                 <textarea placeholder="Votre avis..."></textarea>
                 <label for="rating">Note :</label>
@@ -101,7 +108,7 @@ if (isset($_GET['id']) && is_numeric($_GET['id'])) {
                 <button class="btn-publish">Publier</button>
             </div>
 
-            <!-- Summary of reviews -->
+             Summary of reviews 
             <div class="review-summary">
                 <h4>Résumé des notes</h4>
                 <p>Moyenne : 4.7/5 ★</p>
@@ -114,7 +121,7 @@ if (isset($_GET['id']) && is_numeric($_GET['id'])) {
                 </div>
             </div>
 
-            <!-- List of reviews -->
+            List of reviews 
             <div class="review-list">
                 <div class="review">
                     <p><strong>Jean Dupont</strong> - ★★★★★</p>
@@ -125,23 +132,23 @@ if (isset($_GET['id']) && is_numeric($_GET['id'])) {
                     <p>Une belle visite, mais quelques parties étaient fermées...</p>
                 </div>
             </div>
-        </section>
+        </section> -->
     </main>
     <?php require 'component/footer.php' ?>
 
     <script>
-    // OpenStreetMap Integration
-    var map = L.map('map').setView([48.779, -3.518], 13);
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-    }).addTo(map);
-    L.marker([48.779, -3.518]).addTo(map)
-        .bindPopup('Découverte interactive de la cité des Télécoms')
-        .openPopup();
-    L.marker([45.779, -3.518]).addTo(map)
-        .bindPopup('hihihihihihihihihui')
-    L.marker([45.779, -4.518]).addTo(map)
-        .bindPopup('hihihihihihihihihui')
+    // // OpenStreetMap Integration
+    // var map = L.map('map').setView([48.779, -3.518], 13);
+    // L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    //     attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+    // }).addTo(map);
+    // L.marker([48.779, -3.518]).addTo(map)
+    //     .bindPopup('Découverte interactive de la cité des Télécoms')
+    //     .openPopup();
+    // L.marker([45.779, -3.518]).addTo(map)
+    //     .bindPopup('hihihihihihihihihui')
+    // L.marker([45.779, -4.518]).addTo(map)
+    //     .bindPopup('hihihihihihihihihui')
     </script>
 </body>
 

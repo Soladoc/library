@@ -71,7 +71,6 @@ begin
   end if;
 end;
 $$ language 'plpgsql';
-DROP FUNCTION nb_offres_en_ligne(integer);
 create or replace function nb_offres_en_ligne(id_pro_cherche integer) returns table (id_offre integer,
   titre varchar(255),
   resume varchar(1023),
@@ -188,7 +187,3 @@ BEGIN
   RETURN note;
 END;
 $$ LANGUAGE 'plpgsql';
-  insert into pact._signalable default values;
-  insert into _adresse(nom_voie) values ('aaaaaaaaaaaaaaaaaaa');
-  insert into _offre(titre,resume,description_detaille,url_site_web,adresse,id_signalable,id_professionnel) 
-  values ('barraque à frites','aaaaaaaaaaa','cest une barraque à frite','blabla.fr',1,1,1);
