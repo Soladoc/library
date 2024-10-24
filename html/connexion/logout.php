@@ -8,6 +8,6 @@ $_SESSION = array(); // Réinitialiser toutes les variables de session
 session_destroy(); // Met fin à la session active
 
 // Rediriger vers la page de connexion ou la page d'accueil
-header("Location: connexion.php");
+header("Location: ../autres_pages/accueil.php");
 exit();
 ?>
