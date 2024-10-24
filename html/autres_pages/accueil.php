@@ -67,7 +67,7 @@ require_once 'db.php';
 
                         // Lien vers plus d'infos sur l'offre (mettre l'URL correcte dans href)
                         $requete = "SELECT * FROM pact._adresse WHERE id_adresse = :id";
-                        $stmt2 = $pdo->prepare($query);
+                        $stmt2 = $pdo->prepare($requete);
                         $stmt2->execute(['id' => $adresse]);
                         $info_adresse = $stmt2->fetch(PDO::FETCH_ASSOC);
                 
