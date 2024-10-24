@@ -40,3 +40,9 @@ insert into _image(legende, taille, mime_type)
 (table professionnel),
 (table image));
 
+insert into _offre(titre, resume, description_detaille, url_site_web, adresse, id_signalable, id_professionnel, photoprincipale)
+        values ('maison', 'maison toute simple', 'MMMMMMMMMMMMMMMMMaisonnnnnnnnnnnnn', 'blabla.fr',(table adresse),
+(table signalable),
+(table professionnel),
+(table image));
+
