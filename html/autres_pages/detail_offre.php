@@ -84,10 +84,10 @@ if (isset($_GET['id']) && is_numeric($_GET['id'])) {
         </section>
 
         <!-- User Reviews -->
-        <section class="offer-reviews">
+        <!-- <section class="offer-reviews">
             <h3>Avis des utilisateurs</h3>
 
-            <!-- Review Form -->
+             Review Form 
             <div class="review-form">
                 <textarea placeholder="Votre avis..."></textarea>
                 <label for="rating">Note :</label>
@@ -101,7 +101,7 @@ if (isset($_GET['id']) && is_numeric($_GET['id'])) {
                 <button class="btn-publish">Publier</button>
             </div>
 
-            <!-- Summary of reviews -->
+             Summary of reviews 
             <div class="review-summary">
                 <h4>Résumé des notes</h4>
                 <p>Moyenne : 4.7/5 ★</p>
@@ -114,7 +114,7 @@ if (isset($_GET['id']) && is_numeric($_GET['id'])) {
                 </div>
             </div>
 
-            <!-- List of reviews -->
+            List of reviews 
             <div class="review-list">
                 <div class="review">
                     <p><strong>Jean Dupont</strong> - ★★★★★</p>
@@ -125,23 +125,23 @@ if (isset($_GET['id']) && is_numeric($_GET['id'])) {
                     <p>Une belle visite, mais quelques parties étaient fermées...</p>
                 </div>
             </div>
-        </section>
+        </section> -->
     </main>
     <?php require 'component/footer.php' ?>
 
     <script>
-    // OpenStreetMap Integration
-    var map = L.map('map').setView([48.779, -3.518], 13);
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-    }).addTo(map);
-    L.marker([48.779, -3.518]).addTo(map)
-        .bindPopup('Découverte interactive de la cité des Télécoms')
-        .openPopup();
-    L.marker([45.779, -3.518]).addTo(map)
-        .bindPopup('hihihihihihihihihui')
-    L.marker([45.779, -4.518]).addTo(map)
-        .bindPopup('hihihihihihihihihui')
+    // // OpenStreetMap Integration
+    // var map = L.map('map').setView([48.779, -3.518], 13);
+    // L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    //     attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+    // }).addTo(map);
+    // L.marker([48.779, -3.518]).addTo(map)
+    //     .bindPopup('Découverte interactive de la cité des Télécoms')
+    //     .openPopup();
+    // L.marker([45.779, -3.518]).addTo(map)
+    //     .bindPopup('hihihihihihihihihui')
+    // L.marker([45.779, -4.518]).addTo(map)
+    //     .bindPopup('hihihihihihihihihui')
     </script>
 </body>
 
