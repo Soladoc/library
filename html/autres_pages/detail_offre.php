@@ -17,7 +17,7 @@ if (isset($_GET['id']) && is_numeric($_GET['id'])) {
     // Si l'offre est trouvée, afficher ses détails
     if ($offre) {
         $titre  = $offre['title'];
-        $description = $offre['description'];
+        $description = $offre['description_detaille'];
         $adresse = $offre['adresse'];
         $site_web =$offre['url_site_web'];
         echo '<h3>' . htmlspecialchars($offre['title']) . '</h3>';
