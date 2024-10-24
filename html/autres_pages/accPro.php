@@ -1,13 +1,14 @@
 <?php
-require_once 'db.php';
-// $pdo=db_connect();
-// $stmt = $pdo->prepare('SELECT COUNT(*) FROM pact.offres WHERE id_professionnel = :id_professionnnel');
-// $stmt->execute(['id_professionnel' => $_SESSION['id_professionnel']]);
-// $nb_offre = $stmt->fetchColumn();
-// $stmt = $pdo->prepare('CALL nb_offres_en_ligne(:id_professionnel)');
-// $stmt->execute(['id_professionnel' => $_SESSION['id_professionnel']]);
-// $offre_en_ligne = $stmt->fetchColumn();
-// $offre_hors_ligne = $nb_offre - $offre_en_ligne;
+    session_start();
+    require_once 'db.php';
+    $pdo=db_connect();
+    $stmt = $pdo->prepare('SELECT COUNT(*) FROM pact.offres WHERE id_professionnel = :id_professionnnel');
+    $stmt->execute(['id_professionnel' => $_SESSION['id']]);
+    $nb_offre = $stmt->fetchColumn();
+    $stmt = $pdo->prepare('CALL nb_offres_en_ligne(:id_professionnel)');
+    $stmt->execute(['id_professionnel' => $_SESSION['id']]);
+    $offre_en_ligne = $stmt->fetchColumn();
+    $offre_hors_ligne = $nb_offre - $offre_en_ligne;
 ?>
 
 <!DOCTYPE html>
@@ -34,7 +35,7 @@ require_once 'db.php';
                 <!-- Offre en ligne 1 -->
                  <?php
                  $stmt = $pdo->prepare('CALL nb_offres_en_ligne(:id_professionnel)');
-                 $stmt->execute(['id_professionnel' => $_GET['id_professionnel']]);
+                 $stmt->execute(['id_professionnel' => $_SESSION['id_professionnel']]);
                  $liste_offre_en_ligne = $stmt;
                  while ($offre = $liste_offre_en_ligne->fetch()) {
                     ?>
@@ -76,7 +77,7 @@ require_once 'db.php';
             <div class="offer-carousel">
             <?php
                 $stmt = $pdo->prepare('CALL nb_offres_hors_ligne(:id_professionnel)');
-                $stmt->execute(['id_professionnel' => $_GET['id_professionnel']]);
+                $stmt->execute(['id_professionnel' => $_SESSION['id_professionnel']]);
                 $liste_offre_hors_ligne = $stmt;
                 while ($offre = $liste_offre_hors_ligne->fetch()) {
                     ?>
