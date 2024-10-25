@@ -61,7 +61,7 @@
                             <button class="btn-more-info">En savoir plus</button>
                         </a>
                     </div>
-                    <?php
+                <?php
                 }                
                  $liste_offre_en_ligne->closeCursor();
                  ?>

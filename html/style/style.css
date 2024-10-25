@@ -659,3 +659,19 @@ a {
 #bloc_siren {
     display: block;
 }
+
+@media (max-width: 767px) {
+    .social-links {
+        display: none !important;
+    }
+
+    footer {
+        & > div:first-child {
+            padding: 0em !important;
+        }
+    
+        & > div:first-child > div:first-child {
+            column-gap: 0em !important;
+        }
+    }
+}
