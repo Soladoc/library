@@ -23,7 +23,7 @@ if (isset($_GET['id']) && is_numeric($_GET['id'])) {
         $adresse = $offre['adresse'];
         $site_web = $offre['url_site_web'];
         
-        $stmt = $pdo->prepare('SELECT * from _image where id_image = ?');
+        $stmt = $pdo->prepare('SELECT * from pact._image where id_image = ?');
         $stmt->execute([$offre['photoprincipale']]);
         $image_pricipale = $stmt->fetch(PDO::FETCH_ASSOC);
 
