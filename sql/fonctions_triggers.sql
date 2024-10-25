@@ -70,7 +70,7 @@ declare
   id_offre_temp integer;
   boucle integer;
 begin
-  create view _offres as select * from _offre where id_professionnel=id_pro_cherche;
+  create view _offres as select * from _offre where id_professionnel=nb_offres_en_ligne.id_pro_cherche;
   create table offres_en_ligne(
     id_offre integer,
     titre varchar(255),
@@ -114,7 +114,7 @@ declare
   id_offre_temp integer;
   boucle integer;
 begin
-  create view _offres as select * from _offre where id_professionnel=id_pro_cherche;
+  create view _offres as select * from _offre where id_professionnel=nb_offres_hors_ligne.id_pro_cherche;
   create table offres_hors_ligne(
     id_offre integer,
     titre varchar(255),
