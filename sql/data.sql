@@ -43,7 +43,7 @@ insert into _image(legende, taille, mime_type)
 
 -- Compte pro
 insert into
-    pro_public (email, mdp_hash, nom, prenom, telephone, denomonation)
+    pro_public (email, mdp_hash, nom, prenom, telephone, denomination)
 values
     ('a.b@gmail.com', '$2y$10$EGLHZkQPfzunBskmjGlv0eTVbF8uot3J6R/W76TIjUw33xSYadike', 'ALl', 'Everyone', '0123456789', 'JeSuisPublic');
 -- mdp: toto
