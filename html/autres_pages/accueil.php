@@ -49,11 +49,14 @@ require_once 'db.php';
                         // $closing_time = new DateTime($offre['closing_time']);
                         // $closing_soon = ($closing_time > $current_time && $closing_time->diff($current_time)->h < 1);
                         $id_offre = $offre['id_offre'];
-                        $image = $offre['photoprincipale'];
                         $titre = $offre['titre'];
                         $adresse=  $offre['adresse'];
                         $id_professionnel =  $offre['id_professionnel'];
                         $resume = $offre['resume'];
+
+                        $stmt3 = $pdo->prepare('SELECT * from pact._image where id_image = ?');
+                        $stmt3->execute([$offre['photoprincipale']]);
+                        $image_pricipale = $stmt3->fetch(PDO::FETCH_ASSOC);
                         // $categorie = $offre['category'];
                         // // Calculer si l'offre ferme bientôt (exemple si elle ferme dans moins d'une heure)
                         // $current_time = new DateTime();  // Heure actuelle
@@ -93,7 +96,7 @@ require_once 'db.php';
 
 
                 <div class="offer-card">
-                    <!-- <img src="<?php //echo $offre['image']?>" alt="Crêperie de l'Abbaye"> -->
+                <img src="/images_utilisateur/<?= $image_pricipale['id_image'] ?>" alt="Main Photo" class="offer-photo-large">
                     <h3><?php echo $titre ?>  </h3>
                     <p class="location"><?php echo $adresse_complete ?></p>
                     <p><?php echo $resume ?></p>
