@@ -8,7 +8,7 @@ begin
   insert into pact._membre(pseudo,email) values (new.pseudo,new.email);
   return new;
 end;
-$$ language 'plpgsql';
+$$ language 'plpgsql'; 
 create or replace trigger tg_membres_insert
 instead of insert
 on membres for each row
