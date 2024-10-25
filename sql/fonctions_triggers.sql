@@ -159,7 +159,7 @@ BEGIN
   ELSIF (SELECT COUNT(*) FROM _parcattraction WHERE id_offre = id_offre_cherche) > 0 THEN
     categorie := 'Parc d''attraction';
   END IF;
-  
+
   RETURN categorie;
 END;
 $$ LANGUAGE 'plpgsql';
