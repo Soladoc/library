@@ -31,20 +31,25 @@ insert into _professionnel(denomination, email)
         id_professionnel
 ), image as (
 insert into _image(legende, taille, mime_type)
-        values ('legende', 100, 'image/jpeg')
+        values ('Unciv', 2241423, 'image/png'),
+('Agent Herrington - DEA', 211570, 'image/png'),
+('Sniper - TF2', 335720, 'image/jpeg')
     returning
-        id_image)
+        id_image
+), offre as (
     insert into _offre(titre, resume, description_detaille, url_site_web, adresse, id_signalable, id_professionnel, photoprincipale)
         values ('barraque à frites', 'aaaaaaaaaaa', 'cest une barraque à frite', 'blabla.fr',(table adresse),
 (table signalable),
 (table professionnel),
-(table image));
-
+1)
+)
+insert into _gallerie(id_offre, id_image)
+values
+    ((table offre), 2);
+    ((table offre), 3);
 
 -- Compte pro
-insert into
-    pro_public (email, mdp_hash, nom, prenom, telephone, denomination)
-values
-    ('a.b@gmail.com', '$2y$10$EGLHZkQPfzunBskmjGlv0eTVbF8uot3J6R/W76TIjUw33xSYadike', 'ALl', 'Everyone', '0123456789', 'JeSuisPublic');
--- mdp: toto
+insert into pro_public(email, mdp_hash, nom, prenom, telephone, denomination)
+    values ('a.b@gmail.com', '$2y$10$EGLHZkQPfzunBskmjGlv0eTVbF8uot3J6R/W76TIjUw33xSYadike', 'ALl', 'Everyone', '0123456789', 'JeSuisPublic');
 
+-- mdp: toto
