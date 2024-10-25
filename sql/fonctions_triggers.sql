@@ -147,7 +147,7 @@ DECLARE
   categorie VARCHAR(20);
 BEGIN
   categorie := '?';
-  
+
   IF (SELECT COUNT(*) FROM _restaurant WHERE id_offre = id_offre_cherche) > 0 THEN
     categorie := 'Restaurant';
   ELSIF (SELECT COUNT(*) FROM _activite WHERE id_offre = id_offre_cherche) > 0 THEN
