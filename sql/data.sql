@@ -38,7 +38,7 @@ insert into _image(legende, taille, mime_type)
         id_image
 ), offre as (
 insert into _offre(titre, resume, description_detaille, url_site_web, adresse, id_signalable, id_professionnel, photoprincipale)
-        values ('barraque à frites', 'aaaaaaaaaaa', 'cest une barraque à frite', 'blabla.fr',(table adresse),
+        values ('barraque à frites', 'Des frites. C''est bon les frites', 'cest une barraque à frite', 'blabla.fr',(table adresse),
 (table signalable),
 (table professionnel), 1)
     returning
