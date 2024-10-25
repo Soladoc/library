@@ -1,20 +1,4 @@
 set schema 'pact';
-create or replace function offres_insert() returns trigger as $$
-declare
-  id_temp integer;
-  id_adresse_temp integer;
-begin
-  insert into pact._signalable default values returning id_signalable into id_temp;
-  insert into adresse(nom_voie) values (new.adresse) returning id_adresse into id_adresse_temp;
-  insert into _offre(titre,resume,description_detaille,url_site_web,adresse,photoprincipale,abonnement,id_professionnel,id_signalable) 
-  values (new.titre,new.resume,new.description_detaille,new.url_site_web,new.adresse,new.photoprincipale,new.abonnement,new.id_professionnel,id-temp);
-  return new;
-end;
-$$ language 'plpgsql';
-create or replace trigger offres_insert
-instead of insert
-on offres for each row
-execute procedure offres_insert();
 create or replace function membres_insert() returns trigger as $$
 declare
   id_temp integer;
