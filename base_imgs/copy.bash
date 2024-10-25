@@ -1,6 +1,6 @@
 #!/bin/env bash
 
-set -eu
+set -xeu
 cd "$(dirname "${BASH_SOURCE[0]}")"
 
 for f in 1.png 2.png 3.jpg; do

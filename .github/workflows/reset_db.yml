@@ -28,9 +28,12 @@ jobs:
                 sudo docker cp "$f" postgresdb:/"$f"
               done
               sudo docker exec -w / postgresdb bash -c '
+                set -xeu
                 for f in /creaBDD.sql /vuesBDD.sql /fonctions_triggers.sql /data-depts-communes.sql /data.sql
                   do echo run "$f"
                   psql -U sae -d postgres -f "$f"
                 done
               '
+              ../base_imgs/copy.bash
+
           EOF
