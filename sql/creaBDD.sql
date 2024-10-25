@@ -179,7 +179,7 @@ create table _spectacle(
         constraint spectacle_inherits_offre references _offre(id_offre),
     indication_duree interval not null,
     capacite_acceuil int not null
-);
+); 
 
 create table _parcattraction(
     id_parcattraction integer
