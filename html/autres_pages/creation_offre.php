@@ -31,7 +31,7 @@ function insert_image(PDO $pdo, array $img)
 
     $filename = __DIR__ . "/../images_utilisateur/$id_image";
     move_uploaded_file($img['tmp_name'], $filename);
-
+    echo "Moved file to $filename";
     return [$filename, $id_image];
 }
 
