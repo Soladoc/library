@@ -36,11 +36,11 @@ function insert_image(PDO $pdo, array $img)
 }
 
 if ($type_offre && $_POST) {
-?>
+/*?>
 <pre><?= htmlspecialchars(print_r($_GET, true)) ?></pre>
 <pre><?= htmlspecialchars(print_r($_POST, true)) ?></pre>
 <pre><?= htmlspecialchars(print_r($_FILES, true)) ?></pre>
-<?php
+<?php*/
     // Conserve les images uploadées durant cette transaction pour les supprimer en cas d'erreur. Comme ça on ne pollue pas le dossier.
     $uploaded_files = [];
     try {
