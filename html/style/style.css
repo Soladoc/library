@@ -659,3 +659,9 @@ a {
 #bloc_siren {
     display: block;
 }
+
+@media (max-width: 767px) {
+    .social-links {
+        display: none !important;
+    }
+}
