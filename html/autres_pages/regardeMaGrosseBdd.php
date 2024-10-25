@@ -63,7 +63,7 @@ if (isset($_GET['table'])) {
                 <form action="regardeMaGrosseBdd.php" method="get" enctype="multipart/form-data">
 
                     <br>
-                    <div class="champ">
+                    <div class="champ"> 
                         <p>donne le nom de la table </p>
                         <input type="text" placeholder="" id="table" name="table" required>
                     </div>
