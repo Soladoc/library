@@ -24,8 +24,10 @@
 <body>
     <?php require 'component/header.php' ?>
     <main>
+        
         <h1>Accueil Professionnel</h1>
-
+        <a class="btn-more-info" href="/autres_pages/choix_categorie_creation_offre.php">Créer une offre</a>
+        
         <h3><?php echo $nb_offre ?> offres</h3>
         <section class="online-offers">
             <h2>Mes offres en ligne</h2>
