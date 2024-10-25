@@ -1,60 +1,82 @@
 <?php
-// // Vérifier si l'ID est présent dans l'URL
-// if (isset($_GET['id']) && is_numeric($_GET['id'])) {
-//     $id = $_GET['id'];
+require_once 'db.php';
+// Activer l'affichage des erreurs pour le débogage
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
 
-//     // Connexion à la base de données
-//     $pdo = db_connect();
+// Vérifier si l'ID est présent dans l'URL
+if (isset($_GET['id']) && is_numeric($_GET['id'])) {
+    $id = (int)$_GET['id']; // Cast pour plus de sécurité
 
-//     // Préparer la requête pour récupérer les détails de l'offre
-//     $query = "SELECT * FROM offres WHERE id = :id";
-//     $stmt = $pdo->prepare($query);
-//     $stmt->execute(['id' => $id]);
+    // Connexion à la base de données
+    $pdo = db_connect();
 
-//     // Récupérer les données de l'offre
-//     $offre = $stmt->fetch(PDO::FETCH_ASSOC);
+    // Préparer la requête pour récupérer les détails de l'offre
+    $query = "SELECT * FROM pact._offre WHERE id_offre = :id";
+    $stmt = $pdo->prepare($query);
+    $stmt->execute(['id' => $id]);
 
-//     // Si l'offre est trouvée, afficher ses détails
-//     if ($offre) {
-//         echo '<h3>' . htmlspecialchars($offre['title']) . '</h3>';
-//         echo '<p class="location">' . htmlspecialchars($offre['location']) . '</p>';
-//         echo '<p class="category">Catégorie : ' . htmlspecialchars($offre['category']) . '</p>';
-//         echo '<p class="price">Prix : ' . htmlspecialchars($offre['price']) . '</p>';
-//         echo '<p class="rating">Note : ' . htmlspecialchars($offre['rating']) . ' ★ (' . htmlspecialchars($offre['reviews']) . ' avis)</p>';
-//         echo '<p class="professional">Proposé par : ' . htmlspecialchars($offre['professional']) . '</p>';
-//     } else {
-//         echo 'Aucune offre trouvée avec cet ID.';
-//     }
-// } else {
-//     echo 'ID d\'offre invalide.';
-// }
+    // Récupérer les données de l'offre
+    $offre = $stmt->fetch(PDO::FETCH_ASSOC);
+
+    // Si l'offre est trouvée, afficher ses détails
+    if ($offre) {
+        $titre  = $offre['titre'];  // Assurez-vous que le nom des colonnes correspond à la base de données
+        $description = $offre['description_detaille'];
+        $adresse = $offre['adresse'];
+        $site_web = $offre['url_site_web'];
+        $image_pricipale = $offre['photoprincipale'];
+
+        $query = "SELECT * FROM pact._adresse WHERE id_adresse = :id";
+        $stmt = $pdo->prepare($query);
+        $stmt->execute(['id' => $adresse]);
+        $info_adresse = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        // Vérifier si l'adresse existe
+        if ($info_adresse) {
+            // Construire une chaîne lisible pour l'adresse
+            $numero_voie = $info_adresse['numero_voie'];
+            $complement_numero = $info_adresse['complement_numero'];
+            $nom_voie = $info_adresse['nom_voie'];
+            $localite = $info_adresse['localite'];
+            $code_postal = $info_adresse['commune_code_postal'];
+
+            // Concaténer les informations pour former une adresse complète
+            $adresse_complete = $numero_voie . ' ' . $complement_numero . ' ' . $nom_voie . ', ' . $localite . ', ' . $code_postal;
+
+            // Afficher ou retourner l'adresse complète
+} else {
+    echo 'Adresse introuvable.';
+}
+       
+    } else {
+        echo 'Aucune offre trouvée avec cet ID.';
+    }
+} else {
+    echo 'ID d\'offre invalide.';
+}
+
 ?>
 
-<?php
-    // $pdo = db_connect();
 
-    //  $sql = 'INSERT INTO  pact._changement_etat (id_offre) VALUES (:id_offre)';
-    //  $stmt = $pdo->prepare($sql);
-
-    //  $stmt->bindParam(':id_offre', $_GET['id']);
-?>
 <!DOCTYPE html>
 <html lang="fr">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Détail de l'offre - Parc du Radôme</title>
+    <title>offre : <?php echo $id ?></title>
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
     <script async src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
     <link rel="stylesheet" href="../style/style.css">
 </head>
 
 <body>
-    <?php require 'include/component/header.php' ?>
+    <?php require 'component/header.php' ?>
     <!-- Offer Details -->
     <main>
-        <section class="modif">
+    <section class="modif">
             <div class='online'>
                 <button class="en_ligne">en ligne</button>
                 <button class="hors_ligne">hors ligne</button>
@@ -66,21 +88,22 @@
         </section>
         <section class="offer-details">
             <div class="offer-main-photo">
-                <img src="../images/offre/Radôme1.jpg" alt="Main Photo" class="offer-photo-large">
-                <div class="offer-photo-gallery">
-                    <img src="../images/offre/Radôme2.jpg" alt="Photo 2" class="offer-photo-small">
-                    <img src="../images/offre/Radôme3.jpg" alt="Photo 3" class="offer-photo-small">
-                </div>
+                <img src="../images/offre/<?php echo $image_pricipale ?>.jpg" alt="Main Photo" class="offer-photo-large">
+                <!-- <div class="offer-photo-gallery">
+                     <img src="../images/offre/Radôme2.jpg" alt="Photo 2" class="offer-photo-small">
+                    <img src="../images/offre/Radôme3.jpg" alt="Photo 3" class="offer-photo-small"> 
+                </div> -->
             </div>
 
             <div class="offer-info">
-                <h2>Découverte interactive de la cité des Télécoms</h2>
-                <p class="description">Venez découvrir l'histoire passionnante des télécommunications dans un cadre unique et interactif à Pleumeur-Bodou.</p>
+                <h2><?php echo $titre ?></h2>
+                <p class="description"><?php echo $description ?></p>
                 <div class="offer-status">
                     <!-- <p class="price">Prix : 13-39€</p>
                     <p class="status">Statut : <span class="open">Ouvert</span></p>
                     <p class="rating">Note : ★★★★☆ (4.7/5, 256 avis)</p>
-                    <p class="hours">Horaires : 9h30 - 18h30</p> -->
+                    <p class="hours">Horaires : 9h30 - 18h30</p>
+                    <button class="btn-reserve">Réserver</button> -->
                 </div>
             </div>
         </section>
@@ -90,14 +113,14 @@
             <h3>Emplacement et coordonnées</h3>
             <!-- <div id="map" class="map"></div> -->
             <div class="contact-info">
-                <p><strong>Adresse :</strong> Pleumeur-Bodou (22560), Bretagne, France</p>
-                <p><strong>Site web :</strong> <a href="https://parcduradome.com">https://parcduradome.com</a></p>
+                <p><strong>Adresse :</strong> <?php echo $adresse_complete ?></p>
+                <p><strong>Site web :</strong> <a href="<?php echo $site_web ?>"><?php echo $site_web ?></a></p>
                 <!-- <p><strong>Téléphone :</strong> 02 96 46 63 80</p> -->
             </div>
         </section>
 
-        <!-- User Reviews 
-        <section class="offer-reviews">
+        <!-- User Reviews -->
+        <!-- <section class="offer-reviews">
             <h3>Avis des utilisateurs</h3>
 
              Review Form 
@@ -127,7 +150,7 @@
                 </div>
             </div>
 
-             List of reviews 
+            List of reviews 
             <div class="review-list">
                 <div class="review">
                     <p><strong>Jean Dupont</strong> - ★★★★★</p>
@@ -138,9 +161,9 @@
                     <p>Une belle visite, mais quelques parties étaient fermées...</p>
                 </div>
             </div>
-        </section>-->
+        </section> -->
     </main>
-    <?php require 'include/component/footer.php' ?>
+    <?php require 'component/footer.php' ?>
 
     <script>
     // // OpenStreetMap Integration
