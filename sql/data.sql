@@ -21,7 +21,7 @@ insert into _identite default
             id_identite
 ), adresse as (
 insert into _adresse(nom_voie, commune_code_insee, commune_code_postal)
-        values ('aaaaaaaaaaaaaaaaaaa', '1001', '1400')
+        values ('Rue de l''église', '1001', '1400')
     returning
         id_adresse
 ), professionnel as (
