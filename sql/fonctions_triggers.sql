@@ -96,7 +96,7 @@ begin
   return query select * from offres_en_ligne;
   drop view _offres;
   drop table offres_en_ligne;
-end;
+end; 
 $$ language 'plpgsql';
 create or replace function nb_offres_hors_ligne(id_pro_cherche integer) returns table (id_offre integer,
   titre varchar(255),
