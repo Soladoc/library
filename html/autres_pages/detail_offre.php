@@ -22,7 +22,10 @@ if (isset($_GET['id']) && is_numeric($_GET['id'])) {
         $description = $offre['description_detaille'];
         $adresse = $offre['adresse'];
         $site_web = $offre['url_site_web'];
-        $image_pricipale = $offre['photoprincipale'];
+        
+        $stmt = $pdo->prepare('SELECT * from _image where id_image = ?');
+        $stmt->execute([$offre['photoprincipale']]);
+        $image_pricipale = $stmt->fetch(PDO::FETCH_ASSOC);
 
         $query = "SELECT * FROM pact._adresse WHERE id_adresse = :id";
         $stmt = $pdo->prepare($query);
@@ -74,7 +77,7 @@ if (isset($_GET['id']) && is_numeric($_GET['id'])) {
     <main>
         <section class="offer-details">
             <div class="offer-main-photo">
-                <img src="../images/offre/<?php echo $image_pricipale ?>.jpg" alt="Main Photo" class="offer-photo-large">
+                <img src="/images_utilisateur/<?= $image_pricipale['id_image'] ?>" alt="Main Photo" class="offer-photo-large">
                 <!-- <div class="offer-photo-gallery">
                      <img src="../images/offre/Radôme2.jpg" alt="Photo 2" class="offer-photo-small">
                     <img src="../images/offre/Radôme3.jpg" alt="Photo 3" class="offer-photo-small"> 
