@@ -37,20 +37,18 @@ insert into _image(legende, taille, mime_type)
     returning
         id_image
 ), offre as (
-    insert into _offre(titre, resume, description_detaille, url_site_web, adresse, id_signalable, id_professionnel, photoprincipale)
+insert into _offre(titre, resume, description_detaille, url_site_web, adresse, id_signalable, id_professionnel, photoprincipale)
         values ('barraque à frites', 'aaaaaaaaaaa', 'cest une barraque à frite', 'blabla.fr',(table adresse),
 (table signalable),
-(table professionnel),
-1)
-)
-insert into _gallerie(id_offre, id_image)
-values
-    ((table offre), 2);
-    ((table offre), 3);
+(table professionnel), 1)
+    returning
+        id_offre)
+    insert into _gallerie(id_offre, id_image)
+        values ((table offre), 2),
+((table offre), 3);
 
 -- Compte pro
-insert into
-    pro_public (email, mdp_hash, nom, prenom, telephone, denomination)
-values
-    ('a.b@gmail.com', '$2y$10$EGLHZkQPfzunBskmjGlv0eTVbF8uot3J6R/W76TIjUw33xSYadike', 'ALl', 'Everyone', '0123456789', 'JeSuisPublic');
+insert into pro_public(email, mdp_hash, nom, prenom, telephone, denomination)
+    values ('a.b@gmail.com', '$2y$10$EGLHZkQPfzunBskmjGlv0eTVbF8uot3J6R/W76TIjUw33xSYadike', 'ALl', 'Everyone', '0123456789', 'JeSuisPublic');
+
 -- mdp: toto
