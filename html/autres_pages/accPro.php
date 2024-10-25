@@ -34,7 +34,7 @@
             <div class="offer-list">
                 <!-- Offre en ligne 1 -->
                  <?php
-                 $stmt = $pdo->prepare('select pact.nb_offres_en_ligne(:id_professionnel)');
+                 $stmt = $pdo->prepare('select pact.nb_offres_en_ligne(:id_professionnel::integer)');
                  $stmt->execute([':id_professionnel' => intval($_SESSION['id'])]);
                  $liste_offre_en_ligne = $stmt;
                  while ($offre = $liste_offre_en_ligne->fetch(PDO::FETCH_ASSOC)) {
@@ -44,16 +44,16 @@
                         <h3><?php echo $offre['titre']; ?></h3>
                         <p class="location"><?php echo $offre['localisation']; ?></p>
                         <p class="category"><?php
-                            $stmtCat = $pdo->prepare('select pact.category(:id_offre)');
+                            $stmtCat = $pdo->prepare('select pact.categorie(:id_offre::integer)');
                             $stmtCat->execute([':id_offre' => $offre['id'].T_INT_CAST]);
                             echo $stmtCat->fetchColumn();
                         ?></p>
                         <p class="rating">Note : <?php
-                            $stmtRating = $pdo->prepare('select pact.moyenne(:id_offre)');
+                            $stmtRating = $pdo->prepare('select pact.moyenne(:id_offre::integer)');
                             $stmtRating->execute([':id_offre' => $offre['id'].T_INT_CAST]);
                             echo $stmtRating->fetchColumn();
                         ?>/5 ★ (<?php
-                            $stmtCount = $pdo->prepare('SELECT COUNT(*) FROM pact.avis WHERE offre = :id_offre');
+                            $stmtCount = $pdo->prepare('SELECT COUNT(*) FROM pact.avis WHERE offre = :id_offre::integer');
                             $stmtCount->execute([':id_offre' => $offre['id'].T_INT_CAST]);
                             echo $stmtCount->fetchColumn();
                         ?> avis)</p>
@@ -84,7 +84,7 @@
 
             <div class="offer-carousel">
             <?php
-                $stmt = $pdo->prepare('select pact.nb_offres_hors_ligne(:id_professionnel)');
+                $stmt = $pdo->prepare('select pact.nb_offres_hors_ligne(:id_professionnel::integer)');
                 $stmt->execute([':id_professionnel' => intval($_SESSION['id'])]);
                 $liste_offre_hors_ligne = $stmt;
                 while ($offre = $liste_offre_hors_ligne->fetch()) {
@@ -93,10 +93,10 @@
                         <img src="<?php $offre[8] ?>" alt="Découverte interactive de la cité des Télécoms">
                         <h3><?php echo $offre[1] ?></h3>
                         <p class="location"><?php $offre[7] ?></p>
-                        <p class="category"><?php $stmt = $pdo->prepare('select pact.category(:id_offre)');
+                        <p class="category"><?php $stmt = $pdo->prepare('select pact.categorie(:id_offre::integer)');
                         $stmt->execute([':id_offre' => $offre[0]]);
                         echo $stmt?></p>
-                        <p class="rating">Note : <?php $stmt = $pdo->prepare('select pact.moyenne(:id_offre)');
+                        <p class="rating">Note : <?php $stmt = $pdo->prepare('select pact.moyenne(:id_offre::integer)');
                         $stmt->execute([':id_offre' => $offre[0].T_INT_CAST]);
                         echo $stmt?>/5 ★ (<?php $stmt = $pdo->prepare('select count(*) from pact.avis where offre=:id_offre');
                         $stmt->execute([':id_offre' => $offre[0].T_INT_CAST]);
