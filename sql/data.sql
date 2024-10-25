@@ -45,6 +45,6 @@ insert into _image(legende, taille, mime_type)
 insert into
     pro_public (email, mdp_hash, nom, prenom, telephone)
 values
-    ("a.b@gmail.com", "$2y$10$EGLHZkQPfzunBskmjGlv0eTVbF8uot3J6R/W76TIjUw33xSYadike", "ALl", "Everyone", "0123456789");
+    ('a.b@gmail.com', '$2y$10$EGLHZkQPfzunBskmjGlv0eTVbF8uot3J6R/W76TIjUw33xSYadike', 'ALl', 'Everyone', '0123456789');
 -- mdp: toto
 
