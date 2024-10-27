@@ -1,7 +1,6 @@
 <?php
 require_once 'db.php';
-$pdo = db_connect();
-?>
+$pdo = db_connect() ?>
 
 <!DOCTYPE html>
 <html lang="fr">

@@ -9,10 +9,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Récupérer et valider les données du formulaire
     $titre = $_POST['titre'];
     $resume = $_POST['resume'];
-    $description_detaille = $_POST['description_detaille'];
+    $description_detaillee = $_POST['description_detaillee'];
     $url_site_web = $_POST['url_site_web'];
     $adresse = (int)$_POST['adresse'];
-    $photoprincipale = (int)$_POST['photoprincipale'];
+    $id_image_principale = (int)$_POST['id_image_principale'];
     $abonnement = $_POST['abonnement'];
     $id_signalable = (int)$_POST['id_signalable'];
     $id_professionnel = (int)$_POST['id_professionnel'];
@@ -22,9 +22,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     // Insérer l'offre dans la base de données
     $sql = "INSERT INTO pact._offre (
-                titre, resume, description_detaille, url_site_web, adresse, photoprincipale, abonnement, id_signalable, id_professionnel
+                titre, resume, description_detaillee, url_site_web, adresse, id_image_principale, abonnement, id_signalable, id_professionnel
             ) VALUES (
-                :titre, :resume, :description_detaille, :url_site_web, :adresse, :photoprincipale, :abonnement, :id_signalable, :id_professionnel
+                :titre, :resume, :description_detaillee, :url_site_web, :adresse, :id_image_principale, :abonnement, :id_signalable, :id_professionnel
             )";
     
     $stmt = $pdo->prepare($sql);
@@ -34,10 +34,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $stmt->execute([
             ':titre' => $titre,
             ':resume' => $resume,
-            ':description_detaille' => $description_detaille,
+            ':description_detaillee' => $description_detaillee,
             ':url_site_web' => $url_site_web,
             ':adresse' => $adresse,
-            ':photoprincipale' => $photoprincipale,
+            ':id_image_principale' => $id_image_principale,
             ':abonnement' => $abonnement,
             ':id_signalable' => $id_signalable,
             ':id_professionnel' => $id_professionnel
@@ -62,8 +62,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     <!-- Afficher un message si disponible -->
     <?php if ($message): ?>
-        <p><?php echo htmlspecialchars($message); ?></p>
-    <?php endif; ?>
+        <p><?= htmlspecialchars($message) ?></p>
+    <?php endif ?>
 
     <form action="" method="POST">
         <label for="titre">Titre :</label>
@@ -72,8 +72,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <label for="resume">Résumé :</label>
         <textarea name="resume" id="resume" maxlength="1023" required></textarea><br><br>
 
-        <label for="description_detaille">Description détaillée :</label>
-        <textarea name="description_detaille" id="description_detaille" required></textarea><br><br>
+        <label for="description_detaillee">Description détaillée :</label>
+        <textarea name="description_detaillee" id="description_detaillee" required></textarea><br><br>
 
         <label for="url_site_web">URL du site web :</label>
         <input type="url" name="url_site_web" id="url_site_web" maxlength="2047"><br><br>
@@ -81,8 +81,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <label for="adresse">ID Adresse :</label>
         <input type="number" name="adresse" id="adresse" required><br><br>
 
-        <label for="photoprincipale">ID Photo principale :</label>
-        <input type="number" name="photoprincipale" id="photoprincipale" required><br><br>
+        <label for="id_image_principale">ID Photo principale :</label>
+        <input type="number" name="id_image_principale" id="id_image_principale" required><br><br>
 
         <label for="abonnement">Abonnement :</label>
         <input type="text" name="abonnement" id="abonnement" maxlength="63" required><br><br>

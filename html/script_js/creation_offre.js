@@ -12,7 +12,7 @@ document.addEventListener('DOMContentLoaded', () => {
     /** @type {HTMLInputElement} */
     const montant_tarif = document.getElementById('montant-tarif');
     /** @type {HTMLInputElement} */
-    const photo_principale = document.getElementById('photo-principale');
+    const id_image_principale = document.getElementById('photo-principale');
     const photo_principale_preview = document.getElementById('photo-principale-preview');
     const gallerie = document.getElementById('gallerie');
     const gallerie_preview = document.getElementById('gallerie-preview');
@@ -26,7 +26,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     button_add_tarif.addEventListener('click', () => add_tarif_tr(nom_tarif.value, montant_tarif.valueAsNumber));
 
-    photo_principale.addEventListener('change', () => preview_image(photo_principale, photo_principale_preview));
+    id_image_principale.addEventListener('change', () => preview_image(id_image_principale, photo_principale_preview));
 
     gallerie.addEventListener('change', () => preview_image(gallerie, gallerie_preview));
 

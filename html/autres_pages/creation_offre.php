@@ -4,12 +4,12 @@ session_start();
 require_once 'db.php';
 require_once 'connexion.php';
 
-// $id_pro = exiger_connecte_pro();
-$id_pro = 1;
+// $ID_PRO = exiger_connecte_pro();
+$ID_PRO = 1;
 
 const TYPE_OFFRE_AFFICHABLE = [
     'spectacle' => 'un spectacle',
-    'parc-attraction' => "un parc d'attraction",
+    'parc-attraction' => "un parc d'attractions",
     'visite' => 'une visite',
     'restauration' => 'un restaurant',
     'activite' => 'une activité',
@@ -36,14 +36,15 @@ function insert_image(PDO $pdo, array $img)
 }
 
 if ($type_offre && $_POST) {
-/*?>
-<pre><?= htmlspecialchars(print_r($_GET, true)) ?></pre>
-<pre><?= htmlspecialchars(print_r($_POST, true)) ?></pre>
-<pre><?= htmlspecialchars(print_r($_FILES, true)) ?></pre>
-<?php*/
+    /*?>
+    <pre><?= htmlspecialchars(print_r($_GET, true)) ?></pre>
+    <pre><?= htmlspecialchars(print_r($_POST, true)) ?></pre>
+    <pre><?= htmlspecialchars(print_r($_FILES, true)) ?></pre>
+    <?php*/
     // Conserve les images uploadées durant cette transaction pour les supprimer en cas d'erreur. Comme ça on ne pollue pas le dossier.
     $uploaded_files = [];
-    try {
+    transaction(function () {
+        global $ID_PRO;
         $pdo = db_connect();
         notfalse($pdo->beginTransaction());
 
@@ -51,7 +52,7 @@ if ($type_offre && $_POST) {
         // todo: il faut un code postal avec (car une commune peut avoir plusieurs codes postaux)
         $stmt = notfalse($pdo->prepare('select code_insee, code_postal from pact._commune where nom=?'));
         notfalse($stmt->execute([$_POST['adresse']['commune']]));
-        $commune = notfalse($stmt->fetch(PDO::FETCH_ASSOC));
+        $commune = notfalse($stmt->fetch());
 
         // Insérer l'adresse
         // todo: adresses localisées
@@ -69,7 +70,7 @@ if ($type_offre && $_POST) {
         $id_adresse = notfalse($stmt->fetchColumn());
 
         // Insérer la gallerie la photo principale
-        [$uploaded_files[], $id_image_photo_principale] = insert_image($pdo, $_FILES['photo_principale']);
+        [$uploaded_files[], $id_image_photo_principale] = insert_image($pdo, $_FILES['id_image_principale']);
 
         // Insérer le signalable
         $stmt = notfalse($pdo->prepare('insert into pact._signalable default values returning id_signalable'));
@@ -77,7 +78,7 @@ if ($type_offre && $_POST) {
         $id_signalable = notfalse($stmt->fetchColumn());
 
         // Insérer l'offre
-        $stmt = notfalse($pdo->prepare('INSERT INTO pact._offre (titre, resume, description_detaille, url_site_web, adresse, photoprincipale, abonnement, id_signalable, id_professionnel) VALUES (?,?,?,?,?,?,?,?,?) returning id_offre'));
+        $stmt = notfalse($pdo->prepare('INSERT INTO pact._offre (titre, resume, description_detaillee, url_site_web, adresse, id_image_principale, abonnement, id_signalable, id_professionnel) VALUES (?,?,?,?,?,?,?,?,?) returning id_offre'));
         notfalse($stmt->execute([
             $_POST['titre'],
             $_POST['resume'],
@@ -85,9 +86,9 @@ if ($type_offre && $_POST) {
             $_POST['site'] ?? '',
             $id_adresse,
             $id_image_photo_principale,
-            'gratuit', // todo: standard et premium
+            'gratuit',  // todo: standard et premium
             $id_signalable,
-            $id_pro
+            $ID_PRO
         ]));
         $id_offre = notfalse($stmt->fetchColumn());
 
@@ -107,13 +108,12 @@ if ($type_offre && $_POST) {
         }
 
         $pdo->commit();
-    } catch (Throwable $e) {
-        notfalse($pdo->rollBack());
-        throw $e;
+    }, function () {
+        global $uploaded_files;
         foreach ($uploaded_files as $file) {
             unlink($file);
         }
-    }
+    });
 } else {
 ?>
 <!DOCTYPE html>
@@ -156,7 +156,7 @@ if ($type_offre && $_POST) {
                 <p>
                     <?php
                     require_once 'component/input_address.php';
-                    put_input_address('form-offre');
+                    put_input_address('form-offre')
                     ?>
                 </p>
                 <label for="tel">Tel</label>
@@ -171,7 +171,7 @@ if ($type_offre && $_POST) {
         </section>
         <section>
             <h2>Photo principale</h2>
-            <input form="form-offre" type="file" id="photo-principale" name="photo_principale" accept="image/*" required>
+            <input form="form-offre" type="file" id="photo-principale" name="id_image_principale" accept="image/*" required>
             <div id="photo-principale-preview"></div>
         </section>
         <section id="tarif">

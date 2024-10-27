@@ -1,6 +1,5 @@
 <?php 
-require_once 'db.php';
-?>
+require_once 'db.php' ?>
 
 
 <!DOCTYPE html>
@@ -55,8 +54,8 @@ require_once 'db.php';
                         $resume = $offre['resume'];
 
                         $stmt3 = $pdo->prepare('SELECT * from pact._image where id_image = ?');
-                        $stmt3->execute([$offre['photoprincipale']]);
-                        $image_pricipale = $stmt3->fetch(PDO::FETCH_ASSOC);
+                        $stmt3->execute([$offre['id_image_principale']]);
+                        $image_pricipale = $stmt3->fetch();
                         // $categorie = $offre['category'];
                         // // Calculer si l'offre ferme bientôt (exemple si elle ferme dans moins d'une heure)
                         // $current_time = new DateTime();  // Heure actuelle
@@ -72,7 +71,7 @@ require_once 'db.php';
                         $requete = "SELECT * FROM pact._adresse WHERE id_adresse = :id";
                         $stmt2 = $pdo->prepare($requete);
                         $stmt2->execute(['id' => $adresse]);
-                        $info_adresse = $stmt2->fetch(PDO::FETCH_ASSOC);
+                        $info_adresse = $stmt2->fetch();
                 
 
 
@@ -97,11 +96,11 @@ require_once 'db.php';
 
                 <div class="offer-card">
                 <img src="/images_utilisateur/<?= $image_pricipale['id_image'] ?>" alt="Main Photo" class="offer-photo-large">
-                    <h3><?php echo $titre ?>  </h3>
-                    <p class="location"><?php echo $adresse_complete ?></p>
-                    <p><?php echo $resume ?></p>
+                    <h3><?= $titre ?>  </h3>
+                    <p class="location"><?= $adresse_complete ?></p>
+                    <p><?= $resume ?></p>
                     <!-- <p class="category"><?php //echo $categorie ?></p> -->
-                    <a href="https://413.ventsdouest.dev/autres_pages/detail_offre.php?id=<?php echo $id_offre ?>">
+                    <a href="/autres_pages/detail_offre.php?id=<?= $id_offre ?>">
                         <button class="btn-more-info">En savoir plus</button>
                     </a>
                 </div>

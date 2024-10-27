@@ -14,23 +14,23 @@ if (isset($_GET['id']) && is_numeric($_GET['id'])) {
     $stmt->execute(['id' => $id]);
 
     // Récupérer les données de l'offre
-    $offre = $stmt->fetch(PDO::FETCH_ASSOC);
+    $offre = $stmt->fetch();
 
     // Si l'offre est trouvée, afficher ses détails
     if ($offre) {
         $titre  = $offre['titre'];  // Assurez-vous que le nom des colonnes correspond à la base de données
-        $description = $offre['description_detaille'];
+        $description = $offre['description_detaillee'];
         $adresse = $offre['adresse'];
         $site_web = $offre['url_site_web'];
         
         $stmt = $pdo->prepare('SELECT * from pact._image where id_image = ?');
-        $stmt->execute([$offre['photoprincipale']]);
-        $image_pricipale = $stmt->fetch(PDO::FETCH_ASSOC);
+        $stmt->execute([$offre['id_image_principale']]);
+        $image_pricipale = $stmt->fetch();
 
         $query = "SELECT * FROM pact._adresse WHERE id_adresse = :id";
         $stmt = $pdo->prepare($query);
         $stmt->execute(['id' => $adresse]);
-        $info_adresse = $stmt->fetch(PDO::FETCH_ASSOC);
+        $info_adresse = $stmt->fetch();
 
         // Vérifier si l'adresse existe
         if ($info_adresse) {
@@ -65,7 +65,7 @@ if (isset($_GET['id']) && is_numeric($_GET['id'])) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>offre : <?php echo $id ?></title>
+    <title>offre : <?= $id ?></title>
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
     <script async src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
     <link rel="stylesheet" href="../style/style.css">
@@ -85,8 +85,8 @@ if (isset($_GET['id']) && is_numeric($_GET['id'])) {
             </div>
 
             <div class="offer-info">
-                <h2><?php echo $titre ?></h2>
-                <p class="description"><?php echo $description ?></p>
+                <h2><?= $titre ?></h2>
+                <p class="description"><?= $description ?></p>
                 <div class="offer-status">
                     <!-- <p class="price">Prix : 13-39€</p>
                     <p class="status">Statut : <span class="open">Ouvert</span></p>
@@ -102,8 +102,8 @@ if (isset($_GET['id']) && is_numeric($_GET['id'])) {
             <h3>Emplacement et coordonnées</h3>
             <!-- <div id="map" class="map"></div> -->
             <div class="contact-info">
-                <p><strong>Adresse :</strong> <?php echo $adresse_complete ?></p>
-                <p><strong>Site web :</strong> <a href="<?php echo $site_web ?>"><?php echo $site_web ?></a></p>
+                <p><strong>Adresse :</strong> <?= $adresse_complete ?></p>
+                <p><strong>Site web :</strong> <a href="<?= $site_web ?>"><?= $site_web ?></a></p>
                 <!-- <p><strong>Téléphone :</strong> 02 96 46 63 80</p> -->
             </div>
         </section>

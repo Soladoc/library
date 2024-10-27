@@ -25,7 +25,7 @@ if (empty($username) || empty($password)) {
 $stmt = $pdo->prepare('SELECT email, mdp_hash, existe FROM pact.membres WHERE email = :email');
 $stmt->bindValue(':email', $username, PDO::PARAM_STR);
 $stmt->execute();
-$user = $stmt->fetch(PDO::FETCH_ASSOC);
+$user = $stmt->fetch();
 
 if (!empty($user) && $user['existe'] == 1) {
     $hashed_password = $user['mdp_hash'];
@@ -45,7 +45,7 @@ if (!empty($user) && $user['existe'] == 1) {
     $stmt = $pdo->prepare('SELECT email, mdp_hash, existe, id_professionnel FROM pact.tous_comptes_pro WHERE email = :email');
     $stmt->bindValue(':email', $username, PDO::PARAM_STR);
     $stmt->execute();
-    $user = $stmt->fetch(PDO::FETCH_ASSOC);
+    $user = $stmt->fetch();
 
     if (!empty($user) && $user['existe'] == 1) {
         $hashed_password = $user['mdp_hash'];
@@ -67,5 +67,4 @@ if (!empty($user) && $user['existe'] == 1) {
 }
 
 $stmt = null;
-$pdo = null;
-?>
+$pdo = null ?>

@@ -1,8 +1,0 @@
-{
-  "pgFormatter.configFile": "",
-  "pgFormatter.functionCase": "lowercase",
-  "pgFormatter.keywordCase": "lowercase",
-  "pgFormatter.typeCase": "lowercase",
-  "pgFormatter.spaces": 4,
-  "pgFormatter.wrapLimit": 0
-}

@@ -5,8 +5,7 @@ function put_input_address(?string $form_id = null, string $name = 'adresse')
 {
     $form_attr = $form_id === null ? '' : "form=\"$form_id\"";
     $pdo = db_connect();
-    $communes = $pdo->query('select code_insee, code_postal, nom from pact._commune fetch first 1000 rows only', PDO::FETCH_ASSOC)->fetchAll();
-?>
+    $communes = $pdo->query('select code_insee, code_postal, nom from pact._commune fetch first 1000 rows only', PDO::FETCH_ASSOC)->fetchAll() ?>
 <details>
     <datalist id="datalist-input-address-communes"><?php
     foreach ($communes as $c) {

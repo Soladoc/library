@@ -12,7 +12,7 @@
 //     $stmt->execute(['id' => $id]);
 
 //     // Récupérer les données de l'offre
-//     $offre = $stmt->fetch(PDO::FETCH_ASSOC);
+//     $offre = $stmt->fetch();
 
 //     // Si l'offre est trouvée, afficher ses détails
 //     if ($offre) {
@@ -48,13 +48,12 @@
 <?php
 const TYPE_OFFRE_AFFICHABLE = [
     'spectacle' => 'un spectacle',
-    'parc_attraction' => "un parc d'attraction",
+    'parc_attraction' => "un parc d'attractions",
     'visite' => 'une visite',
     'restauration' => 'une restauration',
     'activite' => 'une activité',
     '' => 'une offre'
-];
-?>
+] ?>
 
 <body>
     <?php require 'component/header.php' ?>
