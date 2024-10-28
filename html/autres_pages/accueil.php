@@ -47,13 +47,13 @@ require_once 'db.php' ?>
                         // $current_time = new DateTime();  // Heure actuelle
                         // $closing_time = new DateTime($offre['closing_time']);
                         // $closing_soon = ($closing_time > $current_time && $closing_time->diff($current_time)->h < 1);
-                        $id_offre = $offre['id_offre'];
+                        $id_offre = $offre['id'];
                         $titre = $offre['titre'];
-                        $adresse=  $offre['adresse'];
+                        $id_adresse=  $offre['id_adresse'];
                         $id_professionnel =  $offre['id_professionnel'];
                         $resume = $offre['resume'];
 
-                        $stmt3 = $pdo->prepare('SELECT * from pact._image where id_image = ?');
+                        $stmt3 = $pdo->prepare('SELECT * from pact._image where id = ?');
                         $stmt3->execute([$offre['id_image_principale']]);
                         $image_pricipale = $stmt3->fetch();
                         // $categorie = $offre['category'];
@@ -68,9 +68,9 @@ require_once 'db.php' ?>
                         // }
 
                         // Lien vers plus d'infos sur l'offre (mettre l'URL correcte dans href)
-                        $requete = "SELECT * FROM pact._adresse WHERE id_adresse = :id";
+                        $requete = "SELECT * FROM pact._adresse WHERE id = ?";
                         $stmt2 = $pdo->prepare($requete);
-                        $stmt2->execute(['id' => $adresse]);
+                        $stmt2->execute([$id_adresse]);
                         $info_adresse = $stmt2->fetch();
                 
 
@@ -95,7 +95,7 @@ require_once 'db.php' ?>
 
 
                 <div class="offer-card">
-                <img src="/images_utilisateur/<?= $image_pricipale['id_image'] ?>" alt="Main Photo" class="offer-photo-large">
+                <img src="/images_utilisateur/<?= $image_pricipale['id'] ?>" alt="Main Photo" class="offer-photo-large">
                     <h3><?= $titre ?>  </h3>
                     <p class="location"><?= $adresse_complete ?></p>
                     <p><?= $resume ?></p>

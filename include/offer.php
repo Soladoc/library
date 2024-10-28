@@ -15,8 +15,8 @@ function offer_put_card_pro(array $offer)
     <h3><?= $offer['titre'] ?></h3>
     <p class="location"><?= $offer['localisation'] ?></p>
     <p class="category"><?= $offer['categorie'] ?></p>
-    <p class="rating">Note : <?= $offer['note_moyenne'] ?>/5 ★ (<?= query_offres_nb_avis($offer['id_offre']) ?> avis)</p>
-    <a href="/autres_pages/detail_offre_pro.php?id=<?= $offer['id_offre'] ?>">
+    <p class="rating">Note : <?= $offer['note_moyenne'] ?>/5 ★ (<?= query_offres_nb_avis($offer['id']) ?> avis)</p>
+    <a href="/autres_pages/detail_offre_pro.php?id=<?= $offer['id'] ?>">
         <button class="btn-more-info">En savoir plus</button>
     </a>
 </div>

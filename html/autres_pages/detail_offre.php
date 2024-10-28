@@ -9,9 +9,9 @@ if (isset($_GET['id']) && is_numeric($_GET['id'])) {
     $pdo = db_connect();
 
     // Préparer la requête pour récupérer les détails de l'offre
-    $query = "SELECT * FROM pact._offre WHERE id_offre = :id";
+    $query = "SELECT * FROM pact._offre WHERE id = ?";
     $stmt = $pdo->prepare($query);
-    $stmt->execute(['id' => $id]);
+    $stmt->execute([$id]);
 
     // Récupérer les données de l'offre
     $offre = $stmt->fetch();
@@ -20,16 +20,16 @@ if (isset($_GET['id']) && is_numeric($_GET['id'])) {
     if ($offre) {
         $titre  = $offre['titre'];  // Assurez-vous que le nom des colonnes correspond à la base de données
         $description = $offre['description_detaillee'];
-        $adresse = $offre['adresse'];
+        $adresse = $offre['id_adresse'];
         $site_web = $offre['url_site_web'];
         
-        $stmt = $pdo->prepare('SELECT * from pact._image where id_image = ?');
+        $stmt = $pdo->prepare('SELECT * from pact._image where id = ?');
         $stmt->execute([$offre['id_image_principale']]);
         $image_pricipale = $stmt->fetch();
 
-        $query = "SELECT * FROM pact._adresse WHERE id_adresse = :id";
+        $query = "SELECT * FROM pact._adresse WHERE id = ?";
         $stmt = $pdo->prepare($query);
-        $stmt->execute(['id' => $adresse]);
+        $stmt->execute($adresse);
         $info_adresse = $stmt->fetch();
 
         // Vérifier si l'adresse existe

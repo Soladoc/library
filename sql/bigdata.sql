@@ -3,7 +3,7 @@ begin;
 set schema 'pact';
 
 insert into
-    _departement(id_departement, nom)
+    _departement(numero, nom)
 values
     ('1', 'Ain'),
     ('2', 'Aisne'),
@@ -107,7 +107,7 @@ values
     ('974', 'La Réunion'),
     ('976', 'Mayotte');
 
-insert into _commune (id_commune,id_departement,nom) 
+insert into _commune (code_insee, numero_departement, nom) 
 VALUES
   ('10002','10','Ailleville'),
   ('10003','10','Aix-Villemaur-Pâlis'),
@@ -36033,7 +36033,7 @@ VALUES
   ('97616','976','Sada'),
   ('97617','976','Tsingoni');
 
-insert into _code_postal (id_commune,code_postal) 
+insert into _code_postal (code_insee_commune, code_postal) 
 VALUES
   ('22344','22340'),
   ('44126','44770'),

@@ -2,14 +2,14 @@
 require_once 'db.php';
 if (isset($_POST['motdepasse'])) {
     $pdo = db_connect();
-    $stmt = $pdo->prepare('SELECT COUNT(*) FROM pact.membres WHERE pseudo = :pseudo');
+    $stmt = $pdo->prepare('SELECT COUNT(*) FROM pact.membre WHERE pseudo = :pseudo');
     $stmt->execute(['pseudo' => $_POST['pseudo']]);
     $count = $stmt->fetchColumn();
     if ($count > 0) {
         echo 'Ce pseudo est déjà utilisé.';
         exit();
     }
-    $stmt = $pdo->prepare('SELECT COUNT(*) FROM pact.membres WHERE email = :email');
+    $stmt = $pdo->prepare('SELECT COUNT(*) FROM pact.membre WHERE email = :email');
     $stmt->execute(['email' => $_POST['email']]);
     $count = $stmt->fetchColumn();
     if ($count > 0) {
@@ -19,7 +19,7 @@ if (isset($_POST['motdepasse'])) {
 
     $mdp_hash = password_hash($_POST['motdepasse'], PASSWORD_DEFAULT);
 
-    $stmt = $pdo->prepare('INSERT INTO pact.membres (pseudo, nom, prenom, telephone, email, mdp_hash) VALUES (:pseudo, :nom, :prenom, :telephone, :email, :mdp_hash)');
+    $stmt = $pdo->prepare('INSERT INTO pact.membre (pseudo, nom, prenom, telephone, email, mdp_hash) VALUES (:pseudo, :nom, :prenom, :telephone, :email, :mdp_hash)');
 
     $stmt->bindParam(':pseudo', $_POST['pseudo']);
     $stmt->bindParam(':email', $_POST['email']);

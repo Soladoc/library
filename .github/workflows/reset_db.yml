@@ -29,7 +29,7 @@ jobs:
               done
               sudo docker exec -w / postgresdb bash -c '
                 set -xeu
-                for f in /creaBDD.sql /vuesBDD.sql /triggers.sql /fonctions.sql /bigdata.sql /data.sql
+                for f in /creaBDD.sql /fonctions.sql /vuesBDD.sql /triggers.sql /bigdata.sql /data.sql
                   do echo run "$f"
                   psql -U sae -d postgres -f "$f"
                 done

@@ -22,7 +22,7 @@ if (empty($username) || empty($password)) {
 }
 
 // Préparer et exécuter la requête pour éviter les injections SQL
-$stmt = $pdo->prepare('SELECT email, mdp_hash, existe FROM pact.membres WHERE email = :email');
+$stmt = $pdo->prepare('SELECT email, mdp_hash, existe FROM pact.membre WHERE email = :email');
 $stmt->bindValue(':email', $username, PDO::PARAM_STR);
 $stmt->execute();
 $user = $stmt->fetch();
@@ -42,7 +42,7 @@ if (!empty($user) && $user['existe'] == 1) {
     }
 } else {
     // Vérifier si l'utilisateur existe dans la table professionnel
-    $stmt = $pdo->prepare('SELECT email, mdp_hash, existe, id_professionnel FROM pact.tous_comptes_pro WHERE email = :email');
+    $stmt = $pdo->prepare('SELECT email, mdp_hash, existe, id FROM pact.professionnel WHERE email = :email');
     $stmt->bindValue(':email', $username, PDO::PARAM_STR);
     $stmt->execute();
     $user = $stmt->fetch();
@@ -53,7 +53,7 @@ if (!empty($user) && $user['existe'] == 1) {
             session_regenerate_id(true);
             $_SESSION['username'] = $username;
             $_SESSION['log'] = true;
-            $_SESSION['id'] = $user['id_professionnel'];
+            $_SESSION['id'] = $user['id'];
             header("Location: ../autres_pages/accPro.php");
             exit();
         } else {

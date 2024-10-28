@@ -25,7 +25,7 @@ $type_offre = $_GET['type-offre'] ?? null;
  */
 function insert_image(PDO $pdo, array $img)
 {
-    $stmt = notfalse($pdo->prepare('insert into pact._image (legende, taille, mime_type) values (?,?,?) returning id_image'));
+    $stmt = notfalse($pdo->prepare('insert into pact._image (legende, taille, mime_type) values (?,?,?) returning id'));
     notfalse($stmt->execute(['', $img['size'], $img['type']]));  // todo: legende
     $id_image = $stmt->fetchColumn();
 
@@ -49,14 +49,14 @@ if ($type_offre && $_POST) {
         notfalse($pdo->beginTransaction());
 
         // Récupérer le code de la commune
-        // todo: il faut un code postal avec (car une commune peut avoir plusieurs codes postaux)
-        $stmt = notfalse($pdo->prepare('select code_insee, code_postal from pact._commune where nom=?'));
+        // todo: make this better (by inputting either nom or code postal)
+        $stmt = notfalse($pdo->prepare('select code_insee from pact._commune where nom=?'));
         notfalse($stmt->execute([$_POST['adresse']['commune']]));
-        $commune = notfalse($stmt->fetch());
+        $commune_code_insee = notfalse($stmt->fetchColumn());
 
         // Insérer l'adresse
         // todo: adresses localisées
-        $stmt = notfalse($pdo->prepare('insert into pact._adresse (numero_voie, complement_numero, nom_voie, localite, precision_int, precision_ext, commune_code_insee, commune_code_postal) values (?,?,?,?,?,?,?,?) returning id_adresse'));
+        $stmt = notfalse($pdo->prepare('insert into pact._adresse (numero_voie, complement_numero, nom_voie, localite, precision_int, precision_ext, code_insee_commune) values (?,?,?,?,?,?,?,?) returning id'));
         notfalse($stmt->execute([
             $_POST['adresse']['num_voie'] ?? 0,
             $_POST['adresse']['compl_numero'] ?? '',
@@ -64,8 +64,7 @@ if ($type_offre && $_POST) {
             $_POST['adresse']['localite'] ?? '',
             $_POST['adresse']['precision_int'] ?? '',
             $_POST['adresse']['precision_ext'] ?? '',
-            $commune['code_insee'],
-            $commune['code_postal']
+            $commune_code_insee,
         ]));
         $id_adresse = notfalse($stmt->fetchColumn());
 
@@ -73,12 +72,12 @@ if ($type_offre && $_POST) {
         [$uploaded_files[], $id_image_photo_principale] = insert_image($pdo, $_FILES['id_image_principale']);
 
         // Insérer le signalable
-        $stmt = notfalse($pdo->prepare('insert into pact._signalable default values returning id_signalable'));
+        $stmt = notfalse($pdo->prepare('insert into pact._signalable default values returning id'));
         notfalse($stmt->execute());
         $id_signalable = notfalse($stmt->fetchColumn());
 
         // Insérer l'offre
-        $stmt = notfalse($pdo->prepare('INSERT INTO pact._offre (titre, resume, description_detaillee, url_site_web, adresse, id_image_principale, abonnement, id_signalable, id_professionnel) VALUES (?,?,?,?,?,?,?,?,?) returning id_offre'));
+        $stmt = notfalse($pdo->prepare('INSERT INTO pact._offre (titre, resume, description_detaillee, url_site_web, id_adresse, id_image_principale, libelle_abonnement, id_signalable, id_professionnel) VALUES (?,?,?,?,?,?,?,?,?) returning id'));
         notfalse($stmt->execute([
             $_POST['titre'],
             $_POST['resume'],

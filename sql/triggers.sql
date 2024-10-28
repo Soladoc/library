@@ -4,86 +4,77 @@ set schema 'pact';
  
 set plpgsql.extra_errors to 'all';
 
--- Insère un compte et retourne son id.
-create or replace function insert_compte(new record)
-    returns int
+-- activite -> insert
+create function activite_insert()
+    returns trigger
     as $$
-declare
-    identite int;
-    signalable int;
-    compte int;
 begin
-    insert into pact._identite default
-        values
-        returning
-            id_identite into identite;
-    insert into pact._signalable default
-        values
-        returning
-            id_signalable into signalable;
-    insert into pact._compte(id_compte, id_signalable, email, mdp_hash, nom, prenom, telephone)
-        values (identite, signalable, new.email, new.mdp_hash, new.nom, new.prenom, new.telephone)
-        returning id_compte into compte;
-    return compte;
-end;
+    insert into pact._activite
+        (id, indication_duree, age_requis, prestations_incluses, prestations_non_incluses)
+    values
+        ((select insert_offre(new)), new.indication_duree, new.age_requis, new.prestations_incluses, new.prestations_non_incluses);
+    return new;
+end
 $$
 language 'plpgsql';
 
--- Membre -> Insert
-create or replace function membres_insert()
+create trigger tg_activite_insert
+    instead of insert on activite for each row
+    execute function activite_insert();
+
+-- membre -> insert
+create function membre_insert()
+    returns trigger
+    as $$
+begin
+    insert into pact._membre(id, pseudo)
+        values ((select insert_compte(new)), new.pseudo);
+    return new;
+end
+$$
+language 'plpgsql';
+
+create trigger tg_membre_insert
+    instead of insert on membre for each row
+    execute function membre_insert();
+
+-- pro_prive -> Insert
+create function pro_prive_insert()
     returns trigger
     as $$
 declare
-    compte constant int = insert_compte(new);
+    id_compte constant int = insert_compte(new);
 begin
-    insert into pact._membre(id_membre, pseudo)
-        values (compte, new.pseudo);
+    insert into pact._professionnel(id, denomination)
+        values (id_compte, new.denomination);
+    insert into pact._prive(id, siren)
+        values (id_compte, new.siren);
     return new;
-end;
+end
 $$
 language 'plpgsql';
 
-create or replace trigger tg_membres_insert
-    instead of insert on membres for each row
-    execute function membres_insert();
-
--- Privé -> Insert
-create or replace function pro_prive_insert()
-    returns trigger
-    as $$
-declare
-    compte constant int = insert_compte(new);
-begin
-    insert into pact._professionnel(id_professionnel, denomination)
-        values (compte, new.denomination);
-    insert into pact._prive(id_prive, siren)
-        values (compte, new.siren);
-    return new;
-end;
-$$
-language 'plpgsql';
-
-create or replace trigger tg_pro_prive_insert
+create trigger tg_pro_prive_insert
     instead of insert on pro_prive for each row
     execute function pro_prive_insert();
 
--- Public -> Insert
-create or replace function pro_public_insert()
+-- pro_public -> insert
+create function pro_public_insert()
     returns trigger
     as $$
 declare
-    compte constant int = insert_compte(new);
+    id_compte constant int = insert_compte(new);
 begin
-    insert into pact._professionnel(id_professionnel, denomination)
-        values (compte, new.denomination);
-    insert into pact._public(id_public)
-        values (compte);
+    insert into pact._professionnel(id, denomination)
+        values (id_compte, new.denomination);
+    insert into pact._public(id)
+        values (id_compte);
     return new;
-end;
+end
 $$
 language 'plpgsql';
 
-create or replace trigger tg_pro_public_insert
+create trigger tg_pro_public_insert
     instead of insert on pro_public for each row
     execute function pro_public_insert();
 
