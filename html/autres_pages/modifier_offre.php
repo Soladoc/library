@@ -18,16 +18,26 @@
 //     if ($offre) {
 //         echo '<h3>' . htmlspecialchars($offre['title']) . '</h3>';
 //         echo '<p class="location">' . htmlspecialchars($offre['location']) . '</p>';
-//         echo '<p class="category">Catégorie : ' . htmlspecialchars($offre['category']) . '</p>';
-//         echo '<p class="price">Prix : ' . htmlspecialchars($offre['price']) . '</p>';
-//         echo '<p class="rating">Note : ' . htmlspecialchars($offre['rating']) . ' ★ (' . htmlspecialchars($offre['reviews']) . ' avis)</p>';
-//         echo '<p class="professional">Proposé par : ' . htmlspecialchars($offre['professional']) . '</p>';
+//         echo '<p class="category">Catégorie&nbsp;: ' . htmlspecialchars($offre['category']) . '</p>';
+//         echo '<p class="price">Prix&nbsp;: ' . htmlspecialchars($offre['price']) . '</p>';
+//         echo '<p class="rating">Note&nbsp;: ' . htmlspecialchars($offre['rating']) . ' ★ (' . htmlspecialchars($offre['reviews']) . ' avis)</p>';
+//         echo '<p class="professional">Proposé par&nbsp;: ' . htmlspecialchars($offre['professional']) . '</p>';
 //     } else {
 //         echo 'Aucune offre trouvée avec cet ID.';
 //     }
 // } else {
 //     echo 'ID d\'offre invalide.';
 // }
+
+const TYPE_OFFRE_AFFICHABLE = [
+    'spectacle' => 'un spectacle',
+    'parc_attraction' => "un parc d'attractions",
+    'visite' => 'une visite',
+    'restauration' => 'une restauration',
+    'activite' => 'une activité',
+    '' => 'une offre'
+];
+
 ?>
 
 
@@ -44,16 +54,6 @@
     <link rel="stylesheet" href="../style/creation_offre.css">
     <title>Création d'une offre</title>
 </head>
-
-<?php
-const TYPE_OFFRE_AFFICHABLE = [
-    'spectacle' => 'un spectacle',
-    'parc_attraction' => "un parc d'attractions",
-    'visite' => 'une visite',
-    'restauration' => 'une restauration',
-    'activite' => 'une activité',
-    '' => 'une offre'
-] ?>
 
 <body>
     <?php require 'component/header.php' ?>

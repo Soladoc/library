@@ -2,12 +2,12 @@
 
 require_once 'db.php';
 if (isset($_POST['mdp'])) {
-    print 'Votre nom :' . $_POST['nom'];
-    print 'Votre prenom :' . $_POST['prenom'];
-    print 'Votre numero de telephone :' . $_POST['telephone'];
-    print 'Votre mail :' . $_POST['email'];
-    print 'Votre mot de passe :' . $_POST['mdp'];
-    print 'Votre adresse :' . $_POST['adresse'];
+    print 'Votre nom&nbsp;:' . $_POST['nom'];
+    print 'Votre prenom&nbsp;:' . $_POST['prenom'];
+    print 'Votre numero de telephone&nbsp;:' . $_POST['telephone'];
+    print 'Votre mail&nbsp;:' . $_POST['email'];
+    print 'Votre mot de passe&nbsp;:' . $_POST['mdp'];
+    print 'Votre adresse&nbsp;:' . $_POST['adresse'];
 
     $estprive = $_POST['type'] === "prive"; 
     $mdp_hash = password_hash($_POST['mdp'], PASSWORD_DEFAULT);
@@ -105,42 +105,42 @@ if (isset($_POST['mdp'])) {
                     <br>
                     <!-- Texte avec label -->
                     <div class="champ">
-                        <p>Nom :</p>
-                        <input type="text" id="nom" name="nom" placeholder="Breton" required />
+                        <p>Nom&nbsp;:</p>
+                        <input type="text" id="nom" name="nom" placeholder="Breton" required >
                     </div>
-                    <br />
+                    <br >
                     <div class="champ">
                         <!-- Texte avec label -->
-                        <p>Prenom :</p>
-                        <input type="text" id="prenom" name="prenom" placeholder="Louis" required />
+                        <p>Prenom&nbsp;:</p>
+                        <input type="text" id="prenom" name="prenom" placeholder="Louis" required >
                     </div>
-                    <br />
+                    <br >
                     <div class="champ">
                         <!-- Texte avec label -->
-                        <p>Téléphone :</p>
+                        <p>Téléphone&nbsp;:</p>
                         <input id="telephone" name="telephone" type="tel" placeholder="Format: 0123456789" pattern="[0-9]{10}" maxlength="10" required>
                     </div>
-                    <br />
+                    <br >
                     <div class="champ">
                         <!-- Texte avec label -->
                         <p>Dénomination (raison sociale) *:</p>
-                        <input type="text" id="denomination" name="denomination" placeholder="Amazon" required />
+                        <input type="text" id="denomination" name="denomination" placeholder="Amazon" required >
                     </div>
-                    <br />
+                    <br >
                     <div class="champ">
                         <!-- Email -->
                         <p>Adresse *:</p>
-                        <input type="text" id="adresse" placeholder="22300 1 rue Edouard Branly" name="adresse" />
+                        <input type="text" id="adresse" placeholder="22300 1 rue Edouard Branly" name="adresse" >
                     </div>
-                    <br />
+                    <br >
 
                     <div class="radio_entr">
                         <div>
-                            <input type="radio" id="prive" name="type" value="prive" onclick="gererAffichage()" checked />
+                            <input type="radio" id="prive" name="type" value="prive" onclick="gererAffichage()" checked >
                             <label for="prive" style="font-family:'Tw Cen MT'">Privé</label>
                         </div>
                         <div>
-                            <input type="radio" id="public" name="type" value="public" onclick="gererAffichage()" />
+                            <input type="radio" id="public" name="type" value="public" onclick="gererAffichage()" >
                             <label for="public" style="font-family:'Tw Cen MT'">Public</label>
                         </div>
                     </div>
@@ -148,12 +148,12 @@ if (isset($_POST['mdp'])) {
                     <br>
                     <div class="champ" id="siren">
                         <label>SIREN*:</label>
-                        <input type="text" id="siren" name="siren" placeholder="231 654 988" oninput="formatInput(this)" maxlength="12"/>
+                        <input type="text" id="siren" name="siren" placeholder="231 654 988" oninput="formatInput(this)" maxlength="12">
                     </div>
                     <br>
                     <button type="submit" class="btn-connexion">Créer un compte professionnel</button>
                 </form>
-                <br /><br>
+                <br ><br>
                 <p>Se connecter ?</p>
                 <a href="connexion.php">
                     <button class="btn-creer">Se connecter</button>

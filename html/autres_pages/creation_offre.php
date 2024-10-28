@@ -2,7 +2,7 @@
 session_start();
 
 require_once 'db.php';
-require_once 'connexion.php';
+require_once 'auth.php';
 
 // $ID_PRO = exiger_connecte_pro();
 $ID_PRO = 1;

@@ -6,8 +6,6 @@ set schema 'pact';
 -- todo: insert into tarif: assert that 'gratuit' = (select libelle_abonnement from _offre o where o.id_offre = id_offre)
 -- todo: trigger timestamp offre lmt
 
-create view adresse as table _adresse;
-
 create view offres as
 select
     *,
@@ -57,9 +55,7 @@ select
     *
 from
     _membre
-    join _compte using (id)
-where
-    existe;
+    join _compte using (id);
 
 create view pro_prive as
 select

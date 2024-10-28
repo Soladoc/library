@@ -1,15 +1,11 @@
 <?php
 
-/* todo: mettre les bonnes clés dans $_SESSION */
-
-function connecter_pro(string $email, int $id_pro) {
-    $_SESSION['email'] = $email;
-    $_SESSION['id'] = $id_pro;
+function connecter_pro(int $id_pro) {
+    $_SESSION['id_pro'] = $id_pro;
 }
 
-function connecter_membre(string $email, int $id_membre) {
-    $_SESSION['email'] = $email;
-    $_SESSION['id'] = $id_membre;
+function connecter_membre(int $id_membre) {
+    $_SESSION['id_membre'] = $id_membre;
 }
 
 /**

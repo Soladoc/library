@@ -4,7 +4,6 @@
             <a href="/"><img src="../images/logo_vertical_big.png" alt="Logo PACT" width="500" height="500" loading="lazy"></a>
             <article>
                 <p><a href="mailto:contact@example.com">Nous contacter</a></p>
-                <p>Lorem ipsum dolor sit amet, consectetur</p>
             </article>
         </div>
         <ul class="social-links">
@@ -16,12 +15,11 @@
         <article>
             <p><a href="/plan-du-site">Plan du site</a></p>
             <p><a href="/mentions-legales">Mentions légales</a></p>
-            <p>Lorem ipsum dolor sit amet</p>
         </article>
     </div>
     <div class="footer-bottom">
-        <p>Lorem ipsum dolor sit amet</p>
-        <p>&copy; 2024 Votre Entreprise</p>
-        <p>Lorem ipsum dolor sit amet</p>
+        <p>413 &ndash; SAÉ 3.02</p>
+        <p>&copy; 2024 TripEnArvor</p>
+        <p>IUT de Lannion &ndash; BUT Informatique</p>
     </div>
 </footer>

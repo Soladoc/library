@@ -17,10 +17,14 @@ create domain code_commune_insee as char(5);
 create domain numero_departement as char(3);
 create domain iso639_1 as char(2);
 create domain nom_option char(10);
-create domain ligne as varchar check (value not like E'%\n%'); -- une ligne not null de texte
-create domain paragraphe as varchar; -- un paragraphe not null de texte
+create domain ligne as varchar check (value not like E'%\n%'); -- une ligne de texte
+create domain paragraphe as varchar; -- un paragraphe de texte
 create domain numero_telephone as char(10) check (value ~ '^[0-9]+$');
 create domain numero_siren as char(9) check (value ~ '^[0-9]+$');
+
+-- 63 car. max, non vide, pas de caractères de contrôle, pas de blancs en début et fin, l'espace ' ' est le seul blanc autorisé.
+-- pas d'arobase (@), pour éviter la confusion avec une adresse e-mail
+create domain pseudonyme as varchar(63) check (value ~ '^[^@\s[:cntrl:]](?: |[^@\s[:cntrl:]])*[^@\s[:cntrl:]]?$');
 
 -- CLASSES
 
@@ -43,12 +47,15 @@ create table _adresse(
         constraint adresse_pk primary key,
     code_insee_commune code_commune_insee not null
         constraint adresse_fk_commune references _commune,
+
     numero_voie int not null default 0,
     complement_numero varchar(10) not null default '',
+    check (numero_voie is not null or complement_numero is null), -- numero_voie is null => complement_numero is null
+
     nom_voie ligne not null default '',
     localite ligne not null default '',
-    precision_int paragraphe not null default '',
-    precision_ext paragraphe not null default '',
+    precision_int ligne not null default '',
+    precision_ext ligne not null default '',
 
     latitude decimal,
     longitude decimal,
@@ -89,8 +96,7 @@ create table _compte(
     mdp_hash varchar(255) not null,
     nom ligne not null,
     prenom ligne not null,
-    telephone numero_telephone not null,
-    existe boolean not null default true
+    telephone numero_telephone not null
 );
 
 create table _professionnel(
@@ -113,7 +119,7 @@ create table _offre(
     id_professionnel int not null
         constraint offre_fk_professionnel references _professionnel,
     titre ligne not null,
-    resume paragraphe not null,
+    resume ligne not null,
     description_detaillee paragraphe not null,
     date_derniere_maj timestamp not null default now(),
     url_site_web varchar(2047) not null default ''
@@ -204,7 +210,7 @@ create table _membre(
     id int
         constraint membre_pk primary key
         constraint membre_inherits_compte references _compte,
-    pseudo ligne not null unique
+    pseudo pseudonyme not null unique
 );
 
 create table _facture(
@@ -248,14 +254,14 @@ create table _avis(
         constraint avis_pk primary key
         constraint avis_inherits_signalable references _signalable,
     commentaire paragraphe not null,
-    note int not null check (note >= 1 and note <= 5),
+    note int not null check (1 <= note and note <= 5),
     moment_publication timestamp not null default now(),
     date_experience date not null,
     lu boolean not null default false,
     blackliste boolean not null default false,
 
-    id_membre_auteur int not null
-        constraint avis_fk_membre_auteur references _membre,
+    id_membre_auteur int -- devient null (anonyme) quand l'auteur est supprimé
+        constraint avis_fk_membre_auteur references _membre on delete set null,
     id_offre int not null
         constraint avis_fk_offre references _offre,
     constraint avis_uniq_auteur_offre unique (id_membre_auteur, id_offre) -- un seul avis par couple (membre_auteur, offre)

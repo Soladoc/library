@@ -2,30 +2,107 @@
 
 require_once 'db.php';
 
-function query_offres_nb_avis(int $id_offre): int
+function query_avis_count(int $id_offre): int
 {
-    $stmt = db_connect()->prepare('select count(*) from avis where id_offre = ?');
-    $stmt->execute([$id_offre]);
-    return $stmt->fetchColumn();
+    $stmt = notfalse(db_connect()->prepare('select count(*) from _avis where id_offre = ?'));
+    bind_values($stmt, [1 => [$id_offre, PDO::PARAM_INT]]);
+    notfalse($stmt->execute());
+    return notfalse($stmt->fetchColumn());
 }
 
-function query_offres_count(int $id_professionnel): int
+function query_offres_count(?int $id_professionnel = null, ?bool $en_ligne = null): int
 {
-    $stmt = db_connect()->prepare('select count(*) from offres where id_professionnel = ?');
-    $stmt->execute([$id_professionnel]);
-    return $stmt->fetchColumn();
+    $args = filter_null_args(['id_professionnel' => [$id_professionnel, PDO::PARAM_INT], 'en_ligne' => [$en_ligne, PDO::PARAM_BOOL]]);
+    $stmt = notfalse(db_connect()->prepare('select count(*) from offres' . _where_clause('and', array_keys($args))));
+    bind_values($stmt, $args);
+    notfalse($stmt->execute());
+    return notfalse($stmt->fetchColumn());
 }
 
-function query_offres_count_en_ligne(int $id_professionnel): int
+function query_offres(?int $id_professionnel = null, ?bool $en_ligne = null): PDOStatement
 {
-    $stmt = db_connect()->prepare('select count(*) from offres where id_professionnel = ? and en_ligne');
-    $stmt->execute([$id_professionnel]);
-    return $stmt->fetchColumn();
-}
-
-function query_offres(int $id_professionnel, bool $en_ligne): PDOStatement
-{
-    $stmt = db_connect()->prepare('select * from offres where id_professionnel = ? and en_ligne = ?');
-    $stmt->execute([$en_ligne, $id_professionnel]);
+    $args = filter_null_args(['id_professionnel' => [$id_professionnel, PDO::PARAM_INT], 'en_ligne' => [$en_ligne, PDO::PARAM_BOOL]]);
+    $stmt = notfalse(db_connect()->prepare('select * from offres' . _where_clause('and', array_keys($args))));
+    bind_values($stmt, $args);
+    notfalse($stmt->execute());
     return $stmt;
+}
+
+function query_image(int $id_image): array
+{
+    $stmt = notfalse(db_connect()->prepare('select * from _image where id = ?'));
+    bind_values($stmt, [1 => [$id_image, PDO::PARAM_INT]]);
+    notfalse($stmt->execute());
+    return notfalse($stmt->fetch());
+}
+
+function query_adresse(int $id_adresse): array
+{
+    $stmt = notfalse(db_connect()->prepare('select * from _adresse where id = ?'));
+    bind_values($stmt, [1 => [$id_adresse, PDO::PARAM_INT]]);
+    notfalse($stmt->execute());
+    return notfalse($stmt->fetch());
+}
+
+function query_commune(string $code_insee_commune): array
+{
+    $stmt = notfalse(db_connect()->prepare('select * from _commune where code_insee = ?'));
+    notfalse($stmt->execute([$code_insee_commune]));
+    return notfalse($stmt->fetch());
+}
+
+function query_codes_postaux(string $code_insee_commune): array
+{
+    $stmt = notfalse(db_connect()->prepare('select code_postal from _code_postal where code_insee_commune = ?'));
+    notfalse($stmt->execute([$code_insee_commune]));
+    return array_map(fn($row) => $row['code_postal'], $stmt->fetchAll());
+}
+
+function query_membre(string $email_or_pseudo): array|false
+{
+    // We know at symbols are not allowed in pseudonyms so if there is one, the user meant to connact with their email.
+    $stmt = notfalse(db_connect()->prepare('select * from membre where ' . (str_contains($email_or_pseudo, '@') ? 'email' : 'pseudo') . ' = ? limit 1'));
+    notfalse($stmt->execute([$email_or_pseudo]));
+    return $stmt->fetch();
+}
+
+function query_professionnel(string $email): array|false
+{
+    $stmt = notfalse(db_connect()->prepare('select * from professionnel where email = ?'));
+    notfalse($stmt->execute([$email]));
+    return $stmt->fetch();
+}
+
+/**
+ * Binds types values to a statement.
+ *
+ * @param PDOStatement $stmt The statement on which to bind values.
+ * @param array<int|string,mixed|array{mixed, int}> $params An associative array mapping from the parameter name to a tuple of the parameter value and the PDO type (e.g. a PDO::PARAM_* constant value)
+ */
+function bind_values(PDOStatement $stmt, array $params)
+{
+    foreach ($params as $name => $v) {
+        notfalse($stmt->bindValue($name, $v[0], $v[1]));
+    }
+}
+
+function filter_null_args(array $array): array
+{
+    return array_filter($array, fn($e) => $e[0] !== null);
+}
+
+/**
+ * Generates a WHERE clause for a SQL query based on an array of key-value pairs.
+ *
+ * This function is an internal implementation detail and should not be called directly outside of this module, as it could pose a security risk.
+ *
+ * @param string $operator The logical operator to use between clauses (e.g. 'and', 'or').
+ * @param array $clauses An array containing the conditions for the WHERE clause.
+ * @return string The generated WHERE clause, or an empty string if no clauses are provided.
+ */
+function _where_clause(string $operator, array $clauses): string
+{
+    return $clauses
+        ? ' where ' . implode(" $operator ", array_map(fn($attr) => "$attr = :$attr", $clauses))
+        : '';
 }

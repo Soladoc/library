@@ -1,11 +1,12 @@
 <?php
 session_start();
-require_once 'components/offer.php';
+require_once 'component/offre.php';
+require_once 'auth.php';
 
-$ID_PRO = intval($_SESSION['id']);
+$ID_PRO = exiger_connecte_pro();
 
 $OFFER_COUNT = query_offres_count($ID_PRO);
-$ONLINE_OFFER_COUNT = query_offres_count_en_ligne($ID_PRO)
+$ONLINE_OFFER_COUNT = query_offres_count($ID_PRO, en_ligne: true)
 ?>
 
 <!DOCTYPE html>
@@ -25,16 +26,16 @@ $ONLINE_OFFER_COUNT = query_offres_count_en_ligne($ID_PRO)
         <h1>Accueil Professionnel</h1>
         <a class="btn-more-info" href="/autres_pages/choix_categorie_creation_offre.php">Créer une offre</a>
 
-        <h3><?= $nb_offre ?> offres</h3>
+        <h3><?= $OFFER_COUNT ?> offres</h3>
         <section class="online-offers">
             <h2>Mes offres en ligne</h2>
-            <p>Vos offres actuellement disponibles en ligne : <?= $ONLINE_OFFER_COUNT ?></p>
+            <p>Vos offres actuellement disponibles en ligne&nbsp;: <?= $ONLINE_OFFER_COUNT ?></p>
 
             <div class="offer-list">
                 <?php
                     $ONLINE_OFFERS = query_offres($ID_PRO, en_ligne: true);
                     while ($offer = $ONLINE_OFFERS->fetch()) {
-                        offer_put_card_pro($offer);
+                        put_card_offre_pro($offer);
                     }
                     notfalse($ONLINE_OFFERS->closeCursor())
                 ?>
@@ -44,7 +45,7 @@ $ONLINE_OFFER_COUNT = query_offres_count_en_ligne($ID_PRO)
                     <h3>Randonnée dans la vallée des Saints</h3>
                     <p class="location">Boudes (63340)</p>
                     <p class="category">Restauration</p>
-                    <p class="rating">Note : 4.2/5 ★ (54 avis)</p>
+                    <p class="rating">Note&nbsp;: 4.2/5 ★ (54 avis)</p>
                     <button class="btn-more-info" href="">En savoir plus</button>
                 </div>
 
@@ -53,13 +54,13 @@ $ONLINE_OFFER_COUNT = query_offres_count_en_ligne($ID_PRO)
 
         <section class="offline-offers">
             <h2>Mes offres hors ligne</h2>
-            <p>Vos offres hors-ligne : <?= $OFFER_COUNT - $ONLINE_OFFER_COUNT ?> </p>
+            <p>Vos offres hors-ligne&nbsp;: <?= $OFFER_COUNT - $ONLINE_OFFER_COUNT ?> </p>
 
             <div class="offer-carousel">
                 <?php
                     $OFFRES_HORS_LIGNE = query_offres($ID_PRO, en_ligne: false);
                     while ($offer = $OFFRES_HORS_LIGNE->fetch()) {
-                        offer_put_card_pro($offer);
+                        put_card_offre_pro($offer);
                     }
                     $OFFRES_HORS_LIGNE->closeCursor()
                 ?>
@@ -68,7 +69,7 @@ $ONLINE_OFFER_COUNT = query_offres_count_en_ligne($ID_PRO)
                     <h3>Découverte interactive de la cité des Télécoms</h3>
                     <p class="location">Pleumeur-Bodou (22560)</p>
                     <p class="category">Restauration</p>
-                    <p class="rating">Note : 4.7/5 ★ (256 avis)</p>
+                    <p class="rating">Note&nbsp;: 4.7/5 ★ (256 avis)</p>
                     <button class="btn-more-info" href="">En savoir plus</button>
 
                 </div>
@@ -79,7 +80,7 @@ $ONLINE_OFFER_COUNT = query_offres_count_en_ligne($ID_PRO)
                     <h3>Randonnée dans la vallée des Saints</h3>
                     <p class="location">Boudes (63340)</p>
                     <p class="category">Restauration</p>
-                    <p class="rating">Note : 4.2/5 ★ (54 avis)</p>
+                    <p class="rating">Note&nbsp;: 4.2/5 ★ (54 avis)</p>
                     <button class="btn-more-info" href="">En savoir plus</button>
                 </div>
 
@@ -89,7 +90,7 @@ $ONLINE_OFFER_COUNT = query_offres_count_en_ligne($ID_PRO)
                     <h3>Chasse aux grenouilles dans le Lac du Gourgal</h3>
                     <p class="location">Guingamp (22200)</p>
                     <p class="category">Activité Nature</p>
-                    <p class="rating">Note : 3.7/5 ★ (122 avis)</p>
+                    <p class="rating">Note&nbsp;: 3.7/5 ★ (122 avis)</p>
                     <button class="btn-more-info" href="">En savoir plus</button>
                 </div>
 
@@ -99,7 +100,7 @@ $ONLINE_OFFER_COUNT = query_offres_count_en_ligne($ID_PRO)
                     <h3>Initiation au Char à Voile sur la plage</h3>
                     <p class="location">Pléneuf-Val-André (22370)</p>
                     <p class="category">Sport nautique</p>
-                    <p class="rating">Note : 4.4/5 ★ (24 avis)</p>
+                    <p class="rating">Note&nbsp;: 4.4/5 ★ (24 avis)</p>
                     <button class="btn-more-info" href="">En savoir plus</button>
                 </div>
             </div>

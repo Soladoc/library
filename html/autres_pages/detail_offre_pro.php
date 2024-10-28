@@ -66,8 +66,8 @@ if (isset($_GET['id']) && is_numeric($_GET['id'])) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>offre : <?= $id ?></title>
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+    <title>offre&nbsp;: <?= $id ?></title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" >
     <script async src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
     <link rel="stylesheet" href="../style/style.css">
 </head>
@@ -99,10 +99,10 @@ if (isset($_GET['id']) && is_numeric($_GET['id'])) {
                 <h2><?= $titre ?></h2>
                 <p class="description"><?= $description ?></p>
                 <div class="offer-status">
-                    <!-- <p class="price">Prix : 13-39€</p>
-                    <p class="status">Statut : <span class="open">Ouvert</span></p>
-                    <p class="rating">Note : ★★★★☆ (4.7/5, 256 avis)</p>
-                    <p class="hours">Horaires : 9h30 - 18h30</p>
+                    <!-- <p class="price">Prix&nbsp;: 13-39€</p>
+                    <p class="status">Statut&nbsp;: <span class="open">Ouvert</span></p>
+                    <p class="rating">Note&nbsp;: ★★★★☆ (4.7/5, 256 avis)</p>
+                    <p class="hours">Horaires&nbsp;: 9h30 - 18h30</p>
                     <button class="btn-reserve">Réserver</button> -->
                 </div>
             </div>
@@ -113,9 +113,9 @@ if (isset($_GET['id']) && is_numeric($_GET['id'])) {
             <h3>Emplacement et coordonnées</h3>
             <!-- <div id="map" class="map"></div> -->
             <div class="contact-info">
-                <p><strong>Adresse :</strong> <?= $adresse_complete ?></p>
-                <p><strong>Site web :</strong> <a href="<?= $site_web ?>"><?= $site_web ?></a></p>
-                <!-- <p><strong>Téléphone :</strong> 02 96 46 63 80</p> -->
+                <p><strong>Adresse&nbsp;:</strong> <?= $adresse_complete ?></p>
+                <p><strong>Site web&nbsp;:</strong> <a href="<?= $site_web ?>"><?= $site_web ?></a></p>
+                <!-- <p><strong>Téléphone&nbsp;:</strong> 02 96 46 63 80</p> -->
             </div>
         </section>
 
@@ -126,7 +126,7 @@ if (isset($_GET['id']) && is_numeric($_GET['id'])) {
              Review Form 
             <div class="review-form">
                 <textarea placeholder="Votre avis..."></textarea>
-                <label for="rating">Note :</label>
+                <label for="rating">Note&nbsp;:</label>
                 <select id="rating">
                     <option value="5">5 étoiles</option>
                     <option value="4">4 étoiles</option>
@@ -140,13 +140,13 @@ if (isset($_GET['id']) && is_numeric($_GET['id'])) {
              Summary of reviews 
             <div class="review-summary">
                 <h4>Résumé des notes</h4>
-                <p>Moyenne : 4.7/5 ★</p>
+                <p>Moyenne&nbsp;: 4.7/5 ★</p>
                 <div class="rating-distribution">
-                    <p>5 étoiles : 70%</p>
-                    <p>4 étoiles : 20%</p>
-                    <p>3 étoiles : 7%</p>
-                    <p>2 étoiles : 2%</p>
-                    <p>1 étoile : 1%</p>
+                    <p>5 étoiles&nbsp;: 70%</p>
+                    <p>4 étoiles&nbsp;: 20%</p>
+                    <p>3 étoiles&nbsp;: 7%</p>
+                    <p>2 étoiles&nbsp;: 2%</p>
+                    <p>1 étoile&nbsp;: 1%</p>
                 </div>
             </div>
 

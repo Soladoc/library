@@ -134,6 +134,10 @@ footer {
     }
 }
 
+.error {
+    color: #ca2200;
+}
+
 .auth-button {
     display: flex;
     align-items: center;

@@ -7,9 +7,7 @@ function escape(string $name): string
 
 require_once 'db.php';
 if ($table = $_GET['table'] ?? null) {
-    $results = db_connect()
-        ->query('table ' . escape($_GET['schema'] ?? 'pact') . '.' . escape($table))
-        ->fetchAll(PDO::FETCH_ASSOC);
+    $results = db_connect()->query('table ' . escape($_GET['schema'] ?: 'pact') . '.' . escape($table))->fetchAll();
     // Vérifier s'il y a des résultats
     if ($results) {
         echo "<table border='1'>";
@@ -59,12 +57,12 @@ if ($table = $_GET['table'] ?? null) {
                         <p>donne le nom de la table *</p>
                         <input type="text" placeholder="" id="table" name="table" required>
                         <p>et un schema</p>
-                        <input type="text" placeholder="" id="schema" name="schema">
+                        <input type="text" placeholder="pact" id="schema" name="schema">
                     </div>
 
                     <button type="submit" class="btn-connexion">regarde</button>
                 </form>
-                <br /><br>
+                <br ><br>
                 </a>
                 <br>
             </div>

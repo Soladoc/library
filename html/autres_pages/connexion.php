@@ -1,6 +1,7 @@
 <?php
 require_once 'db.php';
-$pdo = db_connect() ?>
+$pdo = db_connect()
+?>
 
 <!DOCTYPE html>
 <html lang="fr">
@@ -22,7 +23,7 @@ $pdo = db_connect() ?>
                 <!-- Formulaire de connexion -->
                 <form action="../connexion/login.php" method="POST">
                     <div class="champ">
-                        <label for="login">E-mail *</label>
+                        <label for="login">Pseudo ou e-mail *</label>
                         <input type="text" name="login" placeholder="exemple@mail.fr" id="login" required>
                     </div>
                     <br>
@@ -30,7 +31,7 @@ $pdo = db_connect() ?>
                         <label for="mdp">Mot de passe *</label>
                         <input type="password" name="mdp" placeholder="**********" id="mdp" required>
                     </div>
-                    <br>
+                    <p class="error"><?= $_GET['error'] ?? '' ?></p>
                     <button type="submit" class="btn-connexion">Se connecter</button>
                 </form>
                 <br><br>
