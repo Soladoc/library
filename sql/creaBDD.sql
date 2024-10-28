@@ -130,8 +130,8 @@ create table _restaurant(
     sert_brunch boolean not null default false,
     sert_dejeuner boolean not null default false,
     sert_diner boolean not null default false,
-    sert_boisson boolean not null default false,
-    check (sert_petit_dejeuner or sert_brunch or sert_dejeuner or sert_diner or sert_boisson)
+    sert_boissons boolean not null default false,
+    check (sert_petit_dejeuner or sert_brunch or sert_dejeuner or sert_diner or sert_boissons)
 );
 
 create table _activite(

@@ -22,6 +22,78 @@ create trigger tg_activite_insert
     instead of insert on activite for each row
     execute function activite_insert();
 
+-- spectacle -> insert
+create function spectacle_insert()
+    returns trigger
+    as $$
+begin
+    insert into pact._spectacle
+        (id, indication_duree, capacite_accueil)
+    values
+        ((select insert_offre(new)), new.indication_duree, new.capacite_accueil);
+    return new;
+end
+$$
+language 'plpgsql';
+
+create trigger tg_spectacle_insert
+    instead of insert on spectacle for each row
+    execute function spectacle_insert();
+
+-- visite -> insert
+create function visite_insert()
+    returns trigger
+    as $$
+begin
+    insert into pact._visite
+        (id, indication_duree)
+    values
+        ((select insert_offre(new)), new.indication_duree);
+    return new;
+end
+$$
+language 'plpgsql';
+
+create trigger tg_visite_insert
+    instead of insert on visite for each row
+    execute function visite_insert();
+
+-- parc_attractions -> insert
+create function parc_attractions_insert()
+    returns trigger
+    as $$
+begin
+    insert into pact._parc_attractions
+        (id, id_image_plan)
+    values
+        ((select insert_offre(new)), new.id_image_plan);
+    return new;
+end
+$$
+language 'plpgsql';
+
+create trigger tg_parc_attractions_insert
+    instead of insert on parc_attractions for each row
+    execute function parc_attractions_insert();
+
+-- restaurant -> insert
+create function restaurant_insert()
+    returns trigger
+    as $$
+begin
+    insert into pact._restaurant
+        (id, carte, richesse, sert_petit_dejeuner, sert_brunch, sert_dejeuner, sert_diner, sert_boissons)
+    values
+        ((select insert_offre(new)), new.carte, new.richesse, new.sert_petit_dejeuner, new.sert_brunch, new.sert_dejeuner, new.sert_diner, new.sert_boissons);
+    return new;
+end
+$$
+language 'plpgsql';
+
+create trigger tg_restaurant_insert
+    instead of insert on restaurant for each row
+    execute function restaurant_insert();
+
 -- membre -> insert
 create function membre_insert()
     returns trigger

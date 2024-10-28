@@ -36,6 +36,7 @@ truncate
     _changement_etat,
     _souscription_option,
     _juge,
-    _tags_restaurant
+    _tags_restaurant,
+    _horaire_ouverture
 restart identity;
 
