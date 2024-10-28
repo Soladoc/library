@@ -36,12 +36,10 @@ require_once 'db.php' ?>
                     $pdo = db_connect();
                     
                     // 2. Préparer et exécuter la requête SQL pour récupérer toutes les offres
-                    $sql = 'SELECT * FROM pact._offre';
-                    
-                    $stmt = $pdo->query($sql);  // Exécute la requête SQL
+                    $stmtOffres = $pdo->query('SELECT * FROM pact._offre');
                     
                     // 3. Boucler sur les résultats pour afficher chaque offre
-                    while ($offre = $stmt->fetch(PDO::FETCH_ASSOC)) {
+                    while ($offre = $stmtOffres->fetch(PDO::FETCH_ASSOC)) {
                         
                         // // Calculer si l'offre ferme bientôt (exemple si elle ferme dans moins d'une heure)
                         // $current_time = new DateTime();  // Heure actuelle
@@ -53,9 +51,9 @@ require_once 'db.php' ?>
                         $id_professionnel =  $offre['id_professionnel'];
                         $resume = $offre['resume'];
 
-                        $stmt3 = $pdo->prepare('SELECT * from pact._image where id = ?');
-                        $stmt3->execute([$offre['id_image_principale']]);
-                        $image_pricipale = $stmt3->fetch();
+                        $stmt = $pdo->prepare('SELECT * from pact._image where id = ?');
+                        $stmt->execute([$offre['id_image_principale']]);
+                        $image_pricipale = $stmt->fetch();
                         // $categorie = $offre['category'];
                         // // Calculer si l'offre ferme bientôt (exemple si elle ferme dans moins d'une heure)
                         // $current_time = new DateTime();  // Heure actuelle
@@ -69,9 +67,9 @@ require_once 'db.php' ?>
 
                         // Lien vers plus d'infos sur l'offre (mettre l'URL correcte dans href)
                         $requete = "SELECT * FROM pact._adresse WHERE id = ?";
-                        $stmt2 = $pdo->prepare($requete);
-                        $stmt2->execute([$id_adresse]);
-                        $info_adresse = $stmt2->fetch();
+                        $stmt = $pdo->prepare($requete);
+                        $stmt->execute([$id_adresse]);
+                        $info_adresse = $stmt->fetch();
                 
 
 
@@ -82,10 +80,13 @@ require_once 'db.php' ?>
                             $complement_numero = $info_adresse['complement_numero'];
                             $nom_voie = $info_adresse['nom_voie'];
                             $localite = $info_adresse['localite'];
-                            $code_postal = $info_adresse['commune_code_postal'];
+                            
+                            $stmt = $pdo->prepare('select code_postal from _code_postal where code_insee_commune = ?');
+                            $stmt->execute([$info_adresse['code_insee_commune']]);
+                            $codes_postaux = array_map(fn($row) => $row['code_postal'], $stmt->fetchAll());
                 
                             // Concaténer les informations pour former une adresse complète
-                            $adresse_complete = $numero_voie . ' ' . $complement_numero . ' ' . $nom_voie . ', ' . $localite . ', ' . $code_postal;
+                            $adresse_complete = $numero_voie . ' ' . $complement_numero . ' ' . $nom_voie . ', ' . $localite . implode(', ', $codes_postaux);
                 
                             // Afficher ou retourner l'adresse complète
                         } else {
