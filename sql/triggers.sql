@@ -10,10 +10,19 @@ create function activite_insert()
     as $$
 begin
     new.id = insert_offre(new);
-    insert into pact._activite
-        (id, indication_duree, age_requis, prestations_incluses, prestations_non_incluses)
-    values
-        (new.id, new.indication_duree, new.age_requis, new.prestations_incluses, new.prestations_non_incluses);
+    insert into pact._activite (
+        id,
+        indication_duree,
+        age_requis,
+        prestations_incluses,
+        prestations_non_incluses
+    ) values (
+        new.id,
+        new.indication_duree,
+        coalesce(new.age_requis, 0),
+        new.prestations_incluses,
+        coalesce(new.prestations_non_incluses, '')
+    );
     return new;
 end
 $$
@@ -29,10 +38,15 @@ create function spectacle_insert()
     as $$
 begin
     new.id = insert_offre(new);
-    insert into pact._spectacle
-        (id, indication_duree, capacite_accueil)
-    values
-        (new.id, new.indication_duree, new.capacite_accueil);
+    insert into pact._spectacle (
+        id,
+        indication_duree,
+        capacite_accueil
+    ) values (
+        new.id,
+        new.indication_duree,
+        new.capacite_accueil
+    );
     return new;
 end
 $$
@@ -48,10 +62,13 @@ create function visite_insert()
     as $$
 begin
     new.id = insert_offre(new);
-    insert into pact._visite
-        (id, indication_duree)
-    values
-        (new.id, new.indication_duree);
+    insert into pact._visite (
+        id,
+        indication_duree
+    ) values (
+        new.id,
+        new.indication_duree
+    );
     return new;
 end
 $$
@@ -67,10 +84,13 @@ create function parc_attractions_insert()
     as $$
 begin
     new.id = insert_offre(new);
-    insert into pact._parc_attractions
-        (id, id_image_plan)
-    values
-        (new.id, new.id_image_plan);
+    insert into pact._parc_attractions (
+        id,
+        id_image_plan
+    ) values (
+        new.id,
+        new.id_image_plan
+    );
     return new;
 end
 $$
@@ -86,10 +106,25 @@ create function restaurant_insert()
     as $$
 begin
     new.id = insert_offre(new);
-    insert into pact._restaurant
-        (id, carte, richesse, sert_petit_dejeuner, sert_brunch, sert_dejeuner, sert_diner, sert_boissons)
-    values
-        (new.id, new.carte, new.richesse, new.sert_petit_dejeuner, new.sert_brunch, new.sert_dejeuner, new.sert_diner, new.sert_boissons);
+    insert into pact._restaurant (
+        id,
+        carte,
+        richesse,
+        sert_petit_dejeuner,
+        sert_brunch,
+        sert_dejeuner,
+        sert_diner,
+        sert_boissons
+    ) values (
+        new.id,
+        new.carte,
+        new.richesse,
+        coalesce(new.sert_petit_dejeuner, false),
+        coalesce(new.sert_brunch, false),
+        coalesce(new.sert_dejeuner, false),
+        coalesce(new.sert_diner, false),
+        coalesce(new.sert_boissons, false)
+    );
     return new;
 end
 $$
@@ -105,8 +140,13 @@ create function membre_insert()
     as $$
 begin
     new.id = insert_compte(new);
-    insert into pact._membre(id, pseudo)
-        values (new.id, new.pseudo);
+    insert into pact._membre (
+        id,
+        pseudo
+    ) values (
+        new.id,
+        new.pseudo
+    );
     return new;
 end
 $$
@@ -122,10 +162,20 @@ create function pro_prive_insert()
     as $$
 begin
     new.id = insert_compte(new);
-    insert into pact._professionnel(id, denomination)
-        values (new.id, new.denomination);
-    insert into pact._prive(id, siren)
-        values (new.id, new.siren);
+    insert into pact._professionnel (
+        id,
+        denomination
+    ) values (
+        new.id,
+        new.denomination
+    );
+    insert into pact._prive (
+        id,
+        siren
+    ) values (
+        new.id,
+        new.siren
+    );
     return new;
 end
 $$
@@ -142,10 +192,18 @@ create function pro_public_insert()
 declare
 begin
     new.id = insert_compte(new);
-    insert into pact._professionnel(id, denomination)
-        values (new.id, new.denomination);
-    insert into pact._public(id)
-        values (new.id);
+    insert into pact._professionnel (
+        id,
+        denomination
+    ) values (
+        new.id,
+        new.denomination
+    );
+    insert into pact._public (
+        id
+    ) values (
+        new.id
+    );
     return new;
 end
 $$

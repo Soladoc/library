@@ -27,10 +27,29 @@ declare
     id_signalable int;
 begin
     insert into pact._signalable default values returning id into id_signalable;
-    insert into pact._offre
-        (id, id_adresse, id_image_principale, libelle_abonnement, id_professionnel, titre, resume, description_detaillee, url_site_web)
-    values
-        (id_signalable, new.id_adresse, new.id_image_principale, new.libelle_abonnement, new.id_professionnel, new.titre, new.resume, new.description_detaillee, new.url_site_web);
+    insert into pact._offre (
+        id,
+        id_adresse,
+        id_image_principale,
+        libelle_abonnement,
+        id_professionnel,
+        titre,
+        resume,
+        description_detaillee,
+        url_site_web,
+        date_derniere_maj
+    ) values (
+        id_signalable,
+        new.id_adresse,
+        new.id_image_principale,
+        new.libelle_abonnement,
+        new.id_professionnel,
+        new.titre,
+        new.resume,
+        new.description_detaillee,
+        coalesce(new.url_site_web, ''),
+        now()
+    );
     return id_signalable;
 end
 $$
@@ -46,8 +65,23 @@ declare
 begin
     insert into pact._identite default values returning id into id_identite;
     insert into pact._signalable default values returning id into id_signalable;
-    insert into pact._compte(id, id_signalable, email, mdp_hash, nom, prenom, telephone)
-        values (id_identite, id_signalable, new.email, new.mdp_hash, new.nom, new.prenom, new.telephone);
+    insert into pact._compte (
+        id,
+        id_signalable,
+        email,
+        mdp_hash,
+        nom,
+        prenom,
+        telephone
+    ) values (
+        id_identite,
+        id_signalable,
+        new.email,
+        new.mdp_hash,
+        new.nom,
+        new.prenom,
+        new.telephone
+    );
     return id_identite;
 end
 $$

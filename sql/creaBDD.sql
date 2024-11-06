@@ -121,8 +121,8 @@ create table _offre(
     titre ligne not null,
     resume ligne not null,
     description_detaillee paragraphe not null,
-    date_derniere_maj timestamp not null default now(),
-    url_site_web varchar(2047) not null default ''
+    date_derniere_maj timestamp not null,
+    url_site_web varchar(2047) not null
 );
 
 create table _restaurant(
@@ -132,11 +132,11 @@ create table _restaurant(
     carte paragraphe not null,
     richesse int not null check (1 <= richesse and richesse <= 3),
 
-    sert_petit_dejeuner boolean not null default false,
-    sert_brunch boolean not null default false,
-    sert_dejeuner boolean not null default false,
-    sert_diner boolean not null default false,
-    sert_boissons boolean not null default false,
+    sert_petit_dejeuner boolean not null,
+    sert_brunch boolean not null,
+    sert_dejeuner boolean not null,
+    sert_diner boolean not null,
+    sert_boissons boolean not null,
     check (sert_petit_dejeuner or sert_brunch or sert_dejeuner or sert_diner or sert_boissons)
 );
 
@@ -145,9 +145,9 @@ create table _activite(
         constraint activite_pk primary key
         constraint activite_inherits_offre references _offre,
     indication_duree interval not null,
-    age_requis int not null default 0,
+    age_requis int not null,
     prestations_incluses paragraphe not null,
-    prestations_non_incluses paragraphe not null default ''
+    prestations_non_incluses paragraphe not null
 );
 
 create table _visite(
