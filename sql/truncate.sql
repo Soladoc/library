@@ -1,8 +1,8 @@
 set schema 'pact';
 
 truncate
-    _departement,
-    _commune,
+    --_departement,
+    --_commune,
     _adresse,
     _abonnement,
     _image,
@@ -30,7 +30,7 @@ truncate
     _avis_resto,
     _reponse,
     _signalement,
-    _code_postal,
+    --_code_postal,
     _langue_visite,
     _gallerie,
     _changement_etat,

@@ -14,7 +14,9 @@ error_reporting(E_ALL & ~E_NOTICE);
 function notfalse(mixed $value, string $msg = 'was false'): mixed
 {
     if ($value === false) {
-?><pre><?= $msg ?></pre><?php
+        ?>
+        <pre><?= $msg ?></pre>
+        <?php
         throw new Exception($msg);
     }
     return $value;
@@ -64,10 +66,10 @@ function db_connect(): PDO
     }
 
     // Connect to the database
-
     $driver = 'pgsql';
     // Pour le dév. en localhost: on a accès au conteneur postgresdb, on utilise donc le FQDN.
     $host = _is_localhost() ? '413.ventsdouest.dev' : 'postgresdb';
+    /** @var int */
     $port = notfalse(getenv('PGDB_PORT'), 'PGDB_PORT not set');
     $dbname = 'postgres';
 
@@ -101,7 +103,8 @@ function transaction(callable $body, ?callable $cleanup = null)
         $body();
         $pdo->commit();
     } catch (Throwable $e) {
-        if ($cleanup !== null) $cleanup();
+        if ($cleanup !== null)
+            $cleanup();
         notfalse($pdo->rollBack(), '$pdo->rollBack() failed');
         throw $e;
     }

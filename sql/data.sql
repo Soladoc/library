@@ -25,7 +25,7 @@ values
     ('5cover', 'the.scover@gmail.co', /*toto*/ '$2y$10$EGLHZkQPfzunBskmjGlv0eTVbF8uot3J6R/W76TIjUw33xSYadike', 'Scover', 'NoLastName', '2134657980');
 
 insert into
-    _image(taille, mime_type, legende)
+    _image(taille, mime_subtype, legende)
 values
     (250244, 'webp', '010717 aquarev 045'), -- 1
     (125156, 'jpeg', '1200x680_grenouille'), -- 2
@@ -56,7 +56,6 @@ values
     (252164, 'jpeg', 'reserve-naturelle-des'), -- 27
     (258810, 'jpeg', 'st-brieuc-museum-front'), -- 28
     (141400, 'webp', 'vallee-des-saints'); -- 29
-
 
 with id_adresse as (
     insert into
