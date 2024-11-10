@@ -168,7 +168,7 @@ create table _spectacle(
         constraint spectacle_pk primary key
         constraint spectacle_inherits_offre references _offre,
     indication_duree interval not null,
-    capacite_acceuil int not null
+    capacite_accueil int not null
 ); 
 
 create table _parc_attractions(
@@ -291,13 +291,24 @@ create table _reponse(
 
 -- ASSOCIATIONS
 
+-- Un horaire d'ouverture périodique sur une semaine
+-- Ouvert sur toutes les semaines de l'année (vacances non comptabilisées)
 create table _horaire_ouverture(
     id_offre int
         constraint horaire_ouverture_fk_offre references _offre,
-    jour_de_la_semaine int check (1 <= jour_de_la_semaine and jour_de_la_semaine <= 5),
+    jour_de_la_semaine int check (1 <= jour_de_la_semaine and jour_de_la_semaine <= 7),
     heure_debut time,
     heure_fin time check (heure_fin > heure_debut),
-    constraint horaire_pk primary key (id_offre, jour_de_la_semaine, heure_debut, heure_fin)
+    constraint horaire_ouverture_pk primary key (id_offre, jour_de_la_semaine, heure_debut, heure_fin)
+);
+
+-- Une période d'ouverture ponctuelle
+create table _periode_ouverture(
+    id_offre int
+        constraint horaire_ouverture_fk_offre references _offre,
+    debut timestamp,
+    fin timestamp check (fin > debut),
+    constraint horaire_pk primary key (id_offre, debut, fin)
 );
 
 create table _signalement(

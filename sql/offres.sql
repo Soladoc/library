@@ -11,41 +11,41 @@ with
             ('22360', 'Espace Brezillet', 'PARC EXPO BREZILLET')
         returning
             id
+    ),
+    id_offre as (
+        insert into
+            spectacle (
+                id_adresse,
+                indication_duree,
+                capacite_accueil,
+                id_image_principale,
+                libelle_abonnement,
+                id_professionnel,
+                titre,
+                resume,
+                description_detaillee,
+                url_site_web
+            )
+        values
+            (
+                (table id_adresse),
+                '2:00:',
+                60,
+                12,
+                'gratuit',
+                2,
+                'Celtic Legends - Tournée 2026',
+                'Celtic Legends est un spectacle de musiques et de danses irlandaises qui s’est produit sur de nombreuses scènes à travers le monde depuis sa création, attirant près de 3 millions de spectateurs.',
+                'Celtic Legends revient en 2026 avec une nouvelle version du spectacle. Créé à Galway, au Coeur du Connemara, Celtic Legends est un condensé de la culture traditionnelle Irlandaise recréant sur scène l’ambiance électrique d’une soirée dans un pub traditionnel. Venez partager durant 2 heures ce voyage au coeur de l’Irlande soutenu par 5 talentueux musiciens sous la baguette de Sean McCarthy et de 12 extraordinaires danseurs sous la houlette de la créative Jacintha Sharpe.',
+                'https://www.celtic-legends.net'
+            )
+        returning
+            id
     )
 insert into
-    pact.spectacle (
-        indication_duree,
-        capacite_acceuil,
-        id_adresse,
-        id_image_principale,
-        libelle_abonnement,
-        id_professionnel,
-        titre,
-        resume,
-        description_detaillee,
-        date_derniere_maj,
-        url_site_web,
-        en_ligne,
-        note_moyenne,
-        categorie
-    )
+    _periode_ouverture (id_offre, debut, fin)
 values
-    (
-        (table id_adresse),
-        '0:20:',
-        60,
-        id_image_principale_value,
-        libelle_abonnement_value,
-        id_professionnel_value,
-        titre_value,
-        resume_value,
-        description_detaillee_value,
-        date_derniere_maj_value,
-        'https://kerlabo-kart.com',
-        en_ligne_value,
-        note_moyenne_value,
-        categorie_value
-    );
+    ((table id_offre), '2026-04-10T20:00:00.000Z', '2026-04-11T01:00:00.000Z');
 
 -- Karting Kerlabo
 with
