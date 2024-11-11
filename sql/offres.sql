@@ -2,6 +2,86 @@ begin;
 
 set schema 'pact';
 
+-- Visite du Fort La Latte - La Roche Goyon
+
+-- Découverte interactive de la cité des Télécoms
+with
+    id_adresse as (
+        insert into
+            _adresse (code_insee_commune, localite)
+        values
+            ('22198', 'Cité des Télécoms')
+        returning
+            id
+    ),
+    id_offre as (
+        insert into
+            visite (
+                id_adresse,
+                indication_duree,
+                id_image_principale,
+                libelle_abonnement,
+                id_professionnel,
+                titre,
+                resume,
+                description_detaillee,
+                url_site_web
+            )
+        values
+            (
+                (table id_adresse),
+                '3:00:',
+                2,
+                'gratuit',
+                1,
+                'Visite Interactive de la Cité des Télécoms à Pleumeur-Bodou',
+                'Plongez dans l''univers fascinant des télécommunications avec notre visite interactive de la Cité des Télécoms à Pleumeur-Bodou. Cette expérience immersive vous permettra de découvrir l''histoire et les innovations technologiques qui ont révolutionné notre monde. Grâce à des dispositifs interactifs, des démonstrations en direct et des ateliers pratiques, vous vivrez une aventure unique et enrichissante, idéale pour les passionnés de technologie et les curieux de tous âges.',
+                'Introduction à la Cité des Télécoms :
+La Cité des Télécoms, située à Pleumeur-Bodou en Bretagne, est un lieu incontournable pour tous ceux qui s''intéressent à l''histoire et aux avancées technologiques des télécommunications. Cette visite interactive vous offre une opportunité unique de comprendre comment les télécommunications ont transformé notre quotidien et continuent de le faire.
+
+Parcours Interactif :
+Dès votre arrivée, vous serez accueilli par un guide expert qui vous accompagnera tout au long de votre visite. Le parcours commence par une introduction historique, où vous découvrirez les premières inventions et les pionniers des télécommunications. Vous pourrez voir de vos propres yeux des objets d''époque, tels que les premiers téléphones et les anciens équipements de transmission.
+
+Démonstrations en Direct :
+L''un des points forts de cette visite est les démonstrations en direct. Vous assisterez à des présentations animées par des spécialistes qui vous expliqueront le fonctionnement des technologies actuelles et futures. Que ce soit la fibre optique, les satellites ou les réseaux 5G, chaque démonstration est conçue pour être à la fois éducative et divertissante.
+
+Ateliers Pratiques :
+Pour une expérience encore plus immersive, des ateliers pratiques sont proposés. Vous aurez l''occasion de participer à des activités interactives, comme la création de votre propre réseau de communication ou l''assemblage d''un dispositif de télécommunication. Ces ateliers sont adaptés à tous les niveaux, des débutants aux plus expérimentés, et sont un excellent moyen de mettre en pratique ce que vous avez appris.
+
+Expositions Thématiques :
+La Cité des Télécoms abrite également plusieurs expositions thématiques qui changent régulièrement. Ces expositions couvrent des sujets variés, allant de l''impact des télécommunications sur la société à l''évolution des technologies de communication. Chaque exposition est conçue pour être interactive et engageante, avec des installations multimédias et des jeux éducatifs.
+
+Espace de Réalité Virtuelle :
+Pour une immersion totale, un espace de réalité virtuelle est disponible. Grâce à des casques VR, vous pourrez explorer des environnements virtuels qui simulent les infrastructures de télécommunications, les centres de données et même les satellites en orbite. Cette expérience vous permettra de comprendre de manière visuelle et immersive les complexités des réseaux de communication.
+
+Conclusion :
+La visite interactive de la Cité des Télécoms à Pleumeur-Bodou est une expérience enrichissante et captivante qui vous laissera des souvenirs inoubliables. Que vous soyez un passionné de technologie, un curieux ou simplement à la recherche d''une activité éducative et divertissante, cette visite est faite pour vous. Réservez dès maintenant et préparez-vous à découvrir le monde fascinant des télécommunications !
+
+Informations Pratiques :
+
+- Durée de la visite : Environ 3 heures
+- Tarifs : Adultes : 15 €, Enfants (6-12 ans) : 10 €, Gratuit pour les moins de 6 ans
+- Horaires : Ouvert tous les jours de 10h à 18h
+- Réservations : Recommandées en ligne ou par téléphone
+- Accès : Facilement accessible en voiture ou en transport en commun
+
+N''attendez plus et venez vivre une aventure technologique unique à la Cité des Télécoms !',
+                'https://www.cite-telecoms.com'
+            )
+        returning
+            id
+    )
+insert into
+    _horaire_ouverture (id_offre, jour_de_la_semaine, heure_debut, heure_fin)
+values
+    ((table id_offre), 1, '10:', '18:'),
+    ((table id_offre), 2, '10:', '18:'),
+    ((table id_offre), 3, '10:', '18:'),
+    ((table id_offre), 4, '10:', '18:'),
+    ((table id_offre), 5, '10:', '18:'),
+    ((table id_offre), 6, '10:', '18:'),
+    ((table id_offre), 7, '13:', '18:');
+
 -- Celtic Legends journée 2026
 with
     id_adresse as (
@@ -30,7 +110,7 @@ with
             (
                 (table id_adresse),
                 '2:00:',
-                60,
+                1000,
                 12,
                 'gratuit',
                 2,
