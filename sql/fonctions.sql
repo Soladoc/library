@@ -2,12 +2,11 @@ begin;
 
 set schema 'pact';
 
-set plpgsql.extra_errors to 'all';
+set
+    plpgsql.extra_errors to 'all';
 
 -- Retourne une ligne nommant la catégorie d'une offre.
-create function offre_categorie(id_offre int)
-    returns ligne
-    as $$
+create function offre_categorie (id_offre int) returns ligne as $$
 begin
     if id_offre in (select id from _restaurant) then return 'restaurant'; end if;
     if id_offre in (select id from _activite) then return 'activité'; end if;
@@ -16,13 +15,10 @@ begin
     if id_offre in (select id from _parc_attractions) then return 'parc d''attractions'; end if;
     raise 'incohérence: offre non catégorisée';
 end;
-$$
-language 'plpgsql';
+$$ language 'plpgsql';
 
 -- Insère une offre et retourne son id.
-create function insert_offre(new record)
-    returns int
-    as $$
+create function insert_offre (new record) returns int as $$
 declare
     id_signalable int;
 begin
@@ -50,15 +46,13 @@ begin
         coalesce(new.url_site_web, ''),
         now()
     );
+    insert into pact._changement_etat (id_offre) values (id_signalable);
     return id_signalable;
 end
-$$
-language 'plpgsql';
+$$ language 'plpgsql';
 
 -- Insère un compte et retourne son id.
-create function insert_compte(new record)
-    returns int
-    as $$
+create function insert_compte (new record) returns int as $$
 declare
     id_identite int;
     id_signalable int;
@@ -84,7 +78,6 @@ begin
     );
     return id_identite;
 end
-$$
-language 'plpgsql';
+$$ language 'plpgsql';
 
 commit;

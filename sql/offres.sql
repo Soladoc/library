@@ -2,6 +2,304 @@ begin;
 
 set schema 'pact';
 
+-- truncate table _offre restart identity cascade;
+
+-- Découverte de la Côte de Granit Rose
+with
+    id_adresse as (
+        insert into
+            _adresse (code_insee_commune, precision_ext, numero_voie, nom_voie)
+        values
+            ('22168', 'Parking De La Rade 83', 72, 'Rue Ernest Renan')
+        returning
+            id
+    ),
+    id_offre as (
+        insert into
+            visite (
+                id_adresse,
+                indication_duree,
+                id_image_principale,
+                libelle_abonnement,
+                id_professionnel,
+                titre,
+                resume,
+                description_detaillee,
+                url_site_web
+            )
+        values
+            (
+                (table id_adresse),
+                '2:00:',
+                21,
+                'gratuit',
+                2,
+                'Découverte de la Côte de Granit Rose en bateau',
+                'Découvrez la magie de la Côte de Granite Rose avec notre excursion en bateau inoubliable. Cette visite vous emmène à travers des paysages époustouflants, des formations rocheuses uniques et des plages de sable fin. Profitez de vues panoramiques, de commentaires enrichissants et de moments de détente pour une expérience complète et mémorable.',
+                '**Introduction :**
+Embarquez pour une aventure inoubliable avec notre excursion en bateau le long de la Côte de Granite Rose. Cette région emblématique de la Bretagne est célèbre pour ses formations rocheuses spectaculaires, ses plages de sable fin et ses eaux cristallines. Notre visite est conçue pour vous offrir une expérience immersive et enrichissante, combinant découverte, détente et émerveillement.
+
+**Départ et Itinéraire :**
+Notre excursion commence au port de Perros-Guirec, où vous serez accueilli par notre équipage chaleureux et expérimenté. Après un briefing de sécurité, nous mettrons le cap vers les sites les plus emblématiques de la Côte de Granite Rose. Vous naviguerez le long de la côte, admirant des formations rocheuses uniques telles que le Phare de Ploumanac''h, la Plage de Trestraou et les Sept-Îles.
+
+**Points Forts de la Visite :**
+- **Phare de Ploumanac''h :** Un des phares les plus pittoresques de la région, offrant une vue imprenable sur la côte.
+- **Plage de Trestraou :** Une plage de sable fin idéale pour se détendre et profiter du paysage.
+- **Les Sept-Îles :** Un archipel protégé abritant une riche biodiversité, notamment des colonies d''oiseaux marins.
+
+**Commentaires et Histoire :**
+Tout au long de la visite, notre guide vous fournira des commentaires enrichissants sur l''histoire, la géologie et la faune de la région. Vous apprendrez comment les formations rocheuses ont été sculptées par le temps et les éléments, et découvrirez les légendes locales qui entourent ces lieux mystiques.
+
+**Moments de Détente :**
+En plus des vues spectaculaires, notre excursion inclut des moments de détente. Nous ferons une pause sur une plage isolée où vous pourrez vous baigner, vous détendre sur le sable ou simplement profiter de la tranquillité de la nature. Un goûter léger sera également servi à bord pour vous rafraîchir et vous restaurer.
+
+**Conclusion :**
+Notre visite en bateau de la Côte de Granite Rose est une expérience unique qui combine découverte, détente et émerveillement. Que vous soyez un amoureux de la nature, un passionné d''histoire ou simplement à la recherche d''une journée inoubliable, cette excursion est faite pour vous. Réservez dès maintenant pour vivre une aventure mémorable sur l''une des plus belles côtes de France.
+
+---
+
+**Informations Pratiques :**
+- **Durée :** 3 heures
+- **Départ :** Port de Perros-Guirec
+- **Inclus :** Guide expérimenté, commentaires enrichissants, goûter léger, moments de détente sur la plage
+- **Réservation :** Contactez-nous pour réserver votre place et obtenir plus d''informations.
+
+Nous avons hâte de vous accueillir à bord pour une journée inoubliable sur la Côte de Granite Rose !',
+                'https://www.bretagne-cotedegranitrose.com'
+            )
+        returning
+            id
+    ),
+    s1 as (
+        insert into
+            _langue_visite (id_visite, code_langue)
+        values
+            ((table id_offre), 'fr'),
+            ((table id_offre), 'en')
+    )
+insert into
+    _horaire_ouverture (id_offre, jour_de_la_semaine, heure_debut, heure_fin)
+values
+    ((table id_offre), 1, '10:', '18:'),
+    ((table id_offre), 2, '10:', '18:'),
+    ((table id_offre), 3, '10:', '18:'),
+    ((table id_offre), 4, '10:', '18:'),
+    ((table id_offre), 5, '10:', '18:'),
+    ((table id_offre), 6, '10:', '18:'),
+    ((table id_offre), 7, '13:', '18:');
+
+-- Randonnée dans la vallée des Saints
+with
+    id_adresse as (
+        insert into
+            _adresse (code_insee_commune, localite)
+        values
+            ('63046', 'Vallée des Saints')
+        returning
+            id
+    ),
+    id_offre as (
+        insert into
+            visite (
+                id_adresse,
+                indication_duree,
+                id_image_principale,
+                libelle_abonnement,
+                id_professionnel,
+                titre,
+                resume,
+                description_detaillee,
+                url_site_web
+            )
+        values
+            (
+                (table id_adresse),
+                '4:00:',
+                23,
+                'gratuit',
+                1,
+                'Randonnée dans la vallée des Saints',
+                'Découvrez la Vallée des Saints à Boudes, un site naturel exceptionnel et chargé d''histoire. Cette offre touristique vous propose une visite guidée de la vallée, incluant des explications sur les sculptures de saints, une randonnée pédestre à travers les paysages pittoresques, et une dégustation de produits locaux. Une expérience unique pour les amateurs de nature, d''histoire et de gastronomie.',
+                '**Introduction à la Vallée des Saints :**
+La Vallée des Saints à Boudes est un lieu emblématique qui allie beauté naturelle et richesse culturelle. Située dans le département du Puy-de-Dôme, cette vallée abrite une collection unique de sculptures de saints, réalisées par des artistes locaux et internationaux. Chaque statue raconte une histoire et contribue à l''atmosphère spirituelle et sereine du site.
+
+**Visite Guidée des Sculptures :**
+La visite commence par une introduction détaillée sur l''histoire et la signification des sculptures de la Vallée des Saints. Un guide expérimenté vous accompagnera à travers le parcours, vous offrant des explications sur chaque statue, leur symbolisme et les légendes qui les entourent. Vous aurez l''occasion de poser des questions et d''approfondir vos connaissances sur les saints et leur rôle dans la culture locale.
+
+**Randonnée Pédestre :**
+Après la visite des sculptures, une randonnée pédestre vous attend. Le parcours, adapté à tous les niveaux, vous mènera à travers les paysages magnifiques de la vallée. Vous traverserez des forêts luxuriantes, des champs fleuris et des rivières cristallines. Le guide vous fournira des informations sur la flore et la faune locales, ainsi que sur les particularités géologiques de la région.
+
+**Dégustation de Produits Locaux :**
+Pour clôturer cette expérience en beauté, une dégustation de produits locaux vous sera proposée. Vous aurez l''occasion de goûter aux spécialités culinaires de la région, telles que les fromages, les charcuteries et les vins locaux. Cette dégustation se déroulera dans un cadre convivial, où vous pourrez échanger avec les producteurs et en apprendre davantage sur les traditions gastronomiques du Puy-de-Dôme.
+
+**Informations Pratiques :**
+- **Durée de la visite :** Environ 4 heures.
+- **Point de rendez-vous :** Entrée principale de la Vallée des Saints à Boudes.
+- **Équipement recommandé :** Chaussures de marche, vêtements adaptés à la météo, bouteille d''eau.
+- **Tarif :** 35€ par personne (incluant la visite guidée, la randonnée et la dégustation).
+
+**Réservation :**
+Pour réserver votre place, veuillez contacter notre service client au [numéro de téléphone] ou par email à [adresse email]. Les places sont limitées, alors n''attendez pas pour réserver votre expérience inoubliable à la Vallée des Saints à Boudes.
+
+---
+
+Rejoignez-nous pour une journée mémorable où nature, histoire et gastronomie se rencontrent dans un cadre exceptionnel.',
+                'https://www.lavalleedessaints.com'
+            )
+        returning
+            id
+    ),
+    s1 as (
+        insert into
+            _langue_visite (id_visite, code_langue)
+        values
+            ((table id_offre), 'fr')
+    )
+insert into
+    _horaire_ouverture (id_offre, jour_de_la_semaine, heure_debut, heure_fin)
+values
+    ((table id_offre), 1, '10:', '18:'),
+    ((table id_offre), 2, '10:', '18:'),
+    ((table id_offre), 3, '10:', '18:'),
+    ((table id_offre), 4, '10:', '18:'),
+    ((table id_offre), 5, '10:', '18:'),
+    ((table id_offre), 6, '10:', '18:'),
+    ((table id_offre), 7, '13:', '18:');
+
+-- Balade poétique à Camet
+with
+    id_adresse as (
+        insert into
+            _adresse (code_insee_commune, localite)
+        values
+            ('22203', 'Vallée des Saints')
+        returning
+            id
+    ),
+    id_offre as (
+        insert into
+            visite (
+                id_adresse,
+                indication_duree,
+                id_image_principale,
+                libelle_abonnement,
+                id_professionnel,
+                titre,
+                resume,
+                description_detaillee,
+                url_site_web
+            )
+        values
+            (
+                (table id_adresse),
+                '2:00:',
+                22,
+                'gratuit',
+                2,
+                'Balade poétique à Camet',
+                'Après, Les oiseaux, les fleurs sauvages, les 4 saisons, les poètes et la nature, les arbres ; cette année met à l''honneur Le silence de l''eau. En nous baladant tout autour de l''étang, nous allons rencontrer poèmes et chansons, d''Eugène Guillevic à Anne Sylvestre, de Guy Béart à Paul Eluard, situé à un endroit qui résonne avec le poème.',
+                'Cette édition sur le thème de l''eau a inspiré de nombreuses animations :
+
+- Un atelier d''aquarelle à la médiathèque, avec l''artiste Gérard Hubert
+- Une séance de fabrication de bateaux, poissons, grenouilles, baleines, cygnes en origamis
+- Des aquarelles réalisées par les résident·es exposées à la médiathèque, des lectures et chansons à l''EHPAD Louis Morel de Ploeuc
+- Des lectures, la réalisation de fresques et l''écriture de poèmes à l''école Le Petit Prince, fresques exposées dans la médiathèque et sous les préaux extérieurs',
+                'https://mediathequesdelabaie.fr/au-programme/rendez-vous2/2563-balade-poetique-a-camet'
+            )
+        returning
+            id
+    ),
+    s1 as (
+        insert into
+            _langue_visite (id_visite, code_langue)
+        values
+            ((table id_offre), 'fr')
+    )
+insert into
+    _periode_ouverture (id_offre, debut, fin)
+values
+    ((table id_offre), '2024-06-14T12:00:00.000Z', '2024-09-27T18:00:00.000Z'),
+    ((table id_offre), '2025-06-14T12:00:00.000Z', '2025-09-27T18:00:00.000Z'),
+    ((table id_offre), '2026-06-14T12:00:00.000Z', '2026-09-27T18:00:00.000Z');
+
+-- Randonnée dans la vallée des Saints
+with
+    id_adresse as (
+        insert into
+            _adresse (code_insee_commune, localite)
+        values
+            ('63046', 'Vallée des Saints')
+        returning
+            id
+    ),
+    id_offre as (
+        insert into
+            visite (
+                id_adresse,
+                indication_duree,
+                id_image_principale,
+                libelle_abonnement,
+                id_professionnel,
+                titre,
+                resume,
+                description_detaillee,
+                url_site_web
+            )
+        values
+            (
+                (table id_adresse),
+                '4:00:',
+                23,
+                'gratuit',
+                1,
+                'Randonnée dans la vallée des Saints',
+                'Découvrez la Vallée des Saints à Boudes, un site naturel exceptionnel et chargé d''histoire. Cette offre touristique vous propose une visite guidée de la vallée, incluant des explications sur les sculptures de saints, une randonnée pédestre à travers les paysages pittoresques, et une dégustation de produits locaux. Une expérience unique pour les amateurs de nature, d''histoire et de gastronomie.',
+                '**Introduction à la Vallée des Saints :**
+La Vallée des Saints à Boudes est un lieu emblématique qui allie beauté naturelle et richesse culturelle. Située dans le département du Puy-de-Dôme, cette vallée abrite une collection unique de sculptures de saints, réalisées par des artistes locaux et internationaux. Chaque statue raconte une histoire et contribue à l''atmosphère spirituelle et sereine du site.
+
+**Visite Guidée des Sculptures :**
+La visite commence par une introduction détaillée sur l''histoire et la signification des sculptures de la Vallée des Saints. Un guide expérimenté vous accompagnera à travers le parcours, vous offrant des explications sur chaque statue, leur symbolisme et les légendes qui les entourent. Vous aurez l''occasion de poser des questions et d''approfondir vos connaissances sur les saints et leur rôle dans la culture locale.
+
+**Randonnée Pédestre :**
+Après la visite des sculptures, une randonnée pédestre vous attend. Le parcours, adapté à tous les niveaux, vous mènera à travers les paysages magnifiques de la vallée. Vous traverserez des forêts luxuriantes, des champs fleuris et des rivières cristallines. Le guide vous fournira des informations sur la flore et la faune locales, ainsi que sur les particularités géologiques de la région.
+
+**Dégustation de Produits Locaux :**
+Pour clôturer cette expérience en beauté, une dégustation de produits locaux vous sera proposée. Vous aurez l''occasion de goûter aux spécialités culinaires de la région, telles que les fromages, les charcuteries et les vins locaux. Cette dégustation se déroulera dans un cadre convivial, où vous pourrez échanger avec les producteurs et en apprendre davantage sur les traditions gastronomiques du Puy-de-Dôme.
+
+**Informations Pratiques :**
+- **Durée de la visite :** Environ 4 heures.
+- **Point de rendez-vous :** Entrée principale de la Vallée des Saints à Boudes.
+- **Équipement recommandé :** Chaussures de marche, vêtements adaptés à la météo, bouteille d''eau.
+- **Tarif :** 35€ par personne (incluant la visite guidée, la randonnée et la dégustation).
+
+**Réservation :**
+Pour réserver votre place, veuillez contacter notre service client au [numéro de téléphone] ou par email à [adresse email]. Les places sont limitées, alors n''attendez pas pour réserver votre expérience inoubliable à la Vallée des Saints à Boudes.
+
+---
+
+Rejoignez-nous pour une journée mémorable où nature, histoire et gastronomie se rencontrent dans un cadre exceptionnel.',
+                'https://www.lavalleedessaints.com'
+            )
+        returning
+            id
+    ),
+    s1 as (
+        insert into
+            _langue_visite (id_visite, code_langue)
+        values
+            ((table id_offre), 'fr')
+    )
+insert into
+    _horaire_ouverture (id_offre, jour_de_la_semaine, heure_debut, heure_fin)
+values
+    ((table id_offre), 1, '10:', '18:'),
+    ((table id_offre), 2, '10:', '18:'),
+    ((table id_offre), 3, '10:', '18:'),
+    ((table id_offre), 4, '10:', '18:'),
+    ((table id_offre), 5, '10:', '18:'),
+    ((table id_offre), 6, '10:', '18:'),
+    ((table id_offre), 7, '13:', '18:');
+
 -- Visite du Fort La Latte - La Roche Goyon
 with
     id_adresse as (
@@ -139,6 +437,14 @@ N''attendez plus et venez vivre une aventure technologique unique à la Cité de
             )
         returning
             id
+    ),
+    s1 as (
+        insert into
+            _gallerie (id_offre, id_image)
+        values
+            ((table id_offre), 10),
+            ((table id_offre), 11),
+            ((table id_offre), 16)
     )
 insert into
     _horaire_ouverture (id_offre, jour_de_la_semaine, heure_debut, heure_fin)
