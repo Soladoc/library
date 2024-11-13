@@ -3,7 +3,8 @@ begin;
 set schema 'pact';
 
 -- truncate table _offre restart identity cascade;
-
+--
+-- Trail dans la réserve naturelle des Sept Îles
 -- Découverte de la Côte de Granit Rose
 with
     id_adresse as (

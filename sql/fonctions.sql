@@ -8,11 +8,11 @@ set
 -- Retourne une ligne nommant la catégorie d'une offre.
 create function offre_categorie (id_offre int) returns ligne as $$
 begin
-    if id_offre in (select id from _restaurant) then return 'restaurant'; end if;
-    if id_offre in (select id from _activite) then return 'activité'; end if;
-    if id_offre in (select id from _visite) then return 'visite'; end if;
-    if id_offre in (select id from _spectacle) then return 'spectacle'; end if;
-    if id_offre in (select id from _parc_attractions) then return 'parc d''attractions'; end if;
+    if id_offre in (select id from pact._restaurant) then return 'restaurant'; end if;
+    if id_offre in (select id from pact._activite) then return 'activité'; end if;
+    if id_offre in (select id from pact._visite) then return 'visite'; end if;
+    if id_offre in (select id from pact._spectacle) then return 'spectacle'; end if;
+    if id_offre in (select id from pact._parc_attractions) then return 'parc d''attractions'; end if;
     raise 'incohérence: offre non catégorisée';
 end;
 $$ language 'plpgsql';
