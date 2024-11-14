@@ -7,9 +7,9 @@ set schema 'pact';
 with
     id_adresse as (
         insert into
-            _adresse (code_insee_commune, numero_voie, nom_voie)
+            _adresse (numero_departement, code_commune, numero_voie, nom_voie)
         values
-            ('22162', 32, 'Rue de Beauport')
+            ('22', 162, 32, 'Rue de Beauport')
         returning
             id
     ),
@@ -36,6 +36,7 @@ with
                 1,
                 'Crêperie de l''Abbaye de Beauport',
                 'La Crêperie de l''Abbaye de Beauport est une délicieuse crêperie située à Paimpol. Découvrez nous goutûs plats.',
+                'La Crêperie de l''Abbaye de Beauport est une délicieuse crêperie située à Paimpol. Découvrez nous goutûs plats. Oui, je suis détaillé. Me demandez pas plus de détails. Je ne suis qu''un restaurant',
                 'La carte? Allez voir au restaurant, on vous en donnera une',
                 2,
                 true,
@@ -64,9 +65,9 @@ values
 with
     id_adresse as (
         insert into
-            _adresse (code_insee_commune, numero_voie, nom_voie)
+            _adresse (numero_departement, code_commune, numero_voie, nom_voie)
         values
-            ('22093', 21, 'rue Docteur Calmette')
+            ('22', 93, 21, 'rue Docteur Calmette')
         returning
             id
     ),
@@ -132,9 +133,9 @@ values
 with
     id_adresse as (
         insert into
-            _adresse (code_insee_commune, nom_voie)
+            _adresse (numero_departement, code_commune, nom_voie)
         values
-            ('22201', 'Rte du Cap')
+            ('22', 201, 'Rte du Cap')
         returning
             id
     ),
@@ -209,9 +210,9 @@ values
 with
     id_adresse as (
         insert into
-            _adresse (code_insee_commune, numero_voie, nom_voie)
+            _adresse (numero_departement, code_commune, numero_voie, nom_voie)
         values
-            ('22278', 2, 'Rue des Lycéens Martyrs')
+            ('22', 278, 2, 'Rue des Lycéens Martyrs')
         returning
             id
     ),
@@ -283,9 +284,9 @@ values
 with
     id_adresse as (
         insert into
-            _adresse (code_insee_commune, nom_voie, precision_ext)
+            _adresse (numero_departement, code_commune, nom_voie, precision_ext)
         values
-            ('22168', 'Chem. du Squevel', 'Parking du Sémaphore - Sentier des Douaniers')
+            ('22', 168, 'Chem. du Squevel', 'Parking du Sémaphore - Sentier des Douaniers')
         returning
             id
     ),
@@ -357,9 +358,9 @@ values
 with
     id_adresse as (
         insert into
-            _adresse (code_insee_commune, precision_ext, numero_voie, nom_voie)
+            _adresse (numero_departement, code_commune, precision_ext, numero_voie, nom_voie)
         values
-            ('22168', 'Parking De La Rade 83', 72, 'Rue Ernest Renan')
+            ('22', 168, 'Parking De La Rade 83', 72, 'Rue Ernest Renan')
         returning
             id
     ),
@@ -441,9 +442,9 @@ values
 with
     id_adresse as (
         insert into
-            _adresse (code_insee_commune, localite)
+            _adresse (numero_departement, code_commune, localite)
         values
-            ('63046', 'Vallée des Saints')
+            ('63', 46, 'Vallée des Saints')
         returning
             id
     ),
@@ -519,9 +520,9 @@ values
 with
     id_adresse as (
         insert into
-            _adresse (code_insee_commune, localite)
+            _adresse (numero_departement, code_commune, localite)
         values
-            ('22203', 'Vallée des Saints')
+            ('22', 203, 'Vallée des Saints')
         returning
             id
     ),
@@ -575,9 +576,9 @@ values
 with
     id_adresse as (
         insert into
-            _adresse (code_insee_commune, localite)
+            _adresse (numero_departement, code_commune, localite)
         values
-            ('63046', 'Vallée des Saints')
+            ('63', 046, 'Vallée des Saints')
         returning
             id
     ),
@@ -653,9 +654,9 @@ values
 with
     id_adresse as (
         insert into
-            _adresse (code_insee_commune, localite)
+            _adresse (numero_departement, code_commune, localite)
         values
-            ('22201', 'Cap Fréhel')
+            ('22', 201, 'Cap Fréhel')
         returning
             id
     ),
@@ -724,9 +725,9 @@ values
 with
     id_adresse as (
         insert into
-            _adresse (code_insee_commune, localite)
+            _adresse (numero_departement, code_commune, localite)
         values
-            ('22198', 'Cité des Télécoms')
+            ('22', 198, 'Cité des Télécoms')
         returning
             id
     ),
@@ -810,9 +811,9 @@ values
 with
     id_adresse as (
         insert into
-            _adresse (code_insee_commune, localite, precision_ext)
+            _adresse (numero_departement, code_commune, localite, precision_ext)
         values
-            ('22360', 'Espace Brezillet', 'PARC EXPO BREZILLET')
+            ('22', 360, 'Espace Brezillet', 'PARC EXPO BREZILLET')
         returning
             id
     ),
@@ -855,9 +856,9 @@ values
 with
     id_adresse as (
         insert into
-            _adresse (code_insee_commune, nom_voie)
+            _adresse (numero_departement, code_commune, nom_voie)
         values
-            ('22045', 'Axe Chatelaudren-Quintin')
+            ('22', 045, 'Axe Chatelaudren-Quintin')
         returning
             id
     ),
@@ -914,9 +915,9 @@ values
 with
     id_adresse as (
         insert into
-            _adresse (code_insee_commune, localite)
+            _adresse (numero_departement, code_commune, localite)
         values
-            ('22164', 'Menez Bré')
+            ('22', 164, 'Menez Bré')
         returning
             id
     ),
@@ -976,9 +977,9 @@ values
 with
     id_adresse as (
         insert into
-            _adresse (code_insee_commune, nom_voie, localite)
+            _adresse (numero_departement, code_commune, nom_voie, localite)
         values
-            ('22070', 'Rte de Tréguier', 'ZAC le Lion de Saint-Marc')
+            ('22', 070, 'Rte de Tréguier', 'ZAC le Lion de Saint-Marc')
         returning
             id
     ),
@@ -1026,9 +1027,9 @@ values
 with
     id_adresse as (
         insert into
-            _adresse (code_insee_commune, numero_voie, nom_voie)
+            _adresse (numero_departement, code_commune, numero_voie, nom_voie)
         values
-            ('22070', 14, 'Rue de l''Eglise')
+            ('22', 070, 14, 'Rue de l''Eglise')
         returning
             id
     )
@@ -1061,9 +1062,9 @@ values
 with
     id_adresse as (
         insert into
-            _adresse (code_insee_commune, numero_voie, nom_voie)
+            _adresse (numero_departement, code_commune, numero_voie, nom_voie)
         values
-            ('22186', 1, 'Rue de Belvédère')
+            ('22', 186, 1, 'Rue de Belvédère')
         returning
             id
     )
@@ -1104,9 +1105,9 @@ L''initiation au char à voile peut être incluse dans le cadre d''une activité
 with
     id_adresse as (
         insert into
-            _adresse (code_insee_commune, numero_voie, nom_voie)
+            _adresse (numero_departement, code_commune, numero_voie, nom_voie)
         values
-            ('22278', 18, 'Rue de l''Église')
+            ('22', 278, 18, 'Rue de l''Église')
         returning
             id
     )
@@ -1154,9 +1155,9 @@ De 3 à 6 joueurs, en famille, entre collègues ou entre amis, venez relever nos
 with
     id_adresse as (
         insert into
-            _adresse (code_insee_commune, nom_voie)
+            _adresse (numero_departement, code_commune, nom_voie)
         values
-            ('22360', 'Zone de loisirs Brezillet ouest')
+            ('22', 360, 'Zone de loisirs Brezillet ouest')
         returning
             id
     ),
@@ -1206,9 +1207,9 @@ values
 with
     id_adresse as (
         insert into
-            _adresse (code_insee_commune, nom_voie)
+            _adresse (numero_departement, code_commune, nom_voie)
         values
-            ('22117', 'Les étangs')
+            ('22', 117, 'Les étangs')
         returning
             id
     )
@@ -1245,9 +1246,9 @@ values
 with
     id_adresse as (
         insert into
-            _adresse (code_insee_commune, nom_voie)
+            _adresse (numero_departement, code_commune, nom_voie)
         values
-            ('22154', 'Les Tronchées')
+            ('22', 154, 'Les Tronchées')
         returning
             id
     )

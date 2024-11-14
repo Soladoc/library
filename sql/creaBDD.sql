@@ -13,8 +13,7 @@ create schema pact;
 
 set schema 'pact';
 
-create domain code_commune_insee as char(5);
-create domain numero_departement as char(3);
+create domain num_departement as char(3);
 create domain iso639_1 as char(2);
 create domain nom_option char(10);
 create domain ligne as varchar check (value not like E'%\n%'); -- une ligne de texte
@@ -29,24 +28,27 @@ create domain pseudonyme as varchar(63) check (value ~ '^[^@\s[:cntrl:]](?: |[^@
 -- CLASSES
 
 create table _departement(
-    numero numero_departement
+    numero num_departement
         constraint departement_pk primary key,
     nom ligne not null unique
 );
 
 create table _commune(
-    code_insee code_commune_insee
-        constraint commune_pk primary key,
-    numero_departement numero_departement not null
+    code int,
+    numero_departement num_departement
         constraint commune_fk_departement references _departement,
+    constraint commune_pk primary key (code, numero_departement),
+        
     nom ligne not null
 );
 
 create table _adresse(
     id serial
         constraint adresse_pk primary key,
-    code_insee_commune code_commune_insee not null
-        constraint adresse_fk_commune references _commune,
+
+    code_commune int not null,
+    numero_departement num_departement not null,
+    constraint adresse_fk_commune foreign key (code_commune, numero_departement) references _commune,
 
     numero_voie int not null default 0,
     complement_numero varchar(10) not null default '',
@@ -322,10 +324,12 @@ create table _signalement(
 );
 
 create table _code_postal(
-    code_insee_commune code_commune_insee
-        constraint code_postal_fk_commune references _commune,
-    code_postal char(5),
-    constraint code_postal_pk primary key (code_insee_commune, code_postal)
+    code_commune int not null,
+    numero_departement num_departement not null,
+    constraint adresse_fk_commune foreign key (code_commune, numero_departement) references _commune,
+
+    code_postal char(5) not null,
+    constraint code_postal_pk primary key (code_commune, numero_departement, code_postal)
 );
 
 create table _langue_visite(
