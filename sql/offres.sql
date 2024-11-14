@@ -2,7 +2,123 @@ begin;
 
 set schema 'pact';
 
+-- Restaurant La Plage
+with
+    id_adresse as (
+        insert into
+            _adresse (numero_departement, code_commune, numero_voie, nom_voie)
+        values
+            ('22', 162, 17, 'Bd Joseph le Bihan')
+        returning
+            id
+    ),
+    id_offre as (
+        insert into
+            restaurant (
+                id_adresse,
+                id_image_principale,
+                libelle_abonnement,
+                id_professionnel,
+                titre,
+                resume,
+                description_detaillee,
+                carte,
+                richesse,
+                sert_dejeuner,
+                sert_diner
+            )
+        values
+            (
+                (table id_adresse),
+                8,
+                'gratuit',
+                1,
+                'La Plage',
+                'La Plage est un délicieux restaurant situé à Paimpol. Découvrez nous goutûs plats.',
+                'La Plage est un délicieux restaurant situé à Paimpol. Découvrez nous goutûs plats. Oui, je suis détaillé. Me demandez pas plus de détails. Je ne suis qu''un restaurant. Marie y travaillait et puis j''y suis allé une fois c''est vraiment incroyable trop bon.',
+                'La carte? Allez voir au restaurant, on vous en donnera une',
+                2,
+                true,
+                true
+            )
+        returning
+            id
+    )
+insert into
+    _horaire_ouverture (id_offre, jour_de_la_semaine, heure_debut, heure_fin)
+values
+    ((table id_offre), 2, '12:', '15:30'),
+    ((table id_offre), 2, '18:30', '23:59:59'),
+    ((table id_offre), 3, '12:', '15:30'),
+    ((table id_offre), 3, '18:30', '23:59:59'),
+    ((table id_offre), 4, '12:', '15:30'),
+    ((table id_offre), 4, '18:30', '23:59:59'),
+    ((table id_offre), 5, '12:', '15:30'),
+    ((table id_offre), 5, '18:30', '23:59:59'),
+    ((table id_offre), 6, '12:', '15:30'),
+    ((table id_offre), 6, '18:30', '23:59:59'),
+    ((table id_offre), 7, '12:', '15:30'),
+    ((table id_offre), 7, '18:30', '23:59:59');
+
 -- truncate table _offre restart identity cascade;
+-- Crêperie Les Alizés
+with
+    id_adresse as (
+        insert into
+            _adresse (numero_departement, code_commune, numero_voie, nom_voie)
+        values
+            ('22', 162, 14, 'Rue des Huit Patriotes')
+        returning
+            id
+    ),
+    id_offre as (
+        insert into
+            restaurant (
+                id_adresse,
+                id_image_principale,
+                libelle_abonnement,
+                id_professionnel,
+                titre,
+                resume,
+                description_detaillee,
+                carte,
+                richesse,
+                sert_dejeuner,
+                sert_diner
+            )
+        values
+            (
+                (table id_adresse),
+                8,
+                'gratuit',
+                1,
+                'Crêperie Les Alizés',
+                'La Crêperie Les Alizés est une délicieuse crêperie située à Paimpol. Découvrez nous goutûs plats.',
+                'La Crêperie Les Alizés est une délicieuse crêperie située à Paimpol. Découvrez nous goutûs plats. Oui, je suis détaillé. Me demandez pas plus de détails. Je ne suis qu''un restaurant',
+                'La carte? Allez voir au restaurant, on vous en donnera une',
+                2,
+                true,
+                true
+            )
+        returning
+            id
+    )
+insert into
+    _horaire_ouverture (id_offre, jour_de_la_semaine, heure_debut, heure_fin)
+values
+    ((table id_offre), 2, '12:', '15:30'),
+    ((table id_offre), 2, '18:30', '23:59:59'),
+    ((table id_offre), 3, '12:', '15:30'),
+    ((table id_offre), 3, '18:30', '23:59:59'),
+    ((table id_offre), 4, '12:', '15:30'),
+    ((table id_offre), 4, '18:30', '23:59:59'),
+    ((table id_offre), 5, '12:', '15:30'),
+    ((table id_offre), 5, '18:30', '23:59:59'),
+    ((table id_offre), 6, '12:', '15:30'),
+    ((table id_offre), 6, '18:30', '23:59:59'),
+    ((table id_offre), 7, '12:', '15:30'),
+    ((table id_offre), 7, '18:30', '23:59:59');
+
 -- Crêperie de l'Abbaye de Beauport
 with
     id_adresse as (
