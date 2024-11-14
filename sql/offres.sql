@@ -3,8 +3,356 @@ begin;
 set schema 'pact';
 
 -- truncate table _offre restart identity cascade;
---
+-- Crêperie de l'Abbaye de Beauport
+with
+    id_adresse as (
+        insert into
+            _adresse (code_insee_commune, numero_voie, nom_voie)
+        values
+            ('22162', 32, 'Rue de Beauport')
+        returning
+            id
+    ),
+    id_offre as (
+        insert into
+            restaurant (
+                id_adresse,
+                id_image_principale,
+                libelle_abonnement,
+                id_professionnel,
+                titre,
+                resume,
+                description_detaillee,
+                carte,
+                richesse,
+                sert_dejeuner,
+                sert_diner
+            )
+        values
+            (
+                (table id_adresse),
+                8,
+                'gratuit',
+                1,
+                'Crêperie de l''Abbaye de Beauport',
+                'La Crêperie de l''Abbaye de Beauport est une délicieuse crêperie située à Paimpol. Découvrez nous goutûs plats.',
+                'La carte? Allez voir au restaurant, on vous en donnera une',
+                2,
+                true,
+                true
+            )
+        returning
+            id
+    )
+insert into
+    _horaire_ouverture (id_offre, jour_de_la_semaine, heure_debut, heure_fin)
+values
+    ((table id_offre), 2, '12:', '15:30'),
+    ((table id_offre), 2, '18:30', '23:59:59'),
+    ((table id_offre), 3, '12:', '15:30'),
+    ((table id_offre), 3, '18:30', '23:59:59'),
+    ((table id_offre), 4, '12:', '15:30'),
+    ((table id_offre), 4, '18:30', '23:59:59'),
+    ((table id_offre), 5, '12:', '15:30'),
+    ((table id_offre), 5, '18:30', '23:59:59'),
+    ((table id_offre), 6, '12:', '15:30'),
+    ((table id_offre), 6, '18:30', '23:59:59'),
+    ((table id_offre), 7, '12:', '15:30'),
+    ((table id_offre), 7, '18:30', '23:59:59');
+
+-- Visite de la galerie d'Art du Dragon Noir
+with
+    id_adresse as (
+        insert into
+            _adresse (code_insee_commune, numero_voie, nom_voie)
+        values
+            ('22093', 21, 'rue Docteur Calmette')
+        returning
+            id
+    ),
+    id_offre as (
+        insert into
+            visite (
+                id_adresse,
+                indication_duree,
+                id_image_principale,
+                libelle_abonnement,
+                id_professionnel,
+                titre,
+                resume,
+                description_detaillee,
+                url_site_web
+            )
+        values
+            (
+                (table id_adresse),
+                '0:45:',
+                18,
+                'gratuit',
+                1,
+                'Visite de la galerie d''Art du Dragon Noir',
+                'Découvrez la fascinante Galerie d''Art du Dragon Noir lors de cette visite guidée exclusive. Plongez dans un univers artistique unique où chaque œuvre raconte une histoire captivante. Cette expérience immersive vous permettra d''explorer des collections variées, allant des peintures contemporaines aux sculptures traditionnelles, tout en bénéficiant des explications passionnantes de notre guide expert. Ne manquez pas cette opportunité de vous imprégner de l''art sous toutes ses formes.',
+                'La visite de la Galerie d''Art du Dragon Noir est une expérience inoubliable pour tous les amateurs d''art et de culture. Située dans un cadre enchanteur, cette galerie renommée abrite une collection éclectique d''œuvres d''art qui sauront captiver votre imagination.
+
+Dès votre arrivée, vous serez accueilli par notre guide expert, qui vous accompagnera tout au long de la visite. Vous commencerez par une introduction à l''histoire de la galerie et à son fondateur, un passionné d''art qui a consacré sa vie à rassembler des œuvres exceptionnelles du monde entier.
+
+La première partie de la visite vous emmènera à travers les salles dédiées à l''art contemporain. Vous découvrirez des peintures, des installations et des performances artistiques qui repoussent les limites de la créativité. Notre guide vous expliquera les techniques utilisées par les artistes, ainsi que les messages et les émotions qu''ils cherchent à transmettre à travers leurs œuvres.
+
+Ensuite, vous pénétrerez dans les salles consacrées à l''art traditionnel. Ici, vous pourrez admirer des sculptures, des gravures et des tapisseries qui témoignent de l''héritage culturel de différentes régions du monde. Chaque pièce est soigneusement sélectionnée pour sa qualité et son importance historique, offrant un aperçu unique des traditions artistiques ancestrales.
+
+La visite se poursuivra avec une exploration des œuvres d''artistes émergents. La galerie est fière de soutenir les talents de demain en leur offrant une plateforme pour exposer leurs créations. Vous aurez l''occasion de découvrir des œuvres innovantes et de discuter avec notre guide des tendances actuelles dans le monde de l''art.
+
+Pour clôturer cette expérience en beauté, vous serez invité à participer à un atelier interactif où vous pourrez vous essayer à une technique artistique. Que ce soit la peinture, la sculpture ou le dessin, cet atelier vous permettra de vous immerger pleinement dans le processus créatif et de repartir avec une œuvre personnelle.
+
+La visite de la Galerie d''Art du Dragon Noir est bien plus qu''une simple exposition; c''est une véritable aventure artistique qui vous laissera des souvenirs impérissables. Réservez dès maintenant votre place pour cette expérience unique et laissez-vous envoûter par la magie de l''art.',
+                'https://www.tripadvisor.fr/Attraction_Review-g196529-d15183404-Reviews-Galerie_d_Art_du_Dragon_Noir-Lamballe_Cotes_d_Armor_Brittany.html'
+            )
+        returning
+            id
+    ),
+    s1 as (
+        insert into
+            _langue_visite (id_visite, code_langue)
+        values
+            ((table id_offre), 'fr'),
+            ((table id_offre), 'en')
+    )
+insert into
+    _horaire_ouverture (id_offre, jour_de_la_semaine, heure_debut, heure_fin)
+values
+    ((table id_offre), 1, '10:', '18:'),
+    ((table id_offre), 2, '10:', '18:'),
+    ((table id_offre), 3, '10:', '18:'),
+    ((table id_offre), 4, '10:', '18:'),
+    ((table id_offre), 5, '10:', '18:'),
+    ((table id_offre), 6, '10:', '18:'),
+    ((table id_offre), 7, '13:', '18:');
+
+-- Visite du phare du Cap Fréhel
+with
+    id_adresse as (
+        insert into
+            _adresse (code_insee_commune, nom_voie)
+        values
+            ('22201', 'Rte du Cap')
+        returning
+            id
+    ),
+    id_offre as (
+        insert into
+            visite (
+                id_adresse,
+                indication_duree,
+                id_image_principale,
+                libelle_abonnement,
+                id_professionnel,
+                titre,
+                resume,
+                description_detaillee,
+                url_site_web
+            )
+        values
+            (
+                (table id_adresse),
+                '1:30:',
+                24,
+                'gratuit',
+                1,
+                'Visite du phare Vauban au Cap Fréhel',
+                'Découvrez la beauté sauvage de la Bretagne avec notre visite guidée du phare du Cap Fréhel. Cette excursion vous offre une vue imprenable sur la côte bretonne, une immersion dans l''histoire maritime et une expérience inoubliable au cœur de la nature.',
+                '#### Introduction
+La visite du phare du Cap Fréhel est une expérience unique qui vous plonge dans l''histoire et la beauté naturelle de la Bretagne. Situé sur la côte d''Émeraude, ce phare emblématique offre des vues panoramiques à couper le souffle sur la mer et les falaises environnantes.
+
+#### Déroulement de la visite
+La visite commence par une promenade guidée à travers les sentiers côtiers, où vous pourrez admirer la flore et la faune locales. Votre guide vous racontera l''histoire fascinante du phare, construit au XIXe siècle pour guider les marins à travers les eaux tumultueuses de la Manche. Vous découvrirez également les légendes et les mythes qui entourent ce lieu chargé d''histoire.
+
+#### Ascension du phare
+L''un des moments forts de la visite est l''ascension du phare. Après avoir gravi les marches, vous atteindrez le sommet où une vue à 360 degrés sur la côte bretonne vous attend. Par temps clair, vous pourrez même apercevoir les îles Anglo-Normandes. Votre guide vous expliquera le fonctionnement du phare et son importance stratégique pour la navigation maritime.
+
+#### Exploration des environs
+Après la visite du phare, vous aurez l''occasion d''explorer les environs. Les falaises de grès rose du Cap Fréhel sont un spectacle à ne pas manquer, offrant un contraste saisissant avec le bleu de la mer. Vous pourrez également vous promener dans le parc naturel qui entoure le phare, où vous pourrez observer une variété d''oiseaux marins et de plantes rares.
+
+#### Conclusion
+La visite du phare du Cap Fréhel est une expérience enrichissante qui combine histoire, nature et aventure. Que vous soyez un passionné d''histoire, un amoureux de la nature ou simplement à la recherche d''une journée inoubliable, cette excursion est faite pour vous. Réservez dès maintenant pour vivre une aventure bretonne inoubliable.
+
+#### Informations pratiques
+- **Durée de la visite** : Environ 3 heures
+- **Point de départ** : Parking du Cap Fréhel
+- **Inclus** : Guide professionnel, accès au phare, promenade guidée
+- **Recommandations** : Porter des chaussures confortables et des vêtements adaptés à la météo
+
+Ne manquez pas cette opportunité unique de découvrir l''un des joyaux de la Bretagne. Réservez votre visite dès aujourd''hui et laissez-vous émerveiller par la beauté du Cap Fréhel.',
+                'https://www.dinan-capfrehel.com/sit/phare-du-cap-frehel'
+            )
+        returning
+            id
+    ),
+    s1 as (
+        insert into
+            _langue_visite (id_visite, code_langue)
+        values
+            ((table id_offre), 'fr'),
+            ((table id_offre), 'en')
+    )
+insert into
+    _horaire_ouverture (id_offre, jour_de_la_semaine, heure_debut, heure_fin)
+values
+    ((table id_offre), 1, '10:', '18:'),
+    ((table id_offre), 2, '10:', '18:'),
+    ((table id_offre), 3, '10:', '18:'),
+    ((table id_offre), 4, '10:', '18:'),
+    ((table id_offre), 5, '10:', '18:'),
+    ((table id_offre), 6, '10:', '18:'),
+    ((table id_offre), 7, '13:', '18:');
+
+-- Visite du musée d'Art et d'Histoire de Saint-Brieuc
+with
+    id_adresse as (
+        insert into
+            _adresse (code_insee_commune, numero_voie, nom_voie)
+        values
+            ('22278', 2, 'Rue des Lycéens Martyrs')
+        returning
+            id
+    ),
+    id_offre as (
+        insert into
+            visite (
+                id_adresse,
+                indication_duree,
+                id_image_principale,
+                libelle_abonnement,
+                id_professionnel,
+                titre,
+                resume,
+                description_detaillee,
+                url_site_web
+            )
+        values
+            (
+                (table id_adresse),
+                '4:00:',
+                25,
+                'gratuit',
+                2,
+                'Trail dans la réserve naturelle des Sept Îles',
+                'Découvrez l''histoire et la culture de la Bretagne à travers une visite guidée du musée d''Art et d''Histoire de Saint-Brieuc. Plongez dans des collections riches et variées, allant de l''archéologie à l''art contemporain, en passant par des expositions temporaires fascinantes. Une expérience immersive et enrichissante pour tous les amateurs d''art et d''histoire.',
+                '#### Introduction au musée
+Le musée d''Art et d''Histoire de Saint-Brieuc est un lieu incontournable pour quiconque souhaite explorer le patrimoine culturel et historique de la Bretagne. Situé au cœur de la ville, ce musée offre une vue d''ensemble sur l''évolution artistique et historique de la région, depuis les temps préhistoriques jusqu''à nos jours.
+
+#### Les collections permanentes
+La visite commence par les collections permanentes, qui couvrent une large période historique. Les sections d''archéologie présentent des objets fascinants datant de la préhistoire, de l''Antiquité et du Moyen Âge, offrant un aperçu unique de la vie quotidienne et des pratiques culturelles de ces époques. Les amateurs d''art pourront admirer des œuvres de maîtres anciens et modernes, ainsi que des créations contemporaines qui témoignent de la vitalité artistique de la Bretagne.
+
+#### Les expositions temporaires
+En plus des collections permanentes, le musée propose régulièrement des expositions temporaires qui mettent en lumière des thèmes spécifiques ou des artistes locaux et internationaux. Ces expositions sont souvent accompagnées de conférences, d''ateliers et d''autres événements culturels, offrant ainsi une expérience interactive et éducative.
+
+#### La visite guidée
+Pour une expérience encore plus enrichissante, nous proposons une visite guidée par des experts passionnés. Ces guides vous feront découvrir les trésors cachés du musée, partageront des anecdotes historiques et répondront à toutes vos questions. La visite guidée est disponible en plusieurs langues et peut être adaptée aux besoins spécifiques des groupes, qu''ils soient scolaires, familiaux ou professionnels.
+
+#### Les services supplémentaires
+Le musée dispose également d''une boutique où vous pourrez acheter des souvenirs, des livres et des reproductions d''œuvres d''art. Un café-restaurant est également disponible sur place, offrant une pause agréable après la visite. Pour les visiteurs souhaitant approfondir leurs connaissances, une bibliothèque spécialisée est accessible sur demande.
+
+#### Informations pratiques
+Le musée est ouvert du mardi au dimanche, de 10h à 18h. Les tarifs d''entrée sont abordables et des réductions sont disponibles pour les étudiants, les seniors et les groupes. Pour une visite sans stress, il est recommandé de réserver à l''avance, surtout pour les visites guidées.
+
+Ne manquez pas cette opportunité unique de découvrir l''art et l''histoire de la Bretagne dans un cadre exceptionnel. Réservez dès maintenant votre visite au musée d''Art et d''Histoire de Saint-Brieuc et laissez-vous transporter par la richesse de son patrimoine.',
+                'https://reserves-naturelles.org/reserves/sept-iles'
+            )
+        returning
+            id
+    ),
+    s1 as (
+        insert into
+            _langue_visite (id_visite, code_langue)
+        values
+            ((table id_offre), 'fr'),
+            ((table id_offre), 'en')
+    )
+insert into
+    _horaire_ouverture (id_offre, jour_de_la_semaine, heure_debut, heure_fin)
+values
+    ((table id_offre), 1, '10:', '18:'),
+    ((table id_offre), 2, '10:', '18:'),
+    ((table id_offre), 3, '10:', '18:'),
+    ((table id_offre), 4, '10:', '18:'),
+    ((table id_offre), 5, '10:', '18:'),
+    ((table id_offre), 6, '10:', '18:'),
+    ((table id_offre), 7, '13:', '18:');
+
 -- Trail dans la réserve naturelle des Sept Îles
+with
+    id_adresse as (
+        insert into
+            _adresse (code_insee_commune, nom_voie, precision_ext)
+        values
+            ('22168', 'Chem. du Squevel', 'Parking du Sémaphore - Sentier des Douaniers')
+        returning
+            id
+    ),
+    id_offre as (
+        insert into
+            visite (
+                id_adresse,
+                indication_duree,
+                id_image_principale,
+                libelle_abonnement,
+                id_professionnel,
+                titre,
+                resume,
+                description_detaillee,
+                url_site_web
+            )
+        values
+            (
+                (table id_adresse),
+                '4:00:',
+                24,
+                'gratuit',
+                2,
+                'Trail dans la réserve naturelle des Sept Îles',
+                'Découvrez la beauté sauvage de la réserve naturelle des Sept Îles à Perros-Guirec avec notre offre de trail unique. Parcourez des sentiers pittoresques, admirez la faune et la flore exceptionnelles, et profitez de vues panoramiques sur la côte bretonne. Une expérience inoubliable pour les amateurs de nature et de sport.',
+                '#### Introduction
+Plongez au cœur de la nature bretonne avec notre offre de trail dans la réserve naturelle des Sept Îles à Perros-Guirec. Cette aventure est idéale pour les amateurs de course à pied et de nature, offrant une expérience unique et enrichissante.
+
+#### Parcours et Paysages
+Le trail commence à Perros-Guirec, une charmante station balnéaire située sur la Côte de Granit Rose. Vous traverserez des sentiers côtiers offrant des vues imprenables sur les Sept Îles, un archipel protégé abritant une faune et une flore exceptionnelles. Les paysages variés incluent des falaises escarpées, des plages de sable fin, et des landes fleuries, créant un cadre idyllique pour votre course.
+
+#### Faune et Flore
+La réserve naturelle des Sept Îles est un sanctuaire pour de nombreuses espèces d''oiseaux marins, notamment les macareux moines et les fous de Bassan. Vous aurez peut-être la chance d''apercevoir ces oiseaux majestueux depuis les points de vue panoramiques le long du parcours. La flore locale est également remarquable, avec des espèces rares et protégées qui ajoutent à la beauté du paysage.
+
+#### Niveau de Difficulté et Encadrement
+Le trail est conçu pour être accessible à tous les niveaux de coureurs, avec des options de parcours de différentes longueurs et difficultés. Que vous soyez un débutant ou un coureur expérimenté, vous trouverez un itinéraire adapté à vos capacités. Notre équipe de guides expérimentés vous accompagnera tout au long du parcours, assurant votre sécurité et partageant des anecdotes sur la région.
+
+#### Équipement et Services
+Pour votre confort, nous fournissons tout l''équipement nécessaire, y compris des chaussures de trail, des sacs à dos, et des bâtons de marche. Des points de ravitaillement sont prévus le long du parcours, offrant des boissons et des collations pour vous maintenir en forme. À la fin de la course, vous pourrez vous détendre et profiter d''un repas local dans un cadre convivial.
+
+#### Conclusion
+Notre offre de trail dans la réserve naturelle des Sept Îles à Perros-Guirec est bien plus qu''une simple course. C''est une immersion totale dans la nature bretonne, une occasion de découvrir des paysages époustouflants et une faune exceptionnelle. Rejoignez-nous pour une aventure inoubliable et ressentez la magie de la Côte de Granit Rose.
+
+Réservez dès maintenant votre place et préparez-vous à vivre une expérience unique et enrichissante !',
+                'https://reserves-naturelles.org/reserves/sept-iles'
+            )
+        returning
+            id
+    ),
+    s1 as (
+        insert into
+            _langue_visite (id_visite, code_langue)
+        values
+            ((table id_offre), 'fr'),
+            ((table id_offre), 'en')
+    )
+insert into
+    _horaire_ouverture (id_offre, jour_de_la_semaine, heure_debut, heure_fin)
+values
+    ((table id_offre), 1, '10:', '18:'),
+    ((table id_offre), 2, '10:', '18:'),
+    ((table id_offre), 3, '10:', '18:'),
+    ((table id_offre), 4, '10:', '18:'),
+    ((table id_offre), 5, '10:', '18:'),
+    ((table id_offre), 6, '10:', '18:'),
+    ((table id_offre), 7, '13:', '18:');
+
 -- Découverte de la Côte de Granit Rose
 with
     id_adresse as (
@@ -491,8 +839,8 @@ with
                 'gratuit',
                 2,
                 'Celtic Legends - Tournée 2026',
-                'Celtic Legends est un spectacle de musiques et de danses irlandaises qui s’est produit sur de nombreuses scènes à travers le monde depuis sa création, attirant près de 3 millions de spectateurs.',
-                'Celtic Legends revient en 2026 avec une nouvelle version du spectacle. Créé à Galway, au Coeur du Connemara, Celtic Legends est un condensé de la culture traditionnelle Irlandaise recréant sur scène l’ambiance électrique d’une soirée dans un pub traditionnel. Venez partager durant 2 heures ce voyage au coeur de l’Irlande soutenu par 5 talentueux musiciens sous la baguette de Sean McCarthy et de 12 extraordinaires danseurs sous la houlette de la créative Jacintha Sharpe.',
+                'Celtic Legends est un spectacle de musiques et de danses irlandaises qui s''est produit sur de nombreuses scènes à travers le monde depuis sa création, attirant près de 3 millions de spectateurs.',
+                'Celtic Legends revient en 2026 avec une nouvelle version du spectacle. Créé à Galway, au Coeur du Connemara, Celtic Legends est un condensé de la culture traditionnelle Irlandaise recréant sur scène l''ambiance électrique d''une soirée dans un pub traditionnel. Venez partager durant 2 heures ce voyage au coeur de l''Irlande soutenu par 5 talentueux musiciens sous la baguette de Sean McCarthy et de 12 extraordinaires danseurs sous la houlette de la créative Jacintha Sharpe.',
                 'https://www.celtic-legends.net'
             )
         returning
