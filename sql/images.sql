@@ -47,7 +47,8 @@ values
     (419498, 'jpeg', 'fond-accueil-piste-kart-2022'), -- 40
     (133951, 'png', 'kerlabo-circuits-1024x806'), -- 41
     (53025, 'jpeg', 'kerlabo-karting'), -- 42
-    (67379, 'png', 'kerlabo-enfant-memories') -- 43
+    (67379, 'png', 'kerlabo-enfant-memories'), -- 43
+    (70826, 'jpeg', 'restaurant -la-plage') -- 44
 ;
 
 commit;

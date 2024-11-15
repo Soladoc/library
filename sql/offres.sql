@@ -8,7 +8,7 @@ with
         insert into
             _adresse (numero_departement, code_commune, numero_voie, nom_voie)
         values
-            ('22', 162, 17, 'Bd Joseph le Bihan')
+            ('22', 168, 35, 'Rte de Perros')
         returning
             id
     ),
@@ -30,9 +30,9 @@ with
         values
             (
                 (table id_adresse),
-                8,
+                44,
                 'gratuit',
-                1,
+                45,
                 'La Plage',
                 'La Plage est un délicieux restaurant situé à Paimpol. Découvrez nous goutûs plats.',
                 'La Plage est un délicieux restaurant situé à Paimpol. Découvrez nous goutûs plats. Oui, je suis détaillé. Me demandez pas plus de détails. Je ne suis qu''un restaurant. Marie y travaillait et puis j''y suis allé une fois c''est vraiment incroyable trop bon.',
@@ -89,7 +89,7 @@ with
         values
             (
                 (table id_adresse),
-                8,
+                13,
                 'gratuit',
                 1,
                 'Crêperie Les Alizés',

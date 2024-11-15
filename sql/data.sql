@@ -10,6 +10,12 @@ values
     ('premium', 10);
 
 insert into
+    _option (nom, prix)
+values
+    ('À la Une', 20),
+    ('En Relief', 30);
+
+insert into
     pro_prive (siren, denomination, email, mdp_hash, nom, prenom, telephone)
 values
     (
