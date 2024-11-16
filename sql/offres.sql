@@ -2,6 +2,124 @@ begin;
 
 set schema 'pact';
 
+-- Parc Aquarev
+with
+    id_adresse as (
+        insert into
+            _adresse (numero_departement, code_commune, nom_voie)
+        values
+            ('22', 136, 'Rue du Mène')
+        returning
+            id
+    ),
+    id_offre as (
+        insert into
+            parc_attractions (
+                id_adresse,
+                id_image_principale,
+                id_image_plan,
+                id_professionnel,
+                libelle_abonnement,
+                titre,
+                resume,
+                description_detaillee,
+                url_site_web
+            )
+        values
+            (
+                (table id_adresse),
+                3,
+                46,
+                1,
+                'gratuit',
+                'Parc de loisirs Aquarev',
+                'Découvrez le parc de loisirs Aquarev, véritable poumon vert de Loudéac.',
+                '## Un « rêve » aménagé en pleine nature
+
+30 hectares aménagés autour d''un étang pour le loisir et la détente : une plaine de jeux, un labyrinthe, une bambouseraie, des pontons de pêche, des aires de pique-nique, un parcours sportif, un terrain multi-sport, le tout dans une ambiance détendue, « zen »… Pour tous et en accès libre.
+
+Autour de son « tipi » emblématique, le site présente une nouvelle image d''un parc de loisirs, de promenades, de vie au cœur d''un espace vert rustique qui permet à chacun de trouver des lieux différents, pour se rencontrer, prendre du bon temps et du plaisir.
+
+Le site accueille régulièrement de nombreux événements municipaux et manifestations associatives. Chaque mercredi d''été, venez par exemple participer aux « Ateliers d''Aquarev » sous le tipi, des animations gratuite pour toute la famille proposées par des commerçant ou intervenants du territoire autour des plantes et de la nature.
+
+### Une ambiance propice à la détente
+
+Une partie du mobilier est en bois : kiosques, pontons de pêche, ponceaux, tables de pique-nique… pour s''intégrer parfaitement au cadre naturel du parc.  Le tout dans une ambiance « zen ».
+
+Dans cet ensemble, on retrouve : des aires de pique-nique avec barbecues en accès libre, des parcours de promenade diversifiés et ombragés, du mobilier de détente…
+
+## Des espaces ludiques
+
+### La plaine de jeux
+
+La plaine de jeux accueille les enfants de 3 à 12 ans : jeux de cordes, balançoire royale, parcours aventure (avec agrès), tour pyramide avec 2 toboggans, combiné multi-jeux…
+
+### Le village des menhirs
+
+Une aire de jeux pour les tout-petits avec balançoire et cabanons.
+
+### La toile d''araignée
+
+Une grande toile de cordes qui monte jusqu''à 6 m.
+
+### Le parcours aquatique
+
+Jeux aquatiques pour découvrir se rafraîchir et découvrir en s''amusant.
+
+### L''espace des tout-petits à proximité du tipi
+
+Une aire de jeux pour les plus petits avec toboggan, cabane, balançoires…
+ 
+## Des aménagements pour tous
+
+### Site adapté aux Personnes à Mobilité Réduite.
+
+Tout a été fait pour que le site soit accessible aux Personnes à Mobilité Réduite (PMR). La pente des cheminements est toujours inférieure à 5 %. Trois pontons de pêche sont spécialement conçus pour les PMR, et positionnés en concertation avec la Fédération départementale de pêche et son représentant local.
+
+Pour les bâtiments et le camping, les plans ont reçu un avis favorable de la commission d''accessibilité.
+
+### Les jardins à thèmes
+
+Une placette, des jeux de boules, un kiosque à thé, promenades et pontons sur pilotis
+
+Un labyrinthe bambouseraie
+
+Des cheminements étroits, en surface minérale, serpentant entre les différentes essences… dans un esprit «japonais».
+
+### Des équipements sportifs
+
+Un parcours sportif accessible à tous ponctue votre promenade autour des étangs.
+
+Pour les plus sportifs le parc propose également des terrains de tennis et un terrain multisport en accès libre.
+
+Pour les clubs et les licenciés : un étang de pêche et de nombreux pontons aménages, un pas de tir à l''arc, un embarquement voile…
+
+### Espace Ado
+
+Avec un terrain multi-sports, tennis…
+
+## Infos pratiques
+
+Site en accès libre jusqu''à 23h00, placé sous vidéo-surveillance.
+2 parkings voitures et 1 parking bus.
+Toilettes et douche.
+Aire camping-car.
+Camping et snack sur le site.',
+                'https://www.ville-loudeac.fr/listes/parc-aquarev'
+            )
+        returning
+            id
+    )
+insert into
+    _horaire_ouverture (id_offre, jour_de_la_semaine, heure_debut, heure_fin)
+values
+    ((table id_offre), 2, '9:', '23:'),
+    ((table id_offre), 3, '9:', '23:'),
+    ((table id_offre), 4, '9:', '23:'),
+    ((table id_offre), 5, '9:', '23:'),
+    ((table id_offre), 6, '9:', '23:'),
+    ((table id_offre), 7, '9:', '23:');
+
 -- Restaurant La Plage
 with
     id_adresse as (
@@ -17,8 +135,8 @@ with
             restaurant (
                 id_adresse,
                 id_image_principale,
-                libelle_abonnement,
                 id_professionnel,
+                libelle_abonnement,
                 titre,
                 resume,
                 description_detaillee,
@@ -30,9 +148,9 @@ with
         values
             (
                 (table id_adresse),
-                44,
+                1,
+                1,
                 'gratuit',
-                45,
                 'La Plage',
                 'La Plage est un délicieux restaurant situé à Paimpol. Découvrez nous goutûs plats.',
                 'La Plage est un délicieux restaurant situé à Paimpol. Découvrez nous goutûs plats. Oui, je suis détaillé. Me demandez pas plus de détails. Je ne suis qu''un restaurant. Marie y travaillait et puis j''y suis allé une fois c''est vraiment incroyable trop bon.',
@@ -76,8 +194,8 @@ with
             restaurant (
                 id_adresse,
                 id_image_principale,
-                libelle_abonnement,
                 id_professionnel,
+                libelle_abonnement,
                 titre,
                 resume,
                 description_detaillee,
@@ -89,9 +207,9 @@ with
         values
             (
                 (table id_adresse),
-                13,
-                'gratuit',
+                15,
                 1,
+                'gratuit',
                 'Crêperie Les Alizés',
                 'La Crêperie Les Alizés est une délicieuse crêperie située à Paimpol. Découvrez nous goutûs plats.',
                 'La Crêperie Les Alizés est une délicieuse crêperie située à Paimpol. Découvrez nous goutûs plats. Oui, je suis détaillé. Me demandez pas plus de détails. Je ne suis qu''un restaurant',
@@ -134,8 +252,8 @@ with
             restaurant (
                 id_adresse,
                 id_image_principale,
-                libelle_abonnement,
                 id_professionnel,
+                libelle_abonnement,
                 titre,
                 resume,
                 description_detaillee,
@@ -147,9 +265,9 @@ with
         values
             (
                 (table id_adresse),
-                8,
-                'gratuit',
+                13,
                 1,
+                'gratuit',
                 'Crêperie de l''Abbaye de Beauport',
                 'La Crêperie de l''Abbaye de Beauport est une délicieuse crêperie située à Paimpol. Découvrez nous goutûs plats.',
                 'La Crêperie de l''Abbaye de Beauport est une délicieuse crêperie située à Paimpol. Découvrez nous goutûs plats. Oui, je suis détaillé. Me demandez pas plus de détails. Je ne suis qu''un restaurant',
@@ -193,8 +311,8 @@ with
                 id_adresse,
                 indication_duree,
                 id_image_principale,
-                libelle_abonnement,
                 id_professionnel,
+                libelle_abonnement,
                 titre,
                 resume,
                 description_detaillee,
@@ -204,9 +322,9 @@ with
             (
                 (table id_adresse),
                 '0:45:',
-                18,
-                'gratuit',
+                36,
                 1,
+                'gratuit',
                 'Visite de la galerie d''Art du Dragon Noir',
                 'Découvrez la fascinante Galerie d''Art du Dragon Noir lors de cette visite guidée exclusive. Plongez dans un univers artistique unique où chaque œuvre raconte une histoire captivante. Cette expérience immersive vous permettra d''explorer des collections variées, allant des peintures contemporaines aux sculptures traditionnelles, tout en bénéficiant des explications passionnantes de notre guide expert. Ne manquez pas cette opportunité de vous imprégner de l''art sous toutes ses formes.',
                 'La visite de la Galerie d''Art du Dragon Noir est une expérience inoubliable pour tous les amateurs d''art et de culture. Située dans un cadre enchanteur, cette galerie renommée abrite une collection éclectique d''œuvres d''art qui sauront captiver votre imagination.
@@ -259,10 +377,10 @@ with
         insert into
             visite (
                 id_adresse,
-                indication_duree,
                 id_image_principale,
-                libelle_abonnement,
                 id_professionnel,
+                libelle_abonnement,
+                indication_duree,
                 titre,
                 resume,
                 description_detaillee,
@@ -271,10 +389,10 @@ with
         values
             (
                 (table id_adresse),
-                '1:30:',
-                24,
-                'gratuit',
+                8,
                 1,
+                'gratuit',
+                '1:30:',
                 'Visite du phare Vauban au Cap Fréhel',
                 'Découvrez la beauté sauvage de la Bretagne avec notre visite guidée du phare du Cap Fréhel. Cette excursion vous offre une vue imprenable sur la côte bretonne, une immersion dans l''histoire maritime et une expérience inoubliable au cœur de la nature.',
                 '#### Introduction
@@ -336,10 +454,10 @@ with
         insert into
             visite (
                 id_adresse,
-                indication_duree,
                 id_image_principale,
-                libelle_abonnement,
                 id_professionnel,
+                libelle_abonnement,
+                indication_duree,
                 titre,
                 resume,
                 description_detaillee,
@@ -348,10 +466,10 @@ with
         values
             (
                 (table id_adresse),
-                '4:00:',
-                25,
-                'gratuit',
+                45,
                 2,
+                'gratuit',
+                '4:00:',
                 'Trail dans la réserve naturelle des Sept Îles',
                 'Découvrez l''histoire et la culture de la Bretagne à travers une visite guidée du musée d''Art et d''Histoire de Saint-Brieuc. Plongez dans des collections riches et variées, allant de l''archéologie à l''art contemporain, en passant par des expositions temporaires fascinantes. Une expérience immersive et enrichissante pour tous les amateurs d''art et d''histoire.',
                 '#### Introduction au musée
@@ -410,10 +528,10 @@ with
         insert into
             visite (
                 id_adresse,
-                indication_duree,
                 id_image_principale,
-                libelle_abonnement,
                 id_professionnel,
+                libelle_abonnement,
+                indication_duree,
                 titre,
                 resume,
                 description_detaillee,
@@ -422,10 +540,10 @@ with
         values
             (
                 (table id_adresse),
-                '4:00:',
-                24,
-                'gratuit',
+                43,
                 2,
+                'gratuit',
+                '4:00:',
                 'Trail dans la réserve naturelle des Sept Îles',
                 'Découvrez la beauté sauvage de la réserve naturelle des Sept Îles à Perros-Guirec avec notre offre de trail unique. Parcourez des sentiers pittoresques, admirez la faune et la flore exceptionnelles, et profitez de vues panoramiques sur la côte bretonne. Une expérience inoubliable pour les amateurs de nature et de sport.',
                 '#### Introduction
@@ -484,10 +602,10 @@ with
         insert into
             visite (
                 id_adresse,
-                indication_duree,
                 id_image_principale,
-                libelle_abonnement,
                 id_professionnel,
+                libelle_abonnement,
+                indication_duree,
                 titre,
                 resume,
                 description_detaillee,
@@ -496,10 +614,10 @@ with
         values
             (
                 (table id_adresse),
-                '2:00:',
-                21,
-                'gratuit',
+                34,
                 2,
+                'gratuit',
+                '2:00:',
                 'Découverte de la Côte de Granit Rose en bateau',
                 'Découvrez la magie de la Côte de Granite Rose avec notre excursion en bateau inoubliable. Cette visite vous emmène à travers des paysages époustouflants, des formations rocheuses uniques et des plages de sable fin. Profitez de vues panoramiques, de commentaires enrichissants et de moments de détente pour une expérience complète et mémorable.',
                 '**Introduction :**
@@ -554,84 +672,6 @@ values
     ((table id_offre), 6, '10:', '18:'),
     ((table id_offre), 7, '13:', '18:');
 
--- Randonnée dans la vallée des Saints
-with
-    id_adresse as (
-        insert into
-            _adresse (numero_departement, code_commune, localite)
-        values
-            ('63', 46, 'Vallée des Saints')
-        returning
-            id
-    ),
-    id_offre as (
-        insert into
-            visite (
-                id_adresse,
-                indication_duree,
-                id_image_principale,
-                libelle_abonnement,
-                id_professionnel,
-                titre,
-                resume,
-                description_detaillee,
-                url_site_web
-            )
-        values
-            (
-                (table id_adresse),
-                '4:00:',
-                23,
-                'gratuit',
-                1,
-                'Randonnée dans la vallée des Saints',
-                'Découvrez la Vallée des Saints à Boudes, un site naturel exceptionnel et chargé d''histoire. Cette offre touristique vous propose une visite guidée de la vallée, incluant des explications sur les sculptures de saints, une randonnée pédestre à travers les paysages pittoresques, et une dégustation de produits locaux. Une expérience unique pour les amateurs de nature, d''histoire et de gastronomie.',
-                '**Introduction à la Vallée des Saints :**
-La Vallée des Saints à Boudes est un lieu emblématique qui allie beauté naturelle et richesse culturelle. Située dans le département du Puy-de-Dôme, cette vallée abrite une collection unique de sculptures de saints, réalisées par des artistes locaux et internationaux. Chaque statue raconte une histoire et contribue à l''atmosphère spirituelle et sereine du site.
-
-**Visite Guidée des Sculptures :**
-La visite commence par une introduction détaillée sur l''histoire et la signification des sculptures de la Vallée des Saints. Un guide expérimenté vous accompagnera à travers le parcours, vous offrant des explications sur chaque statue, leur symbolisme et les légendes qui les entourent. Vous aurez l''occasion de poser des questions et d''approfondir vos connaissances sur les saints et leur rôle dans la culture locale.
-
-**Randonnée Pédestre :**
-Après la visite des sculptures, une randonnée pédestre vous attend. Le parcours, adapté à tous les niveaux, vous mènera à travers les paysages magnifiques de la vallée. Vous traverserez des forêts luxuriantes, des champs fleuris et des rivières cristallines. Le guide vous fournira des informations sur la flore et la faune locales, ainsi que sur les particularités géologiques de la région.
-
-**Dégustation de Produits Locaux :**
-Pour clôturer cette expérience en beauté, une dégustation de produits locaux vous sera proposée. Vous aurez l''occasion de goûter aux spécialités culinaires de la région, telles que les fromages, les charcuteries et les vins locaux. Cette dégustation se déroulera dans un cadre convivial, où vous pourrez échanger avec les producteurs et en apprendre davantage sur les traditions gastronomiques du Puy-de-Dôme.
-
-**Informations Pratiques :**
-- **Durée de la visite :** Environ 4 heures.
-- **Point de rendez-vous :** Entrée principale de la Vallée des Saints à Boudes.
-- **Équipement recommandé :** Chaussures de marche, vêtements adaptés à la météo, bouteille d''eau.
-- **Tarif :** 35€ par personne (incluant la visite guidée, la randonnée et la dégustation).
-
-**Réservation :**
-Pour réserver votre place, veuillez contacter notre service client au [numéro de téléphone] ou par email à [adresse email]. Les places sont limitées, alors n''attendez pas pour réserver votre expérience inoubliable à la Vallée des Saints à Boudes.
-
----
-
-Rejoignez-nous pour une journée mémorable où nature, histoire et gastronomie se rencontrent dans un cadre exceptionnel.',
-                'https://www.lavalleedessaints.com'
-            )
-        returning
-            id
-    ),
-    s1 as (
-        insert into
-            _langue_visite (id_visite, code_langue)
-        values
-            ((table id_offre), 'fr')
-    )
-insert into
-    _horaire_ouverture (id_offre, jour_de_la_semaine, heure_debut, heure_fin)
-values
-    ((table id_offre), 1, '10:', '18:'),
-    ((table id_offre), 2, '10:', '18:'),
-    ((table id_offre), 3, '10:', '18:'),
-    ((table id_offre), 4, '10:', '18:'),
-    ((table id_offre), 5, '10:', '18:'),
-    ((table id_offre), 6, '10:', '18:'),
-    ((table id_offre), 7, '13:', '18:');
-
 -- Balade poétique à Camet
 with
     id_adresse as (
@@ -646,10 +686,10 @@ with
         insert into
             visite (
                 id_adresse,
-                indication_duree,
                 id_image_principale,
-                libelle_abonnement,
                 id_professionnel,
+                libelle_abonnement,
+                indication_duree,
                 titre,
                 resume,
                 description_detaillee,
@@ -658,10 +698,10 @@ with
         values
             (
                 (table id_adresse),
-                '2:00:',
-                22,
-                'gratuit',
+                42,
                 2,
+                'gratuit',
+                '2:00:',
                 'Balade poétique à Camet',
                 'Après, Les oiseaux, les fleurs sauvages, les 4 saisons, les poètes et la nature, les arbres ; cette année met à l''honneur Le silence de l''eau. En nous baladant tout autour de l''étang, nous allons rencontrer poèmes et chansons, d''Eugène Guillevic à Anne Sylvestre, de Guy Béart à Paul Eluard, situé à un endroit qui résonne avec le poème.',
                 'Cette édition sur le thème de l''eau a inspiré de nombreuses animations :
@@ -702,10 +742,10 @@ with
         insert into
             visite (
                 id_adresse,
-                indication_duree,
                 id_image_principale,
-                libelle_abonnement,
                 id_professionnel,
+                libelle_abonnement,
+                indication_duree,
                 titre,
                 resume,
                 description_detaillee,
@@ -714,10 +754,10 @@ with
         values
             (
                 (table id_adresse),
-                '4:00:',
-                23,
-                'gratuit',
+                44,
                 1,
+                'gratuit',
+                '4:00:',
                 'Randonnée dans la vallée des Saints',
                 'Découvrez la Vallée des Saints à Boudes, un site naturel exceptionnel et chargé d''histoire. Cette offre touristique vous propose une visite guidée de la vallée, incluant des explications sur les sculptures de saints, une randonnée pédestre à travers les paysages pittoresques, et une dégustation de produits locaux. Une expérience unique pour les amateurs de nature, d''histoire et de gastronomie.',
                 '**Introduction à la Vallée des Saints :**
@@ -780,10 +820,10 @@ with
         insert into
             visite (
                 id_adresse,
-                indication_duree,
                 id_image_principale,
-                libelle_abonnement,
                 id_professionnel,
+                libelle_abonnement,
+                indication_duree,
                 titre,
                 resume,
                 description_detaillee,
@@ -792,10 +832,10 @@ with
         values
             (
                 (table id_adresse),
-                '3:00:',
-                20,
-                'gratuit',
+                26,
                 1,
+                'gratuit',
+                '3:00:',
                 'Visite du Château de La Roche Goyon, Fort La Latte à Plévenon',
                 'Découvrez l''histoire fascinante et les paysages époustouflants du Château de La Roche Goyon, également connu sous le nom de Fort La Latte, lors de cette visite guidée inoubliable. Situé à Plévenon, en Bretagne, ce château médiéval offre une vue imprenable sur la mer et une plongée dans le passé riche de la région. Cette offre touristique inclut une visite guidée, des démonstrations de tir à l''arbalète, et une dégustation de produits locaux pour une expérience complète et immersive.',
                 '**Visite Guidée du Château :**
@@ -851,10 +891,10 @@ with
         insert into
             visite (
                 id_adresse,
-                indication_duree,
                 id_image_principale,
-                libelle_abonnement,
                 id_professionnel,
+                libelle_abonnement,
+                indication_duree,
                 titre,
                 resume,
                 description_detaillee,
@@ -863,10 +903,10 @@ with
         values
             (
                 (table id_adresse),
-                '3:00:',
-                2,
-                'gratuit',
+                4,
                 1,
+                'gratuit',
+                '3:00:',
                 'Visite Interactive de la Cité des Télécoms à Pleumeur-Bodou',
                 'Plongez dans l''univers fascinant des télécommunications avec notre visite interactive de la Cité des Télécoms à Pleumeur-Bodou. Cette expérience immersive vous permettra de découvrir l''histoire et les innovations technologiques qui ont révolutionné notre monde. Grâce à des dispositifs interactifs, des démonstrations en direct et des ateliers pratiques, vous vivrez une aventure unique et enrichissante, idéale pour les passionnés de technologie et les curieux de tous âges.',
                 'Introduction à la Cité des Télécoms :
@@ -908,9 +948,9 @@ N''attendez plus et venez vivre une aventure technologique unique à la Cité de
         insert into
             _gallerie (id_offre, id_image)
         values
-            ((table id_offre), 10),
+            ((table id_offre), 9),
             ((table id_offre), 11),
-            ((table id_offre), 16)
+            ((table id_offre), 14)
     )
 insert into
     _horaire_ouverture (id_offre, jour_de_la_semaine, heure_debut, heure_fin)
@@ -937,11 +977,11 @@ with
         insert into
             spectacle (
                 id_adresse,
+                id_image_principale,
+                id_professionnel,
+                libelle_abonnement,
                 indication_duree,
                 capacite_accueil,
-                id_image_principale,
-                libelle_abonnement,
-                id_professionnel,
                 titre,
                 resume,
                 description_detaillee,
@@ -950,11 +990,11 @@ with
         values
             (
                 (table id_adresse),
+                12,
+                2,
+                'gratuit',
                 '2:00:',
                 1000,
-                12,
-                'gratuit',
-                2,
                 'Celtic Legends - Tournée 2026',
                 'Celtic Legends est un spectacle de musiques et de danses irlandaises qui s''est produit sur de nombreuses scènes à travers le monde depuis sa création, attirant près de 3 millions de spectateurs.',
                 'Celtic Legends revient en 2026 avec une nouvelle version du spectacle. Créé à Galway, au Coeur du Connemara, Celtic Legends est un condensé de la culture traditionnelle Irlandaise recréant sur scène l''ambiance électrique d''une soirée dans un pub traditionnel. Venez partager durant 2 heures ce voyage au coeur de l''Irlande soutenu par 5 talentueux musiciens sous la baguette de Sean McCarthy et de 12 extraordinaires danseurs sous la houlette de la créative Jacintha Sharpe.',
@@ -981,11 +1021,11 @@ with
     id_offre as (
         insert into
             activite (
-                id_professionnel,
-                id_image_principale,
-                age_requis,
                 id_adresse,
+                id_image_principale,
+                id_professionnel,
                 libelle_abonnement,
+                age_requis,
                 titre,
                 resume,
                 description_detaillee,
@@ -995,11 +1035,11 @@ with
             )
         values
             (
-                2,
-                40,
-                7,
                 (table id_adresse),
+                27,
+                2,
                 'gratuit',
+                7,
                 'Karting Kerlabo',
                 'Au cœur des Côtes-d''Armor et à mi-chemin entre St-Brieuc et Guingamp, le site de Kerlabo est un incontournable du karting en Bretagne. Sur un site dédié au loisir et au sport automobile, le circuit de Kerlabo vous offre un tracé unique et vallonné sur plus de 800 mètres!',
                 'Ouvert samedi et dimanche (selon météo : horaires à vérifier sur google)+ les apres midi des vacances scolaires du 21 au 31 décembre. 
@@ -1023,9 +1063,9 @@ with
 insert into
     _gallerie (id_offre, id_image)
 values
-    ((table id_offre), 41),
-    ((table id_offre), 42),
-    ((table id_offre), 43);
+    ((table id_offre), 24),
+    ((table id_offre), 25),
+    ((table id_offre), 28);
 
 -- Randonnée au Menez Bré
 with
@@ -1040,9 +1080,9 @@ with
     id_offre as (
         insert into
             activite (
+                id_adresse,
                 id_professionnel,
                 id_image_principale,
-                id_adresse,
                 libelle_abonnement,
                 titre,
                 resume,
@@ -1052,9 +1092,9 @@ with
             )
         values
             (
-                2,
-                37,
                 (table id_adresse),
+                2,
+                38,
                 'gratuit',
                 'Randonnée au Menez Bré',
                 'Découvrez la beauté sauvage et préservée du Menez Bré avec notre offre touristique de randonnée. Situé en Bretagne, le Menez Bré offre des paysages à couper le souffle, une riche biodiversité et une histoire fascinante. Cette randonnée guidée vous permettra de vous immerger dans la nature tout en apprenant sur l''histoire et la culture locale. Idéale pour les amateurs de nature et les passionnés de randonnée, cette expérience promet des moments inoubliables.',
@@ -1086,8 +1126,8 @@ Rejoignez-nous pour une aventure inoubliable au cœur de la Bretagne et découvr
 insert into
     _gallerie (id_offre, id_image)
 values
-    ((table id_offre), 38),
-    ((table id_offre), 39);
+    ((table id_offre), 39),
+    ((table id_offre), 40);
 
 -- Bowling l'éclipse
 with
@@ -1102,9 +1142,9 @@ with
     id_offre as (
         insert into
             activite (
+                id_adresse,
                 id_professionnel,
                 id_image_principale,
-                id_adresse,
                 libelle_abonnement,
                 url_site_web,
                 titre,
@@ -1115,9 +1155,9 @@ with
             )
         values
             (
-                1,
-                36,
                 (table id_adresse),
+                1,
+                17,
                 'gratuit',
                 'https://www.tregor-bowling.com',
                 'Bowling L''éclipse',
@@ -1132,12 +1172,12 @@ with
 insert into
     _gallerie (id_offre, id_image)
 values
-    ((table id_offre), 30),
-    ((table id_offre), 31),
-    ((table id_offre), 32),
-    ((table id_offre), 33),
-    ((table id_offre), 34),
-    ((table id_offre), 35);
+    ((table id_offre), 16),
+    ((table id_offre), 18),
+    ((table id_offre), 19),
+    ((table id_offre), 20),
+    ((table id_offre), 21),
+    ((table id_offre), 22);
 
 -- Chasse aux grenouilles dans le Lac du Gourgal
 with
@@ -1151,9 +1191,9 @@ with
     )
 insert into
     activite (
+        id_adresse,
         id_professionnel,
         id_image_principale,
-        id_adresse,
         libelle_abonnement,
         titre,
         resume,
@@ -1163,9 +1203,9 @@ insert into
     )
 values
     (
-        1,
-        3,
         (table id_adresse),
+        1,
+        5,
         'gratuit',
         'Chasse aux grenouilles dans le Lac du Gourgal',
         'Chasse aux grenouilles dans le Lac du Gourgal résumé',
@@ -1186,9 +1226,9 @@ with
     )
 insert into
     activite (
+        id_adresse,
         id_professionnel,
         id_image_principale,
-        id_adresse,
         libelle_abonnement,
         titre,
         resume,
@@ -1199,9 +1239,9 @@ insert into
     )
 values
     (
-        1,
-        7,
         (table id_adresse),
+        1,
+        10,
         'gratuit',
         'Initiation au char à voile sur la plage de Trestraou',
         'De 7 à 77 ans, le char à voile est à la portée de tous et vous procure une immense sensation de liberté.',
@@ -1218,6 +1258,7 @@ L''initiation au char à voile peut être incluse dans le cadre d''une activité
         'Nous vous proposons une initiation et randonnée en char à voile'
     );
 
+-- Escape game À l'Arche du Temps
 with
     id_adresse as (
         insert into
@@ -1229,9 +1270,9 @@ with
     )
 insert into
     activite (
+        id_adresse,
         id_professionnel,
         id_image_principale,
-        id_adresse,
         libelle_abonnement,
         url_site_web,
         titre,
@@ -1244,9 +1285,9 @@ insert into
     )
 values
     (
-        1,
-        4,
         (table id_adresse),
+        1,
+        7,
         'gratuit',
         'https://larchedutemps.com',
         'Escape game À l''Arche du Temps',
@@ -1268,6 +1309,7 @@ De 3 à 6 joueurs, en famille, entre collègues ou entre amis, venez relever nos
         'Nous ne vous proposons pas de repas'
     );
 
+-- Laser Game Evolution Saint-Brieuc
 with
     id_adresse as (
         insert into
@@ -1280,9 +1322,9 @@ with
     id_offre as (
         insert into
             activite (
+                id_adresse,
                 id_professionnel,
                 id_image_principale,
-                id_adresse,
                 libelle_abonnement,
                 url_site_web,
                 titre,
@@ -1295,9 +1337,9 @@ with
             )
         values
             (
-                1,
-                19,
                 (table id_adresse),
+                1,
+                29,
                 'gratuit',
                 'https://saint-brieuc.lasergame-evolution.fr/',
                 'Laser Game Evolution Saint-Brieuc',
@@ -1314,10 +1356,10 @@ with
 insert into
     _gallerie (id_offre, id_image)
 values
-    ((table id_offre), 28),
-    ((table id_offre), 19),
-    ((table id_offre), 26),
-    ((table id_offre), 27);
+    ((table id_offre), 30),
+    ((table id_offre), 31),
+    ((table id_offre), 32),
+    ((table id_offre), 33);
 
 -- Lantic Parc Aventure
 with
@@ -1331,9 +1373,9 @@ with
     )
 insert into
     activite (
-        id_professionnel,
-        id_image_principale,
         id_adresse,
+        id_image_principale,
+        id_professionnel,
         libelle_abonnement,
         url_site_web,
         titre,
@@ -1345,9 +1387,9 @@ insert into
     )
 values
     (
-        2,
-        9,
         (table id_adresse),
+        6,
+        2,
         'gratuit',
         'https://www.lanticparcaventure.bzh/',
         'Lantic Parc Aventure',
@@ -1358,7 +1400,7 @@ values
         'Nous vous proposons un parcours d''accrobranche'
     );
 
--- Accrobranche au parc aventure Indiant Forest
+-- Accrobranche au parc aventure Indian Forest
 with
     id_adresse as (
         insert into
@@ -1370,9 +1412,9 @@ with
     )
 insert into
     activite (
+        id_adresse,
         id_professionnel,
         id_image_principale,
-        id_adresse,
         libelle_abonnement,
         url_site_web,
         titre,
@@ -1384,9 +1426,9 @@ insert into
     )
 values
     (
-        2,
-        17,
         (table id_adresse),
+        2,
+        41,
         'gratuit',
         'https://www.aventure-nature.com/accrobranche',
         'Accrobranche au parc aventure Indian Forest',
