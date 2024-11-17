@@ -28,6 +28,14 @@ function query_offres(?int $id_professionnel = null, ?bool $en_ligne = null): PD
     return $stmt;
 }
 
+function query_offre(int $id): array|false
+{
+    $stmt = notfalse(db_connect()->prepare("select * from offres where id = ?"));
+    bind_values($stmt, [1 => [$id, PDO::PARAM_INT]]);
+    notfalse($stmt->execute());
+    return $stmt->fetch();
+}
+
 function query_image(int $id_image): array
 {
     $stmt = notfalse(db_connect()->prepare('select * from _image where id = ?'));
@@ -36,25 +44,27 @@ function query_image(int $id_image): array
     return notfalse($stmt->fetch());
 }
 
-function query_adresse(int $id_adresse): array
+function query_adresse(int $id_adresse): array|false
 {
     $stmt = notfalse(db_connect()->prepare('select * from _adresse where id = ?'));
     bind_values($stmt, [1 => [$id_adresse, PDO::PARAM_INT]]);
     notfalse($stmt->execute());
+    return $stmt->fetch();
+}
+
+function query_commune(int $code, string $numero_departement): array
+{
+    $stmt = notfalse(db_connect()->prepare('select * from _commune where code = ? and numero_departement = ?'));
+    bind_values($stmt, [1 => [$code, PDO::PARAM_INT], 2 => [$numero_departement, PDO::PARAM_STR]]);
+    notfalse($stmt->execute());
     return notfalse($stmt->fetch());
 }
 
-function query_commune(string $code_insee_commune): array
+function query_codes_postaux(int $code_commune, string $numero_departement): array
 {
-    $stmt = notfalse(db_connect()->prepare('select * from _commune where code_insee = ?'));
-    notfalse($stmt->execute([$code_insee_commune]));
-    return notfalse($stmt->fetch());
-}
-
-function query_codes_postaux(string $code_insee_commune): array
-{
-    $stmt = notfalse(db_connect()->prepare('select code_postal from _code_postal where code_insee_commune = ?'));
-    notfalse($stmt->execute([$code_insee_commune]));
+    $stmt = notfalse(db_connect()->prepare('select code_postal from _code_postal where code_commune = ? and numero_departement = ?'));
+    bind_values($stmt, [1 => [$code_commune, PDO::PARAM_INT], 2 => [$numero_departement, PDO::PARAM_STR]]);
+    notfalse($stmt->execute());
     return array_map(fn($row) => $row['code_postal'], $stmt->fetchAll());
 }
 
@@ -77,12 +87,12 @@ function query_professionnel(string $email): array|false
  * Binds types values to a statement.
  *
  * @param PDOStatement $stmt The statement on which to bind values.
- * @param array<int|string,mixed|array{mixed, int}> $params An associative array mapping from the parameter name to a tuple of the parameter value and the PDO type (e.g. a PDO::PARAM_* constant value)
+ * @param array<int|string,array{mixed, int}> $params An associative array mapping from the parameter name to a tuple of the parameter value and the PDO type (e.g. a PDO::PARAM_* constant value)
  */
 function bind_values(PDOStatement $stmt, array $params)
 {
-    foreach ($params as $name => $v) {
-        notfalse($stmt->bindValue($name, $v[0], $v[1]));
+    foreach ($params as $name => [$value, $type]) {
+        notfalse($stmt->bindValue($name, $value, $type));
     }
 }
 

@@ -1,6 +1,7 @@
 <?php
 
 require_once 'queries.php';
+require_once 'util.php';
 
 function put_image(array $image)
 {
@@ -19,7 +20,7 @@ function put_card_offre_pro(array $offre)
 <div class="offer-card">
     <?php put_image(query_image($offre['id_image_principale'])) ?>
     <h3><?= $offre['titre'] ?></h3>
-    <p class="location"><?= formater_adresse(query_adresse($offre['id_adresse'])) ?></p>
+    <p class="location"><?= format_adresse(notfalse(query_adresse($offre['id_adresse']))) ?></p>
     <p class="category"><?= $offre['categorie'] ?></p>
     <p class="rating">
         <?php if ($nb_avis === 0) { ?>Aucun avis
@@ -39,7 +40,7 @@ function put_card_offre(array $offre)
 <div class="offer-card">
     <?php put_image(query_image($offre['id_image_principale'])) ?>
     <h3><?= $offre['titre'] ?> </h3>
-    <p class="location"><?= formater_adresse(query_adresse($offre['id_adresse'])) ?></p>
+    <p class="location"><?= format_adresse(notfalse(query_adresse($offre['id_adresse']))) ?></p>
     <p><?= $offre['resume'] ?></p>
     <p class="category"><?= $offre['categorie'] ?></p>
     <a href="/autres_pages/detail_offre.php?id=<?= $offre['id'] ?>">
@@ -49,12 +50,7 @@ function put_card_offre(array $offre)
 <?php
 }
 
-function elvis(?string $value, ?string $suffix): string
-{
-    return $value ? $value . $suffix : '';
-}
-
-function formater_adresse(array $adresse)
+function format_adresse(array $adresse)
 {
     // Concaténer les informations pour former une adresse complète
 
@@ -64,6 +60,6 @@ function formater_adresse(array $adresse)
         . elvis($adresse['complement_numero'], ' ')
         . elvis($adresse['nom_voie'], ', ')
         . elvis($adresse['localite'], ', ')
-        . elvis(query_commune($adresse['code_insee_commune'])['nom'], ', ')
-        . query_codes_postaux($adresse['code_insee_commune'])[0];
+        . elvis(query_commune($adresse['code_commune'], $adresse['numero_departement'])['nom'], ', ')
+        . query_codes_postaux($adresse['code_commune'], $adresse['numero_departement'])[0];
 }

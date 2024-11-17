@@ -31,7 +31,9 @@ $pdo = db_connect()
                         <label for="mdp">Mot de passe *</label>
                         <input type="password" name="mdp" placeholder="**********" id="mdp" required>
                     </div>
-                    <p class="error"><?= $_GET['error'] ?? '' ?></p>
+                    <?php if ($error = $_GET['error'] ?? null) { ?>
+                    <p class="error"><?= $error ?></p>
+                    <?php } ?>
                     <button type="submit" class="btn-connexion">Se connecter</button>
                 </form>
                 <br><br>

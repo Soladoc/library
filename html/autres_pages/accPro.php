@@ -39,16 +39,6 @@ $ONLINE_OFFER_COUNT = query_offres_count($ID_PRO, en_ligne: true)
                     }
                     notfalse($ONLINE_OFFERS->closeCursor())
                 ?>
-                <!-- Offre en ligne 2 -->
-                <div class="offer-card">
-                    <img src="vallee_saints.jpg" alt="Randonnée dans la vallée des Saints">
-                    <h3>Randonnée dans la vallée des Saints</h3>
-                    <p class="location">Boudes (63340)</p>
-                    <p class="category">Restauration</p>
-                    <p class="rating">Note&nbsp;: 4.2/5 ★ (54 avis)</p>
-                    <button class="btn-more-info" href="">En savoir plus</button>
-                </div>
-
             </div>
         </section>
 
@@ -64,45 +54,6 @@ $ONLINE_OFFER_COUNT = query_offres_count($ID_PRO, en_ligne: true)
                     }
                     $OFFRES_HORS_LIGNE->closeCursor()
                 ?>
-                <div class="offer-card">
-                    <img src="telecom.jpg" alt="Découverte interactive de la cité des Télécoms">
-                    <h3>Découverte interactive de la cité des Télécoms</h3>
-                    <p class="location">Pleumeur-Bodou (22560)</p>
-                    <p class="category">Restauration</p>
-                    <p class="rating">Note&nbsp;: 4.7/5 ★ (256 avis)</p>
-                    <button class="btn-more-info" href="">En savoir plus</button>
-
-                </div>
-
-                <!-- Offre 2 -->
-                <div class="offer-card">
-                    <img src="vallee_saints.jpg" alt="Randonnée dans la vallée des Saints">
-                    <h3>Randonnée dans la vallée des Saints</h3>
-                    <p class="location">Boudes (63340)</p>
-                    <p class="category">Restauration</p>
-                    <p class="rating">Note&nbsp;: 4.2/5 ★ (54 avis)</p>
-                    <button class="btn-more-info" href="">En savoir plus</button>
-                </div>
-
-                <!-- Offre 3 -->
-                <div class="offer-card">
-                    <img src="grenouilles.jpg" alt="Chasse aux grenouilles dans le Lac du Gourgal">
-                    <h3>Chasse aux grenouilles dans le Lac du Gourgal</h3>
-                    <p class="location">Guingamp (22200)</p>
-                    <p class="category">Activité Nature</p>
-                    <p class="rating">Note&nbsp;: 3.7/5 ★ (122 avis)</p>
-                    <button class="btn-more-info" href="">En savoir plus</button>
-                </div>
-
-                <!-- Offre 4 -->
-                <div class="offer-card">
-                    <img src="char_voile.jpg" alt="Initiation au Char à Voile sur la plage">
-                    <h3>Initiation au Char à Voile sur la plage</h3>
-                    <p class="location">Pléneuf-Val-André (22370)</p>
-                    <p class="category">Sport nautique</p>
-                    <p class="rating">Note&nbsp;: 4.4/5 ★ (24 avis)</p>
-                    <button class="btn-more-info" href="">En savoir plus</button>
-                </div>
             </div>
         </section>
 

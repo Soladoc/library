@@ -3,6 +3,7 @@ session_start();
 
 require_once 'queries.php';
 require_once 'auth.php';
+require_once 'util.php';
 
 function fail(): never
 {
@@ -10,11 +11,10 @@ function fail(): never
     exit;
 }
 
-$pdo = db_connect();  // Essaie de te connecter à la base de données
+$pdo = db_connect();
 
 // Récupérer les données du formulaire
-$login = trim($_POST['login']);
-$password = trim($_POST['mdp']);
+[$login, $password] = get_args($_POST, ['login', 'mdp']);
 
 // Connection membre
 $user = query_membre($login);
@@ -45,4 +45,3 @@ if (!empty($user)) {
 }
 
 fail();
-?>

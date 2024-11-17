@@ -1,76 +1,53 @@
 <?php
-
 require_once 'db.php';
-if (isset($_POST['mdp'])) {
-    print 'Votre nom&nbsp;:' . $_POST['nom'];
-    print 'Votre prenom&nbsp;:' . $_POST['prenom'];
-    print 'Votre numero de telephone&nbsp;:' . $_POST['telephone'];
-    print 'Votre mail&nbsp;:' . $_POST['email'];
-    print 'Votre mot de passe&nbsp;:' . $_POST['mdp'];
-    print 'Votre adresse&nbsp;:' . $_POST['adresse'];
+require_once 'util.php';
 
-    $estprive = $_POST['type'] === "prive"; 
-    $mdp_hash = password_hash($_POST['mdp'], PASSWORD_DEFAULT);
+function redirect_to_connexion(): never
+{
+    header('Location: /autres_pages/connexion.php');
+    exit;
+}
+
+if (isset($_POST['type'])) {
+    [$nom, $prenom, $telephone, $email, $mdp, $adresse, $denomination, $type] = get_args($_POST,
+        ['nom', 'prenom', 'telephone', 'email', 'mdp', 'adresse', 'denomination', ['type', f_str_is('prive', 'public')]]);
 
     $pdo = db_connect();
-    $stmt = $pdo->prepare('SELECT COUNT(*) FROM pact._compte WHERE email = :email');
-    $stmt->execute([':email' => $_POST['email']]);
+    $stmt = $pdo->prepare('select count(*) from pact._compte where email = ?');
+    $stmt->execute([$email]);
     $count = $stmt->fetchColumn();
-    
+
     if ($count > 0) {
-        echo 'Cette adresse e-mail est déjà utilisée.';
-        exit;
+        html_error('cette adresse e-mail est déjà utilisée.');
     }
 
-    
-    if ($estprive) {
-        // insert in pro_prive
-        $sql = 'INSERT INTO  pact.pro_prive (email, mdp_hash, nom, prenom, telephone, denomination, siren) VALUES (:email, :mdp_hash, :nom, :prenom, :telephone, :denomination, :siren)';
-        $stmt = $pdo->prepare($sql);
-        $stmt->bindParam(':email', $_POST['email']);
-        $stmt->bindParam(':mdp_hash', $mdp_hash);
-        $stmt->bindParam(':nom', $_POST['nom']);
-        $stmt->bindParam(':prenom', $_POST['prenom']);
-        $stmt->bindParam(':telephone', $_POST['telephone']);
-        $stmt->bindParam(':denomination', $_POST['denomination']);
-        $stmt->bindParam(':siren', $_POST['siren']);
-        // 3. Exécuter la requête avec les valeurs
-        
-        $stmt->execute([
-            ':email' => $_POST['email'],
-            ':mdp_hash' => $mdp_hash,
-            ':nom' => $_POST['nom'],
-            ':prenom' => $_POST['prenom'],
-            ':telephone' => $_POST['telephone'],
-            ':denomination' => $_POST['denomination'],
-            ':siren' => $_POST['siren']
-        ]);
+    $mdp_hash = password_hash($mdp, PASSWORD_DEFAULT);
 
-        echo "<script>window.location.href='../autres_pages/connexion.php';</script>";
+    if ($type === 'prive') {
+        [$siren] = get_args($_POST, ['siren']);
+        $stmt = $pdo->prepare('insert into pro_prive (email, mdp_hash, nom, prenom, telephone, denomination, siren) values (?, ?, ?, ?, ?, ?, ?)');
+        $stmt->execute([
+            $email,
+            $mdp_hash,
+            $nom,
+            $prenom,
+            $telephone,
+            $denomination,
+            $siren,
+        ]);
+        redirect_to_connexion();
     } else {
-        // insert in pro_public
-        $sql = 'INSERT INTO  pact.pro_public (email, mdp_hash, nom, prenom, telephone, denomination) VALUES (:email, :mdp_hash, :nom, :prenom, :telephone, :denomination)';
-        $stmt = $pdo->prepare($sql);
-
-        $stmt->bindParam(':email', $_POST['email']);
-        $stmt->bindParam(':mdp_hash', $mdp_hash);
-        $stmt->bindParam(':nom', $_POST['nom']);
-        $stmt->bindParam(':prenom', $_POST['prenom']);
-        $stmt->bindParam(':telephone', $_POST['telephone']);
-        $stmt->bindParam(':denomination', $_POST['denomination']);
-
-        // 3. Exécuter la requête avec les valeurs
+        $stmt = $pdo->prepare('insert into pro_public (email, mdp_hash, nom, prenom, telephone, denomination) values (?, ?, ?, ?, ?, ?)');
         $stmt->execute([
-            ':email' => $_POST['email'],
-            ':mdp_hash' => $mdp_hash,
-            ':nom' => $_POST['nom'],
-            ':prenom' => $_POST['prenom'],
-            ':telephone' => $_POST['telephone'],
-            ':denomination' => $_POST['denomination']
+            $email,
+            $mdp_hash,
+            $nom,
+            $prenom,
+            $telephone,
+            $denomination,
         ]);
-        echo "<script>window.location.href='../autres_pages/connexion.php';</script>";
+        redirect_to_connexion();
     }
-    echo "<script>window.location.href='../autres_pages/accPro.php';</script>";
 } else {
 ?>
 <!DOCTYPE html>
@@ -91,69 +68,43 @@ if (isset($_POST['mdp'])) {
         <section class="connexion">
             <div class="champ-connexion">
                 <form action="creation_comptePro.php" method="post" enctype="multipart/form-data">
-
-                    <br>
-                    <div class="champ">
-                        <p>E-mail *</p>
-                        <input type="mail" placeholder="exemple@mail.fr" id="email" name="email" required>
-                    </div>
-                    <br>
-                    <div class="champ">
-                        <p>Mot de passe *</p>
-                        <input type="password" placeholder="**********" id="mdp" name="mdp" required>
-                    </div>
-                    <br>
+                    <p class="champ">
+                        <label>E-mail * <input type="mail" placeholder="exemple@mail.fr" id="email" name="email" required></label>
+                    </p>
+                    <p class="champ">
+                        <label>Mot de passe * <input type="password" placeholder="**********" id="mdp" name="mdp" required></label>
+                    </p>
                     <!-- Texte avec label -->
-                    <div class="champ">
-                        <p>Nom&nbsp;:</p>
-                        <input type="text" id="nom" name="nom" placeholder="Breton" required >
-                    </div>
-                    <br >
-                    <div class="champ">
+                    <p class="champ">
+                        <label>Nom * <input type="text" id="nom" name="nom" placeholder="Breton" required ></label>
+                    </p>
+                    <p class="champ">
                         <!-- Texte avec label -->
-                        <p>Prenom&nbsp;:</p>
-                        <input type="text" id="prenom" name="prenom" placeholder="Louis" required >
-                    </div>
-                    <br >
-                    <div class="champ">
+                        <label>Prenom * <input type="text" id="prenom" name="prenom" placeholder="Louis" required ></label>
+                    </p>
+                    <p class="champ">
                         <!-- Texte avec label -->
-                        <p>Téléphone&nbsp;:</p>
-                        <input id="telephone" name="telephone" type="tel" placeholder="Format: 0123456789" pattern="[0-9]{10}" maxlength="10" required>
-                    </div>
-                    <br >
-                    <div class="champ">
+                        <label>Téléphone * <input id="telephone" name="telephone" type="tel" placeholder="Format: 0123456789" pattern="[0-9]{10}" maxlength="10" required></label>
+                    </p>
+                    <p class="champ">
                         <!-- Texte avec label -->
-                        <p>Dénomination (raison sociale) *:</p>
-                        <input type="text" id="denomination" name="denomination" placeholder="Amazon" required >
-                    </div>
-                    <br >
-                    <div class="champ">
+                        <label>Dénomination (raison sociale) * <input type="text" id="denomination" name="denomination" placeholder="Amazon" required ></label>
+                    </p>
+                    <p class="champ">
                         <!-- Email -->
-                        <p>Adresse *:</p>
-                        <input type="text" id="adresse" placeholder="22300 1 rue Edouard Branly" name="adresse" >
-                    </div>
-                    <br >
-
-                    <div class="radio_entr">
-                        <div>
-                            <input type="radio" id="prive" name="type" value="prive" onclick="gererAffichage()" checked >
-                            <label for="prive" style="font-family:'Tw Cen MT'">Privé</label>
-                        </div>
-                        <div>
-                            <input type="radio" id="public" name="type" value="public" onclick="gererAffichage()" >
-                            <label for="public" style="font-family:'Tw Cen MT'">Public</label>
-                        </div>
-                    </div>
-
-                    <br>
-                    <div class="champ" id="siren">
-                        <label>SIREN*:</label>
-                        <input type="text" id="siren" name="siren" placeholder="231 654 988" oninput="formatInput(this)" maxlength="12">
-                    </div>
-                    <br>
+                        <label>Adresse * <input type="text" id="adresse" placeholder="22300 1 rue Edouard Branly" name="adresse" ></labe>
+                    </p>
+                    <p class="radio_entr">
+                        <label>Privé <input type="radio" id="prive" name="type" value="prive" onclick="gererAffichage()" checked ></label>
+                        <label>Public <input type="radio" id="public" name="type" value="public" onclick="gererAffichage()" ></label>
+                    </p>
+                    <p class="champ" id="siren">
+                        <label>SIREN <input type="text" id="siren" name="siren" placeholder="231 654 988" oninput="formatInput(this)" maxlength="12" required></label>
+                    </p>
                     <button type="submit" class="btn-connexion">Créer un compte professionnel</button>
                 </form>
-                <br ><br>
+                <br>
+                <br>
                 <p>Se connecter ?</p>
                 <a href="connexion.php">
                     <button class="btn-creer">Se connecter</button>
@@ -202,6 +153,4 @@ if (isset($_POST['mdp'])) {
 </body>
 
 </html>
-<?php
-}
-?>
+<?php } ?>

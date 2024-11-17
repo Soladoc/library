@@ -1,5 +1,5 @@
 <?php
-require_once 'component/offer.php'
+require_once 'component/offre.php'
 ?>
 
 <!DOCTYPE html>

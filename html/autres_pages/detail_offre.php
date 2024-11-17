@@ -1,63 +1,21 @@
 <?php
-require_once 'db.php';
+require_once 'component/offre.php';
 
-// Vérifier si l'ID est présent dans l'URL
-if (isset($_GET['id']) && is_numeric($_GET['id'])) {
-    $id = (int)$_GET['id']; // Cast pour plus de sécurité
+[$id] = get_args($_GET, [['id', is_numeric(...)]]);
 
-    // Connexion à la base de données
-    $pdo = db_connect();
-
-    // Préparer la requête pour récupérer les détails de l'offre
-    $query = "SELECT * FROM pact._offre WHERE id = ?";
-    $stmt = $pdo->prepare($query);
-    $stmt->execute([$id]);
-
-    // Récupérer les données de l'offre
-    $offre = $stmt->fetch();
-
-    // Si l'offre est trouvée, afficher ses détails
-    if ($offre) {
-        $titre  = $offre['titre'];  // Assurez-vous que le nom des colonnes correspond à la base de données
-        $description = $offre['description_detaillee'];
-        $adresse = $offre['id_adresse'];
-        $site_web = $offre['url_site_web'];
-        
-        $stmt = $pdo->prepare('SELECT * from pact._image where id = ?');
-        $stmt->execute([$offre['id_image_principale']]);
-        $image_pricipale = $stmt->fetch();
-
-        $query = "SELECT * FROM pact._adresse WHERE id = ?";
-        $stmt = $pdo->prepare($query);
-        $stmt->execute($adresse);
-        $info_adresse = $stmt->fetch();
-
-        // Vérifier si l'adresse existe
-        if ($info_adresse) {
-            // Construire une chaîne lisible pour l'adresse
-            $numero_voie = $info_adresse['numero_voie'];
-            $complement_numero = $info_adresse['complement_numero'];
-            $nom_voie = $info_adresse['nom_voie'];
-            $localite = $info_adresse['localite'];
-            $code_postal = $info_adresse['commune_code_postal'];
-
-            // Concaténer les informations pour former une adresse complète
-            $adresse_complete = $numero_voie . ' ' . $complement_numero . ' ' . $nom_voie . ', ' . $localite . ', ' . $code_postal;
-
-            // Afficher ou retourner l'adresse complète
-} else {
-    echo 'Adresse introuvable.';
+$offre = query_offre($id);
+if ($offre === false) {
+    html_error("l'offre d'ID $id n'existe pas");
 }
-       
-    } else {
-        echo 'Aucune offre trouvée avec cet ID.';
-    }
-} else {
-    echo 'ID d\'offre invalide.';
-}
+assert($offre['id'] === $id);
+
+$titre = $offre['titre'];
+$description = $offre['description_detaillee'];
+$site_web = $offre['url_site_web'];
+$image_pricipale = query_image($offre['id_image_principale']);
+$adresse = notfalse(query_adresse($offre['id_adresse']));
 
 ?>
-
 
 <!DOCTYPE html>
 <html lang="fr">
@@ -66,7 +24,7 @@ if (isset($_GET['id']) && is_numeric($_GET['id'])) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>offre&nbsp;: <?= $id ?></title>
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" >
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css">
     <script async src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
     <link rel="stylesheet" href="../style/style.css">
 </head>
@@ -77,7 +35,7 @@ if (isset($_GET['id']) && is_numeric($_GET['id'])) {
     <main>
         <section class="offer-details">
             <div class="offer-main-photo">
-                <img src="/images_utilisateur/<?= $image_pricipale['id_image'] ?>" alt="Main Photo" class="offer-photo-large">
+                <?php put_image($image_pricipale) ?>
                 <!-- <div class="offer-photo-gallery">
                      <img src="../images/offre/Radôme2.jpg" alt="Photo 2" class="offer-photo-small">
                     <img src="../images/offre/Radôme3.jpg" alt="Photo 3" class="offer-photo-small"> 
@@ -102,7 +60,7 @@ if (isset($_GET['id']) && is_numeric($_GET['id'])) {
             <h3>Emplacement et coordonnées</h3>
             <!-- <div id="map" class="map"></div> -->
             <div class="contact-info">
-                <p><strong>Adresse&nbsp;:</strong> <?= $adresse_complete ?></p>
+                <p><strong>Adresse&nbsp;:</strong> <?= format_adresse($adresse) ?></p>
                 <p><strong>Site web&nbsp;:</strong> <a href="<?= $site_web ?>"><?= $site_web ?></a></p>
                 <!-- <p><strong>Téléphone&nbsp;:</strong> 02 96 46 63 80</p> -->
             </div>
@@ -155,18 +113,18 @@ if (isset($_GET['id']) && is_numeric($_GET['id'])) {
     <?php require 'component/footer.php' ?>
 
     <script>
-    // // OpenStreetMap Integration
-    // var map = L.map('map').setView([48.779, -3.518], 13);
-    // L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-    //     attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-    // }).addTo(map);
-    // L.marker([48.779, -3.518]).addTo(map)
-    //     .bindPopup('Découverte interactive de la cité des Télécoms')
-    //     .openPopup();
-    // L.marker([45.779, -3.518]).addTo(map)
-    //     .bindPopup('hihihihihihihihihui')
-    // L.marker([45.779, -4.518]).addTo(map)
-    //     .bindPopup('hihihihihihihihihui')
+        // // OpenStreetMap Integration
+        // var map = L.map('map').setView([48.779, -3.518], 13);
+        // L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        //     attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        // }).addTo(map);
+        // L.marker([48.779, -3.518]).addTo(map)
+        //     .bindPopup('Découverte interactive de la cité des Télécoms')
+        //     .openPopup();
+        // L.marker([45.779, -3.518]).addTo(map)
+        //     .bindPopup('hihihihihihihihihui')
+        // L.marker([45.779, -4.518]).addTo(map)
+        //     .bindPopup('hihihihihihihihihui')
     </script>
 </body>
 
