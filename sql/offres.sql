@@ -109,6 +109,14 @@ Camping et snack sur le site.',
             )
         returning
             id
+    ),
+    s1 as (
+        insert into
+            _tags (id_offre, tag)
+        values
+            ((table id_offre), 'famille'),
+            ((table id_offre), 'plein air'),
+            ((table id_offre), 'sport')
     )
 insert into
     _horaire_ouverture (id_offre, jour_de_la_semaine, heure_debut, heure_fin)
@@ -351,6 +359,13 @@ La visite de la Galerie d''Art du Dragon Noir est bien plus qu''une simple expos
         values
             ((table id_offre), 'fr'),
             ((table id_offre), 'en')
+    ),
+    s2 as (
+        insert into
+            _tags (id_offre, tag)
+        values
+            ((table id_offre), 'culturel'),
+            ((table id_offre), 'musée')
     )
 insert into
     _horaire_ouverture (id_offre, jour_de_la_semaine, heure_debut, heure_fin)
@@ -363,7 +378,7 @@ values
     ((table id_offre), 6, '10:', '18:'),
     ((table id_offre), 7, '13:', '18:');
 
--- Visite du phare du Cap Fréhel
+-- Visite du phare Vauban au Cap Fréhel
 with
     id_adresse as (
         insert into
@@ -428,6 +443,14 @@ Ne manquez pas cette opportunité unique de découvrir l''un des joyaux de la Br
         values
             ((table id_offre), 'fr'),
             ((table id_offre), 'en')
+    ),
+    s2 as (
+        insert into
+            _tags (id_offre, tag)
+        values
+            ((table id_offre), 'patrimoine'),
+            ((table id_offre), 'histoire'),
+            ((table id_offre), 'nature')
     )
 insert into
     _horaire_ouverture (id_offre, jour_de_la_semaine, heure_debut, heure_fin)
@@ -470,7 +493,7 @@ with
                 2,
                 'gratuit',
                 '4:00:',
-                'Trail dans la réserve naturelle des Sept Îles',
+                'Visite du musée d''Art et d''Histoire de Saint-Brieuc',
                 'Découvrez l''histoire et la culture de la Bretagne à travers une visite guidée du musée d''Art et d''Histoire de Saint-Brieuc. Plongez dans des collections riches et variées, allant de l''archéologie à l''art contemporain, en passant par des expositions temporaires fascinantes. Une expérience immersive et enrichissante pour tous les amateurs d''art et d''histoire.',
                 '#### Introduction au musée
 Le musée d''Art et d''Histoire de Saint-Brieuc est un lieu incontournable pour quiconque souhaite explorer le patrimoine culturel et historique de la Bretagne. Situé au cœur de la ville, ce musée offre une vue d''ensemble sur l''évolution artistique et historique de la région, depuis les temps préhistoriques jusqu''à nos jours.
@@ -502,6 +525,15 @@ Ne manquez pas cette opportunité unique de découvrir l''art et l''histoire de 
         values
             ((table id_offre), 'fr'),
             ((table id_offre), 'en')
+    ),
+    s2 as (
+        insert into
+            _tags (id_offre, tag)
+        values
+            ((table id_offre), 'culturel'),
+            ((table id_offre), 'musée'),
+            ((table id_offre), 'histoire'),
+            ((table id_offre), 'art')
     )
 insert into
     _horaire_ouverture (id_offre, jour_de_la_semaine, heure_debut, heure_fin)
@@ -576,6 +608,14 @@ Réservez dès maintenant votre place et préparez-vous à vivre une expérience
         values
             ((table id_offre), 'fr'),
             ((table id_offre), 'en')
+    ),
+    s2 as (
+        insert into
+            _tags (id_offre, tag)
+        values
+            ((table id_offre), 'nature'),
+            ((table id_offre), 'plein air'),
+            ((table id_offre), 'sport')
     )
 insert into
     _horaire_ouverture (id_offre, jour_de_la_semaine, heure_debut, heure_fin)
@@ -660,6 +700,14 @@ Nous avons hâte de vous accueillir à bord pour une journée inoubliable sur la
         values
             ((table id_offre), 'fr'),
             ((table id_offre), 'en')
+    ),
+    s2 as (
+        insert into
+            _tags (id_offre, tag)
+        values
+            ((table id_offre), 'nature'),
+            ((table id_offre), 'nautique'),
+            ((table id_offre), 'culturel')
     )
 insert into
     _horaire_ouverture (id_offre, jour_de_la_semaine, heure_debut, heure_fin)
@@ -720,6 +768,13 @@ with
             _langue_visite (id_visite, code_langue)
         values
             ((table id_offre), 'fr')
+    ),
+    s2 as (
+        insert into
+            _tags (id_offre, tag)
+        values
+            ((table id_offre), 'culturel'),
+            ((table id_offre), 'nature')
     )
 insert into
     _periode_ouverture (id_offre, debut, fin)
@@ -794,6 +849,13 @@ Rejoignez-nous pour une journée mémorable où nature, histoire et gastronomie 
             _langue_visite (id_visite, code_langue)
         values
             ((table id_offre), 'fr')
+    ),
+    s2 as (
+        insert into
+            _tags (id_offre, tag)
+        values
+            ((table id_offre), 'nature'),
+            ((table id_offre), 'plein air')
     )
 insert into
     _horaire_ouverture (id_offre, jour_de_la_semaine, heure_debut, heure_fin)
@@ -865,6 +927,14 @@ Ne manquez pas cette opportunité unique de découvrir l''un des châteaux les p
             _langue_visite (id_visite, code_langue)
         values
             ((table id_offre), 'fr')
+    ),
+    s2 as (
+        insert into
+            _tags (id_offre, tag)
+        values
+            ((table id_offre), 'patrimoine'),
+            ((table id_offre), 'histoire'),
+            ((table id_offre), 'culturel')
     )
 insert into
     _horaire_ouverture (id_offre, jour_de_la_semaine, heure_debut, heure_fin)
@@ -951,6 +1021,14 @@ N''attendez plus et venez vivre une aventure technologique unique à la Cité de
             ((table id_offre), 9),
             ((table id_offre), 11),
             ((table id_offre), 14)
+    ),
+    s2 as (
+        insert into
+            _tags (id_offre, tag)
+        values
+            ((table id_offre), 'culturel'),
+            ((table id_offre), 'musée'),
+            ((table id_offre), 'technologie')
     )
 insert into
     _horaire_ouverture (id_offre, jour_de_la_semaine, heure_debut, heure_fin)
@@ -1002,6 +1080,13 @@ with
             )
         returning
             id
+    ),
+    s1 as (
+        insert into
+            _tags (id_offre, tag)
+        values
+            ((table id_offre), 'musique'),
+            ((table id_offre), 'spectacle')
     )
 insert into
     _periode_ouverture (id_offre, debut, fin)
@@ -1059,6 +1144,13 @@ with
             )
         returning
             id
+    ),
+    s1 as (
+        insert into
+            _tags (id_offre, tag)
+        values
+            ((table id_offre), 'sport'),
+            ((table id_offre), 'plein air')
     )
 insert into
     _gallerie (id_offre, id_image)
@@ -1122,6 +1214,13 @@ Rejoignez-nous pour une aventure inoubliable au cœur de la Bretagne et découvr
             )
         returning
             id
+    ),
+    s1 as (
+        insert into
+            _tags (id_offre, tag)
+        values
+            ((table id_offre), 'nature'),
+            ((table id_offre), 'plein air')
     )
 insert into
     _gallerie (id_offre, id_image)
@@ -1168,6 +1267,13 @@ with
             )
         returning
             id
+    ),
+    s1 as (
+        insert into
+            _tags (id_offre, tag)
+        values
+            ((table id_offre), 'sport'),
+            ((table id_offre), 'famille')
     )
 insert into
     _gallerie (id_offre, id_image)
@@ -1188,31 +1294,41 @@ with
             ('22', 070, 14, 'Rue de l''Eglise')
         returning
             id
+    ),
+    id_offre as (
+        insert into
+            activite (
+                id_adresse,
+                id_professionnel,
+                id_image_principale,
+                libelle_abonnement,
+                titre,
+                resume,
+                description_detaillee,
+                indication_duree,
+                prestations_incluses
+            )
+        values
+            (
+                (table id_adresse),
+                1,
+                5,
+                'gratuit',
+                'Chasse aux grenouilles dans le Lac du Gourgal',
+                'Chasse aux grenouilles dans le Lac du Gourgal résumé',
+                'Chasse aux grenouilles dans le Lac du Gourgal description',
+                '3:00:',
+                'Chasse aux grenouilles dans le Lac du Gourgal prestations incluses'
+            )
+        returning
+            id
     )
 insert into
-    activite (
-        id_adresse,
-        id_professionnel,
-        id_image_principale,
-        libelle_abonnement,
-        titre,
-        resume,
-        description_detaillee,
-        indication_duree,
-        prestations_incluses
-    )
+    _tags (id_offre, tag)
 values
-    (
-        (table id_adresse),
-        1,
-        5,
-        'gratuit',
-        'Chasse aux grenouilles dans le Lac du Gourgal',
-        'Chasse aux grenouilles dans le Lac du Gourgal résumé',
-        'Chasse aux grenouilles dans le Lac du Gourgal description',
-        '3:00:',
-        'Chasse aux grenouilles dans le Lac du Gourgal prestations incluses'
-    );
+    ((table id_offre), 'nature'),
+    ((table id_offre), 'plein air'),
+    ((table id_offre), 'aventure');
 
 -- Initiation au char à voile sur la plage
 with
@@ -1223,29 +1339,30 @@ with
             ('22', 186, 1, 'Rue de Belvédère')
         returning
             id
-    )
-insert into
-    activite (
-        id_adresse,
-        id_professionnel,
-        id_image_principale,
-        libelle_abonnement,
-        titre,
-        resume,
-        description_detaillee,
-        indication_duree,
-        age_requis,
-        prestations_incluses
-    )
-values
-    (
-        (table id_adresse),
-        1,
-        10,
-        'gratuit',
-        'Initiation au char à voile sur la plage de Trestraou',
-        'De 7 à 77 ans, le char à voile est à la portée de tous et vous procure une immense sensation de liberté.',
-        'Direction les longues plages de sable fin du Marquenterre, au nord de la côte picarde, entre Quend-Plage et Fort-Mahon : l''un des meilleurs spots pour s''essayer au char à voile ! 
+    ),
+    id_offre as (
+        insert into
+            activite (
+                id_adresse,
+                id_professionnel,
+                id_image_principale,
+                libelle_abonnement,
+                titre,
+                resume,
+                description_detaillee,
+                indication_duree,
+                age_requis,
+                prestations_incluses
+            )
+        values
+            (
+                (table id_adresse),
+                1,
+                10,
+                'gratuit',
+                'Initiation au char à voile sur la plage de Trestraou',
+                'De 7 à 77 ans, le char à voile est à la portée de tous et vous procure une immense sensation de liberté.',
+                'Direction les longues plages de sable fin du Marquenterre, au nord de la côte picarde, entre Quend-Plage et Fort-Mahon : l''un des meilleurs spots pour s''essayer au char à voile ! 
 
 Une séance dure 3 heures environ.
 Vous commencez par 45 minutes d''initiation avec votre moniteur au cours desquelles vous apprenez les manœuvres, à créer votre trajectoire en sentant le vent.
@@ -1253,10 +1370,18 @@ Et c''est parti pour plus de 2 heures de randonnée sur les longues plages et vo
 
 Le saviez-vous ? Un char à voile peut atteindre 90km/h ! Rendez-vous dans nos bases nautiques !
 L''initiation au char à voile peut être incluse dans le cadre d''une activité scolaire et extrascolaire (Journée de bord de mer plein air, classe de découverte, journée d''intégration), week-end multi activités, séminaires (char à voile, randonnée nautique, équitation, hébergement, repas).',
-        '3:00:',
-        7,
-        'Nous vous proposons une initiation et randonnée en char à voile'
-    );
+                '3:00:',
+                7,
+                'Nous vous proposons une initiation et randonnée en char à voile'
+            )
+        returning
+            id
+    )
+insert into
+    _tags (id_offre, tag)
+values
+    ((table id_offre), 'nautique'),
+    ((table id_offre), 'sport');
 
 -- Escape game À l'Arche du Temps
 with
@@ -1267,32 +1392,33 @@ with
             ('22', 278, 18, 'Rue de l''Église')
         returning
             id
-    )
-insert into
-    activite (
-        id_adresse,
-        id_professionnel,
-        id_image_principale,
-        libelle_abonnement,
-        url_site_web,
-        titre,
-        resume,
-        description_detaillee,
-        indication_duree,
-        age_requis,
-        prestations_incluses,
-        prestations_non_incluses
-    )
-values
-    (
-        (table id_adresse),
-        1,
-        7,
-        'gratuit',
-        'https://larchedutemps.com',
-        'Escape game À l''Arche du Temps',
-        'L''Escape Game Arche Du Temps vous permet de disposer d''un cadre atypique, avec une possibilité de privatisation de l''espace d''accueil (80m²) avec salon modulable, et connexion wifi pour un séminaire, une réunion ou autre.',
-        '# Escape Game
+    ),
+    id_offre as (
+        insert into
+            activite (
+                id_adresse,
+                id_professionnel,
+                id_image_principale,
+                libelle_abonnement,
+                url_site_web,
+                titre,
+                resume,
+                description_detaillee,
+                indication_duree,
+                age_requis,
+                prestations_incluses,
+                prestations_non_incluses
+            )
+        values
+            (
+                (table id_adresse),
+                1,
+                7,
+                'gratuit',
+                'https://larchedutemps.com',
+                'Escape game À l''Arche du Temps',
+                'L''Escape Game Arche Du Temps vous permet de disposer d''un cadre atypique, avec une possibilité de privatisation de l''espace d''accueil (80m²) avec salon modulable, et connexion wifi pour un séminaire, une réunion ou autre.',
+                '# Escape Game
 
 ## Le Gardien des Reliques
 
@@ -1303,11 +1429,20 @@ Vous et votre équipe aurez une heure pour retrouver le coupable, son mobile et 
 Dans le décor authentique de la Chapelle des VII Dormants, cet Escape Game vous plonge dans le passé millénaire d''Autun. Cherchez les indices, combinez les pistes et résolvez le mystère du Gardien des Reliques !
 
 De 3 à 6 joueurs, en famille, entre collègues ou entre amis, venez relever nos défis ! Au total, le briefing et l''enquête sont prévus pour une durée d''environ 1h30.',
-        '1:30:',
-        16,
-        'Nous vous proposons un escape game avec énigmes',
-        'Nous ne vous proposons pas de repas'
-    );
+                '1:30:',
+                16,
+                'Nous vous proposons un escape game avec énigmes',
+                'Nous ne vous proposons pas de repas'
+            )
+        returning
+            id
+    )
+insert into
+    _tags (id_offre, tag)
+values
+    ((table id_offre), 'famille'),
+    ((table id_offre), 'jeu'),
+    ((table id_offre), 'aventure');
 
 -- Laser Game Evolution Saint-Brieuc
 with
@@ -1352,6 +1487,14 @@ with
             )
         returning
             id
+    ),
+    s1 as (
+        insert into
+            _tags (id_offre, tag)
+        values
+            ((table id_offre), 'sport'),
+            ((table id_offre), 'famille'),
+            ((table id_offre), 'jeu')
     )
 insert into
     _gallerie (id_offre, id_image)
@@ -1370,35 +1513,45 @@ with
             ('22', 117, 'Les étangs')
         returning
             id
+    ),
+    id_offre as (
+        insert into
+            activite (
+                id_adresse,
+                id_image_principale,
+                id_professionnel,
+                libelle_abonnement,
+                url_site_web,
+                titre,
+                resume,
+                description_detaillee,
+                indication_duree,
+                age_requis,
+                prestations_incluses
+            )
+        values
+            (
+                (table id_adresse),
+                6,
+                2,
+                'gratuit',
+                'https://www.lanticparcaventure.bzh/',
+                'Lantic Parc Aventure',
+                'LANTIC PARC AVENTURE propose plusieurs parcours acrobatiques en hauteur, du paint ball, du laser tag, pour toute la famille. Venez passer une journée dans les arbres, en famille, entre amis ou collègues, dans un cadre exceptionnel. Restauration sur place.',
+                'Lantic Parc Aventure est situé en pleine nature, au bord des étangs de Lantic, dans un espace de 3,6 hectares. L''accrobranche est une activité de plein-air qui consiste à grimper à la cime des arbres et se balader d''arbre en arbre au travers de différents obstacles, toujours plus funs les uns que les autres (tyroliennes, ponts de singe, rondins tournants, filets, passerelles, …).',
+                '1:00:',
+                12,
+                'Nous vous proposons un parcours d''accrobranche'
+            )
+        returning
+            id
     )
 insert into
-    activite (
-        id_adresse,
-        id_image_principale,
-        id_professionnel,
-        libelle_abonnement,
-        url_site_web,
-        titre,
-        resume,
-        description_detaillee,
-        indication_duree,
-        age_requis,
-        prestations_incluses
-    )
+    _tags (id_offre, tag)
 values
-    (
-        (table id_adresse),
-        6,
-        2,
-        'gratuit',
-        'https://www.lanticparcaventure.bzh/',
-        'Lantic Parc Aventure',
-        'LANTIC PARC AVENTURE propose plusieurs parcours acrobatiques en hauteur, du paint ball, du laser tag, pour toute la famille. Venez passer une journée dans les arbres, en famille, entre amis ou collègues, dans un cadre exceptionnel. Restauration sur place.',
-        'Lantic Parc Aventure est situé en pleine nature, au bord des étangs de Lantic, dans un espace de 3,6 hectares. L''accrobranche est une activité de plein-air qui consiste à grimper à la cime des arbres et se balader d''arbre en arbre au travers de différents obstacles, toujours plus funs les uns que les autres (tyroliennes, ponts de singe, rondins tournants, filets, passerelles, …).',
-        '1:00:',
-        12,
-        'Nous vous proposons un parcours d''accrobranche'
-    );
+    ((table id_offre), 'famille'),
+    ((table id_offre), 'plein air'),
+    ((table id_offre), 'aventure');
 
 -- Accrobranche au parc aventure Indian Forest
 with
@@ -1409,38 +1562,48 @@ with
             ('22', 154, 'Les Tronchées')
         returning
             id
-    )
-insert into
-    activite (
-        id_adresse,
-        id_professionnel,
-        id_image_principale,
-        libelle_abonnement,
-        url_site_web,
-        titre,
-        resume,
-        description_detaillee,
-        indication_duree,
-        age_requis,
-        prestations_incluses
-    )
-values
-    (
-        (table id_adresse),
-        2,
-        41,
-        'gratuit',
-        'https://www.aventure-nature.com/accrobranche',
-        'Accrobranche au parc aventure Indian Forest',
-        'le parc aventure Indian Forest - Parcours d''accrobranche dans les Côtes-d''Armor (22)',
-        'Envie de pratiquer un sport ludique en pleine nature ? Nous vous proposons de découvrir l''accrobranche, un sport original adapté aux petits et grands. L''équipe du parc dispose d''un diplôme d''encadrement OPAH. Ceci pour vous assurer d''agréables moments en toute sécurité. Ils sont à votre service afin de vous faire découvrir cette discipline forte en sensations et en fous rires.
+    ),
+    id_offre as (
+        insert into
+            activite (
+                id_adresse,
+                id_professionnel,
+                id_image_principale,
+                libelle_abonnement,
+                url_site_web,
+                titre,
+                resume,
+                description_detaillee,
+                indication_duree,
+                age_requis,
+                prestations_incluses
+            )
+        values
+            (
+                (table id_adresse),
+                2,
+                41,
+                'gratuit',
+                'https://www.aventure-nature.com/accrobranche',
+                'Accrobranche au parc aventure Indian Forest',
+                'le parc aventure Indian Forest - Parcours d''accrobranche dans les Côtes-d''Armor (22)',
+                'Envie de pratiquer un sport ludique en pleine nature ? Nous vous proposons de découvrir l''accrobranche, un sport original adapté aux petits et grands. L''équipe du parc dispose d''un diplôme d''encadrement OPAH. Ceci pour vous assurer d''agréables moments en toute sécurité. Ils sont à votre service afin de vous faire découvrir cette discipline forte en sensations et en fous rires.
 
 Notre activité est contrôlée par un organisme spécialisé dans la vérification des parcours acrobatiques en hauteur. De plus, des experts forestiers interviennent à chaque saison pour la préservation forestière.
 
 Bienvenue dans notre parc aventure si vous êtes dans les Côtes-d''Armor notamment à Saint-Brieuc, Dinan, Guingamp, Lanvollon, Lannion, Pléneuf-Val-André, Morieux, Lamballe ou Paimpol.',
-        '1:10:',
-        11,
-        'Nous vous proposons un parcours d''accrobranche'
-    );
+                '1:10:',
+                11,
+                'Nous vous proposons un parcours d''accrobranche'
+            )
+        returning
+            id
+    )
+insert into
+    _tags (id_offre, tag)
+values
+    ((table id_offre), 'nature'),
+    ((table id_offre), 'plein air'),
+    ((table id_offre), 'aventure');
 
 commit;
