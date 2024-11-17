@@ -95,11 +95,11 @@ if (isset($_POST['type'])) {
                         <label>Adresse * <input type="text" id="adresse" placeholder="22300 1 rue Edouard Branly" name="adresse" ></labe>
                     </p>
                     <p class="radio_entr">
-                        <label>Privé <input type="radio" id="prive" name="type" value="prive" onclick="gererAffichage()" checked ></label>
-                        <label>Public <input type="radio" id="public" name="type" value="public" onclick="gererAffichage()" ></label>
+                        <label>Privé <input type="radio" id="prive" name="type" value="prive" onclick="gererAffichage()" ></label>
+                        <label>Public <input type="radio" id="public" name="type" value="public" onclick="gererAffichage()" checked></label>
                     </p>
-                    <p class="champ" id="siren">
-                        <label>SIREN <input type="text" id="siren" name="siren" placeholder="231 654 988" oninput="formatInput(this)" maxlength="12" required></label>
+                    <p class="champ" id="champ-siren">
+                        <label>SIREN <input type="text" id="siren" name="siren" placeholder="231 654 988" oninput="formatInput(this)" maxlength="12"></label>
                     </p>
                     <button type="submit" class="btn-connexion">Créer un compte professionnel</button>
                 </form>
@@ -120,18 +120,18 @@ if (isset($_POST['type'])) {
     function gererAffichage() {
         // Récupère tous les boutons radio
         let radios = document.querySelectorAll('input[name="type"]');
-        let ligneSupplementaire = document.getElementById("siren");
+        let ligneSupplementaire = document.getElementById('champ-siren');
         // Parcourt chaque bouton radio pour voir s'il est sélectionné
         radios.forEach(radio => {
             if (radio.checked && radio.value === 'prive') {
                 // Si Option 2 est sélectionnée, on affiche la ligne
                 ligneSupplementaire.style.display = 'block';
-                ligneSupplementaire.setAttribute('required','required');
+                ligneSupplementaire.querySelector('input').setAttribute('required', 'required');
 
             } else if (radio.checked) {
                 // Si une autre option est sélectionnée, on masque la ligne
                 ligneSupplementaire.style.display = 'none';
-                ligneSupplementaire.removeAttribute('required');
+                ligneSupplementaire.querySelector('input').removeAttribute('required');
             }
         });
     }
