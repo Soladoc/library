@@ -27,9 +27,10 @@ jobs:
               done
               sudo docker exec -w / postgresdb bash -c '
                 set -xeu
+                export 
                 for f in /creaBDD.sql /fonctions.sql /vuesBDD.sql /triggers.sql /bigdata.sql /data.sql /images.sql /offres.sql
                   do echo run "$f"
-                  psql -U sae -d postgres -f "$f"
+                  ON_ERROR_STOP=on psql -U sae -d postgres -f "$f"
                 done
               '
           EOF
