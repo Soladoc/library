@@ -83,6 +83,13 @@ function query_professionnel(string $email): array|false
     return $stmt->fetch();
 }
 
+function alterner_etat_offre(int $id_offre): void
+{
+    $stmt = notfalse(db_connect()->prepare('insert into _changement_etat (id_offre) values (?)'));
+    bind_values($stmt, [1 => [$id_offre, PDO::PARAM_INT]]);
+    notfalse($stmt->execute());
+}
+
 /**
  * Binds types values to a statement.
  *
