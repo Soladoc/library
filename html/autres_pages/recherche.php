@@ -51,12 +51,15 @@ require_once 'component/offre.php'
             <br>
             <h3>Options de tri</h3>
             <div class="sorting-buttons">
-                <button class="btn-sort" id="sort-price-up">Prix 🔼</button>
-                <button class="btn-sort" id="sort-price-down">Prix 🔽</button>
-                <button class="btn-sort" id="sort-rating-up">Notes 🔼</button>
-                <button class="btn-sort" id="sort-rating-down">Notes 🔽</button>
-                <button class="btn-sort" id="sort-date-up">Date de publication 🔼</button>
-                <button class="btn-sort" id="sort-date-down">Date de publication 🔽</button>
+                <p>Prix : </p>
+                <button class="btn-sort" id="sort-price-up">🔼</button>
+                <button class="btn-sort" id="sort-price-down">🔽</button>
+                <p>Notes : </p>
+                <button class="btn-sort" id="sort-rating-up">🔼</button>
+                <button class="btn-sort" id="sort-rating-down">🔽</button>
+                <p>Date de publication : </p>
+                <button class="btn-sort" id="sort-date-up">🔼</button>
+                <button class="btn-sort" id="sort-date-down">🔽</button>
             </div>
         </section>
 
