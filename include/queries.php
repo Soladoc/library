@@ -28,9 +28,17 @@ function query_offres(?int $id_professionnel = null, ?bool $en_ligne = null): PD
     return $stmt;
 }
 
+function query_communes(?string $nom = null): array
+{
+    $args = filter_null_args(['nom' => [$nom, PDO::PARAM_STR]]);
+    $stmt = notfalse(db_connect()->prepare('select * from _commune' . _where_clause('and', array_keys($args))));
+    bind_values($stmt, $args);
+    return notfalse($stmt->fetchAll());
+}
+
 function query_offre(int $id): array|false
 {
-    $stmt = notfalse(db_connect()->prepare("select * from offres where id = ?"));
+    $stmt = notfalse(db_connect()->prepare('select * from offres where id = ?'));
     bind_values($stmt, [1 => [$id, PDO::PARAM_INT]]);
     notfalse($stmt->execute());
     return $stmt->fetch();

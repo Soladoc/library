@@ -45,3 +45,18 @@ function f_str_is(string ...$allowed_values): callable
 {
     return fn($value) => array_search($value, $allowed_values) !== false;
 }
+
+/**
+ * Returns the single value in the given array.
+ * @template T
+ * @param array<T> $array The array to extract the single value from.
+ * @return T The single value in the array.
+ * @throws Exception If the array does not contain exactly one value.
+ */
+function single(array $array): mixed
+{
+    if (count($array) !== 1) {
+        throw new Exception('Array contains not a single value');
+    }
+    return $array[0];
+}
