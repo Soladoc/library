@@ -81,7 +81,7 @@ $gallerie = query_gallerie($id);
         </section>
 
         <!-- User Reviews -->
-        <!-- <section class="offer-reviews">
+        <section class="offer-reviews">
             <h3>Avis des utilisateurs</h3>
 
              Review Form 
@@ -101,28 +101,27 @@ $gallerie = query_gallerie($id);
              Summary of reviews 
             <div class="review-summary">
                 <h4>Résumé des notes</h4>
-                <p>Moyenne&nbsp;: 4.7/5 ★</p>
+                <p>Moyenne&nbsp;: <?php $offre['note_moyenne'] ?>/5 ★</p>
                 <div class="rating-distribution">
-                    <p>5 étoiles&nbsp;: 70%</p>
-                    <p>4 étoiles&nbsp;: 20%</p>
-                    <p>3 étoiles&nbsp;: 7%</p>
-                    <p>2 étoiles&nbsp;: 2%</p>
-                    <p>1 étoile&nbsp;: 1%</p>
+                    <?php $avis = query_avis(id_offre: $offre['id']); ?>
+                    <p>5 étoiles&nbsp;: <?php count(array_filter($avis, fn($a) => $a['note'] === 5)) ?></p>
+                    <p>4 étoiles&nbsp;: <?php count(array_filter($avis, fn($a) => $a['note'] === 4)) ?></p>
+                    <p>3 étoiles&nbsp;: <?php count(array_filter($avis, fn($a) => $a['note'] === 3)) ?></p>
+                    <p>2 étoiles&nbsp;: <?php count(array_filter($avis, fn($a) => $a['note'] === 2)) ?></p>
+                    <p>1 étoile&nbsp;: <?php count(array_filter($avis, fn($a) => $a['note'] === 1)) ?></p>
                 </div>
             </div>
 
             List of reviews 
             <div class="review-list">
-                <div class="review">
-                    <p><strong>Jean Dupont</strong> - ★★★★★</p>
-                    <p>Super expérience, je recommande fortement !</p>
-                </div>
-                <div class="review">
-                    <p><strong>Marie Leclerc</strong> - ★★★★☆</p>
-                    <p>Une belle visite, mais quelques parties étaient fermées...</p>
-                </div>
+                <?php foreach($avis as $avis_temp) { ?>
+                    <div class="review">
+                        <p><strong><?php $avis_temp['pseudo'] ?></strong> - <?php $avis_temp['note'] ?>/5</p>
+                        <p><?php $avis_temp['commentaire'] ?></p>
+                    </div>
+                <?php } ?>
             </div>
-        </section> -->
+        </section>
     </main>
     <?php require 'component/footer.php' ?>
 
