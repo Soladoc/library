@@ -4,14 +4,16 @@ ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL & ~E_NOTICE);
 
+
 /**
- * Asserts that something is not false.
+ * Ensures a value is not false, and returns it if not.
+ *
  * @template T
- * @param T|false $value Value, possibly false.
- * @param string $msg Assertion message.
- * @return T Result, not false.
- */
-function notfalse(mixed $value, string $msg = 'was false'): mixed
+ * @param T $value The value to check.
+ * @param string $msg The error message to use if the value is false.
+ * @return T The original value if it is not false, otherwise throws an Exception with the provided message.
+ * @throws Exception If the provided value is false.
+ */function notfalse(mixed $value, string $msg = 'was false'): mixed
 {
     if ($value === false) {
         ?>
