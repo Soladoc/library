@@ -60,3 +60,4 @@ function single(array $array): mixed
     }
     return $array[0];
 }
+
