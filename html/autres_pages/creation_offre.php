@@ -322,6 +322,9 @@ if ($type_offre && $_POST) {
                 }
                 ?>
             </section>
+            <section id="infos-categorie">
+                <!-- Utiliser des sections cachées et input disabled?  -->
+            </section>
             <!-- du coup en sois on a pas de formulaire a check avec Raphael -->
             <form id="form-offre" action="creation_offre.php?type-offre=<?= $type_offre ?>" method="post" enctype="multipart/form-data">
                 <button type="submit">Valider</button>
