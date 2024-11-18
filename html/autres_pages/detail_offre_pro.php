@@ -13,6 +13,15 @@ if (isset($_GET['id']) && is_numeric($_GET['id'])) {
     // Connexion à la base de données
     $pdo = db_connect();
 
+    if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['valider'])) {
+        alterner_etat_offre($id);
+        // Force refresh of data from database
+        $offre = query_offre($id);
+        // Redirect to prevent form resubmission
+        header("Location: " . $_SERVER['PHP_SELF'] . "?id=" . $id);
+        exit();
+    }
+    
     // Récupérer les données de l'offre
     $offre = query_offre($id);
 
