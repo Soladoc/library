@@ -118,10 +118,10 @@ create table _offre(
         constraint offre_fk_adresse references _adresse,
     id_image_principale int not null
         constraint offre_fk_image references _image,
-    libelle_abonnement ligne not null
-        constraint offre_fk_abonnement references _abonnement,
     id_professionnel int not null
         constraint offre_fk_professionnel references _professionnel,
+    libelle_abonnement ligne not null
+        constraint offre_fk_abonnement references _abonnement,
     titre ligne not null,
     resume ligne not null,
     description_detaillee paragraphe not null,
