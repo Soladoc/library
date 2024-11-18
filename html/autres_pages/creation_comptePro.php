@@ -33,7 +33,7 @@ if (isset($_POST['type'])) {
             $prenom,
             $telephone,
             $denomination,
-            $siren,
+            str_replace(' ','',$siren),
         ]);
         redirect_to_connexion();
     } else {

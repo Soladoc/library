@@ -13,6 +13,14 @@ if (isset($_GET['id']) && is_numeric($_GET['id'])) {
     // Connexion à la base de données
     $pdo = db_connect();
 
+    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+        echo "j'alterne";
+        alterner_etat_offre($id);
+        $offre = query_offre($id);
+        header("Location: " . $_SERVER['PHP_SELF'] . "?id=" . $id);
+        exit();
+    }
+
     // Récupérer les données de l'offre
     $offre = query_offre($id);
 
@@ -24,14 +32,6 @@ if (isset($_GET['id']) && is_numeric($_GET['id'])) {
         $site_web = $offre['url_site_web'];
         $image_pricipale = $offre['id_image_principale'];
         $en_ligne=$offre['en_ligne'];
-        print_r($en_ligne);
-        if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['valider'])) {
-            alterner_etat_offre($id);
-            $en_ligne = !$en_ligne;
-            print_r($en_ligne);
-            header("Location: " . $_SERVER['PHP_SELF'] . "?id=" . $id);
-            exit();
-        }
         $info_adresse = query_adresse($adresse);
 
         // Vérifier si l'adresse existe
