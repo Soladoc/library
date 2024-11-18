@@ -7,7 +7,7 @@ ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 
 [$id] = get_args($_GET, [['id', is_numeric(...)]]);
-$membre  = query_membre($id);
+$membre  = query_compte_membre($id);
 
 if ($membre === false) {
     html_error("l'membre d'ID $id n'existe pas");
