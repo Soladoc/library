@@ -19,6 +19,7 @@ print_r($membre);
 echo "</pre>";
 $pseudo = $membre["pseudo"]; 
 $email = $membre["email"];
+$mdp = unserialize($membre["mdp_hash"]);
 $nom = $membre["nom"];
 $prenom = $membre["prenom"];
 $telephone = $membre["telephone"];
@@ -46,6 +47,33 @@ $telephone = $membre["telephone"];
     require 'component/header.php' ?>
 
     <main>
+        <section id="info_compte">
+            <div id="pseudo">
+                <p>pseudo : </p>
+                <?php echo $pseudo?>
+            </div>
+
+            <div id="nom">
+                <p>nom : </p>
+                <?php echo $nom?>
+            </div>
+
+            <div id="prenom">
+                <p>prenom : </p>
+                <?php echo $prenom?>
+            </div>
+
+            <div id="email">
+                <p>email : </p>
+                <?php echo $email?>
+            </div>
+
+            <div id="mdp">
+                <p>mot de passe : </p>
+                <?php echo $mdp?>
+            </div>
+
+        </section>
         
       
     </main>
