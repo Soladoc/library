@@ -45,7 +45,7 @@ function query_gallerie(int $id_offre): array
     $stmt = notfalse(db_connect()->prepare('select id_image from _gallerie where id_offre = ?'));
     bind_values($stmt, [1 => [$id_offre, PDO::PARAM_INT]]);
     notfalse($stmt->execute()); 
-    return $stmt->fetchAll();
+    return array_map(fn($row) => $row['id_image'], $stmt->fetchAll());
 }
 
 function query_adresse(int $id_adresse): array|false
@@ -186,7 +186,7 @@ function insert_adresse(
     return notfalse($stmt->fetchColumn());
 }
 
-function insert_activite(
+function offre_args(
     int $id_adresse,
     int $id_image_principale,
     int $id_professionnel,
@@ -194,13 +194,9 @@ function insert_activite(
     string $titre,
     string $resume,
     string $description_detaillee,
-    DateInterval $indication_duree,
-    string $prestation_incluses,
-    ?int $age_requis = null,
-    ?string $prestations_non_incluses = null,
     ?string $url_site_web = null,
-): int {
-    $args = filter_null_args([
+): array {
+    return filter_null_args([
         'id_adresse' => [$id_adresse, PDO::PARAM_INT],
         'id_image_principale' => [$id_image_principale, PDO::PARAM_INT],
         'id_professionnel' => [$id_professionnel, PDO::PARAM_INT],
@@ -208,11 +204,22 @@ function insert_activite(
         'titre' => [$titre, PDO::PARAM_STR],
         'resume' => [$resume, PDO::PARAM_STR],
         'description_detaillee' => [$description_detaillee, PDO::PARAM_STR],
+        'url_site_web' => [$url_site_web, PDO::PARAM_STR],
+    ]);
+}
+
+function insert_activite(
+    array $offre_args,
+    DateInterval $indication_duree,
+    string $prestation_incluses,
+    ?int $age_requis = null,
+    ?string $prestations_non_incluses = null,
+): int {
+    $args = $offre_args + filter_null_args([
         'indication_duree' => [$indication_duree->format(DateTime::ATOM), PDO::PARAM_STR],
         'prestation_incluses' => [$prestation_incluses, PDO::PARAM_STR],
         'age_requis' => [$age_requis, PDO::PARAM_INT],
         'prestations_non_incluses' => [$prestations_non_incluses, PDO::PARAM_STR],
-        'url_site_web' => [$url_site_web, PDO::PARAM_STR],
     ]);
     $stmt = notfalse(db_connect()->prepare(_insert_into_returning_id('activite', $args)));
     bind_values($stmt, $args);
@@ -221,28 +228,13 @@ function insert_activite(
 }
 
 function insert_spectacle(
-    int $id_adresse,
-    int $id_image_principale,
-    int $id_professionnel,
-    string $libelle_abonnement,
-    string $titre,
-    string $resume,
-    string $description_detaillee,
+    array $offre_args,
     DateInterval $indication_duree,
     int $capacite_accueil,
-    ?string $url_site_web = null,
 ): int {
-    $args = filter_null_args([
-        'id_adresse' => [$id_adresse, PDO::PARAM_INT],
-        'id_image_principale' => [$id_image_principale, PDO::PARAM_INT],
-        'id_professionnel' => [$id_professionnel, PDO::PARAM_INT],
-        'libelle_abonnement' => [$libelle_abonnement, PDO::PARAM_STR],
-        'titre' => [$titre, PDO::PARAM_STR],
-        'resume' => [$resume, PDO::PARAM_STR],
-        'description_detaillee' => [$description_detaillee, PDO::PARAM_STR],
+    $args = $offre_args + filter_null_args([
         'indication_duree' => [$indication_duree->format(DateTime::ATOM), PDO::PARAM_STR],
         'capacite_accueil' => [$capacite_accueil, PDO::PARAM_INT],
-        'url_site_web' => [$url_site_web, PDO::PARAM_STR],
     ]);
     $stmt = notfalse(db_connect()->prepare(_insert_into_returning_id('spectacle', $args)));
     bind_values($stmt, $args);
@@ -251,26 +243,11 @@ function insert_spectacle(
 }
 
 function insert_visite(
-    int $id_adresse,
-    int $id_image_principale,
-    int $id_professionnel,
-    string $libelle_abonnement,
-    string $titre,
-    string $resume,
-    string $description_detaillee,
-    DateInterval $indication_duree,
-    ?string $url_site_web = null,
+    array $offre_args,
+    DateInterval $indication_duree
 ): int {
-    $args = filter_null_args([
-        'id_adresse' => [$id_adresse, PDO::PARAM_INT],
-        'id_image_principale' => [$id_image_principale, PDO::PARAM_INT],
-        'id_professionnel' => [$id_professionnel, PDO::PARAM_INT],
-        'libelle_abonnement' => [$libelle_abonnement, PDO::PARAM_STR],
-        'titre' => [$titre, PDO::PARAM_STR],
-        'resume' => [$resume, PDO::PARAM_STR],
-        'description_detaillee' => [$description_detaillee, PDO::PARAM_STR],
+    $args = $offre_args + filter_null_args([
         'indication_duree' => [$indication_duree->format(DateTime::ATOM), PDO::PARAM_STR],
-        'url_site_web' => [$url_site_web, PDO::PARAM_STR],
     ]);
     $stmt = notfalse(db_connect()->prepare(_insert_into_returning_id('visite', $args)));
     bind_values($stmt, $args);
@@ -279,13 +256,7 @@ function insert_visite(
 }
 
 function insert_restaurant(
-    int $id_adresse,
-    int $id_image_principale,
-    int $id_professionnel,
-    string $libelle_abonnement,
-    string $titre,
-    string $resume,
-    string $description_detaillee,
+    array $offre_args,
     string $carte,
     int $richesse,
     ?bool $sert_petit_dejeuner = null,
@@ -293,16 +264,8 @@ function insert_restaurant(
     ?bool $sert_dejeuner = null,
     ?bool $sert_diner = null,
     ?bool $sert_boissons = null,
-    ?string $url_site_web = null,
 ): int {
-    $args = filter_null_args([
-        'id_adresse' => [$id_adresse, PDO::PARAM_INT],
-        'id_image_principale' => [$id_image_principale, PDO::PARAM_INT],
-        'id_professionnel' => [$id_professionnel, PDO::PARAM_INT],
-        'libelle_abonnement' => [$libelle_abonnement, PDO::PARAM_STR],
-        'titre' => [$titre, PDO::PARAM_STR],
-        'resume' => [$resume, PDO::PARAM_STR],
-        'description_detaillee' => [$description_detaillee, PDO::PARAM_STR],
+    $args = $offre_args + filter_null_args([
         'carte' => [$carte, PDO::PARAM_STR],
         'richesse' => [$richesse, PDO::PARAM_INT],
         'sert_petit_dejeuner' => [$sert_petit_dejeuner, PDO::PARAM_BOOL],
@@ -310,7 +273,6 @@ function insert_restaurant(
         'sert_dejeuner' => [$sert_dejeuner, PDO::PARAM_BOOL],
         'sert_diner' => [$sert_diner, PDO::PARAM_BOOL],
         'sert_boissons' => [$sert_boissons, PDO::PARAM_BOOL],
-        'url_site_web' => [$url_site_web, PDO::PARAM_STR],
     ]);
     $stmt = notfalse(db_connect()->prepare(_insert_into_returning_id('restaurant', $args)));
     bind_values($stmt, $args);
@@ -319,26 +281,11 @@ function insert_restaurant(
 }
 
 function insert_parc_attractions(
-    int $id_adresse,
-    int $id_image_principale,
-    int $id_professionnel,
-    string $libelle_abonnement,
-    string $titre,
-    string $resume,
-    string $description_detaillee,
+    array $offre_args,
     int $id_image_plan,
-    ?string $url_site_web = null,
 ): int {
-    $args = filter_null_args([
-        'id_adresse' => [$id_adresse, PDO::PARAM_INT],
-        'id_image_principale' => [$id_image_principale, PDO::PARAM_INT],
-        'id_professionnel' => [$id_professionnel, PDO::PARAM_INT],
-        'libelle_abonnement' => [$libelle_abonnement, PDO::PARAM_STR],
-        'titre' => [$titre, PDO::PARAM_STR],
-        'resume' => [$resume, PDO::PARAM_STR],
-        'description_detaillee' => [$description_detaillee, PDO::PARAM_STR],
+    $args = $offre_args + filter_null_args([
         'id_image_plan' => [$id_image_plan, PDO::PARAM_INT],
-        'url_site_web' => [$url_site_web, PDO::PARAM_STR],
     ]);
     $stmt = notfalse(db_connect()->prepare(_insert_into_returning_id('parc_attractions', $args)));
     bind_values($stmt, $args);

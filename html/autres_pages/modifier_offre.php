@@ -184,7 +184,7 @@ const TYPE_OFFRE_AFFICHABLE = [
                 <ul>
                 <?php
                 require_once 'tags.php';
-                foreach ($type_offre === 'restauration' ? TAGS_RESTAURATION : DEFAULT_TAGS as $tag) {
+                foreach ($type_offre === 'restauration' ? TAGS_RESTAURANT : DEFAULT_TAGS as $tag) {
                     ?><li><?= $tag ?></li><?php
                 }
                 ?>

@@ -15,7 +15,7 @@ const DEFAULT_TAGS = [
     'humour' => 'humour',
 ];
 
-const TAGS_RESTAURATION = [
+const TAGS_RESTAURANT = [
     'francaise' => 'française',
     'fruits-de-mer' => 'fruits de mer',
     'asiatique' => 'asiatique',
