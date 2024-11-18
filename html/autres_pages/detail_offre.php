@@ -26,7 +26,7 @@ $adresse = notfalse(query_adresse($offre['id_adresse']));
     <title>offre&nbsp;: <?= $id ?></title>
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css">
     <script async src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
-    <link rel="stylesheet" href="../style/style.css">
+    <link rel="stylesheet" href="/style/style.css">
 </head>
 
 <body>
