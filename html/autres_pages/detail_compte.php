@@ -14,6 +14,9 @@ if ($membre === false) {
 }
 // Afficher le détail du compte du membre
 
+echo "<pre>";
+print_r($membre);
+echo "</pre>";
 $pseudo = $membre["pseudo"]; 
 $email = $membre["email"];
 $nom = $membre["nom"];
@@ -37,9 +40,7 @@ $telephone = $membre["telephone"];
 <body>
     <?php 
     
-    echo "<pre>";
-    print_r($membre);
-    echo "</pre>";
+   
     
 
     require 'component/header.php' ?>
