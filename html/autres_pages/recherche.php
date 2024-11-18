@@ -10,6 +10,7 @@ require_once 'component/offre.php'
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Recherche</title>
     <link rel="stylesheet" href="/style/style.css">
+    <script src="/script_js/tri_recherche.js" defer></script>
 </head>
 
 <body>
@@ -27,15 +28,40 @@ require_once 'component/offre.php'
             </div>
         </section>
 
-        <!-- Section des offres à la une -->
+        <section class="tag-selection">
+            <div class="categories">
+                <h3>Catégories</h3>
+                <select id="main-category" onchange="showSubcategories()">
+                    <option value="">-- Sélectionnez une catégorie --</option>
+                    <option value="restauration">Restauration</option>
+                    <option value="activite">Activité</option>
+                    <option value="visite">Visite</option>
+                    <option value="spectacle">Spectacle</option>
+                </select>
+            </div>
+
+            <div id="subcategories" class="hidden">
+                <h3>Sous-catégories</h3>
+                <div class="subcategory-list" id="subcategory-list">
+                </div>
+            </div>
+        </section>
+
+        <section class="sorting-section">
+            <h3>Options de tri</h3>
+            <div class="sorting-buttons">
+                <button class="btn-sort" id="sort-price">Prix</button>
+                <button class="btn-sort" id="sort-rating">Notes</button>
+                <button class="btn-sort" id="sort-date">Date de publication</button>
+            </div>
+        </section>
+
         <section class="highlight-offers">
             <h2>Offres à la une</h2>
             <div class="offer-list">
                 <?php
-                    // Préparer et exécuter la requête SQL pour récupérer toutes les offres
                     $stmtOffres = query_offres();
 
-                    // Boucler sur les résultats pour afficher chaque offre
                     while ($offre = $stmtOffres->fetch()) {
                         put_card_offre($offre);
                     }
