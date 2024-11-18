@@ -1,23 +1,19 @@
 <?php
 session_start();
 require_once 'component/offre.php';
+require_once 'component/head.php';
 require_once 'auth.php';
 
-$ID_PRO = exiger_connecte_pro();
+$id_professionnel = exiger_connecte_pro();
 
-$OFFER_COUNT = query_offres_count($ID_PRO);
-$ONLINE_OFFER_COUNT = query_offres_count($ID_PRO, en_ligne: true)
+$OFFER_COUNT = query_offres_count($id_professionnel);
+$ONLINE_OFFER_COUNT = query_offres_count($id_professionnel, en_ligne: true)
 ?>
 
 <!DOCTYPE html>
 <html lang="fr">
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Accueil Professionnel</title>
-    <link rel="stylesheet" href="/style/style.css">
-</head>
+<?php put_head('Accueil Professionnel') ?>
 
 <body>
     <?php require 'component/header.php' ?>
@@ -33,7 +29,7 @@ $ONLINE_OFFER_COUNT = query_offres_count($ID_PRO, en_ligne: true)
 
             <div class="offer-list">
                 <?php
-                    $ONLINE_OFFERS = query_offres($ID_PRO, en_ligne: true);
+                    $ONLINE_OFFERS = query_offres($id_professionnel, en_ligne: true);
                     while ($offer = $ONLINE_OFFERS->fetch()) {
                         put_card_offre_pro($offer);
                     }
@@ -48,7 +44,7 @@ $ONLINE_OFFER_COUNT = query_offres_count($ID_PRO, en_ligne: true)
 
             <div class="offer-carousel">
                 <?php
-                    $OFFRES_HORS_LIGNE = query_offres($ID_PRO, en_ligne: false);
+                    $OFFRES_HORS_LIGNE = query_offres($id_professionnel, en_ligne: false);
                     while ($offer = $OFFRES_HORS_LIGNE->fetch()) {
                         put_card_offre_pro($offer);
                     }

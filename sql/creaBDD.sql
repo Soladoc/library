@@ -239,12 +239,12 @@ create table _prestation(
 );
 
 create table _tarif(
-    nom_tarif ligne not null,
+    nom ligne not null,
     id_offre int
         constraint tarif_fk_offre references _offre,
-    constraint tarif_pk primary key (nom_tarif, id_offre),
+    constraint tarif_pk primary key (nom, id_offre),
 
-    prix decimal not null
+    montant decimal not null
 );
 
 create table _option(

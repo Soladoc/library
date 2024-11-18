@@ -36,7 +36,6 @@ function query_image(int $id_image): array
     return notfalse($stmt->fetch());
 }
 
-
 /**
  * Récupère les images de la gallerie d'une offre
  * @return array<int> Un tableau d'id d'images. Utilise query_image pour retrouver les infos sur l'image.
@@ -45,7 +44,7 @@ function query_gallerie(int $id_offre): array
 {
     $stmt = notfalse(db_connect()->prepare('select id_image from _gallerie where id_offre = ?'));
     bind_values($stmt, [1 => [$id_offre, PDO::PARAM_INT]]);
-    notfalse($stmt->execute()); 
+    notfalse($stmt->execute());
     return array_map(fn($row) => $row['id_image'], $stmt->fetchAll());
 }
 
@@ -107,7 +106,6 @@ function query_avis(?int $id_membre_auteur = null, ?int $id_offre = null): array
     return $stmt->fetchAll();
 }
 
-
 function query_offres_count(?int $id_professionnel = null, ?bool $en_ligne = null): int
 {
     $args = filter_null_args(['id_professionnel' => [$id_professionnel, PDO::PARAM_INT], 'en_ligne' => [$en_ligne, PDO::PARAM_BOOL]]);
@@ -140,22 +138,11 @@ function alterner_etat_offre(int $id_offre): void
     notfalse($stmt->execute());
 }
 
-/**
- * Inserts an image into the database and returns the filename and ID of the inserted image.
- *
- * @param array $img An associative array containing the image data, with keys 'size' and 'type'.
- * @return array An array containing the filename and ID of the inserted image.
- */
-function insert_image(array $img): array
+function insert_into_gallerie(int $id_offre, int $id_image)
 {
-    $stmt = notfalse(db_connect()->prepare('insert into _image (legende, taille, mime_type) values (?,?,?) returning id'));
-    notfalse($stmt->execute(['', $img['size'], $img['type']]));  // todo: legende
-    $id_image = notfalse($stmt->fetchColumn());
-
-    $filename = __DIR__ . "/../images_utilisateur/$id_image";
-    notfalse(move_uploaded_file($img['tmp_name'], $filename));
-    echo "Moved file to $filename";
-    return [$filename, $id_image];
+    $stmt = notfalse(db_connect()->prepare('insert into _gallerie (id_offre, id_image) values (?,?)'));
+    bind_values($stmt, [1 => [$id_offre, PDO::PARAM_INT], 2 => [$id_image, PDO::PARAM_INT]]);
+    notfalse($stmt->execute());
 }
 
 // Parameterized insertions
@@ -175,7 +162,7 @@ function insert_image(array $img): array
  * @param float|null $longitude The longitude coordinate of the address.
  * @return int The ID of the inserted address.
  */
-function insert_adresse(
+function insert_into_adresse(
     int $code_commune,
     int $numero_departement,
     ?int $numero_voie = null,
@@ -227,15 +214,24 @@ function offre_args(
     ]);
 }
 
-function insert_activite(
+/**
+ * Insérer une activité.
+ * @param array $offre_args
+ * @param string $indication_duree ISO8601 or Postgres syntax INTERVAL string expected.
+ * @param string $prestation_incluses
+ * @param mixed $age_requis
+ * @param mixed $prestations_non_incluses
+ * @return int
+ */
+function insert_into_activite(
     array $offre_args,
-    DateInterval $indication_duree,
+    string $indication_duree,
     string $prestation_incluses,
     ?int $age_requis = null,
     ?string $prestations_non_incluses = null,
 ): int {
     $args = $offre_args + filter_null_args([
-        'indication_duree' => [$indication_duree->format(DateTime::ATOM), PDO::PARAM_STR],
+        'indication_duree' => [$indication_duree, PDO::PARAM_STR],
         'prestation_incluses' => [$prestation_incluses, PDO::PARAM_STR],
         'age_requis' => [$age_requis, PDO::PARAM_INT],
         'prestations_non_incluses' => [$prestations_non_incluses, PDO::PARAM_STR],
@@ -246,35 +242,20 @@ function insert_activite(
     return notfalse($stmt->fetchColumn());
 }
 
-function insert_spectacle(
+function insert_into_parc_attractions(
     array $offre_args,
-    DateInterval $indication_duree,
-    int $capacite_accueil,
+    int $id_image_plan,
 ): int {
     $args = $offre_args + filter_null_args([
-        'indication_duree' => [$indication_duree->format(DateTime::ATOM), PDO::PARAM_STR],
-        'capacite_accueil' => [$capacite_accueil, PDO::PARAM_INT],
+        'id_image_plan' => [$id_image_plan, PDO::PARAM_INT],
     ]);
-    $stmt = notfalse(db_connect()->prepare(_insert_into_returning_id('spectacle', $args)));
+    $stmt = notfalse(db_connect()->prepare(_insert_into_returning_id('parc_attractions', $args)));
     bind_values($stmt, $args);
     notfalse($stmt->execute());
     return notfalse($stmt->fetchColumn());
 }
 
-function insert_visite(
-    array $offre_args,
-    DateInterval $indication_duree
-): int {
-    $args = $offre_args + filter_null_args([
-        'indication_duree' => [$indication_duree->format(DateTime::ATOM), PDO::PARAM_STR],
-    ]);
-    $stmt = notfalse(db_connect()->prepare(_insert_into_returning_id('visite', $args)));
-    bind_values($stmt, $args);
-    notfalse($stmt->execute());
-    return notfalse($stmt->fetchColumn());
-}
-
-function insert_restaurant(
+function insert_into_restaurant(
     array $offre_args,
     string $carte,
     int $richesse,
@@ -299,17 +280,69 @@ function insert_restaurant(
     return notfalse($stmt->fetchColumn());
 }
 
-function insert_parc_attractions(
+/**
+ * Insérer un spectacle.
+ * @param array $offre_args
+ * @param string $indication_duree ISO8601 or Postgres syntax INTERVAL string expected.
+ * @param int $capacite_accueil
+ * @return int
+ */
+function insert_into_spectacle(
     array $offre_args,
-    int $id_image_plan,
+    string $indication_duree,
+    int $capacite_accueil,
 ): int {
     $args = $offre_args + filter_null_args([
-        'id_image_plan' => [$id_image_plan, PDO::PARAM_INT],
+        'indication_duree' => [$indication_duree, PDO::PARAM_STR],
+        'capacite_accueil' => [$capacite_accueil, PDO::PARAM_INT],
     ]);
-    $stmt = notfalse(db_connect()->prepare(_insert_into_returning_id('parc_attractions', $args)));
+    $stmt = notfalse(db_connect()->prepare(_insert_into_returning_id('spectacle', $args)));
     bind_values($stmt, $args);
     notfalse($stmt->execute());
     return notfalse($stmt->fetchColumn());
+}
+
+/**
+ * Insérer une visite.
+ * @param array $offre_args
+ * @param string $indication_duree ISO8601 or Postgres syntax INTERVAL string expected.
+ * @return int
+ */
+function insert_into_visite(
+    array $offre_args,
+    string $indication_duree
+): int {
+    $args = $offre_args + filter_null_args([
+        'indication_duree' => [$indication_duree, PDO::PARAM_STR],
+    ]);
+    $stmt = notfalse(db_connect()->prepare(_insert_into_returning_id('visite', $args)));
+    bind_values($stmt, $args);
+    notfalse($stmt->execute());
+    return notfalse($stmt->fetchColumn());
+}
+
+/**
+ * Inserts an image into the database and returns the filename and ID of the inserted image.
+ *
+ * @param array $img An associative array containing the image data, with keys 'size', 'type' and 'tmp_name'.
+ * @param ?string $legende The image legend (optional).
+ * @return array An array containing the filename and the ID of the inserted image.
+ */
+function insert_uploaded_image(array $img, ?string $legende = null): array
+{
+    $args = filter_null_args([
+        'taille' => [$img['size'], PDO::PARAM_INT],
+        'mime_type' => [$img['type'], PDO::PARAM_STR],
+        'legende' => [$legende, PDO::PARAM_STR],
+    ]);
+    $stmt = notfalse(db_connect()->prepare(_insert_into_returning_id('_image', $args)));
+    bind_values($stmt, $args);
+    notfalse($stmt->execute());
+    $id_image = notfalse($stmt->fetchColumn());
+
+    $filename = __DIR__ . "/../images_utilisateur/$id_image.{$img['type']}";
+    notfalse(move_uploaded_file($img['tmp_name'], $filename));
+    return [$filename, $id_image];
 }
 
 // Utils

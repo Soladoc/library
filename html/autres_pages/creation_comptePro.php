@@ -1,50 +1,54 @@
 <?php
 require_once 'db.php';
 require_once 'util.php';
+require_once 'component/head.php';
 
-function redirect_to_connexion(): never
-{
-    header('Location: /autres_pages/connexion.php');
-    exit;
-}
+if ($_POST) {
+    $args = [
+        'nom' => getarg($_POST, 'nom'),
+        'prenom' => getarg($_POST, 'prenom'),
+        'telephone' => getarg($_POST, 'telephone'),
+        'email' => getarg($_POST, 'email'),
+        'mdp' => getarg($_POST, 'mdp'),
+        'adresse' => getarg($_POST, 'adresse'),
+        'denomination' => getarg($_POST, 'denomination'),
+        'type' => getarg($_POST, 'type', arg_check(f_str_is(['prive', 'public']))),
+    ];
+    if ($args['type'] === 'prive') {
+        $args['siren'] = getarg($_POST, 'siren');
+    }
 
-if (isset($_POST['type'])) {
-    [$nom, $prenom, $telephone, $email, $mdp, $adresse, $denomination, $type] = get_args($_POST,
-        ['nom', 'prenom', 'telephone', 'email', 'mdp', 'adresse', 'denomination', ['type', f_str_is('prive', 'public')]]);
-
-    $pdo = db_connect();
-    $stmt = $pdo->prepare('select count(*) from pact._compte where email = ?');
-    $stmt->execute([$email]);
+    $stmt = db_connect()->prepare('select count(*) from pact._compte where email = ?');
+    $stmt->execute([$args['email']]);
     $count = $stmt->fetchColumn();
 
     if ($count > 0) {
         html_error('cette adresse e-mail est déjà utilisée.');
     }
 
-    $mdp_hash = password_hash($mdp, PASSWORD_DEFAULT);
+    $mdp_hash = password_hash($args['mdp'], PASSWORD_DEFAULT);
 
     if ($type === 'prive') {
-        [$siren] = get_args($_POST, ['siren']);
-        $stmt = $pdo->prepare('insert into pro_prive (email, mdp_hash, nom, prenom, telephone, denomination, siren) values (?, ?, ?, ?, ?, ?, ?)');
+        $stmt = db_connect()->prepare('insert into pro_prive (email, mdp_hash, nom, prenom, telephone, denomination, siren) values (?, ?, ?, ?, ?, ?, ?)');
         $stmt->execute([
-            $email,
+            $args['email'],
             $mdp_hash,
-            $nom,
-            $prenom,
-            $telephone,
-            $denomination,
-            str_replace(' ','',$siren),
+            $args['nom'],
+            $args['prenom'],
+            $args['telephone'],
+            $args['denomination'],
+            str_replace(' ', '', $args['siren']),
         ]);
         redirect_to_connexion();
     } else {
-        $stmt = $pdo->prepare('insert into pro_public (email, mdp_hash, nom, prenom, telephone, denomination) values (?, ?, ?, ?, ?, ?)');
+        $stmt = db_connect()->prepare('insert into pro_public (email, mdp_hash, nom, prenom, telephone, denomination) values (?, ?, ?, ?, ?, ?)');
         $stmt->execute([
-            $email,
+            $args['email'],
             $mdp_hash,
-            $nom,
-            $prenom,
-            $telephone,
-            $denomination,
+            $args['nom'],
+            $args['prenom'],
+            $args['telephone'],
+            $args['denomination'],
         ]);
         redirect_to_connexion();
     }
@@ -53,12 +57,7 @@ if (isset($_POST['type'])) {
 <!DOCTYPE html>
 <html lang="fr">
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Créer un compte pro</title>
-    <link rel="stylesheet" href="/style/style.css">
-</head>
+<?php put_head('CoCréer un compte pronnexion') ?>
 
 <body>
     <?php require 'component/header.php' ?>
@@ -153,4 +152,12 @@ if (isset($_POST['type'])) {
 </body>
 
 </html>
-<?php } ?>
+<?php
+}
+
+function redirect_to_connexion(): never
+{
+    header('Location: /autres_pages/connexion.php');
+    exit;
+}
+?>

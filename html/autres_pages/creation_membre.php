@@ -1,5 +1,6 @@
 <?php
 require_once 'queries.php';
+require_once 'component/head.php';
 
 function fail(string $error)
 {
@@ -40,12 +41,7 @@ if (isset($_POST['motdepasse'])) {
 <!DOCTYPE html>
 <html lang="en">
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="/style/style.css">
-    <title>Création de compte</title>
-</head>
+<?php put_head('Création de compte membre') ?>
 
 <body>
     <?php require 'component/header.php' ?>

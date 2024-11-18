@@ -1,86 +1,77 @@
 <?php
 require_once 'util.php';
 require_once 'queries.php';
+require_once 'component/head.php';
 
+$args = [
+    'id' => getarg($_GET, 'id', arg_filter(FILTER_VALIDATE_INT))
+];
 
-ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
-
-[$id] = get_args($_GET, [['id', is_numeric(...)]]);
-$membre  = query_compte_membre($id);
+$membre = query_compte_membre($args['id']);
 
 if ($membre === false) {
-    html_error("l'membre d'ID $id n'existe pas");
+    html_error("l'membre d'ID {$args['id']} n'existe pas");
 }
 // Afficher le détail du compte du membre
 
-echo "<pre>";
+echo '<pre>';
 print_r($membre);
-echo "</pre>";
-$pseudo = $membre["pseudo"]; 
-$email = $membre["email"];
-$mdp = unserialize($membre["mdp_hash"]);
-$nom = $membre["nom"];
-$prenom = $membre["prenom"];
-$telephone = $membre["telephone"];
+echo '</pre>';
+$pseudo = $membre['pseudo'];
+$email = $membre['email'];
+$mdp = unserialize($membre['mdp_hash']);
+$nom = $membre['nom'];
+$prenom = $membre['prenom'];
+$telephone = $membre['telephone'];
 
 ?>
 
 <!DOCTYPE html>
 <html lang="fr">
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>detail_compte_membre&nbsp;: <?= $id ?></title>
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css">
-    <script async src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
-    <link rel="stylesheet" href="/style/style.css">
-</head>
+<?php put_head("detail_compte_membre : {$args['id']}",
+    ['https://unpkg.com/leaflet@1.7.1/dist/leaflet.css'],
+    ['https://unpkg.com/leaflet@1.7.1/dist/leaflet.js' => 'async']) ?>
 
 <body>
-    <?php 
-    
-   
-    
+    <?php
 
-    require 'component/header.php' ?>
+    require 'component/header.php'
+    ?>
 
     <main>
         <section id="info_compte">
             <div id="pseudo">
                 <p>pseudo : </p>
-                <?php echo $pseudo?>
+                <?php echo $pseudo ?>
             </div>
 
             <div id="nom">
                 <p>nom : </p>
-                <?php echo $nom?>
+                <?php echo $nom ?>
             </div>
 
             <div id="prenom">
                 <p>prenom : </p>
-                <?php echo $prenom?>
+                <?php echo $prenom ?>
             </div>
 
             <div id="email">
                 <p>email : </p>
-                <?php echo $email?>
+                <?php echo $email ?>
             </div>
 
             <div id="mdp">
                 <p>mot de passe : </p>
-                <?php echo $mdp?>
+                <?php echo $mdp ?>
             </div>
 
         </section>
-        
-      
+
     </main>
 
     <?php require 'component/footer.php' ?>
 
-    
 </body>
 
 </html>

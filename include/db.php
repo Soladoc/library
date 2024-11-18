@@ -4,7 +4,6 @@ ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL & ~E_NOTICE);
 
-
 /**
  * Ensures a value is not false, and returns it if not.
  *
@@ -13,7 +12,8 @@ error_reporting(E_ALL & ~E_NOTICE);
  * @param string $msg The error message to use if the value is false.
  * @return T The original value if it is not false, otherwise throws an Exception with the provided message.
  * @throws Exception If the provided value is false.
- */function notfalse(mixed $value, string $msg = 'was false'): mixed
+ */
+function notfalse(mixed $value, string $msg = 'was false'): mixed
 {
     if ($value === false) {
         ?>

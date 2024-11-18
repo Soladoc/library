@@ -28,6 +28,7 @@
 // } else {
 //     echo 'ID d\'offre invalide.';
 // }
+require_once 'component/head.php';
 
 const TYPE_OFFRE_AFFICHABLE = [
     'spectacle' => 'un spectacle',
@@ -40,20 +41,10 @@ const TYPE_OFFRE_AFFICHABLE = [
 
 ?>
 
-
-
-
 <!DOCTYPE html>
 <html lang="fr">
 
-<head>
-    <script async src="../script_js/creation_offre.js"></script>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="/style/style.css">
-    <link rel="stylesheet" href="../style/creation_offre.css">
-    <title>Création d'une offre</title>
-</head>
+<?php put_head("Création d'une offre", ['creation_offre.css'], ['creation_offre.js' => 'defer']) ?>
 
 <body>
     <?php require 'component/header.php' ?>
@@ -69,7 +60,8 @@ const TYPE_OFFRE_AFFICHABLE = [
     <h1>Erreur de méthode d'accès</h1>
     <p>Une erreur dans la requette de la page est survenue, merci de réessayer plus tard</p>
 
-    <?php exit; } ?>
+    <?php exit;
+} ?>
     <main>
         <section id="titre_creation_offre">
             <h1>Créer <?= TYPE_OFFRE_AFFICHABLE[$type_offre] ?></h1>

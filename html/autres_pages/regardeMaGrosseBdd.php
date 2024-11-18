@@ -1,4 +1,5 @@
 <?php
+require_once 'component/head.php';
 
 function escape(string $name): string
 {
@@ -36,12 +37,7 @@ if ($table = $_GET['table'] ?? null) {
 <!DOCTYPE html>
 <html lang="fr">
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>regarde dans la bdd</title>
-    <link rel="stylesheet" href="/style/style.css">
-</head>
+<?php put_head('regarde dans la bdd') ?>
 
 <body>
     <?php require 'component/header.php' ?>

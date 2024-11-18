@@ -1,16 +1,16 @@
 <?php
 require_once 'component/offre.php';
+require_once 'component/head.php';
 
-ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
+$args = [
+    'id' => getarg($_GET, 'id', arg_filter(FILTER_VALIDATE_INT))
+];
 
-[$id] = get_args($_GET, [['id', is_numeric(...)]]);
-
-$offre = query_offre($id);
+$offre = query_offre($args['id']);
 if ($offre === false) {
-    html_error("l'offre d'ID $id n'existe pas");
+    html_error("l'offre d'ID {$args['id']} n'existe pas");
 }
-assert($offre['id'] === $id);
+assert($offre['id'] === $args['id']);
 
 $titre = $offre['titre'];
 $description = $offre['description_detaillee'];
@@ -18,28 +18,24 @@ $site_web = $offre['url_site_web'];
 $image_pricipale = query_image($offre['id_image_principale']);
 $adresse = notfalse(query_adresse($offre['id_adresse']));
 
-$gallerie = query_gallerie($id);
+$gallerie = query_gallerie($args['id']);
 
 ?>
 
 <!DOCTYPE html>
 <html lang="fr">
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>offre&nbsp;: <?= $id ?></title>
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css">
-    <script async src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
-    <link rel="stylesheet" href="/style/style.css">
-</head>
+<?php put_head("offre : {$args['id']}",
+    ['https://unpkg.com/leaflet@1.7.1/dist/leaflet.css'],
+    ['https://unpkg.com/leaflet@1.7.1/dist/leaflet.js' => 'async']); ?>
 
 <body>
-    <?php 
-    echo "<pre>";
+    <?php
+    echo '<pre>';
     print_r($gallerie);
-    echo "</pre>";
-    require 'component/header.php' ?>
+    echo '</pre>';
+    require 'component/header.php'
+    ?>
     <!-- Offer Details -->
     <main>
         <section class="offer-details">
@@ -47,11 +43,9 @@ $gallerie = query_gallerie($id);
                 <?php put_image($image_pricipale) ?>
                  <div class="offer-photo-gallery">
                     <?php
-                    $compteur=0;
-                    while($compteur<count($gallerie)) {
-                        put_image(query_image($gallerie[$compteur]));
-                        $compteur++;
-                    } 
+                    foreach ($gallerie as $image) {
+                        put_image(query_image($image));
+                    }
                     ?>
                 </div> 
             </div>
@@ -114,7 +108,7 @@ $gallerie = query_gallerie($id);
 
             List of reviews 
             <div class="review-list">
-                <?php foreach($avis as $avis_temp) { ?>
+                <?php foreach ($avis as $avis_temp) { ?>
                     <div class="review">
                         <p><strong><?php $avis_temp['pseudo'] ?></strong> - <?php $avis_temp['note'] ?>/5</p>
                         <p><?php $avis_temp['commentaire'] ?></p>
