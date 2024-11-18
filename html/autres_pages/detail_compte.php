@@ -1,5 +1,6 @@
 <?php
 require_once 'util.php';
+require_once 'queries.php';
 
 
 ini_set('display_errors', 1);
