@@ -89,7 +89,7 @@ function query_professionnel(string $email): array|false
 
 function query_compte_membre(int $id): array
 {
-    $stmt = notfalse(db_connect()->prepare('select * from _membre where id = ?'));
+    $stmt = notfalse(db_connect()->prepare('select * from membre where id = ?'));
     bind_values($stmt, [1 => [$id, PDO::PARAM_INT]]);
     notfalse($stmt->execute());
     return $stmt->fetch();
