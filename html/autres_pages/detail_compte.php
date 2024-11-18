@@ -1,5 +1,5 @@
 <?php
-require_once 'component/util.php';
+require_once 'util.php';
 
 
 ini_set('display_errors', 1);
