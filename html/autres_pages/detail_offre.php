@@ -18,6 +18,8 @@ $site_web = $offre['url_site_web'];
 $image_pricipale = query_image($offre['id_image_principale']);
 $adresse = notfalse(query_adresse($offre['id_adresse']));
 
+$gallerie = query_gallerie($id);
+
 ?>
 
 <!DOCTYPE html>
@@ -41,8 +43,12 @@ $adresse = notfalse(query_adresse($offre['id_adresse']));
                 <?php put_image($image_pricipale) ?>
                  <div class="offer-photo-gallery">
                     <?php 
-                    foreach ($variable as $key => $value) {
-                        # code...
+                    if ($gallerie[0]!=null) {
+                        put_image($gallerie[0]);
+                        
+                    }
+                    if ($gallerie[1]!=null) {
+                        put_image($gallerie[1]);
                     }
                      
                     ?>
