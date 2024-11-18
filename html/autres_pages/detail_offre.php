@@ -35,7 +35,11 @@ $gallerie = query_gallerie($id);
 </head>
 
 <body>
-    <?php require 'component/header.php' ?>
+    <?php 
+    echo "<pr>";
+    print_r($gallerie);
+    echo "</pr>";
+    require 'component/header.php' ?>
     <!-- Offer Details -->
     <main>
         <section class="offer-details">
