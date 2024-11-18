@@ -14,7 +14,6 @@ if (isset($_GET['id']) && is_numeric($_GET['id'])) {
     $pdo = db_connect();
 
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-        echo "j'alterne";
         alterner_etat_offre($id);
         $offre = query_offre($id);
         header("Location: " . $_SERVER['PHP_SELF'] . "?id=" . $id);
