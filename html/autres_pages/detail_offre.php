@@ -1,6 +1,9 @@
 <?php
 require_once 'component/offre.php';
 
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+
 [$id] = get_args($_GET, [['id', is_numeric(...)]]);
 
 $offre = query_offre($id);
@@ -36,10 +39,14 @@ $adresse = notfalse(query_adresse($offre['id_adresse']));
         <section class="offer-details">
             <div class="offer-main-photo">
                 <?php put_image($image_pricipale) ?>
-                <!-- <div class="offer-photo-gallery">
-                     <img src="../images/offre/Radôme2.jpg" alt="Photo 2" class="offer-photo-small">
-                    <img src="../images/offre/Radôme3.jpg" alt="Photo 3" class="offer-photo-small"> 
-                </div> -->
+                 <div class="offer-photo-gallery">
+                    <?php 
+                    foreach ($variable as $key => $value) {
+                        # code...
+                    }
+                     
+                    ?>
+                </div> 
             </div>
 
             <div class="offer-info">

@@ -44,6 +44,18 @@ function query_image(int $id_image): array
     return notfalse($stmt->fetch());
 }
 
+/**
+ * Récupère les images de la gallerie d'une offre
+ * @return array<int> Un tableau d'id d'images. Utilise query_image pour retrouver les infos sur l'image.
+ */
+function query_gallerie(int $id_offre): array
+{
+    $stmt = notfalse(db_connect()->prepare('select id_image from _gallerie where id_offre = ?'));
+    bind_values($stmt, [1 => [$id_offre, PDO::PARAM_INT]]);
+    notfalse($stmt->execute()); 
+    return $stmt->fetchAll();
+}
+
 function query_adresse(int $id_adresse): array|false
 {
     $stmt = notfalse(db_connect()->prepare('select * from _adresse where id = ?'));
