@@ -36,9 +36,9 @@ $gallerie = query_gallerie($id);
 
 <body>
     <?php 
-    echo "<pr>";
+    echo "<pre>";
     print_r($gallerie);
-    echo "</pr>";
+    echo "</pre>";
     require 'component/header.php' ?>
     <!-- Offer Details -->
     <main>
@@ -47,11 +47,11 @@ $gallerie = query_gallerie($id);
                 <?php put_image($image_pricipale) ?>
                  <div class="offer-photo-gallery">
                     <?php 
-                    if ($gallerie[0]!=null) {
+                    if (count($gallerie)>=1) {
                         put_image($gallerie[0]);
                         
                     }
-                    if ($gallerie[1]!=null) {
+                    if (count($gallerie)>=2) {
                         put_image($gallerie[1]);
                     }
                      
