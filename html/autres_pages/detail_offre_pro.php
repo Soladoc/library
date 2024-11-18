@@ -91,7 +91,7 @@ if (isset($_GET['id']) && is_numeric($_GET['id'])) {
                 </div>
             </form>
             <div class="page_modif">
-                <button class="modifier">Modifier</button>
+                <a class="modifier" href="https://413.ventsdouest.dev/autres_pages/modifier_offre.php"></a>
             </div>
         </section>
         <section class="offer-details">
