@@ -1,6 +1,17 @@
 // @ts-nocheck
 "use strict";
 
+function formatTimeInterval() {
+    const startTime = document.getElementById('start-time').value;
+    const endTime = document.getElementById('end-time').value;
+
+    // Combine start and end times into an ISO 8601 interval string
+    const iso8601Interval = `${startTime}/${endTime}`;
+
+    // Set the value of the hidden input field
+    document.getElementById('iso8601-interval').value = iso8601Interval;
+}
+
 document.addEventListener('DOMContentLoaded', () => {
     const tbody_tarifs = document.getElementById('table-tarifs').querySelector('tbody');
     /** @type {HTMLTemplateElement} */
