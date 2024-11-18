@@ -14,7 +14,7 @@ if (isset($_GET['id']) && is_numeric($_GET['id'])) {
     $pdo = db_connect();
 
     // Récupérer les données de l'offre
-    $offre = query_offre([$id]);
+    $offre = query_offre($id);
 
     // Si l'offre est trouvée, afficher ses détails
     if ($offre) {
@@ -24,14 +24,13 @@ if (isset($_GET['id']) && is_numeric($_GET['id'])) {
         $site_web = $offre['url_site_web'];
         $image_pricipale = $offre['id_image_principale'];
         $en_ligne=$offre['en_ligne'];
-        if (isset($_POST['valider'])){
-            alterner_etat_offre([$id]);
-            if ($en_ligne){
-            $en_ligne=false;
-            }
-            else {
-                $en_ligne=true;
-            }
+        print_r($en_ligne);
+        if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['valider'])) {
+            alterner_etat_offre($id);
+            $en_ligne = !$en_ligne;
+            print_r($en_ligne);
+            header("Location: " . $_SERVER['PHP_SELF'] . "?id=" . $id);
+            exit();
         }
         $info_adresse = query_adresse($adresse);
 
@@ -42,7 +41,7 @@ if (isset($_GET['id']) && is_numeric($_GET['id'])) {
             $complement_numero = $info_adresse['complement_numero'];
             $nom_voie = $info_adresse['nom_voie'];
             $localite = $info_adresse['localite'];
-            $code_postal = $info_adresse['commune_code_postal'];
+            $code_postal = query_codes_postaux($info_adresse['code_commune'],$info_adresse['numero_departement'])[0];
 
             // Concaténer les informations pour former une adresse complète
             $adresse_complete = $numero_voie . ' ' . $complement_numero . ' ' . $nom_voie . ', ' . $localite . ', ' . $code_postal;
@@ -77,16 +76,24 @@ if (isset($_GET['id']) && is_numeric($_GET['id'])) {
     <?php require 'component/header.php' ?>
     <!-- Offer Details -->
     <main>
-    <section class="modif">
-            <div class='online'>
-                <?php if ($en_ligne) { ?>
-                    <button class="hors_ligne">Mettre hors ligne</button>
-                <?php } else { ?>
-                    <button class="en_ligne">Mettre en ligne</button>
-                <?php } ?>
+        <section class="modif">
+            <form id="toggleForm" method="POST">
+                <div class='online'>
+                    <div>
+                        <?php if ($en_ligne) { ?>
+                            <p>Offre en ligne</p>
+                            <button type="button" class="hors_ligne" onclick="enableValidate()">Mettre hors ligne</button>
+                        <?php } else { ?>
+                            <p>Offre hors ligne</p>
+                            <button type="button" class="en_ligne" onclick="enableValidate()">Mettre en ligne</button>
+                        <?php } ?>
+                    </div>
+                    <button type="submit" name="valider" class="valider" id="validateButton" disabled>Valider</button>
+                </div>
+            </form>
+            <div class="page_modif">
+                <button class="modifier">Modifier</button>
             </div>
-            <button class="valider">Valider</button>
-
         </section>
         <section class="offer-details">
             <div class="offer-main-photo">
@@ -181,6 +188,17 @@ if (isset($_GET['id']) && is_numeric($_GET['id'])) {
     // L.marker([45.779, -4.518]).addTo(map)
     //     .bindPopup('hihihihihihihihihui')
     </script>
-</body>
+    <script>
+        function enableValidate() {
+            document.getElementById('validateButton').disabled = false;
+        }
 
+        document.getElementById('validateButton').addEventListener('click', function(e) {
+            e.preventDefault();
+            if (!this.disabled) {
+                document.getElementById('toggleForm').submit();
+            }
+        });
+    </script>
+</body>
 </html>
