@@ -42,7 +42,7 @@ create view pro_prive as select * from _prive
 create view pro_public as select * from _public
     join professionnel using (id);
 
-CREATE VIEW avis as SELECT * FROM _avis
-JOIN membre on id_membre_auteur=membre.id as id_membre_auteur;
+--CREATE VIEW avis as SELECT * FROM _avis
+--JOIN membre on id_membre_auteur=membre.id as id_membre_auteur;
 
 commit;
