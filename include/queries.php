@@ -36,6 +36,7 @@ function query_image(int $id_image): array
     return notfalse($stmt->fetch());
 }
 
+
 /**
  * Récupère les images de la gallerie d'une offre
  * @return array<int> Un tableau d'id d'images. Utilise query_image pour retrouver les infos sur l'image.
@@ -96,6 +97,16 @@ function query_compte_membre(int $id): PDOStatement
 }
 
 // Parameterized selections
+
+function query_avis(?int $id_membre_auteur = null, ?int $id_offre = null): array
+{
+    $args = filter_null_args(['id_membre_auteur' => [$id_membre_auteur, PDO::PARAM_INT], 'id_offre' => [$id_offre, PDO::PARAM_INT]]);
+    $stmt = notfalse(db_connect()->prepare('select id from _avis ' . _where_clause('and', array_keys($args))));
+    bind_values($stmt, $args);
+    notfalse($stmt->execute());
+    return $stmt->fetchAll();
+}
+
 
 function query_offres_count(?int $id_professionnel = null, ?bool $en_ligne = null): int
 {

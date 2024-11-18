@@ -59,7 +59,7 @@ if ($type_offre && $_POST) {
             $id_adresse,
             $id_image_photo_principale,
             $ID_PRO,
-            'gratuit', // todo: standard et premium
+            'gratuit',  // todo: standard et premium
             $_POST['titre'],
             $_POST['resume'],
             $_POST['description'],
@@ -67,48 +67,38 @@ if ($type_offre && $_POST) {
         );
 
         global $type_offre;
-        switch ($type_offre) {
-            case 'spectacle':
-                $id_offre = insert_spectacle(
-                    $offre_args,
-                    $_POST['indication-duree'],
-                    $_POST['capacite-accueil'],
-                );
-                break;
-            case 'parc-attractions':
-                $id_offre = insert_parc_attractions(
-                    $offre_args,
-                    $_POST['id-image-plan'],
-                );
-                break;
-            case 'visite':
-                $id_offre = insert_visite(
-                    $offre_args,
-                    $_POST['indication-duree'],
-                );
-                break;
-            case 'restaurant':
-                $id_offre = insert_restaurant(
-                    $offre_args,
-                    $_POST['carte'],
-                    $_POST['richesse'],
-                    $_POST['sert-petit-dejeuner'] ?? null,
-                    $_POST['sert-brunch'] ?? null,
-                    $_POST['sert-dejeuner'] ?? null,
-                    $_POST['sert_diner'] ?? null,
-                    $_POST['sert_boissons'] ?? null,
-                );
-                break;
-            case 'activite':
-                $id_offre = insert_activite(
-                    $offre_args,
-                    $_POST['indication-duree'],
-                    $_POST['prestations-incluses'],
-                    $_POST['age-requis'] ?? null,
-                    $_POST['prestations-non-incluses'] ?? null,
-                );
-                break;
-        }
+        $id_offre = match ($type_offre) {
+            'spectacle' => insert_spectacle(
+                $offre_args,
+                $_POST['indication-duree'],
+                $_POST['capacite-accueil'],
+            ),
+            'parc-attractions' => insert_parc_attractions(
+                $offre_args,
+                $_POST['id-image-plan'],
+            ),
+            'visite' => insert_visite(
+                $offre_args,
+                $_POST['indication-duree'],
+            ),
+            'restaurant' => insert_restaurant(
+                $offre_args,
+                $_POST['carte'],
+                $_POST['richesse'],
+                $_POST['sert-petit-dejeuner'] ?? null,
+                $_POST['sert-brunch'] ?? null,
+                $_POST['sert-dejeuner'] ?? null,
+                $_POST['sert_diner'] ?? null,
+                $_POST['sert_boissons'] ?? null,
+            ),
+            'activite' => insert_activite(
+                $offre_args,
+                $_POST['indication-duree'],
+                $_POST['prestations-incluses'],
+                $_POST['age-requis'] ?? null,
+                $_POST['prestations-non-incluses'] ?? null,
+            ),
+        };
 
         // Insérer la gallerie
         $gallerie = [];
@@ -154,7 +144,7 @@ if ($type_offre && $_POST) {
             <p>Une erreur dans la requette de la page est survenue, merci de réessayer plus tard</p>
 
             <?php exit;
-        } ?>
+    } ?>
         <main>
             <section id="titre-creation-offre">
                 <h1>Créer <?= TYPE_OFFRE_AFFICHABLE[$type_offre] ?></h1>
@@ -175,7 +165,7 @@ if ($type_offre && $_POST) {
                         <?php
                         require_once 'component/input_address.php';
                         put_input_address('form-offre')
-                            ?>
+                        ?>
                     </p>
                     <label for="tel">Tel</label>
                     <p>
@@ -323,7 +313,21 @@ if ($type_offre && $_POST) {
                 ?>
             </section>
             <section id="infos-categorie">
-                <!-- Utiliser des sections cachées et input disabled?  -->
+            <?php switch ($type_offre) {
+                case 'spectacle':
+                ?>
+                    
+                <?php
+                    break;
+                case 'parc-attractions':
+                    break;
+                case 'visite':
+                    break;
+                case 'restaurant':
+                    break;
+                case 'activite':
+                    break;
+            } ?>
             </section>
             <!-- du coup en sois on a pas de formulaire a check avec Raphael -->
             <form id="form-offre" action="creation_offre.php?type-offre=<?= $type_offre ?>" method="post" enctype="multipart/form-data">
