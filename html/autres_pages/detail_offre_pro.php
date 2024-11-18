@@ -1,5 +1,6 @@
 <?php
 require_once 'db.php';
+require_once 'queries.php';
 // Activer l'affichage des erreurs pour le débogage
 ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
@@ -12,13 +13,8 @@ if (isset($_GET['id']) && is_numeric($_GET['id'])) {
     // Connexion à la base de données
     $pdo = db_connect();
 
-    // Préparer la requête pour récupérer les détails de l'offre
-    $query = "SELECT * FROM pact._offre WHERE id = ?";
-    $stmt = $pdo->prepare($query);
-    $stmt->execute([$id]);
-
     // Récupérer les données de l'offre
-    $offre = $stmt->fetch();
+    $offre = query_offre($id);
 
     // Si l'offre est trouvée, afficher ses détails
     if ($offre) {
@@ -27,11 +23,16 @@ if (isset($_GET['id']) && is_numeric($_GET['id'])) {
         $adresse = $offre['id_adresse'];
         $site_web = $offre['url_site_web'];
         $image_pricipale = $offre['id_image_principale'];
-
-        $query = "SELECT * FROM pact._adresse WHERE id = ?";
-        $stmt = $pdo->prepare($query);
-        $stmt->execute($adresse);
-        $info_adresse = $stmt->fetch();
+        $en_ligne=$offre['en_ligne'];
+        print_r($en_ligne);
+        if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['valider'])) {
+            alterner_etat_offre($id);
+            $en_ligne = !$en_ligne;
+            print_r($en_ligne);
+            header("Location: " . $_SERVER['PHP_SELF'] . "?id=" . $id);
+            exit();
+        }
+        $info_adresse = query_adresse($adresse);
 
         // Vérifier si l'adresse existe
         if ($info_adresse) {
@@ -40,16 +41,15 @@ if (isset($_GET['id']) && is_numeric($_GET['id'])) {
             $complement_numero = $info_adresse['complement_numero'];
             $nom_voie = $info_adresse['nom_voie'];
             $localite = $info_adresse['localite'];
-            $code_postal = $info_adresse['commune_code_postal'];
+            $code_postal = query_codes_postaux($info_adresse['code_commune'],$info_adresse['numero_departement'])[0];
 
             // Concaténer les informations pour former une adresse complète
             $adresse_complete = $numero_voie . ' ' . $complement_numero . ' ' . $nom_voie . ', ' . $localite . ', ' . $code_postal;
 
             // Afficher ou retourner l'adresse complète
-} else {
-    echo 'Adresse introuvable.';
-}
-       
+        } else {
+            echo 'Adresse introuvable.';
+        }
     } else {
         echo 'Aucune offre trouvée avec cet ID.';
     }
@@ -76,15 +76,24 @@ if (isset($_GET['id']) && is_numeric($_GET['id'])) {
     <?php require 'component/header.php' ?>
     <!-- Offer Details -->
     <main>
-    <section class="modif">
-            <div class='online'>
-                <button class="en_ligne">en ligne</button>
-                <button class="hors_ligne">hors ligne</button>
-
-
+        <section class="modif">
+            <form id="toggleForm" method="POST">
+                <div class='online'>
+                    <div>
+                        <?php if ($en_ligne) { ?>
+                            <p>Offre en ligne</p>
+                            <button type="button" class="hors_ligne" onclick="enableValidate()">Mettre hors ligne</button>
+                        <?php } else { ?>
+                            <p>Offre hors ligne</p>
+                            <button type="button" class="en_ligne" onclick="enableValidate()">Mettre en ligne</button>
+                        <?php } ?>
+                    </div>
+                    <button type="submit" name="valider" class="valider" id="validateButton" disabled>Valider</button>
+                </div>
+            </form>
+            <div class="page_modif">
+                <button class="modifier">Modifier</button>
             </div>
-            <button class="modifier" >modifier</button>
-
         </section>
         <section class="offer-details">
             <div class="offer-main-photo">
@@ -179,6 +188,17 @@ if (isset($_GET['id']) && is_numeric($_GET['id'])) {
     // L.marker([45.779, -4.518]).addTo(map)
     //     .bindPopup('hihihihihihihihihui')
     </script>
-</body>
+    <script>
+        function enableValidate() {
+            document.getElementById('validateButton').disabled = false;
+        }
 
+        document.getElementById('validateButton').addEventListener('click', function(e) {
+            e.preventDefault();
+            if (!this.disabled) {
+                document.getElementById('toggleForm').submit();
+            }
+        });
+    </script>
+</body>
 </html>
