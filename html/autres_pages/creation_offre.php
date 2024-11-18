@@ -1,7 +1,7 @@
 <?php
 session_start();
 
-require_once 'db.php';
+require_once 'queries.php';
 require_once 'auth.php';
 
 // $ID_PRO = exiger_connecte_pro();
@@ -20,21 +20,6 @@ const JOURS_SEMAINE = ['lundi', 'mardi', 'mercredi', 'jeudi', 'vendredi', 'samed
 
 $type_offre = $_GET['type-offre'] ?? null;
 
-/**
- * @return array{string, int}
- */
-function insert_image(PDO $pdo, array $img)
-{
-    $stmt = notfalse($pdo->prepare('insert into pact._image (legende, taille, mime_type) values (?,?,?) returning id'));
-    notfalse($stmt->execute(['', $img['size'], $img['type']]));  // todo: legende
-    $id_image = $stmt->fetchColumn();
-
-    $filename = __DIR__ . "/../images_utilisateur/$id_image";
-    move_uploaded_file($img['tmp_name'], $filename);
-    echo "Moved file to $filename";
-    return [$filename, $id_image];
-}
-
 if ($type_offre && $_POST) {
     /*?>
     <pre><?= htmlspecialchars(print_r($_GET, true)) ?></pre>
@@ -50,13 +35,11 @@ if ($type_offre && $_POST) {
 
         // Récupérer le code de la commune
         // todo: make this better (by inputting either nom or code postal)
-        $stmt = notfalse($pdo->prepare('select code_insee from pact._commune where nom=?'));
-        notfalse($stmt->execute([$_POST['adresse']['commune']]));
-        $commune_code_insee = notfalse($stmt->fetchColumn());
+        $commune = single(query_communes($_POST['adresse']['commune']));
 
         // Insérer l'adresse
         // todo: adresses localisées
-        $stmt = notfalse($pdo->prepare('insert into pact._adresse (numero_voie, complement_numero, nom_voie, localite, precision_int, precision_ext, code_insee_commune) values (?,?,?,?,?,?,?,?) returning id'));
+        $stmt = notfalse($pdo->prepare('insert into pact._adresse (numero_voie, complement_numero, nom_voie, localite, precision_int, precision_ext, code_communer, numero_departement) values (?,?,?,?,?,?,?,?) returning id'));
         notfalse($stmt->execute([
             $_POST['adresse']['num_voie'] ?? 0,
             $_POST['adresse']['compl_numero'] ?? '',
@@ -64,7 +47,8 @@ if ($type_offre && $_POST) {
             $_POST['adresse']['localite'] ?? '',
             $_POST['adresse']['precision_int'] ?? '',
             $_POST['adresse']['precision_ext'] ?? '',
-            $commune_code_insee,
+            $commune['code'],
+            $commune['numero_departement']
         ]));
         $id_adresse = notfalse($stmt->fetchColumn());
 
