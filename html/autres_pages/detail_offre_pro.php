@@ -39,7 +39,7 @@ if (isset($_GET['id']) && is_numeric($_GET['id'])) {
             $complement_numero = $info_adresse['complement_numero'];
             $nom_voie = $info_adresse['nom_voie'];
             $localite = $info_adresse['localite'];
-            $code_postal = $info_adresse['commune_code_postal'];
+            $code_postal = query_codes_postaux($adresse['code_commune'],$adresse['numero_departement'])[0];
 
             // Concaténer les informations pour former une adresse complète
             $adresse_complete = $numero_voie . ' ' . $complement_numero . ' ' . $nom_voie . ', ' . $localite . ', ' . $code_postal;
