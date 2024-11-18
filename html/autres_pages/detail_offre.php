@@ -48,11 +48,11 @@ $gallerie = query_gallerie($id);
                  <div class="offer-photo-gallery">
                     <?php 
                     if (count($gallerie)>=1) {
-                        put_image($gallerie[0]);
+                        put_image(query_image($gallerie[0]));
                         
                     }
                     if (count($gallerie)>=2) {
-                        put_image($gallerie[1]);
+                        put_image(query_image($gallerie[1]));
                     }
                      
                     ?>
