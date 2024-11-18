@@ -87,6 +87,14 @@ function query_professionnel(string $email): array|false
     return $stmt->fetch();
 }
 
+function query_compte_membre(int $id_membre): PDOStatement
+{
+    $stmt = notfalse(db_connect()->prepare('select * from _membre where id = ?'));
+    bind_values($stmt, [1 => [$id, PDO::PARAM_INT]]);
+    notfalse($stmt->execute());
+    return $stmt;
+}
+
 // Parameterized selections
 
 function query_offres_count(?int $id_professionnel = null, ?bool $en_ligne = null): int
