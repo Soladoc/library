@@ -46,15 +46,12 @@ $gallerie = query_gallerie($id);
             <div class="offer-main-photo">
                 <?php put_image($image_pricipale) ?>
                  <div class="offer-photo-gallery">
-                    <?php 
-                    if (count($gallerie)>=1) {
-                        put_image(query_image($gallerie[0]));
-                        
-                    }
-                    if (count($gallerie)>=2) {
-                        put_image(query_image($gallerie[1]));
-                    }
-                     
+                    <?php
+                    $compteur=0;
+                    while($compteur<count($gallerie)) {
+                        put_image(query_image($gallerie[$compteur]));
+                        $compteur++;
+                    } 
                     ?>
                 </div> 
             </div>
