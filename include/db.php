@@ -111,23 +111,3 @@ function transaction(callable $body, ?callable $cleanup = null)
         throw $e;
     }
 }
-
-
-/**
- * Inserts an image into the database and returns the filename and ID of the inserted image.
- *
- * @param PDO $pdo The PDO connection to the database.
- * @param array $img An associative array containing the image data, with keys 'size' and 'type'.
- * @return array An array containing the filename and ID of the inserted image.
- */
-function insert_image(PDO $pdo, array $img): array
-{
-    $stmt = notfalse($pdo->prepare('insert into _image (legende, taille, mime_type) values (?,?,?) returning id'));
-    notfalse($stmt->execute(['', $img['size'], $img['type']]));  // todo: legende
-    $id_image = notfalse($stmt->fetchColumn());
-
-    $filename = __DIR__ . "/../images_utilisateur/$id_image";
-    notfalse(move_uploaded_file($img['tmp_name'], $filename));
-    echo "Moved file to $filename";
-    return [$filename, $id_image];
-}

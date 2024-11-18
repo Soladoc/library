@@ -3,6 +3,7 @@ session_start();
 
 require_once 'queries.php';
 require_once 'auth.php';
+require_once 'util.php';
 
 // $ID_PRO = exiger_connecte_pro();
 $ID_PRO = 1;
@@ -39,21 +40,19 @@ if ($type_offre && $_POST) {
 
         // Insérer l'adresse
         // todo: adresses localisées
-        $stmt = notfalse($pdo->prepare('insert into pact._adresse (numero_voie, complement_numero, nom_voie, localite, precision_int, precision_ext, code_communer, numero_departement) values (?,?,?,?,?,?,?,?) returning id'));
-        notfalse($stmt->execute([
-            $_POST['adresse']['num_voie'] ?? 0,
-            $_POST['adresse']['compl_numero'] ?? '',
-            $_POST['adresse']['nom_voie'] ?? '',
-            $_POST['adresse']['localite'] ?? '',
-            $_POST['adresse']['precision_int'] ?? '',
-            $_POST['adresse']['precision_ext'] ?? '',
+        $id_adresse = insert_adresse(
             $commune['code'],
-            $commune['numero_departement']
-        ]));
-        $id_adresse = notfalse($stmt->fetchColumn());
+            $commune['numero_departement'],
+            $_POST['adresse']['num_voie'] ?? null,
+            $_POST['adresse']['compl_numero'] ?? null,
+            $_POST['adresse']['nom_voie'] ?? null,
+            $_POST['adresse']['localite'] ?? null,
+            $_POST['adresse']['precision_int'] ?? null,
+            $_POST['adresse']['precision_ext'] ?? null,
+        );
 
         // Insérer la gallerie la photo principale
-        [$uploaded_files[], $id_image_photo_principale] = insert_image($pdo, $_FILES['id_image_principale']);
+        [$uploaded_files[], $id_image_photo_principale] = insert_image($_FILES['id_image_principale']);
 
         // Insérer le signalable
         $stmt = notfalse($pdo->prepare('insert into pact._signalable default values returning id'));
@@ -85,7 +84,7 @@ if ($type_offre && $_POST) {
         }
 
         foreach ($gallerie as $img) {
-            [$uploaded_files[], $id_image] = insert_image($pdo, $img);
+            [$uploaded_files[], $id_image] = insert_image($img);
             $stmt = notfalse($pdo->prepare('insert into pact._gallerie (id_offre, id_image) values (?,?)'));
             notfalse($stmt->execute([$id_offre, $id_image]));
         }
@@ -98,7 +97,7 @@ if ($type_offre && $_POST) {
         }
     });
 } else {
-?>
+    ?>
 <!DOCTYPE html>
 <html lang="fr">
 
@@ -189,7 +188,7 @@ if ($type_offre && $_POST) {
             <div>
                 <?php
                 foreach (JOURS_SEMAINE as $jour) {
-                ?>
+                    ?>
                 <article id="<?= $jour ?>">
                     <h3><?= ucfirst($jour) ?></h3>
                     <button id="button-add-horaire-<?= $jour ?>" type="button">+</button>
@@ -220,7 +219,7 @@ if ($type_offre && $_POST) {
                 <?php
                 require_once 'tags.php';
                 foreach ($type_offre === 'restauration' ? TAGS_RESTAURATION : DEFAULT_TAGS as $id => $name) {
-                ?>
+                    ?>
                 <li><label for="tag-<?= $id ?>"><?= $name ?><input form="form-offre" type="checkbox" name="tags[<?= $id ?>]" id="tag-<?= $id ?>" value="<?= $id ?>"></li></label>
                 <?php } ?>
             </ul>
@@ -239,22 +238,22 @@ if ($type_offre && $_POST) {
             <?php
             switch ($type_offre) {
                 case 'spectacle':
-            ?>
+                    ?>
             <p><label>Durée indiquée&nbsp;: <input name="<?= $type_offre ?>[indication_duree]" type="time" required></label></p>
             <p><label>Capacité d'accueil&nbsp;: <input name="<?= $type_offre ?>[capacite_accueil]" type="number" min="0"></label> pers.</p>
             <?php
-                    break;
-                case 'parc-attraction':
+            break;
+        case 'parc-attraction':
             ?>
             <p><label>Âge requis&nbsp;: <input name="<?= $type_offre ?>[age_requis]" type="number" min="1"> an</label></p>
             <?php
-                    break;
-                case 'visite':
+            break;
+        case 'visite':
             ?>
             <p><label>Durée indiquée&nbsp;: <input name="<?= $type_offre ?>[indication_duree]" type="time" required></label></p>
             <?php
-                    break;
-                case 'restauration':
+            break;
+        case 'restauration':
             ?>
             <fieldset>
                 <legend>Niveau de richesse</legend>
@@ -273,8 +272,8 @@ if ($type_offre && $_POST) {
             <p>Carte</p>
             <textarea form="form-offre" name="<?= $type_offre ?>[carte]"></textarea>
             <?php
-                    break;
-                case 'activite':
+            break;
+        case 'activite':
             ?>
             <p><label>Durée indiquée&nbsp;: <input name="<?= $type_offre ?>[indication_duree]" type="time" required></label></p>
             <p><label>Âge requis&nbsp;: <input name="<?= $type_offre ?>[age_requis]" type="number" min="1"> an</label></p>
@@ -285,7 +284,7 @@ if ($type_offre && $_POST) {
             <?php
                     break;
             }
-                    ?>
+            ?>
         </section>
         <!-- du coup en sois on a pas de formulaire a check avec Raphael -->
         <form id="form-offre" action="creation_offre.php?type-offre=<?= $type_offre ?>" method="post" enctype="multipart/form-data">
