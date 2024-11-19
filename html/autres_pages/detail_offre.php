@@ -2,6 +2,9 @@
 require_once 'component/offre.php';
 require_once 'component/head.php';
 
+if (isset($_POST['date'])) {
+}
+
 $args = [
     'id' => getarg($_GET, 'id', arg_filter(FILTER_VALIDATE_INT))
 ];
@@ -91,14 +94,14 @@ $gallerie = query_gallerie($args['id']);
                 <form method="post" action="detail_offre.php">
                     <textarea><input type="text" placeholder="Votre avis..." required></textarea>
                     <label for="rating">Note&nbsp;:</label>
-                    <select id="rating">
+                    <select id="rating" required>
                         <option value="5">5 étoiles</option>
                         <option value="4">4 étoiles</option>
                         <option value="3">3 étoiles</option>
                         <option value="2">2 étoiles</option>
                         <option value="1">1 étoile</option>
                     </select>
-                    <input type="date" id="date" name="date">
+                    <input type="date" id="date" name="date" required>
                     <button class="btn-publish">Publier</button>
                 </form>
             </div>
