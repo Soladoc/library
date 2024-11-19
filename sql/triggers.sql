@@ -207,5 +207,5 @@ END
 $$ LANGUAGE 'plpgsql';
 
 CREATE TRIGGER tg_avis_insert instead of INSERT ON avis FOR EACH ROW
-EXECUTE FUNCTION avis_insert();
-commit;*/
+EXECUTE FUNCTION avis_insert();*/
+commit;
