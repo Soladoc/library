@@ -8,10 +8,6 @@ require_once 'const.php';
 require_once 'component/inputs.php';
 require_once 'component/head.php';
 
-?><pre><?= htmlspecialchars(print_r($_GET, true)) ?></pre><?php
-?><pre><?= htmlspecialchars(print_r($_POST, true)) ?></pre><?php
-?><pre><?= htmlspecialchars(print_r($_FILES, true)) ?></pre><?php
-
 $args = [
     'type_offre' => getarg($_GET, 'type_offre', arg_check(f_str_is(array_keys(TYPES_OFFRE)))),
 ];
@@ -74,6 +70,9 @@ if ($_POST) {
 <?php put_head("Création d'une offre", ['creation_offre.css'], ['module/creation_offre.js' => 'defer type="module"']) ?>
 
 <body>
+    <pre><?= htmlspecialchars(print_r($_GET, true)) ?></pre>
+    <pre><?= htmlspecialchars(print_r($_POST, true)) ?></pre>
+    <pre><?= htmlspecialchars(print_r($_FILES, true)) ?></pre>
     <?php require 'component/header.php' ?>
     <main>
         <section id="titre-creation-offre">
@@ -118,9 +117,8 @@ if ($_POST) {
                 </tbody>
                 <tfoot>
                     <tr>
-                        <td><input id="tarif-montant" type="text" minlength="1" placeholder="Enfant, Sénior&hellip;"></td>
-                        <td><input id="tarif-nom" type="number" min="0" placeholder="Prix"> €</td>
-                        <td><button type="button">+</button></td>
+                        <td><input type="text" placeholder="Enfant, Sénior&hellip;" required></td>
+                        <td><input type="number" min="0" placeholder="Prix" required> €</td>
                     </tr>
                 </tfoot>
             </table>
@@ -246,27 +244,20 @@ if ($_POST) {
         </form>
     </main>
     <?php require 'component/footer.php' ?>
-    <template id="template-tarif-tr">
-        <tr>
-            <td><input form="f" name="tarifs_nom[]" type="text" minlength="1" placeholder="Enfant, Sénior&hellip;" required readonly></td>
+    <template id="template-tarif-tr"><tr>
+            <td><input form="f" name="tarifs_nom[]" type="text" placeholder="Enfant, Sénior&hellip;" required readonly></td>
             <td><input form="f" name="tarifs_montant[]" type="number" min="0" placeholder="Prix" required> €</td>
-            <td><button type="button">-</button></td>
-        </tr>
-    </template>
-    <template id="template-periode-tr">
-        <tr>
+    </tr></template>
+    <template id="template-periode-tr"><tr>
             <td><input form="f" name="periodes_debut[]" type="datetime-local"></td>
             <td><input form="f" name="periodes_fin[]" type="datetime-local"></td>
             <td id="tarif-duree"></td>
-        </tr>
-    </template>
+    </tr></template>
     <?php foreach (JOURS_SEMAINE as $jour) { ?>
-    <template id="template-horaire-tr-<?= $jour ?>">
-        <tr>
+    <template id="template-horaire-tr-<?= $jour ?>"><tr>
             <td><input form="f" name="horaires_debut[<?= $jour ?>][]" type="time" required></td>
             <td><input form="f" name="horaires_fin[<?= $jour ?>][]" type="time" required></td>
-        </tr>
-    </template>
+    </tr></template>
     <?php } ?>
 </body>
 
