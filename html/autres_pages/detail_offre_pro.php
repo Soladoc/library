@@ -4,11 +4,11 @@ require_once 'queries.php';
 require_once 'component/head.php';
 
 
+$args = [
+    'id' => getarg($_GET, 'id', arg_filter(FILTER_VALIDATE_INT))
+];
 // Vérifier si l'ID est présent dans l'URL
 if ($_POST) {
-    $args = [
-        'id' => getarg($_GET, 'id', arg_filter(FILTER_VALIDATE_INT))
-    ];
 
     // Connexion à la base de données
     $pdo = db_connect();
