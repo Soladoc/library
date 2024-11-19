@@ -1,24 +1,95 @@
-import { DynamicTable } from './DynamicTable.js';
+import { Temporal } from 'temporal-polyfill';
+import DynamicTable from './DynamicTable.js';
 
 const type_offre = new URLSearchParams(window.location.search).get('type_offre');
 
 // Grille tarifaire
 {
+    const i_nom = 0, i_montant = 1;
+
     const tarifs = new DynamicTable(
         document.getElementById('table-tarifs'),
         document.getElementById('template-tarif-tr'),
-        function (values) {
-            return !this.has_row(row => row[0] === values[0]);
+        function (tr) {
+            return !this.has_row(row => row[i_nom] === nom(tr).value);
         },
-        (values, tr) => {
-            tr.children[0].children[0].value = values[0];
-            tr.children[1].children[0].value = values[1];
-        }
+        (tr, row) => {
+            nom(tr).value = row[i_nom];
+            montant(tr).value = row[i_montant];
+        },
+        1,
     );
-
     tarifs.add_row(['Adulte', 10]);
+    tarifs.setup();
+
+    /**
+     * @param {HTMLTableRowElement} tr 
+     * @returns {HTMLInputElement}
+     */
+    function nom(tr) {
+        return tr.cells[i_nom].children[0];
+    }
+    /**
+     * @param {HTMLTableRowElement} tr 
+     * @returns {HTMLInputElement}
+     */
+    function montant(tr) {
+        return tr.cells[i_montant].children[0];
+    }
 }
 
+// Périodes
+{
+    const i_debut = 0, i_fin = 1;
+
+    const periodes = new DynamicTable(
+        document.getElementById('table-periodes'),
+        document.getElementById('template-tarif-tr'),
+        tr => {
+            fin(tr).min = debut(tr).value;
+            deduce_duree(tr);
+        },
+        (tr, row) => {
+            debut(tr).value = row[i_debut];
+            fin(tr).value = row[i_fin];
+            deduce_duree(tr);
+        }
+    );
+    periodes.setup();
+
+    /**
+     * @param {HTMLTableRowElement} tr 
+     * @returns {HTMLInputElement}
+     */
+    function debut(tr) {
+        return tr.cells[i_debut].children[0];
+    }
+    /**
+     * @param {HTMLTableRowElement} tr 
+     * @returns {HTMLInputElement}
+     */
+    function fin(tr) {
+        return tr.cells[i_fin].children[0];
+    }
+    /**
+     * @param {HTMLTableRowElement} tr 
+     */
+    function deduce_duree(tr) {
+
+        let result = '';
+        if (debut(tr).value && fin(tr).value) {
+            const duration = Temporal.PlainDateTime.from(debut(tr).value)
+                .until(Temporal.PlainDateTime.from(fin(tr).value));
+            result = duration.toLocaleString(navigator.languages, {
+                'dateStyle': 'full',
+                'timeStyle': 'full',
+            });
+        }
+        tr.cells[2].textContent = result;
+
+
+    }
+}
 
 // Horaires
 {

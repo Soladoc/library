@@ -104,7 +104,7 @@ if ($_POST) {
             <input form="f" id="image_principale" name="image_principale" type="file" accept="image/*" required>
             <div id="image_principale-preview"></div>
         </section>
-        <section id="tarif">
+        <section id="tarifs">
             <h2>Tarifs</h2>
             <table id="table-tarifs">
                 <thead>
@@ -122,31 +122,39 @@ if ($_POST) {
                     </tr>
                 </tfoot>
             </table>
+            <template id="template-tarif-tr"><tr>
+                <td><input form="f" name="tarifs_nom[]" type="text" placeholder="Enfant, Sénior&hellip;" required readonly></td>
+                <td><input form="f" name="tarifs_montant[]" type="number" min="0" placeholder="Prix" required> €</td>
+            </tr></template>
         </section>
         <section id="horaires-hebdomadaires">
             <h2>Horaires hebdomadaires</h2>
             <div>
                 <?php foreach (JOURS_SEMAINE as $jour) { ?>
-                <article id="<?= $jour ?>">
-                    <h3><?= ucfirst($jour) ?></h3>
-                    <button id="button-add-horaire-<?= $jour ?>" type="button">+</button>
-                    <table id="table-horaires-<?= $jour ?>">
-                        <thead>
-                            <tr>
-                                <th>Début</th>
-                                <th>Fin</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                        </tbody>
-                    </table>
-                </article>
+                    <article id="<?= $jour ?>">
+                        <h3><?= ucfirst($jour) ?></h3>
+                        <button id="button-add-horaire-<?= $jour ?>" type="button">+</button>
+                        <table id="table-horaires-<?= $jour ?>">
+                            <thead>
+                                <tr>
+                                    <th>Début</th>
+                                    <th>Fin</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                        </table>
+                    </article>
+                    <template id="template-horaire-tr-<?= $jour ?>"><tr>
+                        <td><input form="f" name="horaires_debut[<?= $jour ?>][]" type="time" required></td>
+                        <td><input form="f" name="horaires_fin[<?= $jour ?>][]" type="time" required></td>
+                    </tr></template>
                 <?php } ?>
             </div>
         </section>
         <section id="horaires-ponctuels">
             <h2>Horaires ponctuels</h2>
-            <table>
+            <table id="table-periodes">
                 <thead>
                     <tr>
                         <th>Début</th>
@@ -158,12 +166,17 @@ if ($_POST) {
                 </tbody>
                 <tfoot>
                     <tr>
-                        <td><input id="periode-debut" type="datetime-local"></td>
-                        <td><input id="periode-fin" type="datetime-local"></td>
+                        <td><input type="datetime-local" placeholder="Début" required></td>
+                        <td><input type="datetime-local" placeholder="Fin" required></td>
                         <td id="tarif-duree"></td>
-                        <td><button id="button-add-periode" type="button">+</button></td>
                     </tr>
+                </tfoot>
             </table>
+            <template id="template-periode-tr"><tr>
+                <td><input form="f" name="periodes_debut[]" type="datetime-local"></td>
+                <td><input form="f" name="periodes_fin[]" type="datetime-local"></td>
+                <td id="tarif-duree"></td>
+            </tr></template>
         </section>
         <section id="tags">
             <h2>Tags</h2>
@@ -244,21 +257,7 @@ if ($_POST) {
         </form>
     </main>
     <?php require 'component/footer.php' ?>
-    <template id="template-tarif-tr"><tr>
-            <td><input form="f" name="tarifs_nom[]" type="text" placeholder="Enfant, Sénior&hellip;" required readonly></td>
-            <td><input form="f" name="tarifs_montant[]" type="number" min="0" placeholder="Prix" required> €</td>
-    </tr></template>
-    <template id="template-periode-tr"><tr>
-            <td><input form="f" name="periodes_debut[]" type="datetime-local"></td>
-            <td><input form="f" name="periodes_fin[]" type="datetime-local"></td>
-            <td id="tarif-duree"></td>
-    </tr></template>
-    <?php foreach (JOURS_SEMAINE as $jour) { ?>
-    <template id="template-horaire-tr-<?= $jour ?>"><tr>
-            <td><input form="f" name="horaires_debut[<?= $jour ?>][]" type="time" required></td>
-            <td><input form="f" name="horaires_fin[<?= $jour ?>][]" type="time" required></td>
-    </tr></template>
-    <?php } ?>
+    
 </body>
 
 </html>

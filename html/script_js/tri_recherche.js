@@ -20,7 +20,7 @@ function showSubcategories() {
 
             const label = document.createElement('label');
             label.htmlFor = subcategory;
-            label.innerText = subcategory;
+            label.textContent = subcategory;
 
             const wrapper = document.createElement('div');
             wrapper.appendChild(checkbox);
