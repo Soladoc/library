@@ -2,7 +2,16 @@
 require_once 'component/offre.php';
 require_once 'component/head.php';
 
-if (isset($_POST['date'])) {
+if ($_POST) {
+    $querry="INSERT INTO pact._avis (id_membre,id_offre,commentaire,date_avis) VALUES (?,?,?,?);";
+    $stmt = db_connect()->prepare($querry);
+    $stmt->execute([
+        $id_membre,
+        $id_offre,
+        $_POST['commentaire'],
+        $_POST['date_avis'],
+        $_POST['note'],
+    ]);
 }
 
 $args = [

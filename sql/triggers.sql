@@ -181,4 +181,30 @@ $$ language 'plpgsql';
 create trigger tg_pro_public_insert instead of insert on pro_public for each row
 execute function pro_public_insert ();
 
+CREATE FUNCTION avis_insert() RETURNS TRIGGER as $$
+DECLARE
+    id_avis integer;
+BEGIN
+    INSERT INTO _signalable default VALUES returning id into id_avis;
+    INSERT INTO pact._avis (
+        id,
+        id_membre,
+        id_offre,
+        commentaire,
+        date_avis,
+        note
+    ) VALUES (
+        id_avis,
+        NEW.id_membre,
+        NEW.id_offre,
+        NEW.commentaire,
+        NEW.date_avis,
+        NEW.note
+    );
+    RETURN NEW
+END
+$$ LANGUAGE 'plpgsql';
+
+CREATE TRIGGER tg_avis_insert instead of INSERT ON avis FOR EACH ROW
+EXECUTE FUNCTION avis_insert();
 commit;
