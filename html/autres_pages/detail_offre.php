@@ -100,7 +100,10 @@ $gallerie = query_gallerie($args['id']);
                         <option value="2">2 étoiles</option>
                         <option value="1">1 étoile</option>
                     </select>
+                    <label for="date">Date de votre visite</label>
                     <input type="date" id="date" name="date" required>
+                    <label for="consent">Je certifie que l’avis reflète ma propre expérience et mon opinion sur cette Offre </label>
+                    <input type="checkbox" name="consent" required>
                     <button class="btn-publish">Publier</button>
                 </form>
             </div>
