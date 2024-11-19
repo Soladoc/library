@@ -28,7 +28,7 @@ require_once 'component/head.php';
                 <h3>Catégories</h3>
                 <select id="main-category" onchange="showSubcategories()">
                     <option value="">-- Sélectionnez une catégorie --</option>
-                    <option value="restauration">Restauration</option>
+                    <option value="restaurant">Restaurant</option>
                     <option value="activite">Activité</option>
                     <option value="visite">Visite</option>
                     <option value="spectacle">Spectacle</option>

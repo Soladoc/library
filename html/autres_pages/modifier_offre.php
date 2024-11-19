@@ -34,7 +34,7 @@ const TYPE_OFFRE_AFFICHABLE = [
     'spectacle' => 'un spectacle',
     'parc_attraction' => "un parc d'attractions",
     'visite' => 'une visite',
-    'restauration' => 'une restauration',
+    'restaurant' => 'un restaurant',
     'activite' => 'une activité',
     '' => 'une offre'
 ];
@@ -176,7 +176,7 @@ const TYPE_OFFRE_AFFICHABLE = [
                 <ul>
                 <?php
                 require_once 'tags.php';
-                foreach ($type_offre === 'restauration' ? TAGS_RESTAURANT : DEFAULT_TAGS as $tag) {
+                foreach ($type_offre === 'restaurant' ? TAGS_RESTAURANT : DEFAULT_TAGS as $tag) {
                     ?><li><?= $tag ?></li><?php
                 }
                 ?>

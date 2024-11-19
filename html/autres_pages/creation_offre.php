@@ -71,7 +71,7 @@ if ($_POST) {
 <!DOCTYPE html>
 <html lang="fr">
 
-<?php put_head("Création d'une offre", ['creation_offre.css'], ['creation_offre.js' => 'defer']) ?>
+<?php put_head("Création d'une offre", ['creation_offre.css'], ['module/creation_offre.js' => 'defer type="module"']) ?>
 
 <body>
     <?php require 'component/header.php' ?>
@@ -118,15 +118,15 @@ if ($_POST) {
                 </tbody>
                 <tfoot>
                     <tr>
-                        <td><input form="f" id="tarif-montant" type="text" minlength="1" placeholder="Enfant, Sénior&hellip;"></td>
-                        <td><input form="f" id="tarif-nom" type="number" min="0" placeholder="Prix"> €</td>
-                        <td><button id="button-add-tarif" type="button">+</button></td>
+                        <td><input id="tarif-montant" type="text" minlength="1" placeholder="Enfant, Sénior&hellip;"></td>
+                        <td><input id="tarif-nom" type="number" min="0" placeholder="Prix"> €</td>
+                        <td><button type="button">+</button></td>
                     </tr>
                 </tfoot>
             </table>
         </section>
-        <section id="horaires">
-            <h2>Horaires</h2>
+        <section id="horaires-hebdomadaires">
+            <h2>Horaires hebdomadaires</h2>
             <div>
                 <?php foreach (JOURS_SEMAINE as $jour) { ?>
                 <article id="<?= $jour ?>">
@@ -145,6 +145,27 @@ if ($_POST) {
                 </article>
                 <?php } ?>
             </div>
+        </section>
+        <section id="horaires-ponctuels">
+            <h2>Horaires ponctuels</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Début</th>
+                        <th>Fin</th>
+                        <th>Durée</th>
+                    </tr>
+                </thead>
+                <tbody>
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <td><input id="periode-debut" type="datetime-local"></td>
+                        <td><input id="periode-fin" type="datetime-local"></td>
+                        <td id="tarif-duree"></td>
+                        <td><button id="button-add-periode" type="button">+</button></td>
+                    </tr>
+            </table>
         </section>
         <section id="tags">
             <h2>Tags</h2>
@@ -229,6 +250,14 @@ if ($_POST) {
         <tr>
             <td><input form="f" name="tarifs_nom[]" type="text" minlength="1" placeholder="Enfant, Sénior&hellip;" required readonly></td>
             <td><input form="f" name="tarifs_montant[]" type="number" min="0" placeholder="Prix" required> €</td>
+            <td><button type="button">-</button></td>
+        </tr>
+    </template>
+    <template id="template-periode-tr">
+        <tr>
+            <td><input form="f" name="periodes_debut[]" type="datetime-local"></td>
+            <td><input form="f" name="periodes_fin[]" type="datetime-local"></td>
+            <td id="tarif-duree"></td>
             <td><button type="button">-</button></td>
         </tr>
     </template>

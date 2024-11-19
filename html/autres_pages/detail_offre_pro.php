@@ -1,10 +1,7 @@
 <?php
 require_once 'db.php';
 require_once 'queries.php';
-// Activer l'affichage des erreurs pour le débogage
-ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
-error_reporting(E_ALL);
+require_once 'components/head.php';
 
 // Vérifier si l'ID est présent dans l'URL
 if (isset($_GET['id']) && is_numeric($_GET['id'])) {

@@ -32,7 +32,7 @@ function put_input_duration(string $form_id = '', string $id = '', string $prefi
     ?>
     <p <?= $id ? "id=\"$id\"" : '' ?> class="input-duration">
         <input <?= $form_attr ?> id="<?= $prefix ?>jours" name="<?= $prefix ?>jours" value="0" type="number" min="0" required> jour(s)
-        <input <?= $form_attr ?> id="<?= $prefix ?>heures" name="<?= $prefix ?>heures" value="0" type="number" max="24" required> heure(s)
+        <input <?= $form_attr ?> id="<?= $prefix ?>heures" name="<?= $prefix ?>heures" value="0" type="number"   max="24" required> heure(s)
         <input <?= $form_attr ?> id="<?= $prefix ?>minutes" name="<?= $prefix ?>minutes" value="0" type="number" max="60" required> minute(s)
     </p>
 <?php

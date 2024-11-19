@@ -14,7 +14,7 @@ require_once 'component/head.php';
         <button type="submit" name="type_offre" value="spectacle">Spectacle</button>
         <button type="submit" name="type_offre" value="parc-attraction">Parc d'attraction</button>
         <button type="submit" name="type_offre" value="visite">Visite</button>
-        <button type="submit" name="type_offre" value="restauration">Restauration</button>
+        <button type="submit" name="type_offre" value="restaurant">Restaurant</button>
         <button type="submit" name="type_offre" value="activite">Activité</button>
     </form>
 
