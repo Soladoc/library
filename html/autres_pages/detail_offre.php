@@ -8,7 +8,13 @@ $args = [
 
 $offre = query_offre($args['id']);
 if ($offre === false) {
-    html_error("l'offre d'ID {$args['id']} n'existe pas");
+    put_head("Erreur ID",
+    ['https://unpkg.com/leaflet@1.7.1/dist/leaflet.css'],
+    ['https://unpkg.com/leaflet@1.7.1/dist/leaflet.js' => 'async']);
+    require 'component/header.php';
+    echo "</br></br>L'offre d'ID {$args['id']} n'existe pas";
+    require 'component/footer.php';
+    exit; 
 }
 assert($offre['id'] === $args['id']);
 
@@ -27,13 +33,15 @@ $gallerie = query_gallerie($args['id']);
 
 <?php put_head("offre : {$args['id']}",
     ['https://unpkg.com/leaflet@1.7.1/dist/leaflet.css'],
-    ['https://unpkg.com/leaflet@1.7.1/dist/leaflet.js' => 'async']); ?>
+    ['https://unpkg.com/leaflet@1.7.1/dist/leaflet.js' => 'async']); 
+?>
 
 <body>
     <?php
     echo '<pre>';
     print_r($gallerie);
     echo '</pre>';
+    
     require 'component/header.php'
     ?>
     <!-- Offer Details -->
@@ -80,16 +88,19 @@ $gallerie = query_gallerie($args['id']);
 
              Review Form 
             <div class="review-form">
-                <textarea placeholder="Votre avis..."></textarea>
-                <label for="rating">Note&nbsp;:</label>
-                <select id="rating">
-                    <option value="5">5 étoiles</option>
-                    <option value="4">4 étoiles</option>
-                    <option value="3">3 étoiles</option>
-                    <option value="2">2 étoiles</option>
-                    <option value="1">1 étoile</option>
-                </select>
-                <button class="btn-publish">Publier</button>
+                <form method="post" action="detail_offre.php">
+                    <textarea><input type="text" placeholder="Votre avis..." required></textarea>
+                    <label for="rating">Note&nbsp;:</label>
+                    <select id="rating">
+                        <option value="5">5 étoiles</option>
+                        <option value="4">4 étoiles</option>
+                        <option value="3">3 étoiles</option>
+                        <option value="2">2 étoiles</option>
+                        <option value="1">1 étoile</option>
+                    </select>
+                    <input type="date" id="date" name="date">
+                    <button class="btn-publish">Publier</button>
+                </form>
             </div>
 
              Summary of reviews 
@@ -98,11 +109,11 @@ $gallerie = query_gallerie($args['id']);
                 <p>Moyenne&nbsp;: <?php $offre['note_moyenne'] ?>/5 ★</p>
                 <div class="rating-distribution">
                     <?php $avis = query_avis(id_offre: $offre['id']); ?>
-                    <p>5 étoiles&nbsp;: <?php count(array_filter($avis, fn($a) => $a['note'] === 5)) ?></p>
-                    <p>4 étoiles&nbsp;: <?php count(array_filter($avis, fn($a) => $a['note'] === 4)) ?></p>
-                    <p>3 étoiles&nbsp;: <?php count(array_filter($avis, fn($a) => $a['note'] === 3)) ?></p>
-                    <p>2 étoiles&nbsp;: <?php count(array_filter($avis, fn($a) => $a['note'] === 2)) ?></p>
-                    <p>1 étoile&nbsp;: <?php count(array_filter($avis, fn($a) => $a['note'] === 1)) ?></p>
+                    <p>5 étoiles&nbsp;: <?php count(array_filter($avis, fn($a) => $a['note'] === 5)) ?> avis.</p>
+                    <p>4 étoiles&nbsp;: <?php count(array_filter($avis, fn($a) => $a['note'] === 4)) ?> avis.</p>
+                    <p>3 étoiles&nbsp;: <?php count(array_filter($avis, fn($a) => $a['note'] === 3)) ?> avis.</p>
+                    <p>2 étoiles&nbsp;: <?php count(array_filter($avis, fn($a) => $a['note'] === 2)) ?> avis.</p>
+                    <p>1 étoile&nbsp;: <?php count(array_filter($avis, fn($a) => $a['note'] === 1)) ?> avis.</p>
                 </div>
             </div>
 
