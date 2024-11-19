@@ -8,9 +8,9 @@ $args = [
 
 $offre = query_offre($args['id']);
 if ($offre === false) {
-    require_once 'component/header.html';
+    require 'component/header.html';
     html_error("l'offre d'ID {$args['id']} n'existe pas");
-    require_once 'component/footer.html';
+    require 'component/footer.html';
     exit;
 }
 assert($offre['id'] === $args['id']);
