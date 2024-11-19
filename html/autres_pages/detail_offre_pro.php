@@ -2,6 +2,7 @@
 require_once 'db.php';
 require_once 'queries.php';
 require_once 'component/head.php';
+require_once 'util.php';
 
 
 $args = [
