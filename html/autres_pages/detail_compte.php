@@ -21,7 +21,6 @@ if ($membre !== false) {
     $nom = $membre['nom'];
     $prenom = $membre['prenom'];
     $telephone = $membre['telephone'];
-    html_error("l'membre d'ID {$args['id']} n'existe pas");
 }
 else if ($pro !== false) {
     echo '<pre>';
