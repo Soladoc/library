@@ -3,22 +3,25 @@ require_once 'db.php';
 require_once 'queries.php';
 require_once 'component/head.php';
 
+
 // Vérifier si l'ID est présent dans l'URL
-if (isset($_GET['id']) && is_numeric($_GET['id'])) {
-    $id = (int)$_GET['id']; // Cast pour plus de sécurité
+if ($_POST) {
+    $args = [
+        'id' => getarg($_GET, 'id', arg_filter(FILTER_VALIDATE_INT))
+    ];
 
     // Connexion à la base de données
     $pdo = db_connect();
 
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-        alterner_etat_offre($id);
-        $offre = query_offre($id);
-        header("Location: " . $_SERVER['PHP_SELF'] . "?id=" . $id);
+        alterner_etat_offre($args['id']);
+        $offre = query_offre($args['id']);
+        header("Location: " . $_SERVER['PHP_SELF'] . "?id=" . $args['id']);
         exit();
     }
 
     // Récupérer les données de l'offre
-    $offre = query_offre($id);
+    $offre = query_offre($args['id']);
 
     // Si l'offre est trouvée, afficher ses détails
     if ($offre) {
@@ -40,7 +43,7 @@ if (isset($_GET['id']) && is_numeric($_GET['id'])) {
             $code_postal = query_codes_postaux($info_adresse['code_commune'],$info_adresse['numero_departement'])[0];
 
             // Concaténer les informations pour former une adresse complète
-            $adresse_complete = $numero_voie . ' ' . $complement_numero . ' ' . $nom_voie . ', ' . $localite . ', ' . $code_postal;
+            $adresse_complete = "$numero_voie $complement_numero $nom_voie, $localite, $code_postal";
 
             // Afficher ou retourner l'adresse complète
         } else {
