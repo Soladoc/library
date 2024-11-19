@@ -15,7 +15,10 @@ if ($offre === false) {
     ['https://unpkg.com/leaflet@1.7.1/dist/leaflet.css'],
     ['https://unpkg.com/leaflet@1.7.1/dist/leaflet.js' => 'async']);
     require 'component/header.php';
-    echo "</br></br>L'offre d'ID {$args['id']} n'existe pas";
+    echo "</br></br>L'offre que vous cherchez n'existe pas";
+    ?>
+    <script>console.log("Pas d'offre n°<?php echo $args['id'] ?>")</script>
+    <?php
     require 'component/footer.php';
     exit; 
 }
