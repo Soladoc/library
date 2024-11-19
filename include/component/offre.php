@@ -27,7 +27,7 @@ function put_card_offre_pro(array $offre)
         <?php } else { ?>Note&nbsp;: <?= $offre['note_moyenne'] ?>/5 ★ (<?= $nb_avis ?> avis)
         <?php } ?>
     </p>
-    <a href="/autres_pages/detail_offre_pro.php?id=<?= $offre['id'] ?>">
+    <a href="/autres_pages/detail_offre.php?id=<?= $offre['id'] ?>&pro=true">
         <button class="btn-more-info">En savoir plus</button>
     </a>
 </div>

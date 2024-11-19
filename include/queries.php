@@ -87,7 +87,7 @@ function query_professionnel(string $email): array|false
     return $stmt->fetch();
 }
 
-function query_compte_membre(int $id): array
+function query_compte_membre(int $id): array|false
 {
     $stmt = notfalse(db_connect()->prepare('select * from membre where id = ?'));
     bind_values($stmt, [1 => [$id, PDO::PARAM_INT]]);
@@ -95,6 +95,13 @@ function query_compte_membre(int $id): array
     return $stmt->fetch();
 }
 
+function query_compte_professionnel(int $id): array
+{
+    $stmt = notfalse(db_connect()->prepare('select * from professionnel where id = ?'));
+    bind_values($stmt, [1 => [$id, PDO::PARAM_INT]]);
+    notfalse($stmt->execute());
+    return $stmt->fetch();
+}
 // Parameterized selections
 
 function query_avis(?int $id_membre_auteur = null, ?int $id_offre = null): array
