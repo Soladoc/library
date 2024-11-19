@@ -8,7 +8,10 @@ $args = [
 
 $offre = query_offre($args['id']);
 if ($offre === false) {
+    require_once 'component/header.html';
     html_error("l'offre d'ID {$args['id']} n'existe pas");
+    require_once 'component/footer.html';
+    exit;
 }
 assert($offre['id'] === $args['id']);
 
@@ -34,6 +37,7 @@ $gallerie = query_gallerie($args['id']);
     echo '<pre>';
     print_r($gallerie);
     echo '</pre>';
+    
     require 'component/header.php'
     ?>
     <!-- Offer Details -->
