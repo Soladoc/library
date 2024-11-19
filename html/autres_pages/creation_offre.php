@@ -258,7 +258,6 @@ if ($_POST) {
             <td><input form="f" name="periodes_debut[]" type="datetime-local"></td>
             <td><input form="f" name="periodes_fin[]" type="datetime-local"></td>
             <td id="tarif-duree"></td>
-            <td><button type="button">-</button></td>
         </tr>
     </template>
     <?php foreach (JOURS_SEMAINE as $jour) { ?>
@@ -266,7 +265,6 @@ if ($_POST) {
         <tr>
             <td><input form="f" name="horaires_debut[<?= $jour ?>][]" type="time" required></td>
             <td><input form="f" name="horaires_fin[<?= $jour ?>][]" type="time" required></td>
-            <td><button type="button">-</button></td>
         </tr>
     </template>
     <?php } ?>
