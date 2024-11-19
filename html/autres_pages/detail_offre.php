@@ -102,13 +102,14 @@ $gallerie = query_gallerie($args['id']);
                     </select>
                     <label for="date">Date de votre visite</label>
                     <input type="date" id="date" name="date" required>
+                    </br>
                     <label for="consent">Je certifie que l’avis reflète ma propre expérience et mon opinion sur cette Offre </label>
                     <input type="checkbox" name="consent" required>
                     <button class="btn-publish">Publier</button>
                 </form>
             </div>
 
-             Summary of reviews 
+            
             <div class="review-summary">
                 <h4>Résumé des notes</h4>
                 <p>Moyenne&nbsp;: <?php $offre['note_moyenne'] ?>/5 ★</p>
@@ -122,8 +123,9 @@ $gallerie = query_gallerie($args['id']);
                 </div>
             </div>
 
-            List of reviews 
+            
             <div class="review-list">
+                <h2>Avis de la communautée</h2>
                 <?php foreach ($avis as $avis_temp) { ?>
                     <div class="review">
                         <p><strong><?php $avis_temp['pseudo'] ?></strong> - <?php $avis_temp['note'] ?>/5</p>
