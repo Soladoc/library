@@ -6,6 +6,7 @@ set schema 'pact';
 -- todo: insert into tarif: assert that 'gratuit' = (select libelle_abonnement from _offre o where o.id_offre = id_offre)
 -- todo: trigger timestamp offre lmt
 -- toto: non-instanciation classe abstraite
+-- todo: normalization periodes ouvertures (contrainte pour ne pas avoir de range overlapping -- agrandir les ranges existants dans un trigger) ce sera intéréssant à coder
 
 create view offres as select
     *,

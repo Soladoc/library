@@ -159,7 +159,6 @@ if ($_POST) {
                     <tr>
                         <th>Début</th>
                         <th>Fin</th>
-                        <th>Durée</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -168,14 +167,12 @@ if ($_POST) {
                     <tr>
                         <td><input type="datetime-local" placeholder="Début" required></td>
                         <td><input type="datetime-local" placeholder="Fin" required></td>
-                        <td id="tarif-duree"></td>
                     </tr>
                 </tfoot>
             </table>
             <template id="template-periode-tr"><tr>
                 <td><input form="f" name="periodes_debut[]" type="datetime-local"></td>
                 <td><input form="f" name="periodes_fin[]" type="datetime-local"></td>
-                <td id="tarif-duree"></td>
             </tr></template>
         </section>
         <section id="tags">

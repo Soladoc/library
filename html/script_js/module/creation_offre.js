@@ -1,4 +1,3 @@
-import { Temporal } from 'temporal-polyfill';
 import DynamicTable from './DynamicTable.js';
 
 const type_offre = new URLSearchParams(window.location.search).get('type_offre');
@@ -47,12 +46,11 @@ const type_offre = new URLSearchParams(window.location.search).get('type_offre')
         document.getElementById('template-tarif-tr'),
         tr => {
             fin(tr).min = debut(tr).value;
-            deduce_duree(tr);
+            return true;
         },
         (tr, row) => {
             debut(tr).value = row[i_debut];
             fin(tr).value = row[i_fin];
-            deduce_duree(tr);
         }
     );
     periodes.setup();
@@ -70,24 +68,6 @@ const type_offre = new URLSearchParams(window.location.search).get('type_offre')
      */
     function fin(tr) {
         return tr.cells[i_fin].children[0];
-    }
-    /**
-     * @param {HTMLTableRowElement} tr 
-     */
-    function deduce_duree(tr) {
-
-        let result = '';
-        if (debut(tr).value && fin(tr).value) {
-            const duration = Temporal.PlainDateTime.from(debut(tr).value)
-                .until(Temporal.PlainDateTime.from(fin(tr).value));
-            result = duration.toLocaleString(navigator.languages, {
-                'dateStyle': 'full',
-                'timeStyle': 'full',
-            });
-        }
-        tr.cells[2].textContent = result;
-
-
     }
 }
 
