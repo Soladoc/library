@@ -29,7 +29,7 @@ jobs:
                 set -xeu
                 for f in /creaBDD.sql /fonctions.sql /vuesBDD.sql /triggers.sql /bigdata.sql /data.sql /images.sql /offres.sql
                   do echo run "$f"
-                  ON_ERROR_STOP=on psql -U sae -d postgres -f "$f"
+                  psql -v ON_ERROR_STOP=on -U sae -d postgres -f "$f"
                 done
               '
           EOF

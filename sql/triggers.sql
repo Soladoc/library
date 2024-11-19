@@ -201,7 +201,7 @@ BEGIN
         NEW.date_avis,
         NEW.note
     );
-    RETURN NEW
+    RETURN NEW;
 END
 $$ LANGUAGE 'plpgsql';
 
