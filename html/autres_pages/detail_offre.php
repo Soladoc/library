@@ -8,10 +8,13 @@ $args = [
 
 $offre = query_offre($args['id']);
 if ($offre === false) {
+    put_head("offre : {$args['id']}",
+    ['https://unpkg.com/leaflet@1.7.1/dist/leaflet.css'],
+    ['https://unpkg.com/leaflet@1.7.1/dist/leaflet.js' => 'async']);
     require 'component/header.php';
-    html_error("l'offre d'ID {$args['id']} n'existe pas");
+    echo "l'offre d'ID {$args['id']} n'existe pas";
     require 'component/footer.php';
-    exit;
+    exit; 
 }
 assert($offre['id'] === $args['id']);
 
@@ -30,7 +33,8 @@ $gallerie = query_gallerie($args['id']);
 
 <?php put_head("offre : {$args['id']}",
     ['https://unpkg.com/leaflet@1.7.1/dist/leaflet.css'],
-    ['https://unpkg.com/leaflet@1.7.1/dist/leaflet.js' => 'async']); ?>
+    ['https://unpkg.com/leaflet@1.7.1/dist/leaflet.js' => 'async']); 
+?>
 
 <body>
     <?php
