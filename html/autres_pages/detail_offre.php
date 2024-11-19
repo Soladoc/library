@@ -8,11 +8,11 @@ $args = [
 
 $offre = query_offre($args['id']);
 if ($offre === false) {
-    put_head("offre : {$args['id']}",
+    put_head("Erreur ID",
     ['https://unpkg.com/leaflet@1.7.1/dist/leaflet.css'],
     ['https://unpkg.com/leaflet@1.7.1/dist/leaflet.js' => 'async']);
     require 'component/header.php';
-    echo "\n\nL'offre d'ID {$args['id']} n'existe pas";
+    echo "</br></br>L'offre d'ID {$args['id']} n'existe pas";
     require 'component/footer.php';
     exit; 
 }
