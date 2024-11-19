@@ -63,7 +63,7 @@ function html_error(mixed $arg): never
 }
 
 /**
- * Returns a string with the given value and suffix, or an empty string if the value is null.
+ * Returns a string with the given value and suffix, or an empty string if the value is falsey.
  * @param ?string $value The value to format.
  * @param ?string $suffix The suffix to append to the value.
  * @return string The formatted string.

@@ -5,7 +5,7 @@ require_once 'queries.php';
 require_once 'auth.php';
 require_once 'util.php';
 require_once 'const.php';
-require_once 'component/input_address.php';
+require_once 'component/inputs.php';
 require_once 'component/head.php';
 
 ?><pre><?= htmlspecialchars(print_r($_GET, true)) ?></pre><?php
@@ -91,11 +91,9 @@ if ($_POST) {
                     <input form="f" id="resume" name="resume" type="text" required>
                 </p>
                 <label for="adresse">Adresse*</label>
-                <p>
-                    <?php
-                    put_input_address('f')
-                    ?>
-                </p>
+                <?php
+                put_input_address('f', 'adresse', 'adresse_')
+                ?>
                 <label for="site">Site Web</label>
                 <p>
                     <input form="f" id="url_site_web" name="url_site_web" type="url">
@@ -250,6 +248,6 @@ if ($_POST) {
 function put_input_indication_duree()
 {
     ?>
-        <label>Durée estimée&nbsp;: <input-duration id='indication_duree'></input-duration></label>
+        <label>Durée estimée&nbsp;: <?php put_input_duration('f', 'indication_duree', 'indication_duree_') ?></label>
         <?php
 }

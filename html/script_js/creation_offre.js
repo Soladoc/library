@@ -21,10 +21,10 @@ tarif_montant.addEventListener('input', update_can_add_tarif);
 
 button_add_tarif.addEventListener('click', () => add_tarif_tr(tarif_nom.value, tarif_montant.valueAsNumber));
 
-setup_preview('image-principale');
+setup_preview('image_principale');
 setup_preview('gallerie');
 if (type_offre === 'parc-attractions') {
-    setup_preview('image-plan');
+    setup_preview('image_plan');
 }
 
 for (const jour of ['lundi', 'mardi', 'mercredi', 'jeudi', 'vendredi', 'samedi', 'dimanche']) {

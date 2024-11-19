@@ -1,12 +1,12 @@
 <?php
 require_once 'db.php';
 
-function put_input_address(string $prefix = '', string $form_id = '')
+function put_input_address(string $form_id = '', string $id = '', string $prefix = '')
 {
-    $form_attr = $form_id === '' ? '' : "form=\"$form_id\"";
+    $form_attr = $form_id ? "form=\"$form_id\"" : '';
     $communes = db_connect()->query('select nom from _commune fetch first 1000 rows only')->fetchAll()
 ?>
-<details class="input-address">
+<details <?= $id ? "id=\"$id\"" : '' ?> class="input-address">
     <datalist id="datalist-input-address-communes"><?php
     foreach ($communes as $c) {
 ?><option><?= $c['nom'] ?></option><?php
@@ -26,14 +26,14 @@ function put_input_address(string $prefix = '', string $form_id = '')
 <?php
 }
 
-function put_input_duration(string $prefix = '', string $form_id = '')
+function put_input_duration(string $form_id = '', string $id = '', string $prefix = '')
 {
-    $form_attr = $form_id === '' ? '' : "form=\"$form_id\"";
+    $form_attr = $form_id ? "form=\"$form_id\"" : '';
     ?>
-    <p class="input-duration">
-        <input <?= $form_attr ?> id="days" name="days" type="number" min="0" required> jour(s)
-        <input <?= $form_attr ?> id="hours" name="hours" type="number" required> heure(s)
-        <input <?= $form_attr ?> id="minutes" name="minutes" type="number" required> minute(s)
+    <p <?= $id ? "id=\"$id\"" : '' ?> class="input-duration">
+        <input <?= $form_attr ?> id="<?= $prefix ?>jours" name="<?= $prefix ?>jours" value="0" type="number" min="0" required> jour(s)
+        <input <?= $form_attr ?> id="<?= $prefix ?>heures" name="<?= $prefix ?>heures" value="0" type="number" max="24" required> heure(s)
+        <input <?= $form_attr ?> id="<?= $prefix ?>minutes" name="<?= $prefix ?>minutes" value="0" type="number" max="60" required> minute(s)
     </p>
 <?php
 }

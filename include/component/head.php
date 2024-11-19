@@ -21,11 +21,11 @@ function put_head(string $title, array $stylesheets = [], array $scripts = [])
             ?><link rel="stylesheet" href="<?= str_contains($href, ':') ? $href : "/style/$href" ?>"><?php
         }
         ?>
-        <script defer src="/script_js/base.js">
+        <script defer src="/script_js/base.js"></script>
         <?php
         foreach ($scripts as $src => $attrs) {
             // Idem.
-            ?><script <?= $attrs ?> src="<?= str_contains($src, ':') ? $src : "/script_js/$src" ?>"></script><?
+            ?><script <?= $attrs ?> src="<?= str_contains($src, ':') ? $src : "/script_js/$src" ?>"></script><?php
         }
         ?>
     </head>
