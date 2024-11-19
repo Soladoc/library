@@ -9,7 +9,7 @@ $args = [
 
 
 $membre = query_compte_membre($args['id']);
-$pro = query_compte_professionne($args['id']);
+$pro = query_compte_professionnel($args['id']);
 
 if ($membre !== false) {
     echo '<pre>';
