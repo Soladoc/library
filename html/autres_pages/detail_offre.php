@@ -89,7 +89,8 @@ $gallerie = query_gallerie($args['id']);
                     <option value="2">2 étoiles</option>
                     <option value="1">1 étoile</option>
                 </select>
-                <button class="btn-publish">Publier</button>
+                <input type="date" id="date" name="date">
+                <button class="btn-publish" onclick="publierAvis()">Publier</button>
             </div>
 
              Summary of reviews 
@@ -98,11 +99,11 @@ $gallerie = query_gallerie($args['id']);
                 <p>Moyenne&nbsp;: <?php $offre['note_moyenne'] ?>/5 ★</p>
                 <div class="rating-distribution">
                     <?php $avis = query_avis(id_offre: $offre['id']); ?>
-                    <p>5 étoiles&nbsp;: <?php count(array_filter($avis, fn($a) => $a['note'] === 5)) ?></p>
-                    <p>4 étoiles&nbsp;: <?php count(array_filter($avis, fn($a) => $a['note'] === 4)) ?></p>
-                    <p>3 étoiles&nbsp;: <?php count(array_filter($avis, fn($a) => $a['note'] === 3)) ?></p>
-                    <p>2 étoiles&nbsp;: <?php count(array_filter($avis, fn($a) => $a['note'] === 2)) ?></p>
-                    <p>1 étoile&nbsp;: <?php count(array_filter($avis, fn($a) => $a['note'] === 1)) ?></p>
+                    <p>5 étoiles&nbsp;: <?php count(array_filter($avis, fn($a) => $a['note'] === 5)) ?> avis.</p>
+                    <p>4 étoiles&nbsp;: <?php count(array_filter($avis, fn($a) => $a['note'] === 4)) ?> avis.</p>
+                    <p>3 étoiles&nbsp;: <?php count(array_filter($avis, fn($a) => $a['note'] === 3)) ?> avis.</p>
+                    <p>2 étoiles&nbsp;: <?php count(array_filter($avis, fn($a) => $a['note'] === 2)) ?> avis.</p>
+                    <p>1 étoile&nbsp;: <?php count(array_filter($avis, fn($a) => $a['note'] === 1)) ?> avis.</p>
                 </div>
             </div>
 
@@ -132,6 +133,9 @@ $gallerie = query_gallerie($args['id']);
         //     .bindPopup('hihihihihihihihihui')
         // L.marker([45.779, -4.518]).addTo(map)
         //     .bindPopup('hihihihihihihihihui')
+        function publierAvis(){
+            document.getElementById('review-form').submit();
+        }
     </script>
 </body>
 
