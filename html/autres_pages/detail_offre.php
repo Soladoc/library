@@ -41,6 +41,7 @@ $gallerie = query_gallerie($args['id']);
 
 <body>
     <?php
+    //TODO suprimmer ca quand romain aura sort that out
     echo '<pre>';
     print_r($gallerie);
     echo '</pre>';
@@ -125,7 +126,7 @@ $gallerie = query_gallerie($args['id']);
 
             
             <div class="review-list">
-                <h2>Avis de la communautée</h2>
+                <h4>Avis de la communautée</h4>
                 <?php foreach ($avis as $avis_temp) { ?>
                     <div class="review">
                         <p><strong><?php $avis_temp['pseudo'] ?></strong> - <?php $avis_temp['note'] ?>/5</p>
