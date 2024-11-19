@@ -89,7 +89,7 @@ $gallerie = query_gallerie($args['id']);
              Review Form 
             <div class="review-form">
                 <form method="post" action="detail_offre.php">
-                    <textarea><input type="text" placeholder="Votre avis..." required></textarea>
+                    <textarea type="text" placeholder="Votre avis..." required></textarea>
                     <label for="rating">Note&nbsp;:</label>
                     <select id="rating">
                         <option value="5">5 étoiles</option>
