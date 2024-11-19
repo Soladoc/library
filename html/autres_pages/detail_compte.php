@@ -7,22 +7,40 @@ $args = [
     'id' => getarg($_GET, 'id', arg_filter(FILTER_VALIDATE_INT))
 ];
 
-$membre = query_compte_membre($args['id']);
 
-if ($membre === false) {
+$membre = query_compte_membre($args['id']);
+$pro = query_compte_professionne($args['id']);
+
+if ($membre !== false) {
+    echo '<pre>';
+    print_r($membre);
+    echo '</pre>';
+    $pseudo = $membre['pseudo'];
+    $email = $membre['email'];
+    $mdp = unserialize($membre['mdp_hash']);
+    $nom = $membre['nom'];
+    $prenom = $membre['prenom'];
+    $telephone = $membre['telephone'];
     html_error("l'membre d'ID {$args['id']} n'existe pas");
+}
+else if ($pro !== false) {
+    echo '<pre>';
+    print_r($pro);
+    echo '</pre>';
+    $denomination = $pro['denomination'];
+    $email = $pro['email'];
+    $mdp = unserialize($pro['mdp_hash']);
+    $nom = $pro['nom'];
+    $prenom = $pro['prenom'];
+    $telephone = $pro['telephone'];
+    
+}
+else {
+    html_error("le compte d'ID {$args['id']} n'existe pas");
 }
 // Afficher le détail du compte du membre
 
-echo '<pre>';
-print_r($membre);
-echo '</pre>';
-$pseudo = $membre['pseudo'];
-$email = $membre['email'];
-$mdp = unserialize($membre['mdp_hash']);
-$nom = $membre['nom'];
-$prenom = $membre['prenom'];
-$telephone = $membre['telephone'];
+
 
 ?>
 
@@ -41,10 +59,22 @@ $telephone = $membre['telephone'];
 
     <main>
         <section id="info_compte">
+            <?php if ($membre !== false) {
+                
+            ?>
             <div id="pseudo">
                 <p>pseudo : </p>
                 <?php echo $pseudo ?>
             </div>
+            <?php }
+            else if ($pro !== false){ ?>
+                <div id="denomination">
+                <p>denomination : </p>
+                <?php echo $denomination ?>
+            </div>
+
+
+            <?php } ?>
 
             <div id="nom">
                 <p>nom : </p>
@@ -60,12 +90,7 @@ $telephone = $membre['telephone'];
                 <p>email : </p>
                 <?php echo $email ?>
             </div>
-
-            <div id="mdp">
-                <p>mot de passe : </p>
-                <?php echo $mdp ?>
-            </div>
-
+           
         </section>
 
     </main>
