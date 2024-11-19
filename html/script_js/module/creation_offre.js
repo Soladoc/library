@@ -3,6 +3,7 @@ const type_offre = new URLSearchParams(window.location.search).get('type_offre')
 
 // Grille tarifaire
 {
+    console.log('setup grille tarifaire');
     const tr_tarif_id_prefix = 'tr-tarif-';
     /** @type {HTMLTableElement} */
     const table_tarifs = document.getElementById('table-tarifs');
@@ -62,6 +63,7 @@ const type_offre = new URLSearchParams(window.location.search).get('type_offre')
             || isNaN(tarif_montant.valueAsNumber)
             || document.getElementById(tr_tarif_id_prefix + tarif_nom.value) !== null;
     }
+    console.log('ok');
 }
 
 
