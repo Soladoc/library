@@ -1,7 +1,7 @@
 <?php
 require_once 'db.php';
 require_once 'queries.php';
-require_once 'components/head.php';
+require_once 'component/head.php';
 
 // Vérifier si l'ID est présent dans l'URL
 if (isset($_GET['id']) && is_numeric($_GET['id'])) {
