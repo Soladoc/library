@@ -88,11 +88,10 @@ $gallerie = query_gallerie($args['id']);
         <!-- User Reviews -->
         <section class="offer-reviews">
             <h3>Avis des utilisateurs</h3>
-
-             Review Form 
             <div class="review-form">
+                <label for="text_avis">Mettre un avis</label>
                 <form method="post" action="detail_offre.php">
-                    <textarea type="text" placeholder="Votre avis..." required></textarea>
+                    <textarea type="text" placeholder="Votre avis..." name="text_avis"></textarea>
                     <label for="rating">Note&nbsp;:</label>
                     <select id="rating" required>
                         <option value="5">5 étoiles</option>
