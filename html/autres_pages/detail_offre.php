@@ -88,17 +88,19 @@ $gallerie = query_gallerie($args['id']);
 
              Review Form 
             <div class="review-form">
-                <textarea placeholder="Votre avis..."></textarea>
-                <label for="rating">Note&nbsp;:</label>
-                <select id="rating">
-                    <option value="5">5 étoiles</option>
-                    <option value="4">4 étoiles</option>
-                    <option value="3">3 étoiles</option>
-                    <option value="2">2 étoiles</option>
-                    <option value="1">1 étoile</option>
-                </select>
-                <input type="date" id="date" name="date">
-                <button class="btn-publish" onclick="publierAvis()">Publier</button>
+                <form method="post" action="detail_offre.php">
+                    <textarea><input type="text" placeholder="Votre avis..." required></textarea>
+                    <label for="rating">Note&nbsp;:</label>
+                    <select id="rating">
+                        <option value="5">5 étoiles</option>
+                        <option value="4">4 étoiles</option>
+                        <option value="3">3 étoiles</option>
+                        <option value="2">2 étoiles</option>
+                        <option value="1">1 étoile</option>
+                    </select>
+                    <input type="date" id="date" name="date">
+                    <button class="btn-publish">Publier</button>
+                </form>
             </div>
 
              Summary of reviews 
@@ -141,9 +143,6 @@ $gallerie = query_gallerie($args['id']);
         //     .bindPopup('hihihihihihihihihui')
         // L.marker([45.779, -4.518]).addTo(map)
         //     .bindPopup('hihihihihihihihihui')
-        function publierAvis(){
-            document.getElementById('review-form').submit();
-        }
     </script>
 </body>
 
