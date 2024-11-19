@@ -89,6 +89,26 @@ else {
                 <p>email : </p>
                 <?php echo $email ?>
             </div>
+
+            <div id="telephone">
+                <p>telephone : </p>
+                <?php echo $telephone ?>
+            </div>
+
+            <div id='changer_mdp'>
+                <form action="detail_compte" method="POST">
+                    <p>modifier son mot de passe</p>
+                    <div class="champ">
+                        <label for="mdp">Mot de passe *</label>
+                        <input id="mdp" name="mdp" type="password" placeholder="**********" required>
+                    </div>
+                    <?php if ($error = $_GET['error'] ?? null) { ?>
+                    <p class="error"><?= $error ?></p>
+                    <?php } ?>
+                    <button type="submit" class="btn-connexion">valider</button>
+                </form>
+
+            </div>
            
         </section>
 
