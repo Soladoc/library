@@ -12,7 +12,7 @@ if ($offre === false) {
     ['https://unpkg.com/leaflet@1.7.1/dist/leaflet.css'],
     ['https://unpkg.com/leaflet@1.7.1/dist/leaflet.js' => 'async']);
     require 'component/header.php';
-    echo "l'offre d'ID {$args['id']} n'existe pas";
+    echo "\n\nL'offre d'ID {$args['id']} n'existe pas";
     require 'component/footer.php';
     exit; 
 }
