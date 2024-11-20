@@ -189,14 +189,14 @@ BEGIN
     INSERT INTO _signalable default VALUES returning id into id_avis;
     INSERT INTO pact._avis (
         id,
-        id_membre,
+        id_membre_auteur,
         id_offre,
         commentaire,
         date_avis,
         note
     ) VALUES (
         id_avis,
-        NEW.id_membre,
+        NEW.id_membre_auteur,
         NEW.id_offre,
         NEW.commentaire,
         NEW.date_avis,
