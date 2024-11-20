@@ -1,17 +1,23 @@
 <?php
+session_start();
 require_once 'component/offre.php';
 require_once 'component/head.php';
 
 if ($_POST) {
-    $querry="INSERT INTO pact._avis (id_membre,id_offre,commentaire,date_avis) VALUES (?,?,?,?);";
-    $stmt = db_connect()->prepare($querry);
-    $stmt->execute([
-        $id_membre,
-        $id_offre,
-        $_POST['commentaire'],
-        $_POST['date_avis'],
-        $_POST['note'],
-    ]);
+    if($_SESSION['log']==true){
+        $querry="INSERT INTO pact._avis (id_membre_auteur,id_offre,commentaire,date_experience,note) VALUES (?,?,?,?,?);";
+        $stmt = db_connect()->prepare($querry);
+        $stmt->execute([
+            $id_membre,
+            $id_offre,
+            $_POST['commentaire'],
+            $_POST['date_avis'],
+            $_POST['note'],
+        ]);
+        $success_message = "Avis ajouté ou mis à jour avec succès !";
+    } else {
+        $error_message = "Veuillez remplir tous les champs du formulaire.";
+    }
 }
 
 $args = [
