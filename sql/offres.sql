@@ -117,16 +117,22 @@ Camping et snack sur le site.',
             ((table id_offre), 'famille'),
             ((table id_offre), 'plein air'),
             ((table id_offre), 'sport')
+    ),
+    s2 as (
+        insert into
+            _horaire_ouverture (id_offre, dow, heure_debut, heure_fin)
+        values
+            ((table id_offre), 1, '9:', '23:'),
+            ((table id_offre), 2, '9:', '23:'),
+            ((table id_offre), 3, '9:', '23:'),
+            ((table id_offre), 4, '9:', '23:'),
+            ((table id_offre), 5, '9:', '23:'),
+            ((table id_offre), 6, '9:', '23:')
     )
 insert into
-    _horaire_ouverture (id_offre, dow, heure_debut, heure_fin)
+    _changement_etat (id_offre, fait_le)
 values
-    ((table id_offre), 1, '9:', '23:'),
-    ((table id_offre), 2, '9:', '23:'),
-    ((table id_offre), 3, '9:', '23:'),
-    ((table id_offre), 4, '9:', '23:'),
-    ((table id_offre), 5, '9:', '23:'),
-    ((table id_offre), 6, '9:', '23:');
+    ((table id_offre), '2026-04-10T20:00:00.000Z', '2026-04-11T01:00:00.000Z');
 
 -- Restaurant La Plage
 with
@@ -777,7 +783,7 @@ with
             ((table id_offre), 'nature')
     )
 insert into
-    _periode_ouverture (id_offre, debut, fin)
+    _periode_ouverture (id_offre, debut_le, fin_le)
 values
     ((table id_offre), '2024-06-14T12:00:00.000Z', '2024-09-27T18:00:00.000Z'),
     ((table id_offre), '2025-06-14T12:00:00.000Z', '2025-09-27T18:00:00.000Z'),
@@ -1089,7 +1095,7 @@ with
             ((table id_offre), 'spectacle')
     )
 insert into
-    _periode_ouverture (id_offre, debut, fin)
+    _periode_ouverture (id_offre, debut_le, fin_le)
 values
     ((table id_offre), '2026-04-10T20:00:00.000Z', '2026-04-11T01:00:00.000Z');
 

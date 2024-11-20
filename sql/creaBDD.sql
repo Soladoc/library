@@ -21,7 +21,7 @@ create domain paragraphe as varchar; -- un paragraphe de texte
 create domain numero_telephone as char(10) check (value ~ '^[0-9]+$');
 create domain numero_siren as char(9) check (value ~ '^[0-9]+$');
 -- 63 car. max, non vide, uniquement minuscules, chiffres, tirets et espaces (sauf en premier et dernier caractère)
-create domain mot_cle as varchar(63) check (value ~ '^[[:lower:]\d](?:[[:lower:]\d -]*[[:lower:]\d])?$');
+create domain mot as varchar(63) check (value ~ '^[[:lower:]\d](?:[[:lower:]\d -]*[[:lower:]\d])?$');
 create domain adresse_email as varchar(319) check (value ~ '^(?:[a-z0-9!#$%&''*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&''*+/=?^_`{|}~-]+)*|"(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21\x23-\x5b\x5d-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])*")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\[(?:(?:(2(5[0-5]|[0-4][0-9])|1[0-9][0-9]|[1-9]?[0-9]))\.){3}(?:(2(5[0-5]|[0-4][0-9])|1[0-9][0-9]|[1-9]?[0-9])|[a-z0-9-]*[a-z0-9]:(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21-\x5a\x53-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])+)\])$');
 -- 63 car. max, non vide, pas de caractères de contrôle, pas de blancs en début et fin, l'espace ' ' est le seul blanc autorisé.
 -- pas d'arobase (@), pour éviter la confusion avec une adresse e-mail
@@ -125,7 +125,7 @@ create table _offre(
     titre ligne not null,
     resume ligne not null,
     description_detaillee paragraphe not null,
-    date_derniere_maj timestamp not null,
+    modifiee_le timestamp not null,
     url_site_web varchar(2047) not null
 );
 
@@ -220,7 +220,7 @@ create table _membre(
 create table _facture(
     id serial
         constraint facture_pk primary key,
-    date_facture timestamp not null,
+    date date not null,
     remise_ht decimal not null,
     montant_deja_verse decimal not null,
     id_offre int not null
@@ -259,9 +259,9 @@ create table _avis(
         constraint avis_inherits_signalable references _signalable,
     commentaire paragraphe not null,
     note int not null check (1 <= note and note <= 5),
-    moment_publication timestamp not null default now(),
+    publie_le timestamp not null default now(),
     date_experience date not null,
-    contexte ligne not null,
+    contexte mot not null,
     lu boolean not null default false,
     blackliste boolean not null default false,
 
@@ -311,9 +311,9 @@ create table _horaire_ouverture(
 create table _periode_ouverture(
     id_offre int
         constraint horaire_ouverture_fk_offre references _offre,
-    debut timestamp,
-    fin timestamp check (fin > debut),
-    constraint horaire_pk primary key (id_offre, debut, fin)
+    debut_le timestamp,
+    fin_le timestamp check (fin_le > debut_le),
+    constraint horaire_pk primary key (id_offre, debut_le, fin_le)
 );
 
 create table _signalement(
@@ -354,8 +354,8 @@ create table _gallerie(
 create table _changement_etat(
     id_offre int
         constraint changement_etat_fk_offre references _offre,
-    date_changement timestamp default now(),
-    constraint changement_etat_pk primary key (id_offre, date_changement)
+    fait_le timestamp default now(),
+    constraint changement_etat_pk primary key (id_offre, fait_le)
 );
 
 create table _souscription_option(
@@ -379,7 +379,7 @@ create table _juge(
 create table _tags(
     id_offre int
         constraint tags_fk_offre references _offre,
-    tag mot_cle,
+    tag mot,
     constraint tags_pk primary key (id_offre, tag)
 );
 

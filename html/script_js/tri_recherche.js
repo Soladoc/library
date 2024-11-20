@@ -70,7 +70,7 @@ function displayOffers() {
             <h3>${offer.titre}</h3>
             <p>Prix: ${offer.prix}€</p>
             <p>Note: ${offer.note}</p>
-            <p>Date: ${offer.date_derniere_maj}</p>
+            <p>Date: ${offer.modifie_le}</p>
         `;
         offerList.appendChild(offerElement);
     });
