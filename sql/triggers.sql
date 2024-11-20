@@ -192,14 +192,14 @@ BEGIN
         id_membre_auteur,
         id_offre,
         commentaire,
-        date_avis,
+        date_experience,
         note
     ) VALUES (
         id_avis,
         NEW.id_membre_auteur,
         NEW.id_offre,
         NEW.commentaire,
-        NEW.date_avis,
+        NEW.date_experience,
         NEW.note
     );
     RETURN NEW;
