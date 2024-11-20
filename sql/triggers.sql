@@ -182,7 +182,7 @@ create trigger tg_pro_public_insert instead of insert on pro_public for each row
 execute function pro_public_insert ();
 
 -- Todo: discuter avec romain sur la vue avis (raphael)
-/*CREATE FUNCTION avis_insert() RETURNS TRIGGER as $$
+CREATE FUNCTION avis_insert() RETURNS TRIGGER as $$
 DECLARE
     id_avis integer;
 BEGIN
@@ -207,5 +207,5 @@ END
 $$ LANGUAGE 'plpgsql';
 
 CREATE TRIGGER tg_avis_insert instead of INSERT ON avis FOR EACH ROW
-EXECUTE FUNCTION avis_insert();*/
+EXECUTE FUNCTION avis_insert();
 commit;

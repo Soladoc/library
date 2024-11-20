@@ -14,6 +14,12 @@ session_start() ?>
                 <span>Déconnexion</span>
             </div>
         </a>
+        <a href="facturation.php">
+            <div class="acces_facturation">
+                <!-- //TODO mettre une image sah -->
+                <span>Facturation</span>
+            </div>
+        </a>
     <?php 
     } else { 
         ?>
