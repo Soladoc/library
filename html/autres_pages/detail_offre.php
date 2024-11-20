@@ -9,7 +9,7 @@ if ($_POST) {
         $stmt = db_connect()->prepare($querry);
         $stmt->execute([
             $_SESSION['id_membre'],
-            $offre['id'],
+            query_offre($args['id']),
             $_POST['commentaire'],
             $_POST['date_avis'],
             $_POST['note'],
