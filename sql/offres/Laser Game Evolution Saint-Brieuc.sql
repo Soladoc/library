@@ -60,3 +60,5 @@ values
     ((table id_offre), 31),
     ((table id_offre), 32),
     ((table id_offre), 33);
+
+commit;

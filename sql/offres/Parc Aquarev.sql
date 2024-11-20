@@ -139,3 +139,5 @@ values
     ((table id_offre), '2022-11-15 00:59:47'),
     ((table id_offre), '2022-11-19 00:55:46'),
     ((table id_offre), '2022-11-27 03:10:32');
+
+commit;

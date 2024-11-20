@@ -49,3 +49,5 @@ values
     ((table id_offre), 'famille'),
     ((table id_offre), 'plein air'),
     ((table id_offre), 'aventure');
+
+commit;

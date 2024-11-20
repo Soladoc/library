@@ -69,3 +69,5 @@ insert into
 values
     ((table id_offre), 39),
     ((table id_offre), 40);
+
+commit;
