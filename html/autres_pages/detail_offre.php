@@ -12,9 +12,10 @@ if ($_POST) {
         'commentaire' => getarg($_POST, 'commentaire'),
         'date_avis' => getarg($_POST, 'date'),
         'note' => getarg($_POST, 'rating', arg_filter(FILTER_VALIDATE_INT)),
+        'contexte' => getarg($_POST, 'contexte'),
     ];
     if($_SESSION['log']==true){
-        $querry="INSERT INTO pact.avis (id_membre_auteur,id_offre,commentaire,date_experience,note) VALUES (?,?,?,?,?);";
+        $querry="INSERT INTO pact.avis (id_membre_auteur,id_offre,commentaire,date_experience,note,contexte) VALUES (?,?,?,?,?,?);";
         $stmt = db_connect()->prepare($querry);
         $stmt->execute([
             $_SESSION['id_membre'],
@@ -22,6 +23,7 @@ if ($_POST) {
             $args['commentaire'],
             $args['date_avis'],
             $args['note'],
+            $args['contexte']
         ]);
         $success_message = "Avis ajouté avec succès !";
     } else {
@@ -124,6 +126,14 @@ $avis=query_avis()
                         <option value="2">2 étoiles</option>
                         <option value="1">1 étoile</option>
                     </select>
+                    <label for="contexte">Contexte&nbsp;:</label>
+                    <select name="contexte" id="contexte" required>
+                        <option value="affaires">Affaires</option>
+                        <option value="couple">Couple</option>
+                        <option value="solo">Solo</option>
+                        <option value="famille">Famille</option>
+                        <option value="amis">Amis</option>
+                    </select>
                     <label for="date">Date de votre visite</label>
                     <input type="date" id="date" name="date" required>
                     </br>
@@ -154,6 +164,9 @@ $avis=query_avis()
                             <p><strong><?= htmlspecialchars($avis_temp['pseudo']) ?></strong> - <?= htmlspecialchars($avis_temp['note']) ?>/5</p>
                             <p><?= htmlspecialchars($avis_temp['commentaire']) ?></p>
                             <p class="review-date"><?= htmlspecialchars($avis_temp['date_experience']) ?></p>
+                            <?php if ($avis_temp['id_membre_auteur']=$_SESSION['id_membre']) { ?>
+                            <button type="submit" class="btn-modif">Modifier</button>
+                            <?php } ?>
                         </div>
                     <?php } 
                 } else { ?>
