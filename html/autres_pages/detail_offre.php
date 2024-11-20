@@ -152,7 +152,7 @@ $avis=query_avis()
                         <div class="review">
                             <p><strong><?= htmlspecialchars($avis_temp['pseudo']) ?></strong> - <?= htmlspecialchars($avis_temp['note']) ?>/5</p>
                             <p><?= htmlspecialchars($avis_temp['commentaire']) ?></p>
-                            <p class="review-date"><?= htmlspecialchars($avis_temp['date_avis']) ?></p>
+                            <p class="review-date"><?= htmlspecialchars($avis_temp['date_experience']) ?></p>
                         </div>
                     <?php } 
                 } else { ?>
