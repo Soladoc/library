@@ -1,2 +1,2 @@
-# Hide large SQL date (otherwise we get 95% SQL)
+# Hide large SQL data (otherwise we get 95% SQL)
 bigdata.sql linguist-vendored

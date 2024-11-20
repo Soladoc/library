@@ -1,11 +1,11 @@
 <?php
 
 /**
- * Summary of put_head
- * @param string $title
- * @param string[] $stylesheets
- * @param array<string, string> $scripts
- * @return void
+ * Renders the HTML head section with the provided title, stylesheets, and scripts.
+ *
+ * @param string $title The title to be displayed in the page's <title> tag.
+ * @param string[] $stylesheets An optional array of stylesheet URLs or file paths to include. Keys are irrelevant, values are link `href`.
+ * @param array<string, string> $scripts An optional array of script URLs or file paths to include. Keys are script `src`, values are script attributes.
  */
 function put_head(string $title, array $stylesheets = [], array $scripts = [])
 {
