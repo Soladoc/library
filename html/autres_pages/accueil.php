@@ -17,7 +17,7 @@ require_once 'component/head.php';
             <br>
             <div class="search-bar">
                 <input type="text" placeholder="Rechercher des activités, restaurants, spectacles...">
-                <a href="rcherche.php">
+                <a href="recherche.php">
                     <button class="btn-search">Rechercher</button>
                 </a>
             </div>

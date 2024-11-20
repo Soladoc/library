@@ -82,13 +82,13 @@ if ($_POST) {
                 
             ?>
             <div id="pseudo">
-                <p>pseudo : </p>
+                <p>Pseudo : </p>
                 <?php echo $pseudo ?>
             </div>
             <?php }
             else if ($pro !== false){ ?>
                 <div id="denomination">
-                <p>denomination : </p>
+                <p>Denomination : </p>
                 <?php echo $denomination ?>
             </div>
 
@@ -96,50 +96,27 @@ if ($_POST) {
             <?php } ?>
 
             <div id="nom">
-                <p>nom : </p>
+                <p>Nom : </p>
                 <?php echo $nom ?>
             </div>
 
             <div id="prenom">
-                <p>prenom : </p>
+                <p>Prenom : </p>
                 <?php echo $prenom ?>
             </div>
 
             <div id="email">
-                <p>email : </p>
+                <p>Email : </p>
                 <?php echo $email ?>
             </div>
 
             <div id="telephone">
-                <p>telephone : </p>
+                <p>Numero de telephone : </p>
                 <?php echo $telephone ?>
             </div>
 
-            <div id='changer_mdp'>
-                <form action="detail_compte.php" method="POST">
-                    <p>modifier son mot de passe</p>
-                    <div class="champ">
-                        <label for="mdp">Mot de passe actuel *</label>
-                        <input id="mdp" name="old_mdp" type="password" placeholder="**********" required>
-                    </div>
-                    <div class="champ">
-                        <label for="mdp">Nouveau mot de passe *</label>
-                        <input id="new_mdp" name="mdp" type="password" placeholder="**********" required>
-                    </div>
-                    <div class="champ">
-                        <label for="mdp">confirmation mot de passe *</label>
-                        <input id="confirmation_mdp" name="mdp" type="password" placeholder="**********" required>
-                    </div>
-                    <?php if ($error = $_GET['error_mdp'] ?? null) { ?>
-                    <p class="error"><?= $error ?></p>
-                    <?php } ?>
-                    <?php if ($error = $_GET['error_confirmation'] ?? null) { ?>
-                    <p class="error"><?= $error ?></p>
-                    <?php } ?>
-                    <button type="submit" class="btn-connexion">valider</button>
-                </form>
-
-            </div>
+            <?php require 'component/info_compte/modif_mdp.php' ?>
+            
            
         </section>
 

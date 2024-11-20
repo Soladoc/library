@@ -200,7 +200,7 @@ begin
         new.id_offre,
         new.commentaire,
         new.date_experience,
-        new.contexte
+        new.contexte,
         new.note
     );
     return new;

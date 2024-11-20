@@ -143,16 +143,51 @@ function query_offres(?int $id_professionnel = null, ?bool $en_ligne = null): PD
     return $stmt;
 }
 
-// Update
+// Update-----------------------------------------------------------------------------------------------------------
 function uptate_mdp(int $id_compte, $new_mdp): void
 {
-    $stmt = notfalse(db_connect()->prepare('UPDATE compte SET mdp_hash = ? WHERE id = ?;'));
+    $stmt = notfalse(db_connect()->prepare('UPDATE _compte SET mdp_hash = ? WHERE id = ?;'));
     bind_values($stmt, [$new_mdp,$id_compte]);
     notfalse($stmt->execute());
 }
 
+function uptate_nom(int $id_compte, $new_nom): void
+{
+    $stmt = notfalse(db_connect()->prepare('UPDATE _compte SET nom = ? WHERE id = ?;'));
+    bind_values($stmt, [$new_nom,$id_compte]);
+    notfalse($stmt->execute());
+}
 
-// Insertions
+function uptate_email(int $id_compte, $new_email): void
+{
+    $stmt = notfalse(db_connect()->prepare('UPDATE _compte SET email = ? WHERE id = ?;'));
+    bind_values($stmt, [$new_email,$id_compte]);
+    notfalse($stmt->execute());
+}
+
+function uptate_prenom(int $id_compte, $new_prenom): void
+{
+    $stmt = notfalse(db_connect()->prepare('UPDATE _compte SET prenom = ? WHERE id = ?;'));
+    bind_values($stmt, [$new_prenom,$id_compte]);
+    notfalse($stmt->execute());
+}
+
+function uptate_telephone(int $id_compte, $new_telephone): void
+{
+    $stmt = notfalse(db_connect()->prepare('UPDATE _compte SET telephone = ? WHERE id = ?;'));
+    bind_values($stmt, [$new_telephone,$id_compte]);
+    notfalse($stmt->execute());
+}
+
+
+function uptate_pseudo(int $id_compte, $new_telephone): void
+{
+    $stmt = notfalse(db_connect()->prepare('UPDATE _compte SET telephone = ? WHERE id = ?;'));
+    bind_values($stmt, [$new_telephone,$id_compte]);
+    notfalse($stmt->execute());
+}
+
+// Insertions---------------------------------------------------------------------------------------------------------
 
 /**
  * Toggles the state (en ligne/hors ligne) of an offer by adding a row in the _changement_etat table.
