@@ -1,0 +1,54 @@
+begin;
+
+set schema 'pact';
+
+with
+    id_adresse as (
+        insert into
+            _adresse (numero_departement, code_commune, localite, precision_ext)
+        values
+            ('22', 360, 'Espace Brezillet', 'PARC EXPO BREZILLET')
+        returning
+            id
+    ),
+    id_offre as (
+        insert into
+            spectacle (
+                id_adresse,
+                id_image_principale,
+                id_professionnel,
+                libelle_abonnement,
+                indication_duree,
+                capacite_accueil,
+                titre,
+                resume,
+                description_detaillee,
+                url_site_web
+            )
+        values
+            (
+                (table id_adresse),
+                12,
+                2,
+                'premium',
+                '2:00:',
+                1000,
+                'Celtic Legends - Tournée 2026',
+                'Celtic Legends est un spectacle de musiques et de danses irlandaises qui s''est produit sur de nombreuses scènes à travers le monde depuis sa création, attirant près de 3 millions de spectateurs.',
+                'Celtic Legends revient en 2026 avec une nouvelle version du spectacle. Créé à Galway, au Coeur du Connemara, Celtic Legends est un condensé de la culture traditionnelle Irlandaise recréant sur scène l''ambiance électrique d''une soirée dans un pub traditionnel. Venez partager durant 2 heures ce voyage au coeur de l''Irlande soutenu par 5 talentueux musiciens sous la baguette de Sean McCarthy et de 12 extraordinaires danseurs sous la houlette de la créative Jacintha Sharpe.',
+                'https://www.celtic-legends.net'
+            )
+        returning
+            id
+    ),
+    s1 as (
+        insert into
+            _tags (id_offre, tag)
+        values
+            ((table id_offre), 'musique'),
+            ((table id_offre), 'spectacle')
+    )
+insert into
+    periode_ouverture (id_offre, debut_le, fin_le)
+values
+    ((table id_offre), '2026-04-10T20:00:00.000Z', '2026-04-11T01:00:00.000Z');

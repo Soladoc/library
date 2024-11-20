@@ -31,9 +31,9 @@ $$ language plpgsql;
 comment on function offre_changement_ouverture_suivant_le (int, timestamp) is 'Retourne un timestamp indiquant quand a lieu le prochain changement d''ouverture d''une offre après une date.
 Prend uniquement en compte les changement d''ouverture strictement postérieurs à `apres_le`.
 Ainsi, `offre_changement_ouverture_suivant_le(5, ''2024-11-20'') < offre_changement_ouverture_suivant_le(5, offre_changement_ouverture_suivant_le(5, ''2024-11-20''))`
-';
+';*/
 
-create function offre_duree_en_ligne (
+/*create function offre_duree_en_ligne (
     id_offre int,
     year int,
     month int

@@ -22,7 +22,7 @@ begin
         resume,
         description_detaillee,
         url_site_web,
-        date_derniere_maj
+        modifiee_le
     ) values (
         id_signalable,
         new.id_adresse,
@@ -33,7 +33,7 @@ begin
         new.resume,
         new.description_detaillee,
         coalesce(new.url_site_web, ''),
-        now()
+        coalesce(new.modifiee_le, now())
     );
     insert into pact._changement_etat (id_offre) values (id_signalable);
     return id_signalable;

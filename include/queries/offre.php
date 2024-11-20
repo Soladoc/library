@@ -71,7 +71,7 @@ function offre_insert_tarif(int $id_offre, string $nom, float $montant)
  */
 function offre_insert_horaire(int $id_offre, int $dow, string $heure_debut, string $heure_fin)
 {
-    $stmt = notfalse(db_connect()->prepare('insert into _horaire_ouverture (id_offre, dow, heure_debut, heure_fin) values (?,?,?,?)'));
+    $stmt = notfalse(db_connect()->prepare('insert into horaire_ouverture (id_offre, dow, heure_debut, heure_fin) values (?,?,?,?)'));
     bind_values($stmt, [1 => [$id_offre, PDO::PARAM_INT], 2 => [$dow, PDO::PARAM_INT], 3 => [$heure_debut, PDO::PARAM_STR], 4 => [$heure_fin, PDO::PARAM_STR]]);
     notfalse($stmt->execute());
 }
@@ -85,7 +85,7 @@ function offre_insert_horaire(int $id_offre, int $dow, string $heure_debut, stri
  */
 function offre_insert_periode(int $id_offre, string $debut_le, string $fin_le)
 {
-    $stmt = notfalse(db_connect()->prepare('insert into _periode_ouverture (id_offre, debut_le, fin_le) values (?,?,?,?)'));
+    $stmt = notfalse(db_connect()->prepare('insert into periode_ouverture (id_offre, debut_le, fin_le) values (?,?,?,?)'));
     bind_values($stmt, [1 => [$id_offre, PDO::PARAM_INT], 2 => [$debut_le, PDO::PARAM_STR], 3 => [$fin_le, PDO::PARAM_STR]]);
     notfalse($stmt->execute());
 }

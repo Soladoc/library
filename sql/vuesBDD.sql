@@ -2,17 +2,12 @@ begin;
 
 set schema 'pact';
 
--- todo: avis_resto with computed attr id_restaurant (based on )
--- todo: insert into tarif: assert that 'gratuit' = (select libelle_abonnement from _offre o where o.id_offre = id_offre)
--- todo: trigger timestamp offre lmt
--- toto: non-instanciation classe abstraite
--- todo: normalization periodes ouvertures (contrainte pour ne pas avoir de range overlapping -- agrandir les ranges existants dans un trigger) ce sera intéréssant à coder
-
 create view offres as select
     *,
     (select count(*) from _changement_etat where _changement_etat.id_offre = _offre.id) % 2 = 0 en_ligne,
     (select avg(_avis.note) from _avis where _avis.id_offre = _offre.id) note_moyenne,
     (select min(_tarif.montant) from _tarif where _tarif.id_offre = _offre.id) prix_min,
+    (select fait_le from _changement_etat where _changement_etat.id_offre = _offre.id order by fait_le limit 1) creee_le,
     offre_categorie(id) categorie/*,
     offre_est_ouverte(id, now()) est_ouverte,
     offre_changement_ouverture_suivant_le(id, now()) changement_ouverture_suivant_le

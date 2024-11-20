@@ -6,7 +6,6 @@ jobs:
     steps:
       - name: Restart Server
         run: |
-          env
           set -xeu
           mkdir -p ~/.ssh
           echo "${{ secrets.ARTIFACT_SSH_KEY }}" > ~/.ssh/id_rsa
