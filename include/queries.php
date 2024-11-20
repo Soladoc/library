@@ -2,14 +2,18 @@
 
 require_once 'db.php';
 
+const PDO_PARAM_DECIMAL = PDO::PARAM_STR;
+
 // Selections
 
-function query_communes(?string $nom = null): array
+// Function selections
+
+function make_interval(int $days, int $hours, int $mins)
 {
-    $args = filter_null_args(['nom' => [$nom, PDO::PARAM_STR]]);
-    $stmt = notfalse(db_connect()->prepare('select * from _commune' . _where_clause('and', array_keys($args))));
-    bind_values($stmt, $args);
-    return notfalse($stmt->fetchAll());
+    $stmt = notfalse(db_connect()->prepare('select make_interval(days => ?, hours => ?, mins => ?)'));
+    bind_values($stmt, [1 => [$days, PDO::PARAM_INT], 2 => [$hours, PDO::PARAM_INT], 3 => [$mins, PDO::PARAM_INT]]);
+    notfalse($stmt->execute());
+    return notfalse($stmt->fetchColumn());
 }
 
 function query_avis_count(int $id_offre): int
@@ -104,6 +108,14 @@ function query_compte_professionnel(int $id): array|false
 }
 // Parameterized selections
 
+function query_communes(?string $nom = null): array
+{
+    $args = filter_null_args(['nom' => [$nom, PDO::PARAM_STR]]);
+    $stmt = notfalse(db_connect()->prepare('select * from _commune' . _where_clause('and', array_keys($args))));
+    bind_values($stmt, $args);
+    return notfalse($stmt->fetchAll());
+}
+
 function query_avis(?int $id_membre_auteur = null, ?int $id_offre = null): array
 {
     $args = filter_null_args(['id_membre_auteur' => [$id_membre_auteur, PDO::PARAM_INT], 'id_offre' => [$id_offre, PDO::PARAM_INT]]);
@@ -154,14 +166,54 @@ function alterner_etat_offre(int $id_offre): void
     notfalse($stmt->execute());
 }
 
-function insert_into_gallerie(int $id_offre, int $id_image)
+function offre_insert_gallerie_image(int $id_offre, int $id_image)
 {
     $stmt = notfalse(db_connect()->prepare('insert into _gallerie (id_offre, id_image) values (?,?)'));
     bind_values($stmt, [1 => [$id_offre, PDO::PARAM_INT], 2 => [$id_image, PDO::PARAM_INT]]);
     notfalse($stmt->execute());
 }
 
-// Parameterized insertions
+function offre_insert_tag(int $id_offre, string $tag)
+{
+    $stmt = notfalse(db_connect()->prepare('insert into _tags (id_offre, tag) values (?,?)'));
+    bind_values($stmt, [1 => [$id_offre, PDO::PARAM_INT], 2 => [$tag, PDO::PARAM_STR]]);
+    notfalse($stmt->execute());
+}
+
+function offre_insert_tarif(int $id_offre, string $nom, float $montant)
+{
+    $stmt = notfalse(db_connect()->prepare('insert into _tarif (id_offre, nom, montant) values (?,?,?)'));
+    bind_values($stmt, [1 => [$id_offre, PDO::PARAM_INT], 2 => [$nom, PDO::PARAM_STR], 3 => [$montant, PDO_PARAM_DECIMAL]]);
+    notfalse($stmt->execute());
+}
+
+/**
+ * Summary of offre_insert_horaire
+ * @param int $id_offre
+ * @param int $dow The day of the week as Sunday (0) to Saturday (6)
+ * @param string $debut A PostgreSQL TIME input string
+ * @param string $fin A PostgreSQL TIME input string.
+ * @return void
+ */
+function offre_insert_horaire(int $id_offre, int $dow, string $debut, string $fin)
+{
+    $stmt = notfalse(db_connect()->prepare('insert into _horaire_ouverture (id_offre, dow, debut, fin) values (?,?,?,?)'));
+    bind_values($stmt, [1 => [$id_offre, PDO::PARAM_INT], 2 => [$dow, PDO::PARAM_INT], 3 => [$debut, PDO::PARAM_STR], 4 => [$fin, PDO::PARAM_STR]]);
+    notfalse($stmt->execute());
+}
+
+/**
+ * Summary of offre_insert_periode
+ * @param int $id_offre
+ * @param string $debut A PostgreSQL TIMESTAMP input string.
+ * @param string $fin A PostgreSQL TIMESTAMP input string.
+ * @return void
+ */
+function offre_insert_periode(int $id_offre, string $debut, string $fin) {
+    $stmt = notfalse(db_connect()->prepare('insert into _periode_ouverture (id_offre, debut, fin) values (?,?,?,?)'));
+    bind_values($stmt, [1 => [$id_offre, PDO::PARAM_INT], 2 => [$debut, PDO::PARAM_STR], 3 => [$fin, PDO::PARAM_STR]]);
+    notfalse($stmt->execute());
+}
 
 /**
  * Inserts a new address into the database and returns the ID of the inserted address.
@@ -199,8 +251,8 @@ function insert_into_adresse(
         'localite' => [$localite, PDO::PARAM_STR],
         'precision_int' => [$precision_int, PDO::PARAM_STR],
         'precision_ext' => [$precision_ext, PDO::PARAM_STR],
-        'latitude' => [$latitude, PDO::PARAM_STR],
-        'longitude' => [$longitude, PDO::PARAM_STR],
+        'latitude' => [$latitude, PDO_PARAM_DECIMAL],
+        'longitude' => [$longitude, PDO_PARAM_DECIMAL],
     ]);
     $stmt = notfalse(db_connect()->prepare(_insert_into_returning_id('_adresse', $args)));
     bind_values($stmt, $args);

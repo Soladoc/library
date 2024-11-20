@@ -10,8 +10,11 @@ function showSubcategories() {
     const mainCategory = document.getElementById('main-category').value;
     const subcategoryContainer = document.getElementById('subcategory-list');
     subcategoryContainer.innerHTML = ''; // Reset
+
     if (mainCategory && subcategories[mainCategory]) {
         subcategories[mainCategory].forEach(subcategory => {
+            const wrapper = document.createElement('div');
+
             const checkbox = document.createElement('input');
             checkbox.type = 'checkbox';
             checkbox.id = subcategory;
@@ -20,19 +23,19 @@ function showSubcategories() {
 
             const label = document.createElement('label');
             label.htmlFor = subcategory;
-            label.textContent = subcategory;
+            label.innerText = subcategory;
 
-            const wrapper = document.createElement('div');
             wrapper.appendChild(checkbox);
             wrapper.appendChild(label);
-
             subcategoryContainer.appendChild(wrapper);
         });
+
         document.getElementById('subcategories').classList.remove('hidden');
     } else {
         document.getElementById('subcategories').classList.add('hidden');
     }
 }
+
 
 const sortButtons = document.querySelectorAll('.btn-sort');
 sortButtons.forEach(button => {

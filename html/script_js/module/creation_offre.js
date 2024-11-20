@@ -73,20 +73,18 @@ const type_offre = new URLSearchParams(window.location.search).get('type_offre')
 
 // Horaires
 {
-    for (const jour of ['lundi', 'mardi', 'mercredi', 'jeudi', 'vendredi', 'samedi', 'dimanche']) {
-        const button_add_horaire = document.getElementById('button-add-horaire-' + jour);
-        const tbody_horaires = document.getElementById('table-horaires-' + jour).querySelector('tbody');
-        button_add_horaire.addEventListener('click', () => tbody_horaires.appendChild(create_horaire_tr(jour)));
+    for (let dow = 0; dow < 7; ++dow) {
+        const button_add_horaire = document.getElementById('button-add-horaire-' + dow);
+        const tbody_horaires = document.getElementById('table-horaires-' + dow).querySelector('tbody');
+        button_add_horaire.addEventListener('click', () => tbody_horaires.appendChild(create_horaire_tr(dow)));
     }
 
     /**
-     * 
-     * @param {string} jour 
-     * 
+     * @param {number} dow 
      * @return {HTMLTableRowElement}
-    */
-    function create_horaire_tr(jour) {
-        /**@type {HTMLTableRowElement}*/ const tr_horaire = document.getElementById('template-horaire-tr-' + jour).content.children[0].cloneNode(true);
+     */
+    function create_horaire_tr(dow) {
+        /**@type {HTMLTableRowElement}*/ const tr_horaire = document.getElementById('template-horaire-tr-' + dow).content.children[0].cloneNode(true);
         /**@type {HTMLInputElement}*/ const debut = tr_horaire.children[0];
         /**@type {HTMLInputElement}*/ const fin = tr_horaire.children[1];
         /**@type {HTMLButtonElement}*/ const btn_remove = tr_horaire.children[2];

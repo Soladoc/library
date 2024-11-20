@@ -300,10 +300,10 @@ create table _reponse(
 create table _horaire_ouverture(
     id_offre int
         constraint horaire_ouverture_fk_offre references _offre,
-    jour_de_la_semaine int check (1 <= jour_de_la_semaine and jour_de_la_semaine <= 7),
+    dow int check (0 <= dow and dow <= 6), -- The day of the week as Sunday (0) to Saturday (6)
     heure_debut time,
     heure_fin time check (heure_fin > heure_debut),
-    constraint horaire_ouverture_pk primary key (id_offre, jour_de_la_semaine, heure_debut, heure_fin)
+    constraint horaire_ouverture_pk primary key (id_offre, dow, heure_debut, heure_fin)
 );
 
 -- Une période d'ouverture ponctuelle
