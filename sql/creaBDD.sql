@@ -261,6 +261,7 @@ create table _avis(
     note int not null check (1 <= note and note <= 5),
     moment_publication timestamp not null default now(),
     date_experience date not null,
+    contexte ligne not null,
     lu boolean not null default false,
     blackliste boolean not null default false,
 
