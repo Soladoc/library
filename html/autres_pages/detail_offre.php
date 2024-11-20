@@ -67,9 +67,9 @@ $avis=query_avis()
 <body>
     <?php
     //TODO suprimmer ca quand romain aura sort that out
-    echo '<pre>';
-    print_r($gallerie);
-    echo '</pre>';
+    // echo '<pre>';
+    // print_r($gallerie);
+    // echo '</pre>';
     
     require 'component/header.php'
     ?>
