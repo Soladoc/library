@@ -14,7 +14,10 @@ if ($_POST) {
         'note' => getarg($_POST, 'rating', arg_filter(FILTER_VALIDATE_INT)),
         'contexte' => getarg($_POST, 'contexte'),
     ];
-    if($_SESSION['log']==true){
+    if($_SESSION['log']==null){
+        $error_message = "Veuillez vous connecter";
+    }
+    else {
         $querry="INSERT INTO pact.avis (id_membre_auteur,id_offre,commentaire,date_experience,note,contexte) VALUES (?,?,?,?,?,?);";
         $stmt = db_connect()->prepare($querry);
         $stmt->execute([
@@ -26,8 +29,7 @@ if ($_POST) {
             $args['contexte']
         ]);
         $success_message = "Avis ajouté avec succès !";
-    } else {
-        $error_message = "Veuillez remplir tous les champs du formulaire.";
+        $error_message = "Veuillez vous connecter";
     }
 }
 
