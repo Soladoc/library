@@ -1,6 +1,23 @@
 <?php
 
 /**
+ * Checks if all elements in the given array satisfy the provided predicate.
+ * Determines whether a predicate matches every element in an array.
+ * @template T
+ * @param T[] $arr The array to check.
+ * @param callable(T): bool $predicatee The predicate function to apply to each element.
+ * @return bool True if all elements satisfy the predicate, false otherwise.
+ */
+function array_every(array $arr, callable $predicate): bool {
+    foreach ($arr as $e) {
+        if (!$predicate($e)) {
+            return false;
+        }
+    }
+    return true;
+}
+
+/**
  * Retrieves an argument from the given source array, with optional validation and transformation.
  * @param array $source The source array to retrieve the argument from.
  * @param string $name The name of the argument to retrieve.
@@ -74,13 +91,23 @@ function elvis(?string $value, ?string $suffix): string
 }
 
 /**
- * Returns a function that checks if a string is contained in a list of allowed values.
+ * Returns a function that checks if a value is contained in a list of allowed values.
  * @param string[] $allowed_values The allowed values.
  * @return callable(string): bool
  */
-function f_str_is(array $allowed_values): callable
+function f_is_in(array $allowed_values): callable
 {
     return fn($value) => array_search($value, $allowed_values) !== false;
+}
+
+/**
+ * Returns a function that checks if an array contains all the specified keys.
+ * @param array $keys The keys to check for.
+ * @return callable(array): bool A function that takes an array and returns true if it contains all the specified keys.
+ */
+function f_array_has_keys(array $keys): callable
+{
+    return fn($value) => is_array($value) && array_every($keys, fn($key) => isset($value[$key]));
 }
 
 /**
@@ -118,13 +145,17 @@ function single_or_default(array $array, mixed $default = null): mixed
 }
 
 /**
- * Converts a "single object array" (SOA) to an "array of structures" (AOS).
+ * Converts a "structre of arrays" (SOA) to an "array of structures" (AOS).
  *
  * The input `$array` is expected to be an array where each element is an associative
  * array with the same set of keys. This function will return a new array where each
  * element is an array containing the values for each key from the input array.
- * @param array $array The input "single object array" to convert.
- * @return array The resulting "array of structures".
+ * @param array<array> $array The input "structre of arrays" to convert.
+ * @return array<int, mixed> The resulting "array of structures".
+ * 
+ * @example
+ * Input: ['a' => [1, 2], 'b' => [3, 4]]
+ * Output: [[a' => 1, 'b' => 3], ['a' => 2, 'b' => 4]]
  */
 function soa_to_aos(array $array): array
 {

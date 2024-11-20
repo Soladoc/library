@@ -9,7 +9,7 @@ require_once 'component/inputs.php';
 require_once 'component/head.php';
 
 $args = [
-    'type_offre' => getarg($_GET, 'type_offre', arg_check(f_str_is(array_keys(TYPES_OFFRE)))),
+    'type_offre' => getarg($_GET, 'type_offre', arg_check(f_is_in(array_keys(TYPES_OFFRE)))),
 ];
 
 $id_professionnel = exiger_connecte_pro();
@@ -20,32 +20,37 @@ if ($_POST) {
     ?><pre><?= htmlspecialchars(print_r($_FILES, true)) ?></pre><?php
     $args += [
         'adresse_commune' => getarg($_POST, 'adresse_commune'),
+        'adresse_complement_numero' => getarg($_POST, 'adresse_complement_numero', arg_filter(FILTER_VALIDATE_INT, ['min_range' => 1]), required: false),
         'description_detaillee' => getarg($_POST, 'description_detaillee'),
+        'horaires' => getarg($_POST, 'horaires', arg_check(f_array_has_keys(['debut', 'fin']))),
+        'periodes' => getarg($_POST, 'periodes', arg_check(f_array_has_keys(['debut', 'fin']))),
         'resume' => getarg($_POST, 'resume'),
+        'tags' => getarg($_POST, 'tags', arg_filter(FILTER_DEFAULT, FILTER_REQUIRE_ARRAY)),
+        'tarifs' => getarg($_POST, 'tarifs', arg_check(f_array_has_keys(['nom', 'montant']))),
         'titre' => getarg($_POST, 'titre'),
-        'adresse_complement_numero' => getarg($_POST, 'adresse_complement_numero', required: false),
         'adresse_localite' => getarg($_POST, 'adresse_localite', required: false),
         'adresse_nom_voie' => getarg($_POST, 'adresse_nom_voie', required: false),
         'adresse_numero_voie' => getarg($_POST, 'adresse_numero_voie', required: false),
         'adresse_precision_ext' => getarg($_POST, 'adresse_precision_ext', required: false),
         'adresse_precision_int' => getarg($_POST, 'adresse_precision_int', required: false),
         'url_site_web' => getarg($_POST, 'url_site_web', required: false),
+
         'file_gallerie' => getarg($_FILES, 'gallerie'),
         'file_image_principale' => getarg($_FILES, 'image_principale'),
     ];
 
     function indication_duree_args(): array {
         return [
-            'indication_duree_jours' => getarg($_POST, 'indication_duree_jours'),
-            'indication_duree_heures' => getarg($_POST, 'indication_duree_heures'),
-            'indication_duree_minutes' => getarg($_POST, 'indication_duree_minutes'),
+            'indication_duree_jours' => getarg($_POST, 'indication_duree_jours', arg_filter(FILTER_VALIDATE_INT, ['min_range' => 0])),
+            'indication_duree_heures' => getarg($_POST, 'indication_duree_heures', arg_filter(FILTER_VALIDATE_INT, ['min_range' => 0])),
+            'indication_duree_minutes' => getarg($_POST, 'indication_duree_minutes', arg_filter(FILTER_VALIDATE_INT, ['min_range' => 0])),
         ];
     }
     
     $args += match ($args['type_offre']) {
         'activite' => indication_duree_args() + [
-            'prestations_incluses' => getarg($_POST, 'prestations_incluses'),
             'age_requis' => getarg($_POST, 'age_requis', arg_filter(FILTER_VALIDATE_INT, ['min_range' => 1]), required: false),
+            'prestations_incluses' => getarg($_POST, 'prestations_incluses'),
             'prestations_non_incluses' => getarg($_POST, 'prestations_non_incluses')
         ],
         'parc-attractions' => [
@@ -57,11 +62,11 @@ if ($_POST) {
         'restaurant' => [
             'carte' => getarg($_POST, 'carte'),
             'richesse' => getarg($_POST, 'richesse'),
-            'sert_petit_dejeuner' => getarg($_POST, 'sert_petit_dejeuner', required: false),
+            'sert_boissons' => getarg($_POST, 'sert_boissons', required: false),
             'sert_brunch' => getarg($_POST, 'sert_brunch', required: false),
             'sert_dejeuner' => getarg($_POST, 'sert_dejeuner', required: false),
             'sert_diner' => getarg($_POST, 'sert_diner', required: false),
-            'sert_boissons' => getarg($_POST, 'sert_boissons', required: false),
+            'sert_petit_dejeuner' => getarg($_POST, 'sert_petit_dejeuner', required: false),
         ],
         'visite' => indication_duree_args()
     };
@@ -131,18 +136,18 @@ if ($_POST) {
                 </tfoot>
             </table>
             <template id="template-tarif-tr"><tr>
-                <td><input form="f" name="tarifs_nom[]" type="text" placeholder="Enfant, Sénior&hellip;" required readonly></td>
-                <td><input form="f" name="tarifs_montant[]" type="number" min="0" placeholder="Prix" required> €</td>
+                <td><input form="f" name="tarifs[nom][]" type="text" placeholder="Enfant, Sénior&hellip;" required readonly></td>
+                <td><input form="f" name="tarifs[montant][]" type="number" min="0" placeholder="Prix" required> €</td>
             </tr></template>
         </section>
         <section id="horaires-hebdomadaires">
             <h2>Horaires hebdomadaires</h2>
             <div>
-                <?php foreach (JOURS_SEMAINE as $jour) { ?>
+                <?php foreach (JOURS_SEMAINE as $dow => $jour) { ?>
                     <article id="<?= $jour ?>">
                         <h3><?= ucfirst($jour) ?></h3>
-                        <button id="button-add-horaire-<?= $jour ?>" type="button">+</button>
-                        <table id="table-horaires-<?= $jour ?>">
+                        <button id="button-add-horaire-<?= $dow ?>" type="button">+</button>
+                        <table id="table-horaires-<?= $dow ?>">
                             <thead>
                                 <tr>
                                     <th>Début</th>
@@ -153,9 +158,9 @@ if ($_POST) {
                             </tbody>
                         </table>
                     </article>
-                    <template id="template-horaire-tr-<?= $jour ?>"><tr>
-                        <td><input form="f" name="horaires_debut[<?= $jour ?>][]" type="time" required></td>
-                        <td><input form="f" name="horaires_fin[<?= $jour ?>][]" type="time" required></td>
+                    <template id="template-horaire-tr-<?= $dow ?>"><tr>
+                        <td><input form="f" name="horaires[<?= $dow ?>][debut][]" type="time" required></td>
+                        <td><input form="f" name="horaires[<?= $dow ?>][fin][]" type="time" required></td>
                         <td><button type="button">-</button></td>
                     </tr></template>
                 <?php } ?>
@@ -180,8 +185,8 @@ if ($_POST) {
                 </tfoot>
             </table>
             <template id="template-periode-tr"><tr>
-                <td><input form="f" name="periodes_debut[]" type="datetime-local"></td>
-                <td><input form="f" name="periodes_fin[]" type="datetime-local"></td>
+                <td><input form="f" name="periodes[debut][]" type="datetime-local"></td>
+                <td><input form="f" name="periodes[fin][]" type="datetime-local"></td>
             </tr></template>
         </section>
         <section id="tags">

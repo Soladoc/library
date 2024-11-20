@@ -47,7 +47,7 @@ transaction(function () {
     $id_offre = match ($args['type_offre']) {
         'activite' => insert_into_activite(
             $offre_args,
-            $args['indication_duree'],
+            extract_indication_duree($args),
             $args['prestations_incluses'],
             $args['age_requis'],
             $args['prestations_non_incluses'],
@@ -58,7 +58,7 @@ transaction(function () {
         ),
         'spectacle' => insert_into_spectacle(
             $offre_args,
-            $args['indication_duree'],
+            extract_indication_duree($args),
             $args['capacite_accueil'],
         ),
         'restaurant' => insert_into_restaurant(
@@ -73,14 +73,42 @@ transaction(function () {
         ),
         'visite' => insert_into_visite(
             $offre_args,
-            $args['indication_duree'],
+            extract_indication_duree($args),
         ),
     };
 
+    // Gallerie
     foreach (soa_to_aos($args['file_gallerie']) as $img) {
-        insert_into_gallerie($id_offre, move_uploaded_image($img));
+        offre_insert_gallerie_image($id_offre, move_uploaded_image($img));
     }
+
+    // Tags
+    foreach (array_keys($args['tags']) as $tag) {
+        offre_insert_tag($id_offre, $tag);
+    }
+
+    // Tarifs
+    foreach (soa_to_aos($args['tarifs']) as $tarif) {
+        offre_insert_tarif($id_offre, $tarif['nom'], $tarif['montant']);
+    }
+
+    // Horaires
+    foreach ($args['horaires'] as $dow => $horaires) {
+        foreach (soa_to_aos($horaires) as $horaire) {
+            offre_insert_horaire($id_offre, $dow, $horaire['debut'], $horaire['fin']);
+        }
+    }
+
+    // Périodes
+    foreach (soa_to_aos($args['periodes']) as $periode) {
+        offre_insert_periode($id_offre, $periode['debut'], $periode['fin']);
+    }
+
 }, function () {
     global $uploaded_files;
     array_walk($uploaded_files, unlink(...));
 });
+
+function extract_indication_duree(array $args): string {
+    return make_interval($args['indication_duree_jours'], $args['indication_duree_heures'], $args['indication_duree_minutes']);
+}

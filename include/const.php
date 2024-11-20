@@ -35,4 +35,13 @@ const TYPES_OFFRE = [
     '' => 'une offre'
 ];
 
-const JOURS_SEMAINE = ['lundi', 'mardi', 'mercredi', 'jeudi', 'vendredi', 'samedi', 'dimanche'];
+// L'ordre des valeurs est important (0 => dimanche -> samedi => 6)
+const JOURS_SEMAINE = [
+    'dimanche',
+    'lundi',
+    'mardi',
+    'mercredi',
+    'jeudi',
+    'vendredi',
+    'samedi'
+];
