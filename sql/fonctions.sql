@@ -2,10 +2,8 @@ begin;
 
 set schema 'pact';
 
-set
-    plpgsql.extra_errors to 'all';
+set plpgsql.extra_errors to 'all';
 
--- Retourne une ligne nommant la catégorie d'une offre.
 create function offre_categorie (id_offre int) returns ligne as $$
 begin
     if id_offre in (select id from pact._restaurant) then return 'restaurant'; end if;
@@ -15,69 +13,42 @@ begin
     if id_offre in (select id from pact._parc_attractions) then return 'parc d''attractions'; end if;
     raise 'incohérence: offre non catégorisée';
 end;
-$$ language 'plpgsql';
+$$ language plpgsql;
+comment on function offre_categorie (int) is 'Retourne une ligne nommant la catégorie d''une offre.';
 
--- Insère une offre et retourne son id.
-create function insert_offre (new record) returns int as $$
-declare
-    id_signalable int;
+/*create function offre_est_ouverte (id_offre int, le timestamp) returns boolean as $$
 begin
-    insert into pact._signalable default values returning id into id_signalable;
-    insert into pact._offre (
-        id,
-        id_adresse,
-        id_image_principale,
-        id_professionnel,
-        libelle_abonnement,
-        titre,
-        resume,
-        description_detaillee,
-        url_site_web,
-        date_derniere_maj
-    ) values (
-        id_signalable,
-        new.id_adresse,
-        new.id_image_principale,
-        new.id_professionnel,
-        new.libelle_abonnement,
-        new.titre,
-        new.resume,
-        new.description_detaillee,
-        coalesce(new.url_site_web, ''),
-        now()
-    );
-    insert into pact._changement_etat (id_offre) values (id_signalable);
-    return id_signalable;
-end
-$$ language 'plpgsql';
 
--- Insère un compte et retourne son id.
-create function insert_compte (new record) returns int as $$
-declare
-    id_identite int;
-    id_signalable int;
+end;
+$$ language plpgsql;
+comment on function offre_est_ouverte (int, timestamp) is 'Retourne un booléen indiquant si une offre est ouverte à un moment donné.';
+
+create function offre_changement_ouverture_suivant_le (id_offre int, apres_le timestamp) returns timestamp as $$
 begin
-    insert into pact._identite default values returning id into id_identite;
-    insert into pact._signalable default values returning id into id_signalable;
-    insert into pact._compte (
-        id,
-        id_signalable,
-        email,
-        mdp_hash,
-        nom,
-        prenom,
-        telephone
-    ) values (
-        id_identite,
-        id_signalable,
-        new.email,
-        new.mdp_hash,
-        new.nom,
-        new.prenom,
-        new.telephone
-    );
-    return id_identite;
-end
-$$ language 'plpgsql';
+
+end;
+$$ language plpgsql;
+comment on function offre_changement_ouverture_suivant_le (int, timestamp) is 'Retourne un timestamp indiquant quand a lieu le prochain changement d''ouverture d''une offre après une date.
+Prend uniquement en compte les changement d''ouverture strictement postérieurs à `apres_le`.
+Ainsi, `offre_changement_ouverture_suivant_le(5, ''2024-11-20'') < offre_changement_ouverture_suivant_le(5, offre_changement_ouverture_suivant_le(5, ''2024-11-20''))`
+';
+
+create function offre_duree_en_ligne (
+    id_offre int,
+    year int,
+    month int
+) returns ligne as $$
+declare
+    en_ligne boolean = false
+begin
+    -- select first to online timestamp in the month
+    -- select last to offline timestamp in the month
+
+    for c in select * from _changement_etat where id_offre = loop
+
+    end loop;
+end;
+$$ language plpgsql;
+comment on function offre_duree_en_ligne (int, int, int) is 'Retourne la durée pendant laquelle un offre a été en ligne pendant un mois.';*/
 
 commit;
