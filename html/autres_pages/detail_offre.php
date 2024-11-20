@@ -10,7 +10,7 @@ $args = [
 if ($_POST) {
     $args += [
         'commentaire' => getarg($_POST, 'commentaire'),
-        'date_avis' => getarg($_POST, 'date_avis'),
+        'date_avis' => getarg($_POST, 'date'),
         'note' => getarg($_POST, 'note', arg_filter(FILTER_VALIDATE_INT)),
     ];
     if($_SESSION['log']==true){
