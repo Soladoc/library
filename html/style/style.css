@@ -840,7 +840,7 @@ a {
         }
 
         .footer-logo img {
-            width: 150px;
+            width: 150px; /* Réduit la taille du logo */
             height: auto;
         }
 
@@ -852,7 +852,7 @@ a {
         }
 
         .social-links li img {
-            width: 50px;
+            width: 50px; /* Réduit la taille des icônes */
             height: 50px;
         }
 
@@ -875,7 +875,7 @@ a {
         }
 
         .footer-logo img {
-            width: 100px;
+            width: 100px; /* Encore plus petit pour les très petits écrans */
         }
 
         .social-links li img {
