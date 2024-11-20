@@ -18,7 +18,7 @@ function make_interval(int $days, int $hours, int $mins)
 
 function query_avis_count(int $id_offre): int
 {
-    $stmt = notfalse(db_connect()->prepare('select count(*) from _avis where id_offre = ?'));
+    $stmt = notfalse(db_connect()->prepare('select count(*) from avis where id_offre = ?'));
     bind_values($stmt, [1 => [$id_offre, PDO::PARAM_INT]]);
     notfalse($stmt->execute());
     return notfalse($stmt->fetchColumn());

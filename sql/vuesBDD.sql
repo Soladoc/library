@@ -10,8 +10,8 @@ set schema 'pact';
 
 create view offres as select
     *,
-    (select count(*) from _changement_etat where id_offre = id) % 2 = 0 en_ligne,
-    (select avg(note) from _avis a where a.id_offre = id) note_moyenne,
+    (select count(*) from _changement_etat where _changement_etat.id_offre = _offre.id) % 2 = 0 en_ligne,
+    (select avg(_avis.note) from _avis where _avis.id_offre = _offre.id) note_moyenne,
     (select offre_categorie(id)) categorie
 from
     _offre;
@@ -43,7 +43,7 @@ create view pro_prive as select * from _prive
 create view pro_public as select * from _public
     join professionnel using (id);
 
-CREATE VIEW avis as SELECT _avis.*, pseudo FROM _avis
-JOIN membre on id_membre_auteur=membre.id;
+create view avis as select _avis.*, pseudo from _avis
+join membre on id_membre_auteur=membre.id;
 
 commit;
