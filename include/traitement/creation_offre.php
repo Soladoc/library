@@ -37,7 +37,7 @@ transaction(function () {
         $id_adresse,
         move_uploaded_image($args['file_image_principale']),
         $id_professionnel,
-        'gratuit',  // todo: standard et premium
+        $args['libelle_abonnement'],
         $args['titre'],
         $args['resume'],
         $args['description_detaillee'],
