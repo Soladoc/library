@@ -1,8 +1,9 @@
 <?php
 
 require_once 'db.php';
+require_once 'queries/util.php';
 
-const PDO_PARAM_DECIMAL = PDO::PARAM_STR;
+require_once 'queries/offre.php';
 
 // Selections
 
@@ -22,14 +23,6 @@ function query_avis_count(int $id_offre): int
     bind_values($stmt, [1 => [$id_offre, PDO::PARAM_INT]]);
     notfalse($stmt->execute());
     return notfalse($stmt->fetchColumn());
-}
-
-function query_offre(int $id): array|false
-{
-    $stmt = notfalse(db_connect()->prepare('select * from offres where id = ?'));
-    bind_values($stmt, [1 => [$id, PDO::PARAM_INT]]);
-    notfalse($stmt->execute());
-    return $stmt->fetch();
 }
 
 function query_image(int $id_image): array
@@ -106,6 +99,7 @@ function query_compte_professionnel(int $id): array|false
     notfalse($stmt->execute());
     return $stmt->fetch();
 }
+
 // Parameterized selections
 
 function query_communes(?string $nom = null): array
@@ -125,143 +119,67 @@ function query_avis(?int $id_membre_auteur = null, ?int $id_offre = null): array
     return $stmt->fetchAll();
 }
 
-function query_offres_count(?int $id_professionnel = null, ?bool $en_ligne = null): int
-{
-    $args = filter_null_args(['id_professionnel' => [$id_professionnel, PDO::PARAM_INT], 'en_ligne' => [$en_ligne, PDO::PARAM_BOOL]]);
-    $stmt = notfalse(db_connect()->prepare('select count(*) from offres' . _where_clause('and', array_keys($args))));
-    bind_values($stmt, $args);
-    notfalse($stmt->execute());
-    return notfalse($stmt->fetchColumn());
-}
-
-function query_offres(?int $id_professionnel = null, ?bool $en_ligne = null): PDOStatement
-{
-    $args = filter_null_args(['id_professionnel' => [$id_professionnel, PDO::PARAM_INT], 'en_ligne' => [$en_ligne, PDO::PARAM_BOOL]]);
-    $stmt = notfalse(db_connect()->prepare('select * from offres' . _where_clause('and', array_keys($args))));
-    bind_values($stmt, $args);
-    notfalse($stmt->execute());
-    return $stmt;
-}
-
 // Update-----------------------------------------------------------------------------------------------------------
+
 function uptate_mdp(int $id_compte, $new_mdp): void
 {
     $stmt = notfalse(db_connect()->prepare('UPDATE _compte SET mdp_hash = ? WHERE id = ?;'));
-    bind_values($stmt, [$new_mdp,$id_compte]);
+    bind_values($stmt, [$new_mdp, $id_compte]);
     notfalse($stmt->execute());
 }
 
 function uptate_nom(int $id_compte, $new_nom): void
 {
     $stmt = notfalse(db_connect()->prepare('UPDATE _compte SET nom = ? WHERE id = ?;'));
-    bind_values($stmt, [$new_nom,$id_compte]);
+    bind_values($stmt, [$new_nom, $id_compte]);
     notfalse($stmt->execute());
 }
 
 function uptate_email(int $id_compte, $new_email): void
 {
     $stmt = notfalse(db_connect()->prepare('UPDATE _compte SET email = ? WHERE id = ?;'));
-    bind_values($stmt, [$new_email,$id_compte]);
+    bind_values($stmt, [$new_email, $id_compte]);
     notfalse($stmt->execute());
 }
 
 function uptate_prenom(int $id_compte, $new_prenom): void
 {
     $stmt = notfalse(db_connect()->prepare('UPDATE _compte SET prenom = ? WHERE id = ?;'));
-    bind_values($stmt, [$new_prenom,$id_compte]);
+    bind_values($stmt, [$new_prenom, $id_compte]);
     notfalse($stmt->execute());
 }
 
 function uptate_telephone(int $id_compte, $new_telephone): void
 {
     $stmt = notfalse(db_connect()->prepare('UPDATE _compte SET telephone = ? WHERE id = ?;'));
-    bind_values($stmt, [$new_telephone,$id_compte]);
+    bind_values($stmt, [$new_telephone, $id_compte]);
     notfalse($stmt->execute());
 }
 
-# membre
+// membre
 function uptate_pseudo(int $id_compte, $new_pseudo): void
 {
     $stmt = notfalse(db_connect()->prepare('UPDATE membre SET pseudo = ? WHERE id = ?;'));
-    bind_values($stmt, [$new_pseudo,$id_compte]);
+    bind_values($stmt, [$new_pseudo, $id_compte]);
     notfalse($stmt->execute());
 }
-#professionnel
+
+// professionnel
 function uptate_denomination(int $id_compte, $new_denomination): void
 {
     $stmt = notfalse(db_connect()->prepare('UPDATE professionnel SET denomination = ? WHERE id = ?;'));
-    bind_values($stmt, [$new_denomination,$id_compte]);
+    bind_values($stmt, [$new_denomination, $id_compte]);
     notfalse($stmt->execute());
 }
-function uptate_siren(int $id_compte, $new_siren): void
+
+function update_siren(int $id_compte, $new_siren): void
 {
     $stmt = notfalse(db_connect()->prepare('UPDATE _prive SET siren = ? WHERE id = ?;'));
-    bind_values($stmt, [$new_siren,$id_compte]);
+    bind_values($stmt, [$new_siren, $id_compte]);
     notfalse($stmt->execute());
 }
 
 // Insertions---------------------------------------------------------------------------------------------------------
-
-/**
- * Toggles the state (en ligne/hors ligne) of an offer by adding a row in the _changement_etat table.
- *
- * @param int $id_offre The ID of the offer to toggle the state for.
- */
-function alterner_etat_offre(int $id_offre): void
-{
-    $stmt = notfalse(db_connect()->prepare('insert into _changement_etat (id_offre) values (?)'));
-    bind_values($stmt, [1 => [$id_offre, PDO::PARAM_INT]]);
-    notfalse($stmt->execute());
-}
-
-function offre_insert_gallerie_image(int $id_offre, int $id_image)
-{
-    $stmt = notfalse(db_connect()->prepare('insert into _gallerie (id_offre, id_image) values (?,?)'));
-    bind_values($stmt, [1 => [$id_offre, PDO::PARAM_INT], 2 => [$id_image, PDO::PARAM_INT]]);
-    notfalse($stmt->execute());
-}
-
-function offre_insert_tag(int $id_offre, string $tag)
-{
-    $stmt = notfalse(db_connect()->prepare('insert into _tags (id_offre, tag) values (?,?)'));
-    bind_values($stmt, [1 => [$id_offre, PDO::PARAM_INT], 2 => [$tag, PDO::PARAM_STR]]);
-    notfalse($stmt->execute());
-}
-
-function offre_insert_tarif(int $id_offre, string $nom, float $montant)
-{
-    $stmt = notfalse(db_connect()->prepare('insert into _tarif (id_offre, nom, montant) values (?,?,?)'));
-    bind_values($stmt, [1 => [$id_offre, PDO::PARAM_INT], 2 => [$nom, PDO::PARAM_STR], 3 => [$montant, PDO_PARAM_DECIMAL]]);
-    notfalse($stmt->execute());
-}
-
-/**
- * Summary of offre_insert_horaire
- * @param int $id_offre
- * @param int $dow The day of the week as Sunday (0) to Saturday (6)
- * @param string $debut A PostgreSQL TIME input string
- * @param string $fin A PostgreSQL TIME input string.
- * @return void
- */
-function offre_insert_horaire(int $id_offre, int $dow, string $debut, string $fin)
-{
-    $stmt = notfalse(db_connect()->prepare('insert into _horaire_ouverture (id_offre, dow, debut, fin) values (?,?,?,?)'));
-    bind_values($stmt, [1 => [$id_offre, PDO::PARAM_INT], 2 => [$dow, PDO::PARAM_INT], 3 => [$debut, PDO::PARAM_STR], 4 => [$fin, PDO::PARAM_STR]]);
-    notfalse($stmt->execute());
-}
-
-/**
- * Summary of offre_insert_periode
- * @param int $id_offre
- * @param string $debut A PostgreSQL TIMESTAMP input string.
- * @param string $fin A PostgreSQL TIMESTAMP input string.
- * @return void
- */
-function offre_insert_periode(int $id_offre, string $debut, string $fin) {
-    $stmt = notfalse(db_connect()->prepare('insert into _periode_ouverture (id_offre, debut, fin) values (?,?,?,?)'));
-    bind_values($stmt, [1 => [$id_offre, PDO::PARAM_INT], 2 => [$debut, PDO::PARAM_STR], 3 => [$fin, PDO::PARAM_STR]]);
-    notfalse($stmt->execute());
-}
 
 /**
  * Inserts a new address into the database and returns the ID of the inserted address.
@@ -308,135 +226,6 @@ function insert_into_adresse(
     return notfalse($stmt->fetchColumn());
 }
 
-function offre_args(
-    int $id_adresse,
-    int $id_image_principale,
-    int $id_professionnel,
-    string $libelle_abonnement,
-    string $titre,
-    string $resume,
-    string $description_detaillee,
-    ?string $url_site_web = null,
-): array {
-    return filter_null_args([
-        'id_adresse' => [$id_adresse, PDO::PARAM_INT],
-        'id_image_principale' => [$id_image_principale, PDO::PARAM_INT],
-        'id_professionnel' => [$id_professionnel, PDO::PARAM_INT],
-        'libelle_abonnement' => [$libelle_abonnement, PDO::PARAM_STR],
-        'titre' => [$titre, PDO::PARAM_STR],
-        'resume' => [$resume, PDO::PARAM_STR],
-        'description_detaillee' => [$description_detaillee, PDO::PARAM_STR],
-        'url_site_web' => [$url_site_web, PDO::PARAM_STR],
-    ]);
-}
-
-/**
- * Insérer une activité.
- * @param array $offre_args
- * @param string $indication_duree ISO8601 or Postgres syntax INTERVAL string expected.
- * @param string $prestation_incluses
- * @param mixed $age_requis
- * @param mixed $prestations_non_incluses
- * @return int
- */
-function insert_into_activite(
-    array $offre_args,
-    string $indication_duree,
-    string $prestation_incluses,
-    ?int $age_requis = null,
-    ?string $prestations_non_incluses = null,
-): int {
-    $args = $offre_args + filter_null_args([
-        'indication_duree' => [$indication_duree, PDO::PARAM_STR],
-        'prestation_incluses' => [$prestation_incluses, PDO::PARAM_STR],
-        'age_requis' => [$age_requis, PDO::PARAM_INT],
-        'prestations_non_incluses' => [$prestations_non_incluses, PDO::PARAM_STR],
-    ]);
-    $stmt = notfalse(db_connect()->prepare(_insert_into_returning_id('activite', $args)));
-    bind_values($stmt, $args);
-    notfalse($stmt->execute());
-    return notfalse($stmt->fetchColumn());
-}
-
-function insert_into_parc_attractions(
-    array $offre_args,
-    int $id_image_plan,
-): int {
-    $args = $offre_args + filter_null_args([
-        'id_image_plan' => [$id_image_plan, PDO::PARAM_INT],
-    ]);
-    $stmt = notfalse(db_connect()->prepare(_insert_into_returning_id('parc_attractions', $args)));
-    bind_values($stmt, $args);
-    notfalse($stmt->execute());
-    return notfalse($stmt->fetchColumn());
-}
-
-function insert_into_restaurant(
-    array $offre_args,
-    string $carte,
-    int $richesse,
-    ?bool $sert_petit_dejeuner = null,
-    ?bool $sert_brunch = null,
-    ?bool $sert_dejeuner = null,
-    ?bool $sert_diner = null,
-    ?bool $sert_boissons = null,
-): int {
-    $args = $offre_args + filter_null_args([
-        'carte' => [$carte, PDO::PARAM_STR],
-        'richesse' => [$richesse, PDO::PARAM_INT],
-        'sert_petit_dejeuner' => [$sert_petit_dejeuner, PDO::PARAM_BOOL],
-        'sert_brunch' => [$sert_brunch, PDO::PARAM_BOOL],
-        'sert_dejeuner' => [$sert_dejeuner, PDO::PARAM_BOOL],
-        'sert_diner' => [$sert_diner, PDO::PARAM_BOOL],
-        'sert_boissons' => [$sert_boissons, PDO::PARAM_BOOL],
-    ]);
-    $stmt = notfalse(db_connect()->prepare(_insert_into_returning_id('restaurant', $args)));
-    bind_values($stmt, $args);
-    notfalse($stmt->execute());
-    return notfalse($stmt->fetchColumn());
-}
-
-/**
- * Insérer un spectacle.
- * @param array $offre_args
- * @param string $indication_duree ISO8601 or Postgres syntax INTERVAL string expected.
- * @param int $capacite_accueil
- * @return int
- */
-function insert_into_spectacle(
-    array $offre_args,
-    string $indication_duree,
-    int $capacite_accueil,
-): int {
-    $args = $offre_args + filter_null_args([
-        'indication_duree' => [$indication_duree, PDO::PARAM_STR],
-        'capacite_accueil' => [$capacite_accueil, PDO::PARAM_INT],
-    ]);
-    $stmt = notfalse(db_connect()->prepare(_insert_into_returning_id('spectacle', $args)));
-    bind_values($stmt, $args);
-    notfalse($stmt->execute());
-    return notfalse($stmt->fetchColumn());
-}
-
-/**
- * Insérer une visite.
- * @param array $offre_args
- * @param string $indication_duree ISO8601 or Postgres syntax INTERVAL string expected.
- * @return int
- */
-function insert_into_visite(
-    array $offre_args,
-    string $indication_duree
-): int {
-    $args = $offre_args + filter_null_args([
-        'indication_duree' => [$indication_duree, PDO::PARAM_STR],
-    ]);
-    $stmt = notfalse(db_connect()->prepare(_insert_into_returning_id('visite', $args)));
-    bind_values($stmt, $args);
-    notfalse($stmt->execute());
-    return notfalse($stmt->fetchColumn());
-}
-
 /**
  * Inserts an image into the database and returns the filename and ID of the inserted image.
  *
@@ -459,55 +248,4 @@ function insert_uploaded_image(array $img, ?string $legende = null): array
     $filename = __DIR__ . "/../images_utilisateur/$id_image.{$img['type']}";
     notfalse(move_uploaded_file($img['tmp_name'], $filename));
     return [$filename, $id_image];
-}
-
-// Utils
-
-/**
- * Binds types values to a statement.
- *
- * @param PDOStatement $stmt The statement on which to bind values.
- * @param array<int|string,array{mixed, int}> $params An associative array mapping from the parameter name to a tuple of the parameter value and the PDO type (e.g. a PDO::PARAM_* constant value)
- */
-function bind_values(PDOStatement $stmt, array $params)
-{
-    foreach ($params as $name => [$value, $type]) {
-        notfalse($stmt->bindValue($name, $value, $type));
-    }
-}
-
-function filter_null_args(array $array): array
-{
-    return array_filter($array, fn($e) => $e[0] !== null);
-}
-
-/**
- * Generates a WHERE clause for a SQL query based on an array of key-value pairs.
- *
- * This function is an internal implementation detail and should not be called directly outside of this module, as it could pose a security risk.
- *
- * @param string $operator The logical operator to use between clauses (e.g. 'and', 'or').
- * @param array $clauses An array containing the conditions for the WHERE clause.
- * @return string The generated WHERE clause, or an empty string if no clauses are provided.
- */
-function _where_clause(string $operator, array $clauses): string
-{
-    return $clauses
-        ? ' where ' . implode(" $operator ", array_map(fn($attr) => "$attr = :$attr", $clauses))
-        : '';
-}
-
-function _insert_into_returning_id(string $table, array $args): string
-{
-    assert(!empty($args));
-    return "insert into \"$table\" (" . implode(',', array_keys($args)) . ') values (?' . str_repeat(',?', count($args) - 1) . ') returning id';
-}
-
-
-function is_prive(int $id_compte): bool
-{   
-    $resultat  
-    $stmt = notfalse(db_connect()->prepare('select id from professionnel;'));
-    bind_values($stmt, [$new_siren,$id_compte]);
-    notfalse($stmt->execute());
 }
