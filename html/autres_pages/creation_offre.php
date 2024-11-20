@@ -67,7 +67,9 @@ if ($_POST) {
 <!DOCTYPE html>
 <html lang="fr">
 
-<?php put_head("Création d'une offre", ['creation_offre.css'], ['module/creation_offre.js' => 'defer type="module"']) ?>
+<?php put_head("Création d'une offre",
+    ['creation_offre.css'],
+    ['module/creation_offre.js' => 'defer type="module"']) ?>
 
 <body>
     <pre><?= htmlspecialchars(print_r($_GET, true)) ?></pre>
@@ -148,6 +150,7 @@ if ($_POST) {
                     <template id="template-horaire-tr-<?= $jour ?>"><tr>
                         <td><input form="f" name="horaires_debut[<?= $jour ?>][]" type="time" required></td>
                         <td><input form="f" name="horaires_fin[<?= $jour ?>][]" type="time" required></td>
+                        <td><button type="button">-</button></td>
                     </tr></template>
                 <?php } ?>
             </div>
@@ -186,7 +189,7 @@ if ($_POST) {
             </ul>
         </section>
         <section id="description_detaillee">
-            <h2>Description</h2>
+            <h2>Description détaillée</h2>
             <textarea form="f" id="description_detaillee" name="description_detaillee" required></textarea>
         </section>
         <section id="image-creation-offre">

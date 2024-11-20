@@ -43,7 +43,7 @@ const type_offre = new URLSearchParams(window.location.search).get('type_offre')
 
     const periodes = new DynamicTable(
         document.getElementById('table-periodes'),
-        document.getElementById('template-tarif-tr'),
+        document.getElementById('template-periode-tr'),
         tr => {
             fin(tr).min = debut(tr).value;
             return true;
