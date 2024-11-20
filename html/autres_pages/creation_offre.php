@@ -278,7 +278,13 @@ if ($_POST) {
         </section>
 
         <section id="type-abonnement">
-
+            <ul id="liste-choix-abonnement">
+                <li>
+                    <label>
+                        <input form="f" name="gratuit" type="checkbox">Gratiut
+                    </label>
+                </li>
+            </ul>
         </section>
 
         <form id="f" method="post" enctype="multipart/form-data">
