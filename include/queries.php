@@ -179,11 +179,24 @@ function uptate_telephone(int $id_compte, $new_telephone): void
     notfalse($stmt->execute());
 }
 
-
-function uptate_pseudo(int $id_compte, $new_telephone): void
+# membre
+function uptate_pseudo(int $id_compte, $new_pseudo): void
 {
-    $stmt = notfalse(db_connect()->prepare('UPDATE _compte SET telephone = ? WHERE id = ?;'));
-    bind_values($stmt, [$new_telephone,$id_compte]);
+    $stmt = notfalse(db_connect()->prepare('UPDATE _membre SET pseudo = ? WHERE id = ?;'));
+    bind_values($stmt, [$new_pseudo,$id_compte]);
+    notfalse($stmt->execute());
+}
+#professionnel
+function uptate_denomination(int $id_compte, $new_denomination): void
+{
+    $stmt = notfalse(db_connect()->prepare('UPDATE _professionnel SET denomination = ? WHERE id = ?;'));
+    bind_values($stmt, [$new_denomination,$id_compte]);
+    notfalse($stmt->execute());
+}
+function uptate_siren(int $id_compte, $new_siren): void
+{
+    $stmt = notfalse(db_connect()->prepare('UPDATE _prive SET siren = ? WHERE id = ?;'));
+    bind_values($stmt, [$new_siren,$id_compte]);
     notfalse($stmt->execute());
 }
 
