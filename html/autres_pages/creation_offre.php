@@ -10,6 +10,7 @@ require_once 'component/head.php';
 
 $args = [
     'type_offre' => getarg($_GET, 'type_offre', arg_check(f_is_in(array_keys(TYPES_OFFRE)))),
+    'libelle_abonnement' => gettrg($_GET, 'type_offre')
 ];
 
 $id_professionnel = exiger_connecte_pro();
