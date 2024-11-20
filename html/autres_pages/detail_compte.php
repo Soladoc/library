@@ -89,7 +89,11 @@ if ($_POST) {
             else if ($pro !== false){ ?>
                 <div id="denomination">
                 <p>Denomination : </p>
-                <?php echo $denomination ?>
+                <?php echo $denomination 
+                if ($id in) {
+                    # code...
+                }?>
+                
             </div>
 
 

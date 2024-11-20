@@ -219,7 +219,7 @@ begin
         SET pseudo = NEW.pseudo
         WHERE id = OLD.id;
         RETURN NEW;
-    END IF;
+    
 end
 $$ language 'plpgsql';
 
@@ -238,7 +238,7 @@ begin
         SET denomination = NEW.denomination
         WHERE id = OLD.id;
         RETURN NEW;
-    END IF;
+    
 end
 $$ language 'plpgsql';
 
