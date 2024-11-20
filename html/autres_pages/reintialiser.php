@@ -19,13 +19,8 @@ $pdo = db_connect()
             <!-- Formulaire de connexion -->
             <form action="../connexion/login.php" method="POST">
                 <div class="champ">
-                    <label for="login">Pseudo ou e-mail *</label>
+                    <label for="login"> E-mail de récuperation:*</label>
                     <input id="login" name="login" type="text" placeholder="exemple@mail.fr" required>
-                </div>
-                <br>
-                <div class="champ">
-                    <label for="mdp">Mot de passe *</label>
-                    <input id="mdp" name="mdp" type="password" placeholder="**********" required>
                 </div>
                 <?php if ($error = $_GET['error'] ?? null) { ?>
                 <p class="error"><?= $error ?></p>
@@ -33,7 +28,6 @@ $pdo = db_connect()
                 <button type="submit" class="btn-connexion">Se connecter</button>
             </form>
             <br><br>
-            <label>Pas de compte&nbsp;?</label>
             <a href="connexion.php">
                 <button class="btn-creer">Retour</button>
             </a>
