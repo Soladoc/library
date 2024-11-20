@@ -1,76 +1,79 @@
+import DynamicTable from './DynamicTable.js';
 
 const type_offre = new URLSearchParams(window.location.search).get('type_offre');
 
 // Grille tarifaire
 {
-    console.log('setup grille tarifaire');
-    const tr_tarif_id_prefix = 'tr-tarif-';
-    /** @type {HTMLTableElement} */
-    const table_tarifs = document.getElementById('table-tarifs');
-    /** @type {HTMLTableSectionElement} */
-    const tbody_tarifs = table_tarifs.querySelector('tbody');
-    /** @type {HTMLTemplateElement} */
-    const template_tarif_tr = document.getElementById('template-tarif-tr');
-    /** @type {HTMLButtonElement} */
-    const button_add_tarif = table_tarifs.querySelector('tfoot button[type=button]');
-    /** @type {HTMLInputElement} */
-    const tarif_nom = document.getElementById('tarif-nom');
-    /** @type {HTMLInputElement} */
-    const tarif_montant = document.getElementById('tarif-montant');
+    const i_nom = 0, i_montant = 1;
 
-    add_tarif_tr('Adulte', 10);
-
-    tarif_nom.addEventListener('input', decide_can_add_tarif);
-    tarif_montant.addEventListener('input', decide_can_add_tarif);
-
-    button_add_tarif.addEventListener('click', () => add_tarif_tr(tarif_nom.value, tarif_montant.valueAsNumber));
-
+    const tarifs = new DynamicTable(
+        document.getElementById('table-tarifs'),
+        document.getElementById('template-tarif-tr'),
+        function (tr) {
+            return !this.has_row(row => row[i_nom] === nom(tr).value);
+        },
+        (tr, row) => {
+            nom(tr).value = row[i_nom];
+            montant(tr).value = row[i_montant];
+        },
+        1,
+    );
+    tarifs.add_row(['Adulte', 10]);
+    tarifs.setup();
 
     /**
-    * @param {string} nom 
-    * @param {number} montant
-    */
-    function add_tarif_tr(nom, montant) {
-        /** @type {HTMLTableRowElement} */
-        const tr_tarif = template_tarif_tr.content.children[0].cloneNode(true); // Clone the template
-
-        tr_tarif.id = tr_tarif_id_prefix + nom;
-        tr_tarif.children[0].children[0].value = nom;
-
-        tr_tarif.children[1].children[0].value = montant;
-
-        /** @type {HTMLButtonElement} */
-        const remove_button = tr_tarif.children[2];
-        remove_button.addEventListener('click', () => {
-            tr_tarif.remove();
-            decide_can_add_tarif();
-            decide_can_remove_tarif();
-        });
-
-        tbody_tarifs.appendChild(tr_tarif);
-        decide_can_add_tarif();
-        decide_can_remove_tarif();
+     * @param {HTMLTableRowElement} tr 
+     * @returns {HTMLInputElement}
+     */
+    function nom(tr) {
+        return tr.cells[i_nom].children[0];
     }
-
-    function decide_can_remove_tarif() {
-        document.querySelectorAll(`[id^=${tr_tarif_id_prefix}] button`).forEach(btn => {
-            return btn.disabled = tbody_tarifs.childElementCount < 2;
-        });
+    /**
+     * @param {HTMLTableRowElement} tr 
+     * @returns {HTMLInputElement}
+     */
+    function montant(tr) {
+        return tr.cells[i_montant].children[0];
     }
-
-    function decide_can_add_tarif() {
-        button_add_tarif.disabled = !tarif_nom.value
-            || isNaN(tarif_montant.valueAsNumber)
-            || document.getElementById(tr_tarif_id_prefix + tarif_nom.value) !== null;
-    }
-    console.log('ok');
 }
 
+// Périodes
+{
+    const i_debut = 0, i_fin = 1;
+
+    const periodes = new DynamicTable(
+        document.getElementById('table-periodes'),
+        document.getElementById('template-periode-tr'),
+        tr => {
+            fin(tr).min = debut(tr).value;
+            return true;
+        },
+        (tr, row) => {
+            debut(tr).value = row[i_debut];
+            fin(tr).value = row[i_fin];
+        }
+    );
+    periodes.setup();
+
+    /**
+     * @param {HTMLTableRowElement} tr 
+     * @returns {HTMLInputElement}
+     */
+    function debut(tr) {
+        return tr.cells[i_debut].children[0];
+    }
+    /**
+     * @param {HTMLTableRowElement} tr 
+     * @returns {HTMLInputElement}
+     */
+    function fin(tr) {
+        return tr.cells[i_fin].children[0];
+    }
+}
 
 // Horaires
 {
     for (const jour of ['lundi', 'mardi', 'mercredi', 'jeudi', 'vendredi', 'samedi', 'dimanche']) {
-        /** @type {HTMLButtonElement} */
         const button_add_horaire = document.getElementById('button-add-horaire-' + jour);
         const tbody_horaires = document.getElementById('table-horaires-' + jour).querySelector('tbody');
         button_add_horaire.addEventListener('click', () => tbody_horaires.appendChild(create_horaire_tr(jour)));
@@ -83,14 +86,10 @@ const type_offre = new URLSearchParams(window.location.search).get('type_offre')
      * @return {HTMLTableRowElement}
     */
     function create_horaire_tr(jour) {
-        /** @type {HTMLTableRowElement} */
-        const tr_horaire = document.getElementById('template-horaire-tr-' + jour).content.children[0].cloneNode(true);
-        /** @type {HTMLInputElement} */
-        const debut = tr_horaire.children[0];
-        /** @type {HTMLInputElement} */
-        const fin = tr_horaire.children[1];
-        /** @type {HTMLButtonElement} */
-        const btn_remove = tr_horaire.children[2];
+        /**@type {HTMLTableRowElement}*/ const tr_horaire = document.getElementById('template-horaire-tr-' + jour).content.children[0].cloneNode(true);
+        /**@type {HTMLInputElement}*/ const debut = tr_horaire.children[0];
+        /**@type {HTMLInputElement}*/ const fin = tr_horaire.children[1];
+        /**@type {HTMLButtonElement}*/ const btn_remove = tr_horaire.children[2];
 
         debut.addEventListener('input', () => fin.min = debut.value);
 

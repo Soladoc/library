@@ -8,10 +8,6 @@ require_once 'const.php';
 require_once 'component/inputs.php';
 require_once 'component/head.php';
 
-?><pre><?= htmlspecialchars(print_r($_GET, true)) ?></pre><?php
-?><pre><?= htmlspecialchars(print_r($_POST, true)) ?></pre><?php
-?><pre><?= htmlspecialchars(print_r($_FILES, true)) ?></pre><?php
-
 $args = [
     'type_offre' => getarg($_GET, 'type_offre', arg_check(f_str_is(array_keys(TYPES_OFFRE)))),
 ];
@@ -19,6 +15,9 @@ $args = [
 $id_professionnel = exiger_connecte_pro();
 
 if ($_POST) {
+    ?><pre><?= htmlspecialchars(print_r($_GET, true)) ?></pre><?php
+    ?><pre><?= htmlspecialchars(print_r($_POST, true)) ?></pre><?php
+    ?><pre><?= htmlspecialchars(print_r($_FILES, true)) ?></pre><?php
     $args += [
         'adresse_commune' => getarg($_POST, 'adresse_commune'),
         'description_detaillee' => getarg($_POST, 'description_detaillee'),
@@ -35,9 +34,16 @@ if ($_POST) {
         'file_image_principale' => getarg($_FILES, 'image_principale'),
     ];
 
+    function indication_duree_args(): array {
+        return [
+            'indication_duree_jours' => getarg($_POST, 'indication_duree_jours'),
+            'indication_duree_heures' => getarg($_POST, 'indication_duree_heures'),
+            'indication_duree_minutes' => getarg($_POST, 'indication_duree_minutes'),
+        ];
+    }
+    
     $args += match ($args['type_offre']) {
-        'activite' => [
-            'indication_duree' => getarg($_POST, 'indication_duree'),
+        'activite' => indication_duree_args() + [
             'prestations_incluses' => getarg($_POST, 'prestations_incluses'),
             'age_requis' => getarg($_POST, 'age_requis', arg_filter(FILTER_VALIDATE_INT, ['min_range' => 1]), required: false),
             'prestations_non_incluses' => getarg($_POST, 'prestations_non_incluses')
@@ -45,8 +51,7 @@ if ($_POST) {
         'parc-attractions' => [
             'file_image_plan' => getarg($_FILES, 'image_plan'),
         ],
-        'spectacle' => [
-            'indication_duree' => getarg($_POST, 'indication_duree'),
+        'spectacle' => indication_duree_args() + [
             'capacite_accueil' => getarg($_POST, 'capacite_accueil', arg_filter(FILTER_VALIDATE_INT, ['min_range' => 0])),
         ],
         'restaurant' => [
@@ -58,10 +63,10 @@ if ($_POST) {
             'sert_diner' => getarg($_POST, 'sert_diner', required: false),
             'sert_boissons' => getarg($_POST, 'sert_boissons', required: false),
         ],
-        'visite' => [
-            'indication_duree' => getarg($_POST, 'indication_duree')
-        ]
+        'visite' => indication_duree_args()
     };
+
+
 
     // Délégation du traitement à un autre script pour gagner de la place
     require 'traitement/creation_offre.php';
@@ -71,7 +76,9 @@ if ($_POST) {
 <!DOCTYPE html>
 <html lang="fr">
 
-<?php put_head("Création d'une offre", ['creation_offre.css'], ['module/creation_offre.js' => 'defer type="module"']) ?>
+<?php put_head("Création d'une offre",
+    ['creation_offre.css'],
+    ['module/creation_offre.js' => 'defer type="module"']) ?>
 
 <body>
     <?php require 'component/header.php' ?>
@@ -105,7 +112,7 @@ if ($_POST) {
             <input form="f" id="image_principale" name="image_principale" type="file" accept="image/*" required>
             <div id="image_principale-preview"></div>
         </section>
-        <section id="tarif">
+        <section id="tarifs">
             <h2>Tarifs</h2>
             <table id="table-tarifs">
                 <thead>
@@ -118,54 +125,64 @@ if ($_POST) {
                 </tbody>
                 <tfoot>
                     <tr>
-                        <td><input id="tarif-montant" type="text" minlength="1" placeholder="Enfant, Sénior&hellip;"></td>
-                        <td><input id="tarif-nom" type="number" min="0" placeholder="Prix"> €</td>
-                        <td><button type="button">+</button></td>
+                        <td><input type="text" placeholder="Enfant, Sénior&hellip;" required></td>
+                        <td><input type="number" min="0" placeholder="Prix" required> €</td>
                     </tr>
                 </tfoot>
             </table>
+            <template id="template-tarif-tr"><tr>
+                <td><input form="f" name="tarifs_nom[]" type="text" placeholder="Enfant, Sénior&hellip;" required readonly></td>
+                <td><input form="f" name="tarifs_montant[]" type="number" min="0" placeholder="Prix" required> €</td>
+            </tr></template>
         </section>
         <section id="horaires-hebdomadaires">
             <h2>Horaires hebdomadaires</h2>
             <div>
                 <?php foreach (JOURS_SEMAINE as $jour) { ?>
-                <article id="<?= $jour ?>">
-                    <h3><?= ucfirst($jour) ?></h3>
-                    <button id="button-add-horaire-<?= $jour ?>" type="button">+</button>
-                    <table id="table-horaires-<?= $jour ?>">
-                        <thead>
-                            <tr>
-                                <th>Début</th>
-                                <th>Fin</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                        </tbody>
-                    </table>
-                </article>
+                    <article id="<?= $jour ?>">
+                        <h3><?= ucfirst($jour) ?></h3>
+                        <button id="button-add-horaire-<?= $jour ?>" type="button">+</button>
+                        <table id="table-horaires-<?= $jour ?>">
+                            <thead>
+                                <tr>
+                                    <th>Début</th>
+                                    <th>Fin</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                        </table>
+                    </article>
+                    <template id="template-horaire-tr-<?= $jour ?>"><tr>
+                        <td><input form="f" name="horaires_debut[<?= $jour ?>][]" type="time" required></td>
+                        <td><input form="f" name="horaires_fin[<?= $jour ?>][]" type="time" required></td>
+                        <td><button type="button">-</button></td>
+                    </tr></template>
                 <?php } ?>
             </div>
         </section>
         <section id="horaires-ponctuels">
             <h2>Horaires ponctuels</h2>
-            <table>
+            <table id="table-periodes">
                 <thead>
                     <tr>
                         <th>Début</th>
                         <th>Fin</th>
-                        <th>Durée</th>
                     </tr>
                 </thead>
                 <tbody>
                 </tbody>
                 <tfoot>
                     <tr>
-                        <td><input id="periode-debut" type="datetime-local"></td>
-                        <td><input id="periode-fin" type="datetime-local"></td>
-                        <td id="tarif-duree"></td>
-                        <td><button id="button-add-periode" type="button">+</button></td>
+                        <td><input type="datetime-local" placeholder="Début" required></td>
+                        <td><input type="datetime-local" placeholder="Fin" required></td>
                     </tr>
+                </tfoot>
             </table>
+            <template id="template-periode-tr"><tr>
+                <td><input form="f" name="periodes_debut[]" type="datetime-local"></td>
+                <td><input form="f" name="periodes_fin[]" type="datetime-local"></td>
+            </tr></template>
         </section>
         <section id="tags">
             <h2>Tags</h2>
@@ -178,7 +195,7 @@ if ($_POST) {
             </ul>
         </section>
         <section id="description_detaillee">
-            <h2>Description</h2>
+            <h2>Description détaillée</h2>
             <textarea form="f" id="description_detaillee" name="description_detaillee" required></textarea>
         </section>
         <section id="image-creation-offre">
@@ -246,28 +263,7 @@ if ($_POST) {
         </form>
     </main>
     <?php require 'component/footer.php' ?>
-    <template id="template-tarif-tr">
-        <tr>
-            <td><input form="f" name="tarifs_nom[]" type="text" minlength="1" placeholder="Enfant, Sénior&hellip;" required readonly></td>
-            <td><input form="f" name="tarifs_montant[]" type="number" min="0" placeholder="Prix" required> €</td>
-            <td><button type="button">-</button></td>
-        </tr>
-    </template>
-    <template id="template-periode-tr">
-        <tr>
-            <td><input form="f" name="periodes_debut[]" type="datetime-local"></td>
-            <td><input form="f" name="periodes_fin[]" type="datetime-local"></td>
-            <td id="tarif-duree"></td>
-        </tr>
-    </template>
-    <?php foreach (JOURS_SEMAINE as $jour) { ?>
-    <template id="template-horaire-tr-<?= $jour ?>">
-        <tr>
-            <td><input form="f" name="horaires_debut[<?= $jour ?>][]" type="time" required></td>
-            <td><input form="f" name="horaires_fin[<?= $jour ?>][]" type="time" required></td>
-        </tr>
-    </template>
-    <?php } ?>
+    
 </body>
 
 </html>

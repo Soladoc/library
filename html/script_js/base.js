@@ -11,33 +11,54 @@ function setup_input_duration(element) {
     // - Increase/Decrease next/previous field when reaching max/min value
     // - Disable to preven going below zero
     const inputs = element.getElementsByTagName('input');
-    for (let i = 1; i < inputs.length; ++i) {
-        inputs.item(i).addEventListener('beforeinput', (e) => check_input(i, e.data));
+
+    for (let i = 0; i < inputs.length; ++i) {
+        inputs.item(i).addEventListener('input', () => check_input(i));
     }
 
     /**
-     * @param {InputEvent} e 
-     * @param {number} i 
+     * @param {number} i
      */
-    function check_input(i, new_value) {
+    function check_input(i) {
         const input = inputs.item(i);
-        if (new_value == input.max) {
-            input.valueAsNumber = 0;
-
-            const parent = inputs.item(i - 1);
-            if (i > 1) check_input(i - 1, parent.valueAsNumber + 1);
-            parent.stepUp();
-        } else if (new_value == -1) {
-            const parent = inputs.item(i - 1);
-            if (parent.valueAsNumber > 0) {
-                input.valueAsNumber = input.max - 1;
-
-                if (i > 1) check_input(i - 1, parent.valueAsNumber - 1);
-                parent.stepDown();
+        const input_prev = inputs.item(i - 1); // larger unit
+        const input_next = inputs.item(i + 1); // smaller unit
+        if (input_prev !== null) {
+            if (input.valueAsNumber === -1) {
+                //debugger;
+                decrement_input(i);
             } else {
-                input.valueAsNumber = 0;
+                const excess = Math.trunc(input.valueAsNumber / input.max);
+                if (excess > 0) {
+                    input.valueAsNumber %= input.max;
+                    input_prev.valueAsNumber += excess;
+                    check_input(i - 1);
+                }
             }
+        }
+        if (input_next !== null) {
+            // for a min to be 0 means that every larger input is 0
+            // for a min to be -1 means that some larger input is > 0
+            input_next.min = input.valueAsNumber > 0 || input.min == -1 ? -1 : 0;
+            check_input(i + 1);
+        }
+    }
 
+    /**
+     * 
+     * @param {number} i &gt; 0
+     */
+    function decrement_input(i) {
+        const input = inputs.item(i);
+        const input_prev = inputs.item(i - 1); // larger unit
+
+        if (input_prev.min) {
+            input.valueAsNumber = Number(input.max) - 1;
+        }
+        if (input_prev.valueAsNumber > 0) {
+            input_prev.stepDown();
+        } else if (i > 0) {
+            decrement_input(i - 1);
         }
     }
 }
