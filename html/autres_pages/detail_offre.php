@@ -5,12 +5,14 @@ require_once 'component/head.php';
 
 $args = [
     'id' => getarg($_GET, 'id', arg_filter(FILTER_VALIDATE_INT)),
-    'commentaire' => getarg($_POST, 'commentaire'),
-    'date_avis' => getarg($_POST, 'date_avis'),
-    'note' => getarg($_POST, 'note', arg_filter(FILTER_VALIDATE_INT)),
 ];
 
 if ($_POST) {
+    $args += [
+        'commentaire' => getarg($_POST, 'commentaire'),
+        'date_avis' => getarg($_POST, 'date'),
+        'note' => getarg($_POST, 'rating', arg_filter(FILTER_VALIDATE_INT)),
+    ];
     if($_SESSION['log']==true){
         $querry="INSERT INTO pact.avis (id_membre_auteur,id_offre,commentaire,date_experience,note) VALUES (?,?,?,?,?);";
         $stmt = db_connect()->prepare($querry);
