@@ -280,10 +280,7 @@ if ($_POST) {
         <section id="type-abonnement">
             <ul id="liste-choix-abonnement">
                 <li>
-                    <label>
-                        <input form="f" name="gratuit" type="checkbox">Gratiut
-                    </label>
-                </li>
+                    <label><input form="f" name="gratuit" type="checkbox">Gratuit</label></li>
             </ul>
         </section>
 
