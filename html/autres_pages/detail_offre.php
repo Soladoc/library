@@ -15,7 +15,7 @@ if ($_POST) {
         'contexte' => getarg($_POST, 'contexte'),
     ];
     if(!isset($_SESSION['id_membre'])){
-        $error_message = "Veuillez vous connecter";
+        $error_message = "Veuillez vous connecter pour publier un avis.";
     }
     else {
         $querry="INSERT INTO pact.avis (id_membre_auteur,id_offre,commentaire,date_experience,note,contexte) VALUES (?,?,?,?,?,?);";
