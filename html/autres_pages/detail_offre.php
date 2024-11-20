@@ -149,7 +149,7 @@ $avis=query_avis()
                 <div class="review-summary">
                 <h4>Résumé des notes</h4>
                 <p>Nombre d'avis : <?=query_avis_count($args['id']) ?></p>
-                <p>Moyenne&nbsp;: <?=round($offre['note_moyenne'],2) ?>/5 ★</p>
+                <p>Moyenne&nbsp;: <?php if ($offre['note_moyenne']!=null){echo round($offre['note_moyenne'],2);} else {echo 0;} ?>/5 ★</p>
                 <div class="rating-distribution">
                     <?php $avis = query_avis(id_offre: $offre['id']); ?>
                     <p>5 étoiles&nbsp;: <?=count(array_filter($avis, fn($a) => $a['note'] === 5)) ?> avis.</p>
@@ -162,6 +162,7 @@ $avis=query_avis()
                     foreach ($avis as $avis_temp) { ?>
                         <div class="review">
                             <p><strong><?= htmlspecialchars($avis_temp['pseudo']) ?></strong> - <?= htmlspecialchars($avis_temp['note']) ?>/5</p>
+                            <p class="review-contexte">Contexte&nbsp;: <?= htmlspecialchars($avis_temp['contexte']) ?></p>
                             <p><?= htmlspecialchars($avis_temp['commentaire']) ?></p>
                             <p class="review-date"><?= htmlspecialchars($avis_temp['date_experience']) ?></p>
                             <?php if ($avis_temp['id_membre_auteur']=$_SESSION['id_membre']) { ?>
