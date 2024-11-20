@@ -5,7 +5,6 @@ require_once 'component/head.php';
 require_once 'auth.php';
 
 $id_professionnel = exiger_connecte_pro();
-echo $id_professionnel;
 ?>
 
 
@@ -19,12 +18,12 @@ echo $id_professionnel;
     <main>
         <?php
             $OFFRES = query_offres($id_professionnel);
-            while ($offer = $OFFRES_HORS_LIGNE->fetch()) {
+            while ($offer = $OFFRES->fetch()) {
                 echo "<pre>";
                 print_r($offer);
                 echo "</pre>";
             }
-            $OFFRES_HORS_LIGNE->closeCursor()
+            $OFFRES->closeCursor()
         ?>
     </main>
 </body>
