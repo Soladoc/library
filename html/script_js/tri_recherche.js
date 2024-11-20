@@ -67,10 +67,10 @@ function displayOffers() {
         const offerElement = document.createElement('div');
         offerElement.className = 'offer-card';
         offerElement.innerHTML = `
-            <h3>${offer.nom}</h3>
+            <h3>${offer.titre}</h3>
             <p>Prix: ${offer.prix}€</p>
             <p>Note: ${offer.note}</p>
-            <p>Date: ${offer.date}</p>
+            <p>Date: ${offer.date_derniere_maj}</p>
         `;
         offerList.appendChild(offerElement);
     });
