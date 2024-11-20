@@ -15,7 +15,7 @@ session_start() ?>
             </div>
         </a>
         <a href="facturation.php">
-            <div class="acces_facturation">
+            <div class="acces-facturation">
             <img src="../images/facturation.png" alt="Profil">
                 <span>Facturation</span>
             </div>
