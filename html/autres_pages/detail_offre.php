@@ -122,7 +122,7 @@ $gallerie = query_gallerie($args['id']);
                     <label for="date">Date de votre visite</label>
                     <input type="date" id="date" name="date" required>
                     </br>
-                    <label for="consent">Je certifie que l’avis reflète ma propre expérience et mon opinion sur cette offre.</label>
+                    <label for="consent">Je certifie que l’avis reflète mes propres expérience et opinion sur cette offre.</label>
                     <input type="checkbox" name="consent" required>
                     <button type="submit" class="btn-publish">Publier</button>
                 </form>
