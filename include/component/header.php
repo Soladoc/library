@@ -14,12 +14,14 @@ session_start() ?>
                 <span>Déconnexion</span>
             </div>
         </a>
-        <a href="facturation.php">
-            <div class="acces_facturation">
-                <!-- //TODO mettre une image sah -->
-                <span>Facturation</span>
-            </div>
-        </a>
+        <?php if($_SESSION['id_pro']!=NULL){ ?>
+            <a href="facturation.php">
+                <div class="acces_facturation">
+                    <!-- //TODO mettre une image sah -->
+                    <span>Facturation</span>
+                </div>
+            </a>
+        <?php } ?>
     <?php 
     } else { 
         ?>
