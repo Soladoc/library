@@ -173,9 +173,11 @@ $avis=query_avis()
                             <p class="review-contexte">Contexte&nbsp;: <?= htmlspecialchars($avis_temp['contexte']) ?></p>
                             <p><?= htmlspecialchars($avis_temp['commentaire']) ?></p>
                             <p class="review-date"><?= htmlspecialchars($avis_temp['date_experience']) ?></p>
-                            <!-- <?php if ($avis_temp['id_membre_auteur']=$_SESSION['id_membre']) { ?>
-                            <button type="submit" class="btn-modif">Modifier</button>
-                            <?php } ?> -->
+                            <?php if ($avis_temp['id_membre_auteur']=$_SESSION['id_membre']) { ?>
+                            <form action="../modifier.php" method="GET">
+                                <button type="submit" class="btn-modif">Modifier</button>
+                            </form>
+                            <?php } ?> 
                         </div>
                     <?php } 
                 } else { ?>
