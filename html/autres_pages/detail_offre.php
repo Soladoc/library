@@ -18,7 +18,7 @@ if ($_POST) {
         $stmt = db_connect()->prepare($querry);
         $stmt->execute([
             $_SESSION['id_membre'],
-            $args['id'],
+            $args['id'] ,
             $args['commentaire'],
             $args['date_avis'],
             $args['note'],
@@ -51,7 +51,7 @@ $image_pricipale = query_image($offre['id_image_principale']);
 $adresse = notfalse(query_adresse($offre['id_adresse']));
 
 $gallerie = query_gallerie($args['id']);
-
+$avis=query_avis()
 ?>
 
 <!DOCTYPE html>
@@ -136,6 +136,17 @@ $gallerie = query_gallerie($args['id']);
             <!-- Liste des avis -->
             <div class="review-list">
                 <h4>Avis de la communauté</h4>
+                <div class="review-summary">
+                <h4>Résumé des notes</h4>
+                <p>Moyenne&nbsp;: <?php $offre['note_moyenne'] ?>/5 ★</p>
+                <div class="rating-distribution">
+                    <?php $avis = query_avis(id_offre: $offre['id']); ?>
+                    <p>5 étoiles&nbsp;: <?php count(array_filter($avis, fn($a) => $a['note'] === 5)) ?> avis.</p>
+                    <p>4 étoiles&nbsp;: <?php count(array_filter($avis, fn($a) => $a['note'] === 4)) ?> avis.</p>
+                    <p>3 étoiles&nbsp;: <?php count(array_filter($avis, fn($a) => $a['note'] === 3)) ?> avis.</p>
+                    <p>2 étoiles&nbsp;: <?php count(array_filter($avis, fn($a) => $a['note'] === 2)) ?> avis.</p>
+                    <p>1 étoile&nbsp;: <?php count(array_filter($avis, fn($a) => $a['note'] === 1)) ?> avis.</p>
+                </div>
                 <?php if (!empty($avis)) {
                     foreach ($avis as $avis_temp) { ?>
                         <div class="review">
