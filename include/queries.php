@@ -249,3 +249,16 @@ function insert_uploaded_image(array $img, ?string $legende = null): array
     notfalse(move_uploaded_file($img['tmp_name'], $filename));
     return [$filename, $id_image];
 }
+
+/**
+ * Checks if a given private professional ID exists in the database.
+ *
+ * @param int $id_pro_prive The ID of the private professional to check.
+ * @return bool True if the private professional ID exists, false otherwise.
+ */
+function exists_pro_prive(int $id_pro_prive): bool {
+    $stmt = notfalse(db_connect()->prepare('select ? in (select id from pro_prive)'));
+    bind_values($stmt, [1 => [$id_pro_prive, PDO::PARAM_INT]]);
+    notfalse($stmt->execute());
+    return $stmt->execute();
+}
