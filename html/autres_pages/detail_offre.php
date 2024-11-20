@@ -3,26 +3,29 @@ session_start();
 require_once 'component/offre.php';
 require_once 'component/head.php';
 
+$args = [
+    'id' => getarg($_GET, 'id', arg_filter(FILTER_VALIDATE_INT)),
+    'commentaire' => getarg($_POST, 'commentaire'),
+    'date_avis' => getarg($_POST, 'date_avis'),
+    'note' => getarg($_POST, 'note', arg_filter(FILTER_VALIDATE_INT)),
+];
+
 if ($_POST) {
     if($_SESSION['log']==true){
-        $querry="INSERT INTO pact._avis (id_membre_auteur,id_offre,commentaire,date_experience,note) VALUES (?,?,?,?,?);";
+        $querry="INSERT INTO pact.avis (id_membre_auteur,id_offre,commentaire,date_experience,note) VALUES (?,?,?,?,?);";
         $stmt = db_connect()->prepare($querry);
         $stmt->execute([
-            $_SESSION['id'],
-            $offre['id'],
-            $_POST['commentaire'],
-            $_POST['date_avis'],
-            $_POST['note'],
+            $_SESSION['id_membre'],
+            query_offre($args['id']),
+            $args['commentaire'],
+            $args['date_avis'],
+            $args['note'],
         ]);
-        $success_message = "Avis ajouté ou mis à jour avec succès !";
+        $success_message = "Avis ajouté avec succès !";
     } else {
         $error_message = "Veuillez remplir tous les champs du formulaire.";
     }
 }
-
-$args = [
-    'id' => getarg($_GET, 'id', arg_filter(FILTER_VALIDATE_INT))
-];
 
 $offre = query_offre($args['id']);
 if ($offre === false) {
@@ -122,7 +125,7 @@ $gallerie = query_gallerie($args['id']);
                     <label for="date">Date de votre visite</label>
                     <input type="date" id="date" name="date" required>
                     </br>
-                    <label for="consent">Je certifie que l’avis reflète ma propre expérience et mon opinion sur cette offre.</label>
+                    <label for="consent">Je certifie que l’avis reflète mes propres expérience et opinion sur cette offre.</label>
                     <input type="checkbox" name="consent" required>
                     <button type="submit" class="btn-publish">Publier</button>
                 </form>
