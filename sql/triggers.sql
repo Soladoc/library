@@ -210,3 +210,39 @@ $$ language 'plpgsql';
 create trigger tg_avis_insert instead of insert on avis for each row
 execute function avis_insert();
 commit;
+
+-- update pseudo membre
+
+create function membre_pseudo_update () returns trigger as $$
+begin
+    UPDATE _membre
+        SET pseudo = NEW.pseudo
+        WHERE id = OLD.id;
+        RETURN NEW;
+    
+end
+$$ language 'plpgsql';
+
+CREATE TRIGGER trg_update_pseudo
+INSTEAD OF UPDATE ON membre
+FOR EACH ROW
+EXECUTE FUNCTION update_pseudo_on_view();
+
+
+
+-- update denomination membre
+
+create function membre_denomination_update () returns trigger as $$
+begin
+    UPDATE _professionnel
+        SET denomination = NEW.denomination
+        WHERE id = OLD.id;
+        RETURN NEW;
+    
+end
+$$ language 'plpgsql';
+
+CREATE TRIGGER trg_update_denomination
+INSTEAD OF UPDATE ON professionnel
+FOR EACH ROW
+EXECUTE FUNCTION update_pseudo_on_view();
