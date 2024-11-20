@@ -15,7 +15,10 @@ transaction(function () {
 
     // Récupérer la commune
     // todo: make this better (by inputting either nom or code postal)
-    $commune = single(query_communes($args['adresse_commune']));
+    $commune = single_or_default(query_communes($args['adresse_commune']));
+    if ($commune === null) {
+        html_error("la commune '$commune' n'existe pas");
+    }
     // Insérer l'adresse
     // todo: adresses localisées
     $id_adresse = insert_into_adresse(

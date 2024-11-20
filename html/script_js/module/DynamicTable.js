@@ -32,7 +32,11 @@ export default class DynamicTable {
         this.#add_button.className = 'button-add-row';
         this.#add_button.type = 'button';
         this.#add_button.textContent = '+';
-        this.#add_button.addEventListener('click', () => this.add_row(this.#new_inputs.map(i => i.value)));
+        this.#add_button.addEventListener('click', () => {
+            if (this.#new_inputs.every(i => i.reportValidity())) {
+                this.add_row(this.#new_inputs.map(i => i.value));
+            }
+        });
 
         for (const input of this.#new_inputs) {
             input.addEventListener('input', this.#decide_can_add.bind(this));
@@ -77,8 +81,7 @@ export default class DynamicTable {
     }
 
     #decide_can_add() {
-        this.#add_button.disabled = !this.#validate_add(this.#new_row)
-            || this.#new_inputs.some(i => !i.reportValidity());
+        this.#add_button.disabled = !this.#validate_add(this.#new_row);
     }
 
     #decide_can_remove() {

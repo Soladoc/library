@@ -15,6 +15,9 @@ $args = [
 $id_professionnel = exiger_connecte_pro();
 
 if ($_POST) {
+    ?><pre><?= htmlspecialchars(print_r($_GET, true)) ?></pre><?php
+    ?><pre><?= htmlspecialchars(print_r($_POST, true)) ?></pre><?php
+    ?><pre><?= htmlspecialchars(print_r($_FILES, true)) ?></pre><?php
     $args += [
         'adresse_commune' => getarg($_POST, 'adresse_commune'),
         'description_detaillee' => getarg($_POST, 'description_detaillee'),
@@ -31,9 +34,16 @@ if ($_POST) {
         'file_image_principale' => getarg($_FILES, 'image_principale'),
     ];
 
+    function indication_duree_args(): array {
+        return [
+            'indication_duree_jours' => getarg($_POST, 'indication_duree_jours'),
+            'indication_duree_heures' => getarg($_POST, 'indication_duree_heures'),
+            'indication_duree_minutes' => getarg($_POST, 'indication_duree_minutes'),
+        ];
+    }
+    
     $args += match ($args['type_offre']) {
-        'activite' => [
-            'indication_duree' => getarg($_POST, 'indication_duree'),
+        'activite' => indication_duree_args() + [
             'prestations_incluses' => getarg($_POST, 'prestations_incluses'),
             'age_requis' => getarg($_POST, 'age_requis', arg_filter(FILTER_VALIDATE_INT, ['min_range' => 1]), required: false),
             'prestations_non_incluses' => getarg($_POST, 'prestations_non_incluses')
@@ -41,8 +51,7 @@ if ($_POST) {
         'parc-attractions' => [
             'file_image_plan' => getarg($_FILES, 'image_plan'),
         ],
-        'spectacle' => [
-            'indication_duree' => getarg($_POST, 'indication_duree'),
+        'spectacle' => indication_duree_args() + [
             'capacite_accueil' => getarg($_POST, 'capacite_accueil', arg_filter(FILTER_VALIDATE_INT, ['min_range' => 0])),
         ],
         'restaurant' => [
@@ -54,10 +63,10 @@ if ($_POST) {
             'sert_diner' => getarg($_POST, 'sert_diner', required: false),
             'sert_boissons' => getarg($_POST, 'sert_boissons', required: false),
         ],
-        'visite' => [
-            'indication_duree' => getarg($_POST, 'indication_duree')
-        ]
+        'visite' => indication_duree_args()
     };
+
+
 
     // Délégation du traitement à un autre script pour gagner de la place
     require 'traitement/creation_offre.php';
@@ -72,9 +81,6 @@ if ($_POST) {
     ['module/creation_offre.js' => 'defer type="module"']) ?>
 
 <body>
-    <pre><?= htmlspecialchars(print_r($_GET, true)) ?></pre>
-    <pre><?= htmlspecialchars(print_r($_POST, true)) ?></pre>
-    <pre><?= htmlspecialchars(print_r($_FILES, true)) ?></pre>
     <?php require 'component/header.php' ?>
     <main>
         <section id="titre-creation-offre">

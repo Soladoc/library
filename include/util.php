@@ -99,6 +99,25 @@ function single(array $array): mixed
 }
 
 /**
+ * Returns the single value in the given array.
+ * @template T
+ * @param array<T> $array The array to extract the single value from.
+ * @param T $default The default value to return if the array is empty.
+ * @return T The single value in the array.
+ * @throws Exception If the array contains more than one value.
+ */
+function single_or_default(array $array, mixed $default = null): mixed
+{
+    if (empty($array)) {
+        return $default;
+    }
+    if (count($array) !== 1) {
+        throw new Exception('Array contains not a single value');
+    }
+    return $array[0];
+}
+
+/**
  * Converts a "single object array" (SOA) to an "array of structures" (AOS).
  *
  * The input `$array` is expected to be an array where each element is an associative
