@@ -3,6 +3,10 @@ session_start();
 require_once 'component/offre.php';
 require_once 'component/head.php';
 
+$args = [
+    'id' => getarg($_GET, 'id', arg_filter(FILTER_VALIDATE_INT))
+];
+
 if ($_POST) {
     if($_SESSION['log']==true){
         $querry="INSERT INTO pact.avis (id_membre_auteur,id_offre,commentaire,date_experience,note) VALUES (?,?,?,?,?);";
@@ -19,10 +23,6 @@ if ($_POST) {
         $error_message = "Veuillez remplir tous les champs du formulaire.";
     }
 }
-
-$args = [
-    'id' => getarg($_GET, 'id', arg_filter(FILTER_VALIDATE_INT))
-];
 
 $offre = query_offre($args['id']);
 if ($offre === false) {
