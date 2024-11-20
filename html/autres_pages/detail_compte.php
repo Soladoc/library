@@ -7,7 +7,6 @@ $args = [
     'id' => getarg($_GET, 'id', arg_filter(FILTER_VALIDATE_INT))
 ];
 
-$id = $args['id'];
 $membre = query_compte_membre($args['id']);
 $pro = query_compte_professionnel($args['id']);
 
@@ -90,7 +89,7 @@ if ($_POST) {
                 <div id="denomination">
                 <p>Denomination : </p>
                 <?php echo $denomination 
-                if ($id in) {
+                if (in_array($id,)) {
                     # code...
                 }?>
                 

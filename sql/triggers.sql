@@ -226,13 +226,13 @@ $$ language 'plpgsql';
 CREATE TRIGGER trg_update_pseudo
 INSTEAD OF UPDATE ON membre
 FOR EACH ROW
-EXECUTE FUNCTION update_pseudo_on_view();
+EXECUTE FUNCTION membre_pseudo_update();
 
 
 
 -- update denomination membre
 
-create function membre_denomination_update () returns trigger as $$
+create function membre_denomination_update() returns trigger as $$
 begin
     UPDATE _professionnel
         SET denomination = NEW.denomination
@@ -245,4 +245,4 @@ $$ language 'plpgsql';
 CREATE TRIGGER trg_update_denomination
 INSTEAD OF UPDATE ON professionnel
 FOR EACH ROW
-EXECUTE FUNCTION update_pseudo_on_view();
+EXECUTE FUNCTION membre_denomination_update();

@@ -502,3 +502,12 @@ function _insert_into_returning_id(string $table, array $args): string
     assert(!empty($args));
     return "insert into \"$table\" (" . implode(',', array_keys($args)) . ') values (?' . str_repeat(',?', count($args) - 1) . ') returning id';
 }
+
+
+function is_prive(int $id_compte): bool
+{   
+    $resultat  
+    $stmt = notfalse(db_connect()->prepare('select id from professionnel;'));
+    bind_values($stmt, [$new_siren,$id_compte]);
+    notfalse($stmt->execute());
+}
