@@ -14,7 +14,7 @@ if ($_POST) {
         'note' => getarg($_POST, 'rating', arg_filter(FILTER_VALIDATE_INT)),
         'contexte' => getarg($_POST, 'contexte'),
     ];
-    if(!isset($_SESSION['log'])){
+    if(!isset($_SESSION['id_membre'])){
         $error_message = "Veuillez vous connecter";
     }
     else {
@@ -29,7 +29,6 @@ if ($_POST) {
             $args['contexte']
         ]);
         $success_message = "Avis ajouté avec succès !";
-        $error_message = "Veuillez vous connecter";
     }
 }
 
@@ -118,15 +117,15 @@ $avis=query_avis()
 
             <!-- Formulaire d'avis -->
             <div class="review-form">
+                <div class="message">
+                    <?php if (isset($error_message)): ?>
+                    <p class="error-message"><?= htmlspecialchars($error_message) ?></p>
+                    <?php elseif (isset($success_message)): ?>
+                    <p class="success-message"><?= htmlspecialchars($success_message) ?></p>
+                    <?php endif; ?>
+                </div>
                 <form method="post" action="detail_offre.php?id=<?= $args['id'] ?>">
                     <textarea name="commentaire" placeholder="Votre avis..." required></textarea>
-                    <div class="message">
-                        <?php if (isset($error_message)): ?>
-                        <p class="error-message"><?= htmlspecialchars($error_message) ?></p>
-                        <?php elseif (isset($success_message)): ?>
-                        <p class="success-message"><?= htmlspecialchars($success_message) ?></p>
-                        <?php endif; ?>
-                    </div>
                     <label for="rating">Note&nbsp;:</label>
                     <select name="rating" id="rating" required>
                         <option value="5">5 étoiles</option>
