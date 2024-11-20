@@ -12,7 +12,7 @@ if ($_POST) {
         'mdp' => getarg($_POST, 'mdp'),
         'adresse' => getarg($_POST, 'adresse'),
         'denomination' => getarg($_POST, 'denomination'),
-        'type' => getarg($_POST, 'type', arg_check(f_str_is(['prive', 'public']))),
+        'type' => getarg($_POST, 'type', arg_check(f_is_in(['prive', 'public']))),
     ];
     if ($args['type'] === 'prive') {
         $args['siren'] = getarg($_POST, 'siren');

@@ -119,14 +119,14 @@ Camping et snack sur le site.',
             ((table id_offre), 'sport')
     )
 insert into
-    _horaire_ouverture (id_offre, jour_de_la_semaine, heure_debut, heure_fin)
+    _horaire_ouverture (id_offre, dow, heure_debut, heure_fin)
 values
+    ((table id_offre), 1, '9:', '23:'),
     ((table id_offre), 2, '9:', '23:'),
     ((table id_offre), 3, '9:', '23:'),
     ((table id_offre), 4, '9:', '23:'),
     ((table id_offre), 5, '9:', '23:'),
-    ((table id_offre), 6, '9:', '23:'),
-    ((table id_offre), 7, '9:', '23:');
+    ((table id_offre), 6, '9:', '23:');
 
 -- Restaurant La Plage
 with
@@ -171,8 +171,10 @@ with
             id
     )
 insert into
-    _horaire_ouverture (id_offre, jour_de_la_semaine, heure_debut, heure_fin)
+    _horaire_ouverture (id_offre, dow, heure_debut, heure_fin)
 values
+    ((table id_offre), 1, '12:', '15:30'),
+    ((table id_offre), 1, '18:30', '23:59:59'),
     ((table id_offre), 2, '12:', '15:30'),
     ((table id_offre), 2, '18:30', '23:59:59'),
     ((table id_offre), 3, '12:', '15:30'),
@@ -182,9 +184,7 @@ values
     ((table id_offre), 5, '12:', '15:30'),
     ((table id_offre), 5, '18:30', '23:59:59'),
     ((table id_offre), 6, '12:', '15:30'),
-    ((table id_offre), 6, '18:30', '23:59:59'),
-    ((table id_offre), 7, '12:', '15:30'),
-    ((table id_offre), 7, '18:30', '23:59:59');
+    ((table id_offre), 6, '18:30', '23:59:59');
 
 -- truncate table _offre restart identity cascade;
 -- Crêperie Les Alizés
@@ -230,8 +230,10 @@ with
             id
     )
 insert into
-    _horaire_ouverture (id_offre, jour_de_la_semaine, heure_debut, heure_fin)
+    _horaire_ouverture (id_offre, dow, heure_debut, heure_fin)
 values
+    ((table id_offre), 1, '12:', '15:30'),
+    ((table id_offre), 1, '18:30', '23:59:59'),
     ((table id_offre), 2, '12:', '15:30'),
     ((table id_offre), 2, '18:30', '23:59:59'),
     ((table id_offre), 3, '12:', '15:30'),
@@ -241,9 +243,7 @@ values
     ((table id_offre), 5, '12:', '15:30'),
     ((table id_offre), 5, '18:30', '23:59:59'),
     ((table id_offre), 6, '12:', '15:30'),
-    ((table id_offre), 6, '18:30', '23:59:59'),
-    ((table id_offre), 7, '12:', '15:30'),
-    ((table id_offre), 7, '18:30', '23:59:59');
+    ((table id_offre), 6, '18:30', '23:59:59');
 
 -- Crêperie de l'Abbaye de Beauport
 with
@@ -288,8 +288,10 @@ with
             id
     )
 insert into
-    _horaire_ouverture (id_offre, jour_de_la_semaine, heure_debut, heure_fin)
+    _horaire_ouverture (id_offre, dow, heure_debut, heure_fin)
 values
+    ((table id_offre), 1, '12:', '15:30'),
+    ((table id_offre), 1, '18:30', '23:59:59'),
     ((table id_offre), 2, '12:', '15:30'),
     ((table id_offre), 2, '18:30', '23:59:59'),
     ((table id_offre), 3, '12:', '15:30'),
@@ -299,9 +301,7 @@ values
     ((table id_offre), 5, '12:', '15:30'),
     ((table id_offre), 5, '18:30', '23:59:59'),
     ((table id_offre), 6, '12:', '15:30'),
-    ((table id_offre), 6, '18:30', '23:59:59'),
-    ((table id_offre), 7, '12:', '15:30'),
-    ((table id_offre), 7, '18:30', '23:59:59');
+    ((table id_offre), 6, '18:30', '23:59:59');
 
 -- Visite de la galerie d'Art du Dragon Noir
 with
@@ -368,15 +368,15 @@ La visite de la Galerie d''Art du Dragon Noir est bien plus qu''une simple expos
             ((table id_offre), 'musée')
     )
 insert into
-    _horaire_ouverture (id_offre, jour_de_la_semaine, heure_debut, heure_fin)
+    _horaire_ouverture (id_offre, dow, heure_debut, heure_fin)
 values
+    ((table id_offre), 0, '10:', '18:'),
     ((table id_offre), 1, '10:', '18:'),
     ((table id_offre), 2, '10:', '18:'),
     ((table id_offre), 3, '10:', '18:'),
     ((table id_offre), 4, '10:', '18:'),
     ((table id_offre), 5, '10:', '18:'),
-    ((table id_offre), 6, '10:', '18:'),
-    ((table id_offre), 7, '13:', '18:');
+    ((table id_offre), 6, '13:', '18:');
 
 -- Visite du phare Vauban au Cap Fréhel
 with
@@ -453,15 +453,15 @@ Ne manquez pas cette opportunité unique de découvrir l''un des joyaux de la Br
             ((table id_offre), 'nature')
     )
 insert into
-    _horaire_ouverture (id_offre, jour_de_la_semaine, heure_debut, heure_fin)
+    _horaire_ouverture (id_offre, dow, heure_debut, heure_fin)
 values
+    ((table id_offre), 0, '10:', '18:'),
     ((table id_offre), 1, '10:', '18:'),
     ((table id_offre), 2, '10:', '18:'),
     ((table id_offre), 3, '10:', '18:'),
     ((table id_offre), 4, '10:', '18:'),
     ((table id_offre), 5, '10:', '18:'),
-    ((table id_offre), 6, '10:', '18:'),
-    ((table id_offre), 7, '13:', '18:');
+    ((table id_offre), 6, '13:', '18:');
 
 -- Visite du musée d'Art et d'Histoire de Saint-Brieuc
 with
@@ -536,15 +536,15 @@ Ne manquez pas cette opportunité unique de découvrir l''art et l''histoire de 
             ((table id_offre), 'art')
     )
 insert into
-    _horaire_ouverture (id_offre, jour_de_la_semaine, heure_debut, heure_fin)
+    _horaire_ouverture (id_offre, dow, heure_debut, heure_fin)
 values
+    ((table id_offre), 0, '10:', '18:'),
     ((table id_offre), 1, '10:', '18:'),
     ((table id_offre), 2, '10:', '18:'),
     ((table id_offre), 3, '10:', '18:'),
     ((table id_offre), 4, '10:', '18:'),
     ((table id_offre), 5, '10:', '18:'),
-    ((table id_offre), 6, '10:', '18:'),
-    ((table id_offre), 7, '13:', '18:');
+    ((table id_offre), 6, '13:', '18:');
 
 -- Trail dans la réserve naturelle des Sept Îles
 with
@@ -618,15 +618,15 @@ Réservez dès maintenant votre place et préparez-vous à vivre une expérience
             ((table id_offre), 'sport')
     )
 insert into
-    _horaire_ouverture (id_offre, jour_de_la_semaine, heure_debut, heure_fin)
+    _horaire_ouverture (id_offre, dow, heure_debut, heure_fin)
 values
+    ((table id_offre), 0, '10:', '18:'),
     ((table id_offre), 1, '10:', '18:'),
     ((table id_offre), 2, '10:', '18:'),
     ((table id_offre), 3, '10:', '18:'),
     ((table id_offre), 4, '10:', '18:'),
     ((table id_offre), 5, '10:', '18:'),
-    ((table id_offre), 6, '10:', '18:'),
-    ((table id_offre), 7, '13:', '18:');
+    ((table id_offre), 6, '13:', '18:');
 
 -- Découverte de la Côte de Granit Rose
 with
@@ -710,15 +710,15 @@ Nous avons hâte de vous accueillir à bord pour une journée inoubliable sur la
             ((table id_offre), 'culturel')
     )
 insert into
-    _horaire_ouverture (id_offre, jour_de_la_semaine, heure_debut, heure_fin)
+    _horaire_ouverture (id_offre, dow, heure_debut, heure_fin)
 values
+    ((table id_offre), 0, '10:', '18:'),
     ((table id_offre), 1, '10:', '18:'),
     ((table id_offre), 2, '10:', '18:'),
     ((table id_offre), 3, '10:', '18:'),
     ((table id_offre), 4, '10:', '18:'),
     ((table id_offre), 5, '10:', '18:'),
-    ((table id_offre), 6, '10:', '18:'),
-    ((table id_offre), 7, '13:', '18:');
+    ((table id_offre), 6, '13:', '18:');
 
 -- Balade poétique à Camet
 with
@@ -858,15 +858,15 @@ Rejoignez-nous pour une journée mémorable où nature, histoire et gastronomie 
             ((table id_offre), 'plein air')
     )
 insert into
-    _horaire_ouverture (id_offre, jour_de_la_semaine, heure_debut, heure_fin)
+    _horaire_ouverture (id_offre, dow, heure_debut, heure_fin)
 values
+    ((table id_offre), 0, '10:', '18:'),
     ((table id_offre), 1, '10:', '18:'),
     ((table id_offre), 2, '10:', '18:'),
     ((table id_offre), 3, '10:', '18:'),
     ((table id_offre), 4, '10:', '18:'),
     ((table id_offre), 5, '10:', '18:'),
-    ((table id_offre), 6, '10:', '18:'),
-    ((table id_offre), 7, '13:', '18:');
+    ((table id_offre), 6, '13:', '18:');
 
 -- Visite du Fort La Latte - La Roche Goyon
 with
@@ -937,15 +937,15 @@ Ne manquez pas cette opportunité unique de découvrir l''un des châteaux les p
             ((table id_offre), 'culturel')
     )
 insert into
-    _horaire_ouverture (id_offre, jour_de_la_semaine, heure_debut, heure_fin)
+    _horaire_ouverture (id_offre, dow, heure_debut, heure_fin)
 values
+    ((table id_offre), 0, '10:', '18:'),
     ((table id_offre), 1, '10:', '18:'),
     ((table id_offre), 2, '10:', '18:'),
     ((table id_offre), 3, '10:', '18:'),
     ((table id_offre), 4, '10:', '18:'),
     ((table id_offre), 5, '10:', '18:'),
-    ((table id_offre), 6, '10:', '18:'),
-    ((table id_offre), 7, '13:', '18:');
+    ((table id_offre), 6, '13:', '18:');
 
 -- Découverte interactive de la cité des Télécoms
 with
@@ -1031,15 +1031,15 @@ N''attendez plus et venez vivre une aventure technologique unique à la Cité de
             ((table id_offre), 'technologie')
     )
 insert into
-    _horaire_ouverture (id_offre, jour_de_la_semaine, heure_debut, heure_fin)
+    _horaire_ouverture (id_offre, dow, heure_debut, heure_fin)
 values
+    ((table id_offre), 0, '10:', '18:'),
     ((table id_offre), 1, '10:', '18:'),
     ((table id_offre), 2, '10:', '18:'),
     ((table id_offre), 3, '10:', '18:'),
     ((table id_offre), 4, '10:', '18:'),
     ((table id_offre), 5, '10:', '18:'),
-    ((table id_offre), 6, '10:', '18:'),
-    ((table id_offre), 7, '13:', '18:');
+    ((table id_offre), 6, '13:', '18:');
 
 -- Celtic Legends journée 2026
 with
