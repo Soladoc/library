@@ -18,7 +18,7 @@ if ($_POST) {
         $stmt = db_connect()->prepare($querry);
         $stmt->execute([
             $_SESSION['id_membre'],
-            $args['id'],
+            $args['id'] ,
             $args['commentaire'],
             $args['date_avis'],
             $args['note'],
@@ -51,7 +51,7 @@ $image_pricipale = query_image($offre['id_image_principale']);
 $adresse = notfalse(query_adresse($offre['id_adresse']));
 
 $gallerie = query_gallerie($args['id']);
-
+$avis=query_avis()
 ?>
 
 <!DOCTYPE html>
@@ -136,12 +136,24 @@ $gallerie = query_gallerie($args['id']);
             <!-- Liste des avis -->
             <div class="review-list">
                 <h4>Avis de la communauté</h4>
+                <div class="review-summary">
+                <h4>Résumé des notes</h4>
+                <p>Nombre d'avis : <?=query_avis_count($args['id']) ?></p>
+                <p>Moyenne&nbsp;: <?=round($offre['note_moyenne'],2) ?>/5 ★</p>
+                <div class="rating-distribution">
+                    <?php $avis = query_avis(id_offre: $offre['id']); ?>
+                    <p>5 étoiles&nbsp;: <?=count(array_filter($avis, fn($a) => $a['note'] === 5)) ?> avis.</p>
+                    <p>4 étoiles&nbsp;: <?=count(array_filter($avis, fn($a) => $a['note'] === 4)) ?> avis.</p>
+                    <p>3 étoiles&nbsp;: <?=count(array_filter($avis, fn($a) => $a['note'] === 3)) ?> avis.</p>
+                    <p>2 étoiles&nbsp;: <?=count(array_filter($avis, fn($a) => $a['note'] === 2)) ?> avis.</p>
+                    <p>1 étoile&nbsp;: <?=count(array_filter($avis, fn($a) => $a['note'] === 1)) ?> avis.</p>
+                </div>
                 <?php if (!empty($avis)) {
                     foreach ($avis as $avis_temp) { ?>
                         <div class="review">
                             <p><strong><?= htmlspecialchars($avis_temp['pseudo']) ?></strong> - <?= htmlspecialchars($avis_temp['note']) ?>/5</p>
                             <p><?= htmlspecialchars($avis_temp['commentaire']) ?></p>
-                            <p class="review-date"><?= htmlspecialchars($avis_temp['date_avis']) ?></p>
+                            <p class="review-date"><?= htmlspecialchars($avis_temp['date_experience']) ?></p>
                         </div>
                     <?php } 
                 } else { ?>
