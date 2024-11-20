@@ -120,6 +120,13 @@ $avis=query_avis()
             <div class="review-form">
                 <form method="post" action="detail_offre.php?id=<?= $args['id'] ?>">
                     <textarea name="commentaire" placeholder="Votre avis..." required></textarea>
+                    <div class="message">
+                        <?php if (isset($error_message)): ?>
+                        <p class="error-message"><?= htmlspecialchars($error_message) ?></p>
+                        <?php elseif (isset($success_message)): ?>
+                        <p class="success-message"><?= htmlspecialchars($success_message) ?></p>
+                        <?php endif; ?>
+                    </div>
                     <label for="rating">Note&nbsp;:</label>
                     <select name="rating" id="rating" required>
                         <option value="5">5 étoiles</option>
