@@ -147,56 +147,58 @@ function query_offres(?int $id_professionnel = null, ?bool $en_ligne = null): PD
 function uptate_mdp(int $id_compte, $new_mdp): void
 {
     $stmt = notfalse(db_connect()->prepare('UPDATE _compte SET mdp_hash = ? WHERE id = ?;'));
-    bind_values($stmt, [$new_mdp,$id_compte]);
+    bind_values($stmt, [$new_mdp, $id_compte]);
     notfalse($stmt->execute());
 }
 
 function uptate_nom(int $id_compte, $new_nom): void
 {
     $stmt = notfalse(db_connect()->prepare('UPDATE _compte SET nom = ? WHERE id = ?;'));
-    bind_values($stmt, [$new_nom,$id_compte]);
+    bind_values($stmt, [$new_nom, $id_compte]);
     notfalse($stmt->execute());
 }
 
 function uptate_email(int $id_compte, $new_email): void
 {
     $stmt = notfalse(db_connect()->prepare('UPDATE _compte SET email = ? WHERE id = ?;'));
-    bind_values($stmt, [$new_email,$id_compte]);
+    bind_values($stmt, [$new_email, $id_compte]);
     notfalse($stmt->execute());
 }
 
 function uptate_prenom(int $id_compte, $new_prenom): void
 {
     $stmt = notfalse(db_connect()->prepare('UPDATE _compte SET prenom = ? WHERE id = ?;'));
-    bind_values($stmt, [$new_prenom,$id_compte]);
+    bind_values($stmt, [$new_prenom, $id_compte]);
     notfalse($stmt->execute());
 }
 
 function uptate_telephone(int $id_compte, $new_telephone): void
 {
     $stmt = notfalse(db_connect()->prepare('UPDATE _compte SET telephone = ? WHERE id = ?;'));
-    bind_values($stmt, [$new_telephone,$id_compte]);
+    bind_values($stmt, [$new_telephone, $id_compte]);
     notfalse($stmt->execute());
 }
 
-# membre
+// membre
 function uptate_pseudo(int $id_compte, $new_pseudo): void
 {
     $stmt = notfalse(db_connect()->prepare('UPDATE membre SET pseudo = ? WHERE id = ?;'));
-    bind_values($stmt, [$new_pseudo,$id_compte]);
+    bind_values($stmt, [$new_pseudo, $id_compte]);
     notfalse($stmt->execute());
 }
-#professionnel
+
+// professionnel
 function uptate_denomination(int $id_compte, $new_denomination): void
 {
     $stmt = notfalse(db_connect()->prepare('UPDATE professionnel SET denomination = ? WHERE id = ?;'));
-    bind_values($stmt, [$new_denomination,$id_compte]);
+    bind_values($stmt, [$new_denomination, $id_compte]);
     notfalse($stmt->execute());
 }
-function uptate_siren(int $id_compte, $new_siren): void
+
+function update_siren(int $id_compte, $new_siren): void
 {
     $stmt = notfalse(db_connect()->prepare('UPDATE _prive SET siren = ? WHERE id = ?;'));
-    bind_values($stmt, [$new_siren,$id_compte]);
+    bind_values($stmt, [$new_siren, $id_compte]);
     notfalse($stmt->execute());
 }
 
@@ -257,7 +259,8 @@ function offre_insert_horaire(int $id_offre, int $dow, string $debut, string $fi
  * @param string $fin A PostgreSQL TIMESTAMP input string.
  * @return void
  */
-function offre_insert_periode(int $id_offre, string $debut, string $fin) {
+function offre_insert_periode(int $id_offre, string $debut, string $fin)
+{
     $stmt = notfalse(db_connect()->prepare('insert into _periode_ouverture (id_offre, debut, fin) values (?,?,?,?)'));
     bind_values($stmt, [1 => [$id_offre, PDO::PARAM_INT], 2 => [$debut, PDO::PARAM_STR], 3 => [$fin, PDO::PARAM_STR]]);
     notfalse($stmt->execute());
