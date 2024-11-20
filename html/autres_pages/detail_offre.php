@@ -138,6 +138,7 @@ $avis=query_avis()
                 <h4>Avis de la communauté</h4>
                 <div class="review-summary">
                 <h4>Résumé des notes</h4>
+                <p>Nombre d'avis : <?php query_avis_count($args['id']) ?></p>
                 <p>Moyenne&nbsp;: <?php $offre['note_moyenne'] ?>/5 ★</p>
                 <div class="rating-distribution">
                     <?php $avis = query_avis(id_offre: $offre['id']); ?>
