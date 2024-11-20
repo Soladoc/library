@@ -2,10 +2,12 @@
 
 function connecter_pro(int $id_pro) {
     $_SESSION['id_pro'] = $id_pro;
+    $_SESSION['log'] = true;
 }
 
 function connecter_membre(int $id_membre) {
     $_SESSION['id_membre'] = $id_membre;
+    $_SESSION['log'] = true;
 }
 
 /**
