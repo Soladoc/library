@@ -66,11 +66,20 @@ function displayOffers() {
     offers.forEach(offer => {
         const offerElement = document.createElement('div');
         offerElement.className = 'offer-card';
+
+        // Format the date
+        const date = new Date(offer.date_derniere_maj);
+        const formattedDate = date.toLocaleDateString('fr-FR', {
+            year: 'numeric',
+            month: '2-digit',
+            day: '2-digit'
+        });
+
         offerElement.innerHTML = `
             <h3>${offer.titre}</h3>
             <p>Prix: ${offer.prix}€</p>
             <p>Note: ${offer.note}</p>
-            <p>Date: ${offer.date_derniere_maj}</p>
+            <p>Date: ${formattedDate}</p>
         `;
         offerList.appendChild(offerElement);
     });
