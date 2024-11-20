@@ -1,12 +1,17 @@
 <?php
-require_once 'component/offre.php';
-require_once 'component/head.php';
+require_once 'component/offre.php'
 ?>
 
 <!DOCTYPE html>
 <html lang="fr">
 
-<?php put_head('Recherche', scripts: ['tri_recherche.js' => 'defer']) ?>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Recherche</title>
+    <link rel="stylesheet" href="/style/style.css">
+    <script src="/script_js/tri_recherche.js" defer></script>
+</head>
 
 <body>
     <?php require 'component/header.php' ?>
@@ -26,21 +31,23 @@ require_once 'component/head.php';
         <section class="tag-selection">
             <div class="categories">
                 <h3>Catégories</h3>
-                <select id="main-category" onchange="showSubcategories()">
-                    <option value="">-- Sélectionnez une catégorie --</option>
-                    <option value="restaurant">Restaurant</option>
-                    <option value="activite">Activité</option>
-                    <option value="visite">Visite</option>
-                    <option value="spectacle">Spectacle</option>
-                </select>
+                <div class="category-dropdown">
+                    <select id="main-category" onchange="showSubcategories()">
+                        <option value="">-- Sélectionnez une catégorie --</option>
+                        <option value="restauration">Restauration</option>
+                        <option value="activite">Activité</option>
+                        <option value="visite">Visite</option>
+                        <option value="spectacle">Spectacle</option>
+                    </select>
+                </div>
             </div>
 
             <div id="subcategories" class="hidden">
                 <h3>Sous-catégories</h3>
-                <div class="subcategory-list" id="subcategory-list">
-                </div>
+                <div class="subcategory-list" id="subcategory-list"></div>
             </div>
         </section>
+
 
         <section class="sorting-section">
             <br>
