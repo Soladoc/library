@@ -15,7 +15,7 @@ if ($_POST) {
     $pdo = db_connect();
 
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-        alterner_etat_offre($args['id']);
+        offre_alterner_etat($args['id']);
         $offre = query_offre($args['id']);
         header("Location: " . $_SERVER['PHP_SELF'] . "?id=" . $args['id']);
         exit();
