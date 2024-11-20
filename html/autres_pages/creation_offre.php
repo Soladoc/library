@@ -92,6 +92,7 @@ if ($_POST) {
         <section id="titre-creation-offre">
             <h1>Créer <?= TYPES_OFFRE[$args['type_offre']] ?></h1>
         </section>
+
         <section id="info-generales">
             <h2>Informations générales</h2>
             <div>
@@ -113,6 +114,7 @@ if ($_POST) {
                 </p>
             </div>
         </section>
+
         <section>
             <h2>Photo principale</h2>
             <input form="f" id="image_principale" name="image_principale" type="file" accept="image/*" required>
@@ -141,6 +143,7 @@ if ($_POST) {
                 <td><input form="f" name="tarifs[montant][]" type="number" min="0" placeholder="Prix" required> €</td>
             </tr></template>
         </section>
+
         <section id="horaires-hebdomadaires">
             <h2>Horaires hebdomadaires</h2>
             <div>
@@ -167,6 +170,7 @@ if ($_POST) {
                 <?php } ?>
             </div>
         </section>
+
         <section id="horaires-ponctuels">
             <h2>Horaires ponctuels</h2>
             <table id="table-periodes">
@@ -190,6 +194,7 @@ if ($_POST) {
                 <td><input form="f" name="periodes[fin][]" type="datetime-local"></td>
             </tr></template>
         </section>
+
         <section id="tags">
             <h2>Tags</h2>
             <ul id="list-tag">
@@ -200,15 +205,22 @@ if ($_POST) {
                 <?php } ?>
             </ul>
         </section>
+
         <section id="description_detaillee">
-            <h2>Description détaillée</h2>
+            <label for="description_detaillee">
+                <h2>Description détaillée</h2>
+            </label>
             <textarea form="f" id="description_detaillee" name="description_detaillee" required></textarea>
         </section>
+
         <section id="image-creation-offre">
-            <h2>Gallerie</h2>
+            <label for="gallerie[]">
+                <h2>Gallerie</h2>
+            </label>
             <input form="f" id="gallerie" name="gallerie[]" type="file" accept="image/*" multiple>
             <div id="gallerie-preview"></div>
         </section>
+
         <section id="infos-detaillees">
             <h2>Informations détaillées</h2>
             <?php
@@ -264,6 +276,11 @@ if ($_POST) {
             }
             ?>
         </section>
+
+        <section id="type-abonnement">
+
+        </section>
+
         <form id="f" method="post" enctype="multipart/form-data">
             <button type="submit">Valider</button>
         </form>

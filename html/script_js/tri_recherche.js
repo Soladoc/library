@@ -1,4 +1,3 @@
-
 const subcategories = {
     restauration: ['Française', 'Fruits de mer', 'Asiatique', 'Indienne', 'Italienne', 'Gastronomique', 'Restauration rapide', 'Crêperie'],
     activite: ['Urbain', 'Nature', 'Plein air', 'Culturel', 'Patrimoine', 'Histoire', 'Sport', 'Nautique', 'Gastronomie', 'Musée', 'Atelier', 'Musique', 'Famille'],
@@ -36,6 +35,60 @@ function showSubcategories() {
     }
 }
 
+// ... (keep your existing code for subcategories)
+
+let offers = []; // This will be populated with data from PHP
+
+function sortOffers(criteria, ascending = true) {
+    offers.sort((a, b) => {
+        let valueA = a[criteria];
+        let valueB = b[criteria];
+
+        if (criteria === 'date') {
+            valueA = new Date(valueA);
+            valueB = new Date(valueB);
+        }
+
+        if (ascending) {
+            return valueA > valueB ? 1 : -1;
+        } else {
+            return valueA < valueB ? 1 : -1;
+        }
+    });
+
+    displayOffers();
+}
+
+function displayOffers() {
+    const offerList = document.querySelector('.offer-list');
+    offerList.innerHTML = ''; // Clear existing offers
+
+    offers.forEach(offer => {
+        const offerElement = document.createElement('div');
+        offerElement.className = 'offer-card';
+        offerElement.innerHTML = `
+            <h3>${offer.nom}</h3>
+            <p>Prix: ${offer.prix}€</p>
+            <p>Note: ${offer.note}</p>
+            <p>Date: ${offer.date}</p>
+        `;
+        offerList.appendChild(offerElement);
+    });
+}
+
+// Event listeners for sort buttons
+document.getElementById('sort-price-up').addEventListener('click', () => sortOffers('prix', true));
+document.getElementById('sort-price-down').addEventListener('click', () => sortOffers('prix', false));
+document.getElementById('sort-rating-up').addEventListener('click', () => sortOffers('note', true));
+document.getElementById('sort-rating-down').addEventListener('click', () => sortOffers('note', false));
+document.getElementById('sort-date-up').addEventListener('click', () => sortOffers('date', true));
+document.getElementById('sort-date-down').addEventListener('click', () => sortOffers('date', false));
+
+// Function to initialize offers from PHP data
+function initializeOffers(offersData) {
+    offers = offersData;
+    displayOffers();
+}
 
 const sortButtons = document.querySelectorAll('.btn-sort');
 sortButtons.forEach(button => {

@@ -1,10 +1,10 @@
 <?php
+require_once 'component/offre.php';
 require_once 'component/offre.php'
 ?>
 
 <!DOCTYPE html>
 <html lang="fr">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -12,11 +12,9 @@ require_once 'component/offre.php'
     <link rel="stylesheet" href="/style/style.css">
     <script src="/script_js/tri_recherche.js" defer></script>
 </head>
-
 <body>
     <?php require 'component/header.php' ?>
     <main>
-        <!-- Section de recherche -->
         <section class="search-section">
             <h1>Recherche</h1>
             <br>
@@ -41,14 +39,11 @@ require_once 'component/offre.php'
                     </select>
                 </div>
             </div>
-
             <div id="subcategories" class="hidden">
                 <h3>Sous-catégories</h3>
                 <div class="subcategory-list" id="subcategory-list"></div>
             </div>
         </section>
-
-
         <section class="sorting-section">
             <br>
             <h3>Options de tri</h3>
@@ -61,13 +56,11 @@ require_once 'component/offre.php'
                 <button class="btn-sort" id="sort-date-down">Date de publication 🔽</button>
             </div>
         </section>
-
         <section class="highlight-offers">
             <h2>Offres à la une</h2>
             <div class="offer-list">
                 <?php
                     $stmtOffres = query_offres();
-
                     while ($offre = $stmtOffres->fetch()) {
                         put_card_offre($offre);
                     }
@@ -76,6 +69,14 @@ require_once 'component/offre.php'
         </section>
     </main>
     <?php require 'component/footer.php' ?>
+    <script src="/script_js/tri_recherche.js"></script>
+    <script>
+        <?php
+        $stmtOffres = query_offres();
+        $offres = $stmtOffres->fetchAll(PDO::FETCH_ASSOC);
+        echo "const offersData = " . json_encode($offres) . ";";
+        ?>
+        initializeOffers(offersData);
+    </script>
 </body>
-
 </html>
