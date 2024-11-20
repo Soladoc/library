@@ -20,7 +20,7 @@ $id_professionnel = exiger_connecte_pro();
             $OFFRES = query_offres($id_professionnel);
             while ($offer = $OFFRES->fetch()) {
                 echo "<pre>";
-                print_r($offer);
+                print_r($offer['libelle_abonnement']);
                 echo "</pre>";
             }
             $OFFRES->closeCursor()
