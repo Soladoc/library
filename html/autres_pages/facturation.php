@@ -1,10 +1,11 @@
 <?php 
+session_start();
 require_once 'component/offre.php';
 require_once 'component/head.php';
 require_once 'auth.php';
 
 $id_professionnel = exiger_connecte_pro();
-
+echo $id_professionnel;
 ?>
 
 
