@@ -1,22 +1,33 @@
 <?php
+session_start();
 require_once 'component/offre.php';
 require_once 'component/head.php';
 
-if ($_POST) {
-    $querry="INSERT INTO pact._avis (id_membre,id_offre,commentaire,date_avis) VALUES (?,?,?,?);";
-    $stmt = db_connect()->prepare($querry);
-    $stmt->execute([
-        $id_membre,
-        $id_offre,
-        $_POST['commentaire'],
-        $_POST['date_avis'],
-        $_POST['note'],
-    ]);
-}
-
 $args = [
-    'id' => getarg($_GET, 'id', arg_filter(FILTER_VALIDATE_INT))
+    'id' => getarg($_GET, 'id', arg_filter(FILTER_VALIDATE_INT)),
 ];
+
+if ($_POST) {
+    $args += [
+        'commentaire' => getarg($_POST, 'commentaire'),
+        'date_avis' => getarg($_POST, 'date'),
+        'note' => getarg($_POST, 'rating', arg_filter(FILTER_VALIDATE_INT)),
+    ];
+    if($_SESSION['log']==true){
+        $querry="INSERT INTO pact.avis (id_membre_auteur,id_offre,commentaire,date_experience,note) VALUES (?,?,?,?,?);";
+        $stmt = db_connect()->prepare($querry);
+        $stmt->execute([
+            $_SESSION['id_membre'],
+            $args['id'],
+            $args['commentaire'],
+            $args['date_avis'],
+            $args['note'],
+        ]);
+        $success_message = "Avis ajouté avec succès !";
+    } else {
+        $error_message = "Veuillez remplir tous les champs du formulaire.";
+    }
+}
 
 $offre = query_offre($args['id']);
 if ($offre === false) {
@@ -98,8 +109,48 @@ $gallerie = query_gallerie($args['id']);
             </div>
         </section>
 
-        <!-- User Reviews -->
         <section class="offer-reviews">
+            <h3>Avis des utilisateurs</h3>
+
+            <!-- Formulaire d'avis -->
+            <div class="review-form">
+                <form method="post" action="detail_offre.php?id=<?= $args['id'] ?>">
+                    <textarea name="commentaire" placeholder="Votre avis..." required></textarea>
+                    <label for="rating">Note&nbsp;:</label>
+                    <select name="rating" id="rating" required>
+                        <option value="5">5 étoiles</option>
+                        <option value="4">4 étoiles</option>
+                        <option value="3">3 étoiles</option>
+                        <option value="2">2 étoiles</option>
+                        <option value="1">1 étoile</option>
+                    </select>
+                    <label for="date">Date de votre visite</label>
+                    <input type="date" id="date" name="date" required>
+                    </br>
+                    <label for="consent">Je certifie que l’avis reflète mes propres expérience et opinion sur cette offre.</label>
+                    <input type="checkbox" name="consent" required>
+                    <button type="submit" class="btn-publish">Publier</button>
+                </form>
+            </div>
+
+            <!-- Liste des avis -->
+            <div class="review-list">
+                <h4>Avis de la communauté</h4>
+                <?php if (!empty($avis)) {
+                    foreach ($avis as $avis_temp) { ?>
+                        <div class="review">
+                            <p><strong><?= htmlspecialchars($avis_temp['pseudo']) ?></strong> - <?= htmlspecialchars($avis_temp['note']) ?>/5</p>
+                            <p><?= htmlspecialchars($avis_temp['commentaire']) ?></p>
+                            <p class="review-date"><?= htmlspecialchars($avis_temp['date_avis']) ?></p>
+                        </div>
+                    <?php } 
+                } else { ?>
+                    <p>Aucun avis pour le moment. Soyez le premier à en écrire un&nbsp;!</p>
+                <?php } ?>
+            </div>
+        </section>
+        <!-- User Reviews -->
+        <!--<section class="offer-reviews">
             <h3>Avis des utilisateurs</h3>
             <div class="review-form">
                 <label for="text_avis">Mettre un avis</label>
@@ -146,7 +197,7 @@ $gallerie = query_gallerie($args['id']);
                     </div>
                 <?php } ?>
             </div>
-        </section>
+        </section>**/-->
     </main>
     <?php require 'component/footer.php' ?>
 
