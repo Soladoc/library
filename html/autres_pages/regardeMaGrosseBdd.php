@@ -1,57 +1,43 @@
 <?php
+require_once 'component/head.php';
+
+function escape(string $name): string
+{
+    return '"' . str_replace('"', '""', $name) . '"';
+}
 
 require_once 'db.php';
-if (isset($_GET['table'])) {
-    print 'table :' . $_GET['table'];
-    $table = $_GET['table'];
+if ($table = $_GET['table'] ?? null) {
+    $results = db_connect()->query('table ' . escape($_GET['schema'] ?: 'pact') . '.' . escape($table))->fetchAll();
+    // Vérifier s'il y a des résultats
+    if ($results) {
+        echo "<table border='1'>";
+        echo '<tr>';
 
-    $pdo = db_connect();
-    try {
-        // Construire la requête SQL pour sélectionner toutes les lignes de la table validée
-        $query = 'SELECT * FROM pact.' . $table;
-        $stmt = $pdo->prepare($query);
-        $stmt->execute();
+        // Afficher les en-têtes du tableau en fonction des colonnes récupérées
+        foreach (array_keys($results[0]) as $column) {
+            echo '<th>' . htmlspecialchars($column ?? '') . '</th>';
+        }
+        echo '</tr>';
 
-        // Récupérer toutes les lignes de la table
-        $results = $stmt->fetchAll(PDO::FETCH_ASSOC);  // Récupère les données sous forme de tableau associatif
-
-        // Vérifier s'il y a des résultats
-        if ($results) {
-            echo "<table border='1'>";
+        // Afficher chaque ligne
+        foreach ($results as $row) {
             echo '<tr>';
-
-            // Afficher les en-têtes du tableau en fonction des colonnes récupérées
-            foreach (array_keys($results[0]) as $column) {
-                echo '<th>' . htmlspecialchars($column) . '</th>';
+            foreach ($row as $value) {
+                echo '<td>' . htmlspecialchars($value ?? '') . '</td>';  // Sécuriser l'affichage des données
             }
             echo '</tr>';
-
-            // Afficher chaque ligne
-            foreach ($results as $row) {
-                echo '<tr>';
-                foreach ($row as $value) {
-                    echo '<td>' . htmlspecialchars($value) . '</td>';  // Sécuriser l'affichage des données
-                }
-                echo '</tr>';
-            }
-            echo '</table>';
-        } else {
-            echo "Aucune donnée trouvée dans la table $table.";
         }
-    } catch (Exception $e) {
-        echo 'Erreur : ' . $e->getMessage();
+        echo '</table>';
+    } else {
+        echo "<p>Aucune donnée trouvée dans la table $table.</p>";
     }
 } else {
 ?>
 <!DOCTYPE html>
 <html lang="fr">
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>regarde dans la bdd</title>
-    <link rel="stylesheet" href="../style/style.css">
-</head>
+<?php put_head('regarde dans la bdd') ?>
 
 <body>
     <?php require 'component/header.php' ?>
@@ -63,14 +49,16 @@ if (isset($_GET['table'])) {
                 <form action="regardeMaGrosseBdd.php" method="get" enctype="multipart/form-data">
 
                     <br>
-                    <div class="champ">
-                        <p>donne le nom de la table </p>
+                    <div class="champ"> 
+                        <p>donne le nom de la table *</p>
                         <input type="text" placeholder="" id="table" name="table" required>
+                        <p>et un schema</p>
+                        <input type="text" placeholder="pact" id="schema" name="schema">
                     </div>
 
                     <button type="submit" class="btn-connexion">regarde</button>
                 </form>
-                <br /><br>
+                <br ><br>
                 </a>
                 <br>
             </div>

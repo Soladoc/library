@@ -14,7 +14,8 @@
     font-family: Arial, sans-serif;
 }
 
-html, body {
+html,
+body {
     height: 100%;
     margin: 0;
     padding: 0;
@@ -69,6 +70,9 @@ header {
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
     position: relative;
 }
+
+footer {
+    color: white;
 
     p > a {
         font-size: x-large;
@@ -128,6 +132,10 @@ header {
         height: 60px;
         /* ajuste la hauteur selon le besoin */
     }
+}
+
+.error {
+    color: #ca2200;
 }
 
 .auth-button {
@@ -654,4 +662,59 @@ a {
 
 #bloc_siren {
     display: block;
+}
+
+@media (max-width: 767px) {
+    .social-links {
+        display: none !important;
+    }
+
+    footer {
+        & > div:first-child {
+            padding: 0em !important;
+        }
+    
+        & > div:first-child > div:first-child {
+            column-gap: 0em !important;
+        }
+    }
+}
+
+/* Section de sélection de tags */
+.tag-selection {
+    margin: 20px 0;
+}
+.categories, .subcategories {
+    margin-bottom: 10px;
+}
+.subcategory-list div {
+    margin: 5px 0;
+}
+.hidden {
+    display: none;
+}
+
+/* Boutons de tri */
+.sorting-section {
+    margin: 20px 0;
+}
+.sorting-buttons {
+    display: flex;
+    gap: 10px;
+}
+.btn-sort {
+    padding: 10px 15px;
+    border: 1px solid #ccc;
+    background-color: #f5f5f5;
+    cursor: pointer;
+    border-radius: 5px;
+    transition: background-color 0.3s;
+}
+.btn-sort:hover {
+    background-color: #ddd;
+}
+.btn-sort.active {
+    background-color: #007BFF;
+    color: #fff;
+    border-color: #007BFF;
 }

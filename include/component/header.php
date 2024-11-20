@@ -1,6 +1,5 @@
 <?php 
-session_start();
-?>
+session_start() ?>
 <header>
     <div class="logo">
         <a href="accueil.php"><img src="../images/logo.png" alt="Logo pact"></a>

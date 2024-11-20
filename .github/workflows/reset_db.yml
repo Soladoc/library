@@ -9,8 +9,6 @@ jobs:
   reset_db:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
       - name: Reset Database
         run: |
           env
@@ -28,9 +26,10 @@ jobs:
                 sudo docker cp "$f" postgresdb:/"$f"
               done
               sudo docker exec -w / postgresdb bash -c '
-                for f in /creaBDD.sql /vuesBDD.sql /fonctions_triggers.sql /data.sql
+                set -xeu
+                for f in /creaBDD.sql /fonctions.sql /vuesBDD.sql /triggers.sql /bigdata.sql /data.sql /images.sql /offres.sql
                   do echo run "$f"
-                  psql -U sae -d postgres -f "$f"
+                  psql -v ON_ERROR_STOP=on -U sae -d postgres -f "$f"
                 done
               '
           EOF

@@ -9,8 +9,6 @@ jobs:
   update_server:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
       - name: Update Server
         run: |
           env

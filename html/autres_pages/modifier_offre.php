@@ -12,49 +12,39 @@
 //     $stmt->execute(['id' => $id]);
 
 //     // Récupérer les données de l'offre
-//     $offre = $stmt->fetch(PDO::FETCH_ASSOC);
+//     $offre = $stmt->fetch();
 
 //     // Si l'offre est trouvée, afficher ses détails
 //     if ($offre) {
 //         echo '<h3>' . htmlspecialchars($offre['title']) . '</h3>';
 //         echo '<p class="location">' . htmlspecialchars($offre['location']) . '</p>';
-//         echo '<p class="category">Catégorie : ' . htmlspecialchars($offre['category']) . '</p>';
-//         echo '<p class="price">Prix : ' . htmlspecialchars($offre['price']) . '</p>';
-//         echo '<p class="rating">Note : ' . htmlspecialchars($offre['rating']) . ' ★ (' . htmlspecialchars($offre['reviews']) . ' avis)</p>';
-//         echo '<p class="professional">Proposé par : ' . htmlspecialchars($offre['professional']) . '</p>';
+//         echo '<p class="category">Catégorie&nbsp;: ' . htmlspecialchars($offre['category']) . '</p>';
+//         echo '<p class="price">Prix&nbsp;: ' . htmlspecialchars($offre['price']) . '</p>';
+//         echo '<p class="rating">Note&nbsp;: ' . htmlspecialchars($offre['rating']) . ' ★ (' . htmlspecialchars($offre['reviews']) . ' avis)</p>';
+//         echo '<p class="professional">Proposé par&nbsp;: ' . htmlspecialchars($offre['professional']) . '</p>';
 //     } else {
 //         echo 'Aucune offre trouvée avec cet ID.';
 //     }
 // } else {
 //     echo 'ID d\'offre invalide.';
 // }
+require_once 'component/head.php';
+
+const TYPE_OFFRE_AFFICHABLE = [
+    'spectacle' => 'un spectacle',
+    'parc_attraction' => "un parc d'attractions",
+    'visite' => 'une visite',
+    'restaurant' => 'un restaurant',
+    'activite' => 'une activité',
+    '' => 'une offre'
+];
+
 ?>
-
-
-
 
 <!DOCTYPE html>
 <html lang="fr">
 
-<head>
-    <script async src="../script_js/creation_offre.js"></script>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="../style/style.css">
-    <link rel="stylesheet" href="../style/creation_offre.css">
-    <title>Création d'une offre</title>
-</head>
-
-<?php
-const TYPE_OFFRE_AFFICHABLE = [
-    'spectacle' => 'un spectacle',
-    'parc_attraction' => "un parc d'attraction",
-    'visite' => 'une visite',
-    'restauration' => 'une restauration',
-    'activite' => 'une activité',
-    '' => 'une offre'
-];
-?>
+<?php put_head("Création d'une offre", ['creation_offre.css'], ['creation_offre.js' => 'defer']) ?>
 
 <body>
     <?php require 'component/header.php' ?>
@@ -70,7 +60,8 @@ const TYPE_OFFRE_AFFICHABLE = [
     <h1>Erreur de méthode d'accès</h1>
     <p>Une erreur dans la requette de la page est survenue, merci de réessayer plus tard</p>
 
-    <?php exit; } ?>
+    <?php exit;
+} ?>
     <main>
         <section id="titre_creation_offre">
             <h1>Créer <?= TYPE_OFFRE_AFFICHABLE[$type_offre] ?></h1>
@@ -185,7 +176,7 @@ const TYPE_OFFRE_AFFICHABLE = [
                 <ul>
                 <?php
                 require_once 'tags.php';
-                foreach ($type_offre === 'restauration' ? TAGS_RESTAURATION : DEFAULT_TAGS as $tag) {
+                foreach ($type_offre === 'restaurant' ? TAGS_RESTAURANT : DEFAULT_TAGS as $tag) {
                     ?><li><?= $tag ?></li><?php
                 }
                 ?>

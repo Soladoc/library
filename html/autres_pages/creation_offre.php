@@ -1,316 +1,276 @@
 <?php
 session_start();
 
-require_once 'db.php';
-require_once 'connexion.php';
+require_once 'queries.php';
+require_once 'auth.php';
+require_once 'util.php';
+require_once 'const.php';
+require_once 'component/inputs.php';
+require_once 'component/head.php';
 
-// $id_pro = exiger_connecte_pro();
-$id_pro = 1;
-
-const TYPE_OFFRE_AFFICHABLE = [
-    'spectacle' => 'un spectacle',
-    'parc-attraction' => "un parc d'attraction",
-    'visite' => 'une visite',
-    'restauration' => 'un restaurant',
-    'activite' => 'une activité',
-    '' => 'une offre'
+$args = [
+    'type_offre' => getarg($_GET, 'type_offre', arg_check(f_str_is(array_keys(TYPES_OFFRE)))),
 ];
 
-const JOURS_SEMAINE = ['lundi', 'mardi', 'mercredi', 'jeudi', 'vendredi', 'samedi', 'dimanche'];
+$id_professionnel = exiger_connecte_pro();
 
-$type_offre = $_GET['type-offre'] ?? null;
+if ($_POST) {
+    ?><pre><?= htmlspecialchars(print_r($_GET, true)) ?></pre><?php
+    ?><pre><?= htmlspecialchars(print_r($_POST, true)) ?></pre><?php
+    ?><pre><?= htmlspecialchars(print_r($_FILES, true)) ?></pre><?php
+    $args += [
+        'adresse_commune' => getarg($_POST, 'adresse_commune'),
+        'description_detaillee' => getarg($_POST, 'description_detaillee'),
+        'resume' => getarg($_POST, 'resume'),
+        'titre' => getarg($_POST, 'titre'),
+        'adresse_complement_numero' => getarg($_POST, 'adresse_complement_numero', required: false),
+        'adresse_localite' => getarg($_POST, 'adresse_localite', required: false),
+        'adresse_nom_voie' => getarg($_POST, 'adresse_nom_voie', required: false),
+        'adresse_numero_voie' => getarg($_POST, 'adresse_numero_voie', required: false),
+        'adresse_precision_ext' => getarg($_POST, 'adresse_precision_ext', required: false),
+        'adresse_precision_int' => getarg($_POST, 'adresse_precision_int', required: false),
+        'url_site_web' => getarg($_POST, 'url_site_web', required: false),
+        'file_gallerie' => getarg($_FILES, 'gallerie'),
+        'file_image_principale' => getarg($_FILES, 'image_principale'),
+    ];
 
-// Conserve les images uploadées durant cette transaction pour les supprimer en cas d'erreur. Comme ça on ne pollue pas le dossier.
-$uploaded_images = [];
-
-function remove_uploaded_images()
-{
-    global $uploaded_images;
-    foreach ($uploaded_images as $file) {
-        unlink($file);
+    function indication_duree_args(): array {
+        return [
+            'indication_duree_jours' => getarg($_POST, 'indication_duree_jours'),
+            'indication_duree_heures' => getarg($_POST, 'indication_duree_heures'),
+            'indication_duree_minutes' => getarg($_POST, 'indication_duree_minutes'),
+        ];
     }
+    
+    $args += match ($args['type_offre']) {
+        'activite' => indication_duree_args() + [
+            'prestations_incluses' => getarg($_POST, 'prestations_incluses'),
+            'age_requis' => getarg($_POST, 'age_requis', arg_filter(FILTER_VALIDATE_INT, ['min_range' => 1]), required: false),
+            'prestations_non_incluses' => getarg($_POST, 'prestations_non_incluses')
+        ],
+        'parc-attractions' => [
+            'file_image_plan' => getarg($_FILES, 'image_plan'),
+        ],
+        'spectacle' => indication_duree_args() + [
+            'capacite_accueil' => getarg($_POST, 'capacite_accueil', arg_filter(FILTER_VALIDATE_INT, ['min_range' => 0])),
+        ],
+        'restaurant' => [
+            'carte' => getarg($_POST, 'carte'),
+            'richesse' => getarg($_POST, 'richesse'),
+            'sert_petit_dejeuner' => getarg($_POST, 'sert_petit_dejeuner', required: false),
+            'sert_brunch' => getarg($_POST, 'sert_brunch', required: false),
+            'sert_dejeuner' => getarg($_POST, 'sert_dejeuner', required: false),
+            'sert_diner' => getarg($_POST, 'sert_diner', required: false),
+            'sert_boissons' => getarg($_POST, 'sert_boissons', required: false),
+        ],
+        'visite' => indication_duree_args()
+    };
+
+
+
+    // Délégation du traitement à un autre script pour gagner de la place
+    require 'traitement/creation_offre.php';
+    exit;
 }
+?>
+<!DOCTYPE html>
+<html lang="fr">
 
-function insert_image(PDO $pdo, array $img)
-{
-    global $uploaded_images;
-    $stmt = notfalse($pdo->prepare('insert into pact._image (legende, taille) values (?,?) returning id_image'));
-    notfalse($stmt->execute([null, $img['size']]));  // todo: legende
-    $id_image = $stmt->fetchColumn();
+<?php put_head("Création d'une offre",
+    ['creation_offre.css'],
+    ['module/creation_offre.js' => 'defer type="module"']) ?>
 
-    move_uploaded_file($img['tmp_name'], __DIR__ . "/../images_utilisateur/$id_image");
-}
-
-if ($type_offre && $_POST) {
-    ?>
-    <pre><?= htmlspecialchars(print_r($_GET, true)) ?></pre>
-    <pre><?= htmlspecialchars(print_r($_POST, true)) ?></pre>
-    <pre><?= htmlspecialchars(print_r($_FILES, true)) ?></pre>
-    <?php
-
-    try {
-        $pdo = db_connect();
-        notfalse($pdo->beginTransaction());
-
-        // Récupérer le code de la commune
-        // todo: il faut un code postal avec (car une commune peut avoir plusieurs codes postaux)
-        $stmt = notfalse($pdo->prepare('select code_insee, code_postal from pact._commune where nom=?'));
-        echo 'fetching commune ' . $_POST['adresse']['commune'];
-        notfalse($stmt->execute([$_POST['adresse']['commune']]));
-        $commune = notfalse($stmt->fetch(PDO::FETCH_ASSOC));
-
-        // Insérer l'adresse
-        // todo: adresses localisées
-        $stmt = notfalse($pdo->prepare('insert into pact._adresse (numero_voie, complement_numero, nom_voie, localite, precision_int, precision_ext, commune_code_insee, commune_code_postal) values (?,?,?,?,?,?,?,?) returning id_adresse'));
-        notfalse($stmt->execute([
-            $_POST['adresse']['num_voie'] ?? null,
-            $_POST['adresse']['compl_numero'] ?? null,
-            $_POST['adresse']['nom_voie'] ?? null,
-            $_POST['adresse']['localite'] ?? null,
-            $_POST['adresse']['precision_int'] ?? null,
-            $_POST['adresse']['precision_ext'] ?? null,
-            $commune['code_insee'],
-            $commune['code_postal']
-        ]));
-        $id_adresse = notfalse($stmt->fetchColumn());
-
-        // Insérer la gallerie la photo principale
-        $id_image_photo_principale = insert_image($pdo, $_FILES['photo_principale']);
-
-        // Insérer le signalable
-        $stmt = notfalse($pdo->prepare('insert into pact._signalable default values returning id_signalable'));
-        notfalse($stmt->execute());
-        $id_signalable = notfalse($stmt->fetchColumn());
-
-        // Insérer l'offre
-        // todo: offre payantes standard et premium
-
-        $stmt = notfalse($pdo->prepare('INSERT INTO pact._offre (titre, resume, description_detaille, url_site_web, adresse, photoprincipale, abonnement, id_signalable, id_professionnel) VALUES (?,?,?,?,?,?,?,?,?) returning id_offre'));
-        notfalse($stmt->execute([
-            $_POST['titre'],
-            $_POST['resume'],
-            $_POST['description'],
-            $_POST['site'] ?? null,
-            $id_adresse,
-            $id_image_photo_principale,
-            'gratuit',
-            $id_signalable,
-            $id_pro
-        ]));
-        $id_offre = notfalse($stmt->fetchColumn());
-
-        // Insérer la gallerie
-
-        foreach ($_FILES['gallerie'] as $img) {
-            $id_image = insert_image($pdo, $img);
-            $stmt = notfalse($pdo->prepare('insert into pact._gallerie (id_offre, id_image) values (?,?)'));
-            notfalse($stmt->execute([$id_offre, $id_image]));
-        }
-
-        notfalse($pdo->rollBack());
-        echo "j'ai réussi";
-    } catch (Throwable $e) {
-        remove_uploaded_images();
-        echo "j'ai échoué";
-        throw $e;
-    }
-} else {
-    ?>
-    <!DOCTYPE html>
-    <html lang="fr">
-
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <link rel="stylesheet" href="../style/style.css">
-        <link rel="stylesheet" href="../style/creation_offre.css">
-        <title>Création d'une offre</title>
-        <script async src="../script_js/creation_offre.js"></script>
-    </head>
-
-    <body>
-        <?php require 'component/header.php' ?>
-        <?php if (!isset($_GET) || !$type_offre) { ?>
-            <!-- post is unset-->
-            <h1>Erreur de méthode d'accès</h1>
-            <p>Une erreur dans la requette de la page est survenue, merci de réessayer plus tard</p>
-
-        <?php exit;
-    } ?>
-        <main>
-            <section id="titre-creation-offre">
-                <h1>Créer <?= TYPE_OFFRE_AFFICHABLE[$type_offre] ?></h1>
-            </section>
-            <section id="info-generales">
-                <h2>Informations générales</h2>
-                <div>
-                    <label for="titre">Titre*</label>
-                    <p>
-                        <input form="form-offre" type="text" name="titre" id="titre" maxlength="255" required>
-                    </p>
-                    <label for="resume">Resumé*</label>
-                    <p>
-                        <input form="form-offre" type="text" name="resume" id="resume" maxlength="1023" required>
-                    </p>
-                    <label for="adresse">Adresse*</label>
-                    <p>
-                        <?php
-                        require_once 'component/input_address.php';
-                        put_input_address('form-offre');
-                        ?>
-                    </p>
-                    <label for="tel">Tel</label>
-                    <p>
-                        <input form="form-offre" type="tel" name="tel" id="tel" pattern="0\d{9}" title="10 chiffres (France uniquement)" placeholder="0123456789">
-                    </p>
-                    <label for="site">Site Web</label>
-                    <p>
-                        <input form="form-offre" type="url" name="site" id="site">
-                    </p>
-                </div>
-            </section>
-            <section>
-                <h2>Photo principale</h2>
-                <input form="form-offre" type="file" id="photo-principale" name="photo_principale" accept="image/*" required>
-                <div id="photo-principale-preview"></div>
-            </section>
-            <section id="tarif">
-                <h2>Tarifs</h2>
-                <table id="table-tarifs">
-                    <thead>
-                        <tr>
-                            <th>Nom</th>
-                            <th>Montant</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                    </tbody>
-                    <tfoot>
-                        <tr>
-                            <td><input id="nom-tarif" type="text" minlength="1" placeholder="Enfant, Sénior&hellip;"></td>
-                            <td><input id="montant-tarif" type="number" min="0" placeholder="Prix"> €</td>
-                            <td><button id="button-add-tarif" type="button">+</button></td>
-                        </tr>
-                    </tfoot>
-                </table>
-                <template id="template-tarif-tr">
-                    <tr>
-                        <td><input form="form-offre" name="tarifs[]" minlength="1" type="text" placeholder="Enfant, Sénior&hellip;" required readonly></td>
-                        <td><input form="form-offre" name="tarifs_montant[]" min="0" type="number" placeholder="Prix" required> €</td>
-                        <td><button type="button">-</button></td>
-                    </tr>
-                </template>
-            </section>
-            <section id="horaires">
-                <h2>Horaires</h2>
-                <div>
-                    <?php
-                    foreach (JOURS_SEMAINE as $jour) {
-                        ?>
-                        <article id="<?= $jour ?>">
-                            <h3><?= ucfirst($jour) ?></h3>
-                            <button id="button-add-horaire-<?= $jour ?>" type="button">+</button>
-                            <table id="table-horaires-<?= $jour ?>">
-                                <thead>
-                                    <tr>
-                                        <th>Début</th>
-                                        <th>Fin</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                </tbody>
-                            </table>
-                        </article>
-                        <template id="template-horaire-tr-<?= $jour ?>">
-                            <tr>
-                                <td><input form="form-offre" type="time" name="horaires_deb[<?= $jour ?>][]" required></td>
-                                <td><input form="form-offre" type="time" name="horaires_fin[<?= $jour ?>][]" required></td>
-                                <td><button type="button">-</button></td>
-                            </tr>
-                        </template>
-                    <?php } ?>
-                </div>
-            </section>
-            <section id="tags">
-                <h2>Tags</h2>
-                <ul id="list-tag">
-                    <?php
-                    require_once 'tags.php';
-                    foreach ($type_offre === 'restauration' ? TAGS_RESTAURATION : DEFAULT_TAGS as $id => $name) {
-                        ?>
-                        <li><label for="tag-<?= $id ?>"><?= $name ?><input form="form-offre" type="checkbox" name="tags[<?= $id ?>]" id="tag-<?= $id ?>" value="<?= $id ?>"></li></label>
-                    <?php } ?>
-                </ul>
-            </section>
-            <section id="description">
-                <h2>Description</h2>
-                <textarea form="form-offre" name="description" id="description" minlength="1" required></textarea>
-            </section>
-            <section id="image-creation-offre">
-                <h2>Gallerie</h2>
-                <input form="form-offre" type="file" id="gallerie" name="gallerie[]" accept="image/*" multiple>
-                <ul id="gallerie-preview"></ul>
-            </section>
-            <section id="infos-detaillees">
-                <h2>Informations détailées</h2>
+<body>
+    <?php require 'component/header.php' ?>
+    <main>
+        <section id="titre-creation-offre">
+            <h1>Créer <?= TYPES_OFFRE[$args['type_offre']] ?></h1>
+        </section>
+        <section id="info-generales">
+            <h2>Informations générales</h2>
+            <div>
+                <label for="titre">Titre*</label>
+                <p>
+                    <input form="f" id="titre" name="titre" type="text" required>
+                </p>
+                <label for="resume">Resumé*</label>
+                <p>
+                    <input form="f" id="resume" name="resume" type="text" required>
+                </p>
+                <label for="adresse">Adresse*</label>
                 <?php
-                switch ($type_offre) {
-                    case 'spectacle':
-                        ?>
-                        <p><label>Durée indiquée&nbsp;: <input name="<?= $type_offre ?>[indication_duree]" type="time" required></label></p>
-                        <p><label>Capacité d'accueil&nbsp;: <input name="<?= $type_offre ?>[capacite_accueil]" type="number" min="0"></label> pers.</p>
-                        <?php
-                        break;
-                    case 'parc-attraction':
-                        ?>
-                        <p><label>Âge requis&nbsp;: <input name="<?= $type_offre ?>[age_requis]" type="number" min="1"> an</label></p>
-                        <?php
-                        break;
-                    case 'visite':
-                        ?>
-                        <p><label>Durée indiquée&nbsp;: <input name="<?= $type_offre ?>[indication_duree]" type="time" required></label></p>
-                        <?php
-                        break;
-                    case 'restauration':
-                        ?>
-                        <fieldset>
-                            <legend>Niveau de richesse</legend>
-                            <p><label><input type="radio" name="<?= $type_offre ?>[richesse]" value="1" checked> €</label></p>
-                            <p><label><input type="radio" name="<?= $type_offre ?>[richesse]" value="2"> €€</label></p>
-                            <p><label><input type="radio" name="<?= $type_offre ?>[richesse]" value="3"> €€€</label></p>
-                        </fieldset>
-                        <fieldset>
-                            <legend>Repas</legend>
-                            <p><label><input type="checkbox" name="<?= $type_offre ?>[sert][petit_dejeuner]"> Petit déjeuner</label></p>
-                            <p><label><input type="checkbox" name="<?= $type_offre ?>[sert][brunch]"> Brunch</label></p>
-                            <p><label><input type="checkbox" name="<?= $type_offre ?>[sert][dejeuner]"> Déjeuner</label></p>
-                            <p><label><input type="checkbox" name="<?= $type_offre ?>[sert][diner]"> Dîner</label></p>
-                            <p><label><input type="checkbox" name="<?= $type_offre ?>[sert][boissons]"> Boissons</label></p>
-                        </fieldset>
-                        <p>Carte</p>
-                        <textarea form="form-offre" name="<?= $type_offre ?>[carte]"></textarea>
-                        <?php
-                        break;
-                    case 'activite':
-                        ?>
-                        <p><label>Durée indiquée&nbsp;: <input name="<?= $type_offre ?>[indication_duree]" type="time" required></label></p>
-                        <p><label>Âge requis&nbsp;: <input name="<?= $type_offre ?>[age_requis]" type="number" min="1"> an</label></p>
-                        <p>Prestations incluses</p>
-                        <textarea form="form-offre" name="<?= $type_offre ?>[prestations_incluses]"></textarea>
-                        <p>Prestations non incluses</p>
-                        <textarea form="form-offre" name="<?= $type_offre ?>[prestations_non_incluses]"></textarea>
-                        <?php
-                        break;
-                }
-                                    ?>
-            </section>
-            <!-- du coup en sois on a pas de formulaire a check avec Raphael -->
-            <form id="form-offre" action="creation_offre.php?type-offre=<?= $type_offre ?>" method="post" enctype="multipart/form-data">
-                <button type="submit">Valider</button>
-            </form>
-        </main>
-        <?php require 'component/footer.php' ?>
-    </body>
+                put_input_address('f', 'adresse', 'adresse_')
+                ?>
+                <label for="site">Site Web</label>
+                <p>
+                    <input form="f" id="url_site_web" name="url_site_web" type="url">
+                </p>
+            </div>
+        </section>
+        <section>
+            <h2>Photo principale</h2>
+            <input form="f" id="image_principale" name="image_principale" type="file" accept="image/*" required>
+            <div id="image_principale-preview"></div>
+        </section>
+        <section id="tarifs">
+            <h2>Tarifs</h2>
+            <table id="table-tarifs">
+                <thead>
+                    <tr>
+                        <th>Nom</th>
+                        <th>Montant</th>
+                    </tr>
+                </thead>
+                <tbody>
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <td><input type="text" placeholder="Enfant, Sénior&hellip;" required></td>
+                        <td><input type="number" min="0" placeholder="Prix" required> €</td>
+                    </tr>
+                </tfoot>
+            </table>
+            <template id="template-tarif-tr"><tr>
+                <td><input form="f" name="tarifs_nom[]" type="text" placeholder="Enfant, Sénior&hellip;" required readonly></td>
+                <td><input form="f" name="tarifs_montant[]" type="number" min="0" placeholder="Prix" required> €</td>
+            </tr></template>
+        </section>
+        <section id="horaires-hebdomadaires">
+            <h2>Horaires hebdomadaires</h2>
+            <div>
+                <?php foreach (JOURS_SEMAINE as $jour) { ?>
+                    <article id="<?= $jour ?>">
+                        <h3><?= ucfirst($jour) ?></h3>
+                        <button id="button-add-horaire-<?= $jour ?>" type="button">+</button>
+                        <table id="table-horaires-<?= $jour ?>">
+                            <thead>
+                                <tr>
+                                    <th>Début</th>
+                                    <th>Fin</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                        </table>
+                    </article>
+                    <template id="template-horaire-tr-<?= $jour ?>"><tr>
+                        <td><input form="f" name="horaires_debut[<?= $jour ?>][]" type="time" required></td>
+                        <td><input form="f" name="horaires_fin[<?= $jour ?>][]" type="time" required></td>
+                        <td><button type="button">-</button></td>
+                    </tr></template>
+                <?php } ?>
+            </div>
+        </section>
+        <section id="horaires-ponctuels">
+            <h2>Horaires ponctuels</h2>
+            <table id="table-periodes">
+                <thead>
+                    <tr>
+                        <th>Début</th>
+                        <th>Fin</th>
+                    </tr>
+                </thead>
+                <tbody>
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <td><input type="datetime-local" placeholder="Début" required></td>
+                        <td><input type="datetime-local" placeholder="Fin" required></td>
+                    </tr>
+                </tfoot>
+            </table>
+            <template id="template-periode-tr"><tr>
+                <td><input form="f" name="periodes_debut[]" type="datetime-local"></td>
+                <td><input form="f" name="periodes_fin[]" type="datetime-local"></td>
+            </tr></template>
+        </section>
+        <section id="tags">
+            <h2>Tags</h2>
+            <ul id="list-tag">
+                <?php
+                foreach ($args['type_offre'] === 'restaurant' ? TAGS_RESTAURANT : DEFAULT_TAGS as $tag) {
+                    ?>
+                    <li><label><input form="f" name="tags[<?= $tag ?>]" type="checkbox"><?= $tag ?></label></li>
+                <?php } ?>
+            </ul>
+        </section>
+        <section id="description_detaillee">
+            <h2>Description détaillée</h2>
+            <textarea form="f" id="description_detaillee" name="description_detaillee" required></textarea>
+        </section>
+        <section id="image-creation-offre">
+            <h2>Gallerie</h2>
+            <input form="f" id="gallerie" name="gallerie[]" type="file" accept="image/*" multiple>
+            <div id="gallerie-preview"></div>
+        </section>
+        <section id="infos-detaillees">
+            <h2>Informations détaillées</h2>
+            <?php
+            switch ($args['type_offre']) {
+                case 'activite':
+                    ?>
+                    <p><label>Âge requis&nbsp;: <input form="f" name="age_requis" type="number" min="1"> an</label></p>
+                    <p>Prestations incluses*</p>
+                    <textarea form="f" name="prestations_incluses" required></textarea>
+                    <p>Prestations non incluses</p>
+                    <textarea form="f" name="prestations_non_incluses"></textarea>
+                    <?php
+                    put_input_indication_duree();
+                    break;
+                case 'parc-attractions':
+                    ?>
+                    <p><label>Âge requis&nbsp;: <input form="f" name="age_requis" type="number" min="1"> an</label></p>
+                    <fieldset>
+                        <p><label>Plan* &nbsp;: <input form="f" id="image_plan" name="image_plan" type="file" accept="image/*" required></label></p>
+                        <div id="image_plan-preview"></div>
+                    </fieldset>
+                    <?php
+                    break;
+                case 'restaurant':
+                    ?>
+                    <fieldset>
+                        <legend>Niveau de richesse</legend>
+                        <p><label><input form="f" type="radio" name="richesse" value="1" checked> €</label></p>
+                        <p><label><input form="f" type="radio" name="richesse" value="2"> €€</label></p>
+                        <p><label><input form="f" type="radio" name="richesse" value="3"> €€€</label></p>
+                    </fieldset>
+                    <fieldset>
+                        <legend>Repas servis</legend>
+                        <p><label><input form="f" type="checkbox" name="sert_petit_dejeuner">Petit déjeuner</label></p>
+                        <p><label><input form="f" type="checkbox" name="sert_brunch">Brunch</label></p>
+                        <p><label><input form="f" type="checkbox" name="sert_dejeuner">Déjeuner</label></p>
+                        <p><label><input form="f" type="checkbox" name="sert_diner">Dîner</label></p>
+                        <p><label><input form="f" type="checkbox" name="sert_boissons">Boissons</label></p>
+                    </fieldset>
+                    <p>Carte</p>
+                    <textarea form="f" name="carte"></textarea>
+                    <?php
+                    break;
+                case 'spectacle':
+                    ?>
+                    <p><label>Capacité d'accueil&nbsp;: <input form="f" name="capacite_accueil" type="number" min="0" required></label> pers.</p>
+                    <?php
+                    put_input_indication_duree();
+                    break;
+                case 'visite':
+                    put_input_indication_duree();
+                    break;
+            }
+            ?>
+        </section>
+        <form id="f" method="post" enctype="multipart/form-data">
+            <button type="submit">Valider</button>
+        </form>
+    </main>
+    <?php require 'component/footer.php' ?>
+    
+</body>
 
-    </html>
-<?php } ?>
+</html>
+<?php
+function put_input_indication_duree()
+{
+    ?>
+        <label>Durée estimée&nbsp;: <?php put_input_duration('f', 'indication_duree', 'indication_duree_') ?></label>
+        <?php
+}

@@ -1,86 +1,113 @@
 <?php
-// // Vérifier si l'ID est présent dans l'URL
-// if (isset($_GET['id']) && is_numeric($_GET['id'])) {
-//     $id = $_GET['id'];
+require_once 'db.php';
+require_once 'queries.php';
+require_once 'component/head.php';
+require_once 'util.php';
 
-//     // Connexion à la base de données
-//     $pdo = db_connect();
 
-//     // Préparer la requête pour récupérer les détails de l'offre
-//     $query = "SELECT * FROM offres WHERE id = :id";
-//     $stmt = $pdo->prepare($query);
-//     $stmt->execute(['id' => $id]);
+$args = [
+    'id' => getarg($_GET, 'id', arg_filter(FILTER_VALIDATE_INT))
+];
+// Vérifier si l'ID est présent dans l'URL
+if ($_POST) {
 
-//     // Récupérer les données de l'offre
-//     $offre = $stmt->fetch(PDO::FETCH_ASSOC);
+    // Connexion à la base de données
+    $pdo = db_connect();
 
-//     // Si l'offre est trouvée, afficher ses détails
-//     if ($offre) {
-//         echo '<h3>' . htmlspecialchars($offre['title']) . '</h3>';
-//         echo '<p class="location">' . htmlspecialchars($offre['location']) . '</p>';
-//         echo '<p class="category">Catégorie : ' . htmlspecialchars($offre['category']) . '</p>';
-//         echo '<p class="price">Prix : ' . htmlspecialchars($offre['price']) . '</p>';
-//         echo '<p class="rating">Note : ' . htmlspecialchars($offre['rating']) . ' ★ (' . htmlspecialchars($offre['reviews']) . ' avis)</p>';
-//         echo '<p class="professional">Proposé par : ' . htmlspecialchars($offre['professional']) . '</p>';
-//     } else {
-//         echo 'Aucune offre trouvée avec cet ID.';
-//     }
-// } else {
-//     echo 'ID d\'offre invalide.';
-// }
+    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+        alterner_etat_offre($args['id']);
+        $offre = query_offre($args['id']);
+        header("Location: " . $_SERVER['PHP_SELF'] . "?id=" . $args['id']);
+        exit();
+    }
+
+    // Récupérer les données de l'offre
+    $offre = query_offre($args['id']);
+
+    // Si l'offre est trouvée, afficher ses détails
+    if ($offre) {
+        $titre  = $offre['titre'];  // Assurez-vous que le nom des colonnes correspond à la base de données
+        $description = $offre['description_detaillee'];
+        $adresse = $offre['id_adresse'];
+        $site_web = $offre['url_site_web'];
+        $image_pricipale = $offre['id_image_principale'];
+        $en_ligne=$offre['en_ligne'];
+        $info_adresse = query_adresse($adresse);
+
+        // Vérifier si l'adresse existe
+        if ($info_adresse) {
+            // Construire une chaîne lisible pour l'adresse
+            $numero_voie = $info_adresse['numero_voie'];
+            $complement_numero = $info_adresse['complement_numero'];
+            $nom_voie = $info_adresse['nom_voie'];
+            $localite = $info_adresse['localite'];
+            $code_postal = query_codes_postaux($info_adresse['code_commune'],$info_adresse['numero_departement'])[0];
+
+            // Concaténer les informations pour former une adresse complète
+            $adresse_complete = "$numero_voie $complement_numero $nom_voie, $localite, $code_postal";
+
+            // Afficher ou retourner l'adresse complète
+        } else {
+            echo 'Adresse introuvable.';
+        }
+    } else {
+        echo 'Aucune offre trouvée avec cet ID.';
+    }
+} else {
+    echo 'ID d\'offre invalide.';
+}
+
 ?>
 
-<?php
-    // $pdo = db_connect();
 
-    //  $sql = 'INSERT INTO  pact._changement_etat (id_offre) VALUES (:id_offre)';
-    //  $stmt = $pdo->prepare($sql);
-
-    //  $stmt->bindParam(':id_offre', $_GET['id']);
-?>
 <!DOCTYPE html>
 <html lang="fr">
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Détail de l'offre - Parc du Radôme</title>
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
-    <script async src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
-    <link rel="stylesheet" href="../style/style.css">
-</head>
+<?php put_head("offre : {$args['id']}",
+    ['https://unpkg.com/leaflet@1.7.1/dist/leaflet.css'],
+    ['https://unpkg.com/leaflet@1.7.1/dist/leaflet.js' => 'async']); ?>>
 
 <body>
-    <?php require 'include/component/header.php' ?>
+    <?php require 'component/header.php' ?>
     <!-- Offer Details -->
     <main>
         <section class="modif">
-            <div class='online'>
-                <button class="en_ligne">en ligne</button>
-                <button class="hors_ligne">hors ligne</button>
-
-
+            <form id="toggleForm" method="POST">
+                <div class='online'>
+                    <div>
+                        <?php if ($en_ligne) { ?>
+                            <p>Offre en ligne</p>
+                            <button type="button" class="hors_ligne" onclick="enableValidate()">Mettre hors ligne</button>
+                        <?php } else { ?>
+                            <p>Offre hors ligne</p>
+                            <button type="button" class="en_ligne" onclick="enableValidate()">Mettre en ligne</button>
+                        <?php } ?>
+                    </div>
+                    <button type="submit" name="valider" class="valider" id="validateButton" disabled>Valider</button>
+                </div>
+            </form>
+            <div class="page_modif">
+                <a class="modifier" href="https://413.ventsdouest.dev/autres_pages/modifier_offre.php">Modifier</a>
             </div>
-            <button class="modifier" >modifier</button>
-
         </section>
         <section class="offer-details">
             <div class="offer-main-photo">
-                <img src="../images/offre/Radôme1.jpg" alt="Main Photo" class="offer-photo-large">
-                <div class="offer-photo-gallery">
-                    <img src="../images/offre/Radôme2.jpg" alt="Photo 2" class="offer-photo-small">
-                    <img src="../images/offre/Radôme3.jpg" alt="Photo 3" class="offer-photo-small">
-                </div>
+                <img src="../images/offre/<?= $image_pricipale ?>.jpg" alt="Main Photo" class="offer-photo-large">
+                <!-- <div class="offer-photo-gallery">
+                     <img src="../images/offre/Radôme2.jpg" alt="Photo 2" class="offer-photo-small">
+                    <img src="../images/offre/Radôme3.jpg" alt="Photo 3" class="offer-photo-small"> 
+                </div> -->
             </div>
 
             <div class="offer-info">
-                <h2>Découverte interactive de la cité des Télécoms</h2>
-                <p class="description">Venez découvrir l'histoire passionnante des télécommunications dans un cadre unique et interactif à Pleumeur-Bodou.</p>
+                <h2><?= $titre ?></h2>
+                <p class="description"><?= $description ?></p>
                 <div class="offer-status">
-                    <!-- <p class="price">Prix : 13-39€</p>
-                    <p class="status">Statut : <span class="open">Ouvert</span></p>
-                    <p class="rating">Note : ★★★★☆ (4.7/5, 256 avis)</p>
-                    <p class="hours">Horaires : 9h30 - 18h30</p> -->
+                    <!-- <p class="price">Prix&nbsp;: 13-39€</p>
+                    <p class="status">Statut&nbsp;: <span class="open">Ouvert</span></p>
+                    <p class="rating">Note&nbsp;: ★★★★☆ (4.7/5, 256 avis)</p>
+                    <p class="hours">Horaires&nbsp;: 9h30 - 18h30</p>
+                    <button class="btn-reserve">Réserver</button> -->
                 </div>
             </div>
         </section>
@@ -90,20 +117,20 @@
             <h3>Emplacement et coordonnées</h3>
             <!-- <div id="map" class="map"></div> -->
             <div class="contact-info">
-                <p><strong>Adresse :</strong> Pleumeur-Bodou (22560), Bretagne, France</p>
-                <p><strong>Site web :</strong> <a href="https://parcduradome.com">https://parcduradome.com</a></p>
-                <!-- <p><strong>Téléphone :</strong> 02 96 46 63 80</p> -->
+                <p><strong>Adresse&nbsp;:</strong> <?= $adresse_complete ?></p>
+                <p><strong>Site web&nbsp;:</strong> <a href="<?= $site_web ?>"><?= $site_web ?></a></p>
+                <!-- <p><strong>Téléphone&nbsp;:</strong> 02 96 46 63 80</p> -->
             </div>
         </section>
 
-        <!-- User Reviews 
-        <section class="offer-reviews">
+        <!-- User Reviews -->
+        <!-- <section class="offer-reviews">
             <h3>Avis des utilisateurs</h3>
 
              Review Form 
             <div class="review-form">
                 <textarea placeholder="Votre avis..."></textarea>
-                <label for="rating">Note :</label>
+                <label for="rating">Note&nbsp;:</label>
                 <select id="rating">
                     <option value="5">5 étoiles</option>
                     <option value="4">4 étoiles</option>
@@ -117,17 +144,17 @@
              Summary of reviews 
             <div class="review-summary">
                 <h4>Résumé des notes</h4>
-                <p>Moyenne : 4.7/5 ★</p>
+                <p>Moyenne&nbsp;: 4.7/5 ★</p>
                 <div class="rating-distribution">
-                    <p>5 étoiles : 70%</p>
-                    <p>4 étoiles : 20%</p>
-                    <p>3 étoiles : 7%</p>
-                    <p>2 étoiles : 2%</p>
-                    <p>1 étoile : 1%</p>
+                    <p>5 étoiles&nbsp;: 70%</p>
+                    <p>4 étoiles&nbsp;: 20%</p>
+                    <p>3 étoiles&nbsp;: 7%</p>
+                    <p>2 étoiles&nbsp;: 2%</p>
+                    <p>1 étoile&nbsp;: 1%</p>
                 </div>
             </div>
 
-             List of reviews 
+            List of reviews 
             <div class="review-list">
                 <div class="review">
                     <p><strong>Jean Dupont</strong> - ★★★★★</p>
@@ -138,9 +165,9 @@
                     <p>Une belle visite, mais quelques parties étaient fermées...</p>
                 </div>
             </div>
-        </section>-->
+        </section> -->
     </main>
-    <?php require 'include/component/footer.php' ?>
+    <?php require 'component/footer.php' ?>
 
     <script>
     // // OpenStreetMap Integration
@@ -156,6 +183,17 @@
     // L.marker([45.779, -4.518]).addTo(map)
     //     .bindPopup('hihihihihihihihihui')
     </script>
-</body>
+    <script>
+        function enableValidate() {
+            document.getElementById('validateButton').disabled = false;
+        }
 
+        document.getElementById('validateButton').addEventListener('click', function(e) {
+            e.preventDefault();
+            if (!this.disabled) {
+                document.getElementById('toggleForm').submit();
+            }
+        });
+    </script>
+</body>
 </html>

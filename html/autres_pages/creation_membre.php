@@ -1,53 +1,47 @@
 <?php
-require_once 'db.php';
+require_once 'queries.php';
+require_once 'component/head.php';
+
+function fail(string $error)
+{
+    header('Location: ?error=' . urlencode($error));
+    exit;
+}
+
 if (isset($_POST['motdepasse'])) {
-    $pdo = db_connect();
-    $stmt = $pdo->prepare('SELECT COUNT(*) FROM pact.membres WHERE pseudo = :pseudo');
-    $stmt->execute(['pseudo' => $_POST['pseudo']]);
-    $count = $stmt->fetchColumn();
-    if ($count > 0) {
-        echo 'Ce pseudo est déjà utilisé.';
-        exit();
-    }
-    $stmt = $pdo->prepare('SELECT COUNT(*) FROM pact.membres WHERE email = :email');
-    $stmt->execute(['email' => $_POST['email']]);
-    $count = $stmt->fetchColumn();
-    if ($count > 0) {
-        echo 'Cette adresse e-mail est déjà utilisée.';
-        exit();
+    $pseudo = $_POST['pseudo'];
+    if (query_membre($pseudo)) {
+        fail('Ce pseudo est déjà utilisé.');
     }
 
-    $mdp_hash = password_hash($_POST['motdepasse'], PASSWORD_DEFAULT);
+    $email = $_POST['email'];
+    if (query_membre($email) or query_professionnel($email)) {
+        fail('Cette adresse e-mail est déjà utilisée.');
+    }
 
-    $stmt = $pdo->prepare('INSERT INTO pact.membres (pseudo, nom, prenom, telephone, email, mdp_hash) VALUES (:pseudo, :nom, :prenom, :telephone, :email, :mdp_hash)');
+    if (strlen($_POST['motdepasse']) > 72) {
+        fail('Mot de passe trop long');
+    }
 
-    $stmt->bindParam(':pseudo', $_POST['pseudo']);
-    $stmt->bindParam(':email', $_POST['email']);
-    $stmt->bindParam(':mdp_hash', $mdp_hash);
-    $stmt->bindParam(':nom', $_POST['nom']);
-    $stmt->bindParam(':prenom', $_POST['prenom']);
-    $stmt->bindParam(':telephone', $_POST['telephone']);
+    $mdp_hash = notfalse(password_hash($_POST['motdepasse'], PASSWORD_DEFAULT));
+
+    $stmt = db_connect()->prepare('insert into pact.membre (pseudo, nom, prenom, telephone, email, mdp_hash) values (?, ?, ?, ?, ?, ?)');
 
     $stmt->execute([
-        'pseudo' => $_POST['pseudo'],
-        'nom' => $_POST['nom'],
-        'prenom' => $_POST['prenom'],
-        'telephone' => $_POST['telephone'],
-        'email' => $_POST['email'],
-        'mdp_hash' => $mdp_hash
+        $pseudo,
+        $_POST['nom'],
+        $_POST['prenom'],
+        $_POST['telephone'],
+        $email,
+        $mdp_hash,
     ]);
-    echo "<script>window.location.href='../autres_pages/connexion.php';</script>";
+    header('Location: /autres_pages/connexion.php');  // todo: passer en GET le pseudo pour l'afficher dans le formulaire connexion, pour que l'utilisateur n'ait pas à le retaper.
 } else {
 ?>
 <!DOCTYPE html>
 <html lang="en">
 
-<head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" href="../style/style.css">
-    <title>Création de compte</title>
-</head>
+<?php put_head('Création de compte membre') ?>
 
 <body>
     <?php require 'component/header.php' ?>
@@ -57,38 +51,40 @@ if (isset($_POST['motdepasse'])) {
             <div class="champ-connexion">
                 <form action="creation_membre.php" method="post" enctype="multipart/form-data">
                     <div class="champ">
-                        <label for="pseudo">Pseudo :</label>
-                        <input type="text" id="pseudo" name="pseudo" required />
+                        <label for="pseudo">Pseudo&nbsp;:</label>
+                        <input type="text" id="pseudo" name="pseudo" autocomplete="nickname" required>
                     </div>
 
                     <div class="champ">
-                        <label for="nom">Nom :</label>
-                        <input type="text" id="nom" name="nom" required />
+                        <label for="nom">Nom&nbsp;:</label>
+                        <input type="text" id="nom" name="nom" autocomplete="family-name" required>
                     </div>
 
                     <div class="champ">
-                        <label for="prenom">Prenom :</label>
-                        <input type="text" id="prenom" name="prenom" required />
+                        <label for="prenom">Prenom&nbsp;:</label>
+                        <input type="text" id="prenom" name="prenom" autocomplete="given-name" required>
                     </div>
 
                     <div class="champ">
-                        <label for="telephone">Téléphone :</label>
-                        <input id="telephone" name="telephone" type="tel" placeholder="Format: 0123456789" pattern="[0-9]{10}" required>
+                        <label for="telephone">Téléphone&nbsp;:</label>
+                        <input type="tel" id="telephone" name="telephone" placeholder="0123456789" pattern="\d{10}" autocomplete="tel" required>
                     </div>
 
                     <div class="champ">
-                        <label for="email">Email :</label>
-                        <input type="mail" id="email" name="email" required />
+                        <label for="email">Email&nbsp;:</label>
+                        <input type="email" id="email" name="email" autocomplete="email" required>
                     </div>
 
                     <div class="champ">
-                        <label for="motdepasse">Mot de passe :</label>
-                        <input type="password" id="motdepasse" name="motdepasse" required />
+                        <label for="motdepasse">Mot de passe&nbsp;:</label>
+                        <input type="password" id="motdepasse" name="motdepasse" required>
                         <br>
                     </div>
+                    <!-- Todo: confirmation mdp -->
+                    <p class="error"><?= $_GET['error'] ?? '' ?></p>
 
                     <div class="champ">
-                        <input type="submit" value="Valider" />
+                        <input type="submit" value="Valider">
                     </div>
                 </form>
             </div>
