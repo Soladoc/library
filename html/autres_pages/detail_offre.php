@@ -8,7 +8,7 @@ if ($_POST) {
         $querry="INSERT INTO pact._avis (id_membre_auteur,id_offre,commentaire,date_experience,note) VALUES (?,?,?,?,?);";
         $stmt = db_connect()->prepare($querry);
         $stmt->execute([
-            $_SESSION['id'],
+            $_SESSION['id_membre'],
             $offre['id'],
             $_POST['commentaire'],
             $_POST['date_avis'],
