@@ -31,6 +31,9 @@ else if ($pro !== false) {
     $nom = $pro['nom'];
     $prenom = $pro['prenom'];
     $telephone = $pro['telephone'];
+    if (exists_pro_prive($id)) {
+        $siren = $pro['siren'];
+    }
     
 }
 else {
@@ -89,11 +92,19 @@ if ($_POST) {
                 <div id="denomination">
                 <p>Denomination : </p>
                 <?php echo $denomination 
-                if (in_array($id,)) {
-                    # code...
+                ?> </div><?php
+
+                if (exists_pro_prive($id)) {
+                    ?>
+                    <div id="siren">
+                    <p>siren : </p>
+                <?php echo $siren 
+                ?> </div><?php
+                    
+                   
                 }?>
                 
-            </div>
+           
 
 
             <?php } ?>
