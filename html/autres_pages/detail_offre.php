@@ -5,7 +5,7 @@ require_once 'component/head.php';
 
 if ($_POST) {
     if($_SESSION['log']==true){
-        $querry="INSERT INTO pact._avis (id_membre_auteur,id_offre,commentaire,date_experience,note) VALUES (?,?,?,?,?);";
+        $querry="INSERT INTO pact.avis (id_membre_auteur,id_offre,commentaire,date_experience,note) VALUES (?,?,?,?,?);";
         $stmt = db_connect()->prepare($querry);
         $stmt->execute([
             $_SESSION['id'],
@@ -14,7 +14,7 @@ if ($_POST) {
             $_POST['date_avis'],
             $_POST['note'],
         ]);
-        $success_message = "Avis ajouté ou mis à jour avec succès !";
+        $success_message = "Avis ajouté avec succès !";
     } else {
         $error_message = "Veuillez remplir tous les champs du formulaire.";
     }

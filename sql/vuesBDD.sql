@@ -44,6 +44,6 @@ create view pro_public as select * from _public
     join professionnel using (id);
 
 CREATE VIEW avis as SELECT _avis.*, pseudo FROM _avis
-JOIN membre on id_membre_auteur=membre.id as id_membre_auteur;
+JOIN membre on id_membre_auteur=membre.id;
 
 commit;
