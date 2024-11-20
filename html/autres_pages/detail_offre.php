@@ -14,7 +14,7 @@ if ($_POST) {
         'note' => getarg($_POST, 'rating', arg_filter(FILTER_VALIDATE_INT)),
         'contexte' => getarg($_POST, 'contexte'),
     ];
-    if($_SESSION['log']==null){
+    if($_SESSION['id_membre']==null){
         $error_message = "Veuillez vous connecter";
     }
     else {
