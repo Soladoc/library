@@ -119,7 +119,7 @@ function query_communes(?string $nom = null): array
 function query_avis(?int $id_membre_auteur = null, ?int $id_offre = null): array
 {
     $args = filter_null_args(['id_membre_auteur' => [$id_membre_auteur, PDO::PARAM_INT], 'id_offre' => [$id_offre, PDO::PARAM_INT]]);
-    $stmt = notfalse(db_connect()->prepare('select * from _avis ' . _where_clause('and', array_keys($args))));
+    $stmt = notfalse(db_connect()->prepare('select * from avis ' . _where_clause('and', array_keys($args))));
     bind_values($stmt, $args);
     notfalse($stmt->execute());
     return $stmt->fetchAll();
