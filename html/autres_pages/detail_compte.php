@@ -7,7 +7,7 @@ $args = [
     'id' => getarg($_GET, 'id', arg_filter(FILTER_VALIDATE_INT))
 ];
 
-
+$id = $args['id'];
 $membre = query_compte_membre($args['id']);
 $pro = query_compte_professionnel($args['id']);
 
@@ -28,7 +28,7 @@ else if ($pro !== false) {
     echo '</pre>';
     $denomination = $pro['denomination'];
     $email = $pro['email'];
-    $mdp = unserialize($pro['mdp_hash']);
+    $mdp_hash = unserialize($pro['mdp_hash']);
     $nom = $pro['nom'];
     $prenom = $pro['prenom'];
     $telephone = $pro['telephone'];
@@ -40,6 +40,26 @@ else {
 // Afficher le détail du compte du membre
 
 
+if ($_POST) {
+    $new_mdp = getarg($_POST, 'new_mdp');
+    $confirmation_mdp = getarg($_POST, 'confirmation_mdp');
+    $old_mdp = getarg($_POST, 'old_mdp');
+
+    if (password_verify($mdp_hash)) {
+        if ($confirmation_mdp === $new_mdp ) {
+            uptate_mdp($id,$new_mdp);
+        }
+        else{
+            header('Location: /autres_pages/connexion.php?error_confirmation=' . urlencode("Mot de passe de confirmation different."));
+
+        }
+    }
+    else {
+        header('Location: /autres_pages/connexion.php?error_mdp=' . urlencode(" Mot de passe incorrect."));
+
+    }
+    
+}
 
 ?>
 
@@ -96,13 +116,24 @@ else {
             </div>
 
             <div id='changer_mdp'>
-                <form action="detail_compte" method="POST">
+                <form action="detail_compte.php" method="POST">
                     <p>modifier son mot de passe</p>
                     <div class="champ">
-                        <label for="mdp">Mot de passe *</label>
-                        <input id="mdp" name="mdp" type="password" placeholder="**********" required>
+                        <label for="mdp">Mot de passe actuel *</label>
+                        <input id="mdp" name="old_mdp" type="password" placeholder="**********" required>
                     </div>
-                    <?php if ($error = $_GET['error'] ?? null) { ?>
+                    <div class="champ">
+                        <label for="mdp">Nouveau mot de passe *</label>
+                        <input id="new_mdp" name="mdp" type="password" placeholder="**********" required>
+                    </div>
+                    <div class="champ">
+                        <label for="mdp">confirmation mot de passe *</label>
+                        <input id="confirmation_mdp" name="mdp" type="password" placeholder="**********" required>
+                    </div>
+                    <?php if ($error = $_GET['error_mdp'] ?? null) { ?>
+                    <p class="error"><?= $error ?></p>
+                    <?php } ?>
+                    <?php if ($error = $_GET['error_confirmation'] ?? null) { ?>
                     <p class="error"><?= $error ?></p>
                     <?php } ?>
                     <button type="submit" class="btn-connexion">valider</button>
