@@ -57,7 +57,7 @@ require_once 'component/offre.php'
             </div>
         </section>
         <section class="highlight-offers">
-            <h2>Offres à la une</h2>
+            <h2>Offres trouvées :</h2>
             <div class="offer-list">
                 <?php
                     $stmtOffres = query_offres();
