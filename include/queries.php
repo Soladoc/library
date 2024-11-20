@@ -131,6 +131,15 @@ function query_offres(?int $id_professionnel = null, ?bool $en_ligne = null): PD
     return $stmt;
 }
 
+// Update
+function uptate_mdp(int $id_compte, $new_mdp): void
+{
+    $stmt = notfalse(db_connect()->prepare('UPDATE compte SET mdp_hash = ? WHERE id = ?;'));
+    bind_values($stmt, [$new_mdp,$id_compte]);
+    notfalse($stmt->execute());
+}
+
+
 // Insertions
 
 /**
