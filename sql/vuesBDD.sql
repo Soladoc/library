@@ -10,8 +10,8 @@ set schema 'pact';
 
 create view offres as select
     *,
-    (select count(*) from _changement_etat where id_offre = id) % 2 = 0 en_ligne,
-    (select avg(note) from _avis a where a.id_offre = id) note_moyenne,
+    (select count(*) from _changement_etat where _changement_etat.id_offre = _offre.id) % 2 = 0 en_ligne,
+    (select avg(_avis.note) from _avis where _avis.id_offre = _offre.id) note_moyenne,
     (select offre_categorie(id)) categorie
 from
     _offre;

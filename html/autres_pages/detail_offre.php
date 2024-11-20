@@ -138,6 +138,7 @@ $avis=query_avis()
                 <h4>Avis de la communauté</h4>
                 <div class="review-summary">
                 <h4>Résumé des notes</h4>
+                <p>Nombre d'avis : <?php query_avis_count($args['id']) ?></p>
                 <p>Moyenne&nbsp;: <?php $offre['note_moyenne'] ?>/5 ★</p>
                 <div class="rating-distribution">
                     <?php $avis = query_avis(id_offre: $offre['id']); ?>
@@ -152,7 +153,7 @@ $avis=query_avis()
                         <div class="review">
                             <p><strong><?= htmlspecialchars($avis_temp['pseudo']) ?></strong> - <?= htmlspecialchars($avis_temp['note']) ?>/5</p>
                             <p><?= htmlspecialchars($avis_temp['commentaire']) ?></p>
-                            <p class="review-date"><?= htmlspecialchars($avis_temp['date_avis']) ?></p>
+                            <p class="review-date"><?= htmlspecialchars($avis_temp['date_experience']) ?></p>
                         </div>
                     <?php } 
                 } else { ?>
