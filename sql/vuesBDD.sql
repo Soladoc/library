@@ -12,6 +12,7 @@ create view offres as select
     *,
     (select count(*) from _changement_etat where _changement_etat.id_offre = _offre.id) % 2 = 0 en_ligne,
     (select avg(_avis.note) from _avis where _avis.id_offre = _offre.id) note_moyenne,
+    (select min(_tarif.montant) from _tarif where _tarif.id_offre = _offre.id) prix_min,
     (select offre_categorie(id)) categorie
 from
     _offre;
