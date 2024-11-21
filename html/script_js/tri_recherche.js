@@ -92,7 +92,7 @@ function displayOffers() {
             <p>Catégorie : ${offer.categorie}</p>
             <p>Description : ${offer.resume}</p>
             <p>Adresse :<?=format_adresse(notfalse(query_adresse(${offer.id_adresse}))) ?></p>
-            <p>Prix : ${offer.min}€</p>
+            <p>À partir de : ${offer.min}€</p>
             <p>Note : ${offer.note}/5</p>
             <p>Date : ${formattedDate}</p>
             <a href="/autres_pages/detail_offre.php?id=${offer.id}&pro=true">
