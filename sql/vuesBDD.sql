@@ -55,7 +55,7 @@ create view pro_public as select * from _public
 create view avis as select _avis.*, pseudo from _avis
     join membre on id_membre_auteur = membre.id;
 
-create view periode_ouverture as table _periode_ouverture;
 create view horaire_ouverture as table _horaire_ouverture;
+create view periode_ouverture as table _periode_ouverture;
 
 commit;

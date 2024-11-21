@@ -1,6 +1,8 @@
 <?php
 require_once 'queries.php';
 require_once 'component/head.php';
+require_once 'component/inputs.php';
+require_once 'util.php';
 
 function fail(string $error)
 {

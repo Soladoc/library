@@ -18,7 +18,7 @@ require_once 'db.php';
  * - Precision ext. : precision_ext
  * @return void
  */
-function put_input_address(string $form_id = '', string $id = '', string $prefix = '')
+function put_input_address(string $id = '', string $prefix = '', string $form_id = '')
 {
     $form_attr = $form_id ? "form=\"$form_id\"" : '';
     $communes = db_connect()->query('select nom from _commune fetch first 1000 rows only')->fetchAll()
