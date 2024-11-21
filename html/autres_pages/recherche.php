@@ -74,7 +74,9 @@ require_once 'component/offre.php'
         }
         echo "const offersData = " . json_encode($offres) . ";";
         ?>
-        initializeOffers(offersData);
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeOffers(offersData);
+        });
     </script>
 </body>
 </html>
