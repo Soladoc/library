@@ -1,6 +1,4 @@
 <?php
-session_start();
-
 require_once 'queries.php';
 require_once 'auth.php';
 require_once 'util.php';
@@ -11,8 +9,6 @@ $args = [
     'mdp' => getarg($_POST, 'mdp'),
 ];
 
-$pdo = db_connect();
-
 // Connection membre
 $user = query_membre($args['login']);
 
@@ -21,7 +17,7 @@ if (!empty($user)) {
         fail();
     }
     session_regenerate_id(true);
-    connecter_membre($user['id']);
+    se_connecter_membre($user['id']);
     header('Location: /autres_pages/accueil.php');
     exit;
 }
@@ -34,7 +30,7 @@ if (!empty($user)) {
         fail();
     }
     session_regenerate_id(true);
-    connecter_pro($user['id']);
+    se_connecter_pro($user['id']);
     header('Location: /autres_pages/accPro.php');
     exit;
 }

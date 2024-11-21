@@ -1,14 +1,10 @@
 <?php
-session_start();
 require_once 'component/head.php';
 require_once 'const.php';
 echo 1;
 
-// Vérification de la session utilisateur
-if (!isset($_SESSION['id_membre'])) {
-    header('Location: ../connexion.php');
-    exit;
-}
+exiger_connecte_membre();
+
 echo 2;
 
 $id_avis = intval($_GET['avis_id']);

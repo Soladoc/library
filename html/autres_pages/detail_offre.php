@@ -1,5 +1,5 @@
 <?php
-session_start();
+require_once 'auth.php';
 require_once 'component/offre.php';
 require_once 'component/head.php';
 
@@ -14,14 +14,14 @@ if ($_POST) {
         'note' => getarg($_POST, 'rating', arg_filter(FILTER_VALIDATE_INT)),
         'contexte' => getarg($_POST, 'contexte'),
     ];
-    if(!isset($_SESSION['id_membre'])){
+    if(($id_membre_co = id_membre_connecte()) === null){
         $error_message = "Veuillez vous connecter pour publier un avis.";
     }
     else {
         $querry="INSERT INTO pact.avis (id_membre_auteur,id_offre,commentaire,date_experience,note,contexte) VALUES (?,?,?,?,?,?);";
         $stmt = db_connect()->prepare($querry);
         $stmt->execute([
-            $_SESSION['id_membre'],
+            $id_membre_co,
             $args['id'] ,
             $args['commentaire'],
             $args['date_avis'],
@@ -173,7 +173,7 @@ $avis=query_avis()
                             <p class="review-contexte">Contexte&nbsp;: <?= htmlspecialchars($avis_temp['contexte']) ?></p>
                             <p><?= htmlspecialchars($avis_temp['commentaire']) ?></p>
                             <p class="review-date"><?= htmlspecialchars($avis_temp['date_experience']) ?></p>
-                            <?php if ($avis_temp['id_membre_auteur']==$_SESSION['id_membre']) { ?>
+                            <?php if ($avis_temp['id_membre_auteur']==exiger_connecte_membre()) { ?>
                             <form method="post" action="../avis/modifier.php?avis_id=<?= $avis_temp['id'] ?>&offre=<?=$args['id'] ?>">
                                 <button type="submit" class="btn-modif">Modifier</button>
                             </form>

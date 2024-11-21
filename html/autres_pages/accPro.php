@@ -1,5 +1,4 @@
 <?php
-session_start();
 require_once 'component/offre.php';
 require_once 'component/head.php';
 require_once 'auth.php';
@@ -30,8 +29,8 @@ $ONLINE_OFFER_COUNT = query_offres_count($id_professionnel, en_ligne: true)
             <div class="offer-list">
                 <?php
                     $ONLINE_OFFERS = query_offres($id_professionnel, en_ligne: true);
-                    while ($offer = $ONLINE_OFFERS->fetch()) {
-                        put_card_offre_pro($offer);
+                    while ($offre = $ONLINE_OFFERS->fetch()) {
+                        put_card_offre_pro($offre);
                     }
                     notfalse($ONLINE_OFFERS->closeCursor())
                 ?>
@@ -45,8 +44,8 @@ $ONLINE_OFFER_COUNT = query_offres_count($id_professionnel, en_ligne: true)
             <div class="offer-carousel">
                 <?php
                     $OFFRES_HORS_LIGNE = query_offres($id_professionnel, en_ligne: false);
-                    while ($offer = $OFFRES_HORS_LIGNE->fetch()) {
-                        put_card_offre_pro($offer);
+                    while ($offre = $OFFRES_HORS_LIGNE->fetch()) {
+                        put_card_offre_pro($offre);
                     }
                     $OFFRES_HORS_LIGNE->closeCursor()
                 ?>

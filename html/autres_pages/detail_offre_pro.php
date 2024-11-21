@@ -4,20 +4,18 @@ require_once 'queries.php';
 require_once 'component/head.php';
 require_once 'util.php';
 
-
 $args = [
     'id' => getarg($_GET, 'id', arg_filter(FILTER_VALIDATE_INT))
 ];
 // Vérifier si l'ID est présent dans l'URL
 if ($_POST) {
-
     // Connexion à la base de données
     $pdo = db_connect();
 
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         offre_alterner_etat($args['id']);
         $offre = query_offre($args['id']);
-        header("Location: " . $_SERVER['PHP_SELF'] . "?id=" . $args['id']);
+        header('Location: ' . $_SERVER['PHP_SELF'] . '?id=' . $args['id']);
         exit();
     }
 
@@ -26,14 +24,14 @@ if ($_POST) {
 
     // Si l'offre est trouvée, afficher ses détails
     if ($offre) {
-        $titre  = $offre['titre'];  // Assurez-vous que le nom des colonnes correspond à la base de données
+        $titre = $offre['titre'];  // Assurez-vous que le nom des colonnes correspond à la base de données
         $description = $offre['description_detaillee'];
         $adresse = $offre['id_adresse'];
         $site_web = $offre['url_site_web'];
         $image_pricipale = $offre['id_image_principale'];
-        $en_ligne=$offre['en_ligne'];
+        $en_ligne = $offre['en_ligne'];
         $info_adresse = query_adresse($adresse);
-        $avis=query_avis();
+        $avis = query_avis();
         // Vérifier si l'adresse existe
         if ($info_adresse) {
             // Construire une chaîne lisible pour l'adresse
@@ -41,7 +39,7 @@ if ($_POST) {
             $complement_numero = $info_adresse['complement_numero'];
             $nom_voie = $info_adresse['nom_voie'];
             $localite = $info_adresse['localite'];
-            $code_postal = query_codes_postaux($info_adresse['code_commune'],$info_adresse['numero_departement'])[0];
+            $code_postal = query_codes_postaux($info_adresse['code_commune'], $info_adresse['numero_departement'])[0];
 
             // Concaténer les informations pour former une adresse complète
             $adresse_complete = "$numero_voie $complement_numero $nom_voie, $localite, $code_postal";
@@ -54,11 +52,10 @@ if ($_POST) {
         echo 'Aucune offre trouvée avec cet ID.';
     }
 } else {
-    echo 'ID d\'offre invalide.';
+    echo "ID d'offre invalide.";
 }
 
 ?>
-
 
 <!DOCTYPE html>
 <html lang="fr">
@@ -76,11 +73,11 @@ if ($_POST) {
                 <div class='online'>
                     <div>
                         <?php if ($en_ligne) { ?>
-                            <p>Offre en ligne</p>
-                            <button type="button" class="hors_ligne" onclick="enableValidate()">Mettre hors ligne</button>
+                        <p>Offre en ligne</p>
+                        <button type="button" class="hors_ligne" onclick="enableValidate()">Mettre hors ligne</button>
                         <?php } else { ?>
-                            <p>Offre hors ligne</p>
-                            <button type="button" class="en_ligne" onclick="enableValidate()">Mettre en ligne</button>
+                        <p>Offre hors ligne</p>
+                        <button type="button" class="en_ligne" onclick="enableValidate()">Mettre en ligne</button>
                         <?php } ?>
                     </div>
                     <button type="submit" name="valider" class="valider" id="validateButton" disabled>Valider</button>
@@ -127,35 +124,35 @@ if ($_POST) {
             <h4>Avis de la communauté</h4>
             <div class="review-summary">
                 <h4>Résumé des notes</h4>
-                <p>Nombre d'avis : <?=query_avis_count($args['id']) ?></p>
-                <p>Moyenne&nbsp;: <?php if ($offre['note_moyenne']!=null){echo round($offre['note_moyenne'],2);} else {echo 0;} ?>/5 ★</p>
+                <p>Nombre d'avis : <?= query_avis_count($args['id']) ?></p>
+                <p>Moyenne&nbsp;: <?php if ($offre['note_moyenne'] != null) { echo round($offre['note_moyenne'], 2); } else { echo 0; } ?>/5 ★</p>
                 <div class="rating-distribution">
                     <?php $avis = query_avis(id_offre: $offre['id']); ?>
-                    <p>5 étoiles&nbsp;: <?=count(array_filter($avis, fn($a) => $a['note'] === 5)) ?> avis.</p>
-                    <p>4 étoiles&nbsp;: <?=count(array_filter($avis, fn($a) => $a['note'] === 4)) ?> avis.</p>
-                    <p>3 étoiles&nbsp;: <?=count(array_filter($avis, fn($a) => $a['note'] === 3)) ?> avis.</p>
-                    <p>2 étoiles&nbsp;: <?=count(array_filter($avis, fn($a) => $a['note'] === 2)) ?> avis.</p>
-                    <p>1 étoile&nbsp;: <?=count(array_filter($avis, fn($a) => $a['note'] === 1)) ?> avis.</p>
+                    <p>5 étoiles&nbsp;: <?= count(array_filter($avis, fn($a) => $a['note'] === 5)) ?> avis.</p>
+                    <p>4 étoiles&nbsp;: <?= count(array_filter($avis, fn($a) => $a['note'] === 4)) ?> avis.</p>
+                    <p>3 étoiles&nbsp;: <?= count(array_filter($avis, fn($a) => $a['note'] === 3)) ?> avis.</p>
+                    <p>2 étoiles&nbsp;: <?= count(array_filter($avis, fn($a) => $a['note'] === 2)) ?> avis.</p>
+                    <p>1 étoile&nbsp;: <?= count(array_filter($avis, fn($a) => $a['note'] === 1)) ?> avis.</p>
                 </div>
                 <?php if (!empty($avis)) {
                     foreach ($avis as $avis_temp) { ?>
-                        <div class="review">
-                            <p><strong><?= htmlspecialchars($avis_temp['pseudo_auteur']) ?></strong> - <?= htmlspecialchars($avis_temp['note']) ?>/5</p>
-                            <p class="review-contexte">Contexte&nbsp;: <?= htmlspecialchars($avis_temp['contexte']) ?></p>
-                            <p><?= htmlspecialchars($avis_temp['commentaire']) ?></p>
-                            <p class="review-date"><?= htmlspecialchars($avis_temp['date_experience']) ?></p>
-                            <?php if ($avis_temp['id_membre_auteur']=$_SESSION['id_membre']) { ?>
-                            <form method="post" action="modifier.php?id=<?= $args['id'] ?>&avis_id=<?= $avis_id ?>">
-                                <button type="submit" class="btn-modif">Modifier</button>
-                            </form>
-                            <?php } ?> 
-                        </div>
-                    <?php } 
+                <div class="review">
+                    <p><strong><?= htmlspecialchars($avis_temp['pseudo_auteur']) ?></strong> - <?= htmlspecialchars($avis_temp['note']) ?>/5</p>
+                    <p class="review-contexte">Contexte&nbsp;: <?= htmlspecialchars($avis_temp['contexte']) ?></p>
+                    <p><?= htmlspecialchars($avis_temp['commentaire']) ?></p>
+                    <p class="review-date"><?= htmlspecialchars($avis_temp['date_experience']) ?></p>
+                    <?php if (($id_membre_co = id_membre_connecte()) !== null && $avis_temp['id_membre_auteur'] = $id_membre_co) { ?>
+                    <form method="post" action="modifier.php?id=<?= $args['id'] ?>&avis_id=<?= $avis_id ?>">
+                        <button type="submit" class="btn-modif">Modifier</button>
+                    </form>
+                    <?php } ?>
+                </div>
+                <?php }
                 } else { ?>
-                    <p>Aucun avis pour le moment.&nbsp;</p>
+                <p>Aucun avis pour le moment.&nbsp;</p>
                 <?php } ?>
             </div>
-        </section>
+            </section>
     </main>
     <?php require 'component/footer.php' ?>
 
@@ -174,16 +171,16 @@ if ($_POST) {
     //     .bindPopup('hihihihihihihihihui')
     </script>
     <script>
-        function enableValidate() {
-            document.getElementById('validateButton').disabled = false;
+    function enableValidate() {
+        document.getElementById('validateButton').disabled = false;
+    }
+    document.getElementById('validateButton').addEventListener('click', function(e) {
+        e.preventDefault();
+        if (!this.disabled) {
+            document.getElementById('toggleForm').submit();
         }
-
-        document.getElementById('validateButton').addEventListener('click', function(e) {
-            e.preventDefault();
-            if (!this.disabled) {
-                document.getElementById('toggleForm').submit();
-            }
-        });
+    });
     </script>
 </body>
+
 </html>

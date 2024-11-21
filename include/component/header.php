@@ -1,15 +1,16 @@
-<?php 
-session_start() ?>
+<?php
+require_once 'auth.php';
+?>
 <header>
     <div class="logo">
-        <?php if (isset($_SESSION['id_pro'])){ ?>
+        <?php if (est_connecte_pro()) { ?>
             <a href="accPro.php"><img src="../images/logo.png" alt="Logo pact"></a>
         <?php } else { ?>
             <a href="accueil.php"><img src="../images/logo.png" alt="Logo pact"></a>
-        <?php }?>
+        <?php } ?>
     </div>
-    <?php 
-    if (isset($_SESSION['log']) && $_SESSION['log'] === true) { 
+    <?php
+    if (est_connecte()) {
         // Vérification du statut de la session
         ?>
         <a href="../connexion/logout.php">
@@ -18,15 +19,16 @@ session_start() ?>
                 <span>Déconnexion</span>
             </div>
         </a>
-        <?php if(isset($_SESSION['id_pro'])){ ?>
+        <?php if (est_connecte_pro()) { ?>
             <a href="facturation.php">
                 <div class="acces-facturation">
                 <img src="../images/facturation.png" alt="Profil">
                     <span>Facturation</span>
                 </div>
             </a>
-    <?php }
-    } else { 
+    <?php
+        }
+    } else {
         ?>
         <a href="connexion.php">
             <div class="auth-button">
@@ -34,7 +36,7 @@ session_start() ?>
                 <span>Connexion</span>
             </div>
         </a>
-    <?php 
-    } 
+    <?php
+    }
     ?>
 </header>

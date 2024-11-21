@@ -19,7 +19,7 @@ $pdo = db_connect()
             <!-- Formulaire de connexion -->
             <form action="../connexion/login.php" method="POST">
                 <div class="champ">
-                    <label for="login">Adresse e-mail *</label>
+                    <label for="login">Adresse e-mail ou pseudo *</label>
                     <input id="login" name="login" type="text" placeholder="exemple@mail.fr" required>
                 </div>
                 <br>
