@@ -17,7 +17,7 @@ transaction(function () {
     // todo: make this better (by inputting either nom or code postal)
     $commune = single_or_default(query_communes($args['adresse_commune']));
     if ($commune === null) {
-        html_error("la commune '$commune' n'existe pas");
+        html_error("la commune {$args['adresse_commune']} n'existe pas");
     }
     // Insérer l'adresse
     // todo: adresses localisées
