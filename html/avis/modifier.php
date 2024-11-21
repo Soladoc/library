@@ -87,3 +87,4 @@ if (isset($_POST['date'])) {
     <?php require '../component/footer.php'; ?>
 </body>
 </html>
+<?php } ?>
