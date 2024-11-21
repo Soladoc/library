@@ -85,7 +85,7 @@ function displayOffers() {
                         this.src='../images_utilisateur/${offer.id_image_principale}.webp';
                         this.onerror=function(){
                             this.onerror=null;
-                            this.src='../images/${offer.id_image_principale}.jpeg';
+                            this.src='../images_utilisateur/${offer.id_image_principale}.jpeg';
                         }
                     }
             ">
