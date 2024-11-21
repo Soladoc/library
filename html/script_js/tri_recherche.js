@@ -35,8 +35,6 @@ function showSubcategories() {
     }
 }
 
-// ... (keep your existing code for subcategories)
-
 let offers = []; // This will be populated with data from PHP
 
 function sortOffers(criteria, ascending = true) {
