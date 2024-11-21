@@ -92,7 +92,7 @@ if (isset($_POST['motdepasse'])) {
 
                     <div class="champ">
                         <label for="adresse">Adresse&nbsp;:</label>
-                        <?php put_input_address('adresse','adresse') ?>
+                        <input type="text" id="adresse" name="adresse" autocomplete="Lannion" required>
                     </div>
 
                     <div class="champ">
