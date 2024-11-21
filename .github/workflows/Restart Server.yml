@@ -1,7 +1,7 @@
 name: Restart Server
 on: workflow_dispatch
 jobs:
-  update_server:
+  restart_server:
     runs-on: ubuntu-latest
     steps:
       - name: Restart Server
