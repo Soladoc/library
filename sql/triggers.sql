@@ -24,7 +24,7 @@ begin
     );
     return new;
 end
-$$ language 'plpgsql';
+$$ language plpgsql;
 
 create trigger tg_activite_insert instead of insert on activite for each row
 execute function activite_insert ();
@@ -44,7 +44,7 @@ begin
     );
     return new;
 end
-$$ language 'plpgsql';
+$$ language plpgsql;
 
 create trigger tg_spectacle_insert instead of insert on spectacle for each row
 execute function spectacle_insert ();
@@ -62,7 +62,7 @@ begin
     );
     return new;
 end
-$$ language 'plpgsql';
+$$ language plpgsql;
 
 create trigger tg_visite_insert instead of insert on visite for each row
 execute function visite_insert ();
@@ -80,7 +80,7 @@ begin
     );
     return new;
 end
-$$ language 'plpgsql';
+$$ language plpgsql;
 
 create trigger tg_parc_attractions_insert instead of insert on parc_attractions for each row
 execute function parc_attractions_insert ();
@@ -110,7 +110,7 @@ begin
     );
     return new;
 end
-$$ language 'plpgsql';
+$$ language plpgsql;
 
 create trigger tg_restaurant_insert instead of insert on restaurant for each row
 execute function restaurant_insert ();
@@ -128,7 +128,7 @@ begin
     );
     return new;
 end
-$$ language 'plpgsql';
+$$ language plpgsql;
 
 create trigger tg_membre_insert instead of insert on membre for each row
 execute function membre_insert ();
@@ -153,7 +153,7 @@ begin
     );
     return new;
 end
-$$ language 'plpgsql';
+$$ language plpgsql;
 
 create trigger tg_pro_prive_insert instead of insert on pro_prive for each row
 execute function pro_prive_insert ();
@@ -176,11 +176,12 @@ begin
     );
     return new;
 end
-$$ language 'plpgsql';
+$$ language plpgsql;
 
 create trigger tg_pro_public_insert instead of insert on pro_public for each row
 execute function pro_public_insert ();
 
+-- avis -> insert
 create function avis_insert() returns trigger as $$
 declare
     id_avis integer;
@@ -205,14 +206,13 @@ begin
     );
     return new;
 end
-$$ language 'plpgsql';
+$$ language plpgsql;
 
 create trigger tg_avis_insert instead of insert on avis for each row
 execute function avis_insert();
 commit;
 
--- update pseudo membre
-
+-- membre -> update (pseudo)
 create function membre_pseudo_update () returns trigger as $$
 begin
     UPDATE _membre
@@ -221,18 +221,17 @@ begin
         RETURN NEW;
     
 end
-$$ language 'plpgsql';
+$$ language plpgsql;
 
 CREATE TRIGGER trg_update_pseudo
 INSTEAD OF UPDATE ON membre
 FOR EACH ROW
-EXECUTE FUNCTION update_pseudo_on_view();
+EXECUTE FUNCTION membre_pseudo_update();
 
 
 
--- update denomination membre
-
-create function membre_denomination_update () returns trigger as $$
+-- membre -> update (denomination)
+create function membre_denomination_update() returns trigger as $$
 begin
     UPDATE _professionnel
         SET denomination = NEW.denomination
@@ -240,9 +239,9 @@ begin
         RETURN NEW;
     
 end
-$$ language 'plpgsql';
+$$ language plpgsql;
 
 CREATE TRIGGER trg_update_denomination
 INSTEAD OF UPDATE ON professionnel
 FOR EACH ROW
-EXECUTE FUNCTION update_pseudo_on_view();
+EXECUTE FUNCTION membre_denomination_update();

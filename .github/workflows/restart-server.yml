@@ -1,15 +1,10 @@
-name: Update Server
-on:
-  push:
-    branches:
-      - main
-    paths-ignore:
-      - '**.sql'
+name: Restart Server
+on: workflow_dispatch
 jobs:
   update_server:
     runs-on: ubuntu-latest
     steps:
-      - name: Update Server
+      - name: Restart Server
         run: |
           set -xeu
           mkdir -p ~/.ssh
@@ -18,6 +13,6 @@ jobs:
           ssh-keyscan -p 22 ${{ secrets.ARTIFACT_HOST }} >> ~/.ssh/known_hosts
           ssh debian@${{ secrets.ARTIFACT_HOST }} << 'EOF'
               set -xeu
-              cd /docker/sae/data
-              sudo git pull
+              docker compose down
+              docker compose up -d
           EOF

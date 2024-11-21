@@ -66,11 +66,24 @@ function displayOffers() {
     offers.forEach(offer => {
         const offerElement = document.createElement('div');
         offerElement.className = 'offer-card';
+
+        // Format the date
+        const date = new Date(offer.modifiee_le);
+        const formattedDate = date.toLocaleDateString('fr-FR', {
+            year: 'numeric',
+            month: '2-digit',
+            day: '2-digit'
+        });
+
         offerElement.innerHTML = `
             <h3>${offer.titre}</h3>
-            <p>Prix: ${offer.prix}€</p>
-            <p>Note: ${offer.note}</p>
-            <p>Date: ${offer.date_derniere_maj}</p>
+            <img src="../images_utilisateur/${offer.id_image_principale}.jpg"></img>
+            <p>Catégorie : ${offer.categorie}</p>
+            <p>Description : ${offer.description}</p>
+            <p>Adresse : ${offer.adresse}</p>
+            <p>Prix : ${offer.prix_min}€</p>
+            <p>Note : ${offer.note}/5</p>
+            <p>Date : ${formattedDate}</p>
         `;
         offerList.appendChild(offerElement);
     });
@@ -95,5 +108,8 @@ sortButtons.forEach(button => {
     button.addEventListener('click', () => {
         sortButtons.forEach(btn => btn.classList.remove('active'));
         button.classList.add('active');
+        const criteria = button.dataset.criteria;
+        const ascending = button.dataset.order === 'asc';
+        sortOffers(criteria, ascending);
     });
 });

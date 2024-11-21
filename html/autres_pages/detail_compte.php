@@ -7,7 +7,6 @@ $args = [
     'id' => getarg($_GET, 'id', arg_filter(FILTER_VALIDATE_INT))
 ];
 
-$id = $args['id'];
 $membre = query_compte_membre($args['id']);
 $pro = query_compte_professionnel($args['id']);
 
@@ -21,6 +20,8 @@ if ($membre !== false) {
     $nom = $membre['nom'];
     $prenom = $membre['prenom'];
     $telephone = $membre['telephone'];
+    $adresse = $membre['adresse'];
+
 }
 else if ($pro !== false) {
     echo '<pre>';
@@ -32,6 +33,10 @@ else if ($pro !== false) {
     $nom = $pro['nom'];
     $prenom = $pro['prenom'];
     $telephone = $pro['telephone'];
+    $adresse = $pro['adresse'];
+    if (exists_pro_prive($id)) {
+        $siren = $pro['siren'];
+    }
     
 }
 else {
@@ -90,11 +95,23 @@ if ($_POST) {
                 <div id="denomination">
                 <p>Denomination : </p>
                 <?php echo $denomination 
-                if ($id in) {
-                    # code...
+                ?> </div>
+
+                
+
+                <?php
+
+                if (exists_pro_prive($id)) {
+                    ?>
+                    <div id="siren">
+                    <p>siren : </p>
+                <?php echo $siren 
+                ?> </div><?php
+                    
+                   
                 }?>
                 
-            </div>
+           
 
 
             <?php } ?>
@@ -118,6 +135,11 @@ if ($_POST) {
                 <p>Numero de telephone : </p>
                 <?php echo $telephone ?>
             </div>
+
+            <div id="adresse">
+                <p>adresse : </p>
+                <?php echo $adresse 
+                ?> </div>
 
             <?php require 'component/info_compte/modif_mdp.php' ?>
             

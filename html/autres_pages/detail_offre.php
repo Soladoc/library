@@ -14,7 +14,10 @@ if ($_POST) {
         'note' => getarg($_POST, 'rating', arg_filter(FILTER_VALIDATE_INT)),
         'contexte' => getarg($_POST, 'contexte'),
     ];
-    if($_SESSION['log']==true){
+    if(!isset($_SESSION['id_membre'])){
+        $error_message = "Veuillez vous connecter pour publier un avis.";
+    }
+    else {
         $querry="INSERT INTO pact.avis (id_membre_auteur,id_offre,commentaire,date_experience,note,contexte) VALUES (?,?,?,?,?,?);";
         $stmt = db_connect()->prepare($querry);
         $stmt->execute([
@@ -26,8 +29,6 @@ if ($_POST) {
             $args['contexte']
         ]);
         $success_message = "Avis ajouté avec succès !";
-    } else {
-        $error_message = "Veuillez remplir tous les champs du formulaire.";
     }
 }
 
@@ -116,6 +117,13 @@ $avis=query_avis()
 
             <!-- Formulaire d'avis -->
             <div class="review-form">
+                <div class="message">
+                    <?php if (isset($error_message)): ?>
+                    <p class="error-message"><?= htmlspecialchars($error_message) ?></p>
+                    <?php elseif (isset($success_message)): ?>
+                    <p class="success-message"><?= htmlspecialchars($success_message) ?></p>
+                    <?php endif; ?>
+                </div>
                 <form method="post" action="detail_offre.php?id=<?= $args['id'] ?>">
                     <textarea name="commentaire" placeholder="Votre avis..." required></textarea>
                     <label for="rating">Note&nbsp;:</label>
@@ -165,9 +173,11 @@ $avis=query_avis()
                             <p class="review-contexte">Contexte&nbsp;: <?= htmlspecialchars($avis_temp['contexte']) ?></p>
                             <p><?= htmlspecialchars($avis_temp['commentaire']) ?></p>
                             <p class="review-date"><?= htmlspecialchars($avis_temp['date_experience']) ?></p>
-                            <!-- <?php if ($avis_temp['id_membre_auteur']=$_SESSION['id_membre']) { ?>
-                            <button type="submit" class="btn-modif">Modifier</button>
-                            <?php } ?> -->
+                            <?php if ($avis_temp['id_membre_auteur']==$_SESSION['id_membre']) { ?>
+                            <form method="post" action="../avis/modifier.php?avis_id=<?= $avis_temp['id'] ?>&offre=<?=$args['id'] ?>">
+                                <button type="submit" class="btn-modif">Modifier</button>
+                            </form>
+                            <?php } ?> 
                         </div>
                     <?php } 
                 } else { ?>

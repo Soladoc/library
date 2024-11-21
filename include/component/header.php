@@ -2,7 +2,11 @@
 session_start() ?>
 <header>
     <div class="logo">
-        <a href="accueil.php"><img src="../images/logo.png" alt="Logo pact"></a>
+        <?php if (isset($_SESSION['id_pro'])){ ?>
+            <a href="accPro.php"><img src="../images/logo.png" alt="Logo pact"></a>
+        <?php } else { ?>
+            <a href="accueil.php"><img src="../images/logo.png" alt="Logo pact"></a>
+        <?php }?>
     </div>
     <?php 
     if (isset($_SESSION['log']) && $_SESSION['log'] === true) { 
@@ -14,13 +18,14 @@ session_start() ?>
                 <span>Déconnexion</span>
             </div>
         </a>
-        <a href="facturation.php">
-            <div class="acces-facturation">
-            <img src="../images/facturation.png" alt="Profil">
-                <span>Facturation</span>
-            </div>
-        </a>
-    <?php 
+        <?php if(isset($_SESSION['id_pro'])){ ?>
+            <a href="facturation.php">
+                <div class="acces-facturation">
+                <img src="../images/facturation.png" alt="Profil">
+                    <span>Facturation</span>
+                </div>
+            </a>
+    <?php }
     } else { 
         ?>
         <a href="connexion.php">
