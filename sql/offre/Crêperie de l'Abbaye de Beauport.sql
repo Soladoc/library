@@ -59,7 +59,7 @@ with
                 id_membre ('5cover'), -- Récupère l'ID de membre à partir du pseudo
                 5, -- Note sur 5
                 'amis', -- Contexte : affaires, couple, solo, famille, amis
-                '11-07-2005', -- Date d'experience
+                '2005-07-11', -- Date d'experience
                 'Super créperie même en été! nous y avons ai fété le 19 eme anniversaire de mon amis Benjamin et le staff nous a offert des crèpes au caramel démicieuses!' -- Commentaire
             )
     )

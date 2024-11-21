@@ -64,7 +64,7 @@ with
                 id_membre ('5cover'), -- Récupère l'ID de membre à partir du pseudo
                 4, -- Note sur 5
                 'affaires', -- Contexte : affaires, couple, solo, famille, amis
-                '13-07-2024', -- Date d'experience
+                '2024-07-13', -- Date d'experience
                 'Incroyable le jeu son et lumières est parfaitement maitrisé!' -- Commentaire
             )
     )

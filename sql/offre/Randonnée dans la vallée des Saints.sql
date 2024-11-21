@@ -91,7 +91,7 @@ Rejoignez-nous pour une journée mémorable où nature, histoire et gastronomie 
             id_membre ('j0hn'),
             4,
             'couple',
-            '19-01-2024',
+            '2024-01-19',
             'Charmant mais le début de la randonée est peu  accessible.'
         )
 )

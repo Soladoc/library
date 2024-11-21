@@ -73,7 +73,7 @@ with
                 id_membre ('5cover'), -- Récupère l'ID de membre à partir du pseudo
                 5, -- Note sur 5
                 'couple', -- Contexte : affaires, couple, solo, famille, amis
-                '13-11-2024', -- Date d'experience
+                '2024-11-13', -- Date d'experience
                 'Sah big banger g kiffé' -- Commentaire
             ),
             (
@@ -81,7 +81,7 @@ with
                 id_membre ('j0hn'), -- Récupère l'ID de membre à partir du pseudo
                 4, -- Note sur 5
                 'couple', -- Contexte : affaires, couple, solo, famille, amis
-                '08-08-2023', -- Date d'experience
+                '2023-08-08', -- Date d'experience
                 'Séjour féérique en couple un vrai moment de bonheur' -- Commentaire
             )
     )

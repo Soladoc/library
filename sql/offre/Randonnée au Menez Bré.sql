@@ -87,7 +87,7 @@ Rejoignez-nous pour une aventure inoubliable au cœur de la Bretagne et découvr
             id_membre ('5cover'),
             2,
             'solo',
-            '10-03-2024',
+            '2024-03-10',
             'Lieu trop bruyant.'
         )
 )

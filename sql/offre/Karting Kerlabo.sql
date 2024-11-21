@@ -76,7 +76,7 @@ with
             id_membre ('dieu_des_frites'),
             2,
             'affaires',
-            '15-06-2024',
+            '2024-06-15',
             'Karting bridés trop lents'
         )
     )

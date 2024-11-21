@@ -88,7 +88,7 @@ Réservez dès maintenant votre place et préparez-vous à vivre une expérience
             id_membre ('dieu_des_frites'),
             5,
             'amis',
-            '31-08-2024',
+            '2024-08-31',
             'Cadre magnifique.'
         )
     )

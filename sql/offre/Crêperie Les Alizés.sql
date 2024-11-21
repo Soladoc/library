@@ -59,7 +59,7 @@ with
                 id_membre ('Snoozy'), -- Récupère l'ID de membre à partir du pseudo
                 1, -- Note sur 5
                 'amis', -- Contexte : affaires, couple, solo, famille, amis
-                '11-07-2024', -- Date d'experience
+                '2024-07-11', -- Date d'experience
                 'Employés peu poli avec la clientelle multiple ' -- Commentaire
             )
     )
