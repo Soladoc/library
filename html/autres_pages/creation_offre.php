@@ -279,8 +279,8 @@ if ($_POST) {
 
         <section id="type-abonnement">
             <ul id="liste-choix-abonnement">
-                <?php //TODO utiliser le querry de Marius pour vérifier que c'est un compte pro ou un compte prive
-                if(true){ ?> 
+                <?php
+                if(!exists_pro_prive($id_professionnel)){ ?> 
                     <li>
                         <label><input form="f" name="libelle_abonnement" value="gratuit" type="radio">Gratuit</label>
                     </li>
