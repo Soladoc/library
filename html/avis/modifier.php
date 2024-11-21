@@ -36,7 +36,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         header("Location: ../detail_offre.php?id=$id_offre");
         exit;
     }
-}
+}else{
 ?>
 
 <!DOCTYPE html>
@@ -91,3 +91,4 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 </body>
 
 </html>
+<?php }?>
