@@ -27,7 +27,7 @@ function array_every(array $arr, callable $predicate): bool {
  */
 function getarg(array $source, string $name, ?callable $filter = null, bool $required = true): mixed
 {
-    if (!isset($source[$name])) {
+    if (!isset($source[$name]) || $source[$name] === '') {
         if ($required) {
             html_error("argument manquant: $name");
         } else {
