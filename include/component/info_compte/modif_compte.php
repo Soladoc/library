@@ -142,7 +142,7 @@ if ($_POST) {
                 <p>adresse : </p>
                 <?php echo $adresse 
                 ?> </div>
-            <?php put_input_address('', 'adresse', 'adresse_');?>
+            <?php put_input_address('adresse', 'adresse_');?>
 
         </div>
 

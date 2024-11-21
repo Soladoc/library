@@ -106,7 +106,7 @@ if ($_POST) {
                 </p>
                 <label for="adresse">Adresse*</label>
                 <?php
-                put_input_address('f', 'adresse', 'adresse_')
+                put_input_address('adresse', 'adresse_', 'f')
                 ?>
                 <label for="site">Site Web</label>
                 <p>
