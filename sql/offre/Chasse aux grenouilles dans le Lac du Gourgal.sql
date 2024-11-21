@@ -55,7 +55,7 @@ with
                 id_membre ('5cover'), -- Récupère l'ID de membre à partir du pseudo
                 1, -- Note sur 5
                 'amis', -- Contexte : affaires, couple, solo, famille, amis
-                '07-11-2024', -- Date d'experience
+                '2024-11-07', -- Date d'experience
                 'Franchement décevant!' -- Commentaire
             )
     )

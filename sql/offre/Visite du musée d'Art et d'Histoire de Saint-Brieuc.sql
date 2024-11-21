@@ -89,7 +89,7 @@ Ne manquez pas cette opportunité unique de découvrir l''art et l''histoire de 
             id_membre ('Snoozy'),
             4,
             'affaires',
-            '08-06-2024',
+            '2024-06-08',
             'Pratique pour des événements de détente entre collègues.'
         )
     )

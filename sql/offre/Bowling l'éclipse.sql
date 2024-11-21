@@ -64,7 +64,7 @@ with
                 id_membre ('5cover'), -- Récupère l'ID de membre à partir du pseudo
                 1, -- Note sur 5
                 'amis', -- Contexte : affaires, couple, solo, famille, amis
-                '21-11-2024', -- Date d'experience
+                '2024-11-21', -- Date d'experience
                 'Les employés ont enquillé les erreurs ce qui nous à un peu foutu les boules ' -- Commentaire
             )
     ),
@@ -84,7 +84,7 @@ with
                 id_membre ('Maëlan'), -- Récupère l'ID de membre à partir du pseudo
                 4.5, -- Note sur 5
                 'amis', -- Contexte : affaires, couple, solo, famille, amis
-                '21-11-2024', -- Date d'experience
+                '2024-11-21', -- Date d'experience
                 'Laser games super sympa simplement dommage que le laser game ne sois pas détaillé sur le site' -- Commentaire
             )
     )

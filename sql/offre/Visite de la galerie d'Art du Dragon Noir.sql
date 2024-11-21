@@ -81,7 +81,7 @@ La visite de la Galerie d''Art du Dragon Noir est bien plus qu''une simple expos
             id_membre ('rstallman'),
             3,
             'famille',
-            '18-09-2024',
+            '2024-09-18',
             'Nous aurion aprécié une visite guidé'
         )
     )

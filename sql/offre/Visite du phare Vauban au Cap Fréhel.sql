@@ -91,7 +91,7 @@ Ne manquez pas cette opportunité unique de découvrir l''un des joyaux de la Br
             id_membre ('5cover'),
             5,
             'famille',
-            '22-02-2024',
+            '2024-02-22',
             'Une expérience mémorable.'
         )
     ),
@@ -111,7 +111,7 @@ Ne manquez pas cette opportunité unique de découvrir l''un des joyaux de la Br
             id_membre ('Snoozy'),
             5,
             'amis',
-            '14-08-2024',
+            '2024-08-14',
             'Visite incroyable, guide très passionné.'
         )
     ),
@@ -131,7 +131,7 @@ Ne manquez pas cette opportunité unique de découvrir l''un des joyaux de la Br
             id_membre ('Maëlan'),
             4,
             'couple',
-            '22-10-2024',
+            '2024-10-22',
             'Belle organisation et lieu impressionnant.'
         )
     ),
@@ -151,7 +151,7 @@ Ne manquez pas cette opportunité unique de découvrir l''un des joyaux de la Br
             id_membre ('j0hn'),
             5,
             'famille',
-            '05-11-2024',
+            '2024-11-05',
             'Les enfants ont adoré la visite.'
         )
     ),
@@ -171,7 +171,7 @@ Ne manquez pas cette opportunité unique de découvrir l''un des joyaux de la Br
             id_membre ('SamSepi0l'),
             5,
             'solo',
-            '30-09-2024',
+            '2024-09-30',
             'Un moment unique et enrichissant.'
         )
     ),
@@ -191,7 +191,7 @@ Ne manquez pas cette opportunité unique de découvrir l''un des joyaux de la Br
             id_membre ('dieu_des_frites'),
             4,
             'affaires',
-            '15-06-2024',
+            '2024-06-15',
             'Parfait pour découvrir l''histoire locale.'
         )
     ),
@@ -211,7 +211,7 @@ Ne manquez pas cette opportunité unique de découvrir l''un des joyaux de la Br
             id_membre ('rstallman'),
             5,
             'amis',
-            '20-12-2024',
+            '2024-12-20',
             'Une découverte exceptionnelle, à refaire.'
         )
     ),
@@ -231,7 +231,7 @@ Ne manquez pas cette opportunité unique de découvrir l''un des joyaux de la Br
             id_membre ('ltorvalds'),
             5,
             'couple',
-            '02-05-2024',
+            '2024-05-02',
             'Le cadre était à couper le souffle.'
         )
     )

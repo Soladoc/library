@@ -31,7 +31,7 @@ jobs:
                 set -xeu
                 for f in /creaBDD.sql /fonctions.sql /vuesBDD.sql /triggers.util.sql /triggers.sql /bigdata.sql /data.sql /images.sql /offre/*.sql
                   do echo run "$f"
-                  psql -v ON_ERROR_STOP=on -U sae -d postgres -f "$f"
+                  psql -v ON_ERROR_STOP=on -v DATESTYLE -U sae -d postgres -f "$f"
                 done
               '
           EOF

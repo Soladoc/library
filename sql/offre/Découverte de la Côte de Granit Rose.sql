@@ -98,7 +98,7 @@ Nous avons hâte de vous accueillir à bord pour une journée inoubliable sur la
             id_membre ('Snoozy'),
             3,
             'couple',
-            '14-08-2024',
+            '2024-08-14',
             'Service correct mais attente longue.'
         )
     )

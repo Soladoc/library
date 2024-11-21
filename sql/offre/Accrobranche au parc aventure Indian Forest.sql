@@ -63,7 +63,7 @@ Bienvenue dans notre parc aventure si vous êtes dans les Côtes-d''Armor notamm
                 id_membre ('5cover'), -- Récupère l'ID de membre à partir du pseudo
                 3, -- Note sur 5
                 'solo', -- Contexte : affaires, couple, solo, famille, amis
-                '15-11-2024', -- Date d'experience
+                '2024-11-15', -- Date d'experience
                 'Ouais bof... J''ai pas trop aimé perso' -- Commentaire
             )
     )

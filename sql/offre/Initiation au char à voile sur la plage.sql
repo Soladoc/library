@@ -64,7 +64,7 @@ L''initiation au char à voile peut être incluse dans le cadre d''une activité
             id_membre ('SamSepi0l'),
             4,
             'famille',
-            '30-09-2024',
+            '2024-09-30',
             'Très bon rapport qualité-prix.'
         )
     )
