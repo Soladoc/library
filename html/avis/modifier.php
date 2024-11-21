@@ -1,58 +1,55 @@
 <?php
 session_start();
-require_once '../component/db.php'; 
-require_once '../component/head.php';
+require_once 'component/head.php';
+echo 1;
 
+// Vérification de la session utilisateur
 if (!isset($_SESSION['id_membre'])) {
     header("Location: ../connexion.php");
     exit;
 }
+echo 2;
 
-if (!isset($_GET['avis_id']) || !isset($_GET['offre']) || empty($_GET['avis_id']) || empty($_GET['offre'])) {
-    die("Les paramètres 'avis_id' ou 'offre' sont manquants.");
-}
 $id_avis = intval($_GET['avis_id']);
 $id_offre = intval($_GET['offre']);
 
-// Vérifier que l'utilisateur est l'auteur de l'avis
-$requete = "SELECT * FROM pact.avis WHERE id = ? ";
-$stmt = db_connect()->prepare($requete);
-$stmt->execute([$id_avis]);
-$avis = $stmt->fetch();
+echo 4;
 
-if (!$avis) {
-    die("Avis introuvable ou non autorisé.");
-}
 
-// Traitement du formulaire
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+echo 5;
+
+// Traitement du formulaire si la méthode POST est utilisée
+if (isset($_POST['date'])) {
     $commentaire = htmlspecialchars(trim($_POST['commentaire']));
     $note = intval($_POST['rating']);
     $contexte = htmlspecialchars(trim($_POST['contexte']));
     $date_experience = $_POST['date'];
 
+    echo 6;
+
+    // Validation des champs du formulaire
     if (empty($commentaire) || empty($note) || empty($contexte) || empty($date_experience)) {
         $error_message = "Tous les champs sont obligatoires.";
     } else {
-        $requete = "UPDATE pact.avis SET commentaire = ?, note = ?, contexte = ?, date_experience = ? WHERE id = ?";
-        $stmt = db_connect()->prepare($requete);
+        // Mise à jour de l'avis dans la base de données
+        $stmt = db_connect()->prepare("UPDATE pact._avis SET commentaire = ?, note = ?, contexte = ?, date_experience = ? WHERE id = ?");
         $stmt->execute([$commentaire, $note, $contexte, $date_experience, $id_avis]);
 
         $success_message = "Avis modifié avec succès !";
         header("Location: ../detail_offre.php?id=$id_offre");
         exit;
     }
+
+    echo 7;
 }else{
 ?>
-
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="en">
 
 <?php put_head("Modifier un avis"); ?>
 
 <body>
     <?php require '../component/header.php'; ?>
-
     <main>
         <h2>Modifier votre avis</h2>
 
@@ -92,9 +89,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <button type="submit" class="btn-publish">Modifier</button>
         </form>
     </main>
-
     <?php require '../component/footer.php'; ?>
 </body>
-
 </html>
 <?php }?>
