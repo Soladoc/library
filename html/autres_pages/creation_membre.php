@@ -29,7 +29,7 @@ if (isset($_POST['motdepasse'])) {
     ];
     $mdp_hash = notfalse(password_hash($_POST['motdepasse'], PASSWORD_DEFAULT));
 
-    $stmt = db_connect()->prepare('insert into pact.membre (pseudo, nom, prenom, telephone, email, mdp_hash,adresse) values (?, ?, ?, ?, ?, ?,?)');
+    $stmt = db_connect()->prepare('insert into pact.membre (pseudo, nom, prenom, telephone, email, mdp_hash, id_adresse) values (?, ?, ?, ?, ?, ?, ?)');
 
     $stmt->execute([
         $pseudo,
