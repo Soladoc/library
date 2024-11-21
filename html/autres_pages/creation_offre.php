@@ -23,7 +23,7 @@ if ($_POST) {
         'adresse_commune' => getarg($_POST, 'adresse_commune'),
         'adresse_complement_numero' => getarg($_POST, 'adresse_complement_numero', required: false),
         'description_detaillee' => getarg($_POST, 'description_detaillee'),
-        'horaires' => getarg($_POST, 'horaires', arg_check(f_array_has_keys(['debut', 'fin']))),
+        'horaires' => getarg($_POST, 'horaires'),
         'periodes' => getarg($_POST, 'periodes', arg_check(f_array_has_keys(['debut', 'fin']))),
         'resume' => getarg($_POST, 'resume'),
         'tags' => getarg($_POST, 'tags', arg_filter(FILTER_DEFAULT, FILTER_REQUIRE_ARRAY)),
