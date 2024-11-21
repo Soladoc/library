@@ -34,6 +34,7 @@ else if ($pro !== false) {
     $prenom = $pro['prenom'];
     $telephone = $pro['telephone'];
     $id_adresse = $membre['id_adresse'];
+    echo $id_adresse;
     $adresse= query_adresse($id_adresse);
     if (exists_pro_prive($id)) {
         $siren = query_get_siren($id);
