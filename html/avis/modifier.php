@@ -15,8 +15,7 @@ $id_avis = intval($_GET['avis_id']);
 $id_offre = intval($_GET['offre']);
 
 // Vérifier que l'utilisateur est l'auteur de l'avis
-$requete = "SELECT * FROM pact.avis WHERE id = ? ";
-$stmt = db_connect()->prepare($requete);
+$stmt = db_connect()->prepare("SELECT * FROM pact.avis WHERE id = ? ");
 $stmt->execute([$id_avis]);
 $avis = $stmt->fetch();
 
@@ -34,8 +33,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (empty($commentaire) || empty($note) || empty($contexte) || empty($date_experience)) {
         $error_message = "Tous les champs sont obligatoires.";
     } else {
-        $requete = "UPDATE pact.avis SET commentaire = ?, note = ?, contexte = ?, date_experience = ? WHERE id = ?";
-        $stmt = db_connect()->prepare($requete);
+        $stmt = db_connect()->prepare("UPDATE pact.avis SET commentaire = ?, note = ?, contexte = ?, date_experience = ? WHERE id = ?");
         $stmt->execute([$commentaire, $note, $contexte, $date_experience, $id_avis]);
 
         $success_message = "Avis modifié avec succès !";
