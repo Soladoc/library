@@ -29,9 +29,9 @@ if ($membre !== false) {
         $adresse= query_adresse($id_adresse);
 }
 else if ($pro !== false) {
-    echo '<pre>';
-    print_r($pro);
-    echo '</pre>';
+    // echo '<pre>';
+    // print_r($pro);
+    // echo '</pre>';
     $denomination = $pro['denomination'];
     $email = $pro['email'];
     $mdp_hash = unserialize($pro['mdp_hash']);
@@ -161,15 +161,15 @@ if ($_POST) {
             <label>modifier son mot de passe</label>                        
             <div class="champ">
                 <label for="mdp">Mot de passe actuel *</label>
-                <input id="mdp" name="old_mdp" type="password" placeholder="**********" required>
+                <input id="mdp" name="old_mdp" type="password" placeholder="**********">
             </div>
             <div class="champ">
                 <label for="mdp">Nouveau mot de passe *</label>
-                <input id="new_mdp" name="mdp" type="password" placeholder="**********" required>
+                <input id="new_mdp" name="mdp" type="password" placeholder="**********">
             </div>
             <div class="champ">
                 <label for="mdp">confirmation mot de passe *</label>
-                <input id="confirmation_mdp" name="mdp" type="password" placeholder="**********" required>
+                <input id="confirmation_mdp" name="mdp" type="password" placeholder="**********">
             </div>
             <?php if ($error = $_GET['error_mdp'] ?? null) { ?>
             <p class="error"><?= $error ?></p>
