@@ -1,7 +1,7 @@
 <?php
 
 function query_offre(int $id_offre): array|false
-{
+{   
     $stmt = notfalse(db_connect()->prepare('select * from offres where id = ?'));
     bind_values($stmt, [1 => [$id_offre, PDO::PARAM_INT]]);
     notfalse($stmt->execute());
