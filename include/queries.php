@@ -113,7 +113,9 @@ function query_get_siren(int $id_compte): int
 function query_communes(?string $nom = null): array
 {
     $args = filter_null_args(['nom' => [$nom, PDO::PARAM_STR]]);
+    echo 'select * from _commune' . _where_clause('and', array_keys($args));
     $stmt = notfalse(db_connect()->prepare('select * from _commune' . _where_clause('and', array_keys($args))));
+    
     bind_values($stmt, $args);
     return notfalse($stmt->fetchAll());
 }
