@@ -134,6 +134,15 @@ values
         'Torvalds',
         '2134657980',
         '$2y$10$EGLHZkQPfzunBskmjGlv0eTVbF8uot3J6R/W76TIjUw33xSYadike' -- toto
+    ),
+    (
+        (table id_adresse),
+        'Maëlan',
+        'maelan.clg.important@gmail.com',
+        'Maëlan',
+        'Poteir',
+        '2134657980',
+        '$2y$10$EGLHZkQPfzunBskmjGlv0eTVbF8uot3J6R/W76TIjUw33xSYadike' -- toto
     );
 
 commit;

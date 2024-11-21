@@ -128,7 +128,7 @@ Ne manquez pas cette opportunité unique de découvrir l''un des joyaux de la Br
     values
         (
             (table id_offre),
-            id_membre ('5cover'),
+            id_membre ('Maëlan'),
             4,
             'couple',
             '22-10-2024',
@@ -192,7 +192,7 @@ Ne manquez pas cette opportunité unique de découvrir l''un des joyaux de la Br
             4,
             'affaires',
             '15-06-2024',
-            'Parfait pour découvrir l’histoire locale.'
+            'Parfait pour découvrir l''histoire locale.'
         )
     ),
     s9 as (
