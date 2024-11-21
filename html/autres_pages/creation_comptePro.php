@@ -3,6 +3,12 @@ require_once 'db.php';
 require_once 'util.php';
 require_once 'component/head.php';
 
+function fail(string $error)
+{
+    header('Location: ?error=' . urlencode($error));
+    exit;
+}
+
 if ($_POST) {
     $args = [
         'nom' => getarg($_POST, 'nom'),
@@ -28,26 +34,46 @@ if ($_POST) {
 
     $mdp_hash = password_hash($args['mdp'], PASSWORD_DEFAULT);
 
+    $Nomcommune = $_POST['adresse'];
+
+    $stmt = db_connect()->prepare("SELECT code, numero_departement FROM pact._commune WHERE nom = ?");
+    $stmt->execute([$Nomcommune]);
+    $commune = $stmt->fetch(PDO::FETCH_ASSOC);
+
+    if (!$commune) {
+        fail("La commune '$Nomcommune' n'existe pas.");
+    }
+
+    $codeCommune = $commune['code'];
+    $numeroDepartement = $commune['numero_departement'];
+
+    $stmt = db_connect()->prepare(" INSERT INTO pact._adresse (code_commune, numero_departement) VALUES ( ?, ?) RETURNING id");
+    $stmt->execute([$codeCommune, $numeroDepartement]);
+
+    $idAdresse = $stmt->fetchColumn();
+
     if ($type === 'prive') {
-        $stmt = db_connect()->prepare('insert into pro_prive (email, mdp_hash, nom, prenom, telephone, denomination, siren) values (?, ?, ?, ?, ?, ?, ?)');
+        $stmt = db_connect()->prepare('insert into pro_prive (email, mdp_hash, nom, prenom, telephone, id_adresse, denomination, siren) values (?, ?, ?, ?, ?, ?, ?, ?)');
         $stmt->execute([
             $args['email'],
             $mdp_hash,
             $args['nom'],
             $args['prenom'],
             $args['telephone'],
+            $idAdresse,
             $args['denomination'],
             str_replace(' ', '', $args['siren']),
         ]);
         redirect_to_connexion();
     } else {
-        $stmt = db_connect()->prepare('insert into pro_public (email, mdp_hash, nom, prenom, telephone, denomination) values (?, ?, ?, ?, ?, ?)');
+        $stmt = db_connect()->prepare('insert into pro_public (email, mdp_hash, nom, prenom, telephone, id_adresse, denomination) values (?, ?, ?, ?, ?, ?, ?)');
         $stmt->execute([
             $args['email'],
             $mdp_hash,
             $args['nom'],
             $args['prenom'],
             $args['telephone'],
+            $idAdresse,
             $args['denomination'],
         ]);
         redirect_to_connexion();
