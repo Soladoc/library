@@ -86,9 +86,20 @@ if ($_POST) {
                 </div>
                 <input id="new_denomination" name="denomination" type="text" placeholder="votre nouvelle denomination">                    
             </div>
+            <?php 
+            if (exists_pro_prive($id)) {
+                    ?>
+                    <div id="siren">
+                    <p>siren : </p>
+                <?php echo $siren 
+                ?> </div><?php
+                    
+                   
+                }?>
 
 
         <?php } ?>
+
 
         <div>
             <div>
@@ -111,7 +122,7 @@ if ($_POST) {
                 <p>Email : </p>
                 <?php echo $email ?>
             </div>
-            <input id="new_email" name="email" type="text" placeholder="votre nouvel email">                    
+            <input id="new_email" name="email" type="email" placeholder="votre nouvel email">                    
 
         </div>
         <div></div>
