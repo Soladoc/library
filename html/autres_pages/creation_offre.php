@@ -20,7 +20,7 @@ if ($_POST) {
     ?><pre><?= htmlspecialchars(print_r($_POST, true)) ?></pre><?php
     ?><pre><?= htmlspecialchars(print_r($_FILES, true)) ?></pre><?php 
     $args += [
-        'adresse_commune' => getarg($_POST, 'adresse_commune'),
+        'adresse_commune' => getarg($_POST, ucfirst('adresse_commune')),
         'adresse_complement_numero' => getarg($_POST, 'adresse_complement_numero', required: false),
         'description_detaillee' => getarg($_POST, 'description_detaillee'),
         'horaires' => getarg($_POST, 'horaires',required:false)?? [],
