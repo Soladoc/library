@@ -81,7 +81,7 @@ with
         values
             ( --
                 (table id_offre),
-                id_membre ('5cover'), -- Récupère l'ID de membre à partir du pseudo
+                id_membre ('Maëlan'), -- Récupère l'ID de membre à partir du pseudo
                 4.5, -- Note sur 5
                 'amis', -- Contexte : affaires, couple, solo, famille, amis
                 '21-11-2024', -- Date d'experience
