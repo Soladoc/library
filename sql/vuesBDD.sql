@@ -22,7 +22,7 @@ comment on column offres.changement_ouverture_suivant_le is
 Si l''offre est fermée, c''est la prochaine ouverture, ou infinity si l''offre sera fermée pour toujours.
 Si l''offre est ouverte, c''est la prochaine fermeture, ou infinity si l''offre sera ouverte pour toujours.';*/
 comment on column offres.en_ligne_ce_mois_pendant is
-'La durée pendant laquelle cette offre a été en ligne pour le mois courant. La valeur est inférieure ou égale à 1 mois.'
+'La durée pendant laquelle cette offre a été en ligne pour le mois courant. La valeur est inférieure ou égale à 1 mois.';
 
 
 create view activite as select * from _activite
