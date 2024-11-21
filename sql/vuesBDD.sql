@@ -52,7 +52,11 @@ create view pro_prive as select * from _prive
 create view pro_public as select * from _public
     join professionnel using (id);
 
-create view avis as select _avis.*, pseudo from _avis
+create view avis as select
+    _avis.*,
+    membre.pseudo pseudo_auteur
+from
+    _avis
     join membre on id_membre_auteur = membre.id;
 
 create view horaire_ouverture as table _horaire_ouverture;

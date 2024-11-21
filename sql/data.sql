@@ -70,17 +70,70 @@ with
             id
     )
 insert into
-    membre (id_adresse, pseudo, email, mdp_hash, nom, prenom, telephone)
+    membre (id_adresse, pseudo, email, prenom, nom, telephone, mdp_hash)
 values
     (
         (table id_adresse),
         '5cover',
-        'the.scover@gmail.co',
-        /*toto*/
-        '$2y$10$EGLHZkQPfzunBskmjGlv0eTVbF8uot3J6R/W76TIjUw33xSYadike', -- toto
+        'scover@gmail.com',
         'Scover',
         'NoLastName',
-        '2134657980'
+        '2134657980',
+        '$2y$10$EGLHZkQPfzunBskmjGlv0eTVbF8uot3J6R/W76TIjUw33xSYadike' -- toto
+    ),
+    (
+        (table id_adresse),
+        'Snoozy',
+        'snoozy@gmail.com',
+        'Benjamin',
+        'Dumont-girard',
+        '2134657980',
+        '$2y$10$EGLHZkQPfzunBskmjGlv0eTVbF8uot3J6R/W76TIjUw33xSYadike' -- toto
+    ),
+    (
+        (table id_adresse),
+        'j0hn',
+        'john.smith@mertrem.org',
+        'John',
+        'Smith',
+        '2134657980',
+        '$2y$10$EGLHZkQPfzunBskmjGlv0eTVbF8uot3J6R/W76TIjUw33xSYadike' -- toto
+    ),
+    (
+        (table id_adresse),
+        'SamSepi0l',
+        'sem.sepiol@gmail.com',
+        'Eliott',
+        'Alderson',
+        '2134657980',
+        '$2y$10$EGLHZkQPfzunBskmjGlv0eTVbF8uot3J6R/W76TIjUw33xSYadike' -- toto
+    ),
+    (
+        (table id_adresse),
+        'dieu_des_frites',
+        'marius.clg.important@gmail.com',
+        'Marius',
+        'Chartier--Le Goff',
+        '2134657980',
+        '$2y$10$EGLHZkQPfzunBskmjGlv0eTVbF8uot3J6R/W76TIjUw33xSYadike' -- toto
+    ),
+    (
+        (table id_adresse),
+        'rstallman',
+        'stallman.richard@gnu.org',
+        'Richard',
+        'Stallman',
+        '2134657980',
+        '$2y$10$EGLHZkQPfzunBskmjGlv0eTVbF8uot3J6R/W76TIjUw33xSYadike' -- toto
+    ),
+    (
+        (table id_adresse),
+        'ltorvalds',
+        'linus.torvalds@kernelist.org',
+        'Linus',
+        'Torvalds',
+        '2134657980',
+        '$2y$10$EGLHZkQPfzunBskmjGlv0eTVbF8uot3J6R/W76TIjUw33xSYadike' -- toto
     );
 
 commit;

@@ -169,7 +169,7 @@ $avis=query_avis()
                 <?php if (!empty($avis)) {
                     foreach ($avis as $avis_temp) { ?>
                         <div class="review">
-                            <p><strong><?= htmlspecialchars($avis_temp['pseudo']) ?></strong> - <?= htmlspecialchars($avis_temp['note']) ?>/5</p>
+                            <p><strong><?= htmlspecialchars($avis_temp['pseudo_auteur']) ?></strong> - <?= htmlspecialchars($avis_temp['note']) ?>/5</p>
                             <p class="review-contexte">Contexte&nbsp;: <?= htmlspecialchars($avis_temp['contexte']) ?></p>
                             <p><?= htmlspecialchars($avis_temp['commentaire']) ?></p>
                             <p class="review-date"><?= htmlspecialchars($avis_temp['date_experience']) ?></p>

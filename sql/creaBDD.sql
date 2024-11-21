@@ -21,32 +21,45 @@ create domain iso639_1 as char(2);
 
 create domain nom_option char(10);
 
-create domain ligne as varchar check (value not like E'%\n%');
-comment on domain ligne is 'Une ligne de texte';
-
 create domain paragraphe as varchar;
-comment on domain paragraphe is 'Un paragraphe de texte';
+comment on domain paragraphe is 'Un paragraphe de texte libre';
+
+create domain ligne as varchar check (value not like E'%\n%');
+comment on domain ligne is 'Une ligne de texte libre';
 
 create domain numero_telephone as char(10) check (value ~ '^[0-9]+$');
+comment on domain numero_telephone is
+'9 chiffres
+- on exclut le zéro initial
+- indicatif +33 implicite';
 
 create domain numero_siren as char(9) check (value ~ '^[0-9]+$');
+comment on domain numero_siren is '9 chiffres';
 
-create domain mot as varchar(63) check (value ~ '^[-''\d[:lower:]](?:[-''\d[:lower:] ]*[-''\d[:lower:]])?$');
-comment on domain mot is '63 car. max, non vide, autorise lettres minuscules, chiffres, espace, tiret et apostrophe. Espaces en extrêmités non autorisés.';
+create domain mot as varchar(255) check (value ~ '^[[:graph:]](?:(?: ?[[:graph:]]+)*[[:graph:]])?$');
+comment on domain mot is 
+'Texte:
+- 255 car. max
+- non vide
+- caractères visibles uniquement
+- espaces autorisés tant qu''il sont entourés de caractères visibles';
+
+create domain mot_minuscule as mot check (value !~ '[[:upper:]]');
+comment on domain mot_minuscule is 'Un mot ne contenant pas de majuscules';
+
+create domain pseudonyme as mot check (value !~ '@');
+comment on domain pseudonyme is
+'Un mot ne contenant pas d''arobase "@" pour éviter la confusion avec une adresse e-mail';
 
 create domain adresse_email as varchar(319) check (value ~ '^(?:[a-z0-9!#$%&''*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&''*+/=?^_`{|}~-]+)*|"(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21\x23-\x5b\x5d-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])*")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\[(?:(?:(2(5[0-5]|[0-4][0-9])|1[0-9][0-9]|[1-9]?[0-9]))\.){3}(?:(2(5[0-5]|[0-4][0-9])|1[0-9][0-9]|[1-9]?[0-9])|[a-z0-9-]*[a-z0-9]:(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21-\x5a\x53-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])+)\])$');
 comment on domain adresse_email is 'Adresse e-mail (regex de https://emailregex.com)';
-
-create domain pseudonyme as varchar(63) check (value ~ '^[^@\s[:cntrl:]](?: |[^@\s[:cntrl:]])*[^@\s[:cntrl:]]?$');
-comment on domain pseudonyme is '63 car. max, non vide, pas de caractères de contrôle, pas de blancs en début et fin, l''espace " " est le seul blanc autorisé.
-Pas d''arobase (@), pour éviter la confusion avec une adresse e-mail';
 
 -- CLASSES
 
 create table _departement (
     numero num_departement
         constraint departement_pk primary key,
-    nom ligne not null unique
+    nom mot not null unique
 );
 
 create table _commune (
@@ -55,7 +68,7 @@ create table _commune (
         constraint commune_fk_departement references _departement,
     constraint commune_pk primary key (code, numero_departement),
         
-    nom ligne not null
+    nom mot not null
 );
 
 create table _adresse (
@@ -83,7 +96,7 @@ comment on constraint adresse_check_numero_voie_complement_numero on _adresse is
 'numero_voie is null => complement_numero is null';
 
 create table _abonnement (
-    libelle ligne
+    libelle mot_minuscule
         constraint abonnement_pk primary key,
     prix decimal not null
 );
@@ -115,8 +128,8 @@ create table _compte (
         constraint compte_inherits_signalable references _signalable,
     email adresse_email not null unique,
     mdp_hash varchar(255) not null,
-    nom ligne not null,
-    prenom ligne not null,
+    nom mot not null,
+    prenom mot not null,
     telephone numero_telephone not null,
     id_adresse int not null
         constraint compte_fk_adresse references _adresse
@@ -126,7 +139,7 @@ create table _professionnel (
     id int
         constraint professionnel_pk primary key
         constraint professionnel_inherits_compte references _compte,
-    denomination ligne not null
+    denomination mot not null
 );
 
 create table _offre (
@@ -139,9 +152,9 @@ create table _offre (
         constraint offre_fk_image references _image,
     id_professionnel int not null
         constraint offre_fk_professionnel references _professionnel,
-    libelle_abonnement ligne not null
+    libelle_abonnement mot_minuscule not null
         constraint offre_fk_abonnement references _abonnement,
-    titre ligne not null,
+    titre mot not null,
     resume ligne not null,
     description_detaillee paragraphe not null,
     modifiee_le timestamp not null,
@@ -183,7 +196,7 @@ create table _visite (
 create table _langue (
     code iso639_1
         constraint langue_pk primary key,
-    libelle ligne not null
+    libelle mot not null
 );
 
 create table _spectacle (
@@ -258,7 +271,7 @@ create table _prestation (
 );
 
 create table _tarif (
-    nom ligne not null,
+    nom mot not null,
     id_offre int
         constraint tarif_fk_offre references _offre,
     constraint tarif_pk primary key (nom, id_offre),
@@ -280,7 +293,7 @@ create table _avis (
     note int not null check (1 <= note and note <= 5),
     publie_le timestamp not null default now(),
     date_experience date not null,
-    contexte mot not null,
+    contexte mot_minuscule not null,
     lu boolean not null default false,
     blackliste boolean not null default false,
 
@@ -403,7 +416,7 @@ create table _juge (
 create table _tags (
     id_offre int
         constraint tags_fk_offre references _offre,
-    tag mot,
+    tag mot_minuscule,
     constraint tags_pk primary key (id_offre, tag)
 );
 

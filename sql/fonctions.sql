@@ -4,7 +4,21 @@ set schema 'pact';
 
 set plpgsql.extra_errors to 'all';
 
-create function offre_categorie (id_offre int) returns mot as $$
+-- Membre
+
+create function id_membre(p_pseudo pseudonyme) returns int as $$
+    select id from _membre where pseudo = p_pseudo;
+$$ language sql;
+comment on function id_membre (pseudonyme) is
+'Retourne l''ID d''un membre à partir de son pseudo.
+@param pseudo le pseudo du membre
+@returns L''ID du membre, ou NULL si il n''existe pas de membre ayant le pseudo donné.
+
+Comme le pseudo est UNIQUE, on peut garantir qu''il n''existe qu''un seul membre pour un pseudo donné.';
+
+-- Offres
+
+create function offre_categorie (id_offre int) returns mot_minuscule as $$
 begin
     if id_offre in (select id from pact._restaurant) then return 'restaurant'; end if;
     if id_offre in (select id from pact._activite) then return 'activité'; end if;

@@ -228,8 +228,6 @@ INSTEAD OF UPDATE ON membre
 FOR EACH ROW
 EXECUTE FUNCTION membre_pseudo_update();
 
-
-
 -- membre -> update (denomination)
 create function membre_denomination_update() returns trigger as $$
 begin
