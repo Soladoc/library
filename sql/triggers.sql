@@ -215,31 +215,31 @@ commit;
 -- membre -> update (pseudo)
 create function membre_pseudo_update () returns trigger as $$
 begin
-    UPDATE _membre
-        SET pseudo = NEW.pseudo
-        WHERE id = OLD.id;
-        RETURN NEW;
+    update _membre
+        set pseudo = new.pseudo
+        where id = old.id;
+        return new;
     
 end
 $$ language plpgsql;
 
-CREATE TRIGGER trg_update_pseudo
-INSTEAD OF UPDATE ON membre
-FOR EACH ROW
-EXECUTE FUNCTION membre_pseudo_update();
+create trigger trg_update_pseudo
+instead of update on membre
+for each row
+execute function membre_pseudo_update();
 
 -- membre -> update (denomination)
 create function membre_denomination_update() returns trigger as $$
 begin
-    UPDATE _professionnel
-        SET denomination = NEW.denomination
-        WHERE id = OLD.id;
-        RETURN NEW;
+    update _professionnel
+        set denomination = new.denomination
+        where id = old.id;
+        return new;
     
 end
 $$ language plpgsql;
 
-CREATE TRIGGER trg_update_denomination
-INSTEAD OF UPDATE ON professionnel
-FOR EACH ROW
-EXECUTE FUNCTION membre_denomination_update();
+create trigger trg_update_denomination
+instead of update on professionnel
+for each row
+execute function membre_denomination_update();
