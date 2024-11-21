@@ -16,25 +16,26 @@ $args = [
 $id_professionnel = exiger_connecte_pro();
 
 if ($_POST) {
-    /* ?><pre><?= htmlspecialchars(print_r($_GET, true)) ?></pre><?php
+     ?><pre><?= htmlspecialchars(print_r($_GET, true)) ?></pre><?php
     ?><pre><?= htmlspecialchars(print_r($_POST, true)) ?></pre><?php
-    ?><pre><?= htmlspecialchars(print_r($_FILES, true)) ?></pre><?php */
+    ?><pre><?= htmlspecialchars(print_r($_FILES, true)) ?></pre><?php 
     $args += [
         'adresse_commune' => getarg($_POST, 'adresse_commune'),
-        'adresse_complement_numero' => getarg($_POST, 'adresse_complement_numero', arg_filter(FILTER_VALIDATE_INT, ['min_range' => 1]), required: false),
+        'adresse_complement_numero' => getarg($_POST, 'adresse_complement_numero', required: false),
         'description_detaillee' => getarg($_POST, 'description_detaillee'),
-        'horaires' => getarg($_POST, 'horaires', arg_check(f_array_has_keys(['debut', 'fin']))),
-        'periodes' => getarg($_POST, 'periodes', arg_check(f_array_has_keys(['debut', 'fin']))),
+        'horaires' => getarg($_POST, 'horaires'),
+        'periodes' => getarg($_POST, 'periodes'),
         'resume' => getarg($_POST, 'resume'),
         'tags' => getarg($_POST, 'tags', arg_filter(FILTER_DEFAULT, FILTER_REQUIRE_ARRAY)),
-        'tarifs' => getarg($_POST, 'tarifs', arg_check(f_array_has_keys(['nom', 'montant']))),
+        'tarifs' => getarg($_POST, 'tarifs'),
         'titre' => getarg($_POST, 'titre'),
         'adresse_localite' => getarg($_POST, 'adresse_localite', required: false),
         'adresse_nom_voie' => getarg($_POST, 'adresse_nom_voie', required: false),
-        'adresse_numero_voie' => getarg($_POST, 'adresse_numero_voie', required: false),
+        'adresse_numero_voie' => getarg($_POST, 'adresse_numero_voie', arg_filter(FILTER_VALIDATE_INT, ['min_range' => 1]) ,required: false),
         'adresse_precision_ext' => getarg($_POST, 'adresse_precision_ext', required: false),
         'adresse_precision_int' => getarg($_POST, 'adresse_precision_int', required: false),
         'url_site_web' => getarg($_POST, 'url_site_web', required: false),
+        'libelle_abonnement' => getarg($_POST, 'libelle_abonnement', required: true),
 
         'file_gallerie' => getarg($_FILES, 'gallerie'),
         'file_image_principale' => getarg($_FILES, 'image_principale'),
