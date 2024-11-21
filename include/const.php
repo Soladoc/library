@@ -45,3 +45,11 @@ const JOURS_SEMAINE = [
     'vendredi',
     'samedi'
 ];
+
+const CONTEXTES_VISITE = [
+    'affaires',
+    'couple',
+    'solo',
+    'famille',
+    'amis'
+];

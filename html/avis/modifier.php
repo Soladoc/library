@@ -1,11 +1,12 @@
 <?php
 session_start();
 require_once 'component/head.php';
+require_once 'const.php';
 echo 1;
 
 // Vérification de la session utilisateur
 if (!isset($_SESSION['id_membre'])) {
-    header("Location: ../connexion.php");
+    header('Location: ../connexion.php');
     exit;
 }
 echo 2;
@@ -14,7 +15,6 @@ $id_avis = intval($_GET['avis_id']);
 $id_offre = intval($_GET['offre']);
 
 echo 4;
-
 
 echo 5;
 
@@ -29,24 +29,24 @@ if (isset($_POST['date'])) {
 
     // Validation des champs du formulaire
     if (empty($commentaire) || empty($note) || empty($contexte) || empty($date_experience)) {
-        $error_message = "Tous les champs sont obligatoires.";
+        $error_message = 'Tous les champs sont obligatoires.';
     } else {
         // Mise à jour de l'avis dans la base de données
-        $stmt = db_connect()->prepare("UPDATE pact._avis SET commentaire = ?, note = ?, contexte = ?, date_experience = ? WHERE id = ?");
+        $stmt = db_connect()->prepare('UPDATE pact._avis SET commentaire = ?, note = ?, contexte = ?, date_experience = ? WHERE id = ?');
         $stmt->execute([$commentaire, $note, $contexte, $date_experience, $id_avis]);
 
-        $success_message = "Avis modifié avec succès !";
+        $success_message = 'Avis modifié avec succès !';
         header("Location: ../detail_offre.php?id=$id_offre");
         exit;
     }
 
     echo 7;
-}else{
+} else {
 ?>
 <!DOCTYPE html>
 <html lang="en">
 
-<?php put_head("Modifier un avis"); ?>
+<?php put_head('Modifier un avis'); ?>
 
 <body>
     <?php require '../component/header.php'; ?>
@@ -75,11 +75,9 @@ if (isset($_POST['date'])) {
 
             <label for="contexte">Contexte&nbsp;:</label>
             <select name="contexte" id="contexte" required>
-                <option value="affaires" <?= $avis['contexte'] == 'affaires' ? 'selected' : '' ?>>Affaires</option>
-                <option value="couple" <?= $avis['contexte'] == 'couple' ? 'selected' : '' ?>>Couple</option>
-                <option value="solo" <?= $avis['contexte'] == 'solo' ? 'selected' : '' ?>>Solo</option>
-                <option value="famille" <?= $avis['contexte'] == 'famille' ? 'selected' : '' ?>>Famille</option>
-                <option value="amis" <?= $avis['contexte'] == 'amis' ? 'selected' : '' ?>>Amis</option>
+                <?php foreach (CONTEXTES_VISITE as $ctx) { ?>
+                    <option value="<?= $ctx ?>" <?= $avis['contexte'] === $ctx ? 'selected' : '' ?>><?= ucfirst($ctx) ?></option>
+                <?php } ?>
             </select>
 
             <label for="date">Date de votre visite</label>
@@ -92,4 +90,4 @@ if (isset($_POST['date'])) {
     <?php require '../component/footer.php'; ?>
 </body>
 </html>
-<?php }?>
+<?php } ?>
