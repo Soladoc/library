@@ -13,6 +13,7 @@ jobs:
           ssh-keyscan -p 22 ${{ secrets.ARTIFACT_HOST }} >> ~/.ssh/known_hosts
           ssh debian@${{ secrets.ARTIFACT_HOST }} << 'EOF'
               set -xeu
+              cd /docker/sae
               docker compose down
               docker compose up -d
           EOF

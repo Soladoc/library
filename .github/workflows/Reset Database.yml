@@ -20,7 +20,8 @@ jobs:
           ssh 'debian@${{ secrets.ARTIFACT_HOST }}' << 'EOF'
               set -xeu
               cd /docker/sae/data
-              sudo git pull
+              sudo git fetch --all
+              sudo git reset --hard origin/main
               cd sql
               sudo docker cp . postgresdb:
               fargs=()
