@@ -94,7 +94,10 @@ function displayOffers() {
             <p>Adresse : ${offer.adresse}</p>
             <p>Prix : ${offer.prix_min}€</p>
             <p>Note : ${offer.note}/5</p>
-            <p>Date : ${formattedDate}</p>`;
+            <p>Date : ${formattedDate}</p>
+            <a href="/autres_pages/detail_offre.php?id=${offer.id}&pro=true">
+                <button class="btn-more-info">En savoir plus</button>
+            </a>`;
         offerList.appendChild(offerElement);
     });
 }
