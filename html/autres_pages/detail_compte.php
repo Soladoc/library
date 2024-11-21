@@ -144,7 +144,7 @@ if ($_POST) {
                 <?php format_adresse($adresse);  
                 ?> </div>
 
-            <?php require 'component/info_compte/modif_mdp.php' ?>
+            <?php require 'component/info_compte/modif_compte.php' ?>
             
            
         </section>
