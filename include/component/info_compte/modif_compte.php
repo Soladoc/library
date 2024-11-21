@@ -2,6 +2,10 @@
 require_once 'util.php';
 require_once 'queries.php';
 require_once 'component/head.php';
+require_once 'component/offre.php';
+require_once 'component/inputs.php';
+
+
 
 $args = [
     'id' => getarg($_GET, 'id', arg_filter(FILTER_VALIDATE_INT))
@@ -12,26 +16,30 @@ $membre = query_compte_membre($args['id']);
 $pro = query_compte_professionnel($args['id']);
 
 if ($membre !== false) {
-    echo '<pre>';
-    print_r($membre);
-    echo '</pre>';
+    // echo '<pre>';
+    // print_r($membre);
+    // echo '</pre>';
     $pseudo = $membre['pseudo'];
     $email = $membre['email'];
     $mdp = unserialize($membre['mdp_hash']);
     $nom = $membre['nom'];
     $prenom = $membre['prenom'];
     $telephone = $membre['telephone'];
+    $id_adresse = $membre['id_adresse'];
+        $adresse= query_adresse($id_adresse);
 }
 else if ($pro !== false) {
-    echo '<pre>';
-    print_r($pro);
-    echo '</pre>';
+    // echo '<pre>';
+    // print_r($pro);
+    // echo '</pre>';
     $denomination = $pro['denomination'];
     $email = $pro['email'];
     $mdp_hash = unserialize($pro['mdp_hash']);
     $nom = $pro['nom'];
     $prenom = $pro['prenom'];
     $telephone = $pro['telephone'];
+    $id_adresse = $pro['id_adresse'];
+        $adresse= query_adresse($id_adresse);
     
 }
 else {
@@ -62,12 +70,23 @@ if ($_POST) {
 }
 
 ?>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    
+</body>
+</html>
 
 <section id="info_compte">  
     <form action="modif_compte.php" method="POST">
 
 
-        <a href="/autres_pages/detail_compte.php">retour</a>
+        <a href="/autres_pages/detail_compte.php?id=<?php echo $id ?>">retour</a>
         <?php if ($membre !== false) {?>
             <div>
                 <div id="pseudo">
@@ -133,16 +152,16 @@ if ($_POST) {
                 <label>Numero telephone : </label>
                 <?php echo $telephone ?>
             </div>
-            <input id="new_telephone" name="telephone" type="text" placeholder="votre nouveau numero telephone">
+            <input id="new_telephone" name="telephone" type="tel" placeholder="votre nouveau numero telephone">
 
         </div>
 
         <div>
         <div id="adresse">
                 <p>adresse : </p>
-                <?php echo $adresse 
+                <?php echo format_adresse($adresse);  
                 ?> </div>
-            <?php put_input_address('adresse', 'adresse_');?>
+            <?php put_input_address("",'adresse', 'adresse_');?>
 
         </div>
 
@@ -153,15 +172,15 @@ if ($_POST) {
             <label>modifier son mot de passe</label>                        
             <div class="champ">
                 <label for="mdp">Mot de passe actuel *</label>
-                <input id="mdp" name="old_mdp" type="password" placeholder="**********" required>
+                <input id="mdp" name="old_mdp" type="password" placeholder="**********">
             </div>
             <div class="champ">
                 <label for="mdp">Nouveau mot de passe *</label>
-                <input id="new_mdp" name="mdp" type="password" placeholder="**********" required>
+                <input id="new_mdp" name="mdp" type="password" placeholder="**********">
             </div>
             <div class="champ">
                 <label for="mdp">confirmation mot de passe *</label>
-                <input id="confirmation_mdp" name="mdp" type="password" placeholder="**********" required>
+                <input id="confirmation_mdp" name="mdp" type="password" placeholder="**********">
             </div>
             <?php if ($error = $_GET['error_mdp'] ?? null) { ?>
             <p class="error"><?= $error ?></p>

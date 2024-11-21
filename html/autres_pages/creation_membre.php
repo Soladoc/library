@@ -25,8 +25,26 @@ if (isset($_POST['motdepasse'])) {
         fail('Mot de passe trop long');
     }
     $args = [
-        'adresse'=> getarg($_POST,'adresse')
+        'adresse_commune'=> getarg($_POST,'adresse_commune')
     ];
+
+    $nomCommune = $args['args'];
+    $stmt = db_connect()->prepare("SELECT code, numero_departement FROM pact._commune WHERE nom = ?");
+    $stmt->execute([$args['adresse_commune']]);
+    $commune = $stmt->fetch(PDO::FETCH_ASSOC);
+
+    if (!$commune) {
+        throw new Exception("La commune '$nomCommune' n'existe pas.");
+    }
+
+    $codeCommune = $commune['code'];
+    $numeroDepartement = $commune['numero_departement'];
+
+    $stmt = db_connect()->prepare(" INSERT INTO pact._adresse (code_commune, numero_departement) VALUES ( ?, ?) RETURNING id");
+    $stmt->execute([$codeCommune, $numeroDepartement]);
+
+    $idAdresse = $stmt->fetchColumn();
+
     $mdp_hash = notfalse(password_hash($_POST['motdepasse'], PASSWORD_DEFAULT));
 
     $stmt = db_connect()->prepare('insert into pact.membre (pseudo, nom, prenom, telephone, email, mdp_hash, id_adresse) values (?, ?, ?, ?, ?, ?, ?)');
@@ -38,7 +56,7 @@ if (isset($_POST['motdepasse'])) {
         $_POST['telephone'],
         $email,
         $mdp_hash,
-        $args['adresse']
+        $idAdresse
     ]);
     header('Location: /autres_pages/connexion.php');  // todo: passer en GET le pseudo pour l'afficher dans le formulaire connexion, pour que l'utilisateur n'ait pas à le retaper.
 } else {
