@@ -127,6 +127,7 @@ if ($_POST) {
                     <p class="champ" id="champ-siren">
                         <label>SIREN <input type="text" id="siren" name="siren" placeholder="231 654 988" oninput="formatInput(this)" maxlength="12"></label>
                     </p>
+                    <p class="error"><?= $_GET['error'] ?? '' ?></p>
                     <button type="submit" class="btn-connexion">Créer un compte professionnel</button>
                 </form>
                 <br>
