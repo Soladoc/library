@@ -68,7 +68,7 @@ function displayOffers() {
         offerElement.className = 'offer-card';
 
         // Format the date
-        const date = new Date(offer.modifiee_le);
+        const date = new Date(offer.fait_le);
         const formattedDate = date.toLocaleDateString('fr-FR', {
             year: 'numeric',
             month: '2-digit',
@@ -92,7 +92,7 @@ function displayOffers() {
             <p>Catégorie : ${offer.categorie}</p>
             <p>Description : ${offer.resume}</p>
             <p>Adresse :<?=format_adresse(notfalse(query_adresse(${offer.id_adresse}))) ?></p>
-            <p>Prix : ${offer.prix_min}€</p>
+            <p>Prix : ${offer.min}€</p>
             <p>Note : ${offer.note}/5</p>
             <p>Date : ${formattedDate}</p>
             <a href="/autres_pages/detail_offre.php?id=${offer.id}&pro=true">
