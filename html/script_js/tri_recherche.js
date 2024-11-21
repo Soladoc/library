@@ -77,13 +77,13 @@ function displayOffers() {
 
         offerElement.innerHTML = `
             <h3>${offer.titre}</h3>
-            <img src="../images/offre/${offer.image_principale}.jpg"></img>
-            <p>Catégorie: ${offer.categorie}</p>
-            <p>Description: ${offer.description}</p>
-            <p>Adresse: ${offer.adresse}</p>
-            <p>Prix: ${offer.prix_min}€</p>
-            <p>Note: ${offer.note}</p>
-            <p>Date: ${formattedDate}</p>
+            <img src="../images_utilisateur/${offer.id_image_principale}.jpg"></img>
+            <p>Catégorie : ${offer.categorie}</p>
+            <p>Description : ${offer.description}</p>
+            <p>Adresse : ${offer.adresse}</p>
+            <p>Prix : ${offer.prix_min}€</p>
+            <p>Note : ${offer.note}/5</p>
+            <p>Date : ${formattedDate}</p>
         `;
         offerList.appendChild(offerElement);
     });
