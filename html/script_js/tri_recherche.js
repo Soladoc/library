@@ -77,7 +77,7 @@ function displayOffers() {
 
         offerElement.innerHTML = `
             <h3>${offer.titre}</h3>
-            <p>Prix: ${offer.prix}€</p>
+            <p>Prix: ${offer.prix_min}€</p>
             <p>Note: ${offer.note}</p>
             <p>Date: ${formattedDate}</p>
         `;
