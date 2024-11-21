@@ -1,5 +1,3 @@
-begin;
-
 set schema 'pact';
 
 with
@@ -65,5 +63,3 @@ values
     ((table id_offre), 'nature'),
     ((table id_offre), 'plein air'),
     ((table id_offre), 'aventure');
-
-commit;

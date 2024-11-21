@@ -1,5 +1,3 @@
-begin;
-
 set schema 'pact';
 
 set
@@ -24,5 +22,3 @@ $$ language plpgsql;
 
 create trigger tg_spectacle_insert instead of insert on spectacle for each row
 execute function spectacle_insert ();
-
-commit;

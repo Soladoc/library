@@ -1,5 +1,3 @@
-begin;
-
 set schema 'pact';
 
 set
@@ -29,5 +27,3 @@ $$ language plpgsql;
 
 create trigger tg_pro_prive_insert instead of insert on pro_prive for each row
 execute function pro_prive_insert ();
-
-commit;

@@ -1,11 +1,9 @@
-begin;
 -- NE PAS FORMATER
 -- j'ai passé trop de temps à faire ça manuellement
 --                                          Raphaël
 
 -- Info:
 -- Ajouter "not null" aux attributs clés étrangères ne faisant pas partie de la clé primaire. La contrainte "references" n'implique pas "not null". La contrainte "primary key" implique "not null unique"
-
 
 drop schema if exists pact cascade;
 
@@ -327,7 +325,6 @@ create table _reponse (
     contenu paragraphe not null
 );
 
-
 -- ASSOCIATIONS
 
 create table _horaire_ouverture (
@@ -419,5 +416,3 @@ create table _tags (
     tag mot_minuscule,
     constraint tags_pk primary key (id_offre, tag)
 );
-
-commit;

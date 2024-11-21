@@ -1,5 +1,3 @@
-begin;
-
 set schema 'pact';
 
 set
@@ -52,5 +50,3 @@ $$ language plpgsql;
 create trigger tg_update_denomination instead of
 update on professionnel for each row
 execute function membre_update_denomination ();
-
-commit;

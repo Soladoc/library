@@ -1,5 +1,3 @@
-begin;
-
 set schema 'pact';
 
 set
@@ -34,5 +32,3 @@ $$ language plpgsql;
 
 create trigger tg_avis_insert instead of insert on avis for each row
 execute function avis_insert ();
-
-commit;

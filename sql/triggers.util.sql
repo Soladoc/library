@@ -1,5 +1,3 @@
-begin;
-
 -- Fonctions utilitaires pour les triggers
 -- Non destinées à êtres appelées en dehors de triggers.sql
 
@@ -77,5 +75,3 @@ comment on function insert_compte (record) is
 'Insère un compte.
 `new` contient les valeurs du compte.
 @returns L''ID du compte inséré.';
-
-commit;

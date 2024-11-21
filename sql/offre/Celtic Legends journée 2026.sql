@@ -1,5 +1,3 @@
-begin;
-
 set schema 'pact';
 
 with
@@ -72,5 +70,3 @@ insert into
     periode_ouverture (id_offre, debut_le, fin_le)
 values
     ((table id_offre), '2026-04-10T20:00:00.000Z', '2026-04-11T01:00:00.000Z');
-
-commit;

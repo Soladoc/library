@@ -1,5 +1,3 @@
-begin;
-
 set schema 'pact';
 
 insert into
@@ -144,5 +142,3 @@ values
         '2134657980',
         '$2y$10$EGLHZkQPfzunBskmjGlv0eTVbF8uot3J6R/W76TIjUw33xSYadike' -- toto
     );
-
-commit;

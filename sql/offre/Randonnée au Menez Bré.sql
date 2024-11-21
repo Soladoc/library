@@ -1,5 +1,3 @@
-begin;
-
 set schema 'pact';
 
 with
@@ -96,5 +94,3 @@ insert into
 values
     ((table id_offre), '2024-11-15 12:00:00') -- mise en ligne
 ;
-
-commit;

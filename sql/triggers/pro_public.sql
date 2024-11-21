@@ -1,5 +1,3 @@
-begin;
-
 set schema 'pact';
 
 set
@@ -27,5 +25,3 @@ $$ language plpgsql;
 
 create trigger tg_pro_public_insert instead of insert on pro_public for each row
 execute function pro_public_insert ();
-
-commit;

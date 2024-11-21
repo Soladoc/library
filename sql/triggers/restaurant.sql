@@ -1,5 +1,3 @@
-begin;
-
 set schema 'pact';
 
 set
@@ -34,5 +32,3 @@ $$ language plpgsql;
 
 create trigger tg_restaurant_insert instead of insert on restaurant for each row
 execute function restaurant_insert ();
-
-commit;

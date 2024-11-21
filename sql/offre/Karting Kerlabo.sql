@@ -1,5 +1,3 @@
-begin;
-
 set schema 'pact';
 
 with
@@ -86,5 +84,3 @@ values
     ((table id_offre), 24),
     ((table id_offre), 25),
     ((table id_offre), 28);
-
-commit;

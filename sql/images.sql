@@ -1,5 +1,3 @@
-begin;
-
 set schema 'pact';
 
 insert into
@@ -52,5 +50,3 @@ values
     (258810, 'jpeg', 'st-brieuc-museum-front'), -- 45
     (286043, 'png', 'Loudeac_aquarev_plan') -- 46
 ;
-
-commit;

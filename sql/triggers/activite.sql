@@ -1,5 +1,3 @@
-begin;
-
 set schema 'pact';
 
 set
@@ -28,5 +26,3 @@ $$ language plpgsql;
 
 create trigger tg_activite_insert instead of insert on activite for each row
 execute function activite_insert ();
-
-commit;

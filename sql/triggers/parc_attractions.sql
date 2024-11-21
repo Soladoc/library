@@ -1,5 +1,3 @@
-begin;
-
 set schema 'pact';
 
 set
@@ -22,5 +20,3 @@ $$ language plpgsql;
 
 create trigger tg_parc_attractions_insert instead of insert on parc_attractions for each row
 execute function parc_attractions_insert ();
-
-commit;

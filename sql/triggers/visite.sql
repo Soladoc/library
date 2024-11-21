@@ -1,5 +1,3 @@
-begin;
-
 set schema 'pact';
 
 set
@@ -22,5 +20,3 @@ $$ language plpgsql;
 
 create trigger tg_visite_insert instead of insert on visite for each row
 execute function visite_insert ();
-
-commit;

@@ -1,5 +1,3 @@
-begin;
-
 set schema 'pact';
 
 with
@@ -163,4 +161,3 @@ values
 
 -- Pour le mois de novembre, cette offre a été en ligne pendant 0 years 0 mons 13 days 63 hours 28 mins 57.0 secs
 -- select (timestamp '2024-11-05 16:41:37' - '2024-11-03 22:05:11') + (timestamp '2024-11-07 08:56:34' - '2024-11-06 12:08:05') + (timestamp '2024-11-15 00:59:47' - '2024-11-10 03:10:31') + (timestamp '2024-11-27 03:10:32' - '2024-11-19 00:55:46');
-commit;

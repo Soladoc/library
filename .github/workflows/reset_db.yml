@@ -26,5 +26,5 @@ jobs:
               for f in creaBDD.sql fonctions.sql vuesBDD.sql triggers.util.sql triggers/*.sql bigdata.sql data.sql images.sql offre/*.sql; do
                 fargs+=(-f "$f")
               done
-              sudo docker exec -w / postgresdb psql -v ON_ERROR_STOP=on -U sae -d postgres "${fargs[@]}"
+              sudo docker exec -w / postgresdb psql -v ON_ERROR_STOP=on -U sae -d postgres --single-transaction "${fargs[@]}"
           EOF

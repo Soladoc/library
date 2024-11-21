@@ -1,5 +1,3 @@
-begin;
-
 set schema 'pact';
 
 set plpgsql.extra_errors to 'all';
@@ -32,7 +30,6 @@ comment on function offre_categorie (int) is
 'Retourne la catégorie d''une offre.
 @param p_id_offre l''ID de l''offre
 @returns La catégorie de l''offre d''ID `id_offre`.';
-
 
 create function offre_est_ouverte (p_id_offre int, p_le timestamp) returns boolean as $$
 begin
@@ -112,5 +109,3 @@ comment on function offre_en_ligne_pendant (int, timestamp, interval) is
 @param p_debut début de la période d''observation
 @param p_duree durée de la période d''observation
 @returns La valeur de retour est inférieure ou égale à `duree`';
-
-commit;
