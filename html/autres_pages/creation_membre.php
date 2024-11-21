@@ -31,7 +31,7 @@ if (isset($_POST['motdepasse'])) {
     $commune = $stmt->fetch(PDO::FETCH_ASSOC);
 
     if (!$commune) {
-        throw new Exception("La commune '$Nomcommune' n'existe pas.");
+        fail("La commune '$Nomcommune' n'existe pas.");
     }
 
     $codeCommune = $commune['code'];
