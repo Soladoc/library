@@ -1,4 +1,5 @@
 <?php
+require_once 'auth.php';
 require_once 'component/head.php';
 require_once 'const.php';
 echo 1;
@@ -86,4 +87,3 @@ if (isset($_POST['date'])) {
     <?php require '../component/footer.php'; ?>
 </body>
 </html>
-<?php } ?>
