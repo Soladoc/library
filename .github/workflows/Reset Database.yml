@@ -5,7 +5,7 @@ on:
       - 'main'
     paths:
       - '**.sql'
-      - '**/reset_db.yml'
+      - '**/Reset Database.yml'
 jobs:
   reset_db:
     runs-on: ubuntu-latest
