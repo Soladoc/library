@@ -16,14 +16,17 @@ jobs:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           set -xeuo pipefail
-          PREV=$(gh api 'repos/${{ github.repository }}/actions/runs' --jq \
+          echo "BASH_VERSION=$BASH_VERSION"
+          mapfile -t PREV < <(gh api 'repos/${{ github.repository }}/actions/runs' --jq \
             '.workflow_runs
             | (.[] | select(.id == ${{ github.event.workflow_run.id }}) | .run_number) as $run_number
             | .[] | select(.workflow_id == ${{ github.event.workflow_run.workflow_id }} and .run_number == $run_number - 1)
             | .created_at, .updated_at, .conclusion')
-          echo "PREV_STARTED_AT=${PREV[0]}" >> "$GITHUB_ENV"
-          echo "PREV_ENDED_AT=${PREV[1]}" >> "$GITHUB_ENV"
-          echo "PREV_CONCLUSION=${PREV[2]}" >> "$GITHUB_ENV"
+          {
+            echo "PREV_STARTED_AT=${PREV[0]}"
+            echo "PREV_ENDED_AT=${PREV[1]}"
+            echo "PREV_CONCLUSION=${PREV[2]}"
+          } >>"$GITHUB_ENV"
 
       - name: Send Discord notification
         env:
@@ -31,7 +34,6 @@ jobs:
           CONCLUSION: "${{ github.event.workflow_run.conclusion }}"
         run: |
           set -xeuo pipefail
-          echo "SHELL=$SHELL"
           echo "PREV_STARTED_AT=$PREV_STARTED_AT"
           echo "PREV_ENDED_AT=$PREV_ENDED_AT"
           echo "PREV_CONCLUSION=$PREV_CONCLUSION"
