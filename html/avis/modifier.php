@@ -19,7 +19,7 @@ echo 4;
 echo 5;
 
 // Traitement du formulaire si la méthode POST est utilisée
-if ($isset($_POST['date'])) {
+if (isset($_POST['date'])) {
     $commentaire = htmlspecialchars(trim($_POST['commentaire']));
     $note = intval($_POST['rating']);
     $contexte = htmlspecialchars(trim($_POST['contexte']));
@@ -41,7 +41,7 @@ if ($isset($_POST['date'])) {
     }
 
     echo 7;
-}
+}else{
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -91,5 +91,5 @@ if ($isset($_POST['date'])) {
     </main>
     <?php require '../component/footer.php'; ?>
 </body>
-
 </html>
+<?php }?>
