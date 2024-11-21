@@ -19,7 +19,7 @@ echo 4;
 echo 5;
 
 // Traitement du formulaire si la méthode POST est utilisée
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+if ($isset($_POST['date'])) {
     $commentaire = htmlspecialchars(trim($_POST['commentaire']));
     $note = intval($_POST['rating']);
     $contexte = htmlspecialchars(trim($_POST['contexte']));
