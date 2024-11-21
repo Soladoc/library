@@ -2,34 +2,36 @@
 session_start();
 require_once '../component/db.php'; 
 require_once '../component/head.php';
-
+echo 1;
 if (!isset($_SESSION['id_membre'])) {
     header("Location: ../connexion.php");
     exit;
 }
-
+echo 2;
 if (!isset($_GET['avis_id']) || !isset($_GET['offre']) || empty($_GET['avis_id']) || empty($_GET['offre'])) {
     die("Les paramètres 'avis_id' ou 'offre' sont manquants.");
 }
+
+echo 3;
 $id_avis = intval($_GET['avis_id']);
 $id_offre = intval($_GET['offre']);
-
+echo 4;
 // Vérifier que l'utilisateur est l'auteur de l'avis
 $stmt = db_connect()->prepare("SELECT * FROM pact.avis WHERE id = ? ");
 $stmt->execute([$id_avis]);
 $avis = $stmt->fetch();
-
+echo 5;
 if (!$avis) {
     die("Avis introuvable ou non autorisé.");
 }
-
+echo 5;
 // Traitement du formulaire
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $commentaire = htmlspecialchars(trim($_POST['commentaire']));
     $note = intval($_POST['rating']);
     $contexte = htmlspecialchars(trim($_POST['contexte']));
     $date_experience = $_POST['date'];
-
+    echo 6;
     if (empty($commentaire) || empty($note) || empty($contexte) || empty($date_experience)) {
         $error_message = "Tous les champs sont obligatoires.";
     } else {
@@ -40,6 +42,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         header("Location: ../detail_offre.php?id=$id_offre");
         exit;
     }
+echo 7;
 }else{
 ?>
 
