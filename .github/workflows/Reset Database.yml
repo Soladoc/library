@@ -1,5 +1,6 @@
 name: Reset Database
 on:
+  workflow_dispatch:
   push:
     branches:
       - 'main'
