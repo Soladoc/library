@@ -3,6 +3,12 @@ require_once 'db.php';
 require_once 'util.php';
 require_once 'component/head.php';
 
+function fail(string $error)
+{
+    header('Location: ?error=' . urlencode($error));
+    exit;
+}
+
 if ($_POST) {
     $args = [
         'nom' => getarg($_POST, 'nom'),
