@@ -1,6 +1,7 @@
 <?php
 /**
- * auth.php - Fonctions relatives à l'authentification
+ * auth.php
+ * Fonctions relatives à l'authentification
  */
 
 notfalse(session_start());
