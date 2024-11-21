@@ -81,13 +81,14 @@ function displayOffers() {
                 onerror="this.onerror=null; 
                   this.src='../images_utilisateur/${offer.id_image_principale}.png';
                   this.onerror=function(){
-                      this.onerror=null; 
-                      this.src='../images_utilisateur/${offer.id_image_principale}.webp';
-                      this.onerror=function(){
-                          this.onerror=null;
-                          this.src='../images/${offer.id_image_principale}.jpeg';
-                      }
-                  }">
+                        this.onerror=null; 
+                        this.src='../images_utilisateur/${offer.id_image_principale}.webp';
+                        this.onerror=function(){
+                            this.onerror=null;
+                            this.src='../images/${offer.id_image_principale}.jpeg';
+                        }
+                    }
+            ">
             <p>Catégorie : ${offer.categorie}</p>
             <p>Description : ${offer.description}</p>
             <p>Adresse : ${offer.adresse}</p>
