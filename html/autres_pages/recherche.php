@@ -59,7 +59,12 @@ require_once 'component/offre.php'
         <section class="highlight-offers">
             <h2>Offres trouvées :</h2>
             <div class="offer-list">
-                
+                <?php
+                    $stmtOffres = query_offres();
+                    while ($offre = $stmtOffres->fetch()) {
+                        put_card_offre($offre);
+                    }
+                ?>
             </div>
         </section>
     </main>
@@ -74,9 +79,7 @@ require_once 'component/offre.php'
         }
         echo "const offersData = " . json_encode($offres) . ";";
         ?>
-        document.addEventListener('DOMContentLoaded', function() {
-            initializeOffers(offersData);
-        });
+        initializeOffers(offersData);
     </script>
 </body>
 </html>
