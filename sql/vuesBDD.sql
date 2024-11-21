@@ -10,7 +10,7 @@ create view offres as select
     (select fait_le from _changement_etat where _changement_etat.id_offre = _offre.id order by fait_le limit 1) creee_le,
     offre_categorie(id) categorie,
     --offre_est_ouverte(id, localtimestamp) est_ouverte,
-    offre_duree_en_ligne(id, date_trunc('month', localtimestamp), '1 month') duree_en_ligne/*,
+    offre_en_ligne_pendant(id, date_trunc('month', localtimestamp), '1 month') en_ligne_ce_mois_pendant/*,
     offre_changement_ouverture_suivant_le(id, localtimestamp) changement_ouverture_suivant_le*/
 from
     _offre;
@@ -20,10 +20,10 @@ comment on column offres.est_ouverte is
 comment on column offres.changement_ouverture_suivant_le is
 'Un timestamp indiquant quand aura lieu le prochain changement d''ouverture.
 Si l''offre est fermée, c''est la prochaine ouverture, ou infinity si l''offre sera fermée pour toujours.
-Si l''offre est ouverte, c''est la prochaine fermeture, ou infinity  si l''offre sera ouverte pour toujours.';
-comment on column offres.duree_en_ligne 'La durée pour laquelle cette offre a été en ligne pour le mois actuel.
-La valeur est inférieure ou égale à 1 mois.'
-*/
+Si l''offre est ouverte, c''est la prochaine fermeture, ou infinity si l''offre sera ouverte pour toujours.';*/
+comment on column offres.en_ligne_ce_mois_pendant is
+'La durée pendant laquelle cette offre a été en ligne pour le mois courant. La valeur est inférieure ou égale à 1 mois.'
+
 
 create view activite as select * from _activite
     join offres using (id);

@@ -64,7 +64,7 @@ Ainsi, `offre_changement_ouverture_suivant_le(5, ''2024-11-20'') < offre_changem
 @return Le prochain changement d''ouverture de l''offre d''ID `id_offre` après `apres_le`';
 */
 
-create function offre_duree_en_ligne (
+create function offre_en_ligne_pendant (
     p_id_offre int,
     debut timestamp,
     duree interval
@@ -73,7 +73,7 @@ declare
     fait_le timestamp;
     derniere_mise_en_ligne timestamp;
     en_ligne boolean not null = false;
-    duree_en_ligne interval not null = '0';
+    en_ligne_pendant interval not null = '0';
     fin constant timestamp not null = debut + duree;
     -- le premier changement d'état représente toujours la création.
     creee_le constant timestamp not null = c.fait_le from _changement_etat c where id_offre = p_id_offre order by fait_le limit 1;
@@ -95,19 +95,19 @@ begin
                 derniere_mise_en_ligne = fait_le;
             else -- mise hors-ligne
                 -- donc l'offre a été en ligne depuis debut
-                duree_en_ligne = duree_en_ligne + (fait_le - coalesce(derniere_mise_en_ligne, greatest(debut, creee_le)));
+                en_ligne_pendant = en_ligne_pendant + (fait_le - coalesce(derniere_mise_en_ligne, greatest(debut, creee_le)));
             end if;
         end if;
     end loop;
 
     if en_ligne then
-        duree_en_ligne = duree_en_ligne + (fin - coalesce(derniere_mise_en_ligne, greatest(debut, creee_le)));
+        en_ligne_pendant = en_ligne_pendant + (fin - coalesce(derniere_mise_en_ligne, greatest(debut, creee_le)));
     end if;
 
-    return duree_en_ligne;
+    return en_ligne_pendant;
 end;
 $$ language plpgsql;
-comment on function offre_duree_en_ligne (int, timestamp, interval) is
+comment on function offre_en_ligne_pendant (int, timestamp, interval) is
 'Retourne la durée pendant laquelle un offre a été en ligne sur une période donnée.
 @param p_id_offre l''ID de l''offre
 @param debut début de la période d''observation
