@@ -71,7 +71,7 @@ if ($_POST) {
         <?php if ($membre !== false) {?>
             <div>
                 <div id="pseudo">
-                    <p>Pseudo : </p>
+                    <label>Pseudo : </label>
                     <?php echo $pseudo ?>
                 </div>
                 <input id="new_pseudo" name="pseudo" type="text" placeholder="votre nouveau pseudo">
@@ -81,16 +81,16 @@ if ($_POST) {
         else if ($pro !== false){ ?>
             <div>
                 <div id="denomination">
-                    <p>Denomination : </p>
+                    <label>Denomination : </label>
                     <?php echo $denomination ?>
                 </div>
-                <input id="new_denomination" name="denomination" type="text" placeholder="votre nouvelle denomination">                    
+                <input id="new_denomination" name="denomination" type="text" placeholder="votre nouvelle denomination">
             </div>
             <?php 
             if (exists_pro_prive($id)) {
                     ?>
                     <div id="siren">
-                    <p>siren : </p>
+                    <label>siren : </label>
                 <?php echo $siren 
                 ?> </div><?php
                     
@@ -106,7 +106,7 @@ if ($_POST) {
                 <label>Nom : </label>
                 <?php echo $nom ?>
             </div>
-            <input id="new_nom" name="nom" type="text" placeholder="votre nouveau nom">                    
+            <input id="new_nom" name="nom" type="text" placeholder="votre nouveau nom">
         </div>
 
         <div>
@@ -114,23 +114,32 @@ if ($_POST) {
                 <label>Prenom : </label>
                 <?php echo $prenom ?>
             </div>
-            <input id="new_prenom" name="prenom" type="text" placeholder="votre nouveau prenom">                    
+            <input id="new_prenom" name="prenom" type="text" placeholder="votre nouveau prenom">
         </div>
 
         <div>
             <div>
-                <p>Email : </p>
+                <label>Email : </label>
                 <?php echo $email ?>
             </div>
-            <input id="new_email" name="email" type="email" placeholder="votre nouvel email">                    
+            <input id="new_email" name="email" type="email" placeholder="votre nouvel email">
 
         </div>
         <div></div>
             <div id="telephone">
-                <p>Numero telephone : </p>
+                <label>Numero telephone : </label>
                 <?php echo $telephone ?>
             </div>
-            <input id="new_telephone" name="telephone" type="text" placeholder="votre nouveau numero telephone">                    
+            <input id="new_telephone" name="telephone" type="text" placeholder="votre nouveau numero telephone">
+
+        </div>
+
+        <div>
+        <div id="adresse">
+                <p>adresse : </p>
+                <?php echo $adresse 
+                ?> </div>
+           <label>Adresse * <input type="text" id="adresse" placeholder="22300 1 rue Edouard Branly" name="adresse" ></labe>
 
         </div>
 
@@ -138,7 +147,7 @@ if ($_POST) {
 
 
         <div id='changer_mdp'>
-            <p>modifier son mot de passe</p>                        
+            <label>modifier son mot de passe</label>                        
             <div class="champ">
                 <label for="mdp">Mot de passe actuel *</label>
                 <input id="mdp" name="old_mdp" type="password" placeholder="**********" required>

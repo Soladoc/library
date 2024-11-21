@@ -58,7 +58,8 @@ begin
         mdp_hash,
         nom,
         prenom,
-        telephone
+        telephone,
+        id_adresse
     ) values (
         id_identite,
         id_signalable,
@@ -66,7 +67,8 @@ begin
         new.mdp_hash,
         new.nom,
         new.prenom,
-        new.telephone
+        new.telephone,
+        new.id_adresse
     );
     return id_identite;
 end

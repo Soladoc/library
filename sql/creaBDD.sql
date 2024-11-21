@@ -117,7 +117,9 @@ create table _compte (
     mdp_hash varchar(255) not null,
     nom ligne not null,
     prenom ligne not null,
-    telephone numero_telephone not null
+    telephone numero_telephone not null,
+    id_adresse int not null
+        constraint compte_fk_adresse references _adresse
 );
 
 create table _professionnel (

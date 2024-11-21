@@ -77,11 +77,11 @@ footer {
     color: white;
 }
 
-footer p > a {
+footer p>a {
     font-size: x-large;
 }
 
-footer > div:first-child {
+footer>div:first-child {
     padding: 1em;
     display: flex;
     justify-content: space-between;
@@ -90,7 +90,7 @@ footer > div:first-child {
     border-top-right-radius: 1.5em;
 }
 
-footer > div:first-child ul {
+footer>div:first-child ul {
     padding: 1em;
     list-style: none;
     display: flex;
@@ -99,17 +99,17 @@ footer > div:first-child ul {
     align-items: center;
 }
 
-footer > div:first-child ul li img {
+footer>div:first-child ul li img {
     -webkit-filter: drop-shadow(5px 5px 5px rgba(0, 0, 0, 0.2));
     filter: drop-shadow(5px 5px 5px rgba(0, 0, 0, 0.2));
 }
 
-footer > div:first-child > div:first-child {
+footer>div:first-child>div:first-child {
     display: flex;
     column-gap: 3em;
 }
 
-footer > div:first-child > div:first-child img {
+footer>div:first-child>div:first-child img {
     box-sizing: content-box;
     border: 2em solid #F3F3F8;
     border-radius: 2em;
@@ -118,7 +118,7 @@ footer > div:first-child > div:first-child img {
     margin: 1em;
 }
 
-footer > div:nth-child(2) {
+footer>div:nth-child(2) {
     padding: 1em 2em;
     display: flex;
     justify-content: space-between;
@@ -700,11 +700,11 @@ a:not(:hover, :focus, :focus-within) {
         display: none !important;
     }
 
-    footer > div:first-child {
+    footer>div:first-child {
         padding: 0em !important;
     }
 
-    footer > div:first-child > div:first-child {
+    footer>div:first-child>div:first-child {
         column-gap: 0em !important;
     }
 }
@@ -832,7 +832,7 @@ a:not(:hover, :focus, :focus-within) {
 }
 
 @media (max-width: 768px) {
-    footer > div:first-child {
+    footer>div:first-child {
         flex-direction: column;
         align-items: center;
         padding: 1em;
@@ -873,7 +873,7 @@ a:not(:hover, :focus, :focus-within) {
 }
 
 @media (max-width: 576px) {
-    footer > div:first-child {
+    footer>div:first-child {
         padding: 0.5em;
     }
 
@@ -886,4 +886,29 @@ a:not(:hover, :focus, :focus-within) {
         width: 40px;
         height: 40px;
     }
+}
+
+/* Section du formulaire de recherche */
+
+.btn-sort {
+    /* Your existing button styles */
+    background-color: #f0f0f0;
+    color: #333;
+    padding: 10px 15px;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.btn-sort.active {
+    background-color: #007bff;
+    color: white;
+}
+
+.btn-sort:hover {
+    background-color: #e0e0e0;
+}
+
+.btn-sort.active:hover {
+    background-color: #0056b3;
 }
