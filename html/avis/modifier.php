@@ -40,7 +40,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $error_message = "Tous les champs sont obligatoires.";
     } else {
         // Mise à jour de l'avis dans la base de données
-        $stmt = db_connect()->prepare("UPDATE pact.avis SET commentaire = ?, note = ?, contexte = ?, date_experience = ? WHERE id = ?");
+        $stmt = db_connect()->prepare("UPDATE pact._avis SET commentaire = ?, note = ?, contexte = ?, date_experience = ? WHERE id = ?");
         $stmt->execute([$commentaire, $note, $contexte, $date_experience, $id_avis]);
 
         $success_message = "Avis modifié avec succès !";
