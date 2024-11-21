@@ -2,6 +2,10 @@
 require_once 'util.php';
 require_once 'queries.php';
 require_once 'component/head.php';
+require_once 'component/offre.php';
+require_once 'component/inputs.php';
+
+
 
 $args = [
     'id' => getarg($_GET, 'id', arg_filter(FILTER_VALIDATE_INT))
