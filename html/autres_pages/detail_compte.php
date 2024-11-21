@@ -33,7 +33,8 @@ else if ($pro !== false) {
     $nom = $pro['nom'];
     $prenom = $pro['prenom'];
     $telephone = $pro['telephone'];
-    $adresse = $pro['adresse'];
+    $id_adresse = $membre['id_adresse'];
+    $adresse= query_adresse($id_adresse);
     if (exists_pro_prive($id)) {
         $siren = query_get_siren($id);
     }
