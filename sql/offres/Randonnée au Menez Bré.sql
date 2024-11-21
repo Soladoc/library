@@ -63,11 +63,18 @@ Rejoignez-nous pour une aventure inoubliable au cœur de la Bretagne et découvr
         values
             ((table id_offre), 'nature'),
             ((table id_offre), 'plein air')
+    ),
+    s2 as (
+        insert into
+            _gallerie (id_offre, id_image)
+        values
+            ((table id_offre), 39),
+            ((table id_offre), 40)
     )
 insert into
-    _gallerie (id_offre, id_image)
+    _changement_etat (id_offre, fait_le)
 values
-    ((table id_offre), 39),
-    ((table id_offre), 40);
+    ((table id_offre), '2024-11-15 12:00:00') -- mise en ligne
+;
 
 commit;

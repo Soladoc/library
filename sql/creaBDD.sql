@@ -22,20 +22,20 @@ create domain iso639_1 as char(2);
 create domain nom_option char(10);
 
 create domain ligne as varchar check (value not like E'%\n%');
-comment on domain ligne is 'une ligne de texte';
+comment on domain ligne is 'Une ligne de texte';
 
 create domain paragraphe as varchar;
-comment on domain paragraphe is 'un paragraphe de texte';
+comment on domain paragraphe is 'Un paragraphe de texte';
 
 create domain numero_telephone as char(10) check (value ~ '^[0-9]+$');
 
 create domain numero_siren as char(9) check (value ~ '^[0-9]+$');
 
-create domain mot as varchar(63) check (value ~ '^[[:lower:]\d](?:[[:lower:]\d -]*[[:lower:]\d])?$');
-comment on domain mot is '63 car. max, non vide, uniquement minuscules, chiffres, tirets et espaces (sauf en premier et dernier caractère)';
+create domain mot as varchar(63) check (value ~ '^[-''\d[:lower:]](?:[-''\d[:lower:] ]*[-''\d[:lower:]])?$');
+comment on domain mot is '63 car. max, non vide, autorise lettres minuscules, chiffres, espace, tiret et apostrophe. Espaces en extrêmités non autorisés.';
 
 create domain adresse_email as varchar(319) check (value ~ '^(?:[a-z0-9!#$%&''*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&''*+/=?^_`{|}~-]+)*|"(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21\x23-\x5b\x5d-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])*")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\[(?:(?:(2(5[0-5]|[0-4][0-9])|1[0-9][0-9]|[1-9]?[0-9]))\.){3}(?:(2(5[0-5]|[0-4][0-9])|1[0-9][0-9]|[1-9]?[0-9])|[a-z0-9-]*[a-z0-9]:(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21-\x5a\x53-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])+)\])$');
-comment on domain adresse_email is 'adresse e-mail (regex de https://emailregex.com)';
+comment on domain adresse_email is 'Adresse e-mail (regex de https://emailregex.com)';
 
 create domain pseudonyme as varchar(63) check (value ~ '^[^@\s[:cntrl:]](?: |[^@\s[:cntrl:]])*[^@\s[:cntrl:]]?$');
 comment on domain pseudonyme is '63 car. max, non vide, pas de caractères de contrôle, pas de blancs en début et fin, l''espace " " est le seul blanc autorisé.
@@ -79,7 +79,8 @@ create table _adresse (
     longitude decimal,
     check ((latitude is null) = (longitude is null))
 );
-comment on constraint adresse_check_numero_voie_complement_numero on _adresse is 'numero_voie is null => complement_numero is null';
+comment on constraint adresse_check_numero_voie_complement_numero on _adresse is
+'numero_voie is null => complement_numero is null';
 
 create table _abonnement (
     libelle ligne
@@ -287,8 +288,8 @@ create table _avis (
         constraint avis_fk_offre references _offre,
     constraint avis_uniq_auteur_offre unique (id_membre_auteur, id_offre)
 );
-comment on column _avis.id_membre_auteur is 'devient null (anonyme) quand l''auteur est supprimé';
-comment on constraint avis_uniq_auteur_offre on _avis is 'un seul avis par couple (membre_auteur, offre)';
+comment on column _avis.id_membre_auteur is 'Devient null (anonyme) quand l''auteur est supprimé';
+comment on constraint avis_uniq_auteur_offre on _avis is 'Un seul avis par couple (membre_auteur, offre)';
 
 create table _avis_resto (
     id int
@@ -322,7 +323,8 @@ create table _horaire_ouverture (
     heure_fin time check (heure_fin > heure_debut),
     constraint horaire_ouverture_pk primary key (id_offre, dow, heure_debut, heure_fin)
 );
-comment on table _horaire_ouverture is 'Un horaire d''ouverture périodique sur une semaine.
+comment on table _horaire_ouverture is
+'Un horaire d''ouverture périodique sur une semaine.
 Ouvert sur toutes les semaines de l''année.
 Vacances, jours fériés et ponts non comptabilisées.';
 comment on column _horaire_ouverture.dow is 'The day of the week as Sunday (0) to Saturday (6)';

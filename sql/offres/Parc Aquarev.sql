@@ -131,13 +131,16 @@ Camping et snack sur le site.',
 insert into
     _changement_etat (id_offre, fait_le)
 values
-    ((table id_offre), '2022-11-03 22:05:11'),
-    ((table id_offre), '2022-11-05 16:41:37'),
-    ((table id_offre), '2022-11-06 12:08:05'),
-    ((table id_offre), '2022-11-07 08:56:34'),
-    ((table id_offre), '2022-11-10 03:10:31'),
-    ((table id_offre), '2022-11-15 00:59:47'),
-    ((table id_offre), '2022-11-19 00:55:46'),
-    ((table id_offre), '2022-11-27 03:10:32');
+    ((table id_offre), '2024-11-03 22:05:11'), -- mise en ligne
+    ((table id_offre), '2024-11-05 16:41:37'), -- mise hors ligne
+    ((table id_offre), '2024-11-06 12:08:05'), -- mise en ligne
+    ((table id_offre), '2024-11-07 08:56:34'), -- mise hors ligne
+    ((table id_offre), '2024-11-10 03:10:31'), -- mise en ligne
+    ((table id_offre), '2024-11-15 00:59:47'), -- mise hors ligne
+    ((table id_offre), '2024-11-19 00:55:46'), -- mise en ligne
+    ((table id_offre), '2024-11-27 03:10:32') -- mise hors ligne
+;
 
+-- Pour le mois de novembre, cette offre a été en ligne pendant 0 years 0 mons 13 days 63 hours 28 mins 57.0 secs
+-- select (timestamp '2024-11-05 16:41:37' - '2024-11-03 22:05:11') + (timestamp '2024-11-07 08:56:34' - '2024-11-06 12:08:05') + (timestamp '2024-11-15 00:59:47' - '2024-11-10 03:10:31') + (timestamp '2024-11-27 03:10:32' - '2024-11-19 00:55:46');
 commit;

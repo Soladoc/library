@@ -8,19 +8,22 @@ create view offres as select
     (select avg(_avis.note) from _avis where _avis.id_offre = _offre.id) note_moyenne,
     (select min(_tarif.montant) from _tarif where _tarif.id_offre = _offre.id) prix_min,
     (select fait_le from _changement_etat where _changement_etat.id_offre = _offre.id order by fait_le limit 1) creee_le,
-    offre_categorie(id) categorie/*,
-    offre_est_ouverte(id, now()) est_ouverte,
-    offre_changement_ouverture_suivant_le(id, now()) changement_ouverture_suivant_le
-    offre_duree_en_ligne(id, extract(year from now()), extract(month from now())) duree_en_ligne
-    */
+    offre_categorie(id) categorie,
+    --offre_est_ouverte(id, localtimestamp) est_ouverte,
+    offre_duree_en_ligne(id, date_trunc('month', localtimestamp), '1 month') duree_en_ligne/*,
+    offre_changement_ouverture_suivant_le(id, localtimestamp) changement_ouverture_suivant_le*/
 from
     _offre;
-/*comment on column offres.est_ouverte is 'Un booléen indiquant si cette offre est actuellement ouverte';
-comment on column offres.changement_ouverture_suivant_le is 'Un timestamp indiquant quand aura lieu le prochain changement d''ouverture.
-Si l''offre est fermée, c''est la prochaine ouverture, ou NULL si l''offre sera fermée pour toujours.
-Si l''offre est ouverte, c''est la prochaine fermeture, ou NULL si l''offre sera ouverte pour toujours.';
+/*
+comment on column offres.est_ouverte is
+'Un booléen indiquant si cette offre est actuellement ouverte';
+comment on column offres.changement_ouverture_suivant_le is
+'Un timestamp indiquant quand aura lieu le prochain changement d''ouverture.
+Si l''offre est fermée, c''est la prochaine ouverture, ou infinity si l''offre sera fermée pour toujours.
+Si l''offre est ouverte, c''est la prochaine fermeture, ou infinity  si l''offre sera ouverte pour toujours.';
 comment on column offres.duree_en_ligne 'La durée pour laquelle cette offre a été en ligne pour le mois actuel.
-La valeur est inférieure ou égale à 1 mois.'*/
+La valeur est inférieure ou égale à 1 mois.'
+*/
 
 create view activite as select * from _activite
     join offres using (id);

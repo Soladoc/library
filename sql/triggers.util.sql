@@ -39,7 +39,10 @@ begin
     return id_signalable;
 end
 $$ language plpgsql;
-comment on function insert_offre (record) is 'Insère une offre et retourne son id.';
+comment on function insert_offre (record) is
+'Insère une offre.
+`new` contient les valeurs de l''offre.
+@returns L''ID de l''offre insérée.';
 
 create function insert_compte (new record) returns int as $$
 declare
@@ -68,6 +71,9 @@ begin
     return id_identite;
 end
 $$ language plpgsql;
-comment on function insert_compte (record) is 'Insère un compte et retourne son id.';
+comment on function insert_compte (record) is
+'Insère un compte.
+`new` contient les valeurs du compte.
+@returns L''ID du compte inséré.';
 
 commit;
