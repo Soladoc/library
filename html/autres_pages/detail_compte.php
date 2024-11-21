@@ -6,7 +6,7 @@ require_once 'component/head.php';
 $args = [
     'id' => getarg($_GET, 'id', arg_filter(FILTER_VALIDATE_INT))
 ];
-
+$id = $args['id'];
 $membre = query_compte_membre($args['id']);
 $pro = query_compte_professionnel($args['id']);
 
@@ -20,8 +20,8 @@ if ($membre !== false) {
     $nom = $membre['nom'];
     $prenom = $membre['prenom'];
     $telephone = $membre['telephone'];
-    $adresse = $membre['adresse'];
-
+    $id_adresse = $membre['adresse'];
+    $adresse= query_adresse($id_adresse);
 }
 else if ($pro !== false) {
     echo '<pre>';
@@ -138,7 +138,7 @@ if ($_POST) {
 
             <div id="adresse">
                 <p>adresse : </p>
-                <?php echo $adresse 
+                <?php format_adresse($adresse);  
                 ?> </div>
 
             <?php require 'component/info_compte/modif_mdp.php' ?>
