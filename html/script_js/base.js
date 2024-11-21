@@ -73,8 +73,13 @@ function setup_input_address(element) {
     const input_summary = element.querySelector('summary input');
     const inputs = Array.from(document.querySelectorAll('label input'));
     inputs.forEach(input => {
-        input.addEventListener('input', () => input_summary.value = format_adresse(...inputs.map(i => i.value)));
+        input.addEventListener('input', format_summary);
     });
+    format_summary();
+
+    function format_summary() {
+        input_summary.value = format_adresse(...inputs.map(i => i.value))
+    }
 }
 function format_adresse(commune, localite, nom_voie, numero_voie, complement_numero, precision_int, precision_ext) {
     return elvis(precision_ext, ', ')
