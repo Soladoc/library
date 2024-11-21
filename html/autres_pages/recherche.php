@@ -74,6 +74,9 @@ require_once 'component/offre.php'
         <?php
         $stmtOffres = query_offres();
         $offres = $stmtOffres->fetchAll(PDO::FETCH_ASSOC);
+        foreach ($offers as &$offer) {
+            $offer['formatted_address'] = format_adresse(notfalse(query_adresse($offer['id_adresse'])));
+        }
         echo "const offersData = " . json_encode($offres) . ";";
         ?>
         initializeOffers(offersData);

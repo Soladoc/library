@@ -91,7 +91,7 @@ function displayOffers() {
             ">
             <p>Catégorie : ${offer.categorie}</p>
             <p>Description : ${offer.resume}</p>
-            <p>Adresse :<?php echo format_adresse(notfalse(query_adresse(${offer.id_adresse}))) ?></p>
+            <p>Adresse : ${offer.formatted_address}</p>
             <p>À partir de : ${offer.min}€</p>
             <p>Note : ${offer.note}/5</p>
             <p>Date : ${formattedDate}</p>
