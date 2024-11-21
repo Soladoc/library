@@ -81,6 +81,26 @@ Nous avons hâte de vous accueillir à bord pour une journée inoubliable sur la
             ((table id_offre), 'nature'),
             ((table id_offre), 'nautique'),
             ((table id_offre), 'culturel')
+    ),
+    s3 as (
+    insert into
+        avis (
+            id_offre,
+            id_membre_auteur,
+            note,
+            contexte,
+            date_experience,
+            commentaire
+        )
+    values
+        (
+            (table id_offre),
+            id_membre ('Snoozy'),
+            3,
+            'couple',
+            '14-08-2024',
+            'Service correct mais attente longue.'
+        )
     )
 insert into
     horaire_ouverture (id_offre, dow, heure_debut, heure_fin)

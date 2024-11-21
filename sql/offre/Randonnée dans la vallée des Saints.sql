@@ -74,7 +74,27 @@ Rejoignez-nous pour une journée mémorable où nature, histoire et gastronomie 
         values
             ((table id_offre), 'nature'),
             ((table id_offre), 'plein air')
-    )
+    ),
+    s3 as (
+    insert into
+        avis (
+            id_offre,
+            id_membre_auteur,
+            note,
+            contexte,
+            date_experience,
+            commentaire
+        )
+    values
+        (
+            (table id_offre),
+            id_membre ('j0hn'),
+            4,
+            'couple',
+            '19-01-2024',
+            'Charmant mais le début de la randonée est peu  accessible.'
+        )
+)
 insert into
     horaire_ouverture (id_offre, dow, heure_debut, heure_fin)
 values

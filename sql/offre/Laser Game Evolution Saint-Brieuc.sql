@@ -52,7 +52,27 @@ with
             ((table id_offre), 'sport'),
             ((table id_offre), 'famille'),
             ((table id_offre), 'jeu')
-    )
+    ),
+    s2 as (
+    insert into
+        avis (
+            id_offre,
+            id_membre_auteur,
+            note,
+            contexte,
+            date_experience,
+            commentaire
+        )
+    values
+        (
+            (table id_offre),
+            id_membre ('ltorvalds'),
+            3,
+            'amis',
+            '02-05-2024',
+            'Ambiance sympa mais prix élevés.'
+        )
+)
 insert into
     _gallerie (id_offre, id_image)
 values

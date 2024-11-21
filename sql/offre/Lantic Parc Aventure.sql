@@ -42,6 +42,26 @@ with
             )
         returning
             id
+    ),
+    s1 as (
+    insert into
+        avis (
+            id_offre,
+            id_membre_auteur,
+            note,
+            contexte,
+            date_experience,
+            commentaire
+        )
+    values
+        (
+            (table id_offre),
+            id_membre ('rstallman'),
+            4,
+            'couple',
+            '20-12-2024',
+            'Excellente expérience.'
+        )
     )
 insert into
     _tags (id_offre, tag)

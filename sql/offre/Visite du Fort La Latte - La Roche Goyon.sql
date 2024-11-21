@@ -68,6 +68,26 @@ Ne manquez pas cette opportunité unique de découvrir l''un des châteaux les p
             ((table id_offre), 'patrimoine'),
             ((table id_offre), 'histoire'),
             ((table id_offre), 'culturel')
+    ),
+    s3 as (
+    insert into
+        avis (
+            id_offre,
+            id_membre_auteur,
+            note,
+            contexte,
+            date_experience,
+            commentaire
+        )
+    values
+        (
+            (table id_offre),
+            id_membre ('ltorvalds'),
+            2,
+            'solo',
+            '04-04-2024',
+            'Lieux peu salubre mais cadre magnofique,dommage!'
+        )
     )
 insert into
     horaire_ouverture (id_offre, dow, heure_debut, heure_fin)
