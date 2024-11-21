@@ -77,6 +77,10 @@ function displayOffers() {
 
         offerElement.innerHTML = `
             <h3>${offer.titre}</h3>
+            <img src="../images/offre/${offer.image_principale}.jpg"></img>
+            <p>Catégorie: ${offer.categorie}</p>
+            <p>Description: ${offer.description}</p>
+            <p>Adresse: ${offer.adresse}</p>
             <p>Prix: ${offer.prix_min}€</p>
             <p>Note: ${offer.note}</p>
             <p>Date: ${formattedDate}</p>
@@ -104,5 +108,8 @@ sortButtons.forEach(button => {
     button.addEventListener('click', () => {
         sortButtons.forEach(btn => btn.classList.remove('active'));
         button.classList.add('active');
+        const criteria = button.dataset.criteria;
+        const ascending = button.dataset.order === 'asc';
+        sortOffers(criteria, ascending);
     });
 });
