@@ -1,4 +1,5 @@
 <?php
+session_start();
 require_once 'auth.php';
 require_once 'component/head.php';
 require_once 'const.php';
