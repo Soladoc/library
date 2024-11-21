@@ -16,9 +16,9 @@ $args = [
 $id_professionnel = exiger_connecte_pro();
 
 if ($_POST) {
-    /* ?><pre><?= htmlspecialchars(print_r($_GET, true)) ?></pre><?php
+     ?><pre><?= htmlspecialchars(print_r($_GET, true)) ?></pre><?php
     ?><pre><?= htmlspecialchars(print_r($_POST, true)) ?></pre><?php
-    ?><pre><?= htmlspecialchars(print_r($_FILES, true)) ?></pre><?php */
+    ?><pre><?= htmlspecialchars(print_r($_FILES, true)) ?></pre><?php 
     $args += [
         'adresse_commune' => getarg($_POST, 'adresse_commune'),
         'adresse_complement_numero' => getarg($_POST, 'adresse_complement_numero', required: false),
