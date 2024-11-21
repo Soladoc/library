@@ -83,7 +83,7 @@ if ($_POST) {
 </html>
 
 <section id="info_compte">  
-    <form action="modif_compte.php" method="POST">
+    <form action="component\info_compte\modif_compte.php" method="POST">
 
 
         <a href="/autres_pages/detail_compte.php?id=<?php echo $id ?>">retour</a>
