@@ -23,7 +23,7 @@ jobs:
               sudo git pull
               cd sql
               shopt -s globstar
-              sudo docker exec postgresdb mkdir /offres
+              sudo docker exec postgresdb mkdir /offre
               for f in **/*.sql; do
                 sudo docker cp "$f" postgresdb:/"$f"
               done
