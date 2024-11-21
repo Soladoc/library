@@ -91,7 +91,7 @@ function displayOffers() {
             ">
             <p>Catégorie : ${offer.categorie}</p>
             <p>Description : ${offer.resume}</p>
-            <p class="location">Adresse :<?= format_adresse(notfalse(query_adresse(${offer.id_adresse}))) ?></p>
+            <p>Adresse :<?=format_adresse(notfalse(query_adresse(${offer.id_adresse}))) ?></p>
             <p>Prix : ${offer.prix_min}€</p>
             <p>Note : ${offer.note}/5</p>
             <p>Date : ${formattedDate}</p>
