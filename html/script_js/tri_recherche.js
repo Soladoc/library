@@ -77,14 +77,24 @@ function displayOffers() {
 
         offerElement.innerHTML = `
             <h3>${offer.titre}</h3>
-            <img src="../images_utilisateur/${offer.id_image_principale}.jpg"></img>
+            <img src="../images_utilisateur/${offer.id_image_principale}.jpg" 
+                onerror="this.onerror=null; 
+                  this.src='../images_utilisateur/${offer.id_image_principale}.png';
+                  this.onerror=function(){
+                        this.onerror=null; 
+                        this.src='../images_utilisateur/${offer.id_image_principale}.webp';
+                        this.onerror=function(){
+                            this.onerror=null;
+                            this.src='../images_utilisateur/${offer.id_image_principale}.jpeg';
+                        }
+                    }
+            ">
             <p>Catégorie : ${offer.categorie}</p>
             <p>Description : ${offer.description}</p>
             <p>Adresse : ${offer.adresse}</p>
             <p>Prix : ${offer.prix_min}€</p>
             <p>Note : ${offer.note}/5</p>
-            <p>Date : ${formattedDate}</p>
-        `;
+            <p>Date : ${formattedDate}</p>`;
         offerList.appendChild(offerElement);
     });
 }
