@@ -1,9 +1,7 @@
 <?php
-echo 0;
 session_start();
-echo 12;
-require_once '../component/db.php'; 
-require_once '../component/head.php';
+require_once '../../component/db.php'; 
+require_once '../../component/head.php';
 echo 1;
 if (!isset($_SESSION['id_membre'])) {
     header("Location: ../connexion.php");
