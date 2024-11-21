@@ -33,7 +33,6 @@ require_once 'component/head.php';
                     
                     // Boucler sur les résultats pour afficher chaque offre
                     while ($offre = $stmtOffres->fetch()) {
-                        echo $offre;
                         put_card_offre($offre);
                     }
                 ?>
