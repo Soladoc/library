@@ -1,4 +1,5 @@
 <?php
+require_once 'util.php';
 /**
  * auth.php
  * Fonctions relatives à l'authentification
