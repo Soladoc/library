@@ -20,10 +20,6 @@ $stmt = db_connect()->prepare("SELECT * FROM pact._avis WHERE id = ?");
 $stmt->execute([$id_avis]);
 $avis = $stmt->fetch(PDO::FETCH_ASSOC);
 
-if (!$avis) {
-    die("Avis introuvable ou non autorisé.");
-}
-
 echo 5;
 
 // Traitement du formulaire si la méthode POST est utilisée
