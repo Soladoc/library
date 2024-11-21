@@ -50,9 +50,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     echo 7;
 }
-
+else{
 ?>
-
 <!DOCTYPE html>
 <html lang="fr">
 
@@ -105,3 +104,4 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 </body>
 
 </html>
+<?php }?>
