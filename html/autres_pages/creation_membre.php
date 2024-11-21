@@ -25,12 +25,12 @@ if (isset($_POST['motdepasse'])) {
         fail('Mot de passe trop long');
     }
     $args = [
-        'adresse'=> getarg($_POST,'adresse')
+        'adresse_commune'=> getarg($_POST,'adresse_commune')
     ];
 
     $nomCommune = $args['args'];
     $stmt = db_connect()->prepare("SELECT code, numero_departement FROM pact._commune WHERE nom = ?");
-    $stmt->execute([$args['adresse']]);
+    $stmt->execute([$args['adresse_commune']]);
     $commune = $stmt->fetch(PDO::FETCH_ASSOC);
 
     if (!$commune) {
