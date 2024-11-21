@@ -35,7 +35,7 @@ function put_card_offre_pro(array $offre)
 }
 
 function put_card_offre(array $offre)
-{ echo "5";
+{
 ?>
 <div class="offer-card">
     <?php put_image(query_image($offre['id_image_principale'])) ?>
