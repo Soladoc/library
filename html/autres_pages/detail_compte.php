@@ -20,7 +20,7 @@ if ($membre !== false) {
     $nom = $membre['nom'];
     $prenom = $membre['prenom'];
     $telephone = $membre['telephone'];
-    $id_adresse = $membre['adresse'];
+    $id_adresse = $membre['id_adresse'];
     $adresse= query_adresse($id_adresse);
 }
 else if ($pro !== false) {
@@ -33,9 +33,10 @@ else if ($pro !== false) {
     $nom = $pro['nom'];
     $prenom = $pro['prenom'];
     $telephone = $pro['telephone'];
-    $adresse = $pro['adresse'];
+    $id_adresse = $membre['id_adresse'];
+    $adresse= query_adresse($id_adresse);
     if (exists_pro_prive($id)) {
-        $siren = $pro['siren'];
+        $siren = query_get_siren($id);
     }
     
 }
