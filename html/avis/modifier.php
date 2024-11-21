@@ -15,10 +15,6 @@ $id_offre = intval($_GET['offre']);
 
 echo 4;
 
-// Vérification si l'ID de l'avis existe
-//$stmt = db_connect()->prepare("SELECT * FROM pact._avis WHERE id = ?");
-//$stmt->execute([$id_avis]);
-//$avis = $stmt->fetch(PDO::FETCH_ASSOC);
 
 echo 5;
 
