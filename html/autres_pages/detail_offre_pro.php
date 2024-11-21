@@ -33,7 +33,7 @@ if ($_POST) {
         $image_pricipale = $offre['id_image_principale'];
         $en_ligne=$offre['en_ligne'];
         $info_adresse = query_adresse($adresse);
-
+        $avis=query_avis();
         // Vérifier si l'adresse existe
         if ($info_adresse) {
             // Construire une chaîne lisible pour l'adresse
@@ -123,49 +123,39 @@ if ($_POST) {
             </div>
         </section>
 
-        <!-- User Reviews -->
-        <!-- <section class="offer-reviews">
-            <h3>Avis des utilisateurs</h3>
-
-             Review Form 
-            <div class="review-form">
-                <textarea placeholder="Votre avis..."></textarea>
-                <label for="rating">Note&nbsp;:</label>
-                <select id="rating">
-                    <option value="5">5 étoiles</option>
-                    <option value="4">4 étoiles</option>
-                    <option value="3">3 étoiles</option>
-                    <option value="2">2 étoiles</option>
-                    <option value="1">1 étoile</option>
-                </select>
-                <button class="btn-publish">Publier</button>
-            </div>
-
-             Summary of reviews 
+        <div class="review-list">
+            <h4>Avis de la communauté</h4>
             <div class="review-summary">
                 <h4>Résumé des notes</h4>
-                <p>Moyenne&nbsp;: 4.7/5 ★</p>
+                <p>Nombre d'avis : <?=query_avis_count($args['id']) ?></p>
+                <p>Moyenne&nbsp;: <?php if ($offre['note_moyenne']!=null){echo round($offre['note_moyenne'],2);} else {echo 0;} ?>/5 ★</p>
                 <div class="rating-distribution">
-                    <p>5 étoiles&nbsp;: 70%</p>
-                    <p>4 étoiles&nbsp;: 20%</p>
-                    <p>3 étoiles&nbsp;: 7%</p>
-                    <p>2 étoiles&nbsp;: 2%</p>
-                    <p>1 étoile&nbsp;: 1%</p>
+                    <?php $avis = query_avis(id_offre: $offre['id']); ?>
+                    <p>5 étoiles&nbsp;: <?=count(array_filter($avis, fn($a) => $a['note'] === 5)) ?> avis.</p>
+                    <p>4 étoiles&nbsp;: <?=count(array_filter($avis, fn($a) => $a['note'] === 4)) ?> avis.</p>
+                    <p>3 étoiles&nbsp;: <?=count(array_filter($avis, fn($a) => $a['note'] === 3)) ?> avis.</p>
+                    <p>2 étoiles&nbsp;: <?=count(array_filter($avis, fn($a) => $a['note'] === 2)) ?> avis.</p>
+                    <p>1 étoile&nbsp;: <?=count(array_filter($avis, fn($a) => $a['note'] === 1)) ?> avis.</p>
                 </div>
+                <?php if (!empty($avis)) {
+                    foreach ($avis as $avis_temp) { ?>
+                        <div class="review">
+                            <p><strong><?= htmlspecialchars($avis_temp['pseudo']) ?></strong> - <?= htmlspecialchars($avis_temp['note']) ?>/5</p>
+                            <p class="review-contexte">Contexte&nbsp;: <?= htmlspecialchars($avis_temp['contexte']) ?></p>
+                            <p><?= htmlspecialchars($avis_temp['commentaire']) ?></p>
+                            <p class="review-date"><?= htmlspecialchars($avis_temp['date_experience']) ?></p>
+                            <?php if ($avis_temp['id_membre_auteur']=$_SESSION['id_membre']) { ?>
+                            <form method="post" action="modifier.php?id=<?= $args['id'] ?>&avis_id=<?= $avis_id ?>">
+                                <button type="submit" class="btn-modif">Modifier</button>
+                            </form>
+                            <?php } ?> 
+                        </div>
+                    <?php } 
+                } else { ?>
+                    <p>Aucun avis pour le moment. Soyez le premier à en écrire un&nbsp;!</p>
+                <?php } ?>
             </div>
-
-            List of reviews 
-            <div class="review-list">
-                <div class="review">
-                    <p><strong>Jean Dupont</strong> - ★★★★★</p>
-                    <p>Super expérience, je recommande fortement !</p>
-                </div>
-                <div class="review">
-                    <p><strong>Marie Leclerc</strong> - ★★★★☆</p>
-                    <p>Une belle visite, mais quelques parties étaient fermées...</p>
-                </div>
-            </div>
-        </section> -->
+        </section>
     </main>
     <?php require 'component/footer.php' ?>
 
