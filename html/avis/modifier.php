@@ -45,13 +45,12 @@ if ($isset($_POST['date'])) {
 else{
 ?>
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="en">
 
 <?php put_head("Modifier un avis"); ?>
 
 <body>
     <?php require '../component/header.php'; ?>
-
     <main>
         <h2>Modifier votre avis</h2>
 
@@ -91,7 +90,6 @@ else{
             <button type="submit" class="btn-publish">Modifier</button>
         </form>
     </main>
-
     <?php require '../component/footer.php'; ?>
 </body>
 
