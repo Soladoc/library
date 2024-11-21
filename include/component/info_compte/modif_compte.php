@@ -45,7 +45,7 @@ if ($_POST) {
     $confirmation_mdp = getarg($_POST, 'confirmation_mdp');
     $old_mdp = getarg($_POST, 'old_mdp');
 
-    if (password_verify($mdp_hash)) {
+    if (password_verify($old_mdp, $mdp_hash)) {
         if ($confirmation_mdp === $new_mdp ) {
             uptate_mdp($id,$new_mdp);
         }
@@ -142,7 +142,7 @@ if ($_POST) {
                 <p>adresse : </p>
                 <?php echo $adresse 
                 ?> </div>
-            <?php put_input_address('', 'adresse', 'adresse_');?>
+            <?php put_input_address('adresse', 'adresse_');?>
 
         </div>
 

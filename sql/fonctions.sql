@@ -19,19 +19,23 @@ comment on function offre_categorie (int) is
 @param id_offre l''ID de l''offre
 @returns La catégorie de l''offre d''ID `id_offre`.';
 
-/*
-create function offre_est_ouverte (id_offre int, le timestamp) returns boolean as $$
-begin
 
+/*create function offre_est_ouverte (id_offre int, le timestamp) returns boolean as $$
+begin
+    for heure_debut, heure_fin in
+        
+    loop
+    select heure_debut, heure_fin from horaire_ouverture h where h.id_offre = id_offre and 
+    return true;
 end;
 $$ language plpgsql;
 comment on function offre_est_ouverte (int, timestamp) is
 'Une offre est elle ouverte à un timestamp donné ?
 @param id_offre l''ID de l''offre
 @param le le timestamp à tester
-@returns L''ouverte est ouverte le `le`.';
+@returns L''ouverte est ouverte le `le`.';*/
 
-create function offre_changement_ouverture_suivant_le (id_offre int, apres_le timestamp) returns timestamp as $$
+/*create function offre_changement_ouverture_suivant_le (id_offre int, apres_le timestamp) returns timestamp as $$
 begin
 
 end;

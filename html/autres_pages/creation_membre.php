@@ -22,10 +22,12 @@ if (isset($_POST['motdepasse'])) {
     if (strlen($_POST['motdepasse']) > 72) {
         fail('Mot de passe trop long');
     }
-
+    $args = [
+        'adresse'=> getarg($_POST,'adresse')
+    ];
     $mdp_hash = notfalse(password_hash($_POST['motdepasse'], PASSWORD_DEFAULT));
 
-    $stmt = db_connect()->prepare('insert into pact.membre (pseudo, nom, prenom, telephone, email, mdp_hash) values (?, ?, ?, ?, ?, ?)');
+    $stmt = db_connect()->prepare('insert into pact.membre (pseudo, nom, prenom, telephone, email, mdp_hash,adresse) values (?, ?, ?, ?, ?, ?,?)');
 
     $stmt->execute([
         $pseudo,
@@ -34,6 +36,7 @@ if (isset($_POST['motdepasse'])) {
         $_POST['telephone'],
         $email,
         $mdp_hash,
+        $args['adresse']
     ]);
     header('Location: /autres_pages/connexion.php');  // todo: passer en GET le pseudo pour l'afficher dans le formulaire connexion, pour que l'utilisateur n'ait pas à le retaper.
 } else {
@@ -68,6 +71,11 @@ if (isset($_POST['motdepasse'])) {
                     <div class="champ">
                         <label for="telephone">Téléphone&nbsp;:</label>
                         <input type="tel" id="telephone" name="telephone" placeholder="0123456789" pattern="\d{10}" autocomplete="tel" required>
+                    </div>
+
+                    <div class="champ">
+                        <label for="adresse">Adresse&nbsp;:</label>
+                        <?php put_input_address('adresse','adresse') ?>
                     </div>
 
                     <div class="champ">
