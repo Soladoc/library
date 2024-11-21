@@ -22,7 +22,7 @@ if ($membre !== false) {
     $prenom = $membre['prenom'];
     $telephone = $membre['telephone'];
     $id_adresse = $membre['id_adresse'];
-    $adresse= query_adresse($id_adresse);
+        $adresse= query_adresse($id_adresse);
 }
 else if ($pro !== false) {
     echo '<pre>';
@@ -35,8 +35,8 @@ else if ($pro !== false) {
     $prenom = $pro['prenom'];
     $telephone = $pro['telephone'];
     $id_adresse = $pro['id_adresse'];
-    echo $id_adresse;
-    $adresse= query_adresse($id_adresse);
+        $adresse= query_adresse($id_adresse);
+
     if (exists_pro_prive($id)) {
         $siren = query_get_siren($id);
     }
@@ -141,10 +141,10 @@ if ($_POST) {
 
             <div id="adresse">
                 <p>adresse : </p>
-                <?php format_adresse($adresse);  
+                <?php echo format_adresse($adresse);  
                 ?> </div>
-
-            <?php require 'component/info_compte/modif_compte.php' ?>
+        <a href="component\info_compte\modif_compte.php">modifier</a>
+            <?php ?>
             
            
         </section>
