@@ -23,6 +23,7 @@ jobs:
               sudo git pull
               cd sql
               shopt -s globstar
+              sudo docker exec postgresdb mkdir /offres
               for f in **/*.sql; do
                 sudo docker cp "$f" postgresdb:/"$f"
               done
@@ -30,7 +31,6 @@ jobs:
                 set -xeu
                 for f in /creaBDD.sql /fonctions.sql /vuesBDD.sql /triggers.util.sql /triggers.sql /bigdata.sql /data.sql /images.sql /offre/*.sql
                   do echo run "$f"
-                  mkdir -p "$(dirname "$f")"
                   psql -v ON_ERROR_STOP=on -U sae -d postgres -f "$f"
                 done
               '
