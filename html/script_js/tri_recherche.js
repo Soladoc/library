@@ -77,7 +77,7 @@ function displayOffers() {
 
         offerElement.innerHTML = `
             <h3>${offer.titre}</h3>
-            <img src="../images/offre/${offer.id_image_principale}.jpg"></img>
+            <img src="../images_utilisateur/${offer.id_image_principale}.jpg"></img>
             <p>Catégorie : ${offer.categorie}</p>
             <p>Description : ${offer.description}</p>
             <p>Adresse : ${offer.adresse}</p>
