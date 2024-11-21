@@ -28,8 +28,6 @@ function query_offres(?int $id_professionnel = null, ?bool $en_ligne = null): PD
 
 // Insertions
 
-// Insertions---------------------------------------------------------------------------------------------------------
-
 /**
  * Toggles the state (en ligne/hors ligne) of an offer by adding a row in the _changement_etat table.
  *
@@ -67,28 +65,28 @@ function offre_insert_tarif(int $id_offre, string $nom, float $montant)
  * Summary of offre_insert_horaire
  * @param int $id_offre
  * @param int $dow The day of the week as Sunday (0) to Saturday (6)
- * @param string $debut A PostgreSQL TIME input string
- * @param string $fin A PostgreSQL TIME input string.
+ * @param string $heure_debut A PostgreSQL TIME input string
+ * @param string $heure_fin A PostgreSQL TIME input string.
  * @return void
  */
-function offre_insert_horaire(int $id_offre, int $dow, string $debut, string $fin)
+function offre_insert_horaire(int $id_offre, int $dow, string $heure_debut, string $heure_fin)
 {
-    $stmt = notfalse(db_connect()->prepare('insert into _horaire_ouverture (id_offre, dow, debut, fin) values (?,?,?,?)'));
-    bind_values($stmt, [1 => [$id_offre, PDO::PARAM_INT], 2 => [$dow, PDO::PARAM_INT], 3 => [$debut, PDO::PARAM_STR], 4 => [$fin, PDO::PARAM_STR]]);
+    $stmt = notfalse(db_connect()->prepare('insert into horaire_ouverture (id_offre, dow, heure_debut, heure_fin) values (?,?,?,?)'));
+    bind_values($stmt, [1 => [$id_offre, PDO::PARAM_INT], 2 => [$dow, PDO::PARAM_INT], 3 => [$heure_debut, PDO::PARAM_STR], 4 => [$heure_fin, PDO::PARAM_STR]]);
     notfalse($stmt->execute());
 }
 
 /**
  * Summary of offre_insert_periode
  * @param int $id_offre
- * @param string $debut A PostgreSQL TIMESTAMP input string.
- * @param string $fin A PostgreSQL TIMESTAMP input string.
+ * @param string $debut_le A PostgreSQL TIMESTAMP input string.
+ * @param string $fin_le A PostgreSQL TIMESTAMP input string.
  * @return void
  */
-function offre_insert_periode(int $id_offre, string $debut, string $fin)
+function offre_insert_periode(int $id_offre, string $debut_le, string $fin_le)
 {
-    $stmt = notfalse(db_connect()->prepare('insert into _periode_ouverture (id_offre, debut, fin) values (?,?,?,?)'));
-    bind_values($stmt, [1 => [$id_offre, PDO::PARAM_INT], 2 => [$debut, PDO::PARAM_STR], 3 => [$fin, PDO::PARAM_STR]]);
+    $stmt = notfalse(db_connect()->prepare('insert into periode_ouverture (id_offre, debut_le, fin_le) values (?,?,?,?)'));
+    bind_values($stmt, [1 => [$id_offre, PDO::PARAM_INT], 2 => [$debut_le, PDO::PARAM_STR], 3 => [$fin_le, PDO::PARAM_STR]]);
     notfalse($stmt->execute());
 }
 

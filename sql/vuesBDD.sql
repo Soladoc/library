@@ -2,20 +2,28 @@ begin;
 
 set schema 'pact';
 
--- todo: avis_resto with computed attr id_restaurant (based on )
--- todo: insert into tarif: assert that 'gratuit' = (select libelle_abonnement from _offre o where o.id_offre = id_offre)
--- todo: trigger timestamp offre lmt
--- toto: non-instanciation classe abstraite
--- todo: normalization periodes ouvertures (contrainte pour ne pas avoir de range overlapping -- agrandir les ranges existants dans un trigger) ce sera intéréssant à coder
-
 create view offres as select
     *,
     (select count(*) from _changement_etat where _changement_etat.id_offre = _offre.id) % 2 = 0 en_ligne,
     (select avg(_avis.note) from _avis where _avis.id_offre = _offre.id) note_moyenne,
     (select min(_tarif.montant) from _tarif where _tarif.id_offre = _offre.id) prix_min,
-    (select offre_categorie(id)) categorie
+    (select fait_le from _changement_etat where _changement_etat.id_offre = _offre.id order by fait_le limit 1) creee_le,
+    offre_categorie(id) categorie,
+    --offre_est_ouverte(id, localtimestamp) est_ouverte,
+    offre_duree_en_ligne(id, date_trunc('month', localtimestamp), '1 month') duree_en_ligne/*,
+    offre_changement_ouverture_suivant_le(id, localtimestamp) changement_ouverture_suivant_le*/
 from
     _offre;
+/*
+comment on column offres.est_ouverte is
+'Un booléen indiquant si cette offre est actuellement ouverte';
+comment on column offres.changement_ouverture_suivant_le is
+'Un timestamp indiquant quand aura lieu le prochain changement d''ouverture.
+Si l''offre est fermée, c''est la prochaine ouverture, ou infinity si l''offre sera fermée pour toujours.
+Si l''offre est ouverte, c''est la prochaine fermeture, ou infinity  si l''offre sera ouverte pour toujours.';
+comment on column offres.duree_en_ligne 'La durée pour laquelle cette offre a été en ligne pour le mois actuel.
+La valeur est inférieure ou égale à 1 mois.'
+*/
 
 create view activite as select * from _activite
     join offres using (id);
@@ -45,6 +53,9 @@ create view pro_public as select * from _public
     join professionnel using (id);
 
 create view avis as select _avis.*, pseudo from _avis
-join membre on id_membre_auteur=membre.id;
+    join membre on id_membre_auteur = membre.id;
+
+create view periode_ouverture as table _periode_ouverture;
+create view horaire_ouverture as table _horaire_ouverture;
 
 commit;

@@ -5,13 +5,13 @@ on:
       - 'main'
     paths:
       - '**.sql'
+      - '**/reset_db.yml'
 jobs:
   reset_db:
     runs-on: ubuntu-latest
     steps:
       - name: Reset Database
         run: |
-          env
           set -xeu
           mkdir -p ~/.ssh
           echo "${{ secrets.ARTIFACT_SSH_KEY }}" > ~/.ssh/id_rsa
@@ -22,12 +22,12 @@ jobs:
               cd /docker/sae/data
               sudo git pull
               cd sql
-              for f in *.sql; do
+              for f in creaBDD.sql fonctions.sql vuesBDD.sql triggers.util.sql triggers.sql bigdata.sql data.sql images.sql offre/*.sql; do
                 sudo docker cp "$f" postgresdb:/"$f"
               done
               sudo docker exec -w / postgresdb bash -c '
                 set -xeu
-                for f in /creaBDD.sql /fonctions.sql /vuesBDD.sql /triggers.sql /bigdata.sql /data.sql /images.sql /offres.sql
+                for f in /creaBDD.sql /fonctions.sql /vuesBDD.sql /triggers.util.sql /triggers.sql /bigdata.sql /data.sql /images.sql /offre/*.sql
                   do echo run "$f"
                   psql -v ON_ERROR_STOP=on -U sae -d postgres -f "$f"
                 done

@@ -1,0 +1,64 @@
+begin;
+
+set schema 'pact';
+
+with
+    id_adresse as (
+        insert into
+            _adresse (numero_departement, code_commune, nom_voie)
+        values
+            ('22', 360, 'Zone de loisirs Brezillet ouest')
+        returning
+            id
+    ),
+    id_offre as (
+        insert into
+            activite (
+                id_adresse,
+                id_professionnel,
+                id_image_principale,
+                libelle_abonnement,
+                url_site_web,
+                titre,
+                resume,
+                description_detaillee,
+                indication_duree,
+                age_requis,
+                prestations_incluses,
+                prestations_non_incluses
+            )
+        values
+            (
+                (table id_adresse),
+                1,
+                29,
+                'gratuit',
+                'https://saint-brieuc.lasergame-evolution.fr/',
+                'Laser Game Evolution Saint-Brieuc',
+                'Bienvenue au Laser Game Evolution de Saint-Brieuc ! Réservation conseillée - Vous pouvez jouer à partir de 4 joueurs et à partir de 7 ans minimum.',
+                'Equipé de votre PISTOLET 100% LASER, votre précision et votre rapidité sont vos atouts pour surpasser vos adversaires dans nos labyrinthes ! Utilisez les planches pour vous cacher, mais méfiez-vous des meurtrières et des miroirs ! Pour un anniversaire, avec vos amis ou encore vos collaborateurs, venez jouer sur réservation, car nos labyrinthes vous seront entièrement privatisés ! Une équipe dynamique sera à votre disposition pour vous faire passer un moment inoubliable ! Laser Game Evolution, LE JEU LASER 100 % !',
+                '0:20:',
+                7,
+                'Nous vous proposons un laser game, un quiz game, un blindtest, des fléchettes',
+                'Nous ne vous proposons pas de repas'
+            )
+        returning
+            id
+    ),
+    s1 as (
+        insert into
+            _tags (id_offre, tag)
+        values
+            ((table id_offre), 'sport'),
+            ((table id_offre), 'famille'),
+            ((table id_offre), 'jeu')
+    )
+insert into
+    _gallerie (id_offre, id_image)
+values
+    ((table id_offre), 30),
+    ((table id_offre), 31),
+    ((table id_offre), 32),
+    ((table id_offre), 33);
+
+commit;
