@@ -89,10 +89,13 @@ if ($_POST) {
             <?php 
             if (exists_pro_prive($id)) {
                     ?>
+                    <div>
                     <div id="siren">
                     <label>siren : </label>
                 <?php echo $siren 
-                ?> </div><?php
+                ?> </div>
+                    <input type="text" id="siren" name="siren" placeholder="231 654 988" oninput="formatInput(this)" maxlength="12">
+            </div><?php
                     
                    
                 }?>
@@ -139,7 +142,7 @@ if ($_POST) {
                 <p>adresse : </p>
                 <?php echo $adresse 
                 ?> </div>
-           <label>Adresse * <input type="text" id="adresse" placeholder="22300 1 rue Edouard Branly" name="adresse" ></labe>
+            <?php put_input_address('', 'adresse', 'adresse_');?>
 
         </div>
 
