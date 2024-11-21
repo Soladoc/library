@@ -18,7 +18,7 @@ function query_offres_count(?int $id_professionnel = null, ?bool $en_ligne = nul
 }
 
 function query_offres(?int $id_professionnel = null, ?bool $en_ligne = null): PDOStatement
-{   
+{
     $args = filter_null_args(['id_professionnel' => [$id_professionnel, PDO::PARAM_INT], 'en_ligne' => [$en_ligne, PDO::PARAM_BOOL]]);
     $stmt = notfalse(db_connect()->prepare('select * from offres' . _where_clause('and', array_keys($args))));
     bind_values($stmt, $args);
