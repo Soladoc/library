@@ -1,31 +1,22 @@
 <?php
 session_start();
-require_once '../component/db.php'; // Pour inclure la connexion à la base de données
+require_once '../component/db.php'; 
 require_once '../component/head.php';
 
-// Vérifier si l'utilisateur est connecté
 if (!isset($_SESSION['id_membre'])) {
     header("Location: ../connexion.php");
     exit;
 }
 
-// Récupérer les données nécessaires
-$id_avis = isset($_GET['avis_id']) ? intval($_GET['avis_id']) : null;
-$id_offre = isset($_GET['id']) ? intval($_GET['id']) : null;
+$id_avis = $_GET['avis_id'];
 
-if (!$id_avis || !$id_offre) {
-    die("ID de l'avis ou de l'offre manquant.");
-}
 
 // Vérifier que l'utilisateur est l'auteur de l'avis
-$requete = "SELECT * FROM pact.avis WHERE id = ? AND id_membre_auteur = ?";
+$requete = "SELECT * FROM pact.avis WHERE id = ? ";
 $stmt = db_connect()->prepare($requete);
-$stmt->execute([$id_avis, $_SESSION['id_membre']]);
+$stmt->execute([$id_avis]);
 $avis = $stmt->fetch();
 
-if (!$avis) {
-    die("Vous n'êtes pas autorisé à modifier cet avis.");
-}
 
 // Traitement du formulaire
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
