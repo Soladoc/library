@@ -2,6 +2,7 @@
 require_once 'util.php';
 require_once 'queries.php';
 require_once 'component/head.php';
+require_once 'component/offre.php';
 
 $args = [
     'id' => getarg($_GET, 'id', arg_filter(FILTER_VALIDATE_INT))
@@ -33,7 +34,7 @@ else if ($pro !== false) {
     $nom = $pro['nom'];
     $prenom = $pro['prenom'];
     $telephone = $pro['telephone'];
-    $id_adresse = $membre['id_adresse'];
+    $id_adresse = $pro['id_adresse'];
     echo $id_adresse;
     $adresse= query_adresse($id_adresse);
     if (exists_pro_prive($id)) {
@@ -143,7 +144,7 @@ if ($_POST) {
                 <?php format_adresse($adresse);  
                 ?> </div>
 
-            <?php require 'component/info_compte/modif_mdp.php' ?>
+            <?php require 'component/info_compte/modif_compte.php' ?>
             
            
         </section>

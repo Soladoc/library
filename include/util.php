@@ -23,14 +23,18 @@ function array_every(array $arr, callable $predicate): bool {
  * @param string $name The name of the argument to retrieve.
  * @param bool $required Whether the argument is required. If true and the argument is not present, an error will be thrown.
  * @param ?callable(string, mixed): mixed $filter An optional filter to apply to the value, given by `arg_check` or `arg_filter`. An error message is shown and the script exists if the filter doesn't match.
- * @return mixed The retrieved and (optionally) transformed argument value.
+ * @return mixed The retrieved and (optionally) transformed argument value. If not required and missing, `null` is returned.
  */
 function getarg(array $source, string $name, ?callable $filter = null, bool $required = true): mixed
 {
-    if ($required && !isset($source[$name])) {
-        html_error("argument manquant: $name");
+    if (!isset($source[$name]) || $source[$name] === '') {
+        if ($required) {
+            html_error("argument manquant: $name");
+        } else {
+            return null;
+        }
     }
-    return $filter === null ? $source[$name] : $filter($name, $source[$name]);
+    return $filter === null ? $source[$name]: $filter($name, $source[$name]);
 }
 
 /**
