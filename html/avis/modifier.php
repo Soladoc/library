@@ -42,8 +42,6 @@ if ($isset($_POST['date'])) {
 
     echo 7;
 }
-else{
-    echo 8;
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -95,4 +93,3 @@ else{
 </body>
 
 </html>
-<?php }?>
