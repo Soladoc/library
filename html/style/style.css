@@ -1,6 +1,8 @@
+@charset "UTF-8";
+
 @font-face {
-    font-family: 'Tw Cen MT';
-    src: url('../fonts/Tw Cen MT.ttf') format('truetype');
+    font-family: "Tw Cen MT";
+    src: url("../fonts/Tw Cen MT.ttf") format("truetype");
 }
 
 :root {
@@ -38,27 +40,27 @@ footer {
 }
 
 button {
-    font-family: 'Tw Cen MT', sans-serif;
+    font-family: "Tw Cen MT", sans-serif;
     cursor: pointer;
-    padding: .25em;
+    padding: 0.25em;
 }
 
 input {
-    padding: .25em;
+    padding: 0.25em;
 }
 
 p {
-    margin: .5em;
-    font-family: 'Tw Cen MT', sans-serif;
+    margin: 0.5em;
+    font-family: "Tw Cen MT", sans-serif;
 }
 
 p,
 figcaption {
-    line-height: calc(1ex / .32);
+    line-height: 3.125ex;
 }
 
 label {
-    font-family: 'Tw Cen MT';
+    font-family: "Tw Cen MT";
 }
 
 header {
@@ -73,65 +75,65 @@ header {
 
 footer {
     color: white;
+}
 
-    p > a {
-        font-size: x-large;
-    }
+footer p > a {
+    font-size: x-large;
+}
 
-    & > div:first-child {
-        padding: 1em;
-        display: flex;
-        justify-content: space-between;
-        background-color: var(--color-secondary);
-        border-top-left-radius: 1.5em;
-        border-top-right-radius: 1.5em;
-    }
+footer > div:first-child {
+    padding: 1em;
+    display: flex;
+    justify-content: space-between;
+    background-color: var(--color-secondary);
+    border-top-left-radius: 1.5em;
+    border-top-right-radius: 1.5em;
+}
 
-    & > div:first-child ul {
-        padding: 1em;
-        list-style: none;
-        display: flex;
-        column-gap: 4em;
-        height: fit-content;
-        align-items: center;
-    }
+footer > div:first-child ul {
+    padding: 1em;
+    list-style: none;
+    display: flex;
+    column-gap: 4em;
+    height: fit-content;
+    align-items: center;
+}
 
-    & > div:first-child ul li img {
-        -webkit-filter: drop-shadow(5px 5px 5px rgba(0, 0, 0, 0.2));
-        filter: drop-shadow(5px 5px 5px rgba(0, 0, 0, 0.2));
-    }
+footer > div:first-child ul li img {
+    -webkit-filter: drop-shadow(5px 5px 5px rgba(0, 0, 0, 0.2));
+    filter: drop-shadow(5px 5px 5px rgba(0, 0, 0, 0.2));
+}
 
-    & > div:first-child > div:first-child {
-        display: flex;
-        column-gap: 3em;
-    }
+footer > div:first-child > div:first-child {
+    display: flex;
+    column-gap: 3em;
+}
 
-    & > div:first-child > div:first-child img {
-        box-sizing: content-box;
-        border: 2em solid #F3F3F8;
-        border-radius: 2em;
-        width: 6.25em;
-        height: 6.25em;
-        margin: 1em;
-    }
+footer > div:first-child > div:first-child img {
+    box-sizing: content-box;
+    border: 2em solid #F3F3F8;
+    border-radius: 2em;
+    width: 6.25em;
+    height: 6.25em;
+    margin: 1em;
+}
 
-    & > div:nth-child(2) {
-        padding: 1em 2em;
-        display: flex;
-        justify-content: space-between;
-        background-color: var(--color-primary);
-    }
+footer > div:nth-child(2) {
+    padding: 1em 2em;
+    display: flex;
+    justify-content: space-between;
+    background-color: var(--color-primary);
 }
 
 .logo {
     position: absolute;
     left: 50%;
     transform: translateX(-50%);
+}
 
-    img {
-        height: 60px;
-        /* ajuste la hauteur selon le besoin */
-    }
+.logo img {
+    height: 60px;
+    /* ajuste la hauteur selon le besoin */
 }
 
 .error {
@@ -149,16 +151,16 @@ footer {
     margin-left: auto;
     /* Garde le bouton à droite */
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+}
 
-    img {
-        height: 30px;
-        margin-right: 10px;
-    }
+.auth-button img {
+    height: 30px;
+    margin-right: 10px;
+}
 
-    span {
-        font-family: 'Tw Cen MT', sans-serif;
-        font-size: 16px;
-    }
+.auth-button span {
+    font-family: "Tw Cen MT", sans-serif;
+    font-size: 16px;
 }
 
 .acces-facturation {
@@ -172,16 +174,16 @@ footer {
     margin-right: auto;
     /* Garde le bouton à gauche */
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+}
 
-    img {
-        height: 30px;
-        margin-right: 10px;
-    }
+.acces-facturation img {
+    height: 30px;
+    margin-right: 10px;
+}
 
-    span {
-        font-family: 'Tw Cen MT', sans-serif;
-        font-size: 16px;
-    }
+.acces-facturation span {
+    font-family: "Tw Cen MT", sans-serif;
+    font-size: 16px;
 }
 
 @media (max-width: 768px) {
@@ -208,7 +210,7 @@ h1,
 h2,
 h3 {
     color: var(--color-text);
-    font-family: 'Tw Cen MT', sans-serif;
+    font-family: "Tw Cen MT", sans-serif;
 }
 
 h1 {
@@ -241,10 +243,10 @@ h1 {
     margin-left: 10px;
     cursor: pointer;
     box-shadow: 0 6px 8px rgba(0, 0, 0, 0.1);
+}
 
-    &:is(:hover, :focus, :focus-within) {
-        background-color: #357ABD;
-    }
+.btn-search:is(:hover, :focus, :focus-within) {
+    background-color: #357ABD;
 }
 
 /* Offres */
@@ -265,39 +267,39 @@ h1 {
     padding: 15px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     transition: transform 0.2s;
+}
 
-    &:is(:hover, :focus, :focus-within) {
-        transform: translateY(-5px);
-    }
+.offer-card:is(:hover, :focus, :focus-within) {
+    transform: translateY(-5px);
+}
 
-    img {
-        width: 100%;
-        border-radius: 5px;
-        height: 200px;
-        object-fit: cover;
-    }
+.offer-card img {
+    width: 100%;
+    border-radius: 5px;
+    height: 200px;
+    object-fit: cover;
+}
 
-    h3 {
-        font-size: 18px;
-        margin-top: 10px;
-    }
+.offer-card h3 {
+    font-size: 18px;
+    margin-top: 10px;
+}
 
-    .offer-card p {
-        margin: 5px 0;
-        color: #555;
-        font-family: 'Tw Cen MT', sans-serif;
-    }
+.offer-card .offer-card p {
+    margin: 5px 0;
+    color: #555;
+    font-family: "Tw Cen MT", sans-serif;
+}
 
-    :is(.location, .category, .price, .rating, .professional) {
-        font-size: 14px;
-    }
+.offer-card :is(.location, .category, .price, .rating, .professional) {
+    font-size: 14px;
+}
 
-    .closing-soon {
-        color: red;
-        font-weight: bold;
-        font-size: 14px;
-        font-family: 'Tw Cen MT', sans-serif;
-    }
+.offer-card .closing-soon {
+    color: red;
+    font-weight: bold;
+    font-size: 14px;
+    font-family: "Tw Cen MT", sans-serif;
 }
 
 .btn-more-info {
@@ -312,10 +314,10 @@ h1 {
     margin-top: 10px;
     cursor: pointer;
     font-size: 16px;
+}
 
-    &:is(:hover, :focus, :focus-within) {
-        background-color: #357ABD;
-    }
+.btn-more-info:is(:hover, :focus, :focus-within) {
+    background-color: #357ABD;
 }
 
 /* Sections des rubriques */
@@ -328,11 +330,13 @@ h1 {
     background-color: white;
     border-radius: 15px;
     box-shadow: 0 8px 8px rgba(0, 0, 0, 0.3);
+}
 
-    h2 {
-        font-size: 24px;
-        margin-bottom: 20px;
-    }
+.highlight-offers h2,
+.new-offers h2,
+.recently-viewed h2 {
+    font-size: 24px;
+    margin-bottom: 20px;
 }
 
 /* Responsiveness */
@@ -388,10 +392,10 @@ h1 {
     border: none;
     border-radius: 8px;
     cursor: pointer;
+}
 
-    &:is(:hover, :focus, :focus-within) {
-        background-color: #357ABD;
-    }
+.btn-create:is(:hover, :focus, :focus-within) {
+    background-color: #357ABD;
 }
 
 /* Page de connexion */
@@ -405,11 +409,11 @@ h1 {
     background-color: white;
     border-radius: 15px;
     box-shadow: 0 8px 8px rgba(0, 0, 0, 0.3);
+}
 
-    h2 {
-        font-size: 24px;
-        margin-bottom: 20px;
-    }
+.connexion h2 {
+    font-size: 24px;
+    margin-bottom: 20px;
 }
 
 @media (max-width: 1300px) {
@@ -442,10 +446,10 @@ h1 {
     margin-left: 10px;
     cursor: pointer;
     box-shadow: 0 6px 8px rgba(0, 0, 0, 0.1);
+}
 
-    &:is(:hover, :focus, :focus-within) {
-        background-color: #357ABD;
-    }
+.btn-creer:is(:hover, :focus, :focus-within) {
+    background-color: #357ABD;
 }
 
 .champ {
@@ -453,14 +457,14 @@ h1 {
     flex-direction: column;
     align-items: flex-start;
     margin-bottom: 15px;
+}
 
-    p {
-        margin: 0 0 5px 0;
-    }
+.champ p {
+    margin: 0 0 5px 0;
+}
 
-    input {
-        width: 100%;
-    }
+.champ input {
+    width: 100%;
 }
 
 .champ-connexion {
@@ -485,10 +489,10 @@ h1 {
     cursor: pointer;
     font-size: 25px;
     box-shadow: 0 6px 8px rgba(0, 0, 0, 0.1);
+}
 
-    &:is(:hover, :focus, :focus-within) {
-        background-color: #357ABD;
-    }
+.btn-connexion:is(:hover, :focus, :focus-within) {
+    background-color: #357ABD;
 }
 
 /*----------offre détaillée*/
@@ -572,10 +576,10 @@ h1 {
 
 .contact-info {
     text-align: center;
+}
 
-    p {
-        margin: 5px 0;
-    }
+.contact-info p {
+    margin: 5px 0;
 }
 
 /* Bloc 3 : Avis */
@@ -636,10 +640,10 @@ textarea {
 /*------------fin offre detaillé------------*/
 a {
     color: unset;
+}
 
-    &:not(:hover, :focus, :focus-within) {
-        text-decoration: none;
-    }
+a:not(:hover, :focus, :focus-within) {
+    text-decoration: none;
 }
 
 /* BOUTONS RADIO */
@@ -647,44 +651,44 @@ a {
     display: flex;
     gap: 15px;
     align-items: center;
+}
 
-    div {
-        display: flex;
-        align-items: center;
-    }
+.radio_entr div {
+    display: flex;
+    align-items: center;
+}
 
-    input[type="radio"] {
-        appearance: none;
-        width: 20px;
-        height: 20px;
-        border: 2px solid #999;
-        border-radius: 50%;
-        display: inline-block;
-        margin-right: 8px;
-        position: relative;
-        cursor: pointer;
-        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    }
+.radio_entr input[type=radio] {
+    appearance: none;
+    width: 20px;
+    height: 20px;
+    border: 2px solid #999;
+    border-radius: 50%;
+    display: inline-block;
+    margin-right: 8px;
+    position: relative;
+    cursor: pointer;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
 
-    input[type="radio"]:checked::before {
-        content: '';
-        display: block;
-        width: 10px;
-        height: 10px;
-        border-radius: 50%;
-        background-color: #3498db;
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-    }
+.radio_entr input[type=radio]:checked::before {
+    content: "";
+    display: block;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background-color: #3498db;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
 
-    label {
-        font-family: 'Tw Cen MT', sans-serif;
-        font-size: 16px;
-        color: #333;
-        cursor: pointer;
-    }
+.radio_entr label {
+    font-family: "Tw Cen MT", sans-serif;
+    font-size: 16px;
+    color: #333;
+    cursor: pointer;
 }
 
 #bloc_siren {
@@ -696,14 +700,12 @@ a {
         display: none !important;
     }
 
-    footer {
-        & > div:first-child {
-            padding: 0em !important;
-        }
-    
-        & > div:first-child > div:first-child {
-            column-gap: 0em !important;
-        }
+    footer > div:first-child {
+        padding: 0em !important;
+    }
+
+    footer > div:first-child > div:first-child {
+        column-gap: 0em !important;
     }
 }
 
@@ -718,12 +720,14 @@ a {
     max-width: 800px;
 }
 
-.categories, #subcategories {
+.categories,
+#subcategories {
     margin-bottom: 20px;
 }
 
-.categories h3, #subcategories h3 {
-    font-family: 'Tw Cen MT', sans-serif;
+.categories h3,
+#subcategories h3 {
+    font-family: "Tw Cen MT", sans-serif;
     color: var(--color-text);
     font-size: 1.2em;
     margin-bottom: 10px;
@@ -739,7 +743,7 @@ a {
     border: 1px solid #ccc;
     border-radius: 5px;
     background-color: #f9f9f9;
-    font-family: 'Tw Cen MT', sans-serif;
+    font-family: "Tw Cen MT", sans-serif;
     font-size: 1em;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
@@ -767,13 +771,13 @@ a {
     background-color: var(--color-accent);
 }
 
-.subcategory-list input[type="checkbox"] {
+.subcategory-list input[type=checkbox] {
     display: none;
 }
 
 .subcategory-list label {
     cursor: pointer;
-    font-family: 'Tw Cen MT', sans-serif;
+    font-family: "Tw Cen MT", sans-serif;
 }
 
 .sorting-section {
@@ -828,37 +832,37 @@ a {
 }
 
 @media (max-width: 768px) {
-    footer {
-        & > div:first-child {
-            flex-direction: column;
-            align-items: center;
-            padding: 1em;
-        }
+    footer > div:first-child {
+        flex-direction: column;
+        align-items: center;
+        padding: 1em;
+    }
 
-        .footer-logo {
-            text-align: center;
-        }
+    footer .footer-logo {
+        text-align: center;
+    }
 
-        .footer-logo img {
-            width: 150px; /* Réduit la taille du logo */
-            height: auto;
-        }
+    footer .footer-logo img {
+        width: 150px;
+        /* Réduit la taille du logo */
+        height: auto;
+    }
 
-        .social-links {
-            flex-wrap: wrap;
-            gap: 1em;
-            justify-content: center;
-            padding: 1em 0;
-        }
+    footer .social-links {
+        flex-wrap: wrap;
+        gap: 1em;
+        justify-content: center;
+        padding: 1em 0;
+    }
 
-        .social-links li img {
-            width: 50px; /* Réduit la taille des icônes */
-            height: 50px;
-        }
+    footer .social-links li img {
+        width: 50px;
+        /* Réduit la taille des icônes */
+        height: 50px;
+    }
 
-        .footer-content article {
-            text-align: center;
-        }
+    footer .footer-content article {
+        text-align: center;
     }
 
     .footer-bottom {
@@ -869,43 +873,17 @@ a {
 }
 
 @media (max-width: 576px) {
-    footer {
-        & > div:first-child {
-            padding: 0.5em;
-        }
-
-        .footer-logo img {
-            width: 100px; /* Encore plus petit pour les très petits écrans */
-        }
-
-        .social-links li img {
-            width: 40px;
-            height: 40px;
-        }
+    footer > div:first-child {
+        padding: 0.5em;
     }
-}
 
-/* Section du formulaire de recherche */
+    footer .footer-logo img {
+        width: 100px;
+        /* Encore plus petit pour les très petits écrans */
+    }
 
-.btn-sort {
-    /* Your existing button styles */
-    background-color: #f0f0f0;
-    color: #333;
-    padding: 10px 15px;
-    border: none;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-}
-
-.btn-sort.active {
-    background-color: #007bff;
-    color: white;
-}
-
-.btn-sort:hover {
-    background-color: #e0e0e0;
-}
-
-.btn-sort.active:hover {
-    background-color: #0056b3;
+    footer .social-links li img {
+        width: 40px;
+        height: 40px;
+    }
 }
