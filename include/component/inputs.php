@@ -1,6 +1,23 @@
 <?php
 require_once 'db.php';
 
+/**
+ * Composant d'input d'adresse postale.
+ * @param string $form_id l'ID du formulaire auquel appartient le contrôle. Pas nécéssaire de le spécifier si l'élément est déjà dans un <formm>
+ * @param string $id L'ID de l'élément à ajouter. Optionnel, ne pas spécifier pour pas d'ID.
+ * @param string $prefix Le préfixe des attributs "name" des champs pour chaque champ de l'adresse. Définit les noms de clés dans le $_POST en PHP. Optionnel, ne pas spécifier pour pas de préfix
+ * 
+ * Noms dans le post (optionellement suffixés par $prefix)
+ * 
+ * - Commune : commune
+ * - Localité : localite
+ * - Nom voie : nom_voie
+ * - Numéro voie : numero_voie
+ * - Complément numéro : complement_numero
+ * - Precision int. : precision_int
+ * - Precision ext. : precision_ext
+ * @return void
+ */
 function put_input_address(string $form_id = '', string $id = '', string $prefix = '')
 {
     $form_attr = $form_id ? "form=\"$form_id\"" : '';
