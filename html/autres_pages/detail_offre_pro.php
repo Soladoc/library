@@ -144,15 +144,10 @@ if ($_POST) {
                             <p class="review-contexte">Contexte&nbsp;: <?= htmlspecialchars($avis_temp['contexte']) ?></p>
                             <p><?= htmlspecialchars($avis_temp['commentaire']) ?></p>
                             <p class="review-date"><?= htmlspecialchars($avis_temp['date_experience']) ?></p>
-                            <?php if ($avis_temp['id_membre_auteur']=$_SESSION['id_membre']) { ?>
-                            <form method="post" action="modifier.php?id=<?= $args['id'] ?>&avis_id=<?= $avis_id ?>">
-                                <button type="submit" class="btn-modif">Modifier</button>
-                            </form>
-                            <?php } ?> 
                         </div>
                     <?php } 
                 } else { ?>
-                    <p>Aucun avis pour le moment. Soyez le premier à en écrire un&nbsp;!</p>
+                    <p>Aucun avis pour le moment.&nbsp;</p>
                 <?php } ?>
             </div>
         </section>
