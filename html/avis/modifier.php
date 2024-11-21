@@ -7,11 +7,6 @@ if (!isset($_SESSION['id_membre'])) {
     exit;
 }
 echo 2;
-if (!isset($_GET['avis_id']) || !isset($_GET['offre']) || empty($_GET['avis_id']) || empty($_GET['offre'])) {
-    die("Les paramètres 'avis_id' ou 'offre' sont manquants.");
-}
-
-echo 3;
 $id_avis = intval($_GET['avis_id']);
 $id_offre = intval($_GET['offre']);
 echo 4;
