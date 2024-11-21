@@ -60,7 +60,7 @@ declare
     creee_le constant timestamp not null = c.fait_le from _changement_etat c where id_offre = p_id_offre order by fait_le limit 1;
 begin
     if duree <= interval '0' then
-        raise exception 'La durée doit être positive';
+        raise 'La durée doit être positive';
     end if;
 
     for fait_le in
