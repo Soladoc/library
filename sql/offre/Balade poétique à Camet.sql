@@ -7,7 +7,7 @@ with
         insert into
             _adresse (numero_departement, code_commune, localite)
         values
-            ('22', 203, 'Vallée des Saints')
+            ('22', 203, 'Route de Camet')
         returning
             id
     ),
@@ -75,22 +75,10 @@ with
                 'couple', -- Contexte : affaires, couple, solo, famille, amis
                 '13-11-2024', -- Date d'experience
                 'Sah big banger g kiffé' -- Commentaire
-            )
-    ),
-    s4 as ( -- Cette CTE a besoin des valeurs des précédentes, mais elle ne retourne pas de valeur. On doit quand même la nommer, on utilsera la convention de nomamge s1, s2, s3...
-        insert into
-            avis ( --
-                id_offre,
-                id_membre_auteur,
-                note,
-                contexte,
-                date_experience,
-                commentaire
-            )
-        values
-            ( --
+            ),
+            (
                 (table id_offre),
-                id_membre ('5cover'), -- Récupère l'ID de membre à partir du pseudo
+                id_membre ('j0hn'), -- Récupère l'ID de membre à partir du pseudo
                 4, -- Note sur 5
                 'couple', -- Contexte : affaires, couple, solo, famille, amis
                 '08-08-2023', -- Date d'experience
