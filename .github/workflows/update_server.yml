@@ -11,7 +11,6 @@ jobs:
     steps:
       - name: Update Server
         run: |
-          set -xeu
           mkdir -p ~/.ssh
           echo '${{ secrets.ARTIFACT_SSH_KEY }}' > ~/.ssh/id_rsa
           chmod 600 ~/.ssh/id_rsa
