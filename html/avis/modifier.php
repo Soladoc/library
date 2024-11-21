@@ -9,7 +9,7 @@ if (!isset($_SESSION['id_membre'])) {
 }
 
 $id_avis = $_GET['avis_id'];
-
+$id_offre = $_GET['offre'];
 
 // Vérifier que l'utilisateur est l'auteur de l'avis
 $requete = "SELECT * FROM pact.avis WHERE id = ? ";
