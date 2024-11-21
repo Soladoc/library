@@ -1,47 +1,6 @@
 <?php
 session_start();
 require_once 'component/head.php';
-require_once 'const.php';
-echo 1;
-
-// Vérification de la session utilisateur
-if (!isset($_SESSION['id_membre'])) {
-    header('Location: ../connexion.php');
-    exit;
-}
-echo 2;
-
-$id_avis = intval($_GET['avis_id']);
-$id_offre = intval($_GET['offre']);
-
-echo 4;
-
-echo 5;
-
-// Traitement du formulaire si la méthode POST est utilisée
-if (isset($_POST['date'])) {
-    $commentaire = htmlspecialchars(trim($_POST['commentaire']));
-    $note = intval($_POST['rating']);
-    $contexte = htmlspecialchars(trim($_POST['contexte']));
-    $date_experience = $_POST['date'];
-
-    echo 6;
-
-    // Validation des champs du formulaire
-    if (empty($commentaire) || empty($note) || empty($contexte) || empty($date_experience)) {
-        $error_message = 'Tous les champs sont obligatoires.';
-    } else {
-        // Mise à jour de l'avis dans la base de données
-        $stmt = db_connect()->prepare('UPDATE pact._avis SET commentaire = ?, note = ?, contexte = ?, date_experience = ? WHERE id = ?');
-        $stmt->execute([$commentaire, $note, $contexte, $date_experience, $id_avis]);
-
-        $success_message = 'Avis modifié avec succès !';
-        header("Location: ../detail_offre.php?id=$id_offre");
-        exit;
-    }
-
-    echo 7;
-} else {
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -90,4 +49,3 @@ if (isset($_POST['date'])) {
     <?php require '../component/footer.php'; ?>
 </body>
 </html>
-<?php } ?>
