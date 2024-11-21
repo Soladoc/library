@@ -29,7 +29,7 @@ require_once 'component/head.php';
             <div class="offer-list">
                 <?php
                     // Préparer et exécuter la requête SQL pour récupérer toutes les offres
-                    $stmtOffres = query_offres();
+                    $stmtOffres = query_offre();
                     echo 4;
                     // Boucler sur les résultats pour afficher chaque offre
                     while ($offre = $stmtOffres->fetch()) {
