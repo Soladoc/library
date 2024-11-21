@@ -15,33 +15,35 @@ echo 3;
 $id_avis = intval($_GET['avis_id']);
 $id_offre = intval($_GET['offre']);
 echo 4;
-// Vérifier que l'utilisateur est l'auteur de l'avis
-$stmt = db_connect()->prepare("SELECT * FROM pact.avis WHERE id = ? ");
-$stmt->execute([$id_avis]);
-$avis = $stmt->fetch();
-echo 5;
-if (!$avis) {
-    die("Avis introuvable ou non autorisé.");
-}
-echo 5;
-// Traitement du formulaire
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $commentaire = htmlspecialchars(trim($_POST['commentaire']));
-    $note = intval($_POST['rating']);
-    $contexte = htmlspecialchars(trim($_POST['contexte']));
-    $date_experience = $_POST['date'];
-    echo 6;
-    if (empty($commentaire) || empty($note) || empty($contexte) || empty($date_experience)) {
-        $error_message = "Tous les champs sont obligatoires.";
-    } else {
-        $stmt = db_connect()->prepare("UPDATE pact.avis SET commentaire = ?, note = ?, contexte = ?, date_experience = ? WHERE id = ?");
-        $stmt->execute([$commentaire, $note, $contexte, $date_experience, $id_avis]);
-
-        $success_message = "Avis modifié avec succès !";
-        header("Location: ../detail_offre.php?id=$id_offre");
-        exit;
+if(isset($_POST['date'])){
+    // Vérifier que l'utilisateur est l'auteur de l'avis
+    $stmt = db_connect()->prepare("SELECT * FROM pact.avis WHERE id = ? ");
+    $stmt->execute([$id_avis]);
+    $avis = $stmt->fetch();
+    echo 5;
+    if (!$avis) {
+        die("Avis introuvable ou non autorisé.");
     }
-echo 7;
+    echo 5;
+    // Traitement du formulaire
+    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+        $commentaire = htmlspecialchars(trim($_POST['commentaire']));
+        $note = intval($_POST['rating']);
+        $contexte = htmlspecialchars(trim($_POST['contexte']));
+        $date_experience = $_POST['date'];
+        echo 6;
+        if (empty($commentaire) || empty($note) || empty($contexte) || empty($date_experience)) {
+            $error_message = "Tous les champs sont obligatoires.";
+        } else {
+            $stmt = db_connect()->prepare("UPDATE pact.avis SET commentaire = ?, note = ?, contexte = ?, date_experience = ? WHERE id = ?");
+            $stmt->execute([$commentaire, $note, $contexte, $date_experience, $id_avis]);
+
+            $success_message = "Avis modifié avec succès !";
+            header("Location: ../detail_offre.php?id=$id_offre");
+            exit;
+        }
+    echo 7;
+    }
 }else{
 ?>
 
