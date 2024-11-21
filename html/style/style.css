@@ -884,3 +884,28 @@ a {
         }
     }
 }
+
+/* Section du formulaire de recherche */
+
+.btn-sort {
+    /* Your existing button styles */
+    background-color: #f0f0f0;
+    color: #333;
+    padding: 10px 15px;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.btn-sort.active {
+    background-color: #007bff;
+    color: white;
+}
+
+.btn-sort:hover {
+    background-color: #e0e0e0;
+}
+
+.btn-sort.active:hover {
+    background-color: #0056b3;
+}

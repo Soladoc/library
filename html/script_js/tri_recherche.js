@@ -104,5 +104,8 @@ sortButtons.forEach(button => {
     button.addEventListener('click', () => {
         sortButtons.forEach(btn => btn.classList.remove('active'));
         button.classList.add('active');
+        const criteria = button.dataset.criteria;
+        const ascending = button.dataset.order === 'asc';
+        sortOffers(criteria, ascending);
     });
 });
