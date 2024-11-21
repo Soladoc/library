@@ -90,7 +90,7 @@ if ($_POST) {
                         <label>Dénomination (raison sociale) * <input type="text" id="denomination" name="denomination" placeholder="Amazon" required ></label>
                     </p>
                     <p class="champ">
-                        <!-- Email -->
+                        
                         <label>Adresse * <input type="text" id="adresse" placeholder="22300 1 rue Edouard Branly" name="adresse" ></labe>
                     </p>
                     <p class="radio_entr">
