@@ -174,7 +174,7 @@ $avis=query_avis()
                             <p><?= htmlspecialchars($avis_temp['commentaire']) ?></p>
                             <p class="review-date"><?= htmlspecialchars($avis_temp['date_experience']) ?></p>
                             <?php if ($avis_temp['id_membre_auteur']==$_SESSION['id_membre']) { ?>
-                            <form method="post" action="../avis/modifier.php?avis_id=<?= $avis_id ?>">
+                            <form method="post" action="../avis/modifier.php?avis_id=<?= $avis_temp['id'] ?>">
                                 <button type="submit" class="btn-modif">Modifier</button>
                             </form>
                             <?php } ?> 
