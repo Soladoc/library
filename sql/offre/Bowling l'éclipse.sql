@@ -47,6 +47,46 @@ with
         values
             ((table id_offre), 'sport'),
             ((table id_offre), 'famille')
+    ),
+    s2 as ( -- Cette CTE a besoin des valeurs des précédentes, mais elle ne retourne pas de valeur. On doit quand même la nommer, on utilsera la convention de nomamge s1, s2, s3...
+        insert into
+            avis ( --
+                id_offre,
+                id_membre_auteur,
+                note,
+                contexte,
+                date_experience,
+                commentaire
+            )
+        values
+            ( --
+                (table id_offre),
+                id_membre ('5cover'), -- Récupère l'ID de membre à partir du pseudo
+                1, -- Note sur 5
+                'amis', -- Contexte : affaires, couple, solo, famille, amis
+                '21-11-2024', -- Date d'experience
+                'Les employés ont enquillé les erreurs ce qui nous à un peu foutu les boules ' -- Commentaire
+            )
+    ),
+    s3 as ( -- Cette CTE a besoin des valeurs des précédentes, mais elle ne retourne pas de valeur. On doit quand même la nommer, on utilsera la convention de nomamge s1, s2, s3...
+        insert into
+            avis ( --
+                id_offre,
+                id_membre_auteur,
+                note,
+                contexte,
+                date_experience,
+                commentaire
+            )
+        values
+            ( --
+                (table id_offre),
+                id_membre ('5cover'), -- Récupère l'ID de membre à partir du pseudo
+                4.5, -- Note sur 5
+                'amis', -- Contexte : affaires, couple, solo, famille, amis
+                '21-11-2024', -- Date d'experience
+                'Laser games super sympa simplement dommage que le laser game ne sois pas détaillé sur le site' -- Commentaire
+            )
     )
 insert into
     _gallerie (id_offre, id_image)

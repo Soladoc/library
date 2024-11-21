@@ -72,6 +72,26 @@ Ne manquez pas cette opportunité unique de découvrir l''art et l''histoire de 
             ((table id_offre), 'musée'),
             ((table id_offre), 'histoire'),
             ((table id_offre), 'art')
+    ),
+    s3 as (
+    insert into
+        avis (
+            id_offre,
+            id_membre_auteur,
+            note,
+            contexte,
+            date_experience,
+            commentaire
+        )
+    values
+        (
+            (table id_offre),
+            id_membre ('Snoozy'),
+            4,
+            'affaires',
+            '08-06-2024',
+            'Pratique pour des événements de détente entre collègues.'
+        )
     )
 insert into
     horaire_ouverture (id_offre, dow, heure_debut, heure_fin)

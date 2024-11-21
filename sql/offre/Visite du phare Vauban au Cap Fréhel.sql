@@ -74,7 +74,168 @@ Ne manquez pas cette opportunité unique de découvrir l''un des joyaux de la Br
             ((table id_offre), 'patrimoine'),
             ((table id_offre), 'histoire'),
             ((table id_offre), 'nature')
+    ),
+    s3 as (
+    insert into
+        avis (
+            id_offre,
+            id_membre_auteur,
+            note,
+            contexte,
+            date_experience,
+            commentaire
+        )
+    values
+        (
+            (table id_offre),
+            id_membre ('5cover'),
+            5,
+            'famille',
+            '22-02-2024',
+            'Une expérience mémorable.'
+        )
+    ),
+    s4 as (
+    insert into
+        avis (
+            id_offre,
+            id_membre_auteur,
+            note,
+            contexte,
+            date_experience,
+            commentaire
+        )
+    values
+        (
+            (table id_offre),
+            id_membre ('Snoozy'),
+            5,
+            'amis',
+            '14-08-2024',
+            'Visite incroyable, guide très passionné.'
+        )
+    ),
+    s5 as (
+    insert into
+        avis (
+            id_offre,
+            id_membre_auteur,
+            note,
+            contexte,
+            date_experience,
+            commentaire
+        )
+    values
+        (
+            (table id_offre),
+            id_membre ('5cover'),
+            4,
+            'couple',
+            '22-10-2024',
+            'Belle organisation et lieu impressionnant.'
+        )
+    ),
+    s6 as (
+    insert into
+        avis (
+            id_offre,
+            id_membre_auteur,
+            note,
+            contexte,
+            date_experience,
+            commentaire
+        )
+    values
+        (
+            (table id_offre),
+            id_membre ('j0hn'),
+            5,
+            'famille',
+            '05-11-2024',
+            'Les enfants ont adoré la visite.'
+        )
+    ),
+    s7 as (
+    insert into
+        avis (
+            id_offre,
+            id_membre_auteur,
+            note,
+            contexte,
+            date_experience,
+            commentaire
+        )
+    values
+        (
+            (table id_offre),
+            id_membre ('SamSepi0l'),
+            5,
+            'solo',
+            '30-09-2024',
+            'Un moment unique et enrichissant.'
+        )
+    ),
+    s8 as (
+    insert into
+        avis (
+            id_offre,
+            id_membre_auteur,
+            note,
+            contexte,
+            date_experience,
+            commentaire
+        )
+    values
+        (
+            (table id_offre),
+            id_membre ('dieu_des_frites'),
+            4,
+            'affaires',
+            '15-06-2024',
+            'Parfait pour découvrir l’histoire locale.'
+        )
+    ),
+    s9 as (
+    insert into
+        avis (
+            id_offre,
+            id_membre_auteur,
+            note,
+            contexte,
+            date_experience,
+            commentaire
+        )
+    values
+        (
+            (table id_offre),
+            id_membre ('rstallman'),
+            5,
+            'amis',
+            '20-12-2024',
+            'Une découverte exceptionnelle, à refaire.'
+        )
+    ),
+    s10 as (
+    insert into
+        avis (
+            id_offre,
+            id_membre_auteur,
+            note,
+            contexte,
+            date_experience,
+            commentaire
+        )
+    values
+        (
+            (table id_offre),
+            id_membre ('ltorvalds'),
+            5,
+            'couple',
+            '02-05-2024',
+            'Le cadre était à couper le souffle.'
+        )
     )
+
 insert into
     horaire_ouverture (id_offre, dow, heure_debut, heure_fin)
 values

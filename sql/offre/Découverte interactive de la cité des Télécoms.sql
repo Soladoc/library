@@ -83,7 +83,27 @@ N''attendez plus et venez vivre une aventure technologique unique à la Cité de
             ((table id_offre), 'culturel'),
             ((table id_offre), 'musée'),
             ((table id_offre), 'technologie')
-    )
+    ),
+    s3 as (
+    insert into
+        avis (
+            id_offre,
+            id_membre_auteur,
+            note,
+            contexte,
+            date_experience,
+            commentaire
+        )
+    values
+        (
+            (table id_offre),
+            id_membre ('5cover'),
+            5,
+            'amis',
+            '22-10-2024',
+            'Superbe ambiance et repas délicieux.'
+        )
+)
 insert into
     horaire_ouverture (id_offre, dow, heure_debut, heure_fin)
 values

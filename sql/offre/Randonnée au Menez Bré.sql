@@ -70,7 +70,27 @@ Rejoignez-nous pour une aventure inoubliable au cœur de la Bretagne et découvr
         values
             ((table id_offre), 39),
             ((table id_offre), 40)
-    )
+    ),
+    s3 as (
+    insert into
+        avis (
+            id_offre,
+            id_membre_auteur,
+            note,
+            contexte,
+            date_experience,
+            commentaire
+        )
+    values
+        (
+            (table id_offre),
+            id_membre ('5cover'),
+            2,
+            'solo',
+            '10-03-2024',
+            'Lieu trop bruyant.'
+        )
+)
 insert into
     _changement_etat (id_offre, fait_le)
 values
