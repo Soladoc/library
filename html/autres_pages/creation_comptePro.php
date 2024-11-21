@@ -2,6 +2,7 @@
 require_once 'db.php';
 require_once 'util.php';
 require_once 'component/head.php';
+require_once 'component/inputs.php';
 
 function fail(string $error)
 {
