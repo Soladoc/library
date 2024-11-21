@@ -8,8 +8,11 @@ if (!isset($_SESSION['id_membre'])) {
     exit;
 }
 
-$id_avis = $_GET['avis_id'];
-$id_offre = $_GET['offre'];
+if (!isset($_GET['avis_id']) || !isset($_GET['offre']) || empty($_GET['avis_id']) || empty($_GET['offre'])) {
+    die("Les paramètres 'avis_id' ou 'offre' sont manquants.");
+}
+$id_avis = intval($_GET['avis_id']);
+$id_offre = intval($_GET['offre']);
 
 // Vérifier que l'utilisateur est l'auteur de l'avis
 $requete = "SELECT * FROM pact.avis WHERE id = ? ";
@@ -17,6 +20,9 @@ $stmt = db_connect()->prepare($requete);
 $stmt->execute([$id_avis]);
 $avis = $stmt->fetch();
 
+if (!$avis) {
+    die("Avis introuvable ou non autorisé.");
+}
 
 // Traitement du formulaire
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
