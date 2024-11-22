@@ -36,9 +36,9 @@ fmt_hms() {
 }
 
 # Send a message to the Discord webhook.
-# $1: string: the message to send
+# stdin: string: the message to send
 send_msg() {
-    jq -nc --arg msg "$1" '{content: $msg}' |
+    jq -Rc '{content: { message: . }}' |
         curl --header "Accept: application/json" \
              --header "Content-Type: application/json" \
              --data @- \
