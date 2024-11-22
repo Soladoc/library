@@ -5,7 +5,7 @@ create view tarif as table _tarif;
 create view offres as select
     *,
     (select count(*) from _changement_etat where _changement_etat.id_offre = _offre.id) % 2 = 0 en_ligne,
-    (select avg(_avis.note) from _avis where _avis.id_offre = _offre.id) note_moyenne,
+    (select round(avg(_avis.note),2) from _avis where _avis.id_offre = _offre.id) note_moyenne,
     (select min(tarif.montant) from tarif where tarif.id_offre = _offre.id) prix_min,
     (select fait_le from _changement_etat where _changement_etat.id_offre = _offre.id order by fait_le limit 1) creee_le,
     offre_categorie(id) categorie,
