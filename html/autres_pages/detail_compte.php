@@ -12,9 +12,9 @@ $membre = query_compte_membre($args['id']);
 $pro = query_compte_professionnel($args['id']);
 
 if ($membre !== false) {
-    echo '<pre>';
-    print_r($membre);
-    echo '</pre>';
+    // echo '<pre>';
+    // print_r($membre);
+    // echo '</pre>';
     $pseudo = $membre['pseudo'];
     $email = $membre['email'];
     $mdp = unserialize($membre['mdp_hash']);
@@ -25,9 +25,9 @@ if ($membre !== false) {
         $adresse= query_adresse($id_adresse);
 }
 else if ($pro !== false) {
-    echo '<pre>';
-    print_r($pro);
-    echo '</pre>';
+    // echo '<pre>';
+    // print_r($pro);
+    // echo '</pre>';
     $denomination = $pro['denomination'];
     $email = $pro['email'];
     $mdp_hash = unserialize($pro['mdp_hash']);
