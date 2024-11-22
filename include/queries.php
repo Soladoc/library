@@ -218,16 +218,16 @@ function insert_adresse(
     ?float $longitude = null,
 ): int {
     $args = filter_null_args([
-        'code_commune' => [$code_commune, PDO::PARAM_INT],
-        'numero_departement' => [$numero_departement, PDO::PARAM_INT],
-        'numero_voie' => [$numero_voie, PDO::PARAM_INT],
-        'complement_numero' => [$complement_numero, PDO::PARAM_INT],
-        'nom_voie' => [$nom_voie, PDO::PARAM_STR],
-        'localite' => [$localite, PDO::PARAM_STR],
-        'precision_int' => [$precision_int, PDO::PARAM_STR],
-        'precision_ext' => [$precision_ext, PDO::PARAM_STR],
-        'latitude' => [$latitude, PDO_PARAM_DECIMAL],
-        'longitude' => [$longitude, PDO_PARAM_DECIMAL],
+        1 => [$code_commune, PDO::PARAM_INT],
+        2 => [$numero_departement, PDO::PARAM_INT],
+        3 => [$numero_voie, PDO::PARAM_INT],
+        4 => [$complement_numero, PDO::PARAM_INT],
+        5 => [$nom_voie, PDO::PARAM_STR],
+        6 => [$localite, PDO::PARAM_STR],
+        7 => [$precision_int, PDO::PARAM_STR],
+        8 => [$precision_ext, PDO::PARAM_STR],
+        9 => [$latitude, PDO_PARAM_DECIMAL],
+        10 => [$longitude, PDO_PARAM_DECIMAL],
     ]);
     $stmt = notfalse(db_connect()->prepare(_insert_into_returning_id('_adresse', $args)));
     bind_values($stmt, $args);
@@ -245,9 +245,9 @@ function insert_adresse(
 function insert_uploaded_image(array $img, ?string $legende = null): array
 {
     $args = filter_null_args([
-        'taille' => [$img['size'], PDO::PARAM_INT],
-        'mime_type' => [$img['type'], PDO::PARAM_STR],
-        'legende' => [$legende, PDO::PARAM_STR],
+        1 => [$img['size'], PDO::PARAM_INT],
+        2 => [$img['type'], PDO::PARAM_STR],
+        3 => [$legende, PDO::PARAM_STR],
     ]);
     $stmt = notfalse(db_connect()->prepare(_insert_into_returning_id('_image', $args)));
     bind_values($stmt, $args);
