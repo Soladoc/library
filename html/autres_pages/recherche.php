@@ -52,8 +52,8 @@ require_once 'component/offre.php'
                 <button id="sort-price-down" class="btn-sort" data-criteria="prix" data-order="desc">Prix ↓</button>
                 <button id="sort-rating-up" class="btn-sort" data-criteria="note" data-order="asc">Note ↑</button>
                 <button id="sort-rating-down" class="btn-sort" data-criteria="note" data-order="desc">Note ↓</button>
-                <button id="sort-date-up" class="btn-sort" data-criteria="date" data-order="asc">Date ↑</button>
-                <button id="sort-date-down" class="btn-sort" data-criteria="date" data-order="desc">Date ↓</button>
+                <button id="sort-date-up" class="btn-sort" data-criteria="date" data-order="asc">Plus récent</button>
+                <button id="sort-date-down" class="btn-sort" data-criteria="date" data-order="desc">Moins récent</button>
             </div>
         </section>
         <section class="highlight-offers">
