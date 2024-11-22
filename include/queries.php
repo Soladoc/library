@@ -191,21 +191,21 @@ function update_siren(int $id_compte, $new_siren): void
 // Insertions---------------------------------------------------------------------------------------------------------
 
 /**
- * Inserts a new address into the database and returns the ID of the inserted address.
+ * Insère une nouvelle  adresse dans la BDD et retourne son ID.
  *
- * @param int $code_commune The code of the commune for the address.
- * @param int $numero_departement The number of the department for the address.
- * @param int|null $numero_voie The number of the street for the address.
- * @param string|null $complement_numero Additional information about the street number.
- * @param string|null $nom_voie The name of the street for the address.
- * @param string|null $localite The locality (e.g. city, town) for the address.
- * @param string|null $precision_int Additional internal precision information for the address.
- * @param string|null $precision_ext Additional external precision information for the address.
- * @param float|null $latitude The latitude coordinate of the address.
- * @param float|null $longitude The longitude coordinate of the address.
- * @return int The ID of the inserted address.
+ * @param int $code_commune
+ * @param int $numero_departement
+ * @param int|null $numero_voie
+ * @param string|null $complement_numero
+ * @param string|null $nom_voie
+ * @param string|null $localite
+ * @param string|null $precision_int
+ * @param string|null $precision_ext
+ * @param float|null $latitude
+ * @param float|null $longitude
+ * @return int L'ID de l'adresse nouvellement insérée.
  */
-function insert_into_adresse(
+function insert_adresse(
     int $code_commune,
     int $numero_departement,
     ?int $numero_voie = null,
