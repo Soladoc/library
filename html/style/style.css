@@ -1,240 +1,914 @@
-<?php
-require_once 'auth.php';
-require_once 'component/offre.php';
-require_once 'component/head.php';
+@charset "UTF-8";
 
-$args = [
-    'id' => getarg($_GET, 'id', arg_filter(FILTER_VALIDATE_INT)),
-];
+@font-face {
+    font-family: "Tw Cen MT";
+    src: url("../fonts/Tw Cen MT.ttf") format("truetype");
+}
 
-if ($_POST) {
-    $args += [
-        'commentaire' => getarg($_POST, 'commentaire'),
-        'date_avis' => getarg($_POST, 'date'),
-        'note' => getarg($_POST, 'rating', arg_filter(FILTER_VALIDATE_INT)),
-        'contexte' => getarg($_POST, 'contexte'),
-    ];
-    if(($id_membre_co = id_membre_connecte()) === null){
-        $error_message = "Veuillez vous connecter pour publier un avis.";
+:root {
+    --color-text: #0d0d0f;
+    --color-background: #f3f3f8;
+    --color-primary: #4a55c5;
+    --color-secondary: #8b94ee;
+    --color-accent: #4051fd;
+    --color-accent-hover: #4051fd80;
+    font-size: 1.1em;
+    font-family: Arial, sans-serif;
+}
+
+html,
+body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+}
+
+main {
+    flex: 1;
+}
+
+footer {
+    margin-top: 40px;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+button {
+    font-family: "Tw Cen MT", sans-serif;
+    cursor: pointer;
+    padding: 0.25em;
+}
+
+input {
+    padding: 0.25em;
+}
+
+p {
+    margin: 0.5em;
+    font-family: "Tw Cen MT", sans-serif;
+}
+
+p,
+figcaption {
+    line-height: 3.125ex;
+}
+
+label {
+    font-family: "Tw Cen MT";
+}
+
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #F3F3F8;
+    padding: 10px 20px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+    position: relative;
+}
+
+footer {
+    color: white;
+}
+
+footer p>a {
+    font-size: x-large;
+}
+
+footer>div:first-child {
+    padding: 1em;
+    display: flex;
+    justify-content: space-between;
+    background-color: var(--color-secondary);
+    border-top-left-radius: 1.5em;
+    border-top-right-radius: 1.5em;
+}
+
+footer>div:first-child ul {
+    padding: 1em;
+    list-style: none;
+    display: flex;
+    column-gap: 4em;
+    height: fit-content;
+    align-items: center;
+}
+
+footer>div:first-child ul li img {
+    -webkit-filter: drop-shadow(5px 5px 5px rgba(0, 0, 0, 0.2));
+    filter: drop-shadow(5px 5px 5px rgba(0, 0, 0, 0.2));
+}
+
+footer>div:first-child>div:first-child {
+    display: flex;
+    column-gap: 3em;
+}
+
+footer>div:first-child>div:first-child img {
+    box-sizing: content-box;
+    border: 2em solid #F3F3F8;
+    border-radius: 2em;
+    width: 6.25em;
+    height: 6.25em;
+    margin: 1em;
+}
+
+footer>div:nth-child(2) {
+    padding: 1em 2em;
+    display: flex;
+    justify-content: space-between;
+    background-color: var(--color-primary);
+}
+
+.logo {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.logo img {
+    height: 60px;
+    /* ajuste la hauteur selon le besoin */
+}
+
+.error {
+    color: #ca2200;
+}
+
+.auth-button {
+    display: flex;
+    align-items: center;
+    background-color: #4051FD;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 20px;
+    cursor: pointer;
+    margin-left: auto;
+    /* Garde le bouton à droite */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+}
+
+.auth-button img {
+    height: 30px;
+    margin-right: 10px;
+}
+
+.auth-button span {
+    font-family: "Tw Cen MT", sans-serif;
+    font-size: 16px;
+}
+
+.acces-facturation {
+    display: flex;
+    align-items: center;
+    background-color: #4051FD;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 20px;
+    cursor: pointer;
+    margin-right: auto;
+    /* Garde le bouton à gauche */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+}
+
+.acces-facturation img {
+    height: 30px;
+    margin-right: 10px;
+}
+
+.acces-facturation span {
+    font-family: "Tw Cen MT", sans-serif;
+    font-size: 16px;
+}
+
+@media (max-width: 768px) {
+    header {
+        padding: 10px;
     }
-    else {
-        $querry="INSERT INTO pact.avis (id_membre_auteur,id_offre,commentaire,date_experience,note,contexte) VALUES (?,?,?,?,?,?);";
-        $stmt = db_connect()->prepare($querry);
-        $stmt->execute([
-            $id_membre_co,
-            $args['id'] ,
-            $args['commentaire'],
-            $args['date_avis'],
-            $args['note'],
-            $args['contexte']
-        ]);
-        $success_message = "Avis ajouté avec succès !";
+
+    .auth-button {
+        padding: 8px 15px;
+    }
+
+    .acces-facturation {
+        padding: 8px 15px;
+    }
+
+    .logo img {
+        height: 30px;
+        /* Ajuster pour les plus petits écrans */
     }
 }
 
-$offre = query_offre($args['id']);
-if ($offre === false) {
-    put_head("Erreur ID",
-    ['https://unpkg.com/leaflet@1.7.1/dist/leaflet.css'],
-    ['https://unpkg.com/leaflet@1.7.1/dist/leaflet.js' => 'async']);
-    require 'component/header.php';
-    echo "</br></br>L'offre que vous cherchez n'existe pas";
-    ?>
-    <script>console.log("Pas d'offre n°<?php echo $args['id'] ?>")</script>
-    <?php
-    require 'component/footer.php';
-    exit; 
+/* Styles globaux */
+h1,
+h2,
+h3 {
+    color: var(--color-text);
+    font-family: "Tw Cen MT", sans-serif;
 }
-assert($offre['id'] === $args['id']);
 
-$titre = $offre['titre'];
-$description = $offre['description_detaillee'];
-$site_web = $offre['url_site_web'];
-$image_pricipale = query_image($offre['id_image_principale']);
-$adresse = notfalse(query_adresse($offre['id_adresse']));
+h1 {
+    padding: 1em;
+    text-align: center;
+}
 
-$gallerie = query_gallerie($args['id']);
-$avis=query_avis()
-?>
+/* Section de recherche */
+.search-section {
+    text-align: center;
+    padding: 20px;
+    background-color: white;
+    margin-bottom: 20px;
+}
 
-<!DOCTYPE html>
-<html lang="fr">
+.search-bar input {
+    width: 50%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-shadow: 0 6px 8px rgba(0, 0, 0, 0.1);
+}
 
-<?php put_head("offre : {$args['id']}",
-    ['https://unpkg.com/leaflet@1.7.1/dist/leaflet.css'],
-    ['https://unpkg.com/leaflet@1.7.1/dist/leaflet.js' => 'async']); 
-?>
+.btn-search {
+    background-color: #3366cc;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    margin-left: 10px;
+    cursor: pointer;
+    box-shadow: 0 6px 8px rgba(0, 0, 0, 0.1);
+}
 
-<body>
-    <?php
-    //TODO suprimmer ca quand romain aura sort that out
-    // echo '<pre>';
-    // print_r($gallerie);
-    // echo '</pre>';
-    
-    require 'component/header.php'
-    ?>
-    <!-- Offer Details -->
-    <main>
-        <section class="offer-details">
-            <section class="offer-main-photo">
-                <div class="carousel-container">
-                    <div class="carousel">
-                        <?php if ($image_pricipale): ?>
-                            <div class="carousel-slide active">
-                                <?php put_image($image_pricipale); ?>
-                            </div>
-                        <?php endif; ?>
+.btn-search:is(:hover, :focus, :focus-within) {
+    background-color: #357ABD;
+}
 
-                        <?php if (!empty($gallerie)): ?>
-                            <?php foreach ($gallerie as $image): ?>
-                                <div class="carousel-slide">
-                                    <?php put_image(query_image($image)); ?>
-                                </div>
-                            <?php endforeach; ?>
-                        <?php endif; ?>
-                    </div>
-                    <button class="carousel-prev" aria-label="Image précédente">❮</button>
-                    <button class="carousel-next" aria-label="Image suivante">❯</button>
-                </div>
-            </section>
+/* Offres */
+.offer-list {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    padding: 20px;
+    background-color: white;
+}
 
+.offer-card {
+    background-color: white;
+    border: 1px solid #ccc;
+    border-radius: 15px;
+    width: 30%;
+    margin-bottom: 20px;
+    padding: 15px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s;
+}
 
-            <div class="offer-info">
-                <h2><?= htmlspecialchars($titre) ?></h2>
-                <p class="description"><?= nl2br(htmlspecialchars($description)) ?></p>
-            </div>
+.offer-card:is(:hover, :focus, :focus-within) {
+    transform: translateY(-5px);
+}
 
-        </section>
+.offer-card img {
+    width: 100%;
+    border-radius: 5px;
+    height: 200px;
+    object-fit: cover;
+}
 
-        <!-- Location -->
-        <section class="offer-location">
-            <h3>Emplacement et coordonnées</h3>
-            <!-- <div id="map" class="map"></div> -->
-            <div class="contact-info">
-                <p><strong>Adresse&nbsp;:</strong> <?= format_adresse($adresse) ?></p>
-                <p><strong>Site web&nbsp;:</strong> <a href="<?= $site_web ?>"><?= $site_web ?></a></p>
-                <!-- <p><strong>Téléphone&nbsp;:</strong> 02 96 46 63 80</p> -->
-            </div>
-        </section>
+.offer-card h3 {
+    font-size: 18px;
+    margin-top: 10px;
+}
 
-        <section class="offer-reviews">
-            <h3>Avis des utilisateurs</h3>
+.offer-card .offer-card p {
+    margin: 5px 0;
+    color: #555;
+    font-family: "Tw Cen MT", sans-serif;
+}
 
-            <!-- Formulaire d'avis -->
-            <div class="review-form">
-                <div class="message">
-                    <?php if (isset($error_message)): ?>
-                    <p class="error-message"><?= htmlspecialchars($error_message) ?></p>
-                    <?php elseif (isset($success_message)): ?>
-                    <p class="success-message"><?= htmlspecialchars($success_message) ?></p>
-                    <?php endif; ?>
-                </div>
-                <form method="post" action="detail_offre.php?id=<?= $args['id'] ?>">
-                    <textarea name="commentaire" placeholder="Votre avis..." required></textarea>
-                    <label for="rating">Note&nbsp;:</label>
-                    <select name="rating" id="rating" required>
-                        <option value="5">5 étoiles</option>
-                        <option value="4">4 étoiles</option>
-                        <option value="3">3 étoiles</option>
-                        <option value="2">2 étoiles</option>
-                        <option value="1">1 étoile</option>
-                    </select>
-                    <label for="contexte">Contexte&nbsp;:</label>
-                    <select name="contexte" id="contexte" required>
-                        <option value="affaires">Affaires</option>
-                        <option value="couple">Couple</option>
-                        <option value="solo">Solo</option>
-                        <option value="famille">Famille</option>
-                        <option value="amis">Amis</option>
-                    </select>
-                    <label for="date">Date de votre visite</label>
-                    <input type="date" id="date" name="date" required>
-                    </br>
-                    <label for="consent">Je certifie que l'avis reflète mes propres expérience et opinion sur cette offre.</label>
-                    <input type="checkbox" name="consent" required>
-                    <button type="submit" class="btn-publish">Publier</button>
-                </form>
-            </div>
+.offer-card :is(.location, .category, .price, .rating, .professional) {
+    font-size: 14px;
+}
 
-            <!-- Liste des avis -->
-            <div class="review-list">
-                <h4>Avis de la communauté</h4>
-                <div class="review-summary">
-                <h4>Résumé des notes</h4>
-                <p>Nombre d'avis : <?=query_avis_count($args['id']) ?></p>
-                <p>Moyenne&nbsp;: <?php if ($offre['note_moyenne']!=null){echo round($offre['note_moyenne'],2);} else {echo 0;} ?>/5 ★</p>
-                <div class="rating-distribution">
-                    <?php $avis = query_avis(id_offre: $offre['id']); ?>
-                    <p>5 étoiles&nbsp;: <?=count(array_filter($avis, fn($a) => $a['note'] === 5)) ?> avis.</p>
-                    <p>4 étoiles&nbsp;: <?=count(array_filter($avis, fn($a) => $a['note'] === 4)) ?> avis.</p>
-                    <p>3 étoiles&nbsp;: <?=count(array_filter($avis, fn($a) => $a['note'] === 3)) ?> avis.</p>
-                    <p>2 étoiles&nbsp;: <?=count(array_filter($avis, fn($a) => $a['note'] === 2)) ?> avis.</p>
-                    <p>1 étoile&nbsp;: <?=count(array_filter($avis, fn($a) => $a['note'] === 1)) ?> avis.</p>
-                </div>
-                <?php if (!empty($avis)) {
-                    foreach ($avis as $avis_temp) { ?>
-                        <div class="review">
-                            <p><strong><?= htmlspecialchars($avis_temp['pseudo_auteur']) ?></strong> - <?= htmlspecialchars($avis_temp['note']) ?>/5</p>
-                            <p class="review-contexte">Contexte&nbsp;: <?= htmlspecialchars($avis_temp['contexte']) ?></p>
-                            <p><?= htmlspecialchars($avis_temp['commentaire']) ?></p>
-                            <p class="review-date"><?= htmlspecialchars($avis_temp['date_experience']) ?></p>
-                            <?php if (($id_membre_co = id_membre_connecte()) !== null && $avis_temp['id_membre_auteur'] === $id_membre_co) { ?>
-                            <form method="post" action="../avis/modifier.php?avis_id=<?= $avis_temp['id'] ?>&offre=<?=$args['id'] ?>">
-                                <button type="submit" class="btn-modif">Modifier</button>
-                            </form>
-                            <?php }?> 
-                        </div>
-                    <?php } 
-                } else { ?>
-                    <p>Aucun avis pour le moment. Soyez le premier à en écrire un&nbsp;!</p>
-                <?php } ?>
-            </div>
-        </section>
-    </main>
-    <?php require 'component/footer.php' ?>
-    <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            const slides = document.querySelectorAll('.carousel-slide');
-            const nextButton = document.querySelector('.carousel-next');
-            const prevButton = document.querySelector('.carousel-prev');
-            let currentSlide = 0;
+.offer-card .closing-soon {
+    color: red;
+    font-weight: bold;
+    font-size: 14px;
+    font-family: "Tw Cen MT", sans-serif;
+}
 
-            function updateCarousel() {
-                slides.forEach((slide, index) => {
-                    slide.style.transform = `translateX(${100 * (index - currentSlide)}%)`;
-                });
-            }
+.btn-more-info {
+    display: block;
+    width: 100%;
+    padding: 10px;
+    background-color: #4A90E2;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    text-align: center;
+    margin-top: 10px;
+    cursor: pointer;
+    font-size: 16px;
+}
 
-            nextButton.addEventListener('click', () => {
-                currentSlide = (currentSlide + 1) % slides.length;
-                updateCarousel();
-            });
+.btn-more-info:is(:hover, :focus, :focus-within) {
+    background-color: #357ABD;
+}
 
-            prevButton.addEventListener('click', () => {
-                currentSlide = (currentSlide - 1 + slides.length) % slides.length;
-                updateCarousel();
-            });
+/* Sections des rubriques */
+.highlight-offers,
+.new-offers,
+.recently-viewed {
+    margin: 20px;
+    padding: 20px;
+    border: 2px solid #0d0d0f;
+    background-color: white;
+    border-radius: 15px;
+    box-shadow: 0 8px 8px rgba(0, 0, 0, 0.3);
+}
 
-            updateCarousel();
-        });
-    </script>
+.highlight-offers h2,
+.new-offers h2,
+.recently-viewed h2 {
+    font-size: 24px;
+    margin-bottom: 20px;
+}
 
+/* Responsiveness */
+@media (max-width: 768px) {
+    .offer-card {
+        width: 48%;
+    }
+}
 
-    <script>
-        // // OpenStreetMap Integration
-        // var map = L.map('map').setView([48.779, -3.518], 13);
-        // L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        //     attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-        // }).addTo(map);
-        // L.marker([48.779, -3.518]).addTo(map)
-        //     .bindPopup('Découverte interactive de la cité des Télécoms')
-        //     .openPopup();
-        // L.marker([45.779, -3.518]).addTo(map)
-        //     .bindPopup('hihihihihihihihihui')
-        // L.marker([45.779, -4.518]).addTo(map)
-        //     .bindPopup('hihihihihihihihihui')
-    </script>
-</body>
+@media (max-width: 576px) {
+    .offer-card {
+        width: 100%;
+    }
 
-</html>
+    .search-bar input {
+        width: 70%;
+    }
+}
+
+/*---------acc pro------*/
+/* offres en ligne et offres hors ligne*/
+.offline-offers,
+.online-offers {
+    padding: 20px;
+    margin: 20px;
+    border: 2px solid #0d0d0f;
+    background-color: white;
+    border-radius: 15px;
+    box-shadow: 0 8px 8px rgba(0, 0, 0, 0.3);
+}
+
+.offer-carousel,
+.offer-list {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    padding: 20px;
+    background-color: white;
+}
+
+/* Create offer button */
+.create-offer {
+    text-align: center;
+    margin-top: 20px;
+    margin-bottom: 0.5em;
+}
+
+.btn-create {
+    background-color: #4A90E2;
+    color: white;
+    padding: 15px 25px;
+    font-size: 1.1em;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+.btn-create:is(:hover, :focus, :focus-within) {
+    background-color: #357ABD;
+}
+
+/* Page de connexion */
+.connexion {
+    padding: 20px;
+    display: block;
+    width: fit-content;
+    margin-left: auto;
+    margin-right: auto;
+    border: 2px solid #0d0d0f;
+    background-color: white;
+    border-radius: 15px;
+    box-shadow: 0 8px 8px rgba(0, 0, 0, 0.3);
+}
+
+.connexion h2 {
+    font-size: 24px;
+    margin-bottom: 20px;
+}
+
+@media (max-width: 1300px) {
+    .connexion {
+        margin-left: 20px;
+        margin-right: 20px;
+    }
+}
+
+.champ-connexion input {
+    width: 50%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-shadow: 0 6px 8px rgba(0, 0, 0, 0.1);
+}
+
+@media (max-width: 576px) {
+    .champ-connexion {
+        width: 70%;
+    }
+}
+
+.btn-creer {
+    background-color: #3366cc;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    margin-left: 10px;
+    cursor: pointer;
+    box-shadow: 0 6px 8px rgba(0, 0, 0, 0.1);
+}
+
+.btn-creer:is(:hover, :focus, :focus-within) {
+    background-color: #357ABD;
+}
+
+.champ {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    margin-bottom: 15px;
+}
+
+.champ p {
+    margin: 0 0 5px 0;
+}
+
+.champ input {
+    width: 100%;
+}
+
+.champ-connexion {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 300px;
+}
+
+.connexion {
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.btn-connexion {
+    background-color: #3366cc;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    margin-left: 10px;
+    cursor: pointer;
+    font-size: 25px;
+    box-shadow: 0 6px 8px rgba(0, 0, 0, 0.1);
+}
+
+.btn-connexion:is(:hover, :focus, :focus-within) {
+    background-color: #357ABD;
+}
+
+/*----------offre détaillée*/
+/* Bloc 1 : Informations de l'offre */
+.offer-details {
+    display: flex;
+    justify-content: space-around;
+    background-color: white;
+    padding: 20px;
+    margin: 20px 0;
+}
+
+.offer-main-photo {
+    width: 30%;
+}
+
+.offer-photo-large {
+    width: 100%;
+    border-radius: 8px;
+}
+
+.offer-photo-gallery {
+    display: flex;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+.offer-photo-small {
+    width: 48%;
+    border-radius: 8px;
+}
+
+.offer-info {
+    width: 40%;
+}
+
+.description {
+    font-size: 1.2em;
+    margin-bottom: 10px;
+}
+
+.offer-status {
+    background-color: #f9f9f9;
+    padding: 15px;
+    border-radius: 8px;
+}
+
+.price,
+.status,
+.rating,
+.hours {
+    margin-bottom: 8px;
+}
+
+.open {
+    color: green;
+}
+
+.btn-reserve {
+    background-color: #4A90E2;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+/* Bloc 2 : Carte et contact */
+.offer-location {
+    background-color: white;
+    padding: 20px;
+    margin-bottom: 20px;
+}
+
+.map {
+    height: 300px;
+    width: 100%;
+    border-radius: 8px;
+    margin-bottom: 15px;
+}
+
+.contact-info {
+    text-align: center;
+}
+
+.contact-info p {
+    margin: 5px 0;
+}
+
+/* Bloc 3 : Avis */
+.offer-reviews {
+    background-color: white;
+    padding: 20px;
+    margin-bottom: 20px;
+}
+
+.review-form {
+    margin-bottom: 20px;
+}
+
+textarea {
+    width: 100%;
+    height: 80px;
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+}
+
+.review-rating {
+    margin-bottom: 10px;
+}
+
+.btn-publish {
+    background-color: #4A90E2;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.review-summary {
+    margin-bottom: 20px;
+}
+
+.rating-distribution {
+    margin-top: 10px;
+}
+
+.review-list {
+    background-color: #f9f9f9;
+    padding: 15px;
+    border-radius: 8px;
+}
+
+.review {
+    margin-bottom: 15px;
+}
+
+.review p {
+    margin: 0;
+}
+
+/*------------fin offre detaillé------------*/
+a {
+    color: unset;
+}
+
+a:not(:hover, :focus, :focus-within) {
+    text-decoration: none;
+}
+
+/* BOUTONS RADIO */
+.radio_entr {
+    display: flex;
+    gap: 15px;
+    align-items: center;
+}
+
+.radio_entr div {
+    display: flex;
+    align-items: center;
+}
+
+.radio_entr input[type=radio] {
+    appearance: none;
+    width: 20px;
+    height: 20px;
+    border: 2px solid #999;
+    border-radius: 50%;
+    display: inline-block;
+    margin-right: 8px;
+    position: relative;
+    cursor: pointer;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.radio_entr input[type=radio]:checked::before {
+    content: "";
+    display: block;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background-color: #3498db;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.radio_entr label {
+    font-family: "Tw Cen MT", sans-serif;
+    font-size: 16px;
+    color: #333;
+    cursor: pointer;
+}
+
+#bloc_siren {
+    display: block;
+}
+
+@media (max-width: 767px) {
+    .social-links {
+        display: none !important;
+    }
+
+    footer>div:first-child {
+        padding: 0em !important;
+    }
+
+    footer>div:first-child>div:first-child {
+        column-gap: 0em !important;
+    }
+}
+
+/* Section des catégories et sous-catégories */
+.tag-selection {
+    padding: 20px;
+    margin: 20px auto;
+    background-color: #ffffff;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    max-width: 800px;
+}
+
+.categories,
+#subcategories {
+    margin-bottom: 20px;
+}
+
+.categories h3,
+#subcategories h3 {
+    font-family: "Tw Cen MT", sans-serif;
+    color: var(--color-text);
+    font-size: 1.2em;
+    margin-bottom: 10px;
+}
+
+.category-dropdown select,
+.subcategory-list {
+    display: block;
+    width: 100%;
+    max-width: 400px;
+    margin: 0 auto;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background-color: #f9f9f9;
+    font-family: "Tw Cen MT", sans-serif;
+    font-size: 1em;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.subcategory-list {
+    padding: 10px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.subcategory-list div {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background-color: var(--color-secondary);
+    color: #fff;
+    padding: 8px 12px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.subcategory-list div:hover {
+    background-color: var(--color-accent);
+}
+
+.subcategory-list input[type=checkbox] {
+    display: none;
+}
+
+.subcategory-list label {
+    cursor: pointer;
+    font-family: "Tw Cen MT", sans-serif;
+}
+
+.sorting-section {
+    text-align: center;
+    margin: 20px auto;
+    padding: 20px;
+    max-width: 800px;
+    background-color: #f9f9f9;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.sorting-section h3 {
+    font-size: 24px;
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 15px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.sorting-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    justify-content: center;
+    padding: 10px;
+}
+
+.btn-sort {
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    padding: 10px 15px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.btn-sort:hover {
+    background-color: #0056b3;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+}
+
+.btn-sort:active {
+    background-color: #003f7f;
+    transform: scale(0.98);
+}
+
+@media (max-width: 768px) {
+    footer>div:first-child {
+        flex-direction: column;
+        align-items: center;
+        padding: 1em;
+    }
+
+    footer .footer-logo {
+        text-align: center;
+    }
+
+    footer .footer-logo img {
+        width: 150px;
+        /* Réduit la taille du logo */
+        height: auto;
+    }
+
+    footer .social-links {
+        flex-wrap: wrap;
+        gap: 1em;
+        justify-content: center;
+        padding: 1em 0;
+    }
+
+    footer .social-links li img {
+        width: 50px;
+        /* Réduit la taille des icônes */
+        height: 50px;
+    }
+
+    footer .footer-content article {
+        text-align: center;
+    }
+
+    .footer-bottom {
+        flex-direction: column;
+        text-align: center;
+        padding: 1em;
+    }
+}
+
+@media (max-width: 576px) {
+    footer>div:first-child {
+        padding: 0.5em;
+    }
+
+    footer .footer-logo img {
+        width: 100px;
+        /* Encore plus petit pour les très petits écrans */
+    }
+
+    footer .social-links li img {
+        width: 40px;
+        height: 40px;
+    }
+}
+
+/* Section du formulaire de recherche */
+
+.btn-sort {
+    /* Your existing button styles */
+    background-color: #f0f0f0;
+    color: #333;
+    padding: 10px 15px;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.btn-sort.active {
+    background-color: #007bff;
+    color: white;
+}
+
+.btn-sort:hover {
+    background-color: #e0e0e0;
+}
+
+.btn-sort.active:hover {
+    background-color: #0056b3;
+}
