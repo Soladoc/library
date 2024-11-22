@@ -23,11 +23,10 @@ function _is_localhost(): bool
 $_PDO = null;
 
 /**
- * Connect to the database.
+ * Se connecter à la base de données.
  *
- * The return value of this function is cached.
- *
- * @return PDO The database PDO object.
+ * La valeur retournée par cette fonction est cachée : l'appeler plusieurs fois n'a aucun effet. Il n'y a donc pas besoin de conserber son résultat dans une variable.
+ * @return PDO L'objet PDO connecté à la base de données.
  */
 function db_connect(): PDO
 {
@@ -48,7 +47,6 @@ function db_connect(): PDO
     $driver = 'pgsql';
     // Pour le dév. en localhost: on a accès au conteneur postgresdb, on utilise donc le FQDN.
     $host = _is_localhost() ? '413.ventsdouest.dev' : 'postgresdb';
-    /** @var int */
     $port = notfalse(getenv('PGDB_PORT'), 'PGDB_PORT not set');
     $dbname = 'postgres';
 
@@ -66,12 +64,14 @@ function db_connect(): PDO
 }
 
 /**
- * Call a function inside a transaction.
+ * Effectue une transaction.
  *
- * This function automates the beginning, commit and rollback of a transaction.
+ * Cette fonction automatise BEGIN, COMMIT et ROLLBACK pour effectuer une transaction dans la base de données.
+ * 
+ * Regrouper les statements liés dans une transaction permet notamment de préserver la cohérence de la base de données en cas d'erreur.
  *
- * @param callable $body The body of the transaction. Any @see \Throwable thrown from this function will result in a rollback.
- * @param ?callable $cleanup Additional cleanup logic to run when an exception is catched from @p $body, before rolling back.
+ * @param callable $body La fonction contenant le corps de la transaction. Elle est appelée entre le BEGIN et le COMMIT. Si cette fonction jette une exception, un ROLLBACK est effectué.
+ * @param ?callable $cleanup La fonction à appeler pour effectuer un nettoyage additionnel lorsque $body jette une exception, avant le ROLLBACK. Optionnel.
  */
 function transaction(callable $body, ?callable $cleanup = null)
 {

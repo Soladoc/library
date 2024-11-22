@@ -11,8 +11,17 @@
     <?php
     $code = $_POST['code'] ?? '';
     if ($code) {
-        ?>
-        <pre><samp><?php eval($code) ?></samp></pre>
+        ?><pre><samp>
+        <?php try {
+            $return_value = eval($code) ?></samp></pre>
+            <?php if ($return_value !== null) { ?>
+                <p>Return value</p>
+                <pre><samp><?= $return_value ?></samp></pre>
+            <?php }
+        } catch (Throwable $e) { ?>
+            </samp></pre><p>Exception</p>
+            <pre><samp><?= strval($e) ?></samp></pre>
+        <?php } ?>
         <hr>
     <?php } ?>
     <form method="post">

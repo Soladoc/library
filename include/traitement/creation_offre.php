@@ -21,7 +21,7 @@ transaction(function () {
     }
     // Insérer l'adresse
     // todo: adresses localisées
-    $id_adresse = insert_into_adresse(
+    $id_adresse = insert_adresse(
         $commune['code'],
         $commune['numero_departement'],
         $args['adresse_numero_voie'],
