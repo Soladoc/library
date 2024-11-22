@@ -6,6 +6,8 @@ readonly failure_jokes=(
     'on attend que @Raph repare ça'
     '@Marius cherche pas les donnees sont perdues'
     "c'est l'heure de la pause café :coffee:"
+    'faut dormir'
+    'allo allo la terre appelle'
 )
 readonly log_lines=10
 
@@ -35,10 +37,12 @@ fmt_hms() {
     echo "${h: -2}:${m: -2}:${s: -2}"
 }
 
+readonly MSG_SUPPRESS_EMBEDS=4
+
 # Send a message to the Discord webhook.
 # stdin: string: the message to send
 send_msg() {
-    jq -sRc '{content:.}' |
+    jq -sRc --arg flags $MSG_SUPPRESS_EMBEDS '{content:.,$flags}' |
         curl --header "Accept: application/json" \
              --header "Content-Type: application/json" \
              --data @- -i \
@@ -67,8 +71,6 @@ mapfile -t prev < <(gh api "repos/$REPOSITORY/actions/runs" --jq "
     | .conclusion, .updated_at")
 readonly prev_conclusion=${prev[0]}
 readonly prev_timestamp=${prev[1]}
-
-env
 
 if [[ "$CONCLUSION" == failure ]] && [[ "$prev_conclusion" == success ]]; then
     send_msg <<EOF
