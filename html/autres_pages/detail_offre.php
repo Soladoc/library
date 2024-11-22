@@ -78,15 +78,22 @@ $avis=query_avis()
     <main>
         <section class="offer-details">
             <div class="offer-main-photo">
-                <?php put_image($image_pricipale) ?>
-                 <div class="offer-photo-gallery">
-                    <?php
-                    foreach ($gallerie as $image) {
-                        put_image(query_image($image));
-                    }
-                    ?>
-                </div> 
+                <div class="carousel">
+                    <?php foreach ($gallerie as $index => $image): ?>
+                        <div class="carousel-slide <?= $index === 0 ? 'active' : '' ?>">
+                            <?php put_image(query_image($image), ['class' => 'carousel-image']) ?>
+                        </div>
+                    <?php endforeach; ?>
+                    <button class="carousel-control prev">←</button>
+                    <button class="carousel-control next">→</button>
+                </div>
             </div>
+
+<div class="offer-info">
+    <h2><?= $titre ?></h2>
+    <p class="description"><?= $description ?></p>
+</div>
+
 
             <div class="offer-info">
                 <h2><?= $titre ?></h2>
@@ -187,6 +194,7 @@ $avis=query_avis()
         </section>
     </main>
     <?php require 'component/footer.php' ?>
+    <script src="/script_js/carrousel.js"></script>
 
     <script>
         // // OpenStreetMap Integration
