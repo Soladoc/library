@@ -11,13 +11,13 @@
     <?php
     if ($_POST) { ?>
         <pre><samp><?php eval($_POST['code']) ?></samp></pre>
-    <?php } else { ?>
+        <hr>
+    <?php } ?>
     <form method="post">
         <p><label for="code">Code</label></p>
         <p><textarea name="code" id="code" rows="23" cols="120"></textarea></p>
         <p><button type="submit">Exécuter</button></p>
     </form>
-    <?php } ?>
 </body>
 
 </html>
