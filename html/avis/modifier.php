@@ -3,18 +3,15 @@ session_start();
 require_once 'auth.php';
 require_once 'component/head.php';
 require_once 'const.php';
-echo 1;
 
 exiger_connecte_membre();
-
-echo 2;
 
 $id_avis = intval($_GET['avis_id']);
 $id_offre = intval($_GET['offre']);
 
-echo 4;
-
-echo 5;
+$stmt = db_connect()->prepare('SELECT * FROM pact._avis WHERE id = ?');
+$stmt->execute([$id_avis]);
+$avis = $stmt->fetch(PDO::FETCH_ASSOC);
 
 // Traitement du formulaire si la méthode POST est utilisée
 if (isset($_POST['date'])) {
