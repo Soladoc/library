@@ -32,3 +32,8 @@ $$ language plpgsql;
 
 create trigger tg_restaurant_insert instead of insert on restaurant for each row
 execute function restaurant_insert ();
+
+-- Update
+create trigger tg_restaurant_after_update after update on _restaurant for each row
+execute function _offre_after_update ();
+
