@@ -49,6 +49,55 @@ else {
 
 
 if ($_POST) {
+    # modif pseudo ------------------------------------------------------------------------------------------------------------------
+    $new_pseudo = getarg($_POST, 'new_pseudo',null, false);
+    if ($new_pseudo) {
+        query_uptate_pseudo($id,$new_pseudo);
+    }
+
+    # modif denomination ------------------------------------------------------------------------------------------------------------------
+    $new_denomination = getarg($_POST, 'new_denomination',null, false);
+    if ($new_denomination) {
+        query_uptate_denomination($id,$new_denomination);
+    }
+
+    # modif siren ------------------------------------------------------------------------------------------------------------------
+    $new_siren = getarg($_POST, 'new_siren',null, false);
+    if ($new_siren) {
+        query_uptate_siren($id,$new_siren);
+    }
+
+    # modif Nom ------------------------------------------------------------------------------------------------------------------
+    $new_Nom = getarg($_POST, 'new_Nom',null, false);
+    if ($new_Nom) {
+        query_uptate_Nom($id,$new_Nom);
+    }
+
+    # modif Prenom ------------------------------------------------------------------------------------------------------------------
+    $new_Prenom = getarg($_POST, 'new_Prenom',null, false);
+    if ($new_Prenom) {
+        query_uptate_Prenom($id,$new_Prenom);
+    }
+
+    # modif Email ------------------------------------------------------------------------------------------------------------------
+    $new_Email = getarg($_POST, 'new_Email',null, false);
+    if ($new_Email) {
+        query_uptate_Email($id,$new_Email);
+    }
+
+    # modif telephone ------------------------------------------------------------------------------------------------------------------
+    $new_telephone = getarg($_POST, 'new_telephone',null, false);
+    if ($new_telephone) {
+        query_uptate_telephone($id,$new_telephone);
+    }
+
+    # modif adresse ------------------------------------------------------------------------------------------------------------------
+    
+
+
+
+
+    # modif mot de passe ------------------------------------------------------------------------------------------------------------------
     $new_mdp = getarg($_POST, 'new_mdp',null, false);
     $confirmation_mdp = getarg($_POST, 'confirmation_mdp',null, false);
     $old_mdp = getarg($_POST, 'old_mdp',null, false);
@@ -92,7 +141,7 @@ if ($_POST) {
                     <label>Pseudo : </label>
                     <?php echo $pseudo ?>
                 </div>
-                <input id="new_pseudo" name="pseudo" type="text" placeholder="votre nouveau pseudo">
+                <input id="new_pseudo" name="new_pseudo" type="text" placeholder="votre nouveau pseudo">
             </div>
         <?php }
 
@@ -102,7 +151,7 @@ if ($_POST) {
                     <label>Denomination : </label>
                     <?php echo $denomination ?>
                 </div>
-                <input id="new_denomination" name="denomination" type="text" placeholder="votre nouvelle denomination">
+                <input id="new_denomination" name="new_denomination" type="text" placeholder="votre nouvelle denomination">
             </div>
             <?php 
             if (exists_pro_prive($id)) {
@@ -112,7 +161,7 @@ if ($_POST) {
                     <label>siren : </label>
                 <?php echo $siren 
                 ?> </div>
-                    <input type="text" id="siren" name="siren" placeholder="231 654 988" oninput="formatInput(this)" maxlength="12">
+                    <input type="text" id="new_siren" name="new_siren" placeholder="231 654 988" oninput="formatInput(this)" maxlength="12">
             </div><?php
                     
                    
@@ -127,7 +176,7 @@ if ($_POST) {
                 <label>Nom : </label>
                 <?php echo $nom ?>
             </div>
-            <input id="new_nom" name="nom" type="text" placeholder="votre nouveau nom">
+            <input id="new_nom" name="new_nom" type="text" placeholder="votre nouveau nom">
         </div>
 
         <div>
@@ -135,7 +184,7 @@ if ($_POST) {
                 <label>Prenom : </label>
                 <?php echo $prenom ?>
             </div>
-            <input id="new_prenom" name="prenom" type="text" placeholder="votre nouveau prenom">
+            <input id="new_prenom" name="new_prenom" type="text" placeholder="votre nouveau prenom">
         </div>
 
         <div>
@@ -143,7 +192,7 @@ if ($_POST) {
                 <label>Email : </label>
                 <?php echo $email ?>
             </div>
-            <input id="new_email" name="email" type="email" placeholder="votre nouvel email">
+            <input id="new_email" name="new_email" type="new_email" placeholder="votre nouvel email">
 
         </div>
         <div></div>
@@ -151,7 +200,7 @@ if ($_POST) {
                 <label>Numero telephone : </label>
                 <?php echo $telephone ?>
             </div>
-            <input id="new_telephone" name="telephone" type="tel" placeholder="votre nouveau numero telephone">
+            <input id="new_telephone" name="new_telephone" type="tel" placeholder="votre nouveau numero telephone">
 
         </div>
 
