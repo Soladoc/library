@@ -65,6 +65,20 @@ mapfile -t prev < <(gh api "repos/$REPOSITORY/actions/runs" --jq "
 readonly prev_conclusion=${prev[0]}
 readonly prev_timestamp=${prev[1]}
 
+set +x
+echo "ACTOR=$ACTOR"
+echo "CONCLUSION=$CONCLUSION"
+echo "DISCORD_WEBHOOK_URL=$DISCORD_WEBHOOK_URL"
+echo "HTML_URL=$HTML_URL"
+echo "REPOSITORY=$REPOSITORY"
+echo "RUN_ID=$RUN_ID"
+echo "TIMESTAMP=$TIMESTAMP"
+echo "WORKFLOW_ID=$WORKFLOW_ID"
+echo "DISPLAY_TITLE=$DISPLAY_TITLE"
+echo "prev_conclusion=$prev_conclusion"
+echo "prev_timestamp=$prev_timestamp"
+set -x
+
 if [[ "$CONCLUSION" == failure ]] && [[ "$prev_conclusion" == success ]]; then
     send_msg <<EOF
 @everyone $ACTOR a casse la bdd avec [$DISPLAY_TITLE]($HTML_URL) :skull:
