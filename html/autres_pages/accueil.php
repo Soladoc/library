@@ -29,13 +29,11 @@ require_once 'component/head.php';
             <div class="offer-list">
                 <?php
                     // Préparer et exécuter la requête SQL pour récupérer toutes les offres
-                    $stmtOffres = query_offres_a_une();
+                    $stmtOffres = query_offres();
                     
                     // Boucler sur les résultats pour afficher chaque offre
-                    if ($stmtOffres !== false) {
-                        while ($offre = $stmtOffres->fetch(PDO::FETCH_ASSOC)) {
-                            put_card_offre($offre);
-                        }
+                    while ($offre = $stmtOffres->fetch()) {
+                        put_card_offre($offre);
                     }
                 ?>
             </div>
