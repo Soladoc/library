@@ -77,29 +77,28 @@ $avis=query_avis()
     <!-- Offer Details -->
     <main>
         <section class="offer-details">
-            <div class="offer-main-photo">
-                <div class="carousel">
-                    <!-- Affichage de l'image principale -->
-                    <?php if ($image_pricipale): ?>
-                        <div class="carousel-slide active">
-                            <img src="<?= $image_pricipale ?>" alt="Image principale de l'offre" class="carousel-image">
-                        </div>
-                    <?php endif; ?>
-
-                    <!-- Affichage des images de la galerie -->
-                    <?php if (!empty($gallerie)): ?>
-                        <?php foreach ($gallerie as $image): ?>
-                            <div class="carousel-slide">
-                                <img src="<?= query_image($image) ?>" alt="Image de la galerie" class="carousel-image">
+            <section class="offer-main-photo">
+                <div class="carousel-container">
+                    <div class="carousel">
+                        <?php if ($image_pricipale): ?>
+                            <div class="carousel-slide active">
+                                <?php put_image($image_pricipale); ?>
                             </div>
-                        <?php endforeach; ?>
-                    <?php endif; ?>
+                        <?php endif; ?>
 
-                    <!-- Boutons de contrôle du carrousel -->
-                    <button class="carousel-control prev">←</button>
-                    <button class="carousel-control next">→</button>
+                        <?php if (!empty($gallerie)): ?>
+                            <?php foreach ($gallerie as $image): ?>
+                                <div class="carousel-slide">
+                                    <?php put_image(query_image($image)); ?>
+                                </div>
+                            <?php endforeach; ?>
+                        <?php endif; ?>
+                    </div>
+                    <button class="carousel-prev" aria-label="Image précédente">❮</button>
+                    <button class="carousel-next" aria-label="Image suivante">❯</button>
                 </div>
-            </div>
+            </section>
+
 
             <div class="offer-info">
                 <h2><?= htmlspecialchars($titre) ?></h2>
@@ -197,29 +196,30 @@ $avis=query_avis()
     <script>
         document.addEventListener('DOMContentLoaded', function () {
             const slides = document.querySelectorAll('.carousel-slide');
-            const prevButton = document.querySelector('.carousel-control.prev');
-            const nextButton = document.querySelector('.carousel-control.next');
-            let currentIndex = 0;
+            const nextButton = document.querySelector('.carousel-next');
+            const prevButton = document.querySelector('.carousel-prev');
+            let currentSlide = 0;
 
             function updateCarousel() {
                 slides.forEach((slide, index) => {
-                    slide.classList.toggle('active', index === currentIndex);
+                    slide.style.transform = `translateX(${100 * (index - currentSlide)}%)`;
                 });
             }
 
-            prevButton.addEventListener('click', () => {
-                currentIndex = (currentIndex - 1 + slides.length) % slides.length;
-                updateCarousel();
-            });
-
             nextButton.addEventListener('click', () => {
-                currentIndex = (currentIndex + 1) % slides.length;
+                currentSlide = (currentSlide + 1) % slides.length;
                 updateCarousel();
             });
 
-            updateCarousel(); // Initialise le carrousel avec le premier slide actif
+            prevButton.addEventListener('click', () => {
+                currentSlide = (currentSlide - 1 + slides.length) % slides.length;
+                updateCarousel();
+            });
+
+            updateCarousel();
         });
     </script>
+
 
     <script>
         // // OpenStreetMap Integration
