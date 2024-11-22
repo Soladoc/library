@@ -21,8 +21,6 @@ if (isset($_POST['date'])) {
     $contexte = htmlspecialchars(trim($_POST['contexte']));
     $date_experience = $_POST['date'];
 
-    echo 6;
-
     // Validation des champs du formulaire
     if (empty($commentaire) || empty($note) || empty($contexte) || empty($date_experience)) {
         $error_message = 'Tous les champs sont obligatoires.';
@@ -37,7 +35,6 @@ if (isset($_POST['date'])) {
         exit;
     }
 
-    echo 7;
 } else {
 ?>
 <!DOCTYPE html>
