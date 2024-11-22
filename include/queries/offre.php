@@ -63,7 +63,7 @@ function offre_insert_tag(int $id_offre, string $tag)
 
 function offre_insert_tarif(int $id_offre, string $nom, float $montant)
 {
-    $stmt = notfalse(db_connect()->prepare('insert into _tarif (id_offre, nom, montant) values (?,?,?)'));
+    $stmt = notfalse(db_connect()->prepare('insert into tarif (id_offre, nom, montant) values (?,?,?)'));
     bind_values($stmt, [1 => [$id_offre, PDO::PARAM_INT], 2 => [$nom, PDO::PARAM_STR], 3 => [$montant, PDO_PARAM_DECIMAL]]);
     notfalse($stmt->execute());
 }
