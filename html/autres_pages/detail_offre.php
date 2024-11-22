@@ -64,7 +64,13 @@ $avis=query_avis()
     ['https://unpkg.com/leaflet@1.7.1/dist/leaflet.css'],
     ['https://unpkg.com/leaflet@1.7.1/dist/leaflet.js' => 'async']); 
 ?>
-
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Détails Offre</title>
+    <link rel="stylesheet" href="/style/style.css">
+    <script src="/script_js/carrousel.js" defer></script>
+</head>
 <body>
     <?php
     //TODO suprimmer ca quand romain aura sort that out
@@ -80,12 +86,14 @@ $avis=query_avis()
             <section class="offer-main-photo">
                 <div class="carousel-container">
                     <div class="carousel">
+                        <!-- Image principale -->
                         <?php if ($image_pricipale): ?>
-                            <div class="carousel-slide active">
+                            <div class="carousel-slide">
                                 <?php put_image($image_pricipale); ?>
                             </div>
                         <?php endif; ?>
 
+                        <!-- Galerie d'images -->
                         <?php if (!empty($gallerie)): ?>
                             <?php foreach ($gallerie as $image): ?>
                                 <div class="carousel-slide">
@@ -94,10 +102,13 @@ $avis=query_avis()
                             <?php endforeach; ?>
                         <?php endif; ?>
                     </div>
+
+                    <!-- Boutons de navigation -->
                     <button class="carousel-prev" aria-label="Image précédente">❮</button>
                     <button class="carousel-next" aria-label="Image suivante">❯</button>
                 </div>
             </section>
+
 
 
             <div class="offer-info">
@@ -193,34 +204,6 @@ $avis=query_avis()
         </section>
     </main>
     <?php require 'component/footer.php' ?>
-    <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            const slides = document.querySelectorAll('.carousel-slide');
-            const nextButton = document.querySelector('.carousel-next');
-            const prevButton = document.querySelector('.carousel-prev');
-            let currentSlide = 0;
-
-            function updateCarousel() {
-                slides.forEach((slide, index) => {
-                    slide.style.transform = `translateX(${100 * (index - currentSlide)}%)`;
-                });
-            }
-
-            nextButton.addEventListener('click', () => {
-                currentSlide = (currentSlide + 1) % slides.length;
-                updateCarousel();
-            });
-
-            prevButton.addEventListener('click', () => {
-                currentSlide = (currentSlide - 1 + slides.length) % slides.length;
-                updateCarousel();
-            });
-
-            updateCarousel();
-        });
-    </script>
-
-
     <script>
         // // OpenStreetMap Integration
         // var map = L.map('map').setView([48.779, -3.518], 13);
