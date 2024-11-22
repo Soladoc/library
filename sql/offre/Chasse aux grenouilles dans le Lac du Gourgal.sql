@@ -56,7 +56,23 @@ with
                 '2024-11-07', -- Date d'experience
                 'Franchement décevant!' -- Commentaire
             )
-    )
+    ),
+    s2 as (
+        insert into tarif (
+            nom,
+            id_offre,
+            montant
+        )
+        values(
+            'adulte',
+            (table id_offre),
+            10
+        ),
+        (
+            'enfant',
+            (table id_offre),
+            5
+        )
 insert into
     _tags (id_offre, tag)
 values

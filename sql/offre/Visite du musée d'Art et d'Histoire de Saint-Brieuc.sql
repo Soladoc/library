@@ -90,6 +90,23 @@ Ne manquez pas cette opportunité unique de découvrir l''art et l''histoire de 
             '2024-06-08',
             'Pratique pour des événements de détente entre collègues.'
         )
+    ),
+    s4 as (
+        insert into tarif (
+            nom,
+            id_offre,
+            montant
+        )
+        values(
+            'Adulte',
+            (table id_offre),
+            20
+        ),
+        values(
+            'Enfant',
+            (table id_offre),
+            13
+        )
     )
 insert into
     horaire_ouverture (id_offre, dow, heure_debut, heure_fin)

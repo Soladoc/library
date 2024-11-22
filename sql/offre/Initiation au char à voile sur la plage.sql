@@ -65,7 +65,28 @@ L''initiation au char à voile peut être incluse dans le cadre d''une activité
             '2024-09-30',
             'Très bon rapport qualité-prix.'
         )
-    )
+    ),
+    s2 as (
+        insert into tarif (
+            nom,
+            id_offre,
+            montant
+        )
+        values(
+            'débutant',
+            (table id_offre),
+            25
+        ),
+        (
+            'initié',
+            (table id_offre),
+            20
+        ),
+        (
+            'pro',
+            (table id_offre),
+            10
+        )
 insert into
     _tags (id_offre, tag)
 values

@@ -82,7 +82,23 @@ with
                 '2023-08-08', -- Date d'experience
                 'Séjour féérique en couple un vrai moment de bonheur' -- Commentaire
             )
-    )
+    ),
+    s4 as (
+        insert into tarif (
+            nom,
+            id_offre,
+            montant
+        )
+        values(
+            'adulte',
+            (table id_offre),
+            15
+        ),
+        (
+            'enfant',
+            (table id_offre),
+            7
+        )
 insert into
     periode_ouverture (id_offre, debut_le, fin_le)
 values

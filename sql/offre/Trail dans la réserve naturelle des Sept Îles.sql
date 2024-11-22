@@ -89,6 +89,23 @@ Réservez dès maintenant votre place et préparez-vous à vivre une expérience
             '2024-08-31',
             'Cadre magnifique.'
         )
+    ),
+    s4 as (
+        insert into tarif (
+            nom,
+            id_offre,
+            montant
+        )
+        values(
+            'Adulte',
+            (table id_offre),
+            5
+        ),
+        values(
+            'Enfant',
+            (table id_offre),
+            0
+        )
     )
 insert into
     horaire_ouverture (id_offre, dow, heure_debut, heure_fin)

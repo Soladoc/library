@@ -86,6 +86,23 @@ Ne manquez pas cette opportunité unique de découvrir l''un des châteaux les p
             '2024-04-04',
             'Lieux peu salubre mais cadre magnofique,dommage!'
         )
+    ),
+    s4 as (
+        insert into tarif (
+            nom,
+            id_offre,
+            montant
+        )
+        values(
+            'Adulte',
+            (table id_offre),
+            5
+        ),
+        values(
+            'Enfant',
+            (table id_offre),
+            0
+        )
     )
 insert into
     horaire_ouverture (id_offre, dow, heure_debut, heure_fin)
