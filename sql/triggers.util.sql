@@ -75,3 +75,11 @@ comment on function insert_compte (record) is
 'Insère un compte.
 `new` contient les valeurs du compte.
 @returns L''ID du compte inséré.';
+
+create function _offre_after_update () returns trigger as $$
+begin
+    new.modifiee_le = now();
+end
+$$ language plpgsql;
+comment on function _offre_after_update () is
+'Fonction trigger pour les sous classes de offre qui met à jour l''attribut modifiee_le';

@@ -64,7 +64,13 @@ $avis=query_avis()
     ['https://unpkg.com/leaflet@1.7.1/dist/leaflet.css'],
     ['https://unpkg.com/leaflet@1.7.1/dist/leaflet.js' => 'async']); 
 ?>
-
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Détails Offre</title>
+    <link rel="stylesheet" href="/style/style.css">
+    <script src="/script_js/carrousel.js" defer></script>
+</head>
 <body>
     <?php
     //TODO suprimmer ca quand romain aura sort that out
@@ -77,28 +83,39 @@ $avis=query_avis()
     <!-- Offer Details -->
     <main>
         <section class="offer-details">
-            <div class="offer-main-photo">
-                <?php put_image($image_pricipale) ?>
-                 <div class="offer-photo-gallery">
-                    <?php
-                    foreach ($gallerie as $image) {
-                        put_image(query_image($image));
-                    }
-                    ?>
-                </div> 
-            </div>
+            <section class="offer-main-photo">
+                <div class="carousel-container">
+                    <div class="carousel">
+                        <!-- Image principale -->
+                        <?php if ($image_pricipale): ?>
+                            <div class="carousel-slide">
+                                <?php put_image($image_pricipale); ?>
+                            </div>
+                        <?php endif; ?>
+
+                        <!-- Galerie d'images -->
+                        <?php if (!empty($gallerie)): ?>
+                            <?php foreach ($gallerie as $image): ?>
+                                <div class="carousel-slide">
+                                    <?php put_image(query_image($image)); ?>
+                                </div>
+                            <?php endforeach; ?>
+                        <?php endif; ?>
+                    </div>
+
+                    <!-- Boutons de navigation -->
+                    <button class="carousel-prev" aria-label="Image précédente">❮</button>
+                    <button class="carousel-next" aria-label="Image suivante">❯</button>
+                </div>
+            </section>
+
+
 
             <div class="offer-info">
-                <h2><?= $titre ?></h2>
-                <p class="description"><?= $description ?></p>
-                <div class="offer-status">
-                    <!-- <p class="price">Prix&nbsp;: 13-39€</p>
-                    <p class="status">Statut&nbsp;: <span class="open">Ouvert</span></p>
-                    <p class="rating">Note&nbsp;: ★★★★☆ (4.7/5, 256 avis)</p>
-                    <p class="hours">Horaires&nbsp;: 9h30 - 18h30</p>
-                    <button class="btn-reserve">Réserver</button> -->
-                </div>
+                <h2><?= htmlspecialchars($titre) ?></h2>
+                <p class="description"><?= nl2br(htmlspecialchars($description)) ?></p>
             </div>
+
         </section>
 
         <!-- Location -->
@@ -187,7 +204,6 @@ $avis=query_avis()
         </section>
     </main>
     <?php require 'component/footer.php' ?>
-
     <script>
         // // OpenStreetMap Integration
         // var map = L.map('map').setView([48.779, -3.518], 13);

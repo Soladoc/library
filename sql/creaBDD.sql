@@ -274,7 +274,7 @@ create table _tarif (
         constraint tarif_fk_offre references _offre,
     constraint tarif_pk primary key (nom, id_offre),
 
-    montant decimal not null
+    montant decimal not null check (montant >= 0)
 );
 
 create table _option (

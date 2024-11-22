@@ -1,10 +1,12 @@
 set schema 'pact';
 
+create view tarif as table _tarif;
+
 create view offres as select
     *,
     (select count(*) from _changement_etat where _changement_etat.id_offre = _offre.id) % 2 = 0 en_ligne,
-    (select avg(_avis.note) from _avis where _avis.id_offre = _offre.id) note_moyenne,
-    (select min(_tarif.montant) from _tarif where _tarif.id_offre = _offre.id) prix_min,
+    (select round(avg(_avis.note),2) from _avis where _avis.id_offre = _offre.id) note_moyenne,
+    (select min(tarif.montant) from tarif where tarif.id_offre = _offre.id) prix_min,
     (select fait_le from _changement_etat where _changement_etat.id_offre = _offre.id order by fait_le limit 1) creee_le,
     offre_categorie(id) categorie,
     --offre_est_ouverte(id, localtimestamp) est_ouverte,
@@ -55,6 +57,7 @@ create view avis as select
 from
     _avis
     join membre on id_membre_auteur = membre.id;
+
 
 create view horaire_ouverture as table _horaire_ouverture;
 create view periode_ouverture as table _periode_ouverture;

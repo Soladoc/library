@@ -22,3 +22,7 @@ $$ language plpgsql;
 
 create trigger tg_spectacle_insert instead of insert on spectacle for each row
 execute function spectacle_insert ();
+
+-- Update
+create trigger tg_spectacle_after_update after update on _spectacle for each row
+execute function _offre_after_update ();
