@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-set -vxeo pipefail
+set -xeo pipefail
 
 readonly failure_jokes=(
     'on attend que @Raph repare ça'
@@ -39,7 +39,12 @@ fmt_hms() {
 # $1: string: the message to send
 send_msg() {
     jq -n --arg msg "$1" '{content: { message: $msg }}' |
-        curl -H "Content-Type: application/json" -X POST -d @- "$DISCORD_WEBHOOK_URL"
+        curl --verbose \
+            --header "Accept: application/json" \
+            --header "Content-Type: application/json" \
+            --request POST \
+            --data @- \
+            "$DISCORD_WEBHOOK_URL"
 }
 
 # The last lines of the workflow run logs.
@@ -57,16 +62,6 @@ gh_run_logs() {
         tail -n $log_lines # take last entries
 }
 
-echo "ACTOR=$ACTOR"
-echo "CONCLUSION=$CONCLUSION"
-echo "DISCORD_WEBHOOK_URL=$DISCORD_WEBHOOK_URL"
-echo "HTML_URL=$HTML_URL"
-echo "REPOSITORY=$REPOSITORY"
-echo "RUN_ID=$RUN_ID"
-echo "TIMESTAMP=$TIMESTAMP"
-echo "WORKFLOW_ID=$WORKFLOW_ID"
-echo "DISPLAY_TITLE=$DISPLAY_TITLE"
-
 mapfile -t prev < <(gh api "repos/$REPOSITORY/actions/runs" --jq "
         .workflow_runs
     | (.[] | select(.id == $RUN_ID) | .run_number) as \$run_number
@@ -75,8 +70,7 @@ mapfile -t prev < <(gh api "repos/$REPOSITORY/actions/runs" --jq "
 readonly prev_conclusion=${prev[0]}
 readonly prev_timestamp=${prev[1]}
 
-echo "prev_conclusion=$prev_conclusion"
-echo "prev_timestamp=$prev_timestamp"
+env
 
 if [[ "$CONCLUSION" == failure ]] && [[ "$prev_conclusion" == success ]]; then
     send_msg <<EOF
