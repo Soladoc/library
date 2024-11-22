@@ -29,7 +29,6 @@ function query_offres(?int $id_professionnel = null, ?bool $en_ligne = null): PD
 function query_offres_a_une(): array|false
 {
     $stmt = notfalse(db_connect()->prepare('select * from offres where note_moyenne = 5'));
-    bind_values($stmt, $args);
     notfalse($stmt->execute());
     return $stmt;
 }
