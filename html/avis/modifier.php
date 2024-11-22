@@ -47,7 +47,7 @@ if (isset($_POST['date'])) {
 <?php put_head('Modifier un avis'); ?>
 
 <body>
-    <?php require '../component/header.php'; ?>
+    <?php require 'component/header.php'; ?>
     <main>
         <h2>Modifier votre avis</h2>
 
@@ -85,7 +85,7 @@ if (isset($_POST['date'])) {
             <button type="submit" class="btn-publish">Modifier</button>
         </form>
     </main>
-    <?php require '../component/footer.php'; ?>
+    <?php require 'component/footer.php'; ?>
 </body>
 </html>
 <?php } ?>
