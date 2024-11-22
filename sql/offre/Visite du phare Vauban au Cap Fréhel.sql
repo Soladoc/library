@@ -74,166 +74,60 @@ Ne manquez pas cette opportunité unique de découvrir l''un des joyaux de la Br
             ((table id_offre), 'nature')
     ),
     s3 as (
-    insert into
-        avis (
-            id_offre,
-            id_membre_auteur,
-            note,
-            contexte,
-            date_experience,
-            commentaire
-        )
-    values
-        (
-            (table id_offre),
-            id_membre ('5cover'),
-            5,
-            'famille',
-            '2024-02-22',
-            'Une expérience mémorable.'
-        )
+        insert into
+            avis (id_offre, id_membre_auteur, note, contexte, date_experience, commentaire)
+        values
+            ((table id_offre), id_membre ('5cover'), 5, 'famille', '2024-02-22', 'Une expérience mémorable.')
     ),
     s4 as (
-    insert into
-        avis (
-            id_offre,
-            id_membre_auteur,
-            note,
-            contexte,
-            date_experience,
-            commentaire
-        )
-    values
-        (
-            (table id_offre),
-            id_membre ('Snoozy'),
-            5,
-            'amis',
-            '2024-08-14',
-            'Visite incroyable, guide très passionné.'
-        )
+        insert into
+            avis (id_offre, id_membre_auteur, note, contexte, date_experience, commentaire)
+        values
+            ((table id_offre), id_membre ('Snoozy'), 5, 'amis', '2024-08-14', 'Visite incroyable, guide très passionné.')
     ),
     s5 as (
-    insert into
-        avis (
-            id_offre,
-            id_membre_auteur,
-            note,
-            contexte,
-            date_experience,
-            commentaire
-        )
-    values
-        (
-            (table id_offre),
-            id_membre ('Maëlan'),
-            4,
-            'couple',
-            '2024-10-22',
-            'Belle organisation et lieu impressionnant.'
-        )
+        insert into
+            avis (id_offre, id_membre_auteur, note, contexte, date_experience, commentaire)
+        values
+            ((table id_offre), id_membre ('Maëlan'), 4, 'couple', '2024-10-22', 'Belle organisation et lieu impressionnant.')
     ),
     s6 as (
-    insert into
-        avis (
-            id_offre,
-            id_membre_auteur,
-            note,
-            contexte,
-            date_experience,
-            commentaire
-        )
-    values
-        (
-            (table id_offre),
-            id_membre ('j0hn'),
-            5,
-            'famille',
-            '2024-11-05',
-            'Les enfants ont adoré la visite.'
-        )
+        insert into
+            avis (id_offre, id_membre_auteur, note, contexte, date_experience, commentaire)
+        values
+            ((table id_offre), id_membre ('j0hn'), 5, 'famille', '2024-11-05', 'Les enfants ont adoré la visite.')
     ),
     s7 as (
-    insert into
-        avis (
-            id_offre,
-            id_membre_auteur,
-            note,
-            contexte,
-            date_experience,
-            commentaire
-        )
-    values
-        (
-            (table id_offre),
-            id_membre ('SamSepi0l'),
-            5,
-            'solo',
-            '2024-09-30',
-            'Un moment unique et enrichissant.'
-        )
+        insert into
+            avis (id_offre, id_membre_auteur, note, contexte, date_experience, commentaire)
+        values
+            ((table id_offre), id_membre ('SamSepi0l'), 5, 'solo', '2024-09-30', 'Un moment unique et enrichissant.')
     ),
     s8 as (
-    insert into
-        avis (
-            id_offre,
-            id_membre_auteur,
-            note,
-            contexte,
-            date_experience,
-            commentaire
-        )
-    values
-        (
-            (table id_offre),
-            id_membre ('dieu_des_frites'),
-            4,
-            'affaires',
-            '2024-06-15',
-            'Parfait pour découvrir l''histoire locale.'
-        )
+        insert into
+            avis (id_offre, id_membre_auteur, note, contexte, date_experience, commentaire)
+        values
+            (
+                (table id_offre),
+                id_membre ('dieu_des_frites'),
+                4,
+                'affaires',
+                '2024-06-15',
+                'Parfait pour découvrir l''histoire locale.'
+            )
     ),
     s9 as (
-    insert into
-        avis (
-            id_offre,
-            id_membre_auteur,
-            note,
-            contexte,
-            date_experience,
-            commentaire
-        )
-    values
-        (
-            (table id_offre),
-            id_membre ('rstallman'),
-            5,
-            'amis',
-            '2024-12-20',
-            'Une découverte exceptionnelle, à refaire.'
-        )
+        insert into
+            avis (id_offre, id_membre_auteur, note, contexte, date_experience, commentaire)
+        values
+            ((table id_offre), id_membre ('rstallman'), 5, 'amis', '2024-12-20', 'Une découverte exceptionnelle, à refaire.')
     ),
     s10 as (
-    insert into
-        avis (
-            id_offre,
-            id_membre_auteur,
-            note,
-            contexte,
-            date_experience,
-            commentaire
-        )
-    values
-        (
-            (table id_offre),
-            id_membre ('ltorvalds'),
-            5,
-            'couple',
-            '2024-05-02',
-            'Le cadre était à couper le souffle.'
-        )
+        insert into
+            avis (id_offre, id_membre_auteur, note, contexte, date_experience, commentaire)
+        values
+            ((table id_offre), id_membre ('ltorvalds'), 5, 'couple', '2024-05-02', 'Le cadre était à couper le souffle.')
     )
-
 insert into
     horaire_ouverture (id_offre, dow, heure_debut, heure_fin)
 values

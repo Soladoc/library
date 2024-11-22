@@ -54,24 +54,10 @@ De 3 à 6 joueurs, en famille, entre collègues ou entre amis, venez relever nos
             id
     ),
     s1 as (
-    insert into
-        avis (
-            id_offre,
-            id_membre_auteur,
-            note,
-            contexte,
-            date_experience,
-            commentaire
-        )
-    values
-        (
-            (table id_offre),
-            id_membre ('j0hn'),
-            1,
-            'solo',
-            '2024-11-05',
-            'Propreté douteuse et accueil froid.'
-        )
+        insert into
+            avis (id_offre, id_membre_auteur, note, contexte, date_experience, commentaire)
+        values
+            ((table id_offre), id_membre ('j0hn'), 1, 'solo', '2024-11-05', 'Propreté douteuse et accueil froid.')
     )
 insert into
     _tags (id_offre, tag)

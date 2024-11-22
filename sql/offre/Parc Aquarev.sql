@@ -127,24 +127,17 @@ Camping et snack sur le site.',
             ((table id_offre), 6, '9:', '23:')
     ),
     s3 as (
-    insert into
-        avis (
-            id_offre,
-            id_membre_auteur,
-            note,
-            contexte,
-            date_experience,
-            commentaire
-        )
-    values
-        (
-            (table id_offre),
-            id_membre ('Snoozy'),
-            5,
-            'famille',
-            '2024-11-28',
-            'Personnel très accueillant.Parc adapté a tous public'
-        )
+        insert into
+            avis (id_offre, id_membre_auteur, note, contexte, date_experience, commentaire)
+        values
+            (
+                (table id_offre),
+                id_membre ('Snoozy'),
+                5,
+                'famille',
+                '2024-11-28',
+                'Personnel très accueillant.Parc adapté a tous public'
+            )
     )
 insert into
     _changement_etat (id_offre, fait_le)

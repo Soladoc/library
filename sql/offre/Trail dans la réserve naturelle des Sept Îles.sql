@@ -71,24 +71,10 @@ Réservez dès maintenant votre place et préparez-vous à vivre une expérience
             ((table id_offre), 'sport')
     ),
     s3 as (
-    insert into
-        avis (
-            id_offre,
-            id_membre_auteur,
-            note,
-            contexte,
-            date_experience,
-            commentaire
-        )
-    values
-        (
-            (table id_offre),
-            id_membre ('dieu_des_frites'),
-            5,
-            'amis',
-            '2024-08-31',
-            'Cadre magnifique.'
-        )
+        insert into
+            avis (id_offre, id_membre_auteur, note, contexte, date_experience, commentaire)
+        values
+            ((table id_offre), id_membre ('dieu_des_frites'), 5, 'amis', '2024-08-31', 'Cadre magnifique.')
     )
 insert into
     horaire_ouverture (id_offre, dow, heure_debut, heure_fin)

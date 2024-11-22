@@ -67,21 +67,12 @@ with
             )
     ),
     s3 as (
-        insert into tarif (
-            nom,
-            id_offre,
-            montant
-        )
-        values(
-            'adulte',
-            (table id_offre),
-            10
-        ),
-        (
-            'enfant',
-            (table id_offre),
-            5
-        )
+        insert into
+            tarif (nom, id_offre, montant)
+        values
+            ('adulte', (table id_offre), 10),
+            ('enfant', (table id_offre), 5)
+    )
 insert into
     periode_ouverture (id_offre, debut_le, fin_le)
 values

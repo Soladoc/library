@@ -42,24 +42,10 @@ with
             id
     ),
     s1 as (
-    insert into
-        avis (
-            id_offre,
-            id_membre_auteur,
-            note,
-            contexte,
-            date_experience,
-            commentaire
-        )
-    values
-        (
-            (table id_offre),
-            id_membre ('SamSepi0l'),
-            1,
-            'affaires',
-            '2024-07-25',
-            'Service désagréable et désorganisé.'
-        )
+        insert into
+            avis (id_offre, id_membre_auteur, note, contexte, date_experience, commentaire)
+        values
+            ((table id_offre), id_membre ('SamSepi0l'), 1, 'affaires', '2024-07-25', 'Service désagréable et désorganisé.')
     )
 insert into
     horaire_ouverture (id_offre, dow, heure_debut, heure_fin)

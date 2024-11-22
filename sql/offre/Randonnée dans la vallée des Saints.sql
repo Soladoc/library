@@ -74,36 +74,23 @@ Rejoignez-nous pour une journée mémorable où nature, histoire et gastronomie 
             ((table id_offre), 'plein air')
     ),
     s3 as (
-    insert into
-        avis (
-            id_offre,
-            id_membre_auteur,
-            note,
-            contexte,
-            date_experience,
-            commentaire
-        )
-    values
-        (
-            (table id_offre),
-            id_membre ('j0hn'),
-            4,
-            'couple',
-            '2024-01-19',
-            'Charmant mais le début de la randonée est peu  accessible.'
-        )
+        insert into
+            avis (id_offre, id_membre_auteur, note, contexte, date_experience, commentaire)
+        values
+            (
+                (table id_offre),
+                id_membre ('j0hn'),
+                4,
+                'couple',
+                '2024-01-19',
+                'Charmant mais le début de la randonée est peu  accessible.'
+            )
     ),
     s4 as (
-        insert into tarif (
-            nom,
-            id_offre,
-            montant
-        )
-        values(
-            'adulte',
-            (table id_offre),
-            0
-        )
+        insert into
+            tarif (nom, id_offre, montant)
+        values
+            ('adulte', (table id_offre), 0)
     )
 insert into
     horaire_ouverture (id_offre, dow, heure_debut, heure_fin)

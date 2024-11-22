@@ -83,41 +83,17 @@ N''attendez plus et venez vivre une aventure technologique unique à la Cité de
             ((table id_offre), 'technologie')
     ),
     s3 as (
-    insert into
-        avis (
-            id_offre,
-            id_membre_auteur,
-            note,
-            contexte,
-            date_experience,
-            commentaire
-        )
-    values
-        (
-            (table id_offre),
-            id_membre ('5cover'),
-            5,
-            'amis',
-            '2024-10-22',
-            'Superbe ambiance et repas délicieux.'
-        )
+        insert into
+            avis (id_offre, id_membre_auteur, note, contexte, date_experience, commentaire)
+        values
+            ((table id_offre), id_membre ('5cover'), 5, 'amis', '2024-10-22', 'Superbe ambiance et repas délicieux.')
     ),
     s4 as (
-        insert into tarif (
-            nom,
-            id_offre,
-            montant
-        )
-        values(
-            'adulte',
-            (table id_offre),
-            10
-        ),
-        (
-            'enfant',
-            (table id_offre),
-            5
-        )
+        insert into
+            tarif (nom, id_offre, montant)
+        values
+            ('adulte', (table id_offre), 10),
+            ('enfant', (table id_offre), 5)
     )
 insert into
     horaire_ouverture (id_offre, dow, heure_debut, heure_fin)
