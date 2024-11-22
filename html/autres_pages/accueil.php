@@ -32,8 +32,10 @@ require_once 'component/head.php';
                     $stmtOffres = query_offres_a_une();
                     
                     // Boucler sur les résultats pour afficher chaque offre
-                    while ($offre = $stmtOffres->fetch()) {
-                        put_card_offre($offre);
+                    if ($stmtOffres !== false) {
+                        while ($offre = $stmtOffres->fetch(PDO::FETCH_ASSOC)) {
+                            put_card_offre($offre);
+                        }
                     }
                 ?>
             </div>
