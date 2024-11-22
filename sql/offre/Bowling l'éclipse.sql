@@ -32,7 +32,7 @@ with
                 'https://www.tregor-bowling.com',
                 'Bowling L''éclipse',
                 'Un bowling, laser game et bar avec jeux',
-                'Toutes sortes de choses bla bla bla bla bla blabla bla blabla bla blabla bla blabla bla blabla bla blabla bla blabla bla blabla bla blabla bla blabla bla blabla bla blabla bla blabla bla blabla bla bla',
+                'Le bowling de Lannion est un lieu convivial et animé, idéal pour passer une soirée entre amis ou en famille. Avec ses pistes modernes, ses lumières colorées et son ambiance musicale, il offre un cadre parfait pour s’amuser tout en testant son adresse. Des snacks et boissons sont également disponibles pour agrémenter la partie.',
                 '0:20:',
                 'De nombreuses choses'
             )
