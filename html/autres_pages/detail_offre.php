@@ -157,7 +157,7 @@ $avis=query_avis()
                 <div class="review-summary">
                 <h4>Résumé des notes</h4>
                 <p>Nombre d'avis : <?=query_avis_count($args['id']) ?></p>
-                <p>Moyenne&nbsp;: <?php if ($offre['note_moyenne']!=null){echo round($offre['note_moyenne'],2);} else {echo 0;} ?>/5 ★</p>
+                <p>Moyenne&nbsp;: <?php if ($offre['note_moyenne']!=null){echo $offre['note_moyenne'];} else {echo 0;} ?>/5 ★</p>
                 <div class="rating-distribution">
                     <?php $avis = query_avis(id_offre: $offre['id']); ?>
                     <p>5 étoiles&nbsp;: <?=count(array_filter($avis, fn($a) => $a['note'] === 5)) ?> avis.</p>
