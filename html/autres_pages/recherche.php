@@ -60,10 +60,7 @@ require_once 'component/offre.php'
             <h2>Offres trouvées :</h2>
             <div class="offer-list">
                 <?php
-                    $stmtOffres = query_offres();
-                    while ($offre = $stmtOffres->fetch()) {
-                        put_card_offre($offre);
-                    }
+    
                 ?>
             </div>
         </section>
@@ -74,12 +71,14 @@ require_once 'component/offre.php'
         <?php
         $stmtOffres = query_offres();
         $offres = $stmtOffres->fetchAll(PDO::FETCH_ASSOC);
-        foreach ($offers as &$offre) {
+        foreach ($offres as &$offre) {
             $offre['formatted_address'] = format_adresse(notfalse(query_adresse($offre['id_adresse'])));
         }
         echo "const offersData = " . json_encode($offres) . ";";
         ?>
-        initializeOffers(offersData);
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeOffers(offersData);
+        });
     </script>
 </body>
 </html>
