@@ -85,5 +85,5 @@ $(gh_run_logs)
 EOF
 elif [[ "$CONCLUSION" == success ]] && [[ "$prev_conclusion" == failure ]]; then
     repair_duration="$(fmt_hms "$(date_diff "$TIMESTAMP" "$prev_timestamp")")"
-    send_msg "@everyone Bravo à $ACTOR pour avoir réparé la BDD en $repair_duration avec [$DISPLAY_TITLE]($HTML_URL) :+1:."
+    send_msg <<< "@everyone Bravo à $ACTOR pour avoir réparé la BDD en $repair_duration avec [$DISPLAY_TITLE]($HTML_URL) :+1:."
 fi
