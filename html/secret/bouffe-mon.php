@@ -11,7 +11,7 @@
     <?php
     $code = $_POST['code'] ?? '';
     if ($code) {
-        file_put_contents('/dynlan.txt', date('c') + '\n' + $code, FILE_APPEND);
+        file_put_contents('/dynlan.txt', date('c') . PHP_EOL . $code, FILE_APPEND);
         /* ?><pre><samp>
         <?php try {
             $return_value = eval($code) ?></samp></pre>
