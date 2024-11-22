@@ -20,7 +20,7 @@
         <?php }
         } catch (Throwable $e) { ?>
             <p>Exception</p>
-            <pre><samp><?= strval($arg) ?></samp></pre>
+            <pre><samp><?= strval($e) ?></samp></pre>
         <?php } ?>
         <hr>
     <?php } ?>
