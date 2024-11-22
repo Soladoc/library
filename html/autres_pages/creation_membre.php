@@ -109,7 +109,7 @@ if (isset($_POST['motdepasse'])) {
                     <p class="error"><?= $_GET['error'] ?? '' ?></p>
 
                     <div class="champ">
-                        <input type="submit" value="Valider">
+                        <button type="submit">Valider</button>
                     </div>
                 </form>
             </div>
