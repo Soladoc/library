@@ -71,7 +71,7 @@ function displayOffers() {
         offerElement.className = 'offer-card';
 
         // Format the date
-        const date = new Date(offer.fait_le);
+        const date = new Date(offer.creee_le);
         const formattedDate = date.toLocaleDateString('fr-FR', {
             year: 'numeric',
             month: '2-digit',
