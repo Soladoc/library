@@ -48,9 +48,9 @@ function sortOffers(criteria, ascending = true) {
         }
 
         if (ascending) {
-            return valueA > valueB ? 1 : -1;
-        } else {
             return valueA < valueB ? 1 : -1;
+        } else {
+            return valueA > valueB ? 1 : -1;
         }
     });
 
@@ -65,11 +65,9 @@ function initializeOffers(offersData) {
 function displayOffers() {
     const offerList = document.querySelector('.offer-list');
     offerList.innerHTML = ''; // Clear existing offers
-
     offers.forEach(offer => {
         const offerElement = document.createElement('div');
         offerElement.className = 'offer-card';
-
         // Format the date
         const date = new Date(offer.creee_le);
         const formattedDate = date.toLocaleDateString('fr-FR', {
@@ -77,7 +75,7 @@ function displayOffers() {
             month: '2-digit',
             year: 'numeric'
         });
-
+        
         offerElement.innerHTML = `
             <h3>${offer.titre}</h3>
             <img src="../images_utilisateur/${offer.id_image_principale}.jpg" 
@@ -106,12 +104,12 @@ function displayOffers() {
 }
 
 // Event listeners for sort buttons
-document.getElementById('sort-price-up').addEventListener('click', () => sortOffers('prix', true));
-document.getElementById('sort-price-down').addEventListener('click', () => sortOffers('prix', false));
-document.getElementById('sort-rating-up').addEventListener('click', () => sortOffers('note', true));
-document.getElementById('sort-rating-down').addEventListener('click', () => sortOffers('note', false));
-document.getElementById('sort-date-up').addEventListener('click', () => sortOffers('date', true));
-document.getElementById('sort-date-down').addEventListener('click', () => sortOffers('date', false));
+document.getElementById('sort-price-up').addEventListener('click', () => sortOffers('prix_min', true));
+document.getElementById('sort-price-down').addEventListener('click', () => sortOffers('prix_min', false));
+document.getElementById('sort-rating-up').addEventListener('click', () => sortOffers('note_moyenne', true));
+document.getElementById('sort-rating-down').addEventListener('click', () => sortOffers('note_moyenne', false));
+document.getElementById('sort-date-up').addEventListener('click', () => sortOffers('creee_le', true));
+document.getElementById('sort-date-down').addEventListener('click', () => sortOffers('creee_le', false));
 
 
 const sortButtons = document.querySelectorAll('.btn-sort');
