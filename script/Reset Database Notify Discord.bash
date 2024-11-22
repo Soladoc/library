@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-set -xeo pipefail
+set -vxeo pipefail
 
 readonly failure_jokes=(
     'on attend que @Raph repare ça'
@@ -57,15 +57,6 @@ gh_run_logs() {
         tail -n $log_lines # take last entries
 }
 
-mapfile -t prev < <(gh api "repos/$REPOSITORY/actions/runs" --jq "
-        .workflow_runs
-    | (.[] | select(.id == $RUN_ID) | .run_number) as \$run_number
-    | .[] | select(.workflow_id == $WORKFLOW_ID and .run_number == \$run_number - 1)
-    | .conclusion, .updated_at")
-readonly prev_conclusion=${prev[0]}
-readonly prev_timestamp=${prev[1]}
-
-set +x
 echo "ACTOR=$ACTOR"
 echo "CONCLUSION=$CONCLUSION"
 echo "DISCORD_WEBHOOK_URL=$DISCORD_WEBHOOK_URL"
@@ -75,9 +66,17 @@ echo "RUN_ID=$RUN_ID"
 echo "TIMESTAMP=$TIMESTAMP"
 echo "WORKFLOW_ID=$WORKFLOW_ID"
 echo "DISPLAY_TITLE=$DISPLAY_TITLE"
+
+mapfile -t prev < <(gh api "repos/$REPOSITORY/actions/runs" --jq "
+        .workflow_runs
+    | (.[] | select(.id == $RUN_ID) | .run_number) as \$run_number
+    | .[] | select(.workflow_id == $WORKFLOW_ID and .run_number == \$run_number - 1)
+    | .conclusion, .updated_at")
+readonly prev_conclusion=${prev[0]}
+readonly prev_timestamp=${prev[1]}
+
 echo "prev_conclusion=$prev_conclusion"
 echo "prev_timestamp=$prev_timestamp"
-set -x
 
 if [[ "$CONCLUSION" == failure ]] && [[ "$prev_conclusion" == success ]]; then
     send_msg <<EOF
