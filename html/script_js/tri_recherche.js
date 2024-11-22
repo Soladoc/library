@@ -68,7 +68,6 @@ function displayOffers() {
     offers.forEach(offer => {
         const offerElement = document.createElement('div');
         offerElement.className = 'offer-card';
-        offer.array.values();
         // Format the date
         const date = new Date(offer.creee_le);
         const formattedDate = date.toLocaleDateString('fr-FR', {
