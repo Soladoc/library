@@ -2,10 +2,12 @@
 
 set -xeuo pipefail
 
-# Call GitHub api with pagination, explicit JSON accept and API version headers.
-alias gh-api="gh api --paginate --header 'Accept: application/vnd.github+json' --header 'X-GitHub-Api-Version: 2022-11-28'"
-
 # Functions
+
+# Call GitHub api with pagination, explicit JSON accept and API version headers.
+gh-api() {
+    gh api --paginate --header 'Accept: application/vnd.github+json' --header 'X-GitHub-Api-Version: 2022-11-28' $@
+}
 
 # Picks a random element in an array.
 # $@: the array to choose from
