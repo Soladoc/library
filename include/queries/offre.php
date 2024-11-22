@@ -26,11 +26,11 @@ function query_offres(?int $id_professionnel = null, ?bool $en_ligne = null): PD
     return $stmt;
 }
 
-function query_offres_a_une(): array|false
+function query_offres_a_une(): PDOStatement
 {
     $stmt = notfalse(db_connect()->prepare('select * from offres where note_moyenne = 5'));
     notfalse($stmt->execute());
-    return $stmt->fetch();
+    return $stmt;
 }
 
 // Insertions
