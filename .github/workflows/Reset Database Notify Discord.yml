@@ -23,5 +23,5 @@ jobs:
           RUN_ID: "${{ github.event.workflow_run.id }}"
           TIMESTAMP: "${{ github.event.workflow_run.updated_at }}"
           WORKFLOW_ID: "${{ github.event.workflow_run.id }}"
-        run: '$GITHUB_WORKSPACE/script/Reset Database Notify Discord.bash'
+        run: '"$GITHUB_WORKSPACE/script/Reset Database Notify Discord.bash"'
 
