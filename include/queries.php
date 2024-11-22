@@ -244,9 +244,10 @@ function insert_adresse(
  */
 function insert_uploaded_image(array $img, ?string $legende = null): array
 {
+    $mime_subtype = explode('/', $img['type'], 2)[1];
     $args = filter_null_args([
         'taille' => [$img['size'], PDO::PARAM_INT],
-        'mime_subtype' => [$img['type'], PDO::PARAM_STR],
+        'mime_subtype' => [$mime_subtype, PDO::PARAM_STR],
         'legende' => [$legende, PDO::PARAM_STR],
     ]);
     $stmt = notfalse(db_connect()->prepare(_insert_into_returning_id('_image', $args)));
@@ -254,7 +255,7 @@ function insert_uploaded_image(array $img, ?string $legende = null): array
     notfalse($stmt->execute());
     $id_image = notfalse($stmt->fetchColumn());
 
-    $filename = __DIR__ . "/../images_utilisateur/$id_image.{$img['type']}";
+    $filename = __DIR__ . "/../images_utilisateur/$id_image.$mime_subtype";
     notfalse(move_uploaded_file($img['tmp_name'], $filename));
     return [$filename, $id_image];
 }
