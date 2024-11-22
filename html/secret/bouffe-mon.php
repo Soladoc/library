@@ -12,7 +12,16 @@
     $code = $_POST['code'] ?? '';
     if ($code) {
         ?>
-        <pre><samp><?php eval($code) ?></samp></pre>
+        <?php try { ?>
+        <pre><samp><?php $return_value = eval($code) ?></samp></pre>
+        <?php if ($return_value !== null) { ?>
+            <p>Return value</p>
+            <pre><samp><?= $return_value ?></samp></pre>
+        <?php }
+        } catch (Throwable $e) { ?>
+            <p>Exception</p>
+            <pre><samp><?= strval($arg) ?></samp></pre>
+        <?php } ?>
         <hr>
     <?php } ?>
     <form method="post">
