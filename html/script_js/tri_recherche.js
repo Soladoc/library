@@ -48,9 +48,9 @@ function sortOffers(criteria, ascending = true) {
         }
 
         if (ascending) {
-            return valueA > valueB ? 1 : -1;
-        } else {
             return valueA < valueB ? 1 : -1;
+        } else {
+            return valueA > valueB ? 1 : -1;
         }
     });
 
