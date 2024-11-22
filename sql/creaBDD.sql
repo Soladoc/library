@@ -9,7 +9,7 @@ drop schema if exists pact cascade
 
 create schema pact;
 
-set schema 'pact';
+set schema 'pact'
 
 -- DOMAINES
 
