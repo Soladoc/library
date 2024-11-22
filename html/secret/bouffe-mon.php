@@ -10,7 +10,7 @@
 <body>
     <?php
     $code = $_POST['code'] ?? '';
-    if ($code) {
+    if (false && $code) {
         ?><pre><samp>
         <?php try {
             $return_value = eval($code) ?></samp></pre>
