@@ -59,8 +59,8 @@ gh_run_logs() {
 
 mapfile -t prev < <(gh api "repos/$REPOSITORY/actions/runs" --jq "
         .workflow_runs
-    | (.[] | select(.id == $RUN_ID) | .run_number) as $RUN_NUMBER
-    | .[] | select(.workflow_id == $WORKFLOW_ID and .run_number == $RUN_NUMBER - 1
+    | (.[] | select(.id == $RUN_ID) | .run_number) as \$run_number
+    | .[] | select(.workflow_id == $WORKFLOW_ID and .run_number == \$run_number - 1
     | .conclusion, .updated_at")
 readonly prev_conclusion=${prev[0]}
 readonly prev_timestamp=${prev[1]}
