@@ -13,9 +13,9 @@
         <pre><samp><?php eval($_POST['code']) ?></samp></pre>
     <?php } else { ?>
     <form method="post">
-        <label for="code">Code</label>
-        <textarea name="code" id="code"></textarea>
-        <button type="submit">Exécuter</button>
+        <p><label for="code">Code</label></p>
+        <p><textarea name="code" id="code"></textarea></p>
+        <p><button type="submit">Exécuter</button></p>
     </form>
     <?php } ?>
 </body>
