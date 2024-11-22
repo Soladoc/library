@@ -912,3 +912,4 @@ a:not(:hover, :focus, :focus-within) {
 .btn-sort.active:hover {
     background-color: #0056b3;
 }
+

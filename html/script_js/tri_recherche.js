@@ -73,9 +73,9 @@ function displayOffers() {
         // Format the date
         const date = new Date(offer.creee_le);
         const formattedDate = date.toLocaleDateString('fr-FR', {
-            year: 'numeric',
+            day: '2-digit',
             month: '2-digit',
-            day: '2-digit'
+            year: 'numeric'
         });
 
         offerElement.innerHTML = `
@@ -96,7 +96,7 @@ function displayOffers() {
             <p>Description : ${offer.resume}</p>
             <p>Adresse : ${offer.formatted_address}</p>
             <p>À partir de : ${offer.min}€</p>
-            <p>Note : ${offer.note}/5</p>
+            <p>Note : ${offer.note_moyenne}/5</p>
             <p>Date : ${formattedDate}</p>
             <a href="/autres_pages/detail_offre.php?id=${offer.id}&pro=true">
                 <button class="btn-more-info">En savoir plus</button>
