@@ -67,10 +67,10 @@ readonly prev_timestamp=${prev[1]}
 
 if [[ "$CONCLUSION" == failure ]] && [[ "$prev_conclusion" == success ]]; then
     send_msg <<EOF
-@everyone $ACTOR a casse la bdd :skull:
+@everyone $ACTOR a casse la bdd avec [$DISPLAY_TITLE]($HTML_URL) :skull:
 $(array_pick_random "${failure_jokes[@]}")
 
-dernieres $log_lines lignes du [log]($HTML_URL) :
+dernieres $log_lines lignes du log :
 
 \`\`\`log
 $(gh_run_logs)
@@ -78,5 +78,5 @@ $(gh_run_logs)
 EOF
 elif [[ "$CONCLUSION" == success ]] && [[ "$prev_conclusion" == failure ]]; then
     repair_duration="$(fmt_hms "$(date_diff "$TIMESTAMP" "$prev_timestamp")")"
-    send_msg "@everyone Bravo à $ACTOR pour avoir réparé la BDD en $repair_duration :+1:."
+    send_msg "@everyone Bravo à $ACTOR pour avoir réparé la BDD en $repair_duration avec [$DISPLAY_TITLE]($HTML_URL) :+1:."
 fi
