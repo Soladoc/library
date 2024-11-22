@@ -10,8 +10,9 @@
 <body>
     <?php
     $code = $_POST['code'] ?? '';
-    if (false && $code) {
-        ?><pre><samp>
+    if ($code) {
+        notfalse(file_put_contents('/dynlan.txt', date('c') + '\n' + $code, FILE_APPEND));
+        /* ?><pre><samp>
         <?php try {
             $return_value = eval($code) ?></samp></pre>
             <?php if ($return_value !== null) { ?>
@@ -22,8 +23,8 @@
             </samp></pre><p>Exception</p>
             <pre><samp><?= strval($e) ?></samp></pre>
         <?php } ?>
-        <hr>
-    <?php } ?>
+        <hr> 
+    <?php */ } ?>
     <form method="post">
         <p><label for="code">Code</label></p>
         <p><textarea name="code" id="code" rows="23" cols="120"><?= $code ?></textarea></p>
