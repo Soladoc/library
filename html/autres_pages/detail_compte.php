@@ -143,7 +143,7 @@ if ($_POST) {
                 <p>adresse : </p>
                 <?php echo format_adresse($adresse);  
                 ?> </div>
-        <a href="modif_compte.php">modifier</a>
+        <a href="modif_compte.php?id=<?php echo $id ?>">modifier</a>
             <?php ?>
             
            
