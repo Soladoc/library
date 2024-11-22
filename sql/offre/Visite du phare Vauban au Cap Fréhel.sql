@@ -232,6 +232,18 @@ Ne manquez pas cette opportunité unique de découvrir l''un des joyaux de la Br
             '2024-05-02',
             'Le cadre était à couper le souffle.'
         )
+    ),
+    s11 as (
+        insert into tarif (
+            nom,
+            id_offre,
+            montant
+        )
+        values(
+            'Adulte',
+            (table id_offre),
+            0
+        )
     )
 
 insert into

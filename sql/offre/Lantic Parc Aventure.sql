@@ -60,6 +60,23 @@ with
             '2024-12-20',
             'Excellente expérience.'
         )
+    ),
+    s2 as (
+        insert into tarif (
+            nom,
+            id_offre,
+            montant
+        )
+        values(
+            'adulte',
+            (table id_offre),
+            50
+        ),
+        (
+            'enfant',
+            (table id_offre),
+            44.5
+        )
     )
 insert into
     _tags (id_offre, tag)

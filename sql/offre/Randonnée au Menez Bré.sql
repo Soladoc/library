@@ -88,7 +88,24 @@ Rejoignez-nous pour une aventure inoubliable au cœur de la Bretagne et découvr
             '2024-03-10',
             'Lieu trop bruyant.'
         )
-)
+    ),
+    s4 as (
+        insert into tarif (
+            nom,
+            id_offre,
+            montant
+        )
+        values(
+            'adulte',
+            (table id_offre),
+            5
+        ),
+        (
+            'enfant',
+            (table id_offre),
+            0
+        )
+    )
 insert into
     _changement_etat (id_offre, fait_le)
 values

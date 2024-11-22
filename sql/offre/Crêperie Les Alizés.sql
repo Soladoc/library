@@ -60,7 +60,23 @@ with
                 '2024-07-11', -- Date d'experience
                 'Employés peu poli avec la clientelle multiple ' -- Commentaire
             )
-    )
+    ),
+    s2 as (
+        insert into tarif (
+            nom,
+            id_offre,
+            montant
+        )
+        values(
+            'adulte',
+            (table id_offre),
+            25
+        ),
+        (
+            'enfant',
+            (table id_offre),
+            18
+        )
 insert into
     horaire_ouverture (id_offre, dow, heure_debut, heure_fin)
 values

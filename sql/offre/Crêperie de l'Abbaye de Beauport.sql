@@ -60,7 +60,23 @@ with
                 '2005-07-11', -- Date d'experience
                 'Super créperie même en été! nous y avons ai fété le 19 eme anniversaire de mon amis Benjamin et le staff nous a offert des crèpes au caramel démicieuses!' -- Commentaire
             )
-    )
+    ),
+    s2 as (
+        insert into tarif (
+            nom,
+            id_offre,
+            montant
+        )
+        values(
+            'adulte',
+            (table id_offre),
+            25
+        ),
+        (
+            'enfant',
+            (table id_offre),
+            18
+        )
 insert into
     horaire_ouverture (id_offre, dow, heure_debut, heure_fin)
 values

@@ -77,6 +77,23 @@ with
             '2024-06-15',
             'Karting bridés trop lents'
         )
+    ),
+    s2 as (
+        insert into tarif (
+            nom,
+            id_offre,
+            montant
+        )
+        values(
+            'adulte',
+            (table id_offre),
+            20
+        ),
+        (
+            'etudiant',
+            (table id_offre),
+            15
+        )
     )
 insert into
     _gallerie (id_offre, id_image)

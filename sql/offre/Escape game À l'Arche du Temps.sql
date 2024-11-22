@@ -72,6 +72,23 @@ De 3 à 6 joueurs, en famille, entre collègues ou entre amis, venez relever nos
             '2024-11-05',
             'Propreté douteuse et accueil froid.'
         )
+    ),
+    s2 as (
+        insert into tarif (
+            nom,
+            id_offre,
+            montant
+        )
+        values(
+            'adulte',
+            (table id_offre),
+            15
+        ),
+        (
+            'enfant',
+            (table id_offre),
+            10
+        )
     )
 insert into
     _tags (id_offre, tag)

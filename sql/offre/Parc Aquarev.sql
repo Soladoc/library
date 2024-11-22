@@ -145,7 +145,24 @@ Camping et snack sur le site.',
             '2024-11-28',
             'Personnel très accueillant.Parc adapté a tous public'
         )
-)
+    ),
+    s4 as (
+        insert into tarif (
+            nom,
+            id_offre,
+            montant
+        )
+        values(
+            'adulte',
+            (table id_offre),
+            40
+        ),
+        (
+            'famille',
+            (table id_offre),
+            30
+        )
+    )
 insert into
     _changement_etat (id_offre, fait_le)
 values

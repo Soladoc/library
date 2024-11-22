@@ -60,7 +60,29 @@ with
             '2024-07-25',
             'Service désagréable et désorganisé.'
         )
-)
+    ),
+    s2 as (
+        insert into tarif (
+            nom,
+            id_offre,
+            montant
+        )
+        values(
+            'Menu midi',
+            (table id_offre),
+            20
+        ),
+        (
+            'Menu soir',
+            (table id_offre),
+            25
+        ),
+        (
+            'Menu ouvrier',
+            (table id_offre),
+            10
+        )
+    )
 insert into
     horaire_ouverture (id_offre, dow, heure_debut, heure_fin)
 values

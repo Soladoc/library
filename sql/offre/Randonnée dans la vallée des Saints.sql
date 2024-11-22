@@ -92,7 +92,19 @@ Rejoignez-nous pour une journée mémorable où nature, histoire et gastronomie 
             '2024-01-19',
             'Charmant mais le début de la randonée est peu  accessible.'
         )
-)
+    ),
+    s4 as (
+        insert into tarif (
+            nom,
+            id_offre,
+            montant
+        )
+        values(
+            'adulte',
+            (table id_offre),
+            0
+        )
+    )
 insert into
     horaire_ouverture (id_offre, dow, heure_debut, heure_fin)
 values
