@@ -38,13 +38,11 @@ fmt_hms() {
 # Send a message to the Discord webhook.
 # $1: string: the message to send
 send_msg() {
-    jq -n --arg msg "$1" '{content: { message: $msg }}' |
-        curl --verbose \
-            --header "Accept: application/json" \
-            --header "Content-Type: application/json" \
-            --request POST \
-            --data @- \
-            "$DISCORD_WEBHOOK_URL"
+    #jq -nc --arg msg "$1" '{content: { message: $msg }}' |
+        curl --header "Accept: application/json" \
+             --header "Content-Type: application/json" \
+             --data '{"content":{"message":"aaaaaaaaaaaaaaaa"}}' \
+             "$DISCORD_WEBHOOK_URL"
 }
 
 # The last lines of the workflow run logs.
