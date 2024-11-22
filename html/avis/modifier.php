@@ -3,6 +3,7 @@ session_start();
 require_once 'auth.php';
 require_once 'component/head.php';
 require_once 'const.php';
+require_once 'db.php';
 
 exiger_connecte_membre();
 
