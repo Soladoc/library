@@ -41,7 +41,7 @@ send_msg() {
     jq -Rc '{content:.}' |
         curl --header "Accept: application/json" \
              --header "Content-Type: application/json" \
-             --data @- \
+             --data @- -i \
              "$DISCORD_WEBHOOK_URL"
 }
 
