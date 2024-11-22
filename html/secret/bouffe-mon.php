@@ -9,13 +9,15 @@
 
 <body>
     <?php
-    if ($_POST) { ?>
-        <pre><samp><?php eval($_POST['code']) ?></samp></pre>
+    $code = $_POST['code'] ?? '';
+    if ($code) {
+        ?>
+        <pre><samp><?php eval($code) ?></samp></pre>
         <hr>
     <?php } ?>
     <form method="post">
         <p><label for="code">Code</label></p>
-        <p><textarea name="code" id="code" rows="23" cols="120"></textarea></p>
+        <p><textarea name="code" id="code" rows="23" cols="120"><?= $code ?></textarea></p>
         <p><button type="submit">Exécuter</button></p>
     </form>
 </body>
