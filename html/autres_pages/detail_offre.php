@@ -78,27 +78,34 @@ $avis=query_avis()
     <main>
         <section class="offer-details">
             <div class="offer-main-photo">
-                <?php put_image($image_pricipale) ?>
-                 <div class="offer-photo-gallery">
-                    <?php
-                    foreach ($gallerie as $image) {
-                        put_image(query_image($image));
-                    }
-                    ?>
-                </div> 
+                <div class="carousel">
+                    <!-- Affichage de l'image principale -->
+                    <?php if ($image_pricipale): ?>
+                        <div class="carousel-slide active">
+                            <img src="<?= $image_pricipale ?>" alt="Image principale de l'offre" class="carousel-image">
+                        </div>
+                    <?php endif; ?>
+
+                    <!-- Affichage des images de la galerie -->
+                    <?php if (!empty($gallerie)): ?>
+                        <?php foreach ($gallerie as $image): ?>
+                            <div class="carousel-slide">
+                                <img src="<?= query_image($image) ?>" alt="Image de la galerie" class="carousel-image">
+                            </div>
+                        <?php endforeach; ?>
+                    <?php endif; ?>
+
+                    <!-- Boutons de contrôle du carrousel -->
+                    <button class="carousel-control prev">←</button>
+                    <button class="carousel-control next">→</button>
+                </div>
             </div>
 
             <div class="offer-info">
-                <h2><?= $titre ?></h2>
-                <p class="description"><?= $description ?></p>
-                <div class="offer-status">
-                    <!-- <p class="price">Prix&nbsp;: 13-39€</p>
-                    <p class="status">Statut&nbsp;: <span class="open">Ouvert</span></p>
-                    <p class="rating">Note&nbsp;: ★★★★☆ (4.7/5, 256 avis)</p>
-                    <p class="hours">Horaires&nbsp;: 9h30 - 18h30</p>
-                    <button class="btn-reserve">Réserver</button> -->
-                </div>
+                <h2><?= htmlspecialchars($titre) ?></h2>
+                <p class="description"><?= nl2br(htmlspecialchars($description)) ?></p>
             </div>
+
         </section>
 
         <!-- Location -->
@@ -157,7 +164,7 @@ $avis=query_avis()
                 <div class="review-summary">
                 <h4>Résumé des notes</h4>
                 <p>Nombre d'avis : <?=query_avis_count($args['id']) ?></p>
-                <p>Moyenne&nbsp;: <?php if ($offre['note_moyenne']!=null){echo $offre['note_moyenne'];} else {echo 0;} ?>/5 ★</p>
+                <p>Moyenne&nbsp;: <?php if ($offre['note_moyenne']!=null){echo round($offre['note_moyenne'],2);} else {echo 0;} ?>/5 ★</p>
                 <div class="rating-distribution">
                     <?php $avis = query_avis(id_offre: $offre['id']); ?>
                     <p>5 étoiles&nbsp;: <?=count(array_filter($avis, fn($a) => $a['note'] === 5)) ?> avis.</p>
