@@ -59,9 +59,7 @@ require_once 'component/offre.php'
         <section class="highlight-offers">
             <h2>Offres trouvées :</h2>
             <div class="offer-list">
-                <?php
-    
-                ?>
+                
             </div>
         </section>
     </main>
