@@ -3,30 +3,23 @@ on:
   workflow_dispatch:
   push:
     branches:
-      - 'main'
+      - main
     paths:
+      - '.github/workflows/Reset Database.yml'
       - '**.sql'
-      - '**/Reset Database.yml'
+defaults:
+  run:
+    shell: bash
 jobs:
   reset_db:
     runs-on: ubuntu-latest
     steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
       - name: Reset Database
         run: |
           mkdir -p ~/.ssh
           echo '${{ secrets.ARTIFACT_SSH_KEY }}' > ~/.ssh/id_rsa
           chmod 600 ~/.ssh/id_rsa
           ssh-keyscan -p 22 '${{ secrets.ARTIFACT_HOST }}' >> ~/.ssh/known_hosts
-          ssh 'debian@${{ secrets.ARTIFACT_HOST }}' << 'EOF'
-              set -xeu
-              cd /docker/sae/data
-              sudo git fetch --all
-              sudo git reset --hard origin/main
-              cd sql
-              sudo docker cp . postgresdb:
-              fargs=()
-              for f in creaBDD.sql fonctions.sql vuesBDD.sql triggers.util.sql triggers/*.sql bigdata.sql data.sql images.sql offre/*.sql; do
-                fargs+=(-f "$f")
-              done
-              sudo docker exec -w / postgresdb psql -v ON_ERROR_STOP=on -U sae -d postgres --single-transaction "${fargs[@]}"
-          EOF
+          ssh 'debian@${{ secrets.ARTIFACT_HOST }}' bash < "$GITHUB_WORKSPACE/Reset Database.bash"

@@ -1,47 +1,27 @@
 name: Reset Database Notify Discord
-
 on:
   workflow_run:
     workflows: [Reset Database]
     types:
       - completed
-
+defaults:
+  run:
+    shell: bash
 jobs:
   notify:
     runs-on: ubuntu-latest
     steps:
-      - name: Get previous workflow run status
-        id: get_previous_status
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          set -xeuo pipefail
-          echo "BASH_VERSION=$BASH_VERSION"
-          mapfile -t PREV < <(gh api 'repos/${{ github.repository }}/actions/runs' --jq \
-            '.workflow_runs
-            | (.[] | select(.id == ${{ github.event.workflow_run.id }}) | .run_number) as $run_number
-            | .[] | select(.workflow_id == ${{ github.event.workflow_run.workflow_id }} and .run_number == $run_number - 1)
-            | .created_at, .updated_at, .conclusion')
-          {
-            echo "PREV_STARTED_AT=${PREV[0]}"
-            echo "PREV_ENDED_AT=${PREV[1]}"
-            echo "PREV_CONCLUSION=${PREV[2]}"
-          } >>"$GITHUB_ENV"
-
+      - name: Checkout code
+        uses: actions/checkout@v4
       - name: Send Discord notification
         env:
-          DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
+          ACTOR: "[${{ github.event.workflow_run.actor.login }}](${{ github.event.workflow_run.actor.html_url }})"
           CONCLUSION: "${{ github.event.workflow_run.conclusion }}"
-        run: |
-          set -xeuo pipefail
-          echo "PREV_STARTED_AT=$PREV_STARTED_AT"
-          echo "PREV_ENDED_AT=$PREV_ENDED_AT"
-          echo "PREV_CONCLUSION=$PREV_CONCLUSION"
-          echo "CONCLUSION=$CONCLUSION"
-          #if [ "$CURRENT_STATUS" == "success" ] && [ "$PREVIOUS_STATUS" == "failure" ]; then
-          #  MESSAGE="DB is up and running!"
-          #  curl -H "Content-Type: application/json" -X POST -d "{\"content\": \"$MESSAGE\"}" $DISCORD_WEBHOOK_URL
-          #elif [ "$CURRENT_STATUS" == "failure" ] && [ "$PREVIOUS_STATUS" == "success" ]; then
-          #  MESSAGE="DB is down!"
-          #  curl -H "Content-Type: application/json" -X POST -d "{\"content\": \"$MESSAGE\"}" $DISCORD_WEBHOOK_URL
-          #fi
+          DISCORD_WEBHOOK_URL: "${{ secrets.DISCORD_WEBHOOK_URL }}"
+          HTML_URL: "${{ github.event.workflow_run.html_url }}"
+          REPOSITORY: "${{ github.repository }}"
+          RUN_ID: "${{ github.event.workflow_run.id }}"
+          TIMESTAMP: "${{ github.event.workflow_run.updated_at }}"
+          WORKFLOW_ID: "${{ github.event.workflow_run.id }}"
+        run: "$GITHUB_WORKSPACE/Reset Database Notify Discord.bash"
+
