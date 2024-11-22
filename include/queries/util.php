@@ -39,5 +39,7 @@ function _where_clause(string $operator, array $clauses): string
 function _insert_into_returning_id(string $table, array $args): string
 {
     assert(!empty($args));
-    return "insert into \"$table\" (" . implode(',', array_keys($args)) . ') values (?' . str_repeat(',?', count($args) - 1) . ') returning id';
+    $column_names = implode(',', array_keys($args));
+    $arg_names = implode(',', array_map(fn($attr) => ":$attr", array_keys($args)));
+    return "insert into \"$table\" ($column_names) values ($arg_names) returning id";
 }

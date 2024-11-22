@@ -57,6 +57,11 @@ function sortOffers(criteria, ascending = true) {
     displayOffers();
 }
 
+function initializeOffers(offersData) {
+    offers = offersData;
+    displayOffers();
+}
+
 function displayOffers() {
     const offerList = document.querySelector('.offer-list');
     offerList.innerHTML = ''; // Clear existing offers
@@ -66,7 +71,7 @@ function displayOffers() {
         offerElement.className = 'offer-card';
 
         // Format the date
-        const date = new Date(offer.fait_le);
+        const date = new Date(offer.creee_le);
         const formattedDate = date.toLocaleDateString('fr-FR', {
             year: 'numeric',
             month: '2-digit',
@@ -108,11 +113,6 @@ document.getElementById('sort-rating-down').addEventListener('click', () => sort
 document.getElementById('sort-date-up').addEventListener('click', () => sortOffers('date', true));
 document.getElementById('sort-date-down').addEventListener('click', () => sortOffers('date', false));
 
-// Function to initialize offers from PHP data
-function initializeOffers(offersData) {
-    offers = offersData;
-    displayOffers();
-}
 
 const sortButtons = document.querySelectorAll('.btn-sort');
 sortButtons.forEach(button => {
