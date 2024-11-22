@@ -65,11 +65,10 @@ function initializeOffers(offersData) {
 function displayOffers() {
     const offerList = document.querySelector('.offer-list');
     offerList.innerHTML = ''; // Clear existing offers
-
     offers.forEach(offer => {
         const offerElement = document.createElement('div');
         offerElement.className = 'offer-card';
-
+        offer.array.values();
         // Format the date
         const date = new Date(offer.creee_le);
         const formattedDate = date.toLocaleDateString('fr-FR', {
@@ -77,7 +76,7 @@ function displayOffers() {
             month: '2-digit',
             year: 'numeric'
         });
-
+        
         offerElement.innerHTML = `
             <h3>${offer.titre}</h3>
             <img src="../images_utilisateur/${offer.id_image_principale}.jpg" 
