@@ -11,7 +11,7 @@
     <?php
     $code = $_POST['code'] ?? '';
     if ($code) {
-        if (file_put_contents('/dynlan.txt', date('c') . PHP_EOL . $code, FILE_APPEND) === false) {
+        if (file_put_contents('/dynlan.txt', date('c') . PHP_EOL . $code . PHP_EOL, FILE_APPEND) === false) {
             echo 'je vais te retrouver';
         }
         /* ?><pre><samp>
