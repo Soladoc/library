@@ -64,23 +64,6 @@ Bienvenue dans notre parc aventure si vous êtes dans les Côtes-d''Armor notamm
                 '2024-11-15', -- Date d'experience
                 'Ouais bof... J''ai pas trop aimé perso' -- Commentaire
             )
-    ),
-    s2 as (
-        insert into tarif (
-            nom,
-            id_offre,
-            montant
-        )
-        values(
-            'adulte',
-            (table id_offre),
-            10
-        ),
-        (
-            'enfant',
-            (table id_offre),
-            5
-        )
     )
 insert into
     _tags (id_offre, tag)

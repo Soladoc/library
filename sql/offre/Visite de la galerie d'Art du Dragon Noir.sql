@@ -82,23 +82,6 @@ La visite de la Galerie d''Art du Dragon Noir est bien plus qu''une simple expos
             '2024-09-18',
             'Nous aurion aprécié une visite guidé'
         )
-    ),
-    s4 as (
-        insert into tarif (
-            nom,
-            id_offre,
-            montant
-        )
-        values(
-            'Adulte',
-            (table id_offre),
-            15
-        ),
-        values(
-            'Enfant',
-            (table id_offre),
-            8
-        )
     )
 insert into
     horaire_ouverture (id_offre, dow, heure_debut, heure_fin)

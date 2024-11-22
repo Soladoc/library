@@ -85,23 +85,7 @@ with
                 '2024-11-21', -- Date d'experience
                 'Laser games super sympa simplement dommage que le laser game ne sois pas détaillé sur le site' -- Commentaire
             )
-    ),
-    s4 as (
-        insert into tarif (
-            nom,
-            id_offre,
-            montant
-        )
-        values(
-            'adulte',
-            (table id_offre),
-            10
-        ),
-        (
-            'enfant',
-            (table id_offre),
-            5.2
-        )
+    )
 insert into
     _gallerie (id_offre, id_image)
 values

@@ -99,23 +99,7 @@ Nous avons hâte de vous accueillir à bord pour une journée inoubliable sur la
             '2024-08-14',
             'Service correct mais attente longue.'
         )
-    ),
-    s2 as (
-        insert into tarif (
-            nom,
-            id_offre,
-            montant
-        )
-        values(
-            'adulte',
-            (table id_offre),
-            5
-        ),
-        (
-            'enfant',
-            (table id_offre),
-            0
-        )
+    )
 insert into
     horaire_ouverture (id_offre, dow, heure_debut, heure_fin)
 values
