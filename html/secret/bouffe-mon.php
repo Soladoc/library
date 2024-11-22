@@ -11,15 +11,15 @@
     <?php
     $code = $_POST['code'] ?? '';
     if ($code) {
-        ?>
-        <?php try { ?>
-        <pre><samp><?php $return_value = eval($code) ?></samp></pre>
-        <?php if ($return_value !== null) { ?>
-            <p>Return value</p>
-            <pre><samp><?= $return_value ?></samp></pre>
-        <?php }
+        ?><pre><samp>
+        <?php try {
+            $return_value = eval($code) ?></samp></pre>
+            <?php if ($return_value !== null) { ?>
+                <p>Return value</p>
+                <pre><samp><?= $return_value ?></samp></pre>
+            <?php }
         } catch (Throwable $e) { ?>
-            <p>Exception</p>
+            </samp></pre><p>Exception</p>
             <pre><samp><?= strval($e) ?></samp></pre>
         <?php } ?>
         <hr>
