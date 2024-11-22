@@ -246,7 +246,7 @@ function insert_uploaded_image(array $img, ?string $legende = null): array
 {
     $args = filter_null_args([
         'taille' => [$img['size'], PDO::PARAM_INT],
-        'mime_type' => [$img['type'], PDO::PARAM_STR],
+        'mime_subtype' => [$img['type'], PDO::PARAM_STR],
         'legende' => [$legende, PDO::PARAM_STR],
     ]);
     $stmt = notfalse(db_connect()->prepare(_insert_into_returning_id('_image', $args)));
