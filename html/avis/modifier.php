@@ -33,7 +33,7 @@ if (isset($_POST['date'])) {
 
         $success_message = 'Avis modifié avec succès !';
         $id = $avis['id_offre'];
-        header("Location: ../detail_offre.php?id=$id");
+        header("Location: ../autres_pages/detail_offre.php?id=$id");
         exit;
     }
 
