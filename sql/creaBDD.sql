@@ -5,11 +5,11 @@
 -- Info:
 -- Ajouter "not null" aux attributs clés étrangères ne faisant pas partie de la clé primaire. La contrainte "references" n'implique pas "not null". La contrainte "primary key" implique "not null unique"
 
-drop schema if exists pact cascade
+drop schema if exists pact cascade;
 
 create schema pact;
 
-set schema 'pact'
+set schema 'pact';
 
 -- DOMAINES
 
