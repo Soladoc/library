@@ -49,11 +49,11 @@ else {
 
 
 if ($_POST) {
-    $new_mdp = getarg($_POST, 'new_mdp');
-    $confirmation_mdp = getarg($_POST, 'confirmation_mdp');
-    $old_mdp = getarg($_POST, 'old_mdp');
+    $new_mdp = getarg($_POST, 'new_mdp',null, false);
+    $confirmation_mdp = getarg($_POST, 'confirmation_mdp',null, false);
+    $old_mdp = getarg($_POST, 'old_mdp',null, false);
 
-    if (password_verify($old_mdp, $mdp_hash)) {
+    if ($new_mdp  && password_verify($old_mdp, $mdp_hash)) {
         if ($confirmation_mdp === $new_mdp ) {
             uptate_mdp($id,$new_mdp);
         }
@@ -66,7 +66,6 @@ if ($_POST) {
         header('Location: /autres_pages/connexion.php?error_mdp=' . urlencode(" Mot de passe incorrect."));
 
     }
-    
 }
 
 ?>
