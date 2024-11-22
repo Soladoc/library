@@ -177,7 +177,7 @@ function query_uptate_pseudo(int $id_compte, $new_pseudo): void
 function query_uptate_denomination(int $id_compte, $new_denomination): void
 {
     $stmt = notfalse(db_connect()->prepare('UPDATE professionnel SET denomination = ? WHERE id = ?;'));
-    bind_values($stmt, [$new_denomination, $id_compte]);
+    bind_values($stmt, [1 => [$new_denomination, PDO::PARAM_INT], 2 => [$id_compte, PDO::PARAM_STR]]);
     notfalse($stmt->execute());
 }
 
@@ -255,7 +255,7 @@ function insert_uploaded_image(array $img, ?string $legende = null): array
     notfalse($stmt->execute());
     $id_image = notfalse($stmt->fetchColumn());
 
-    $filename = __DIR__ . "/../html/images_utilisateur/$id_image.$mime_subtype";
+    $filename = __DIR__ . "/../images_utilisateur/$id_image.$mime_subtype";
     notfalse(move_uploaded_file($img['tmp_name'], $filename));
     return [$filename, $id_image];
 }

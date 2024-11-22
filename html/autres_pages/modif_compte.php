@@ -50,7 +50,7 @@ else {
 
 if ($_POST) {
     # modif pseudo ------------------------------------------------------------------------------------------------------------------
-    $new_pseudo = getarg($_POST, 'new_pseudo',null, false);
+    $new_pseudo = getarg($_POST, 'new_pseudo',null, required: false);
     if ($new_pseudo) {
         query_uptate_pseudo($id,$new_pseudo);
     }
@@ -58,7 +58,7 @@ if ($_POST) {
     # modif denomination ------------------------------------------------------------------------------------------------------------------
     $new_denomination = getarg($_POST, 'new_denomination',null, false);
     if ($new_denomination) {
-        query_uptate_denomination($id,$new_denomination);
+        query_uptate_denomination(id_compte: $id,$new_denomination);
     }
 
     # modif siren ------------------------------------------------------------------------------------------------------------------
@@ -74,7 +74,7 @@ if ($_POST) {
     }
 
     # modif Prenom ------------------------------------------------------------------------------------------------------------------
-    $new_Prenom = getarg($_POST, 'new_Prenom',null, false);
+    $new_Prenom = getarg($_POST, 'new_Prenom',null, required: false);
     if ($new_Prenom) {
         query_uptate_Prenom($id,$new_Prenom);
     }
