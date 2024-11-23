@@ -253,7 +253,7 @@ function insert_uploaded_image(array $img, ?string $legende = null): array
     notfalse($stmt->execute());
     $id_image = notfalse($stmt->fetchColumn());
 
-    $filename = __DIR__ . "/../images_utilisateur/$id_image.$mime_subtype";
+    $filename = __DIR__ . "/../html/images_utilisateur/$id_image.$mime_subtype";
     notfalse(move_uploaded_file($img['tmp_name'], $filename));
     return [$filename, $id_image];
 }
