@@ -258,7 +258,7 @@ create table _avis (
     constraint avis_uniq_auteur_offre unique (id_membre_auteur, id_offre)
 );
 comment on column _avis.id_membre_auteur is 'Devient null (anonyme) quand l''auteur est supprimé';
-comment on constraint avis_uniq_auteur_offre on _avis is 'Un seul avis par couple (membre_auteur, offre)';
+comment on constraint avis_uniq_auteur_offre on _avis is 'Un seul avis par couple (membre_auteur, offre). Ceci est une clé candidate et non pas une clé primaire car id_membre_auteur peut être null';
 
 create table _avis_resto (
     id int

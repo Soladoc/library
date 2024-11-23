@@ -34,8 +34,8 @@ function query_image(int $id_image): array
 }
 
 /**
- * Récupère les images de la gallerie d'une offre
- * @return array<int> Un tableau d'id d'images. Utilise query_image pour retrouver les infos sur l'image.
+ * Récupère les images de la gallerie d'une offre.
+ * @return array<int> Un tableau d'ID d'images. Utiliser `query_image` pour retrouver les infos sur l'image.
  */
 function query_gallerie(int $id_offre): array
 {
@@ -137,27 +137,27 @@ function query_uptate_mdp(int $id_compte, $new_mdp): void
     notfalse($stmt->execute());
 }
 
-function query_uptate_nom(int $id_compte, $new_nom): void
+function query_update_Nom(int $id_compte, $new_nom): void
 {
     $stmt = notfalse(db_connect()->prepare('UPDATE _compte SET nom = ? WHERE id = ?;'));
     bind_values($stmt, [1 => [$new_nom, PDO::PARAM_STR], 2 => [$id_compte, PDO::PARAM_INT]]);
     notfalse($stmt->execute());
 }
-function query_uptate_email(int $id_compte, $new_email): void
+function query_update_email(int $id_compte, $new_email): void
 {
     $stmt = notfalse(db_connect()->prepare('UPDATE _compte SET email = ? WHERE id = ?;'));
     bind_values($stmt, [1 => [$new_email, PDO::PARAM_STR], 2 => [$id_compte, PDO::PARAM_INT]]);
     notfalse($stmt->execute());
 }
 
-function query_uptate_prenom(int $id_compte, $new_prenom): void
+function query_update_prenom(int $id_compte, $new_prenom): void
 {
     $stmt = notfalse(db_connect()->prepare('UPDATE _compte SET prenom = ? WHERE id = ?;'));
     bind_values($stmt, [1 => [$new_prenom, PDO::PARAM_STR], 2 => [$id_compte, PDO::PARAM_INT]]);
     notfalse($stmt->execute());
 }
 
-function query_uptate_telephone(int $id_compte, $new_telephone): void
+function query_update_telephone(int $id_compte, $new_telephone): void
 {
     $stmt = notfalse(db_connect()->prepare('UPDATE _compte SET telephone = ? WHERE id = ?;'));
     bind_values($stmt, [1 => [$new_telephone, PDO::PARAM_STR], 2 => [$id_compte, PDO::PARAM_INT]]);
@@ -189,7 +189,7 @@ function query_update_siren(int $id_compte, $new_siren): void
 // Insertions---------------------------------------------------------------------------------------------------------
 
 /**
- * Insère une nouvelle  adresse dans la BDD et retourne son ID.
+ * Insère une nouvelle adresse dans la BDD et retourne son ID.
  *
  * @param int $code_commune
  * @param int $numero_departement
@@ -234,11 +234,11 @@ function insert_adresse(
 }
 
 /**
- * Inserts an image into the database and returns the filename and ID of the inserted image.
+ * Insère une image dans la BDD et retourne le tuple du nom de fichier et de l'ID de l'image insérée .
  *
- * @param array $img An associative array containing the image data, with keys 'size', 'type' and 'tmp_name'.
- * @param ?string $legende The image legend (optional).
- * @return array An array containing the filename and the ID of the inserted image.
+ * @param array $img Un tableau associatif contenant les attributs de l'image, avec les clés `'size'`, `'type'` et `'tmp_name'`.
+ * @param ?string $legende La légende de l'image (optionnel).
+ * @return array Une tableau indexé numériquement contenant le nom de fichier et l'ID de l'image insérée.
  */
 function insert_uploaded_image(array $img, ?string $legende = null): array
 {
@@ -259,10 +259,9 @@ function insert_uploaded_image(array $img, ?string $legende = null): array
 }
 
 /**
- * Checks if a given private professional ID exists in the database.
- *
- * @param int $id_pro_prive The ID of the private professional to check.
- * @return bool True if the private professional ID exists, false otherwise.
+ * Détermine si un professionnel privé existe dans la BDD.
+ * @param int $id_pro_prive L'ID du professionnel privé.
+ * @return bool `true` si un professionnel privé d'id $id_pro_prive existe, `false` sinon.
  */
 function exists_pro_prive(int $id_pro_prive): bool {
     $stmt = notfalse(db_connect()->prepare('select ? in (select id from pro_prive)'));

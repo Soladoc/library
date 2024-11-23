@@ -55,7 +55,7 @@ if ($_POST) {
 
     if (password_verify($mdp_hash)) {
         if ($confirmation_mdp === $new_mdp ) {
-            uptate_mdp($id,$new_mdp);
+            update_mdp($id,$new_mdp);
         }
         else{
             header('Location: /autres_pages/connexion.php?error_confirmation=' . urlencode("Mot de passe de confirmation different."));

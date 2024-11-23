@@ -1,11 +1,30 @@
 <?php
 
 /**
- * Renders the HTML head section with the provided title, stylesheets, and scripts.
- *
- * @param string $title The title to be displayed in the page's <title> tag.
- * @param string[] $stylesheets An optional array of stylesheet URLs or file paths to include. Keys are irrelevant, values are link `href`.
- * @param array<string, string> $scripts An optional array of script URLs or file paths to include. Keys are script `src`, values are script attributes.
+ * Affiche l'élement `<head>` HTML avec le titre, feuilles de style CSS et les scripts JS fournis.
+ * @param string $title Le titre du document.
+ * @param array $stylesheets Un liste de chemins relatifs dans au dossier `/style` des feuilles de style CSS à inclure.
+ * @param array $scripts Un tableau associatif mappant des chemins relatifs au dossier `/script_js` des script JS à inclure vers leurs paramètres qui correspond au reste de l'attribut.
+ * 
+ * Note: la feuille de stile `style.css` et le script `base.js` sont inclus dans tous les documents.
+ * 
+ * @example location description
+ * ```php
+ * put_head("Création d'une offre",
+ *  ['creation_offre.css'],
+ *  ['module/creation_offre.js' => 'defer type="module"'])
+ * ```
+ * Produit l'HTML suivant (simplifié)
+ * ```html
+ * <head>
+ *     <title>Création d'une offre</title>
+ *     <link rel="stylesheet" href="/style/style.css">
+ *     <link rel="stylesheet" href="/style/creation_offre.css">
+ *     <script defer src="/script_js/base.js">
+ *     <script defer type="module" src="/script_js/module/creation_offre.js">
+ * </head>
+ * ``` 
+ * @return void
  */
 function put_head(string $title, array $stylesheets = [], array $scripts = [])
 {

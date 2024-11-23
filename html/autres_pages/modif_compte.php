@@ -5,12 +5,6 @@ require_once 'component/head.php';
 require_once 'component/offre.php';
 require_once 'component/inputs.php';
 
-ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
-error_reporting(E_ALL);
-
-
-
 $args = [
     'id' => getarg($_GET, 'id', arg_filter(FILTER_VALIDATE_INT))
 ];
@@ -62,37 +56,37 @@ if ($_POST) {
     # modif denomination ------------------------------------------------------------------------------------------------------------------
     $new_denomination = getarg($_POST, 'new_denomination',null, false);
     if ($new_denomination) {
-        query_uptate_denomination(id_compte: $id,$new_denomination);
+        query_uptate_denomination($id,$new_denomination);
     }
 
     # modif siren ------------------------------------------------------------------------------------------------------------------
     $new_siren = getarg($_POST, 'new_siren',null, false);
     if ($new_siren) {
-        query_uptate_siren($id,$new_siren);
+        query_update_siren($id,$new_siren);
     }
 
     # modif Nom ------------------------------------------------------------------------------------------------------------------
     $new_Nom = getarg($_POST, 'new_Nom',null, false);
     if ($new_Nom) {
-        query_uptate_Nom($id,$new_Nom);
+        query_update_Nom($id,$new_Nom);
     }
 
     # modif Prenom ------------------------------------------------------------------------------------------------------------------
     $new_Prenom = getarg($_POST, 'new_Prenom',null, required: false);
     if ($new_Prenom) {
-        query_uptate_Prenom($id,$new_Prenom);
+        query_update_prenom($id,$new_Prenom);
     }
 
     # modif Email ------------------------------------------------------------------------------------------------------------------
     $new_Email = getarg($_POST, 'new_Email',null, false);
     if ($new_Email) {
-        query_uptate_Email($id,$new_Email);
+        query_update_email($id,$new_Email);
     }
 
     # modif telephone ------------------------------------------------------------------------------------------------------------------
     $new_telephone = getarg($_POST, 'new_telephone',null, false);
     if ($new_telephone) {
-        query_uptate_telephone($id,$new_telephone);
+        query_update_telephone($id,$new_telephone);
     }
 
     
@@ -107,7 +101,7 @@ if ($_POST) {
 
     if ($new_mdp  && password_verify($old_mdp, $mdp_hash)) {
         if ($confirmation_mdp === $new_mdp ) {
-            uptate_mdp($id,$new_mdp);
+            update_mdp($id,$new_mdp);
         }
         else{
             header('Location: /autres_pages/connexion.php?error_confirmation=' . urlencode("Mot de passe de confirmation different."));

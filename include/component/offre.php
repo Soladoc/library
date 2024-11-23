@@ -3,15 +3,20 @@
 require_once 'queries.php';
 require_once 'util.php';
 
+/**
+ * Affiche le composant d'image utilisateur.
+ * @param array $image L'image à afficher (ligne issue la BDD, voir `query_image`)
+ * @return void
+ */
 function put_image(array $image)
 {
 ?><img src="<?= "/images_utilisateur/{$image['id']}.{$image['mime_subtype']}" ?>" alt="<?= $image['legende'] ?: "Image de l'offre" ?>" title="<?= $image['legende'] ?>"><?php
 }
 
 /**
- * Puts an offer card.
- *
- * @param array<string, mixed> $offre row in the offers view.
+ * Affiche le composant de carte d'offfre pour professionnel
+ * @param array<string, mixed> $offre L'offre à afficher (ligne issue la BDD, foir `query_offre`)
+ * @return void
  */
 function put_card_offre_pro(array $offre)
 {
@@ -34,6 +39,11 @@ function put_card_offre_pro(array $offre)
 <?php
 }
 
+/**
+ * Affiche le composant de carte d'offfre pour membre ou visiteur.
+ * @param array<string, mixed> $offre L'offre à afficher (ligne issue la BDD, foir `query_offre`)
+ * @return void
+ */
 function put_card_offre(array $offre)
 {
 ?>
@@ -48,18 +58,4 @@ function put_card_offre(array $offre)
     </a>
 </div>
 <?php
-}
-
-function format_adresse(array $adresse)
-{
-    // Concaténer les informations pour former une adresse complète
-
-    return elvis($adresse['precision_ext'], ', ')
-        . elvis($adresse['precision_int'], ', ')
-        . elvis($adresse['numero_voie'], ' ')
-        . elvis($adresse['complement_numero'], ' ')
-        . elvis($adresse['nom_voie'], ', ')
-        . elvis($adresse['localite'], ', ')
-        . elvis(query_commune($adresse['code_commune'], $adresse['numero_departement'])['nom'], ', ')
-        . query_codes_postaux($adresse['code_commune'], $adresse['numero_departement'])[0];
 }
