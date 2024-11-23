@@ -11,7 +11,7 @@ comment on function rmod is
 'Retourne le modulo de deux entiers.
 @param x La première opérande
 @param y La seconde opérande
-@return x % y, mais du signe de @p y au lieu de l''opérateur % ou la fonction mod, qui returnent x mod y du signe de x.';
+@return @p x % @p y, mais du signe de @p y au lieu de l''opérateur % ou la fonction mod, qui returnent @p x mod @p y du signe de @p x.';
 
 -- Membre
 
@@ -20,10 +20,10 @@ create function id_membre(p_pseudo pseudonyme) returns int as $$
 $$ language sql;
 comment on function id_membre (pseudonyme) is
 'Retourne l''ID d''un membre à partir de son pseudo.
-@param pseudo le pseudo du membre
-@returns L''ID du membre, ou NULL si il n''existe pas de membre ayant le pseudo donné.
+@param p_pseudo le pseudo du membre
+@returns L''ID du membre, ou `null` si il n''existe pas de membre ayant le pseudo donné.
 
-Comme le pseudo est UNIQUE, on peut garantir qu''il n''existe qu''un seul membre pour un pseudo donné.';
+Comme le pseudo est `unique`, on peut garantir qu''il n''existe qu''un seul membre pour un pseudo donné.';
 
 -- Offres
 
@@ -40,7 +40,7 @@ $$ language plpgsql;
 comment on function offre_categorie (int) is
 'Retourne la catégorie d''une offre.
 @param p_id_offre l''ID de l''offre
-@returns La catégorie de l''offre d''ID `id_offre`.';
+@returns La catégorie de l''offre d''ID @p p_id_offre.';
 
 create function offre_est_ouverte (p_id_offre int, p_le timestamp) returns boolean as $$
     select p_id_offre in (select id_offre from _horaire_ouverture)
@@ -56,10 +56,10 @@ comment on function offre_est_ouverte (int, timestamp) is
 'Une offre est-elle ouverte à un timestamp donné ?
 @param p_id_offre l''ID de l''offre
 @param p_le le timestamp à tester
-@returns L''ouverte est ouverte le `le`.';
+@returns L''ouverte est ouverte le @p p_le.';
 
 create function offre_changement_ouverture_suivant_le (p_id_offre int, p_apres_le timestamp) returns timestamp as $$
-select coalesce(least(
+select least(
     (select date_trunc('day', p_apres_le)
         + dans_jours * interval '1 day'
         + heure
@@ -86,16 +86,17 @@ select coalesce(least(
     ) changements_ouverture_periode
     order by le
     limit 1)
-), 'infinity');
+);
 $$ language sql;
 comment on function offre_changement_ouverture_suivant_le (int, timestamp) is
 'Retourne un timestamp indiquant quand a lieu le prochain changement d''ouverture d''une offre après une date.
-Prend uniquement en compte les changement d''ouverture strictement postérieurs à `apres_le`.
+@param p_id_offre l''ID de l''offre
+@param p_apres_le le timpestamp auquel la valeur de retour doit être postérieur.
+@returns Le premier changement d''ouverture de l''offre d''ID @p p_id_offre postérieur à @p p_apres_le, ou `null` si aucun changement d''ouverture n''a lieu après le timsetamp spécifé
+
+Prend uniquement en compte les changement d''ouverture strictement postérieurs à @p p_apres_le.
 Ainsi, `offre_changement_ouverture_suivant_le(5, ''2024-11-20'') < offre_changement_ouverture_suivant_le(5, offre_changement_ouverture_suivant_le(5, ''2024-11-20''))`
-@param id_offre l''ID de l''offre
-@param apres_le le timpestamp auquel la valeur de retour doit être postérieur.
-@return Le prochain changement d''ouverture de l''offre d''ID `id_offre` après `apres_le`.
-On ne peut pas utiliser une vue pour les changements d''ouverture car il y en ai une infinité (puisque les horaires se répentent chaque semaine)';
+On ne peut pas utiliser une vue pour les changements d''ouverture car il y en ait une infinité (puisque les horaires se répentent chaque semaine)';
 
 
 create function offre_en_ligne_pendant (
@@ -146,4 +147,4 @@ comment on function offre_en_ligne_pendant (int, timestamp, interval) is
 @param p_id_offre l''ID de l''offre
 @param p_debut début de la période d''observation
 @param p_duree durée de la période d''observation
-@returns La valeur de retour est inférieure ou égale à `duree`';
+@returns La valeur de retour est inférieure ou égale à @p p_duree';
