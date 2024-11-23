@@ -20,7 +20,8 @@ begin
         resume,
         description_detaillee,
         url_site_web,
-        modifiee_le
+        modifiee_le,
+        periodes_ouverture
     ) values (
         id_signalable,
         new.id_adresse,
@@ -31,7 +32,8 @@ begin
         new.resume,
         new.description_detaillee,
         coalesce(new.url_site_web, ''),
-        coalesce(new.modifiee_le, now())
+        coalesce(new.modifiee_le, localtimestamp),
+        coalesce(new.periodes_ouverture, '{}')
     );
     insert into pact._changement_etat (id_offre) values (id_signalable);
     return id_signalable;
@@ -78,7 +80,7 @@ comment on function insert_compte (record) is
 
 create function _offre_after_update () returns trigger as $$
 begin
-    new.modifiee_le = now();
+    new.modifiee_le = localtimestamp;
 end
 $$ language plpgsql;
 comment on function _offre_after_update () is

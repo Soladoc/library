@@ -116,15 +116,19 @@ Camping et snack sur le site.',
             ((table id_offre), 'sport')
     ),
     s2 as (
+        -- Pour le mois de novembre, cette offre a été en ligne pendant 0 years 0 mons 13 days 63 hours 28 mins 57.0 secs
+        -- select (timestamp '2024-11-05 16:41:37' - '2024-11-03 22:05:11') + (timestamp '2024-11-07 08:56:34' - '2024-11-06 12:08:05') + (timestamp '2024-11-15 00:59:47' - '2024-11-10 03:10:31') + (timestamp '2024-11-27 03:10:32' - '2024-11-19 00:55:46');
         insert into
-            _horaire_ouverture (id_offre, dow, heure_debut, heure_fin)
+            _changement_etat (id_offre, fait_le)
         values
-            ((table id_offre), 1, '9:', '23:'),
-            ((table id_offre), 2, '9:', '23:'),
-            ((table id_offre), 3, '9:', '23:'),
-            ((table id_offre), 4, '9:', '23:'),
-            ((table id_offre), 5, '9:', '23:'),
-            ((table id_offre), 6, '9:', '23:')
+            ((table id_offre), '2024-11-03 22:05:11'), -- mise en ligne
+            ((table id_offre), '2024-11-05 16:41:37'), -- mise hors ligne
+            ((table id_offre), '2024-11-06 12:08:05'), -- mise en ligne
+            ((table id_offre), '2024-11-07 08:56:34'), -- mise hors ligne
+            ((table id_offre), '2024-11-10 03:10:31'), -- mise en ligne
+            ((table id_offre), '2024-11-15 00:59:47'), -- mise hors ligne
+            ((table id_offre), '2024-11-19 00:55:46'), -- mise en ligne
+            ((table id_offre), '2024-11-27 03:10:32') -- mise hors ligne
     ),
     s3 as (
         insert into
@@ -140,17 +144,53 @@ Camping et snack sur le site.',
             )
     )
 insert into
-    _changement_etat (id_offre, fait_le)
+    _ouverture_hebdomadaire (id_offre, dow, horaires)
 values
-    ((table id_offre), '2024-11-03 22:05:11'), -- mise en ligne
-    ((table id_offre), '2024-11-05 16:41:37'), -- mise hors ligne
-    ((table id_offre), '2024-11-06 12:08:05'), -- mise en ligne
-    ((table id_offre), '2024-11-07 08:56:34'), -- mise hors ligne
-    ((table id_offre), '2024-11-10 03:10:31'), -- mise en ligne
-    ((table id_offre), '2024-11-15 00:59:47'), -- mise hors ligne
-    ((table id_offre), '2024-11-19 00:55:46'), -- mise en ligne
-    ((table id_offre), '2024-11-27 03:10:32') -- mise hors ligne
-;
-
--- Pour le mois de novembre, cette offre a été en ligne pendant 0 years 0 mons 13 days 63 hours 28 mins 57.0 secs
--- select (timestamp '2024-11-05 16:41:37' - '2024-11-03 22:05:11') + (timestamp '2024-11-07 08:56:34' - '2024-11-06 12:08:05') + (timestamp '2024-11-15 00:59:47' - '2024-11-10 03:10:31') + (timestamp '2024-11-27 03:10:32' - '2024-11-19 00:55:46');
+    (
+        (table id_offre),
+        1,
+        (
+            select
+                timemultirange (timerange ('15:', '15:30'), timerange ('15:50', '23:05:59'))
+        )
+    ),
+    (
+        (table id_offre),
+        2,
+        (
+            select
+                timemultirange (timerange ('10:', '19:'))
+        )
+    ),
+    (
+        (table id_offre),
+        3,
+        (
+            select
+                timemultirange (timerange ('10:', '15:'))
+        )
+    ),
+    (
+        (table id_offre),
+        4,
+        (
+            select
+                timemultirange (timerange ('11:', '13:'))
+        )
+    ),
+    (
+        (table id_offre),
+        5,
+        (
+            select
+                timemultirange (timerange ('18:', '19:'))
+        )
+    ),
+    (
+        (table id_offre),
+        6,
+        (
+            select
+                timemultirange (timerange ('14:', '18:'))
+        )
+    );

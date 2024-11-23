@@ -13,6 +13,16 @@ comment on function rmod is
 @param y La seconde opérande
 @return @p x % @p y, mais du signe de @p y au lieu de l''opérateur % ou la fonction mod, qui returnent @p x mod @p y du signe de @p x.';
 
+create function bounds(multirange anymultirange) returns table (
+    bound anyelement,
+    inclusive bool
+) as $$
+    with ranges as (select unnest(multirange) m)
+    select lower(m) bound, lower_inc(m) inclusive from ranges
+    union all
+    select upper(m), upper_inc(m) from ranges
+$$ language sql strict immutable;
+
 -- Membre
 
 create function id_membre(p_pseudo pseudonyme) returns int as $$
@@ -41,56 +51,40 @@ comment on function offre_categorie (int) is
 @param p_id_offre l''ID de l''offre
 @returns La catégorie de l''offre d''ID @p p_id_offre.';
 
-create function offre_est_ouverte (p_id_offre int, p_le timestamp) returns bool as $$
-    select p_id_offre in (select id_offre from _horaire_ouverture)
-       and p_id_offre in (select id_offre from _periode_ouverture)
-        or p_id_offre in (select id_offre from _periode_ouverture
-                           where debut_le <= p_le and p_le < fin_le)
-        or p_id_offre in (select id_offre from _horaire_ouverture
-                           where dow = extract(dow from p_le)
-                             and heure_debut <= p_le::time
-                             and p_le::time < heure_fin);
+create function offre_changement_ouverture_suivant_le (
+    p_id_offre int,
+    p_apres_le timestamp,
+    p_offre_periodes_ouverture tsmultirange
+) returns timestamp as $$
+    select least(
+        (
+            select date_trunc('day', p_apres_le)
+                 + dans_jours * interval '1 day'
+                 + heure
+            from (
+                select bound heure, inclusive, rmod(dow - extract(dow from p_apres_le), 7) dans_jours
+                  from _ouverture_hebdomadaire o, bounds(o.horaires)
+                 where id_offre = p_id_offre
+            ) b
+            where dans_jours <> 0 or (b.inclusive and heure > p_apres_le::time
+                               or not b.inclusive and heure >= p_apres_le::time)
+            order by dans_jours
+            limit 1
+        ),
+        (
+            select bound from bounds(p_offre_periodes_ouverture) b
+            where b.inclusive and bound > p_apres_le
+            or not b.inclusive and bound >= p_apres_le
+            order by bound
+            limit 1
+        )
+    );
 $$ language sql strict stable;
-comment on function offre_est_ouverte (int, timestamp) is
-'Une offre est-elle ouverte à un timestamp donné ?
-@param p_id_offre l''ID de l''offre
-@param p_le le timestamp à tester
-@returns L''ouverte est ouverte le @p p_le.';
-
-create function offre_changement_ouverture_suivant_le (p_id_offre int, p_apres_le timestamp) returns timestamp as $$
-select least(
-    (select date_trunc('day', p_apres_le)
-        + dans_jours * interval '1 day'
-        + heure
-    from (select rmod(dow - extract(dow from p_apres_le), 7) dans_jours, heure from (
-        select dow, heure_debut heure
-        from _horaire_ouverture
-        where id_offre = p_id_offre
-        union all
-        select dow, heure_fin
-        from _horaire_ouverture
-        where id_offre = p_id_offre
-    ) c) c
-    where dans_jours <> 0 or heure > p_apres_le::time
-    order by dans_jours
-    limit 1),
-    (select * from (
-        select debut_le le from _periode_ouverture
-        where id_offre = p_id_offre
-        and debut_le > p_apres_le
-        union all
-        select fin_le from _periode_ouverture
-        where id_offre = p_id_offre
-        and fin_le > p_apres_le
-    ) changements_ouverture_periode
-    order by le
-    limit 1)
-);
-$$ language sql strict stable;
-comment on function offre_changement_ouverture_suivant_le (int, timestamp) is
+comment on function offre_changement_ouverture_suivant_le (int, timestamp, tsmultirange) is
 'Retourne un timestamp indiquant quand a lieu le prochain changement d''ouverture d''une offre après une date.
 @param p_id_offre l''ID de l''offre
 @param p_apres_le le timpestamp auquel la valeur de retour doit être postérieur.
+@param p_offre_periodes_ouverture_ouverture l''a valeur de l''attribut periodes_ouverture de l''offre d''ID  @p id_offre. Évite d''avoir faire une nouvelle requête.
 @returns Le premier changement d''ouverture de l''offre d''ID @p p_id_offre postérieur à @p p_apres_le, ou `null` si aucun changement d''ouverture n''a lieu après le timsetamp spécifé
 
 Prend uniquement en compte les changement d''ouverture strictement postérieurs à @p p_apres_le.

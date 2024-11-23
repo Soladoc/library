@@ -111,7 +111,8 @@ create table _offre (
     resume ligne not null,
     description_detaillee paragraphe not null,
     modifiee_le timestamp not null,
-    url_site_web varchar(2047) not null
+    url_site_web varchar(2047) not null,
+    periodes_ouverture tsmultirange not null
 );
 
 create table _restaurant (
@@ -244,7 +245,7 @@ create table _avis (
         constraint avis_inherits_signalable references _signalable,
     commentaire paragraphe not null,
     note int not null check (note between 1 and 5),
-    publie_le timestamp not null default now(),
+    publie_le timestamp not null default localtimestamp,
     date_experience date not null,
     contexte mot_minuscule not null,
     lu bool not null default false,
@@ -282,27 +283,19 @@ create table _reponse (
 
 -- ASSOCIATIONS
 
-create table _horaire_ouverture (
+create table _ouverture_hebdomadaire (
     id_offre int
-        constraint horaire_ouverture_fk_offre references _offre,
-    dow int check (0 <= dow and dow <= 6),
-    heure_debut time,
-    heure_fin time check (heure_fin > heure_debut),
-    constraint horaire_ouverture_pk primary key (id_offre, dow, heure_debut, heure_fin)
+        constraint horaires_ouverture_fk_offre references _offre,
+    dow int check (dow between 0 and 6),
+    constraint horaires_ouverture_pk primary key (id_offre, dow),
+
+    horaires timemultirange not null check (not isempty(horaires))
 );
-comment on table _horaire_ouverture is
-'Un horaire d''ouverture périodique sur une semaine.
+comment on table _ouverture_hebdomadaire is
+'Des horaires d''ouverture hebdonaraires
 Ouvert sur toutes les semaines de l''année.
 Vacances, jours fériés et ponts non comptabilisées.';
-comment on column _horaire_ouverture.dow is 'The day of the week as Sunday (0) to Saturday (6)';
-create table _periode_ouverture (
-    id_offre int
-        constraint horaire_ouverture_fk_offre references _offre,
-    debut_le timestamp,
-    fin_le timestamp check (fin_le > debut_le),
-    constraint horaire_pk primary key (id_offre, debut_le, fin_le)
-);
-comment on table _periode_ouverture is 'Une période d''ouverture ponctuelle';
+comment on column _ouverture_hebdomadaire.dow is 'The day of the week as Sunday (0) to Saturday (6)';
 
 create table _signalement (
     id_membre int
@@ -342,7 +335,7 @@ create table _gallerie (
 create table _changement_etat (
     id_offre int
         constraint changement_etat_fk_offre references _offre,
-    fait_le timestamp default now(),
+    fait_le timestamp default localtimestamp,
     constraint changement_etat_pk primary key (id_offre, fait_le)
 );
 

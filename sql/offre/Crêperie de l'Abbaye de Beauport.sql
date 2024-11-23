@@ -62,17 +62,53 @@ with
             )
     )
 insert into
-    _horaire_ouverture (id_offre, dow, heure_debut, heure_fin)
+    _ouverture_hebdomadaire (id_offre, dow, horaires)
 values
-    ((table id_offre), 1, '12:', '15:30'),
-    ((table id_offre), 1, '18:30', '23:59:59'),
-    ((table id_offre), 2, '12:', '15:30'),
-    ((table id_offre), 2, '18:30', '23:59:59'),
-    ((table id_offre), 3, '12:', '15:30'),
-    ((table id_offre), 3, '18:30', '23:59:59'),
-    ((table id_offre), 4, '12:', '15:30'),
-    ((table id_offre), 4, '18:30', '23:59:59'),
-    ((table id_offre), 5, '12:', '15:30'),
-    ((table id_offre), 5, '18:30', '23:59:59'),
-    ((table id_offre), 6, '12:', '15:30'),
-    ((table id_offre), 6, '18:30', '23:59:59');
+    (
+        (table id_offre),
+        1,
+        (
+            select
+                timemultirange (timerange ('12:', '15:30'), timerange ('18:30', '23:59:59'))
+        )
+    ),
+    (
+        (table id_offre),
+        2,
+        (
+            select
+                timemultirange (timerange ('12:', '15:30'), timerange ('18:30', '23:59:59'))
+        )
+    ),
+    (
+        (table id_offre),
+        3,
+        (
+            select
+                timemultirange (timerange ('12:', '15:30'), timerange ('18:30', '23:59:59'))
+        )
+    ),
+    (
+        (table id_offre),
+        4,
+        (
+            select
+                timemultirange (timerange ('12:', '15:30'), timerange ('18:30', '23:59:59'))
+        )
+    ),
+    (
+        (table id_offre),
+        5,
+        (
+            select
+                timemultirange (timerange ('12:', '15:30'), timerange ('18:30', '23:59:59'))
+        )
+    ),
+    (
+        (table id_offre),
+        6,
+        (
+            select
+                timemultirange (timerange ('12:', '15:30'), timerange ('18:30', '23:59:59'))
+        )
+    );

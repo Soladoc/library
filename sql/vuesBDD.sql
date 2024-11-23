@@ -9,9 +9,15 @@ create view offres as select
     (select min(tarif.montant) from tarif where tarif.id_offre = _offre.id) prix_min,
     (select fait_le from _changement_etat where _changement_etat.id_offre = _offre.id order by fait_le limit 1) creee_le,
     offre_categorie(id) categorie,
-    offre_est_ouverte(id, localtimestamp) est_ouverte,
     offre_en_ligne_pendant(id, date_trunc('month', localtimestamp), '1 month') en_ligne_ce_mois_pendant,
-    offre_changement_ouverture_suivant_le(id, localtimestamp) changement_ouverture_suivant_le
+    offre_changement_ouverture_suivant_le(id, localtimestamp, periodes_ouverture) changement_ouverture_suivant_le,
+    coalesce(localtimestamp <@ periodes_ouverture
+               or localtime <@ (select horaires                       --\
+                                  from _ouverture_hebdomadaire        --| Horaires ce jour
+                                 where id_offre = id                  --| de la semaine
+                                   and dow = extract(dow from localtimestamp)), --/
+             true -- Considérer une offre sans période ou horaire comme ouverte tout le temps
+            ) est_ouverte 
 from
     _offre;
 

@@ -85,12 +85,53 @@ Ne manquez pas cette opportunité unique de découvrir l''art et l''histoire de 
             )
     )
 insert into
-    _horaire_ouverture (id_offre, dow, heure_debut, heure_fin)
+    _ouverture_hebdomadaire (id_offre, dow, horaires)
 values
-    ((table id_offre), 0, '10:', '18:'),
-    ((table id_offre), 1, '10:', '18:'),
-    ((table id_offre), 2, '10:', '18:'),
-    ((table id_offre), 3, '10:', '18:'),
-    ((table id_offre), 4, '10:', '18:'),
-    ((table id_offre), 5, '10:', '18:'),
-    ((table id_offre), 6, '13:', '18:');
+    (
+        (table id_offre),
+        1,
+        (
+            select
+                timemultirange (timerange ('10:', '18:'))
+        )
+    ),
+    (
+        (table id_offre),
+        2,
+        (
+            select
+                timemultirange (timerange ('10:', '18:'))
+        )
+    ),
+    (
+        (table id_offre),
+        3,
+        (
+            select
+                timemultirange (timerange ('10:', '18:'))
+        )
+    ),
+    (
+        (table id_offre),
+        4,
+        (
+            select
+                timemultirange (timerange ('10:', '18:'))
+        )
+    ),
+    (
+        (table id_offre),
+        5,
+        (
+            select
+                timemultirange (timerange ('10:', '18:'))
+        )
+    ),
+    (
+        (table id_offre),
+        6,
+        (
+            select
+                timemultirange (timerange ('10:', '18:'))
+        )
+    );
