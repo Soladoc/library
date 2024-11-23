@@ -63,7 +63,7 @@ select least(
     (select date_trunc('day', p_apres_le)
         + dans_jours * interval '1 day'
         + heure
-    from (select rmod(extract(dow from p_apres_le) - dow, 7) dans_jours, heure from (
+    from (select rmod(dow - extract(dow from p_apres_le), 7) dans_jours, heure from (
         select dow, heure_debut heure
         from _horaire_ouverture
         where id_offre = p_id_offre
