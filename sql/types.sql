@@ -11,6 +11,14 @@ create type timerange as range (
     subtype_diff = time_subtype_diff
 );
 
+create type categorie_offre as enum (
+    'restaurant',
+    'activité',
+    'visite',
+    'spectacle',
+    'parc d''attractions'
+);
+
 -- DOMAINES
 
 create domain num_departement as char(3);

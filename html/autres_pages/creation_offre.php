@@ -9,7 +9,7 @@ require_once 'component/head.php';
 $id_professionnel = exiger_connecte_pro();
 
 $args = [
-    'type_offre' => getarg($_GET, 'type_offre', arg_check(f_is_in(array_keys(TYPES_OFFRE)))),
+    'type_offre' => getarg($_GET, 'type_offre', arg_check(f_is_in(array_keys(CATEGORIES_OFFRE)))),
     'libelle_abonnement' => 'gratuit', //getarg($_GET, 'type_offre'),
 ];
 
@@ -89,7 +89,7 @@ if ($_POST) {
     <?php require 'component/header.php' ?>
     <main>
         <section id="titre-creation-offre">
-            <h1>Créer <?= TYPES_OFFRE[$args['type_offre']] ?></h1>
+            <h1>Créer <?= CATEGORIES_OFFRE[$args['type_offre']] ?></h1>
         </section>
 
         <section id="info-generales">

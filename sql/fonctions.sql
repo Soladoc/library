@@ -37,13 +37,13 @@ Comme le pseudo est `unique`, on peut garantir qu''il n''existe qu''un seul memb
 
 -- Offres
 
-create function offre_categorie (p_id_offre int) returns mot_minuscule as $$
+create function offre_categorie (p_id_offre int) returns categorie_offre as $$
     select case
-        when p_id_offre in (select id from pact._restaurant) then 'restaurant'
-        when p_id_offre in (select id from pact._activite) then 'activité'
-        when p_id_offre in (select id from pact._visite) then 'visite'
-        when p_id_offre in (select id from pact._spectacle) then 'spectacle'
-        when p_id_offre in (select id from pact._parc_attractions) then 'parc d''attractions'
+        when p_id_offre in (select id from pact._restaurant) then categorie_offre 'restaurant'
+        when p_id_offre in (select id from pact._activite) then categorie_offre 'activité'
+        when p_id_offre in (select id from pact._visite) then categorie_offre 'visite'
+        when p_id_offre in (select id from pact._spectacle) then categorie_offre 'spectacle'
+        when p_id_offre in (select id from pact._parc_attractions) then categorie_offre 'parc d''attractions'
     end
 $$ language sql strict stable;
 comment on function offre_categorie (int) is
@@ -133,7 +133,7 @@ begin
     end if;
 
     return en_ligne_pendant;
-end;
+end
 $$ language plpgsql strict stable;
 comment on function offre_en_ligne_pendant (int, timestamp, interval) is
 'Retourne la durée pendant laquelle un offre a été en ligne sur une période donnée.

@@ -1,7 +1,7 @@
 set schema 'pact';
 
 insert into
-    _abonnement (libelle, prix)
+    _abonnement (libelle, prix_journalier)
 values 
     -- prix hors taxe par jour
     ('gratuit', 0),

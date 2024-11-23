@@ -31,8 +31,8 @@ with
                 1,
                 'gratuit',
                 'La Plage',
-                'La Plage est un délicieux restaurant situé à Paimpol. Découvrez nos goutûs plats.',
-                'La Plage est un délicieux restaurant situé à Paimpol. Découvrez nos goutûs plats. Oui, je suis détaillé. Me demandez pas plus de détails. Je ne suis qu''un restaurant. Marie y travaillait et puis j''y suis allé une fois c''est vraiment incroyable trop bon.',
+                'La Plage est un délicieux restaurant situé à Trestraou. Découvrez nos goutûs plats.',
+                'La Plage est un délicieux restaurant situé à Trestraou. Découvrez nos goutûs plats. Oui, je suis détaillé. Me demandez pas plus de détails. Je ne suis qu''un restaurant.',
                 'La carte? Allez voir au restaurant, on vous en donnera une',
                 2,
                 true,
@@ -43,9 +43,42 @@ with
     ),
     s1 as (
         insert into
-            avis (id_offre, id_membre_auteur, note, contexte, date_experience, commentaire)
+            avis_restaurant (
+                id_restaurant,
+                id_membre_auteur,
+                note,
+                contexte,
+                date_experience,
+                commentaire,
+                note_cuisine,
+                note_service,
+                note_ambiance,
+                note_qualite_prix
+            )
         values
-            ((table id_offre), id_membre ('SamSepi0l'), 1, 'affaires', '2024-07-25', 'Service désagréable et désorganisé.')
+            (
+                (table id_offre),
+                id_membre ('SamSepi0l'),
+                1,
+                'affaires',
+                '2024-07-25',
+                'Service désagréable et désorganisé.',
+                2,
+                3,
+                2,
+                1
+            ), (
+                (table id_offre),
+                id_membre ('5cover'),
+                5,
+                'couple',
+                '2024-09-17',
+                'Tout simplement magique.',
+                5,
+                4,
+                4,
+                5
+            )
     )
 insert into
     _ouverture_hebdomadaire (id_offre, dow, horaires)

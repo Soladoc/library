@@ -32,7 +32,7 @@ require_once 'component/head.php';
 
 const TYPE_OFFRE_AFFICHABLE = [
     'spectacle' => 'un spectacle',
-    'parc_attraction' => "un parc d'attractions",
+    'parc_attractions' => "un parc d'attractions",
     'visite' => 'une visite',
     'restaurant' => 'un restaurant',
     'activite' => 'une activité',

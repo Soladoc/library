@@ -51,7 +51,7 @@ comment on constraint adresse_check_numero_voie_complement_numero on _adresse is
 create table _abonnement (
     libelle mot_minuscule
         constraint abonnement_pk primary key,
-    prix decimal not null
+    prix_journalier decimal not null
 );
 
 create table _image (
@@ -260,12 +260,10 @@ create table _avis (
 comment on column _avis.id_membre_auteur is 'Devient null (anonyme) quand l''auteur est supprimé';
 comment on constraint avis_uniq_auteur_offre on _avis is 'Un seul avis par couple (membre_auteur, offre). Ceci est une clé candidate et non pas une clé primaire car id_membre_auteur peut être null';
 
-create table _avis_resto (
+create table _avis_restaurant (
     id int
-        constraint avis_resto_pk primary key
-        constraint avis_resto_inherits_avis references _avis,
-    id_restaurant int not null
-        constraint avis_resto_fk_restaurant references _restaurant,
+        constraint avis_restaurant_pk primary key
+        constraint avis_restaurant_inherits_avis references _avis,
     note_cuisine int not null check (note_cuisine between 1 and 5),
     note_service int not null check (note_service between 1 and 5),
     note_ambiance int not null check (note_ambiance between 1 and 5),
@@ -344,7 +342,8 @@ create table _souscription_option (
         constraint souscription_option_pk primary key
         constraint souscription_option_fk_offre references _offre,
     nom_option nom_option not null
-        constraint souscription_option_fk_option references _option
+        constraint souscription_option_fk_option references _option,
+    actif bool default true
 );
 
 create table _juge (

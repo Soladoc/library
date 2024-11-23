@@ -5,6 +5,38 @@ set schema 'pact';
 
 set plpgsql.extra_errors to 'all';
 
+create function insert_avis (new record, p_id_offre int) returns int as $$
+declare
+    id_avis int;
+begin
+    insert into _signalable default values returning id into id_avis;
+    insert into pact._avis (
+        id,
+        id_offre,
+        id_membre_auteur,
+        commentaire,
+        date_experience,
+        contexte,
+        note
+    ) values (
+        id_avis,
+        p_id_offre,
+        new.id_membre_auteur,
+        new.commentaire,
+        new.date_experience,
+        new.contexte,
+        new.note
+    );
+    return id_avis;
+end
+$$ language plpgsql strict;
+
+comment on function insert_avis (record, int) is
+'Insère un avis.
+`new` contient les valeurs de l''avis.
+@param p_id_offre l''ID de l''offre commentée (new n''est pas utilisé pour remplir cette colonne)
+@returns L''ID de l''avis inséré.';
+
 create function insert_offre (new record) returns int as $$
 declare
     id_signalable int;
