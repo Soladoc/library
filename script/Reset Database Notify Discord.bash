@@ -93,6 +93,8 @@ readonly log_lines=20
 # Discord message flag: do not include any embeds when serializing this message
 readonly dmf_suppress_embeds=4
 
+readonly relevant_job='Reset Database'
+
 # Main logic
 
 # Get previous run info
@@ -115,8 +117,8 @@ fi
 
 # Get failed job info
 mapfile -t job < <(
-    gh-api "repos/$REPOSITORY/actions/runs/$RUN_ID/jobs" --jq '
-    .jobs[0] | .html_url, ([.steps[] | select (.conclusion == "failure")][0] | .name, .number)'
+    gh-api "repos/$REPOSITORY/actions/runs/$RUN_ID/jobs" --jq "
+    .jobs[0] | .html_url, (.steps | map(select(.conclusion == \"failure\" or .name == \"$relevant_job\")) | .[0] | .name, .number)"
 )
 readonly failed_job_url="${job[0]}" failed_step_name="${job[1]}" failed_step_number="${job[2]}"
 
