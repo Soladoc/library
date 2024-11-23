@@ -117,7 +117,7 @@ Camping et snack sur le site.',
     ),
     s2 as (
         insert into
-            horaire_ouverture (id_offre, dow, heure_debut, heure_fin)
+            _horaire_ouverture (id_offre, dow, heure_debut, heure_fin)
         values
             ((table id_offre), 1, '9:', '23:'),
             ((table id_offre), 2, '9:', '23:'),

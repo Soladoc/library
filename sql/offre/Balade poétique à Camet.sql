@@ -84,7 +84,7 @@ with
             )
     )
 insert into
-    periode_ouverture (id_offre, debut_le, fin_le)
+    _periode_ouverture (id_offre, debut_le, fin_le)
 values
     ((table id_offre), '2024-06-14T12:00:00.000Z', '2024-09-27T18:00:00.000Z'),
     ((table id_offre), '2025-06-14T12:00:00.000Z', '2025-09-27T18:00:00.000Z'),

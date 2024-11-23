@@ -57,6 +57,3 @@ create view avis as select
 from
     _avis
     join membre on id_membre_auteur = membre.id;
-
-create view horaire_ouverture as table _horaire_ouverture;
-create view periode_ouverture as table _periode_ouverture;

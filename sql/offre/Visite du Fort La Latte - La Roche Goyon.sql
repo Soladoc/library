@@ -81,7 +81,7 @@ Ne manquez pas cette opportunité unique de découvrir l''un des châteaux les p
             ('Enfant', (table id_offre), 0)
     )
 insert into
-    horaire_ouverture (id_offre, dow, heure_debut, heure_fin)
+    _horaire_ouverture (id_offre, dow, heure_debut, heure_fin)
 values
     ((table id_offre), 0, '10:', '18:'),
     ((table id_offre), 1, '10:', '18:'),

@@ -129,7 +129,7 @@ Ne manquez pas cette opportunité unique de découvrir l''un des joyaux de la Br
             ((table id_offre), id_membre ('ltorvalds'), 5, 'couple', '2024-05-02', 'Le cadre était à couper le souffle.')
     )
 insert into
-    horaire_ouverture (id_offre, dow, heure_debut, heure_fin)
+    _horaire_ouverture (id_offre, dow, heure_debut, heure_fin)
 values
     ((table id_offre), 0, '10:', '18:'),
     ((table id_offre), 1, '10:', '18:'),

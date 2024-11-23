@@ -70,7 +70,7 @@ La visite de la Galerie d''Art du Dragon Noir est bien plus qu''une simple expos
             ((table id_offre), id_membre ('rstallman'), 3, 'famille', '2024-09-18', 'Nous aurion aprécié une visite guidé')
     )
 insert into
-    horaire_ouverture (id_offre, dow, heure_debut, heure_fin)
+    _horaire_ouverture (id_offre, dow, heure_debut, heure_fin)
 values
     ((table id_offre), 0, '10:', '18:'),
     ((table id_offre), 1, '10:', '18:'),

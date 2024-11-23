@@ -77,7 +77,7 @@ Réservez dès maintenant votre place et préparez-vous à vivre une expérience
             ((table id_offre), id_membre ('dieu_des_frites'), 5, 'amis', '2024-08-31', 'Cadre magnifique.')
     )
 insert into
-    horaire_ouverture (id_offre, dow, heure_debut, heure_fin)
+    _horaire_ouverture (id_offre, dow, heure_debut, heure_fin)
 values
     ((table id_offre), 0, '10:', '18:'),
     ((table id_offre), 1, '10:', '18:'),
