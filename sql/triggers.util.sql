@@ -36,7 +36,7 @@ begin
     insert into pact._changement_etat (id_offre) values (id_signalable);
     return id_signalable;
 end
-$$ language plpgsql;
+$$ language plpgsql strict;
 comment on function insert_offre (record) is
 'Insère une offre.
 `new` contient les valeurs de l''offre.
@@ -70,7 +70,7 @@ begin
     );
     return id_identite;
 end
-$$ language plpgsql;
+$$ language plpgsql strict;
 comment on function insert_compte (record) is
 'Insère un compte.
 `new` contient les valeurs du compte.

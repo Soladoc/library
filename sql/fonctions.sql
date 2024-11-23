@@ -6,7 +6,7 @@ set plpgsql.extra_errors to 'all';
 
 create function rmod(x numeric, y numeric) returns numeric as $$
     select (y + x % y) % y;
-$$ language sql;
+$$ language sql strict immutable;
 comment on function rmod is
 'Retourne le modulo de deux entiers.
 @param x La première opérande
@@ -17,7 +17,7 @@ comment on function rmod is
 
 create function id_membre(p_pseudo pseudonyme) returns int as $$
     select id from _membre where pseudo = p_pseudo;
-$$ language sql;
+$$ language sql strict stable;
 comment on function id_membre (pseudonyme) is
 'Retourne l''ID d''un membre à partir de son pseudo.
 @param p_pseudo le pseudo du membre
@@ -28,21 +28,20 @@ Comme le pseudo est `unique`, on peut garantir qu''il n''existe qu''un seul memb
 -- Offres
 
 create function offre_categorie (p_id_offre int) returns mot_minuscule as $$
-begin
-    if p_id_offre in (select id from pact._restaurant) then return 'restaurant'; end if;
-    if p_id_offre in (select id from pact._activite) then return 'activité'; end if;
-    if p_id_offre in (select id from pact._visite) then return 'visite'; end if;
-    if p_id_offre in (select id from pact._spectacle) then return 'spectacle'; end if;
-    if p_id_offre in (select id from pact._parc_attractions) then return 'parc d''attractions'; end if;
-    raise 'incohérence: offre non catégorisée';
-end;
-$$ language plpgsql;
+    select case
+        when p_id_offre in (select id from pact._restaurant) then 'restaurant'
+        when p_id_offre in (select id from pact._activite) then 'activité'
+        when p_id_offre in (select id from pact._visite) then 'visite'
+        when p_id_offre in (select id from pact._spectacle) then 'spectacle'
+        when p_id_offre in (select id from pact._parc_attractions) then 'parc d''attractions'
+    end
+$$ language sql strict stable;
 comment on function offre_categorie (int) is
 'Retourne la catégorie d''une offre.
 @param p_id_offre l''ID de l''offre
 @returns La catégorie de l''offre d''ID @p p_id_offre.';
 
-create function offre_est_ouverte (p_id_offre int, p_le timestamp) returns boolean as $$
+create function offre_est_ouverte (p_id_offre int, p_le timestamp) returns bool as $$
     select p_id_offre in (select id_offre from _horaire_ouverture)
        and p_id_offre in (select id_offre from _periode_ouverture)
         or p_id_offre in (select id_offre from _periode_ouverture
@@ -51,7 +50,7 @@ create function offre_est_ouverte (p_id_offre int, p_le timestamp) returns boole
                            where dow = extract(dow from p_le)
                              and heure_debut <= p_le::time
                              and p_le::time < heure_fin);
-$$ language sql;
+$$ language sql strict stable;
 comment on function offre_est_ouverte (int, timestamp) is
 'Une offre est-elle ouverte à un timestamp donné ?
 @param p_id_offre l''ID de l''offre
@@ -87,7 +86,7 @@ select least(
     order by le
     limit 1)
 );
-$$ language sql;
+$$ language sql strict stable;
 comment on function offre_changement_ouverture_suivant_le (int, timestamp) is
 'Retourne un timestamp indiquant quand a lieu le prochain changement d''ouverture d''une offre après une date.
 @param p_id_offre l''ID de l''offre
@@ -107,7 +106,7 @@ create function offre_en_ligne_pendant (
 declare
     fait_le timestamp;
     derniere_mise_en_ligne timestamp;
-    en_ligne boolean not null = false;
+    en_ligne bool not null = false;
     en_ligne_pendant interval not null = '0';
     fin constant timestamp not null = p_debut + p_duree;
     -- le premier changement d'état représente toujours la création.
@@ -141,7 +140,7 @@ begin
 
     return en_ligne_pendant;
 end;
-$$ language plpgsql;
+$$ language plpgsql strict stable;
 comment on function offre_en_ligne_pendant (int, timestamp, interval) is
 'Retourne la durée pendant laquelle un offre a été en ligne sur une période donnée.
 @param p_id_offre l''ID de l''offre
