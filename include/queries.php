@@ -268,8 +268,7 @@ function exists_pro_prive(int $id_pro_prive): bool
 {
     $stmt = notfalse(db_connect()->prepare('select ? in (select id from pro_prive)'));
     bind_values($stmt, [1 => [$id_pro_prive, PDO::PARAM_INT]]);
-    notfalse($stmt->execute());
-    return $stmt->execute();
+    return $stmt->fetchColumn();
 }
 
 /**
@@ -279,8 +278,7 @@ function exists_pro_prive(int $id_pro_prive): bool
  */
 function exists_offre(int $id_offre): bool
 {
-    $stmt = notfalse(db_connect()->prepare('select ? in (select id from offre)'));
+    $stmt = notfalse(db_connect()->prepare('select ? in (select id from offres)'));
     bind_values($stmt, [1 => [$id_offre, PDO::PARAM_INT]]);
-    notfalse($stmt->execute());
-    return $stmt->execute();
+    
 }
