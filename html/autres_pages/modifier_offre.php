@@ -7,8 +7,11 @@ require_once 'component/inputs.php';
 require_once 'component/head.php';
 
 $id_professionnel = exiger_connecte_pro();
-echo "test";//TODO
 
+if (!isset($_GET['id_offre']) || !exists_offre($_GET['id_offre'])) {
+    html_error('Erreur dans la requette de la page : id_offre manquant');
+    exit;
+}
 $args = [
     'type_offre' => getarg($_GET, 'id_offre', arg_check(f_is_in(array_keys(CATEGORIES_OFFRE)))),
     'libelle_abonnement' => 'gratuit',  // getarg($_GET, 'type_offre'),
