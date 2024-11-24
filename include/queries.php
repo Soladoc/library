@@ -280,5 +280,5 @@ function exists_offre(int $id_offre): bool
 {
     $stmt = notfalse(db_connect()->prepare('select ? in (select id from offres)'));
     bind_values($stmt, [1 => [$id_offre, PDO::PARAM_INT]]);
-    
+    return $stmt->fetchColumn();
 }
