@@ -9,6 +9,7 @@ require_once 'component/head.php';
 $id_professionnel = exiger_connecte_pro();
 
 $args = [
+    //ne lance pas la page et génère une errreur si il n'y a pas de get
     'type_offre' => getarg($_GET, 'type_offre', arg_check(f_is_in(array_keys(CATEGORIES_OFFRE)))),
     'libelle_abonnement' => 'gratuit',  // getarg($_GET, 'type_offre'),
 ];
@@ -294,7 +295,7 @@ if ($_POST) {
                     </li>
             </ul>
             <aside>
-                <img src="../icon/icons8-haute-importance-100.png" alt="Haute importance" width="50" height="50">
+                <img src="../icon/icons8-haute-importance-100.png" alt="Haute importance" width="25" height="25">
                 <p>
                    Attention! Une fois l'option choisi vous ne pourrez plus la modifier.
                 </p>
