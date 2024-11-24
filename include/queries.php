@@ -271,3 +271,16 @@ function exists_pro_prive(int $id_pro_prive): bool
     notfalse($stmt->execute());
     return $stmt->execute();
 }
+
+/**
+ * Détermine si une offre existe dans la bdd
+ * @param int $id_offre l'id de l'offre que l'on recherche
+ * @return bool `true` si une offre privé d'id $id_offre existe, `false` sinon.
+ */
+function exists_offre(int $id_offre): bool
+{
+    $stmt = notfalse(db_connect()->prepare('select ? in (select id from offre)'));
+    bind_values($stmt, [1 => [$id_offre, PDO::PARAM_INT]]);
+    notfalse($stmt->execute());
+    return $stmt->execute();
+}
