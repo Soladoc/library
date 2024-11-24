@@ -10,7 +10,6 @@ $id_professionnel = exiger_connecte_pro();
 
 //ne continue dans la page que si id_offre existe et est valide
 if ( !isset($_GET['id_offre']) ) {
-    echo isset($_GET['id_offre']);
     html_error('Erreur dans la requette de la page : id_offre manquant');
     exit;
 }else {
