@@ -282,6 +282,7 @@ if ($_POST) {
                     <li>
                         <label><input form="f" name="libelle_abonnement" value="gratuit" type="radio">Gratuit</label>
                     </li>
+            </ul>
                 <?php
                 } else {
                     ?>
@@ -291,10 +292,15 @@ if ($_POST) {
                     <li>
                         <label><input form="f" name="libelle_abonnement" value="premium" type="radio">Premium</label>
                     </li>
+            </ul>
+            <aside>
+                <p>
+                    Une fois l'option choisi vous ne pourrez plus la modifier.
+                </p>
+            </aside>
                 <?php
                 }
                 ?>
-            </ul>
         </section>
 
         <form id="f" method="post" enctype="multipart/form-data">
