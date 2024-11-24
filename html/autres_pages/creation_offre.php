@@ -294,8 +294,9 @@ if ($_POST) {
                     </li>
             </ul>
             <aside>
+                <img src="../icon/icons8-haute-importance-100.png" alt="Haute importance" width="50" height="50">
                 <p>
-                    Une fois l'option choisi vous ne pourrez plus la modifier.
+                   Attention! Une fois l'option choisi vous ne pourrez plus la modifier.
                 </p>
             </aside>
                 <?php
