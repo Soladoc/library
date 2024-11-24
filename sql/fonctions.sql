@@ -37,6 +37,23 @@ Comme le pseudo est `unique`, on peut garantir qu''il n''existe qu''un seul memb
 
 -- Offres
 
+create function offre_creee_le (p_id_offre int) returns timestamp as $$
+    select
+        fait_le
+    from
+        _changement_etat
+    where
+        _changement_etat.id_offre = p_id_offre
+    order by
+        fait_le
+    limit
+        1;
+$$ language sql strict stable;
+comment on function offre_creee_le (int) is
+'Retourne le timestamp de création d''une offre.
+@param p_id_offre l''ID de l''offre
+@returns le timestamp du premier changement d''état de l''offre.';
+
 create function offre_categorie (p_id_offre int) returns categorie_offre as $$
     select case
         when p_id_offre in (select id from pact._restaurant) then categorie_offre 'restaurant'

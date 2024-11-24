@@ -13,6 +13,7 @@ with
         insert into
             parc_attractions (
                 id_adresse,
+                modifiee_le,
                 id_image_principale,
                 id_image_plan,
                 id_professionnel,
@@ -25,6 +26,7 @@ with
         values
             (
                 (table id_adresse),
+                '2024-04-29 05:59:07',
                 3,
                 46,
                 1,

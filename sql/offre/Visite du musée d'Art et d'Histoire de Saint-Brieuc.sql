@@ -13,6 +13,7 @@ with
         insert into
             visite (
                 id_adresse,
+                modifiee_le,
                 id_image_principale,
                 id_professionnel,
                 libelle_abonnement,
@@ -25,6 +26,7 @@ with
         values
             (
                 (table id_adresse),
+                '2024-06-05 21:06:45',
                 45,
                 2,
                 'gratuit',

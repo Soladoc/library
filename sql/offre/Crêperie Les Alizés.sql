@@ -13,6 +13,7 @@ with
         insert into
             restaurant (
                 id_adresse,
+                modifiee_le,
                 id_image_principale,
                 id_professionnel,
                 libelle_abonnement,
@@ -27,6 +28,7 @@ with
         values
             (
                 (table id_adresse),
+                '2024-06-11 22:44:47',
                 15,
                 1,
                 'gratuit',

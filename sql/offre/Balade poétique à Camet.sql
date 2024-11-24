@@ -13,6 +13,7 @@ with
         insert into
             visite (
                 id_adresse,
+                modifiee_le,
                 id_image_principale,
                 id_professionnel,
                 libelle_abonnement,
@@ -26,6 +27,7 @@ with
         values
             (
                 (table id_adresse),
+                '2024-07-31 19:35:58',
                 42,
                 2,
                 'gratuit',
@@ -87,6 +89,6 @@ values
         id_membre ('j0hn'), -- Récupère l'ID de membre à partir du pseudo
         4, -- Note sur 5
         'couple', -- Contexte : affaires, couple, solo, famille, amis
-        '2023-08-08', -- Date d'experience
+        '2024-08-08', -- Date d'experience
         'Séjour féérique en couple un vrai moment de bonheur' -- Commentaire
     );

@@ -8,7 +8,15 @@ set plpgsql.extra_errors to 'all';
 create function insert_avis (new record, p_id_offre int) returns int as $$
 declare
     id_avis int;
+    -- On ne prend pas en compte les heures pour cette vérification.
+    -- Cela signifie qu'on autorise la publication d'un avis le même jour que la création de l'offre mais à une heure antérieure.
+    -- C'est soit ça soit interdire la publication à heure postérieure car date_experience n'a pas d'heure.
+    -- Mieut vaut autoriser un cas potentiellement invalide plutôt qu'interdire un cas potentiellement valide.
+    date_creation_offre constant date not null = offre_creee_le(p_id_offre)::date;
 begin
+    if new.date_experience < date_creation_offre then
+        raise 'La date d''expérience de l''avis (%) ne peut pas être antérieure à la date création de de l''offre (%)', new.date_experience, date_creation_offre;
+    end if;
     insert into _signalable default values returning id into id_avis;
     insert into pact._avis (
         id,
@@ -41,6 +49,8 @@ create function insert_offre (new record) returns int as $$
 declare
     id_signalable int;
 begin
+    new.modifiee_le = coalesce(new.modifiee_le, localtimestamp);
+
     insert into pact._signalable default values returning id into id_signalable;
     insert into pact._offre (
         id,
@@ -64,10 +74,10 @@ begin
         new.resume,
         new.description_detaillee,
         coalesce(new.url_site_web, ''),
-        coalesce(new.modifiee_le, localtimestamp),
+        new.modifiee_le,
         coalesce(new.periodes_ouverture, '{}')
     );
-    insert into pact._changement_etat (id_offre) values (id_signalable);
+    insert into pact._changement_etat (id_offre, fait_le) values (id_signalable, new.modifiee_le);
     return id_signalable;
 end
 $$ language plpgsql strict;

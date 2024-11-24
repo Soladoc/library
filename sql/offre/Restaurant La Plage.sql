@@ -13,6 +13,7 @@ with
         insert into
             restaurant (
                 id_adresse,
+                modifiee_le,
                 id_image_principale,
                 id_professionnel,
                 libelle_abonnement,
@@ -27,6 +28,7 @@ with
         values
             (
                 (table id_adresse),
+                '2024-08-04 06:18:31',
                 1,
                 1,
                 'gratuit',
@@ -61,7 +63,7 @@ with
                 id_membre ('SamSepi0l'),
                 1,
                 'affaires',
-                '2024-07-25',
+                '2024-09-25',
                 'Service désagréable et désorganisé.',
                 2,
                 3,

@@ -13,6 +13,7 @@ with
         insert into
             activite (
                 id_adresse,
+                modifiee_le,
                 id_image_principale,
                 id_professionnel,
                 libelle_abonnement,
@@ -27,6 +28,7 @@ with
         values
             (
                 (table id_adresse),
+                '2024-03-13 19:18:51',
                 27,
                 2,
                 'premium',

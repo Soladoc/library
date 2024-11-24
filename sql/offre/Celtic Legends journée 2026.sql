@@ -13,6 +13,7 @@ with
         insert into
             spectacle (
                 id_adresse,
+                modifiee_le,
                 id_image_principale,
                 id_professionnel,
                 libelle_abonnement,
@@ -27,6 +28,7 @@ with
         values
             (
                 (table id_adresse),
+                '2024-02-29 09:22:01',
                 12,
                 2,
                 'premium',

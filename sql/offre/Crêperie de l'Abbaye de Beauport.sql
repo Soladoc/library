@@ -13,6 +13,7 @@ with
         insert into
             restaurant (
                 id_adresse,
+                modifiee_le,
                 id_image_principale,
                 id_professionnel,
                 libelle_abonnement,
@@ -27,6 +28,7 @@ with
         values
             (
                 (table id_adresse),
+                '2024-02-15 06:59:05',
                 13,
                 1,
                 'gratuit',
@@ -61,7 +63,7 @@ with
                 id_membre ('5cover'), -- Récupère l'ID de membre à partir du pseudo
                 5, -- Note sur 5
                 'amis', -- Contexte : affaires, couple, solo, famille, amis
-                '2005-07-11', -- Date d'experience
+                '2024-02-16', -- Date d'experience
                 'Super créperie même en été! nous y avons ai fété le 19 eme anniversaire de mon amis Benjamin et le staff nous a offert des crèpes au caramel démicieuses!', -- Commentaire
                 4,
                 4,

@@ -13,6 +13,7 @@ with
         insert into
             visite (
                 id_adresse,
+                modifiee_le,
                 id_image_principale,
                 id_professionnel,
                 libelle_abonnement,
@@ -25,6 +26,7 @@ with
         values
             (
                 (table id_adresse),
+                '2024-04-03 17:14:47',
                 8,
                 1,
                 'gratuit',
@@ -77,7 +79,7 @@ Ne manquez pas cette opportunité unique de découvrir l''un des joyaux de la Br
         insert into
             avis (id_offre, id_membre_auteur, note, contexte, date_experience, commentaire)
         values
-            ((table id_offre), id_membre ('5cover'), 5, 'famille', '2024-02-22', 'Une expérience mémorable.')
+            ((table id_offre), id_membre ('5cover'), 5, 'famille', '2024-04-28', 'Une expérience mémorable.')
     ),
     s4 as (
         insert into

@@ -13,6 +13,7 @@ with
         insert into
             visite (
                 id_adresse,
+                modifiee_le,
                 indication_duree,
                 id_image_principale,
                 id_professionnel,
@@ -25,6 +26,7 @@ with
         values
             (
                 (table id_adresse),
+                '2024-07-28 05:16:37',
                 '0:45:',
                 36,
                 1,
