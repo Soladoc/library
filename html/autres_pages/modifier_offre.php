@@ -7,6 +7,7 @@ require_once 'component/inputs.php';
 require_once 'component/head.php';
 
 $id_professionnel = exiger_connecte_pro();
+echo "test";//TODO retirer
 
 $args = [
     'type_offre' => getarg($_GET, 'id_offre', arg_check(f_is_in(array_keys(CATEGORIES_OFFRE)))),
