@@ -11,13 +11,14 @@ create view offres as select
     offre_categorie(id) categorie,
     offre_en_ligne_pendant(id, date_trunc('month', localtimestamp), '1 month') en_ligne_ce_mois_pendant,
     offre_changement_ouverture_suivant_le(id, localtimestamp, periodes_ouverture) changement_ouverture_suivant_le,
-    coalesce(localtimestamp <@ periodes_ouverture
-               or localtime <@ (select horaires                       --\
-                                  from _ouverture_hebdomadaire        --| Horaires ce jour
-                                 where id_offre = id                  --| de la semaine
-                                   and dow = extract(dow from localtimestamp)), --/
-             true -- Considérer une offre sans période ou horaire comme ouverte tout le temps
-            ) est_ouverte 
+    -- Considérer une offre sans période ou horaire comme ouverte tout le temps
+    (with horaire_match as (
+        select horaires from _ouverture_hebdomadaire
+         where id_offre = id
+           and dow = extract(dow from localtimestamp))
+     select isempty(periodes_ouverture) and not exists((table horaire_match))
+         or localtimestamp <@ periodes_ouverture
+         or coalesce(localtime <@ (table horaire_match), false)) est_ouverte 
 from
     _offre;
 
