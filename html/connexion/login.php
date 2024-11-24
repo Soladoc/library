@@ -1,12 +1,14 @@
 <?php
-require_once 'queries.php';
 require_once 'auth.php';
 require_once 'util.php';
+require_once 'queries.php';
+require_once 'redirect.php';
 
 // Récupérer les données du formulaire
 $args = [
     'login' => getarg($_POST, 'login'),
     'mdp' => getarg($_POST, 'mdp'),
+    'return_url' => getarg($_POST, 'return_url', required: false),
 ];
 
 // Connection membre
@@ -18,8 +20,7 @@ if (!empty($user)) {
     }
     session_regenerate_id(true);
     se_connecter_membre($user['id']);
-    header('Location: /autres_pages/accueil.php');
-    exit;
+    succeed('/autres_pages/accueil.php');
 }
 
 // Connection professionnel
@@ -31,14 +32,20 @@ if (!empty($user)) {
     }
     session_regenerate_id(true);
     se_connecter_pro($user['id']);
-    header('Location: /autres_pages/accPro.php');
-    exit;
+    succeed('/autres_pages/accPro.php');
 }
 
 fail();
 
 function fail(): never
 {
-    header('Location: /autres_pages/connexion.php?error=' . urlencode("Nom d'utilisateur ou mot de passe incorrect."));
+    redirect_to(location_connexion(error: "Nom d'utilisateur ou mot de passe incorrect."));
+    exit;
+}
+
+function succeed(string $default_location): never
+{
+    global $args;
+    redirect_to($args['return_url'] ?? $default_location);
     exit;
 }

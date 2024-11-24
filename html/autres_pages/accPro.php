@@ -5,8 +5,8 @@ require_once 'auth.php';
 
 $id_professionnel = exiger_connecte_pro();
 
-$OFFER_COUNT = query_offres_count($id_professionnel);
-$ONLINE_OFFER_COUNT = query_offres_count($id_professionnel, en_ligne: true)
+$nb_offres = query_offres_count($id_professionnel);
+$nb_offres_en_ligne = query_offres_count($id_professionnel, en_ligne: true)
 ?>
 
 <!DOCTYPE html>
@@ -21,33 +21,33 @@ $ONLINE_OFFER_COUNT = query_offres_count($id_professionnel, en_ligne: true)
         <h1>Accueil Professionnel</h1>
         <a class="btn-more-info" href="/autres_pages/choix_categorie_creation_offre.php">Créer une offre</a>
 
-        <h3><?= $OFFER_COUNT ?> offres</h3>
+        <h3><?= $nb_offres ?> offres</h3>
         <section class="online-offers">
             <h2>Mes offres en ligne</h2>
-            <p>Vos offres actuellement disponibles en ligne&nbsp;: <?= $ONLINE_OFFER_COUNT ?></p>
+            <p>Vos offres actuellement disponibles en ligne&nbsp;: <?= $nb_offres_en_ligne ?></p>
 
             <div class="offer-list">
                 <?php
-                    $ONLINE_OFFERS = query_offres($id_professionnel, en_ligne: true);
-                    while ($offre = $ONLINE_OFFERS->fetch()) {
-                        put_card_offre_pro($offre);
-                    }
-                    notfalse($ONLINE_OFFERS->closeCursor())
+                $offres_en_ligne = query_offres($id_professionnel, en_ligne: true);
+                while ($offre = $offres_en_ligne->fetch()) {
+                    put_card_offre_pro($offre);
+                }
+                notfalse($offres_en_ligne->closeCursor())
                 ?>
             </div>
         </section>
 
         <section class="offline-offers">
             <h2>Mes offres hors ligne</h2>
-            <p>Vos offres hors-ligne&nbsp;: <?= $OFFER_COUNT - $ONLINE_OFFER_COUNT ?> </p>
+            <p>Vos offres hors-ligne&nbsp;: <?= $nb_offres - $nb_offres_en_ligne ?> </p>
 
             <div class="offer-carousel">
                 <?php
-                    $OFFRES_HORS_LIGNE = query_offres($id_professionnel, en_ligne: false);
-                    while ($offre = $OFFRES_HORS_LIGNE->fetch()) {
-                        put_card_offre_pro($offre);
-                    }
-                    $OFFRES_HORS_LIGNE->closeCursor()
+                $offres_hors_ligne = query_offres($id_professionnel, en_ligne: false);
+                while ($offre = $offres_hors_ligne->fetch()) {
+                    put_card_offre_pro($offre);
+                }
+                $offres_hors_ligne->closeCursor()
                 ?>
             </div>
         </section>

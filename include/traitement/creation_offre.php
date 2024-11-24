@@ -103,12 +103,12 @@ transaction(function () {
     foreach (soa_to_aos($args['periodes']) as $periode) {
         offre_insert_periode($id_offre, $periode['debut'], $periode['fin']);
     }
-
 }, function () {
     global $uploaded_files;
     array_walk($uploaded_files, unlink(...));
 });
 
-function extract_indication_duree(array $args): string {
+function extract_indication_duree(array $args): string
+{
     return make_interval($args['indication_duree_jours'], $args['indication_duree_heures'], $args['indication_duree_minutes']);
 }

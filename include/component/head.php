@@ -5,9 +5,9 @@
  * @param string $title Le titre du document.
  * @param array $stylesheets Un liste de chemins relatifs dans au dossier `/style` des feuilles de style CSS à inclure.
  * @param array $scripts Un tableau associatif mappant des chemins relatifs au dossier `/script_js` des script JS à inclure vers leurs paramètres qui correspond au reste de l'attribut.
- * 
+ *
  * Note: la feuille de stile `style.css` et le script `base.js` sont inclus dans tous les documents.
- * 
+ *
  * @example location description
  * ```php
  * put_head("Création d'une offre",
@@ -23,7 +23,7 @@
  *     <script defer src="/script_js/base.js">
  *     <script defer type="module" src="/script_js/module/creation_offre.js">
  * </head>
- * ``` 
+ * ```
  * @return void
  */
 function put_head(string $title, array $stylesheets = [], array $scripts = [])

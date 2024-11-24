@@ -1,6 +1,7 @@
 <?php
 require_once 'util.php';
 require_once 'queries.php';
+require_once 'redirect.php';
 require_once 'component/head.php';
 require_once 'component/offre.php';
 
@@ -22,9 +23,8 @@ if ($membre !== false) {
     $prenom = $membre['prenom'];
     $telephone = $membre['telephone'];
     $id_adresse = $membre['id_adresse'];
-        $adresse= query_adresse($id_adresse);
-}
-else if ($pro !== false) {
+    $adresse = query_adresse($id_adresse);
+} else if ($pro !== false) {
     // echo '<pre>';
     // print_r($pro);
     // echo '</pre>';
@@ -35,38 +35,30 @@ else if ($pro !== false) {
     $prenom = $pro['prenom'];
     $telephone = $pro['telephone'];
     $id_adresse = $pro['id_adresse'];
-        $adresse= query_adresse($id_adresse);
+    $adresse = query_adresse($id_adresse);
 
     if (exists_pro_prive($id)) {
         $siren = query_get_siren($id);
     }
-    
-}
-else {
+} else {
     html_error("le compte d'ID {$args['id']} n'existe pas");
 }
 // Afficher le détail du compte du membre
-
 
 if ($_POST) {
     $new_mdp = getarg($_POST, 'new_mdp');
     $confirmation_mdp = getarg($_POST, 'confirmation_mdp');
     $old_mdp = getarg($_POST, 'old_mdp');
 
-    if (password_verify($mdp_hash)) {
-        if ($confirmation_mdp === $new_mdp ) {
-            update_mdp($id,$new_mdp);
+    if ($new_mdp && password_verify($old_mdp, $mdp_hash)) {
+        if ($confirmation_mdp === $new_mdp) {
+            update_mdp($id, $new_mdp);  // todo: cette fonction n'exite pas
+        } else {
+            redirect_to(location_connexion('Mot de passe de confirmation different.'));
         }
-        else{
-            header('Location: /autres_pages/connexion.php?error_confirmation=' . urlencode("Mot de passe de confirmation different."));
-
-        }
+    } else {
+        redirect_to(location_connexion(error: 'Mot de passe incorrect.'));
     }
-    else {
-        header('Location: /autres_pages/connexion.php?error_mdp=' . urlencode(" Mot de passe incorrect."));
-
-    }
-    
 }
 
 ?>
@@ -86,18 +78,18 @@ if ($_POST) {
 
     <main>
         <section id="info_compte">
-            <?php if ($membre !== false) {
-                
-            ?>
+            <?php
+            if ($membre !== false) {
+                ?>
             <div id="pseudo">
                 <p>Pseudo : </p>
                 <?php echo $pseudo ?>
             </div>
-            <?php }
-            else if ($pro !== false){ ?>
+            <?php } else if ($pro !== false) { ?>
                 <div id="denomination">
                 <p>Denomination : </p>
-                <?php echo $denomination 
+                <?php
+                echo $denomination
                 ?> </div>
 
                 
@@ -108,11 +100,11 @@ if ($_POST) {
                     ?>
                     <div id="siren">
                     <p>siren : </p>
-                <?php echo $siren 
+                <?php
+                echo $siren
                 ?> </div><?php
-                    
-                   
-                }?>
+                }
+                ?>
                 
            
 
@@ -141,7 +133,8 @@ if ($_POST) {
 
             <div id="adresse">
                 <p>adresse : </p>
-                <?php echo format_adresse($adresse);  
+                <?php
+                echo format_adresse($adresse);
                 ?> </div>
         <a href="modif_compte.php?id=<?php echo $id ?>">modifier</a>
             <?php ?>

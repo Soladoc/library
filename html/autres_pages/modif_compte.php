@@ -1,6 +1,7 @@
 <?php
 require_once 'util.php';
 require_once 'queries.php';
+require_once 'redirect.php';
 require_once 'component/head.php';
 require_once 'component/offre.php';
 require_once 'component/inputs.php';
@@ -24,9 +25,8 @@ if ($membre !== false) {
     $prenom = $membre['prenom'];
     $telephone = $membre['telephone'];
     $id_adresse = $membre['id_adresse'];
-        $adresse= query_adresse($id_adresse);
-}
-else if ($pro !== false) {
+    $adresse = query_adresse($id_adresse);
+} else if ($pro !== false) {
     // echo '<pre>';
     // print_r($pro);
     // echo '</pre>';
@@ -37,80 +37,68 @@ else if ($pro !== false) {
     $prenom = $pro['prenom'];
     $telephone = $pro['telephone'];
     $id_adresse = $pro['id_adresse'];
-        $adresse= query_adresse($id_adresse);
-    
-}
-else {
+    $adresse = query_adresse($id_adresse);
+} else {
     html_error("le compte d'ID {$args['id']} n'existe pas");
 }
 // Afficher le détail du compte du membre
 
-
 if ($_POST) {
-    # modif pseudo ------------------------------------------------------------------------------------------------------------------
-    $new_pseudo = getarg($_POST, 'new_pseudo',null, required: false);
+    // modif pseudo ------------------------------------------------------------------------------------------------------------------
+    $new_pseudo = getarg($_POST, 'new_pseudo', null, required: false);
     if ($new_pseudo) {
-        query_uptate_pseudo($id,$new_pseudo);
+        query_uptate_pseudo($id, $new_pseudo);
     }
 
-    # modif denomination ------------------------------------------------------------------------------------------------------------------
-    $new_denomination = getarg($_POST, 'new_denomination',null, false);
+    // modif denomination ------------------------------------------------------------------------------------------------------------------
+    $new_denomination = getarg($_POST, 'new_denomination', null, false);
     if ($new_denomination) {
-        query_uptate_denomination($id,$new_denomination);
+        query_uptate_denomination($id, $new_denomination);
     }
 
-    # modif siren ------------------------------------------------------------------------------------------------------------------
-    $new_siren = getarg($_POST, 'new_siren',null, false);
+    // modif siren ------------------------------------------------------------------------------------------------------------------
+    $new_siren = getarg($_POST, 'new_siren', null, false);
     if ($new_siren) {
-        query_update_siren($id,$new_siren);
+        query_update_siren($id, $new_siren);
     }
 
-    # modif Nom ------------------------------------------------------------------------------------------------------------------
-    $new_Nom = getarg($_POST, 'new_Nom',null, false);
+    // modif Nom ------------------------------------------------------------------------------------------------------------------
+    $new_Nom = getarg($_POST, 'new_Nom', null, false);
     if ($new_Nom) {
-        query_update_Nom($id,$new_Nom);
+        query_update_Nom($id, $new_Nom);
     }
 
-    # modif Prenom ------------------------------------------------------------------------------------------------------------------
-    $new_Prenom = getarg($_POST, 'new_Prenom',null, required: false);
+    // modif Prenom ------------------------------------------------------------------------------------------------------------------
+    $new_Prenom = getarg($_POST, 'new_Prenom', null, required: false);
     if ($new_Prenom) {
-        query_update_prenom($id,$new_Prenom);
+        query_update_prenom($id, $new_Prenom);
     }
 
-    # modif Email ------------------------------------------------------------------------------------------------------------------
-    $new_Email = getarg($_POST, 'new_Email',null, false);
+    // modif Email ------------------------------------------------------------------------------------------------------------------
+    $new_Email = getarg($_POST, 'new_Email', null, false);
     if ($new_Email) {
-        query_update_email($id,$new_Email);
+        query_update_email($id, $new_Email);
     }
 
-    # modif telephone ------------------------------------------------------------------------------------------------------------------
-    $new_telephone = getarg($_POST, 'new_telephone',null, false);
+    // modif telephone ------------------------------------------------------------------------------------------------------------------
+    $new_telephone = getarg($_POST, 'new_telephone', null, false);
     if ($new_telephone) {
-        query_update_telephone($id,$new_telephone);
+        query_update_telephone($id, $new_telephone);
     }
 
-    
+    // modif mot de passe ------------------------------------------------------------------------------------------------------------------
+    $new_mdp = getarg($_POST, 'new_mdp', null, false);
+    $confirmation_mdp = getarg($_POST, 'confirmation_mdp', null, false);
+    $old_mdp = getarg($_POST, 'old_mdp', null, false);
 
-
-
-
-    # modif mot de passe ------------------------------------------------------------------------------------------------------------------
-    $new_mdp = getarg($_POST, 'new_mdp',null, false);
-    $confirmation_mdp = getarg($_POST, 'confirmation_mdp',null, false);
-    $old_mdp = getarg($_POST, 'old_mdp',null, false);
-
-    if ($new_mdp  && password_verify($old_mdp, $mdp_hash)) {
-        if ($confirmation_mdp === $new_mdp ) {
-            update_mdp($id,$new_mdp);
+    if ($new_mdp && password_verify($old_mdp, $mdp_hash)) {
+        if ($confirmation_mdp === $new_mdp) {
+            update_mdp($id, $new_mdp);  // todo: cette fonction n'exite pas
+        } else {
+            redirect_to(location_connexion('Mot de passe de confirmation different.'));
         }
-        else{
-            header('Location: /autres_pages/connexion.php?error_confirmation=' . urlencode("Mot de passe de confirmation different."));
-
-        }
-    }
-    else {
-        header('Location: /autres_pages/connexion.php?error_mdp=' . urlencode(" Mot de passe incorrect."));
-
+    } else {
+        redirect_to(location_connexion(error: 'Mot de passe incorrect.'));
     }
 }
 
@@ -132,7 +120,7 @@ if ($_POST) {
 
 
         <a href="/autres_pages/detail_compte.php?id=<?php echo $id ?>">retour</a>
-        <?php if ($membre !== false) {?>
+        <?php if ($membre !== false) { ?>
             <div>
                 <div id="pseudo">
                     <label>Pseudo : </label>
@@ -140,9 +128,7 @@ if ($_POST) {
                 </div>
                 <input id="new_pseudo" name="new_pseudo" type="text" placeholder="votre nouveau pseudo">
             </div>
-        <?php }
-
-        else if ($pro !== false){ ?>
+        <?php } else if ($pro !== false) { ?>
             <div>
                 <div id="denomination">
                     <label>Denomination : </label>
@@ -150,19 +136,19 @@ if ($_POST) {
                 </div>
                 <input id="new_denomination" name="new_denomination" type="text" placeholder="votre nouvelle denomination">
             </div>
-            <?php 
+            <?php
             if (exists_pro_prive($id)) {
-                    ?>
+                ?>
                     <div>
                     <div id="siren">
                     <label>siren : </label>
-                <?php echo $siren 
+                <?php
+                echo $siren
                 ?> </div>
                     <input type="text" id="new_siren" name="new_siren" placeholder="231 654 988" oninput="formatInput(this)" maxlength="12">
             </div><?php
-                    
-                   
-                }?>
+            }
+            ?>
 
 
         <?php } ?>
@@ -204,9 +190,10 @@ if ($_POST) {
         <div>
         <div id="adresse">
                 <p>adresse : </p>
-                <?php echo format_adresse($adresse);  
+                <?php
+                echo format_adresse($adresse);
                 ?> </div>
-            <?php put_input_address("",'adresse', 'adresse_');?>
+            <?php put_input_address('', 'adresse', 'adresse_'); ?>
 
         </div>
 

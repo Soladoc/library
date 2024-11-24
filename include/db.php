@@ -20,7 +20,7 @@ function _is_localhost(): bool
     return empty(filter_var($server_ip, FILTER_VALIDATE_IP, FILTER_FLAG_NO_RES_RANGE | FILTER_FLAG_NO_PRIV_RANGE));
 }
 
-$_PDO = null;
+$_pdo = null;
 
 /**
  * Se connecter à la base de données.
@@ -30,9 +30,9 @@ $_PDO = null;
  */
 function db_connect(): PDO
 {
-    global $_PDO;
-    if ($_PDO !== null) {
-        return $_PDO;
+    global $_pdo;
+    if ($_pdo !== null) {
+        return $_pdo;
     }
 
     // Load .env file
@@ -45,29 +45,29 @@ function db_connect(): PDO
 
     // Connect to the database
     $driver = 'pgsql';
-    // Pour le dév. en localhost: on a accès au conteneur postgresdb, on utilise donc le FQDN.
+    // Pour le dév. en localhost: on n'a pas accès au conteneur postgresdb, on utilise donc le FQDN.
     $host = _is_localhost() ? '413.ventsdouest.dev' : 'postgresdb';
     $port = notfalse(getenv('PGDB_PORT'), 'PGDB_PORT not set');
     $dbname = 'postgres';
 
-    $_PDO = new PDO(
+    $_pdo = new PDO(
         "$driver:host=$host;port=$port;dbname=$dbname",
         notfalse(getenv('DB_USER'), 'DB_USER not set'),
         notfalse(getenv('DB_ROOT_PASSWORD'), 'DB_ROOT_PASSWORD not set'),
     );
 
-    notfalse($_PDO->exec("set schema 'pact'"));
+    notfalse($_pdo->exec("set schema 'pact'"));
 
-    $_PDO->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);
+    $_pdo->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);
 
-    return $_PDO;
+    return $_pdo;
 }
 
 /**
  * Effectue une transaction.
  *
  * Cette fonction automatise BEGIN, COMMIT et ROLLBACK pour effectuer une transaction dans la base de données.
- * 
+ *
  * Regrouper les statements liés dans une transaction permet notamment de préserver la cohérence de la base de données en cas d'erreur.
  *
  * @param callable $body La fonction contenant le corps de la transaction. Elle est appelée entre le BEGIN et le COMMIT. Si cette fonction jette une exception, un ROLLBACK est effectué.

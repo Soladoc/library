@@ -1,7 +1,9 @@
 <?php
-require_once 'db.php';
 require_once 'component/head.php';
-$pdo = db_connect()
+require_once 'util.php';
+
+$return_url = getarg($_GET, 'return_url', required: false);
+$error = getarg($_GET, 'error', required: false);
 ?>
 
 <!DOCTYPE html>
@@ -27,10 +29,13 @@ $pdo = db_connect()
                     <label for="mdp">Mot de passe *</label>
                     <input id="mdp" name="mdp" type="password" placeholder="**********" required>
                 </div>
-                <?php if ($error = $_GET['error'] ?? null) { ?>
-                <p class="error"><?= $error ?></p>
+                <?php if ($error !== null) { ?>
+                    <p class="error"><?= $error ?></p>
                 <?php } ?>
                 <button type="submit" class="btn-connexion">Se connecter</button>
+                <?php if ($return_url !== null) { ?>
+                    <input type="hidden" name="return_url" value="<?= $return_url ?>">
+                <?php } ?>
             </form>
             <br><br>
             <label>Pas de compte&nbsp;?</label>

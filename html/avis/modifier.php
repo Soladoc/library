@@ -1,9 +1,9 @@
 <?php
-session_start();
-require_once 'auth.php';
-require_once 'component/head.php';
-require_once 'const.php';
 require_once 'db.php';
+require_once 'auth.php';
+require_once 'const.php';
+require_once 'redirect.php';
+require_once 'component/head.php';
 
 exiger_connecte_membre();
 
@@ -31,10 +31,8 @@ if (isset($_POST['date'])) {
 
         $success_message = 'Avis modifié avec succès !';
         $id = $avis['id_offre'];
-        header("Location: ../autres_pages/detail_offre.php?id=$id");
-        exit;
+        redirect_to(location_detail_offre($id));
     }
-
 } else {
 ?>
 <!DOCTYPE html>

@@ -72,7 +72,7 @@ require_once 'component/offre.php'
         foreach ($offres as &$offre) {
             $offre['formatted_address'] = format_adresse(notfalse(query_adresse($offre['id_adresse'])));
         }
-        echo "const offersData = " . json_encode($offres) . ";";
+        echo 'const offersData = ' . json_encode($offres) . ';';
         ?>
         document.addEventListener('DOMContentLoaded', function() {
             initializeOffers(offersData);

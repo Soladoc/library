@@ -1,27 +1,36 @@
 <?php
 require_once 'util.php';
+require_once 'redirect.php';
+
 /**
  * auth.php
  * Fonctions relatives à l'authentification
  */
-
 notfalse(session_start());
 
+function location_home(): string
+{
+    return est_connecte_pro() ? '/autres_pages/accueil.php' : '/autres_pages/accPro.php';
+}
+
 /**
- * Déconnecte la session actuelle.
- * @return void
+ * Déconnecte la session actuelle et redirige vers l'accueil.
+ * @return never
  */
-function se_deconnecter(): void {
+function se_deconnecter(): never
+{
     assert(est_connecte());
     $_SESSION = [];
     notfalse(session_destroy());
+    redirect_to(location_home());
 }
 
 /**
  * Sommes-nous connectés?
  * @return bool `true` si nous (la session courante) sommes connectés en tant que membre ou professionnel, `false` sinon.
  */
-function est_connecte(): bool {
+function est_connecte(): bool
+{
     return est_connecte_pro() || est_connecte_membre();
 }
 
@@ -47,7 +56,7 @@ function exiger_connecte_pro(): int
     if (($id = id_pro_connecte()) !== null) {
         return $id;
     }
-    header('Location: /autres_pages/connexion.php');
+    redirect_to(location_connexion());
     exit;
 }
 
@@ -81,7 +90,6 @@ function se_connecter_membre(int $id_membre): void
     $_SESSION['id_membre'] = $id_membre;
 }
 
-
 /**
  * Retourne l'ID du professionnel actuellement connecté, redirigeant vers la page de connexion sinon.
  * Cette fonction appelle <i>header</i>. Elle doit donc être appelé <b>avant</b> tout envoi de HTML.
@@ -92,7 +100,7 @@ function exiger_connecte_membre(): int
     if (($id = id_membre_connecte()) !== null) {
         return $id;
     }
-    header('Location: /autres_pages/connexion.php');
+    redirect_to(location_connexion());
     exit;
 }
 

@@ -143,6 +143,7 @@ function query_update_Nom(int $id_compte, $new_nom): void
     bind_values($stmt, [1 => [$new_nom, PDO::PARAM_STR], 2 => [$id_compte, PDO::PARAM_INT]]);
     notfalse($stmt->execute());
 }
+
 function query_update_email(int $id_compte, $new_email): void
 {
     $stmt = notfalse(db_connect()->prepare('UPDATE _compte SET email = ? WHERE id = ?;'));
@@ -263,7 +264,8 @@ function insert_uploaded_image(array $img, ?string $legende = null): array
  * @param int $id_pro_prive L'ID du professionnel privé.
  * @return bool `true` si un professionnel privé d'id $id_pro_prive existe, `false` sinon.
  */
-function exists_pro_prive(int $id_pro_prive): bool {
+function exists_pro_prive(int $id_pro_prive): bool
+{
     $stmt = notfalse(db_connect()->prepare('select ? in (select id from pro_prive)'));
     bind_values($stmt, [1 => [$id_pro_prive, PDO::PARAM_INT]]);
     notfalse($stmt->execute());

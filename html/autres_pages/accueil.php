@@ -28,13 +28,13 @@ require_once 'component/head.php';
             <h2>Offres à la une</h2>
             <div class="offer-list">
                 <?php
-                    // Préparer et exécuter la requête SQL pour récupérer toutes les offres
-                    $stmtOffres = query_offres_a_une();
-                    
-                    // Boucler sur les résultats pour afficher chaque offre
-                    while ($offre = $stmtOffres->fetch()) {
-                        put_card_offre($offre);
-                    }
+                // Préparer et exécuter la requête SQL pour récupérer toutes les offres
+                $stmtOffres = query_offres_a_une();
+
+                // Boucler sur les résultats pour afficher chaque offre
+                while ($offre = $stmtOffres->fetch()) {
+                    put_card_offre($offre);
+                }
                 ?>
             </div>
         </section>

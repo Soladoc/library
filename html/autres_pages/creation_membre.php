@@ -1,13 +1,13 @@
 <?php
+require_once 'util.php';
 require_once 'queries.php';
+require_once 'redirect.php';
 require_once 'component/head.php';
 require_once 'component/inputs.php';
-require_once 'util.php';
 
-function fail(string $error)
+function fail(string $error): never
 {
-    header('Location: ?error=' . urlencode($error));
-    exit;
+    redirect_to('?error=' . urlencode($error));
 }
 
 if (isset($_POST['motdepasse'])) {
@@ -24,20 +24,20 @@ if (isset($_POST['motdepasse'])) {
     if (strlen($_POST['motdepasse']) > 72) {
         fail('Mot de passe trop long');
     }
-    $Nomcommune = $_POST['adresse'];
+    $nomCommune = $_POST['adresse'];
 
-    $stmt = db_connect()->prepare("SELECT code, numero_departement FROM pact._commune WHERE nom = ?");
-    $stmt->execute([$Nomcommune]);
+    $stmt = db_connect()->prepare('SELECT code, numero_departement FROM pact._commune WHERE nom = ?');
+    $stmt->execute([$nomCommune]);
     $commune = $stmt->fetch(PDO::FETCH_ASSOC);
 
     if (!$commune) {
-        fail("La commune '$Nomcommune' n'existe pas.");
+        fail("La commune '$nomCommune' n'existe pas.");
     }
 
     $codeCommune = $commune['code'];
     $numeroDepartement = $commune['numero_departement'];
 
-    $stmt = db_connect()->prepare(" INSERT INTO pact._adresse (code_commune, numero_departement) VALUES ( ?, ?) RETURNING id");
+    $stmt = db_connect()->prepare(' INSERT INTO pact._adresse (code_commune, numero_departement) VALUES ( ?, ?) RETURNING id');
     $stmt->execute([$codeCommune, $numeroDepartement]);
 
     $idAdresse = $stmt->fetchColumn();
@@ -55,7 +55,7 @@ if (isset($_POST['motdepasse'])) {
         $mdp_hash,
         $idAdresse
     ]);
-    header('Location: /autres_pages/connexion.php');  // todo: passer en GET le pseudo pour l'afficher dans le formulaire connexion, pour que l'utilisateur n'ait pas à le retaper.
+    redirect_to(location_connexion());  // todo: passer en GET le pseudo pour l'afficher dans le formulaire connexion, pour que l'utilisateur n'ait pas à le retaper.
 } else {
 ?>
 <!DOCTYPE html>

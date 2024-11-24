@@ -1,22 +1,20 @@
 <?php
 require_once 'db.php';
-require_once 'queries.php';
-require_once 'component/head.php';
 require_once 'util.php';
+require_once 'queries.php';
+require_once 'redirect.php';
+require_once 'component/head.php';
 
 $args = [
     'id' => getarg($_GET, 'id', arg_filter(FILTER_VALIDATE_INT))
 ];
-// Vérifier si l'ID est présent dans l'URL
-if ($_POST) {
-    // Connexion à la base de données
-    $pdo = db_connect();
 
+if ($_POST) {
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         offre_alterner_etat($args['id']);
         $offre = query_offre($args['id']);
-        header('Location: ' . $_SERVER['PHP_SELF'] . '?id=' . $args['id']);
-        exit();
+        redirect_to($_SERVER['REQUEST_URI']);
+        exit;
     }
 
     // Récupérer les données de l'offre

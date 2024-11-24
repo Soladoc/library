@@ -22,7 +22,6 @@ function notfalse(mixed $valeur, string $message = 'was false'): mixed
     return $valeur;
 }
 
-
 /**
  * Détermine si tous les éléments d'un tableau satisfont un prédicat.
  * @template T
@@ -30,7 +29,8 @@ function notfalse(mixed $valeur, string $message = 'was false'): mixed
  * @param callable(T): bool $predicate La fonction prédicat à appeler avec chaque élément de $arr.
  * @return bool `true` si $predicate n'a retourné une valeur *falsey* pour aucun élément de $arr, false sinon.
  */
-function array_every(array $arr, callable $predicate): bool {
+function array_every(array $arr, callable $predicate): bool
+{
     foreach ($arr as $e) {
         if (!$predicate($e)) {
             return false;
@@ -56,7 +56,7 @@ function getarg(array $source, string $nom, ?callable $filter = null, bool $requ
             return null;
         }
     }
-    return $filter === null ? $source[$nom]: $filter($nom, $source[$nom]);
+    return $filter === null ? $source[$nom] : $filter($nom, $source[$nom]);
 }
 
 /**
@@ -156,7 +156,7 @@ function single(array $array): mixed
  * @template T
  * @param array<T> $array Un tableau devant contenir 0 ou 1 élément.
  * @param T $default La valeur par défaut à retourner quand $array est vide.
- * @return T Le seul élément de $array, ou $default si $array est vide. 
+ * @return T Le seul élément de $array, ou $default si $array est vide.
  * @throws Exception Si le tableau contient plus d'une valeur.
  */
 function single_or_default(array $array, mixed $default = null): mixed
@@ -178,7 +178,7 @@ function single_or_default(array $array, mixed $default = null): mixed
  * element is an array containing the values for each key from the input array.
  * @param array<array> $array The input "structre of arrays" to convert.
  * @return array<int, mixed> The resulting "array of structures".
- * 
+ *
  * @example
  * Input: ['a' => [1, 2], 'b' => [3, 4]]
  * Output: [[a' => 1, 'b' => 3], ['a' => 2, 'b' => 4]]
@@ -212,4 +212,3 @@ function format_adresse(array $adresse)
         . elvis(query_commune($adresse['code_commune'], $adresse['numero_departement'])['nom'], ', ')
         . query_codes_postaux($adresse['code_commune'], $adresse['numero_departement'])[0];
 }
-

@@ -5,7 +5,7 @@ require_once 'db.php';
  * Affiche le composant d'input d'adresse postale.
  *
  * Noms dans le POST (optionellement suffixés par $prefix)
- * 
+ *
  * - `commune`
  * - `localite`
  * - `nom_voie`
@@ -13,7 +13,7 @@ require_once 'db.php';
  * - `complement_numero`
  * - `precision_int`
  * - `precision_ext`
- 
+ *
  * @param string $form_id l'ID du formulaire auquel appartient le contrôle. Pas nécéssaire de le spécifier si l'élément est déjà dans un `<form>`.
  * @param string $id L'ID de l'élément à ajouter. Optionnel, ne pas spécifier pour pas d'ID.
  * @param string $prefix Le préfixe des attributs "name" des champs pour chaque champ de l'adresse. Définit les noms de clés dans le $_POST en PHP. Optionnel, ne pas spécifier pour pas de préfix
