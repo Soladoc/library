@@ -84,36 +84,38 @@ if ($offre) {
                 <a class="modifier" href="https://413.ventsdouest.dev/autres_pages/modifier_offre.php">Modifier</a>
             </div>
             <section class="offer-details">
-            <section class="offer-main-photo">
-                <div class="carousel-container">
-                    <div class="carousel">
-                        <!-- Image principale -->
-                        <?php if ($image_pricipale): ?>
-                            <div class="carousel-slide">
-                                <?php put_image($image_pricipale) ?>
-                            </div>
-                        <?php endif ?>
-
-                        <!-- Galerie d'images -->
-                        <?php if (!empty($gallerie)): ?>
-                            <?php foreach ($gallerie as $image): ?>
+                <section class="offer-main-photo">
+                    <div class="carousel-container">
+                        <div class="carousel">
+                            <!-- Image principale -->
+                            <?php if ($image_pricipale): ?>
                                 <div class="carousel-slide">
-                                    <?php put_image(DB\query_image($image)) ?>
+                                    <?php put_image($image_pricipale) ?>
                                 </div>
-                            <?php endforeach ?>
-                        <?php endif ?>
+                            <?php endif ?>
+
+                            <!-- Galerie d'images -->
+                            <?php if (!empty($gallerie)): ?>
+                                <?php foreach ($gallerie as $image): ?>
+                                    <div class="carousel-slide">
+                                        <?php put_image(DB\query_image($image)) ?>
+                                    </div>
+                                <?php endforeach ?>
+                            <?php endif ?>
+                        </div>
+
+                        <!-- Boutons de navigation -->
+                        <button class="carousel-prev" aria-label="Image précédente">❮</button>
+                        <button class="carousel-next" aria-label="Image suivante">❯</button>
                     </div>
+                </section>
 
-                    <!-- Boutons de navigation -->
-                    <button class="carousel-prev" aria-label="Image précédente">❮</button>
-                    <button class="carousel-next" aria-label="Image suivante">❯</button>
-                </div>
-            </section>
-
-            <div class="offer-info">
-                <h2><?= $titre ?></h2>
-                <p class="description"><?= $description ?></p>
+                <div class="offer-info">
+                <h2><?= htmlspecialchars($titre) ?></h2>
+                <p class="description"><?= nl2br(htmlspecialchars($description)) ?></p>
             </div>
+
+        </section>
 
         <!-- Location -->
         <section class="offer-location">
