@@ -32,6 +32,7 @@ if ($_POST) {
         $site_web = $offre['url_site_web'];
         $image_pricipale = $offre['id_image_principale'];
         $en_ligne = $offre['en_ligne'];
+        echo $en_ligne;
         $info_adresse = DB\query_adresse($adresse);
         $avis = DB\query_avis();
         // Vérifier si l'adresse existe
