@@ -82,6 +82,10 @@ if ($_POST) {
     
 }
 
+$args = [
+    'id' => getarg($_GET, 'id', arg_filter(FILTER_VALIDATE_INT))
+];
+
 
 
 if ($membre !== false) {
