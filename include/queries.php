@@ -26,6 +26,14 @@ function query_avis_count(int $id_offre): int
     return notfalse($stmt->fetchColumn());
 }
 
+function query_images(): \Iterator
+{
+    $stmt = notfalse(connect()->prepare('select * from _image'));
+    notfalse($stmt->execute());
+    return $stmt->getIterator();
+}
+
+
 function query_image(int $id_image): array
 {
     $stmt = notfalse(connect()->prepare('select * from _image where id = ?'));
