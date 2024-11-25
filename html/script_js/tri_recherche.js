@@ -3,7 +3,7 @@
 let offers = []; // This will be populated with data from PHP
 async function initializeOffers() {
     offers = await (await fetch(`/json/offres.php`)).json();
-    displayOffers();
+    filterOffers();
 }
 initializeOffers();
 
@@ -42,6 +42,21 @@ function showSubcategories() {
     } else {
         document.getElementById('subcategories').classList.add('hidden');
     }
+    if (mainCategory && subcategories[mainCategory]) {
+        subcategories[mainCategory].forEach(subcategory => {
+            // ... (existing code to create checkboxes)
+            
+            // Add event listener to each checkbox
+            checkbox.addEventListener('change', filterOffers);
+        });
+
+        document.getElementById('subcategories').classList.remove('hidden');
+    } else {
+        document.getElementById('subcategories').classList.add('hidden');
+    }
+
+    // Call filterOffers when main category changes
+    filterOffers();
 }
 
 function sortOffers(criteria, ascending = true) {
@@ -71,6 +86,94 @@ function sortOffers(criteria, ascending = true) {
     displayOffers();
 }
 
+function filterOffers() {
+    const mainCategory = document.getElementById('main-category').value;
+    const subcategoryCheckboxes = document.querySelectorAll('input[name="subcategory"]:checked');
+    const subcategories = Array.from(subcategoryCheckboxes).map(cb => cb.value);
+
+    const filteredOffers = offers.filter(offer => {
+        if (mainCategory && offer.categorie !== mainCategory) {
+            return false;
+        }
+        if (subcategories.length > 0 && !subcategories.includes(offer.sous_categorie)) {
+            return false;
+        }
+        return true;
+    });
+
+    displayOffers(filteredOffers);
+}
+
+function displayOffers(offersToDisplay = offers) {
+    const offerList = document.querySelector('.offer-list');
+    offerList.innerHTML = ''; // Clear existing offers
+    offersToDisplay.forEach(offer => {
+        const offerList = document.querySelector('.offer-list');
+    offerList.innerHTML = ''; // Clear existing offers
+    offers.forEach(offer => {
+        const offerElement = document.createElement('div');
+        offerElement.className = 'offer-card';
+        // Format the date
+        const date = new Date(offer.creee_le);
+        const formattedDate = date.toLocaleDateString('fr-FR', {
+            day: '2-digit',
+            month: '2-digit',
+            year: 'numeric'
+        });
+        
+        if (offer.prix_min!=null){
+        offerElement.innerHTML = `
+            <h3>${offer.titre}</h3>
+            <img src="../images_utilisateur/${offer.id_image_principale}.jpg" 
+                onerror="this.onerror=null; 
+                  this.src='../images_utilisateur/${offer.id_image_principale}.png';
+                  this.onerror=function(){
+                        this.onerror=null; 
+                        this.src='../images_utilisateur/${offer.id_image_principale}.webp';
+                        this.onerror=function(){
+                            this.onerror=null;
+                            this.src='../images_utilisateur/${offer.id_image_principale}.jpeg';
+                        }
+                    }
+            ">
+            <p>Catégorie : ${offer.categorie}</p>
+            <p>Description : ${offer.resume}</p>
+            <p>Adresse : ${offer.formatted_address}</p>
+            <p>À partir de : ${offer.prix_min}€</p>
+            <p>Note : ${offer.note_moyenne}/5</p>
+            <p>Date : ${formattedDate}</p>
+            <a href="/autres_pages/detail_offre.php?id=${offer.id}&pro=true">
+                <button class="btn-more-info">En savoir plus</button>
+            </a>`;
+        } else {
+            offerElement.innerHTML = `
+            <h3>${offer.titre}</h3>
+            <img src="../images_utilisateur/${offer.id_image_principale}.jpg" 
+                onerror="this.onerror=null; 
+                  this.src='../images_utilisateur/${offer.id_image_principale}.png';
+                  this.onerror=function(){
+                        this.onerror=null; 
+                        this.src='../images_utilisateur/${offer.id_image_principale}.webp';
+                        this.onerror=function(){
+                            this.onerror=null;
+                            this.src='../images_utilisateur/${offer.id_image_principale}.jpeg';
+                        }
+                    }
+            ">
+            <p>Catégorie : ${offer.categorie}</p>
+            <p>Description : ${offer.resume}</p>
+            <p>Adresse : ${offer.formatted_address}</p>
+            <p>Gratuit</p>
+            <p>Note : ${offer.note_moyenne}/5</p>
+            <p>Date : ${formattedDate}</p>
+            <a href="/autres_pages/detail_offre.php?id=${offer.id}&pro=true">
+                <button class="btn-more-info">En savoir plus</button>
+            </a>`;
+        }
+        offerList.appendChild(offerElement);
+    });
+    });
+}
 function displayOffers() {
     const offerList = document.querySelector('.offer-list');
     offerList.innerHTML = ''; // Clear existing offers
@@ -145,6 +248,7 @@ document.getElementById('sort-rating-up').addEventListener('click', () => sortOf
 document.getElementById('sort-rating-down').addEventListener('click', () => sortOffers('note_moyenne', false));
 document.getElementById('sort-date-up').addEventListener('click', () => sortOffers('date', true));
 document.getElementById('sort-date-down').addEventListener('click', () => sortOffers('date', false));
+document.getElementById('main-category').addEventListener('change', showSubcategories);
 
 
 const sortButtons = document.querySelectorAll('.btn-sort');
