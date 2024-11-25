@@ -286,18 +286,7 @@ h1 {
     margin-bottom: 20px;
 }
 
-/* Responsiveness */
-@media (max-width: 768px) {
-    .offer-card {
-        width: 48%;
-    }
-}
-
 @media (max-width: 576px) {
-    .offer-card {
-        width: 100%;
-    }
-
     .search-bar input {
         width: 70%;
     }
@@ -315,8 +304,7 @@ h1 {
     box-shadow: 0 8px 8px rgba(0, 0, 0, 0.3);
 }
 
-.offer-carousel,
-.offer-list {
+.offer-carousel {
     display: flex;
     flex-wrap: wrap;
     justify-content: space-between;

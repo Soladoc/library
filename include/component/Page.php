@@ -9,7 +9,7 @@ final class Page
 {
     private const BASE_STYLESHEETS = [
         'style.css',
-        'offre_card.css',
+        'offer-list.css',
     ];
     private const BASE_SCRIPTS = [
         'base.js' => 'defer',
