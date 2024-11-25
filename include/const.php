@@ -53,3 +53,5 @@ const CONTEXTES_VISITE = [
     'famille',
     'amis',
 ];
+
+const DOCUMENT_ROOT = "/var/www/html";

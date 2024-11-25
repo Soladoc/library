@@ -20,7 +20,15 @@ function notfalse(mixed $valeur, string $message = 'was false'): mixed
     return $valeur;
 }
 
-function array_pop_key(array &$array, string $key): mixed
+/**
+ * Supprime une clé d'un tableu et retourne la valeur associée.
+ * @template T
+ * @param T[] $array Le tableau à modifier.
+ * @param string|int $key La clé à retirer. Elle doit exister dans le tableau.
+ * @throws \Exception Si la clé n'existe pas dans le tableau.
+ * @return T La valeur associée à la clé retirée.
+ */
+function array_pop_key(array &$array, string|int $key): mixed
 {
     if (!array_key_exists($key, $array)) {
         throw new Exception("Array must contain key '$key'");
