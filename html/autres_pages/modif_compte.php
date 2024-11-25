@@ -13,8 +13,7 @@ $args = [
 ];
 
 $id = $args['id'];
-$membre = DB\query_compte_membre($args['id']);
-$pro = DB\query_compte_professionnel($args['id']);
+
 
 // Afficher le détail du compte du membre
 
@@ -82,10 +81,8 @@ if ($_POST) {
     
 }
 
-$args = [
-    'id' => getarg($_GET, 'id', arg_filter(FILTER_VALIDATE_INT))
-];
-
+$membre = DB\query_compte_membre($args['id']);
+$pro = DB\query_compte_professionnel($args['id']);
 
 
 if ($membre !== false) {
