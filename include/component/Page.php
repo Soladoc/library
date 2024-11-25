@@ -62,13 +62,13 @@ final class Page
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><?= htmlspecialchars($this->title) ?></title>
     <?php
-    foreach (self::BASE_STYLESHEETS + $this->stylesheets as $href) {
+    foreach (array_merge(self::BASE_STYLESHEETS, $this->stylesheets) as $href) {
         // Si c'est une URL (contient un ':'), on laisse tel quel. Sinon on préfixe par le dossier des feuilles de style.
         ?><link rel="stylesheet" href="<?= str_contains($href, ':') ? $href : "/style/$href" ?>"><?php
     }
     ?>
     <?php
-    foreach (self::BASE_SCRIPTS + $this->scripts as $src => $attrs) {
+    foreach (array_merge(self::BASE_SCRIPTS, $this->scripts) as $src => $attrs) {
         // Idem.
         ?><script <?= $attrs ?> src="<?= str_contains($src, ':') ? $src : "/script_js/$src" ?>"></script><?php
     }
