@@ -52,7 +52,7 @@ if ($offre) {
     }
 } else {
     echo 'Aucune offre trouvée avec cet ID.';
-}e
+}
 
 ?>
 
