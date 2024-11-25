@@ -4,6 +4,7 @@ require_once 'util.php';
 require_once 'queries.php';
 require_once 'redirect.php';
 require_once 'component/Page.php';
+require_once 'component/offre.php';
 
 $page = new Page("offre : {$args['id']}",
     ['https://unpkg.com/leaflet@1.7.1/dist/leaflet.css'],
