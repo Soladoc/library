@@ -9,7 +9,7 @@ function redirect_to(string $location): never
 function location_connexion(?string $error = null): string
 {
     return '/autres_pages/connexion.php?return_url=' . urlencode($_SERVER['REQUEST_URI'])
-        . ($error === null ? '&error=' . urlencode($error) : null);
+        . ($error === null ? null : '&error=' . urlencode($error));
 }
 
 function location_detail_offre(int $id_offre): string
@@ -21,5 +21,5 @@ function location_detail_offre(int $id_offre): string
 function location_modif_compte(?string $error = null): string
 {
     return '/autres_pages/modif_compte.php?return_url=' . urlencode($_SERVER['REQUEST_URI'])
-        . ($error === null ? '&error=' . urlencode($error) : null);
+        . ($error === null ? null : '&error=' . urlencode($error));
 }
