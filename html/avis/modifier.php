@@ -40,7 +40,7 @@ if (isset($_POST['date'])) {
 <!DOCTYPE html>
 <html lang="en">
 
-<?php $page->put_head(); ?>
+<?php $page->put_head() ?>
 
 <body>
     <?php $page->put_header() ?>
@@ -52,7 +52,7 @@ if (isset($_POST['date'])) {
                 <p class="error-message"><?= htmlspecialchars($error_message) ?></p>
             <?php elseif (isset($success_message)): ?>
                 <p class="success-message"><?= htmlspecialchars($success_message) ?></p>
-            <?php endif; ?>
+            <?php endif ?>
         </div>
 
         <form method="post" action="modifier.php?id=<?= $id_offre ?>&avis_id=<?= $id_avis ?>">

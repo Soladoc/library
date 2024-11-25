@@ -187,10 +187,9 @@ if ($_POST) {
         <div>
         <div id="adresse">
                 <p>adresse : </p>
-                <?php
-                echo format_adresse($adresse);
-                ?> </div>
-            <?php put_input_address('', 'adresse', 'adresse_'); ?>
+                <?= format_adresse($adresse) ?>
+        </div>
+            <?php put_input_address('', 'adresse', 'adresse_') ?>
 
         </div>
 

@@ -80,18 +80,18 @@ $avis = query_avis()
                         <!-- Image principale -->
                         <?php if ($image_pricipale): ?>
                             <div class="carousel-slide">
-                                <?php put_image($image_pricipale); ?>
+                                <?php put_image($image_pricipale) ?>
                             </div>
-                        <?php endif; ?>
+                        <?php endif ?>
 
                         <!-- Galerie d'images -->
                         <?php if (!empty($gallerie)): ?>
                             <?php foreach ($gallerie as $image): ?>
                                 <div class="carousel-slide">
-                                    <?php put_image(query_image($image)); ?>
+                                    <?php put_image(query_image($image)) ?>
                                 </div>
-                            <?php endforeach; ?>
-                        <?php endif; ?>
+                            <?php endforeach ?>
+                        <?php endif ?>
                     </div>
 
                     <!-- Boutons de navigation -->
@@ -130,7 +130,7 @@ $avis = query_avis()
                     <p class="error-message"><?= htmlspecialchars($error_message) ?></p>
                     <?php elseif (isset($success_message)): ?>
                     <p class="success-message"><?= htmlspecialchars($success_message) ?></p>
-                    <?php endif; ?>
+                    <?php endif ?>
                 </div>
                 <form method="post" action="detail_offre.php?id=<?= $args['id'] ?>">
                     <textarea name="commentaire" placeholder="Votre avis..." required></textarea>
@@ -167,7 +167,7 @@ $avis = query_avis()
                 <p>Nombre d'avis : <?= query_avis_count($args['id']) ?></p>
                 <p>Moyenne&nbsp;: <?php if ($offre['note_moyenne'] != null) { echo round($offre['note_moyenne'], 2); } else { echo 0; } ?>/5 ★</p>
                 <div class="rating-distribution">
-                    <?php $avis = query_avis(id_offre: $offre['id']); ?>
+                    <?php $avis = query_avis(id_offre: $offre['id']) ?>
                     <p>5 étoiles&nbsp;: <?= count(array_filter($avis, fn($a) => $a['note'] === 5)) ?> avis.</p>
                     <p>4 étoiles&nbsp;: <?= count(array_filter($avis, fn($a) => $a['note'] === 4)) ?> avis.</p>
                     <p>3 étoiles&nbsp;: <?= count(array_filter($avis, fn($a) => $a['note'] === 3)) ?> avis.</p>
