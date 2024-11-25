@@ -61,7 +61,7 @@ if (isset($_POST['motdepasse'])) {
 } else {
 ?>
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fr">
 
 <?php $page->put_head() ?>
 

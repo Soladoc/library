@@ -5,7 +5,7 @@ $page = new Page("Choix de l'offre", ['choix_categorie_creation_offre.css']);
 ?>
 
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fr">
 
 <?php $page->put_head() ?>
 

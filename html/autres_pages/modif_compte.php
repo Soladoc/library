@@ -117,7 +117,7 @@ if ($membre !== false) {
 
 ?>
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fr">
 <?php $page->put_head() ?>
 <body>
 <?php $page->put_header() ?>

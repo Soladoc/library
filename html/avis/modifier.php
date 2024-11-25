@@ -38,7 +38,7 @@ if (isset($_POST['date'])) {
 } else {
 ?>
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fr">
 
 <?php $page->put_head() ?>
 
