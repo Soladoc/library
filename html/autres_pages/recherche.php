@@ -37,6 +37,7 @@ $page = new Page('Recherche', scripts: [
                     </select>
                 </div>
             </div>
+            <input type="hidden" id="selected-category" name="category" value="">
             <div id="subcategories" class="hidden">
                 <h3>Sous-catégories</h3>
                 <div class="subcategory-list" id="subcategory-list"></div>

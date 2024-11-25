@@ -249,59 +249,6 @@ h1 {
     background-color: #357ABD;
 }
 
-/* Offres */
-.offer-list {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-between;
-    padding: 20px;
-    background-color: white;
-}
-
-.offer-card {
-    background-color: white;
-    border: 1px solid #ccc;
-    border-radius: 15px;
-    width: 30%;
-    margin-bottom: 20px;
-    padding: 15px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    transition: transform 0.2s;
-}
-
-.offer-card:is(:hover, :focus, :focus-within) {
-    transform: translateY(-5px);
-}
-
-.offer-card img {
-    width: 100%;
-    border-radius: 5px;
-    height: 200px;
-    object-fit: cover;
-}
-
-.offer-card h3 {
-    font-size: 18px;
-    margin-top: 10px;
-}
-
-.offer-card .offer-card p {
-    margin: 5px 0;
-    color: #555;
-    font-family: "Tw Cen MT", sans-serif;
-}
-
-.offer-card :is(.location, .category, .price, .rating, .professional) {
-    font-size: 14px;
-}
-
-.offer-card .closing-soon {
-    color: red;
-    font-weight: bold;
-    font-size: 14px;
-    font-family: "Tw Cen MT", sans-serif;
-}
-
 .btn-more-info {
     display: block;
     width: 100%;
