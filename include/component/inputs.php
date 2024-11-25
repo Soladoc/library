@@ -17,9 +17,10 @@ require_once 'db.php';
  * @param string $form_id l'ID du formulaire auquel appartient le contrôle. Pas nécéssaire de le spécifier si l'élément est déjà dans un `<form>`.
  * @param string $id L'ID de l'élément à ajouter. Optionnel, ne pas spécifier pour pas d'ID.
  * @param string $prefix Le préfixe des attributs "name" des champs pour chaque champ de l'adresse. Définit les noms de clés dans le $_POST en PHP. Optionnel, ne pas spécifier pour pas de préfix
+ * @param array $actuelle L'adresse à modifier. `null` pour créer une nouvelle adresse.
  * @return void
  */
-function put_input_address(string $id = '', string $prefix = '', string $form_id = '')
+function put_input_address(string $id = '', string $prefix = '', string $form_id = '', array $actuelle = null)
 {
     $form_attr = $form_id ? "form=\"$form_id\"" : '';
     $communes = DB\connect()->query('select nom from _commune fetch first 1000 rows only')->fetchAll()
