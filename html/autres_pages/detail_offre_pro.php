@@ -30,7 +30,7 @@ if ($offre) {
     $description = $offre['description_detaillee'];
     $adresse = $offre['id_adresse'];
     $site_web = $offre['url_site_web'];
-    $image_pricipale = $offre['id_image_principale'];
+    $image_pricipale = DB\query_image($offre['id_image_principale']);
     $en_ligne = $offre['en_ligne'];
     $info_adresse = DB\query_adresse($adresse);
     $avis = DB\query_avis();
