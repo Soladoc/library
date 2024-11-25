@@ -14,6 +14,8 @@ if ( !isset($_GET['id_offre']) ) {
     exit;
 }else {
     if (!exists_offre($_GET['id_offre'])) {
+        echo exists_offre($_GET['id_offre']);
+        echo $_GET['id_offre'];
         html_error('Erreur: l\'offre n\'existe pas');
         exit;
     }
