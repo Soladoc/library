@@ -1,16 +1,18 @@
 <?php
-session_start();
-require_once 'auth.php';
-require_once 'component/head.php';
-require_once 'const.php';
 require_once 'db.php';
+require_once 'auth.php';
+require_once 'const.php';
+require_once 'redirect.php';
+require_once 'component/Page.php';
 
-exiger_connecte_membre();
+$page = new Page('Modifier un avis');
+
+Auth\exiger_connecte_membre();
 
 $id_avis = intval($_GET['avis_id']);
 $id_offre = intval($_GET['offre']);
 
-$stmt = db_connect()->prepare('SELECT * FROM pact._avis WHERE id = ?');
+$stmt = DB\connect()->prepare('SELECT * FROM pact._avis WHERE id = ?');
 $stmt->execute([$id_avis]);
 $avis = $stmt->fetch(PDO::FETCH_ASSOC);
 
@@ -26,24 +28,22 @@ if (isset($_POST['date'])) {
         $error_message = 'Tous les champs sont obligatoires.';
     } else {
         // Mise à jour de l'avis dans la base de données
-        $stmt = db_connect()->prepare('UPDATE pact._avis SET commentaire = ?, note = ?, contexte = ?, date_experience = ? WHERE id = ?');
+        $stmt = DB\connect()->prepare('UPDATE pact._avis SET commentaire = ?, note = ?, contexte = ?, date_experience = ? WHERE id = ?');
         $stmt->execute([$commentaire, $note, $contexte, $date_experience, $id_avis]);
 
         $success_message = 'Avis modifié avec succès !';
         $id = $avis['id_offre'];
-        header("Location: ../autres_pages/detail_offre.php?id=$id");
-        exit;
+        redirect_to(location_detail_offre($id));
     }
-
 } else {
 ?>
 <!DOCTYPE html>
 <html lang="en">
 
-<?php put_head('Modifier un avis'); ?>
+<?php $page->put_head() ?>
 
 <body>
-    <?php require 'component/header.php'; ?>
+    <?php $page->put_header() ?>
     <main>
         <h2>Modifier votre avis</h2>
 
@@ -52,7 +52,7 @@ if (isset($_POST['date'])) {
                 <p class="error-message"><?= htmlspecialchars($error_message) ?></p>
             <?php elseif (isset($success_message)): ?>
                 <p class="success-message"><?= htmlspecialchars($success_message) ?></p>
-            <?php endif; ?>
+            <?php endif ?>
         </div>
 
         <form method="post" action="modifier.php?id=<?= $id_offre ?>&avis_id=<?= $id_avis ?>">
@@ -81,7 +81,7 @@ if (isset($_POST['date'])) {
             <button type="submit" class="btn-publish">Modifier</button>
         </form>
     </main>
-    <?php require 'component/footer.php'; ?>
+    <?php $page->put_footer() ?>
 </body>
 </html>
 <?php } ?>

@@ -1,24 +1,30 @@
 document.addEventListener('DOMContentLoaded', function () {
+    const carousel = document.querySelector('.carousel');
     const slides = document.querySelectorAll('.carousel-slide');
-    const prevButton = document.querySelector('.carousel-control.prev');
-    const nextButton = document.querySelector('.carousel-control.next');
-    let currentIndex = 0;
+    const nextButton = document.querySelector('.carousel-next');
+    const prevButton = document.querySelector('.carousel-prev');
 
-    function updateCarousel(index) {
-        slides.forEach((slide, i) => {
-            slide.classList.toggle('active', i === index);
-        });
+    let currentSlide = 0;
+
+    // Fonction pour mettre à jour la position du carrousel
+    function updateCarousel() {
+        const offset = -currentSlide * 100;
+        carousel.style.transform = `translateX(${offset}%)`;
     }
 
-    prevButton.addEventListener('click', () => {
-        currentIndex = (currentIndex - 1 + slides.length) % slides.length;
-        updateCarousel(currentIndex);
-    });
-
+    // Bouton suivant
     nextButton.addEventListener('click', () => {
-        currentIndex = (currentIndex + 1) % slides.length;
-        updateCarousel(currentIndex);
+        currentSlide = (currentSlide + 1) % slides.length;
+        updateCarousel();
     });
 
-    updateCarousel(currentIndex);
+    // Bouton précédent
+    prevButton.addEventListener('click', () => {
+        currentSlide = (currentSlide - 1 + slides.length) % slides.length;
+        updateCarousel();
+    });
+
+    // Initialisation
+    updateCarousel();
 });
+

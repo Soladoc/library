@@ -1,39 +1,34 @@
 <?php
 
-ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
-error_reporting(E_ALL & ~E_NOTICE);
-
 /**
- * Ensures a value is not false, and returns it if not.
+ * Cause une erreur si la valeur fournie est strictement égale à `false`.
  *
  * @template T
- * @param T $value The value to check.
- * @param string $msg The error message to use if the value is false.
- * @return T The original value if it is not false, otherwise throws an Exception with the provided message.
- * @throws Exception If the provided value is false.
+ * @param T|false $valeur La valeur à comparer à `false` avec l'opérateur `===`
+ * @param string $message Le message d'erreur à afficher si $valeur était `false`
+ * @return T $valeur si elle n'était pas strictement égale à `false`.
+ * @throws Exception Si $valeur est `false`.
  */
-function notfalse(mixed $value, string $msg = 'was false'): mixed
+function notfalse(mixed $valeur, string $message = 'was false'): mixed
 {
-    if ($value === false) {
+    if ($valeur === false) {
         ?>
-        <pre><?= $msg ?></pre>
+        <pre><?= $message ?></pre>
         <?php
-        throw new Exception($msg);
+        throw new Exception($message);
     }
-    return $value;
+    return $valeur;
 }
 
-
 /**
- * Checks if all elements in the given array satisfy the provided predicate.
- * Determines whether a predicate matches every element in an array.
+ * Détermine si tous les éléments d'un tableau satisfont un prédicat.
  * @template T
- * @param T[] $arr The array to check.
- * @param callable(T): bool $predicatee The predicate function to apply to each element.
- * @return bool True if all elements satisfy the predicate, false otherwise.
+ * @param T[] $arr Le tableau à tester.
+ * @param callable(T): bool $predicate La fonction prédicat à appeler avec chaque élément de $arr.
+ * @return bool `true` si $predicate n'a retourné une valeur *falsey* pour aucun élément de $arr, false sinon.
  */
-function array_every(array $arr, callable $predicate): bool {
+function array_every(array $arr, callable $predicate): bool
+{
     foreach ($arr as $e) {
         if (!$predicate($e)) {
             return false;
@@ -43,29 +38,29 @@ function array_every(array $arr, callable $predicate): bool {
 }
 
 /**
- * Retrieves an argument from the given source array, with optional validation and transformation.
- * @param array $source The source array to retrieve the argument from.
- * @param string $name The name of the argument to retrieve.
- * @param bool $required Whether the argument is required. If true and the argument is not present, an error will be thrown.
- * @param ?callable(string, mixed): mixed $filter An optional filter to apply to the value, given by `arg_check` or `arg_filter`. An error message is shown and the script exists if the filter doesn't match.
- * @return mixed The retrieved and (optionally) transformed argument value. If not required and missing, `null` is returned.
+ * Valide et récupère un argument d'un tableau source.
+ * @param array $source Le tableau source d'où récupérer l'argument (tel que `$_GET`, `$_POST` ou `$_FILES$`).
+ * @param string $nom Le nom de l'argument (clé dans le tableau) à récupérer.
+ * @param ?callable(string, mixed): mixed $filter Un filtre optionnel à appliquer à la valeur, donné par `arg_check` ou `arg_filter`. Une erreur HTML est jetée si l'argument (la valeur de $source à la clé $nom) ne satisfait pas le filtre
+ * @param bool $required Si cet argument est obligatoire. Si `true` et l'argument n'est pas présent, une erreur HTML est jetée.
+ * @return mixed L'argument récupéré et potentiellement transformé (si $filter est non `null`). Si l'argument n'est pas requis ($required est `false`) et manquant (il n'y a pas de clé $nom dans $source), `null` est retourné.
  */
-function getarg(array $source, string $name, ?callable $filter = null, bool $required = true): mixed
+function getarg(array $source, string $nom, ?callable $filter = null, bool $required = true): mixed
 {
-    if (!isset($source[$name]) || $source[$name] === '') {
+    if (!isset($source[$nom]) || $source[$nom] === '') {
         if ($required) {
-            html_error("argument manquant: $name");
+            html_error("argument manquant: $nom");
         } else {
             return null;
         }
     }
-    return $filter === null ? $source[$name]: $filter($name, $source[$name]);
+    return $filter === null ? $source[$nom] : $filter($nom, $source[$nom]);
 }
 
 /**
- * Returns a function that applies the given validation check to an argument value.
- * @param callable $check An validation check function that takes the argument value and returns a boolean indicating if the value is valid.
- * @return callable(string, mixed): mixed A function that takes an argument name and value, applies the validation check, and returns the value if it is valid, or throws an error if it is not.
+ * Crée un filtre pour `getarg` qui valide l'argumnet via prédicat.
+ * @param callable(mixed): bool Une fonction prédicat.
+ * @return callable(string, mixed): mixed Un filtre utilisable par la fonction `getarg`.
  */
 function arg_check(callable $check): callable
 {
@@ -78,10 +73,10 @@ function arg_check(callable $check): callable
 }
 
 /**
- * Returns a function that applies the given filter and options to an argument value.
- * @param int $filter The filter to apply to the argument value.
- * @param array|int $options The options to use with the filter.
- * @return callable(string, mixed): mixed A function that takes an argument name and value, applies the filter and options, and returns the transformed value.
+ * Crée un filtre pour `getarg` qui applique un filtre PHP à l'argument agec la fonction `filter_var`.
+ * @param int $filter Le filtre à appliquer à l'argument.
+ * @param array|int $options Les options du filtre. Voir la documentation PHP pour les valeurs possibles.
+ * @return callable(string, mixed): mixed Un filtre utilisable par la fonction `getarg`.
  */
 function arg_filter(int $filter, array|int $options = 0): callable
 {
@@ -95,8 +90,8 @@ function arg_filter(int $filter, array|int $options = 0): callable
 }
 
 /**
- * Outputs an HTML error message and throws an exception.
- * @param mixed $arg The value to include in the error message. Is thrown if it is an instance of `Throwable`, otherwise, `Exception` is thrown.
+ * Affiche un message d'erreur HTML et jette une exception.
+ * @param mixed $arg La valeur à inclure avec le message d'erreur. Si c'est une instance de `Throwable`, est est aussi jetée. Sinon, elle est englobée dans une `Exception` puis jetée.
  */
 function html_error(mixed $arg): never
 {
@@ -109,20 +104,20 @@ function html_error(mixed $arg): never
 }
 
 /**
- * Returns a string with the given value and suffix, or an empty string if the value is falsey.
- * @param ?string $value The value to format.
- * @param ?string $suffix The suffix to append to the value.
- * @return string The formatted string.
+ * Concatène une chaîne à un suffixe ou retourne la chaîne vide.
+ * @param ?string $chaine La chaîne (peut être `null`).
+ * @param ?string $suffixe Le suffixe à concaténer à $chaine.
+ * @return string La chaîne formatée.
  */
-function elvis(?string $value, ?string $suffix): string
+function elvis(?string $chaine, ?string $suffixe): string
 {
-    return $value ? "$value$suffix" : '';
+    return $chaine ? "$chaine$suffixe" : '';
 }
 
 /**
- * Returns a function that checks if a value is contained in a list of allowed values.
- * @param string[] $allowed_values The allowed values.
- * @return callable(string): bool
+ * Retourne une fonction prédicat qui vérifie qu'une chaîne est contenue dans une liste de valeurs autoriséess.
+ * @param string[] $allowed_values Les valeurs autorisées.
+ * @return callable(string): bool Une fonction prédicat validant une chaîne.
  */
 function f_is_in(array $allowed_values): callable
 {
@@ -130,9 +125,9 @@ function f_is_in(array $allowed_values): callable
 }
 
 /**
- * Returns a function that checks if an array contains all the specified keys.
- * @param array $keys The keys to check for.
- * @return callable(array): bool A function that takes an array and returns true if it contains all the specified keys.
+ * Returns a function prédicat qui vérifie qu'un tableau contient toutes les clés spécifiées
+ * @param array $keys Les clés devant être dans le tableau.
+ * @return callable(array): bool Un fonction prédicat validant un tableau.
  */
 function f_array_has_keys(array $keys): callable
 {
@@ -140,11 +135,11 @@ function f_array_has_keys(array $keys): callable
 }
 
 /**
- * Returns the single value in the given array.
+ * Retourne le seul élément d'un tableau.
  * @template T
- * @param array<T> $array The array to extract the single value from.
- * @return T The single value in the array.
- * @throws Exception If the array does not contain exactly one value.
+ * @param array<T> $array Un tableau devant contenir extactement 1 élément.
+ * @return T Le seul élément de $array.
+ * @throws Exception Si $array ne contient pas exactement 1 élément.
  */
 function single(array $array): mixed
 {
@@ -155,12 +150,12 @@ function single(array $array): mixed
 }
 
 /**
- * Returns the single value in the given array.
+ * Retourne le seul élément d'un tableau, ou une valeur par défaut si le tableau est vide.
  * @template T
- * @param array<T> $array The array to extract the single value from.
- * @param T $default The default value to return if the array is empty.
- * @return T The single value in the array.
- * @throws Exception If the array contains more than one value.
+ * @param array<T> $array Un tableau devant contenir 0 ou 1 élément.
+ * @param T $default La valeur par défaut à retourner quand $array est vide.
+ * @return T Le seul élément de $array, ou $default si $array est vide.
+ * @throws Exception Si le tableau contient plus d'une valeur.
  */
 function single_or_default(array $array, mixed $default = null): mixed
 {
@@ -181,7 +176,7 @@ function single_or_default(array $array, mixed $default = null): mixed
  * element is an array containing the values for each key from the input array.
  * @param array<array> $array The input "structre of arrays" to convert.
  * @return array<int, mixed> The resulting "array of structures".
- * 
+ *
  * @example
  * Input: ['a' => [1, 2], 'b' => [3, 4]]
  * Output: [[a' => 1, 'b' => 3], ['a' => 2, 'b' => 4]]
@@ -195,4 +190,23 @@ function soa_to_aos(array $array): array
         }
     }
     return $result;
+}
+
+/**
+ * Formate une adresse dans un format humainement lisible.
+ * @param array $adresse L'adresse (ligne issue de la BDD, voir `DB\query_adresse`)
+ * @return string
+ */
+function format_adresse(array $adresse)
+{
+    // Concaténer les informations pour former une adresse complète
+
+    return elvis($adresse['precision_ext'], ', ')
+        . elvis($adresse['precision_int'], ', ')
+        . elvis($adresse['numero_voie'], ' ')
+        . elvis($adresse['complement_numero'], ' ')
+        . elvis($adresse['nom_voie'], ', ')
+        . elvis($adresse['localite'], ', ')
+        . elvis(DB\query_commune($adresse['code_commune'], $adresse['numero_departement'])['nom'], ', ')
+        . DB\query_codes_postaux($adresse['code_commune'], $adresse['numero_departement'])[0];
 }

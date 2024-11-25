@@ -913,69 +913,77 @@ a:not(:hover, :focus, :focus-within) {
     background-color: #0056b3;
 }
 
-.carousel {
+/* Conteneur principal */
+.carousel-container {
     position: relative;
-    width: 500px;
-    height: 300px;
+    width: 100%;
+    max-width: 600px; /* Largeur maximale */
     margin: auto;
-    overflow: hidden;
-    border-radius: 15px;
-    border: 3px solid black;
+    overflow: hidden; /* Masque les images hors cadre */
+    border: 2px solid black; /* Bordure noire */
+    border-radius: 10px; /* Bords arrondis */
 }
 
+/* Liste des slides */
+.carousel {
+    display: flex;
+    transition: transform 0.5s ease-in-out; /* Animation de défilement */
+    width: 100%;
+}
+
+/* Chaque slide */
 .carousel-slide {
-    display: none;
-    width: 100%;
-    height: 100%;
+    min-width: 100%; /* Chaque slide occupe 100% du conteneur */
+    box-sizing: border-box;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
-.carousel-slide.active {
-    display: block;
+/* Les images */
+.carousel-slide img {
+    width: 100%; /* Image prend toute la largeur */
+    height: auto; /* Ajustement automatique de la hauteur */
+    border-radius: 10px; /* Bords arrondis */
 }
 
-.carousel-image {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-}
-
-.carousel-control {
+/* Boutons de navigation */
+.carousel-prev,
+.carousel-next {
     position: absolute;
     top: 50%;
     transform: translateY(-50%);
     background-color: rgba(0, 0, 0, 0.5);
     color: white;
     border: none;
-    font-size: 1.5rem;
+    padding: 10px;
     cursor: pointer;
-    padding: 0.5rem 1rem;
-    z-index: 2;
+    z-index: 10;
+    border-radius: 50%;
 }
 
-.carousel-control.prev {
+.carousel-prev {
     left: 10px;
 }
 
-.carousel-control.next {
+.carousel-next {
     right: 10px;
 }
 
-/* Disposition responsive */
-.offer-main-photo, .offer-info {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    margin: 1rem 0;
+.carousel-prev:hover,
+.carousel-next:hover {
+    background-color: rgba(0, 0, 0, 0.8);
 }
 
-@media (min-width: 768px) {
-    .offer-main-photo, .offer-info {
-        flex-direction: row;
-        align-items: flex-start;
-        justify-content: space-between;
+/* Responsive design */
+@media (max-width: 768px) {
+    .carousel-container {
+        max-width: 100%;
     }
-    .description {
-        text-align: right;
-        max-width: 400px;
+
+    .carousel-prev,
+    .carousel-next {
+        padding: 8px;
     }
 }
+

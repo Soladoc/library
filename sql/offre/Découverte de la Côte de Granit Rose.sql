@@ -13,6 +13,7 @@ with
         insert into
             visite (
                 id_adresse,
+                modifiee_le,
                 id_image_principale,
                 id_professionnel,
                 libelle_abonnement,
@@ -25,6 +26,7 @@ with
         values
             (
                 (table id_adresse),
+                '2024-03-16 18:01:23',
                 34,
                 2,
                 'gratuit',
@@ -81,32 +83,66 @@ Nous avons hâte de vous accueillir à bord pour une journée inoubliable sur la
             ((table id_offre), 'culturel')
     ),
     s3 as (
-    insert into
-        avis (
-            id_offre,
-            id_membre_auteur,
-            note,
-            contexte,
-            date_experience,
-            commentaire
-        )
-    values
-        (
-            (table id_offre),
-            id_membre ('Snoozy'),
-            3,
-            'couple',
-            '2024-08-14',
-            'Service correct mais attente longue.'
-        )
+        insert into
+            avis (id_offre, id_membre_auteur, note, contexte, date_experience, commentaire)
+        values
+            (
+                (table id_offre),
+                id_membre ('Snoozy'),
+                3,
+                'couple',
+                '2024-08-14',
+                'Service correct mais attente longue.'
+            )
     )
 insert into
-    horaire_ouverture (id_offre, dow, heure_debut, heure_fin)
+    _ouverture_hebdomadaire (id_offre, dow, horaires)
 values
-    ((table id_offre), 0, '10:', '18:'),
-    ((table id_offre), 1, '10:', '18:'),
-    ((table id_offre), 2, '10:', '18:'),
-    ((table id_offre), 3, '10:', '18:'),
-    ((table id_offre), 4, '10:', '18:'),
-    ((table id_offre), 5, '10:', '18:'),
-    ((table id_offre), 6, '13:', '18:');
+    (
+        (table id_offre),
+        1,
+        (
+            select
+                timemultirange (timerange ('12:', '15:30'), timerange ('18:30', '23:59:59'))
+        )
+    ),
+    (
+        (table id_offre),
+        2,
+        (
+            select
+                timemultirange (timerange ('10:', '18:'))
+        )
+    ),
+    (
+        (table id_offre),
+        3,
+        (
+            select
+                timemultirange (timerange ('10:', '18:'))
+        )
+    ),
+    (
+        (table id_offre),
+        4,
+        (
+            select
+                timemultirange (timerange ('10:', '18:'))
+        )
+    ),
+    (
+        (table id_offre),
+        5,
+        (
+            select
+                timemultirange (timerange ('10:', '18:'))
+        )
+    ),
+    (
+        (table id_offre),
+        6,
+        (
+            select
+                timemultirange (timerange ('10:', '18:'))
+        )
+    );

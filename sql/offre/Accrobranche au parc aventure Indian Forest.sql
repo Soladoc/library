@@ -5,7 +5,7 @@ with
         insert into
             _adresse (numero_departement, code_commune, nom_voie)
         values
-            ('22', 154, 'Les Tronchées')
+            ('22', 155, 'Les Tronchées')
         returning
             id
     ),
@@ -13,6 +13,7 @@ with
         insert into
             activite (
                 id_adresse,
+                modifiee_le,
                 id_professionnel,
                 id_image_principale,
                 libelle_abonnement,
@@ -27,6 +28,7 @@ with
         values
             (
                 (table id_adresse),
+                '2024-06-21 11:37:28',
                 2,
                 41,
                 'gratuit',

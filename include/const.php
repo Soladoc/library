@@ -26,13 +26,13 @@ const TAGS_RESTAURANT = [
     'restauration rapide',
 ];
 
-const TYPES_OFFRE = [
+const CATEGORIES_OFFRE = [
     'activite' => 'une activité',
     'parc-attractions' => "un parc d'attractions",
     'restaurant' => 'un restaurant',
     'spectacle' => 'un spectacle',
     'visite' => 'une visite',
-    '' => 'une offre'
+    '' => 'une offre',
 ];
 
 // L'ordre des valeurs est important (0 => dimanche -> samedi => 6)
@@ -43,7 +43,7 @@ const JOURS_SEMAINE = [
     'mercredi',
     'jeudi',
     'vendredi',
-    'samedi'
+    'samedi',
 ];
 
 const CONTEXTES_VISITE = [
@@ -51,5 +51,5 @@ const CONTEXTES_VISITE = [
     'couple',
     'solo',
     'famille',
-    'amis'
+    'amis',
 ];

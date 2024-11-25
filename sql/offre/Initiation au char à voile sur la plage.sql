@@ -13,6 +13,7 @@ with
         insert into
             activite (
                 id_adresse,
+                modifiee_le,
                 id_professionnel,
                 id_image_principale,
                 libelle_abonnement,
@@ -26,6 +27,7 @@ with
         values
             (
                 (table id_adresse),
+                '2024-03-29 21:32:54',
                 1,
                 10,
                 'gratuit',
@@ -47,24 +49,10 @@ L''initiation au char à voile peut être incluse dans le cadre d''une activité
             id
     ),
     s1 as (
-    insert into
-        avis (
-            id_offre,
-            id_membre_auteur,
-            note,
-            contexte,
-            date_experience,
-            commentaire
-        )
-    values
-        (
-            (table id_offre),
-            id_membre ('SamSepi0l'),
-            4,
-            'famille',
-            '2024-09-30',
-            'Très bon rapport qualité-prix.'
-        )
+        insert into
+            avis (id_offre, id_membre_auteur, note, contexte, date_experience, commentaire)
+        values
+            ((table id_offre), id_membre ('SamSepi0l'), 4, 'famille', '2024-09-30', 'Très bon rapport qualité-prix.')
     )
 insert into
     _tags (id_offre, tag)

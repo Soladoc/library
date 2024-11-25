@@ -6,26 +6,11 @@ set
 -- Create
 create function avis_insert () returns trigger as $$
 declare
-    id_avis integer;
 begin
-    insert into _signalable default values returning id into id_avis;
-    insert into pact._avis (
-        id,
-        id_membre_auteur,
-        id_offre,
-        commentaire,
-        date_experience,
-        contexte,
-        note
-    ) values (
-        id_avis,
-        new.id_membre_auteur,
-        new.id_offre,
-        new.commentaire,
-        new.date_experience,
-        new.contexte,
-        new.note
-    );
+    if offre_categorie(new.id_offre) = 'restaurant' then
+        raise 'insérer dans avis_restaurant pour les avis sur les restaurants';
+    end if;
+    perform insert_avis(new, new.id_offre);
     return new;
 end
 $$ language plpgsql;

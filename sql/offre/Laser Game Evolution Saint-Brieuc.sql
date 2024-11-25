@@ -13,6 +13,7 @@ with
         insert into
             activite (
                 id_adresse,
+                modifiee_le,
                 id_professionnel,
                 id_image_principale,
                 libelle_abonnement,
@@ -28,6 +29,7 @@ with
         values
             (
                 (table id_adresse),
+                '2024-02-26 07:25:38',
                 1,
                 29,
                 'gratuit',
@@ -52,25 +54,11 @@ with
             ((table id_offre), 'jeu')
     ),
     s2 as (
-    insert into
-        avis (
-            id_offre,
-            id_membre_auteur,
-            note,
-            contexte,
-            date_experience,
-            commentaire
-        )
-    values
-        (
-            (table id_offre),
-            id_membre ('ltorvalds'),
-            3,
-            'amis',
-            '2024-05-02',
-            'Ambiance sympa mais prix élevés.'
-        )
-)
+        insert into
+            avis (id_offre, id_membre_auteur, note, contexte, date_experience, commentaire)
+        values
+            ((table id_offre), id_membre ('ltorvalds'), 3, 'amis', '2024-05-02', 'Ambiance sympa mais prix élevés.')
+    )
 insert into
     _gallerie (id_offre, id_image)
 values

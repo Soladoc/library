@@ -1,15 +1,17 @@
 <?php
 require_once 'component/offre.php';
-require_once 'component/head.php';
+require_once 'component/Page.php';
+
+$page = new Page('Accueil');
 ?>
 
 <!DOCTYPE html>
 <html lang="fr">
 
-<?php put_head('Accueil') ?>
+<?php $page->put_head() ?>
 
 <body>
-    <?php require 'component/header.php' ?>
+    <?php $page->put_header() ?>
     <main>
         <!-- Section de recherche -->
         <section class="search-section">
@@ -28,18 +30,18 @@ require_once 'component/head.php';
             <h2>Offres à la une</h2>
             <div class="offer-list">
                 <?php
-                    // Préparer et exécuter la requête SQL pour récupérer toutes les offres
-                    $stmtOffres = query_offres_a_une();
-                    
-                    // Boucler sur les résultats pour afficher chaque offre
-                    while ($offre = $stmtOffres->fetch()) {
-                        put_card_offre($offre);
-                    }
+                // Préparer et exécuter la requête SQL pour récupérer toutes les offres
+                $offres = DB\query_offres_a_une();
+
+                // Boucler sur les résultats pour afficher chaque offre
+                foreach ($offres as $offre) {
+                    put_card_offre($offre);
+                }
                 ?>
             </div>
         </section>
     </main>
-    <?php require 'component/footer.php' ?>
+    <?php $page->put_footer() ?>
 </body>
 
 </html>

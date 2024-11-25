@@ -1,12 +1,15 @@
 <?php
 require_once 'db.php';
 require_once 'util.php';
-require_once 'component/head.php';
+require_once 'redirect.php';
+require_once 'component/Page.php';
 require_once 'component/inputs.php';
+
+$page = new Page('CoCréer un compte pronnexion');
 
 function fail(string $error)
 {
-    header('Location: ?error=' . urlencode($error));
+    redirect_to('?error=' . urlencode($error));
     exit;
 }
 
@@ -25,7 +28,7 @@ if ($_POST) {
         $args['siren'] = getarg($_POST, 'siren');
     }
 
-    $stmt = db_connect()->prepare('select count(*) from pact._compte where email = ?');
+    $stmt = DB\connect()->prepare('select count(*) from pact._compte where email = ?');
     $stmt->execute([$args['email']]);
     $count = $stmt->fetchColumn();
 
@@ -35,26 +38,26 @@ if ($_POST) {
 
     $mdp_hash = password_hash($args['mdp'], PASSWORD_DEFAULT);
 
-    $Nomcommune = $_POST['adresse'];
+    $nomCommune = $_POST['adresse'];
 
-    $stmt = db_connect()->prepare("SELECT code, numero_departement FROM pact._commune WHERE nom = ?");
-    $stmt->execute([$Nomcommune]);
+    $stmt = DB\connect()->prepare('SELECT code, numero_departement FROM pact._commune WHERE nom = ?');
+    $stmt->execute([$nomCommune]);
     $commune = $stmt->fetch(PDO::FETCH_ASSOC);
 
     if (!$commune) {
-        fail("La commune '$Nomcommune' n'existe pas.");
+        fail("La commune '$nomCommune' n'existe pas.");
     }
 
     $codeCommune = $commune['code'];
     $numeroDepartement = $commune['numero_departement'];
 
-    $stmt = db_connect()->prepare(" INSERT INTO pact._adresse (code_commune, numero_departement) VALUES ( ?, ?) RETURNING id");
+    $stmt = DB\connect()->prepare(' INSERT INTO pact._adresse (code_commune, numero_departement) VALUES ( ?, ?) RETURNING id');
     $stmt->execute([$codeCommune, $numeroDepartement]);
 
     $idAdresse = $stmt->fetchColumn();
 
     if ($type === 'prive') {
-        $stmt = db_connect()->prepare('insert into pro_prive (email, mdp_hash, nom, prenom, telephone, id_adresse, denomination, siren) values (?, ?, ?, ?, ?, ?, ?, ?)');
+        $stmt = DB\connect()->prepare('insert into pro_prive (email, mdp_hash, nom, prenom, telephone, id_adresse, denomination, siren) values (?, ?, ?, ?, ?, ?, ?, ?)');
         $stmt->execute([
             $args['email'],
             $mdp_hash,
@@ -65,9 +68,9 @@ if ($_POST) {
             $args['denomination'],
             str_replace(' ', '', $args['siren']),
         ]);
-        redirect_to_connexion();
+        redirect_to(location_connexion());
     } else {
-        $stmt = db_connect()->prepare('insert into pro_public (email, mdp_hash, nom, prenom, telephone, id_adresse, denomination) values (?, ?, ?, ?, ?, ?, ?)');
+        $stmt = DB\connect()->prepare('insert into pro_public (email, mdp_hash, nom, prenom, telephone, id_adresse, denomination) values (?, ?, ?, ?, ?, ?, ?)');
         $stmt->execute([
             $args['email'],
             $mdp_hash,
@@ -77,17 +80,17 @@ if ($_POST) {
             $idAdresse,
             $args['denomination'],
         ]);
-        redirect_to_connexion();
+        redirect_to(location_connexion());
     }
 } else {
 ?>
 <!DOCTYPE html>
 <html lang="fr">
 
-<?php put_head('CoCréer un compte pronnexion') ?>
+<?php $page->put_head() ?>
 
 <body>
-    <?php require 'component/header.php' ?>
+    <?php $page->put_header() ?>
     <main>
         <!-- Section des offres à la une -->
         <h1>Créer un compte professionnel</h1>
@@ -140,7 +143,7 @@ if ($_POST) {
             </div>
         </section>
     </main>
-    <?php require 'component/footer.php' ?>
+    <?php $page->put_footer() ?>
 
     <script>
     // Fonction pour afficher ou masquer la ligne supplémentaire
@@ -181,11 +184,5 @@ if ($_POST) {
 
 </html>
 <?php
-}
-
-function redirect_to_connexion(): never
-{
-    header('Location: /autres_pages/connexion.php');
-    exit;
 }
 ?>

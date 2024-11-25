@@ -1,26 +1,28 @@
 <?php
 require_once 'db.php';
-require_once 'queries.php';
-require_once 'component/head.php';
 require_once 'util.php';
+require_once 'queries.php';
+require_once 'redirect.php';
+require_once 'component/Page.php';
+
+$page = new Page("offre : {$args['id']}",
+    ['https://unpkg.com/leaflet@1.7.1/dist/leaflet.css'],
+    ['https://unpkg.com/leaflet@1.7.1/dist/leaflet.js' => 'async']);
 
 $args = [
     'id' => getarg($_GET, 'id', arg_filter(FILTER_VALIDATE_INT))
 ];
-// Vérifier si l'ID est présent dans l'URL
-if ($_POST) {
-    // Connexion à la base de données
-    $pdo = db_connect();
 
+if ($_POST) {
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-        offre_alterner_etat($args['id']);
-        $offre = query_offre($args['id']);
-        header('Location: ' . $_SERVER['PHP_SELF'] . '?id=' . $args['id']);
-        exit();
+        DB\offre_alterner_etat($args['id']);
+        $offre = DB\query_offre($args['id']);
+        redirect_to($_SERVER['REQUEST_URI']);
+        exit;
     }
 
     // Récupérer les données de l'offre
-    $offre = query_offre($args['id']);
+    $offre = DB\query_offre($args['id']);
 
     // Si l'offre est trouvée, afficher ses détails
     if ($offre) {
@@ -30,8 +32,8 @@ if ($_POST) {
         $site_web = $offre['url_site_web'];
         $image_pricipale = $offre['id_image_principale'];
         $en_ligne = $offre['en_ligne'];
-        $info_adresse = query_adresse($adresse);
-        $avis = query_avis();
+        $info_adresse = DB\query_adresse($adresse);
+        $avis = DB\query_avis();
         // Vérifier si l'adresse existe
         if ($info_adresse) {
             // Construire une chaîne lisible pour l'adresse
@@ -39,7 +41,7 @@ if ($_POST) {
             $complement_numero = $info_adresse['complement_numero'];
             $nom_voie = $info_adresse['nom_voie'];
             $localite = $info_adresse['localite'];
-            $code_postal = query_codes_postaux($info_adresse['code_commune'], $info_adresse['numero_departement'])[0];
+            $code_postal = DB\query_codes_postaux($info_adresse['code_commune'], $info_adresse['numero_departement'])[0];
 
             // Concaténer les informations pour former une adresse complète
             $adresse_complete = "$numero_voie $complement_numero $nom_voie, $localite, $code_postal";
@@ -60,12 +62,10 @@ if ($_POST) {
 <!DOCTYPE html>
 <html lang="fr">
 
-<?php put_head("offre : {$args['id']}",
-    ['https://unpkg.com/leaflet@1.7.1/dist/leaflet.css'],
-    ['https://unpkg.com/leaflet@1.7.1/dist/leaflet.js' => 'async']); ?>>
+<?php $page->put_head() ?>>
 
 <body>
-    <?php require 'component/header.php' ?>
+    <?php $page->put_header() ?>
     <!-- Offer Details -->
     <main>
         <section class="modif">
@@ -89,10 +89,10 @@ if ($_POST) {
         </section>
         <section class="offer-details">
             <div class="offer-main-photo">
-                <img src="../images/offre/<?= $image_pricipale ?>.jpg" alt="Main Photo" class="offer-photo-large">
+                <img src="/images/offre/<?= $image_pricipale ?>.jpg" alt="Main Photo" class="offer-photo-large">
                 <!-- <div class="offer-photo-gallery">
-                     <img src="../images/offre/Radôme2.jpg" alt="Photo 2" class="offer-photo-small">
-                    <img src="../images/offre/Radôme3.jpg" alt="Photo 3" class="offer-photo-small"> 
+                     <img src="/images/offre/Radôme2.jpg" alt="Photo 2" class="offer-photo-small">
+                    <img src="/images/offre/Radôme3.jpg" alt="Photo 3" class="offer-photo-small"> 
                 </div> -->
             </div>
 
@@ -124,10 +124,10 @@ if ($_POST) {
             <h4>Avis de la communauté</h4>
             <div class="review-summary">
                 <h4>Résumé des notes</h4>
-                <p>Nombre d'avis : <?= query_avis_count($args['id']) ?></p>
-                <p>Moyenne&nbsp;: <?php if ($offre['note_moyenne'] != null) { echo round($offre['note_moyenne'], 2); } else { echo 0; } ?>/5 ★</p>
+                <p>Nombre d'avis : <?= DB\query_avis_count($args['id']) ?></p>
+                <p>Moyenne&nbsp;: <?php if ($offre['note_moyenne'] != null) { echo $offre['note_moyenne']; } else { echo 0; } ?>/5 ★</p>
                 <div class="rating-distribution">
-                    <?php $avis = query_avis(id_offre: $offre['id']); ?>
+                    <?php $avis = DB\query_avis(id_offre: $offre['id']) ?>
                     <p>5 étoiles&nbsp;: <?= count(array_filter($avis, fn($a) => $a['note'] === 5)) ?> avis.</p>
                     <p>4 étoiles&nbsp;: <?= count(array_filter($avis, fn($a) => $a['note'] === 4)) ?> avis.</p>
                     <p>3 étoiles&nbsp;: <?= count(array_filter($avis, fn($a) => $a['note'] === 3)) ?> avis.</p>
@@ -141,7 +141,7 @@ if ($_POST) {
                     <p class="review-contexte">Contexte&nbsp;: <?= htmlspecialchars($avis_temp['contexte']) ?></p>
                     <p><?= htmlspecialchars($avis_temp['commentaire']) ?></p>
                     <p class="review-date"><?= htmlspecialchars($avis_temp['date_experience']) ?></p>
-                    <?php if (($id_membre_co = id_membre_connecte()) !== null && $avis_temp['id_membre_auteur'] = $id_membre_co) { ?>
+                    <?php if (($id_membre_co = Auth\id_membre_connecte()) !== null && $avis_temp['id_membre_auteur'] = $id_membre_co) { ?>
                     <form method="post" action="modifier.php?id=<?= $args['id'] ?>&avis_id=<?= $avis_id ?>">
                         <button type="submit" class="btn-modif">Modifier</button>
                     </form>
@@ -154,7 +154,7 @@ if ($_POST) {
             </div>
             </section>
     </main>
-    <?php require 'component/footer.php' ?>
+    <?php $page->put_footer() ?>
 
     <script>
     // // OpenStreetMap Integration

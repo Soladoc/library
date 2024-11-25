@@ -1,23 +1,27 @@
 <?php
-require_once 'db.php';
-require_once 'component/head.php';
-$pdo = db_connect()
+require_once 'component/Page.php';
+require_once 'util.php';
+
+$page = new Page('Connexion');
+
+$return_url = getarg($_GET, 'return_url', required: false);
+$error = getarg($_GET, 'error', required: false);
 ?>
 
 <!DOCTYPE html>
 <html lang="fr">
 
-<?php put_head('Connexion') ?>
+<?php $page->put_head() ?>
 
 <body>
-<?php require 'component/header.php' ?>
+<?php $page->put_header() ?>
 <main>
     <h1>Connexion</h1>
     <section class="connexion">
         <div class="champ-connexion">
             <br>
             <!-- Formulaire de connexion -->
-            <form action="../connexion/login.php" method="POST">
+            <form action="/connexion/login.php" method="POST">
                 <div class="champ">
                     <label for="login">Adresse e-mail ou pseudo *</label>
                     <input id="login" name="login" type="text" placeholder="exemple@mail.fr" required>
@@ -27,10 +31,13 @@ $pdo = db_connect()
                     <label for="mdp">Mot de passe *</label>
                     <input id="mdp" name="mdp" type="password" placeholder="**********" required>
                 </div>
-                <?php if ($error = $_GET['error'] ?? null) { ?>
-                <p class="error"><?= $error ?></p>
+                <?php if ($error !== null) { ?>
+                    <p class="error"><?= $error ?></p>
                 <?php } ?>
                 <button type="submit" class="btn-connexion">Se connecter</button>
+                <?php if ($return_url !== null) { ?>
+                    <input type="hidden" name="return_url" value="<?= $return_url ?>">
+                <?php } ?>
             </form>
             <br><br>
             <label>Pas de compte&nbsp;?</label>
@@ -45,7 +52,7 @@ $pdo = db_connect()
         </div>
     </section>
 </main>
-<?php require 'component/footer.php' ?>
+<?php $page->put_footer() ?>
 </body>
 
 </html>

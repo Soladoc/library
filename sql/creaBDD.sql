@@ -5,54 +5,9 @@
 -- Info:
 -- Ajouter "not null" aux attributs clés étrangères ne faisant pas partie de la clé primaire. La contrainte "references" n'implique pas "not null". La contrainte "primary key" implique "not null unique"
 
-drop schema if exists pact cascade;
-
-create schema pact;
+-- CLASSES
 
 set schema 'pact';
-
--- DOMAINES
-
-create domain num_departement as char(3);
-
-create domain iso639_1 as char(2);
-
-create domain nom_option char(10);
-
-create domain paragraphe as varchar;
-comment on domain paragraphe is 'Un paragraphe de texte libre';
-
-create domain ligne as varchar check (value not like E'%\n%');
-comment on domain ligne is 'Une ligne de texte libre';
-
-create domain numero_telephone as char(10) check (value ~ '^[0-9]+$');
-comment on domain numero_telephone is
-'9 chiffres
-- on exclut le zéro initial
-- indicatif +33 implicite';
-
-create domain numero_siren as char(9) check (value ~ '^[0-9]+$');
-comment on domain numero_siren is '9 chiffres';
-
-create domain mot as varchar(255) check (value ~ '^[[:graph:]](?:(?: ?[[:graph:]]+)*[[:graph:]])?$');
-comment on domain mot is 
-'Texte:
-- 255 car. max
-- non vide
-- caractères visibles uniquement
-- espaces autorisés tant qu''il sont entourés de caractères visibles';
-
-create domain mot_minuscule as mot check (value !~ '[[:upper:]]');
-comment on domain mot_minuscule is 'Un mot ne contenant pas de majuscules';
-
-create domain pseudonyme as mot check (value !~ '@');
-comment on domain pseudonyme is
-'Un mot ne contenant pas d''arobase "@" pour éviter la confusion avec une adresse e-mail';
-
-create domain adresse_email as varchar(319) check (value ~ '^(?:[a-z0-9!#$%&''*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&''*+/=?^_`{|}~-]+)*|"(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21\x23-\x5b\x5d-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])*")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\[(?:(?:(2(5[0-5]|[0-4][0-9])|1[0-9][0-9]|[1-9]?[0-9]))\.){3}(?:(2(5[0-5]|[0-4][0-9])|1[0-9][0-9]|[1-9]?[0-9])|[a-z0-9-]*[a-z0-9]:(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21-\x5a\x53-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])+)\])$');
-comment on domain adresse_email is 'Adresse e-mail (regex de https://emailregex.com)';
-
--- CLASSES
 
 create table _departement (
     numero num_departement
@@ -96,7 +51,7 @@ comment on constraint adresse_check_numero_voie_complement_numero on _adresse is
 create table _abonnement (
     libelle mot_minuscule
         constraint abonnement_pk primary key,
-    prix decimal not null
+    prix_journalier decimal not null
 );
 
 create table _image (
@@ -156,7 +111,8 @@ create table _offre (
     resume ligne not null,
     description_detaillee paragraphe not null,
     modifiee_le timestamp not null,
-    url_site_web varchar(2047) not null
+    url_site_web varchar(2047) not null,
+    periodes_ouverture tsmultirange not null
 );
 
 create table _restaurant (
@@ -164,13 +120,13 @@ create table _restaurant (
         constraint restaurant_pk primary key
         constraint restaurant_inherits_offre references _offre,
     carte paragraphe not null,
-    richesse int not null check (1 <= richesse and richesse <= 3),
+    richesse int not null check (richesse between 1 and 3),
 
-    sert_petit_dejeuner boolean not null,
-    sert_brunch boolean not null,
-    sert_dejeuner boolean not null,
-    sert_diner boolean not null,
-    sert_boissons boolean not null,
+    sert_petit_dejeuner bool not null,
+    sert_brunch bool not null,
+    sert_dejeuner bool not null,
+    sert_diner bool not null,
+    sert_boissons bool not null,
     check (sert_petit_dejeuner or sert_brunch or sert_dejeuner or sert_diner or sert_boissons)
 );
 
@@ -274,7 +230,7 @@ create table _tarif (
         constraint tarif_fk_offre references _offre,
     constraint tarif_pk primary key (nom, id_offre),
 
-    montant decimal not null
+    montant decimal not null check (montant >= 0)
 );
 
 create table _option (
@@ -288,12 +244,12 @@ create table _avis (
         constraint avis_pk primary key
         constraint avis_inherits_signalable references _signalable,
     commentaire paragraphe not null,
-    note int not null check (1 <= note and note <= 5),
-    publie_le timestamp not null default now(),
+    note int not null check (note between 1 and 5),
+    publie_le timestamp not null default localtimestamp,
     date_experience date not null,
     contexte mot_minuscule not null,
-    lu boolean not null default false,
-    blackliste boolean not null default false,
+    lu bool not null default false,
+    blackliste bool not null default false,
 
     id_membre_auteur int
         constraint avis_fk_membre_auteur references _membre on delete set null,
@@ -302,18 +258,16 @@ create table _avis (
     constraint avis_uniq_auteur_offre unique (id_membre_auteur, id_offre)
 );
 comment on column _avis.id_membre_auteur is 'Devient null (anonyme) quand l''auteur est supprimé';
-comment on constraint avis_uniq_auteur_offre on _avis is 'Un seul avis par couple (membre_auteur, offre)';
+comment on constraint avis_uniq_auteur_offre on _avis is 'Un seul avis par couple (membre_auteur, offre). Ceci est une clé candidate et non pas une clé primaire car id_membre_auteur peut être null';
 
-create table _avis_resto (
+create table _avis_restaurant (
     id int
-        constraint avis_resto_pk primary key
-        constraint avis_resto_inherits_avis references _avis,
-    id_restaurant int not null
-        constraint avis_resto_fk_restaurant references _restaurant,
-    note_cuisine int not null check (1 <= note_cuisine and note_cuisine <= 5),
-    note_service int not null check (1 <= note_service and note_service <= 5),
-    note_ambiance int not null check (1 <= note_ambiance and note_ambiance <= 5),
-    note_qualite_prix int not null check (1 <= note_qualite_prix and note_qualite_prix <= 5)
+        constraint avis_restaurant_pk primary key
+        constraint avis_restaurant_inherits_avis references _avis,
+    note_cuisine int not null check (note_cuisine between 1 and 5),
+    note_service int not null check (note_service between 1 and 5),
+    note_ambiance int not null check (note_ambiance between 1 and 5),
+    note_qualite_prix int not null check (note_qualite_prix between 1 and 5)
 );
 
 create table _reponse (
@@ -327,28 +281,19 @@ create table _reponse (
 
 -- ASSOCIATIONS
 
-create table _horaire_ouverture (
+create table _ouverture_hebdomadaire (
     id_offre int
-        constraint horaire_ouverture_fk_offre references _offre,
-    dow int check (0 <= dow and dow <= 6),
-    heure_debut time,
-    heure_fin time check (heure_fin > heure_debut),
-    constraint horaire_ouverture_pk primary key (id_offre, dow, heure_debut, heure_fin)
+        constraint horaires_ouverture_fk_offre references _offre,
+    dow int check (dow between 0 and 6),
+    constraint horaires_ouverture_pk primary key (id_offre, dow),
+
+    horaires timemultirange not null check (not isempty(horaires))
 );
-comment on table _horaire_ouverture is
-'Un horaire d''ouverture périodique sur une semaine.
+comment on table _ouverture_hebdomadaire is
+'Des horaires d''ouverture hebdonaraires
 Ouvert sur toutes les semaines de l''année.
 Vacances, jours fériés et ponts non comptabilisées.';
-comment on column _horaire_ouverture.dow is 'The day of the week as Sunday (0) to Saturday (6)';
-
-create table _periode_ouverture (
-    id_offre int
-        constraint horaire_ouverture_fk_offre references _offre,
-    debut_le timestamp,
-    fin_le timestamp check (fin_le > debut_le),
-    constraint horaire_pk primary key (id_offre, debut_le, fin_le)
-);
-comment on table _periode_ouverture is 'Une période d''ouverture ponctuelle';
+comment on column _ouverture_hebdomadaire.dow is 'The day of the week as Sunday (0) to Saturday (6)';
 
 create table _signalement (
     id_membre int
@@ -388,7 +333,7 @@ create table _gallerie (
 create table _changement_etat (
     id_offre int
         constraint changement_etat_fk_offre references _offre,
-    fait_le timestamp default now(),
+    fait_le timestamp default localtimestamp,
     constraint changement_etat_pk primary key (id_offre, fait_le)
 );
 
@@ -397,7 +342,8 @@ create table _souscription_option (
         constraint souscription_option_pk primary key
         constraint souscription_option_fk_offre references _offre,
     nom_option nom_option not null
-        constraint souscription_option_fk_option references _option
+        constraint souscription_option_fk_option references _option,
+    actif bool default true
 );
 
 create table _juge (
@@ -407,7 +353,7 @@ create table _juge (
         constraint approuve_fk_avis references _avis,
     constraint approuve_pk primary key (id_identite, id_avis),
 
-    aime boolean not null
+    aime bool not null
 );
 
 create table _tags (

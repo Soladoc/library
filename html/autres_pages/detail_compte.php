@@ -1,20 +1,25 @@
 <?php
 require_once 'util.php';
 require_once 'queries.php';
-require_once 'component/head.php';
+require_once 'redirect.php';
+require_once 'component/Page.php';
 require_once 'component/offre.php';
+
+$page = new Page("detail_compte_membre : {$args['id']}",
+    ['https://unpkg.com/leaflet@1.7.1/dist/leaflet.css'],
+    ['https://unpkg.com/leaflet@1.7.1/dist/leaflet.js' => 'async']);
 
 $args = [
     'id' => getarg($_GET, 'id', arg_filter(FILTER_VALIDATE_INT))
 ];
 $id = $args['id'];
-$membre = query_compte_membre($args['id']);
-$pro = query_compte_professionnel($args['id']);
+$membre = DB\query_compte_membre($args['id']);
+$pro = DB\query_compte_professionnel($args['id']);
 
 if ($membre !== false) {
-    echo '<pre>';
-    print_r($membre);
-    echo '</pre>';
+    // echo '<pre>';
+    // print_r($membre);
+    // echo '</pre>';
     $pseudo = $membre['pseudo'];
     $email = $membre['email'];
     $mdp = unserialize($membre['mdp_hash']);
@@ -22,12 +27,11 @@ if ($membre !== false) {
     $prenom = $membre['prenom'];
     $telephone = $membre['telephone'];
     $id_adresse = $membre['id_adresse'];
-        $adresse= query_adresse($id_adresse);
-}
-else if ($pro !== false) {
-    echo '<pre>';
-    print_r($pro);
-    echo '</pre>';
+    $adresse = DB\query_adresse($id_adresse);
+} else if ($pro !== false) {
+    // echo '<pre>';
+    // print_r($pro);
+    // echo '</pre>';
     $denomination = $pro['denomination'];
     $email = $pro['email'];
     $mdp_hash = unserialize($pro['mdp_hash']);
@@ -35,38 +39,30 @@ else if ($pro !== false) {
     $prenom = $pro['prenom'];
     $telephone = $pro['telephone'];
     $id_adresse = $pro['id_adresse'];
-        $adresse= query_adresse($id_adresse);
+    $adresse = DB\query_adresse($id_adresse);
 
-    if (exists_pro_prive($id)) {
-        $siren = query_get_siren($id);
+    if (DB\exists_pro_prive($id)) {
+        $siren = DB\query_get_siren($id);
     }
-    
-}
-else {
+} else {
     html_error("le compte d'ID {$args['id']} n'existe pas");
 }
 // Afficher le détail du compte du membre
-
 
 if ($_POST) {
     $new_mdp = getarg($_POST, 'new_mdp');
     $confirmation_mdp = getarg($_POST, 'confirmation_mdp');
     $old_mdp = getarg($_POST, 'old_mdp');
 
-    if (password_verify($mdp_hash)) {
-        if ($confirmation_mdp === $new_mdp ) {
-            uptate_mdp($id,$new_mdp);
+    if ($new_mdp && password_verify($old_mdp, $mdp_hash)) {
+        if ($confirmation_mdp === $new_mdp) {
+            update_mdp($id, $new_mdp);  // todo: cette fonction n'exite pas
+        } else {
+            redirect_to(location_connexion('Mot de passe de confirmation different.'));
         }
-        else{
-            header('Location: /autres_pages/connexion.php?error_confirmation=' . urlencode("Mot de passe de confirmation different."));
-
-        }
+    } else {
+        redirect_to(location_connexion(error: 'Mot de passe incorrect.'));
     }
-    else {
-        header('Location: /autres_pages/connexion.php?error_mdp=' . urlencode(" Mot de passe incorrect."));
-
-    }
-    
 }
 
 ?>
@@ -74,45 +70,40 @@ if ($_POST) {
 <!DOCTYPE html>
 <html lang="fr">
 
-<?php put_head("detail_compte_membre : {$args['id']}",
-    ['https://unpkg.com/leaflet@1.7.1/dist/leaflet.css'],
-    ['https://unpkg.com/leaflet@1.7.1/dist/leaflet.js' => 'async']) ?>
+<?php $page->put_head() ?>
 
 <body>
-    <?php
-
-    require 'component/header.php'
-    ?>
+    <?php $page->put_header() ?>
 
     <main>
         <section id="info_compte">
-            <?php if ($membre !== false) {
-                
-            ?>
+            <?php
+            if ($membre !== false) {
+                ?>
             <div id="pseudo">
                 <p>Pseudo : </p>
-                <?php echo $pseudo ?>
+                <?= $pseudo ?>
             </div>
-            <?php }
-            else if ($pro !== false){ ?>
+            <?php } else if ($pro !== false) { ?>
                 <div id="denomination">
                 <p>Denomination : </p>
-                <?php echo $denomination 
+                <?php
+                echo $denomination
                 ?> </div>
 
                 
 
                 <?php
 
-                if (exists_pro_prive($id)) {
+                if (DB\exists_pro_prive($id)) {
                     ?>
                     <div id="siren">
                     <p>siren : </p>
-                <?php echo $siren 
+                <?php
+                echo $siren
                 ?> </div><?php
-                    
-                   
-                }?>
+                }
+                ?>
                 
            
 
@@ -121,29 +112,28 @@ if ($_POST) {
 
             <div id="nom">
                 <p>Nom : </p>
-                <?php echo $nom ?>
+                <?= $nom ?>
             </div>
 
             <div id="prenom">
                 <p>Prenom : </p>
-                <?php echo $prenom ?>
+                <?= $prenom ?>
             </div>
 
             <div id="email">
                 <p>Email : </p>
-                <?php echo $email ?>
+                <?= $email ?>
             </div>
 
             <div id="telephone">
                 <p>Numero de telephone : </p>
-                <?php echo $telephone ?>
+                <?= $telephone ?>
             </div>
 
             <div id="adresse">
                 <p>adresse : </p>
-                <?php echo format_adresse($adresse);  
-                ?> </div>
-        <a href="modif_compte.php?id=<?php echo $id ?>">modifier</a>
+                <?= format_adresse($adresse) ?> </div>
+        <a href="modif_compte.php?id=<?= $id ?>">modifier</a>
             <?php ?>
             
            
@@ -151,7 +141,7 @@ if ($_POST) {
 
     </main>
 
-    <?php require 'component/footer.php' ?>
+    <?php $page->put_footer() ?>
 
 </body>
 

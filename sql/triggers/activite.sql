@@ -26,3 +26,7 @@ $$ language plpgsql;
 
 create trigger tg_activite_insert instead of insert on activite for each row
 execute function activite_insert ();
+
+-- Update
+create trigger tg_activite_after_update after update on _activite for each row
+execute function _offre_after_update ();

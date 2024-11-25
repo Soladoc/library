@@ -13,6 +13,7 @@ with
         insert into
             spectacle (
                 id_adresse,
+                modifiee_le,
                 id_image_principale,
                 id_professionnel,
                 libelle_abonnement,
@@ -21,11 +22,13 @@ with
                 titre,
                 resume,
                 description_detaillee,
-                url_site_web
+                url_site_web,
+                periodes_ouverture
             )
         values
             (
                 (table id_adresse),
+                '2024-02-29 09:22:01',
                 12,
                 2,
                 'premium',
@@ -34,7 +37,11 @@ with
                 'Celtic Legends - Tournée 2026',
                 'Celtic Legends est un spectacle de musiques et de danses irlandaises qui s''est produit sur de nombreuses scènes à travers le monde depuis sa création, attirant près de 3 millions de spectateurs.',
                 'Celtic Legends revient en 2026 avec une nouvelle version du spectacle. Créé à Galway, au Coeur du Connemara, Celtic Legends est un condensé de la culture traditionnelle Irlandaise recréant sur scène l''ambiance électrique d''une soirée dans un pub traditionnel. Venez partager durant 2 heures ce voyage au coeur de l''Irlande soutenu par 5 talentueux musiciens sous la baguette de Sean McCarthy et de 12 extraordinaires danseurs sous la houlette de la créative Jacintha Sharpe.',
-                'https://www.celtic-legends.net'
+                'https://www.celtic-legends.net',
+                (
+                    select
+                        tsmultirange (tsrange ('2026-04-10 20:00:00', '2026-04-11 01:00:00'))
+                )
             )
         returning
             id
@@ -67,6 +74,7 @@ with
             )
     )
 insert into
-    periode_ouverture (id_offre, debut_le, fin_le)
+    tarif (nom, id_offre, montant)
 values
-    ((table id_offre), '2026-04-10T20:00:00.000Z', '2026-04-11T01:00:00.000Z');
+    ('adulte', (table id_offre), 10),
+    ('enfant', (table id_offre), 5);

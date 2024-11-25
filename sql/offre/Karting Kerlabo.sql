@@ -13,6 +13,7 @@ with
         insert into
             activite (
                 id_adresse,
+                modifiee_le,
                 id_image_principale,
                 id_professionnel,
                 libelle_abonnement,
@@ -27,6 +28,7 @@ with
         values
             (
                 (table id_adresse),
+                '2024-03-13 19:18:51',
                 27,
                 2,
                 'premium',
@@ -59,24 +61,17 @@ with
             ((table id_offre), 'plein air')
     ),
     s2 as (
-    insert into
-        avis (
-            id_offre,
-            id_membre_auteur,
-            note,
-            contexte,
-            date_experience,
-            commentaire
-        )
-    values
-        (
-            (table id_offre),
-            id_membre ('dieu_des_frites'),
-            2,
-            'affaires',
-            '2024-06-15',
-            'Karting bridés trop lents'
-        )
+        insert into
+            avis (id_offre, id_membre_auteur, note, contexte, date_experience, commentaire)
+        values
+            ((table id_offre), id_membre ('dieu_des_frites'), 2, 'affaires', '2024-06-15', 'Karting bridés trop lents')
+    ),
+    s3 as (
+        insert into
+            tarif (nom, id_offre, montant)
+        values
+            ('adulte', (table id_offre), 20),
+            ('etudiant', (table id_offre), 15)
     )
 insert into
     _gallerie (id_offre, id_image)

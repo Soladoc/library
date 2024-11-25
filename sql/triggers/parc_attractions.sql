@@ -20,3 +20,7 @@ $$ language plpgsql;
 
 create trigger tg_parc_attractions_insert instead of insert on parc_attractions for each row
 execute function parc_attractions_insert ();
+
+-- Update
+create trigger tg_parc_attractions_after_update after update on _parc_attractions for each row
+execute function _offre_after_update ();
