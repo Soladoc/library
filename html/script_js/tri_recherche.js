@@ -78,6 +78,7 @@ function displayOffers() {
             year: 'numeric'
         });
         
+        if (offer.prix_min!=null){
         offerElement.innerHTML = `
             <h3>${offer.titre}</h3>
             <img src="../images_utilisateur/${offer.id_image_principale}.jpg" 
@@ -101,6 +102,31 @@ function displayOffers() {
             <a href="/autres_pages/detail_offre.php?id=${offer.id}&pro=true">
                 <button class="btn-more-info">En savoir plus</button>
             </a>`;
+        } else {
+            offerElement.innerHTML = `
+            <h3>${offer.titre}</h3>
+            <img src="../images_utilisateur/${offer.id_image_principale}.jpg" 
+                onerror="this.onerror=null; 
+                  this.src='../images_utilisateur/${offer.id_image_principale}.png';
+                  this.onerror=function(){
+                        this.onerror=null; 
+                        this.src='../images_utilisateur/${offer.id_image_principale}.webp';
+                        this.onerror=function(){
+                            this.onerror=null;
+                            this.src='../images_utilisateur/${offer.id_image_principale}.jpeg';
+                        }
+                    }
+            ">
+            <p>Catégorie : ${offer.categorie}</p>
+            <p>Description : ${offer.resume}</p>
+            <p>Adresse : ${offer.formatted_address}</p>
+            <p>Gratuit</p>
+            <p>Note : ${offer.note_moyenne}/5</p>
+            <p>Date : ${formattedDate}</p>
+            <a href="/autres_pages/detail_offre.php?id=${offer.id}&pro=true">
+                <button class="btn-more-info">En savoir plus</button>
+            </a>`;
+        }
         offerList.appendChild(offerElement);
     });
 }

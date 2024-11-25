@@ -17,7 +17,9 @@ if ( !isset($_GET['id_offre']) ) {
     html_error('Erreur dans la requette de la page : id_offre manquant');
     exit;
 }else {
-    if (!DB\exists_offre($_GET['id_offre'])) {
+    if (!exists_offre($_GET['id_offre'])) {
+        echo exists_offre($_GET['id_offre']);
+        echo $_GET['id_offre'];
         html_error('Erreur: l\'offre n\'existe pas');
         exit;
     }
