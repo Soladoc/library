@@ -11,7 +11,7 @@ notfalse(session_start());
 
 function location_home(): string
 {
-    return est_connecte_pro() ? '/autres_pages/accueil.php' : '/autres_pages/accPro.php';
+    return est_connecte_pro() ? '/autres_pages/accPro.php' : '/autres_pages/accueil.php';
 }
 
 /**
