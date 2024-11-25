@@ -8,11 +8,11 @@ require_once 'auth.php';
 final class Page
 {
     private const BASE_STYLESHEETS = [
-        '/style/style.css',
-        '/style/offre_card.css',
+        'style.css',
+        'offre_card.css',
     ];
     private const BASE_SCRIPTS = [
-        '/script_js/base.js' => 'defer',
+        'base.js' => 'defer',
     ];
 
     readonly string $title;
