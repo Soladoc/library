@@ -49,7 +49,14 @@ function sortOffers(criteria, ascending = true) {
         let valueA = a[criteria];
         let valueB = b[criteria];
 
-        if (criteria === 'date') {
+        if (criteria === 'prix_min') {
+            // Convert to number if it's a string, or use 0 if it's null/undefined
+            valueA = parseFloat(valueA) || 0;
+            valueB = parseFloat(valueB) || 0;
+        } else if (criteria === 'note_moyenne') {
+            valueA = parseFloat(valueA) || 0;
+            valueB = parseFloat(valueB) || 0;
+        } else if (criteria === 'date') {
             valueA = new Date(valueA);
             valueB = new Date(valueB);
         }
@@ -136,8 +143,8 @@ document.getElementById('sort-price-up').addEventListener('click', () => sortOff
 document.getElementById('sort-price-down').addEventListener('click', () => sortOffers('prix_min', false));
 document.getElementById('sort-rating-up').addEventListener('click', () => sortOffers('note_moyenne', true));
 document.getElementById('sort-rating-down').addEventListener('click', () => sortOffers('note_moyenne', false));
-document.getElementById('sort-date-up').addEventListener('click', () => sortOffers('creee_le', true));
-document.getElementById('sort-date-down').addEventListener('click', () => sortOffers('creee_le', false));
+document.getElementById('sort-date-up').addEventListener('click', () => sortOffers('date', true));
+document.getElementById('sort-date-down').addEventListener('click', () => sortOffers('date', false));
 
 
 const sortButtons = document.querySelectorAll('.btn-sort');
