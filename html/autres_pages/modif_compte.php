@@ -89,19 +89,24 @@ if ($_POST) {
     }
 
     // modif mot de passe ------------------------------------------------------------------------------------------------------------------
-    $new_mdp = getarg($_POST, 'new_mdp', null, false);
-    $confirmation_mdp = getarg($_POST, 'confirmation_mdp', null, false);
+    
     $old_mdp = getarg($_POST, 'old_mdp', null, false);
+    
+    if($old_mdp){
+        $new_mdp = getarg($_POST, 'new_mdp', null, false);
+        $confirmation_mdp = getarg($_POST, 'confirmation_mdp', null, false);
 
-    if ($new_mdp && password_verify($old_mdp, $mdp_hash)) {
+        if ($new_mdp && password_verify($old_mdp, $mdp_hash)) {
         if ($confirmation_mdp === $new_mdp) {
-            DB\query_uptate_mdp($id, $new_mdp); 
+            DB\query_uptate_mdp($id, password_hash($new_mdp)); 
         } else {
-            redirect_to(location_connexion('Mot de passe de confirmation different.'));
+            redirect_to(location_modif_compte('Mot de passe de confirmation different.'));
         }
-    } else {
-        redirect_to(location_connexion(error: 'Mot de passe incorrect.'));
+        } else {
+            redirect_to(location_modif_compte(error: 'Mot de passe incorrect.'));
+        }
     }
+    
 }
 
 ?>
@@ -216,7 +221,7 @@ if ($_POST) {
             <?php if ($error = $_GET['error_confirmation'] ?? null) { ?>
             <p class="error"><?= $error ?></p>
             <?php } ?>
-            <button type="submit" >valider</button>
+            <button type="submit">valider</button>
         </div>
 
        

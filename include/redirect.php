@@ -16,3 +16,10 @@ function location_detail_offre(int $id_offre): string
 {
     return "/autres_pages/detail_offre.php?id=$id_offre";
 }
+
+
+function location_modif_compte(?string $error = null): string
+{
+    return '/autres_pages/modif_compte.php?return_url=' . urlencode($_SERVER['REQUEST_URI'])
+        . ($error === null ? '&error=' . urlencode($error) : null);
+}
