@@ -19,7 +19,7 @@ if (!empty($user)) {
         fail();
     }
     session_regenerate_id(true);
-    se_connecter_membre($user['id']);
+    Auth\se_connecter_membre($user['id']);
     succeed('/autres_pages/accueil.php');
 }
 
@@ -31,7 +31,7 @@ if (!empty($user)) {
         fail();
     }
     session_regenerate_id(true);
-    se_connecter_pro($user['id']);
+    Auth\se_connecter_pro($user['id']);
     succeed('/autres_pages/accPro.php');
 }
 

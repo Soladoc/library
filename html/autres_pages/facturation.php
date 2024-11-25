@@ -5,7 +5,7 @@ require_once 'auth.php';
 
 $page = new Page('Facturation');
 
-$id_professionnel = exiger_connecte_pro();
+$id_professionnel = Auth\exiger_connecte_pro();
 ?>
 
 

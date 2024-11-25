@@ -1,7 +1,8 @@
 <?php
+namespace Auth;
+
 require_once 'util.php';
 require_once 'redirect.php';
-
 /**
  * auth.php
  * Fonctions relatives à l'authentification

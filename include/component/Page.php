@@ -76,14 +76,14 @@ final class Page
 ?>
 <header>
     <div class="logo">
-        <?php if (est_connecte_pro()) { ?>
+        <?php if (Auth\est_connecte_pro()) { ?>
             <a href="accPro.php"><img src="../images/logo.png" alt="Logo pact"></a>
         <?php } else { ?>
             <a href="accueil.php"><img src="../images/logo.png" alt="Logo pact"></a>
         <?php } ?>
     </div>
     <?php
-    if (est_connecte()) {
+    if (Auth\est_connecte()) {
         // Vérification du statut de la session
         ?>
         <a href="../connexion/logout.php">
@@ -92,7 +92,7 @@ final class Page
                 <span>Déconnexion</span>
             </div>
         </a>
-        <?php if (est_connecte_pro()) { ?>
+        <?php if (Auth\est_connecte_pro()) { ?>
             <a href="facturation.php">
                 <div class="acces-facturation">
                 <img src="../images/facturation.png" alt="Profil">

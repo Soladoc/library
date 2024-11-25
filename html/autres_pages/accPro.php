@@ -6,7 +6,7 @@ require_once 'queries/offre.php';
 
 $page = new Page('Accueil Professionnel');
 
-$id_professionnel = exiger_connecte_pro();
+$id_professionnel = Auth\exiger_connecte_pro();
 
 $nb_offres = query_offres_count($id_professionnel);
 $nb_offres_en_ligne = query_offres_count($id_professionnel, en_ligne: true)

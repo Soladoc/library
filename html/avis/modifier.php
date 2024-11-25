@@ -7,7 +7,7 @@ require_once 'component/Page.php';
 
 $page = new Page('Modifier un avis');
 
-exiger_connecte_membre();
+Auth\exiger_connecte_membre();
 
 $id_avis = intval($_GET['avis_id']);
 $id_offre = intval($_GET['offre']);

@@ -10,7 +10,7 @@ $page = new Page("Création d'une offre",
     ['creation_offre.css'],
     ['module/creation_offre.js' => 'defer type="module"']);
 
-$id_professionnel = exiger_connecte_pro();
+$id_professionnel = Auth\exiger_connecte_pro();
 
 //ne continue dans la page que si id_offre existe et est valide
 if ( !isset($_GET['id_offre']) ) {
