@@ -59,7 +59,7 @@ if ($offre) {
 <!DOCTYPE html>
 <html lang="fr">
 
-<?php $page->put_head() ?>>
+<?php $page->put_head() ?>
 
 <body>
     <?php $page->put_header() ?>
