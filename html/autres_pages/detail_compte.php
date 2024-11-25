@@ -13,8 +13,8 @@ $args = [
     'id' => getarg($_GET, 'id', arg_filter(FILTER_VALIDATE_INT))
 ];
 $id = $args['id'];
-$membre = query_compte_membre($args['id']);
-$pro = query_compte_professionnel($args['id']);
+$membre = DB\query_compte_membre($args['id']);
+$pro = DB\query_compte_professionnel($args['id']);
 
 if ($membre !== false) {
     // echo '<pre>';
@@ -27,7 +27,7 @@ if ($membre !== false) {
     $prenom = $membre['prenom'];
     $telephone = $membre['telephone'];
     $id_adresse = $membre['id_adresse'];
-    $adresse = query_adresse($id_adresse);
+    $adresse = DB\query_adresse($id_adresse);
 } else if ($pro !== false) {
     // echo '<pre>';
     // print_r($pro);
@@ -39,10 +39,10 @@ if ($membre !== false) {
     $prenom = $pro['prenom'];
     $telephone = $pro['telephone'];
     $id_adresse = $pro['id_adresse'];
-    $adresse = query_adresse($id_adresse);
+    $adresse = DB\query_adresse($id_adresse);
 
-    if (exists_pro_prive($id)) {
-        $siren = query_get_siren($id);
+    if (DB\exists_pro_prive($id)) {
+        $siren = DB\query_get_siren($id);
     }
 } else {
     html_error("le compte d'ID {$args['id']} n'existe pas");
@@ -95,7 +95,7 @@ if ($_POST) {
 
                 <?php
 
-                if (exists_pro_prive($id)) {
+                if (DB\exists_pro_prive($id)) {
                     ?>
                     <div id="siren">
                     <p>siren : </p>

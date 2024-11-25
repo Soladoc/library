@@ -22,7 +22,7 @@ require_once 'db.php';
 function put_input_address(string $id = '', string $prefix = '', string $form_id = '')
 {
     $form_attr = $form_id ? "form=\"$form_id\"" : '';
-    $communes = db_connect()->query('select nom from _commune fetch first 1000 rows only')->fetchAll()
+    $communes = DB\connect()->query('select nom from _commune fetch first 1000 rows only')->fetchAll()
 ?>
 <details <?= $id ? "id=\"$id\"" : '' ?> class="input-address">
     <datalist id="datalist-input-address-communes"><?php

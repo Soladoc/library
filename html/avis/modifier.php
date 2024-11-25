@@ -12,7 +12,7 @@ Auth\exiger_connecte_membre();
 $id_avis = intval($_GET['avis_id']);
 $id_offre = intval($_GET['offre']);
 
-$stmt = db_connect()->prepare('SELECT * FROM pact._avis WHERE id = ?');
+$stmt = DB\connect()->prepare('SELECT * FROM pact._avis WHERE id = ?');
 $stmt->execute([$id_avis]);
 $avis = $stmt->fetch(PDO::FETCH_ASSOC);
 
@@ -28,7 +28,7 @@ if (isset($_POST['date'])) {
         $error_message = 'Tous les champs sont obligatoires.';
     } else {
         // Mise à jour de l'avis dans la base de données
-        $stmt = db_connect()->prepare('UPDATE pact._avis SET commentaire = ?, note = ?, contexte = ?, date_experience = ? WHERE id = ?');
+        $stmt = DB\connect()->prepare('UPDATE pact._avis SET commentaire = ?, note = ?, contexte = ?, date_experience = ? WHERE id = ?');
         $stmt->execute([$commentaire, $note, $contexte, $date_experience, $id_avis]);
 
         $success_message = 'Avis modifié avec succès !';

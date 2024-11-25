@@ -280,7 +280,7 @@ if ($_POST) {
         <section id="type-abonnement">
             <ul id="liste-choix-abonnement">
                 <?php
-                if (!exists_pro_prive($id_professionnel)) {
+                if (!DB\exists_pro_prive($id_professionnel)) {
                     ?> 
                     <li>
                         <label><input form="f" name="libelle_abonnement" value="gratuit" type="radio">Gratuit</label>

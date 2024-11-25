@@ -1,4 +1,6 @@
 <?php
+namespace DB;
+use PDO, Throwable;
 require_once 'util.php';
 
 function _is_localhost(): bool
@@ -28,7 +30,7 @@ $_pdo = null;
  * La valeur retournée par cette fonction est cachée : l'appeler plusieurs fois n'a aucun effet. Il n'y a donc pas besoin de conserber son résultat dans une variable.
  * @return PDO L'objet PDO connecté à la base de données.
  */
-function db_connect(): PDO
+function connect(): PDO
 {
     global $_pdo;
     if ($_pdo !== null) {
@@ -75,7 +77,7 @@ function db_connect(): PDO
  */
 function transaction(callable $body, ?callable $cleanup = null)
 {
-    $pdo = db_connect();
+    $pdo = connect();
     notfalse($pdo->beginTransaction(), '$pdo->beginTransaction() failed');
 
     try {

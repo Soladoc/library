@@ -17,7 +17,7 @@ if ( !isset($_GET['id_offre']) ) {
     html_error('Erreur dans la requette de la page : id_offre manquant');
     exit;
 }else {
-    if (!exists_offre($_GET['id_offre'])) {
+    if (!DB\exists_offre($_GET['id_offre'])) {
         html_error('Erreur: l\'offre n\'existe pas');
         exit;
     }
@@ -293,7 +293,7 @@ if ($_POST) {
         <section id="type-abonnement">
             <ul id="liste-choix-abonnement">
                 <?php
-                if (!exists_pro_prive($id_professionnel)) {
+                if (!DB\exists_pro_prive($id_professionnel)) {
                     ?> 
                     <li>
                         <label><input form="f" name="libelle_abonnement" value="gratuit" type="radio">Gratuit</label>

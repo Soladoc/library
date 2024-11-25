@@ -18,15 +18,14 @@ $id_professionnel = Auth\exiger_connecte_pro();
     <?php $page->put_header() ?>
     <main>
         <?php
-        $offres = query_offres($id_professionnel);
-        while ($offre = $offres->fetch()) {
+        $offres = DB\query_offres($id_professionnel);
+        foreach ($offres as $offre) {
             echo '<pre>';
             print_r($offre['libelle_abonnement']);
             // cc benjamin, j'ai renommé l'attribut prix de abonnement en prix_jouranlier
             // ce message s'autodétruira dans 5 réinitialisations de BDD
             echo '</pre>';
         }
-        $offres->closeCursor()
         ?>
     </main>
 </body>

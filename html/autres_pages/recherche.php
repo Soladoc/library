@@ -1,17 +1,15 @@
 <?php
 require_once 'component/offre.php';
-require_once 'component/offre.php'
+require_once 'component/Page.php';
+
+$page = new Page('Recherche', scripts: [
+    'tri_recherche.js' => 'defer',
+]);
 ?>
 
 <!DOCTYPE html>
 <html lang="fr">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Recherche</title>
-    <link rel="stylesheet" href="/style/style.css">
-    <script src="/script_js/tri_recherche.js" defer></script>
-</head>
+<?php $page->put_head() ?>
 <body>
     <?php $page->put_header() ?>
     <main>
@@ -64,19 +62,5 @@ require_once 'component/offre.php'
         </section>
     </main>
     <?php $page->put_footer() ?>
-    <script src="/script_js/tri_recherche.js"></script>
-    <script>
-        <?php
-        $stmtOffres = query_offres();
-        $offres = $stmtOffres->fetchAll(PDO::FETCH_ASSOC);
-        foreach ($offres as &$offre) {
-            $offre['formatted_address'] = format_adresse(notfalse(query_adresse($offre['id_adresse'])));
-        }
-        echo 'const offersData = ' . json_encode($offres) . ';';
-        ?>
-        document.addEventListener('DOMContentLoaded', function() {
-            initializeOffers(offersData);
-        });
-    </script>
 </body>
 </html>

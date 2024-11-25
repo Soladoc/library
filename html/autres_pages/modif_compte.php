@@ -13,8 +13,8 @@ $args = [
 ];
 
 $id = $args['id'];
-$membre = query_compte_membre($args['id']);
-$pro = query_compte_professionnel($args['id']);
+$membre = DB\query_compte_membre($args['id']);
+$pro = DB\query_compte_professionnel($args['id']);
 
 if ($membre !== false) {
     // echo '<pre>';
@@ -27,7 +27,7 @@ if ($membre !== false) {
     $prenom = $membre['prenom'];
     $telephone = $membre['telephone'];
     $id_adresse = $membre['id_adresse'];
-    $adresse = query_adresse($id_adresse);
+    $adresse = DB\query_adresse($id_adresse);
 } else if ($pro !== false) {
     // echo '<pre>';
     // print_r($pro);
@@ -39,7 +39,7 @@ if ($membre !== false) {
     $prenom = $pro['prenom'];
     $telephone = $pro['telephone'];
     $id_adresse = $pro['id_adresse'];
-    $adresse = query_adresse($id_adresse);
+    $adresse = DB\query_adresse($id_adresse);
 } else {
     html_error("le compte d'ID {$args['id']} n'existe pas");
 }
@@ -49,43 +49,43 @@ if ($_POST) {
     // modif pseudo ------------------------------------------------------------------------------------------------------------------
     $new_pseudo = getarg($_POST, 'new_pseudo', null, required: false);
     if ($new_pseudo) {
-        query_uptate_pseudo($id, $new_pseudo);
+        DB\query_uptate_pseudo($id, $new_pseudo);
     }
 
     // modif denomination ------------------------------------------------------------------------------------------------------------------
     $new_denomination = getarg($_POST, 'new_denomination', null, false);
     if ($new_denomination) {
-        query_uptate_denomination($id, $new_denomination);
+        DB\query_uptate_denomination($id, $new_denomination);
     }
 
     // modif siren ------------------------------------------------------------------------------------------------------------------
     $new_siren = getarg($_POST, 'new_siren', null, false);
     if ($new_siren) {
-        query_update_siren($id, $new_siren);
+        DB\query_update_siren($id, $new_siren);
     }
 
     // modif Nom ------------------------------------------------------------------------------------------------------------------
     $new_Nom = getarg($_POST, 'new_Nom', null, false);
     if ($new_Nom) {
-        query_update_Nom($id, $new_Nom);
+        DB\query_update_Nom($id, $new_Nom);
     }
 
     // modif Prenom ------------------------------------------------------------------------------------------------------------------
     $new_Prenom = getarg($_POST, 'new_Prenom', null, required: false);
     if ($new_Prenom) {
-        query_update_prenom($id, $new_Prenom);
+        DB\query_update_prenom($id, $new_Prenom);
     }
 
     // modif Email ------------------------------------------------------------------------------------------------------------------
     $new_Email = getarg($_POST, 'new_Email', null, false);
     if ($new_Email) {
-        query_update_email($id, $new_Email);
+        DB\query_update_email($id, $new_Email);
     }
 
     // modif telephone ------------------------------------------------------------------------------------------------------------------
     $new_telephone = getarg($_POST, 'new_telephone', null, false);
     if ($new_telephone) {
-        query_update_telephone($id, $new_telephone);
+        DB\query_update_telephone($id, $new_telephone);
     }
 
     // modif mot de passe ------------------------------------------------------------------------------------------------------------------
@@ -134,7 +134,7 @@ if ($_POST) {
                 <input id="new_denomination" name="new_denomination" type="text" placeholder="votre nouvelle denomination">
             </div>
             <?php
-            if (exists_pro_prive($id)) {
+            if (DB\exists_pro_prive($id)) {
                 ?>
                     <div>
                     <div id="siren">

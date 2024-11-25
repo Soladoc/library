@@ -5,7 +5,7 @@ require_once 'util.php';
 
 /**
  * Affiche le composant d'image utilisateur.
- * @param array $image L'image à afficher (ligne issue la BDD, voir `query_image`)
+ * @param array $image L'image à afficher (ligne issue la BDD, voir `DB\query_image`)
  * @return void
  */
 function put_image(array $image)
@@ -15,17 +15,17 @@ function put_image(array $image)
 
 /**
  * Affiche le composant de carte d'offfre pour professionnel
- * @param array<string, mixed> $offre L'offre à afficher (ligne issue la BDD, foir `query_offre`)
+ * @param array<string, mixed> $offre L'offre à afficher (ligne issue la BDD, foir `DB\query_offre`)
  * @return void
  */
 function put_card_offre_pro(array $offre)
 {
-    $nb_avis = query_avis_count($offre['id']);
+    $nb_avis = DB\query_avis_count($offre['id']);
 ?>
 <div class="offer-card">
-    <?php put_image(query_image($offre['id_image_principale'])) ?>
+    <?php put_image(DB\query_image($offre['id_image_principale'])) ?>
     <h3><?= $offre['titre'] ?></h3>
-    <p class="location"><?= format_adresse(notfalse(query_adresse($offre['id_adresse']))) ?></p>
+    <p class="location"><?= format_adresse(notfalse(DB\query_adresse($offre['id_adresse']))) ?></p>
     <p class="category"><?= $offre['categorie'] ?></p>
     <p class="rating">
         <?php if ($nb_avis === 0) { ?>Aucun avis
@@ -41,16 +41,16 @@ function put_card_offre_pro(array $offre)
 
 /**
  * Affiche le composant de carte d'offfre pour membre ou visiteur.
- * @param array<string, mixed> $offre L'offre à afficher (ligne issue la BDD, foir `query_offre`)
+ * @param array<string, mixed> $offre L'offre à afficher (ligne issue la BDD, foir `DB\query_offre`)
  * @return void
  */
 function put_card_offre(array $offre)
 {
 ?>
 <div class="offer-card">
-    <?php put_image(query_image($offre['id_image_principale'])) ?>
+    <?php put_image(DB\query_image($offre['id_image_principale'])) ?>
     <h3><?= $offre['titre'] ?> </h3>
-    <p class="location"><?= format_adresse(notfalse(query_adresse($offre['id_adresse']))) ?></p>
+    <p class="location"><?= format_adresse(notfalse(DB\query_adresse($offre['id_adresse']))) ?></p>
     <p><?= $offre['resume'] ?></p>
     <p class="category"><?= $offre['categorie'] ?></p>
     <a href="/autres_pages/detail_offre.php?id=<?= $offre['id'] ?>">

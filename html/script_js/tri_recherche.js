@@ -1,3 +1,12 @@
+'use strict';
+
+let offers = []; // This will be populated with data from PHP
+async function initializeOffers() {
+    offers = await (await fetch(`/json/offres.php`)).json();
+    displayOffers();
+}
+initializeOffers();
+
 const subcategories = {
     restauration: ['Française', 'Fruits de mer', 'Asiatique', 'Indienne', 'Italienne', 'Gastronomique', 'Restauration rapide', 'Crêperie'],
     activite: ['Urbain', 'Nature', 'Plein air', 'Culturel', 'Patrimoine', 'Histoire', 'Sport', 'Nautique', 'Gastronomie', 'Musée', 'Atelier', 'Musique', 'Famille'],
@@ -35,8 +44,6 @@ function showSubcategories() {
     }
 }
 
-let offers = []; // This will be populated with data from PHP
-
 function sortOffers(criteria, ascending = true) {
     offers.sort((a, b) => {
         let valueA = a[criteria];
@@ -54,11 +61,6 @@ function sortOffers(criteria, ascending = true) {
         }
     });
 
-    displayOffers();
-}
-
-function initializeOffers(offersData) {
-    offers = offersData;
     displayOffers();
 }
 

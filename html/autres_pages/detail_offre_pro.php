@@ -15,14 +15,14 @@ $args = [
 
 if ($_POST) {
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-        offre_alterner_etat($args['id']);
-        $offre = query_offre($args['id']);
+        DB\offre_alterner_etat($args['id']);
+        $offre = DB\query_offre($args['id']);
         redirect_to($_SERVER['REQUEST_URI']);
         exit;
     }
 
     // Récupérer les données de l'offre
-    $offre = query_offre($args['id']);
+    $offre = DB\query_offre($args['id']);
 
     // Si l'offre est trouvée, afficher ses détails
     if ($offre) {
@@ -32,8 +32,8 @@ if ($_POST) {
         $site_web = $offre['url_site_web'];
         $image_pricipale = $offre['id_image_principale'];
         $en_ligne = $offre['en_ligne'];
-        $info_adresse = query_adresse($adresse);
-        $avis = query_avis();
+        $info_adresse = DB\query_adresse($adresse);
+        $avis = DB\query_avis();
         // Vérifier si l'adresse existe
         if ($info_adresse) {
             // Construire une chaîne lisible pour l'adresse
@@ -41,7 +41,7 @@ if ($_POST) {
             $complement_numero = $info_adresse['complement_numero'];
             $nom_voie = $info_adresse['nom_voie'];
             $localite = $info_adresse['localite'];
-            $code_postal = query_codes_postaux($info_adresse['code_commune'], $info_adresse['numero_departement'])[0];
+            $code_postal = DB\query_codes_postaux($info_adresse['code_commune'], $info_adresse['numero_departement'])[0];
 
             // Concaténer les informations pour former une adresse complète
             $adresse_complete = "$numero_voie $complement_numero $nom_voie, $localite, $code_postal";
@@ -124,10 +124,10 @@ if ($_POST) {
             <h4>Avis de la communauté</h4>
             <div class="review-summary">
                 <h4>Résumé des notes</h4>
-                <p>Nombre d'avis : <?= query_avis_count($args['id']) ?></p>
+                <p>Nombre d'avis : <?= DB\query_avis_count($args['id']) ?></p>
                 <p>Moyenne&nbsp;: <?php if ($offre['note_moyenne'] != null) { echo $offre['note_moyenne']; } else { echo 0; } ?>/5 ★</p>
                 <div class="rating-distribution">
-                    <?php $avis = query_avis(id_offre: $offre['id']) ?>
+                    <?php $avis = DB\query_avis(id_offre: $offre['id']) ?>
                     <p>5 étoiles&nbsp;: <?= count(array_filter($avis, fn($a) => $a['note'] === 5)) ?> avis.</p>
                     <p>4 étoiles&nbsp;: <?= count(array_filter($avis, fn($a) => $a['note'] === 4)) ?> avis.</p>
                     <p>3 étoiles&nbsp;: <?= count(array_filter($avis, fn($a) => $a['note'] === 3)) ?> avis.</p>

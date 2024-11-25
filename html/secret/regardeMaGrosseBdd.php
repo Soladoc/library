@@ -10,7 +10,7 @@ function quote(string $name): string
 
 require_once 'db.php';
 if ($table = $_GET['table'] ?? null) {
-    $results = db_connect()->query('table ' . quote($_GET['schema'] ?: 'pact') . '.' . quote($table))->fetchAll();
+    $results = DB\connect()->query('table ' . quote($_GET['schema'] ?: 'pact') . '.' . quote($table))->fetchAll();
     // Vérifier s'il y a des résultats
     if ($results) {
         echo "<table border='1'>";

@@ -28,7 +28,7 @@ if ($_POST) {
         $args['siren'] = getarg($_POST, 'siren');
     }
 
-    $stmt = db_connect()->prepare('select count(*) from pact._compte where email = ?');
+    $stmt = DB\connect()->prepare('select count(*) from pact._compte where email = ?');
     $stmt->execute([$args['email']]);
     $count = $stmt->fetchColumn();
 
@@ -40,7 +40,7 @@ if ($_POST) {
 
     $nomCommune = $_POST['adresse'];
 
-    $stmt = db_connect()->prepare('SELECT code, numero_departement FROM pact._commune WHERE nom = ?');
+    $stmt = DB\connect()->prepare('SELECT code, numero_departement FROM pact._commune WHERE nom = ?');
     $stmt->execute([$nomCommune]);
     $commune = $stmt->fetch(PDO::FETCH_ASSOC);
 
@@ -51,13 +51,13 @@ if ($_POST) {
     $codeCommune = $commune['code'];
     $numeroDepartement = $commune['numero_departement'];
 
-    $stmt = db_connect()->prepare(' INSERT INTO pact._adresse (code_commune, numero_departement) VALUES ( ?, ?) RETURNING id');
+    $stmt = DB\connect()->prepare(' INSERT INTO pact._adresse (code_commune, numero_departement) VALUES ( ?, ?) RETURNING id');
     $stmt->execute([$codeCommune, $numeroDepartement]);
 
     $idAdresse = $stmt->fetchColumn();
 
     if ($type === 'prive') {
-        $stmt = db_connect()->prepare('insert into pro_prive (email, mdp_hash, nom, prenom, telephone, id_adresse, denomination, siren) values (?, ?, ?, ?, ?, ?, ?, ?)');
+        $stmt = DB\connect()->prepare('insert into pro_prive (email, mdp_hash, nom, prenom, telephone, id_adresse, denomination, siren) values (?, ?, ?, ?, ?, ?, ?, ?)');
         $stmt->execute([
             $args['email'],
             $mdp_hash,
@@ -70,7 +70,7 @@ if ($_POST) {
         ]);
         redirect_to(location_connexion());
     } else {
-        $stmt = db_connect()->prepare('insert into pro_public (email, mdp_hash, nom, prenom, telephone, id_adresse, denomination) values (?, ?, ?, ?, ?, ?, ?)');
+        $stmt = DB\connect()->prepare('insert into pro_public (email, mdp_hash, nom, prenom, telephone, id_adresse, denomination) values (?, ?, ?, ?, ?, ?, ?)');
         $stmt->execute([
             $args['email'],
             $mdp_hash,

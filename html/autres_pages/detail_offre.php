@@ -22,7 +22,7 @@ if ($_POST) {
         $error_message = 'Veuillez vous connecter pour publier un avis.';
     } else {
         $querry = 'INSERT INTO pact.avis (id_membre_auteur,id_offre,commentaire,date_experience,note,contexte) VALUES (?,?,?,?,?,?);';
-        $stmt = db_connect()->prepare($querry);
+        $stmt = DB\connect()->prepare($querry);
         $stmt->execute([
             $id_membre_co,
             $args['id'],
@@ -35,7 +35,7 @@ if ($_POST) {
     }
 }
 
-$offre = query_offre($args['id']);
+$offre = DB\query_offre($args['id']);
 if ($offre === false) {
     html_error("Pas d'offre n°{$args['id']}");
 }
@@ -44,11 +44,11 @@ assert($offre['id'] === $args['id']);
 $titre = $offre['titre'];
 $description = $offre['description_detaillee'];
 $site_web = $offre['url_site_web'];
-$image_pricipale = query_image($offre['id_image_principale']);
-$adresse = notfalse(query_adresse($offre['id_adresse']));
+$image_pricipale = DB\query_image($offre['id_image_principale']);
+$adresse = notfalse(DB\query_adresse($offre['id_adresse']));
 
-$gallerie = query_gallerie($args['id']);
-$avis = query_avis()
+$gallerie = DB\query_gallerie($args['id']);
+$avis = DB\query_avis()
 ?>
 
 <!DOCTYPE html>
@@ -88,7 +88,7 @@ $avis = query_avis()
                         <?php if (!empty($gallerie)): ?>
                             <?php foreach ($gallerie as $image): ?>
                                 <div class="carousel-slide">
-                                    <?php put_image(query_image($image)) ?>
+                                    <?php put_image(DB\query_image($image)) ?>
                                 </div>
                             <?php endforeach ?>
                         <?php endif ?>
@@ -164,10 +164,10 @@ $avis = query_avis()
                 <h4>Avis de la communauté</h4>
                 <div class="review-summary">
                 <h4>Résumé des notes</h4>
-                <p>Nombre d'avis : <?= query_avis_count($args['id']) ?></p>
+                <p>Nombre d'avis : <?= DB\query_avis_count($args['id']) ?></p>
                 <p>Moyenne&nbsp;: <?php if ($offre['note_moyenne'] != null) { echo round($offre['note_moyenne'], 2); } else { echo 0; } ?>/5 ★</p>
                 <div class="rating-distribution">
-                    <?php $avis = query_avis(id_offre: $offre['id']) ?>
+                    <?php $avis = DB\query_avis(id_offre: $offre['id']) ?>
                     <p>5 étoiles&nbsp;: <?= count(array_filter($avis, fn($a) => $a['note'] === 5)) ?> avis.</p>
                     <p>4 étoiles&nbsp;: <?= count(array_filter($avis, fn($a) => $a['note'] === 4)) ?> avis.</p>
                     <p>3 étoiles&nbsp;: <?= count(array_filter($avis, fn($a) => $a['note'] === 3)) ?> avis.</p>

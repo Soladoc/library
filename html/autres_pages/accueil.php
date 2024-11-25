@@ -31,10 +31,10 @@ $page = new Page('Accueil');
             <div class="offer-list">
                 <?php
                 // Préparer et exécuter la requête SQL pour récupérer toutes les offres
-                $stmtOffres = query_offres_a_une();
+                $offres = DB\query_offres_a_une();
 
                 // Boucler sur les résultats pour afficher chaque offre
-                while ($offre = $stmtOffres->fetch()) {
+                foreach ($offres as $offre) {
                     put_card_offre($offre);
                 }
                 ?>
