@@ -24,7 +24,7 @@ function put_card_offre_pro(array $offre)
 ?>
 <div class="offer-card">
     <?php put_image(DB\query_image($offre['id_image_principale'])) ?>
-    <h3><?= $offre['titre'] ?></h3>
+    <h3><a href="/autres_pages/detail_offre_pro.php?id=<?= $offre['id'] ?>"><?= $offre['titre'] ?></a></h3>
     <p class="location"><?= format_adresse(notfalse(DB\query_adresse($offre['id_adresse']))) ?></p>
     <p class="category"><?= $offre['categorie'] ?></p>
     <p class="rating">
@@ -32,9 +32,6 @@ function put_card_offre_pro(array $offre)
         <?php } else { ?>Note&nbsp;: <?= $offre['note_moyenne'] ?>/5 ★ (<?= $nb_avis ?> avis)
         <?php } ?>
     </p>
-    <a href="/autres_pages/detail_offre_pro.php?id=<?= $offre['id'] ?>&pro=true">
-        <button class="btn-more-info">En savoir plus</button>
-    </a>
 </div>
 <?php
 }
@@ -49,13 +46,10 @@ function put_card_offre(array $offre)
 ?>
 <div class="offer-card">
     <?php put_image(DB\query_image($offre['id_image_principale'])) ?>
-    <h3><?= $offre['titre'] ?> </h3>
+    <h3><a href="/autres_pages/detail_offre.php?id=<?= $offre['id'] ?>"><?= $offre['titre'] ?></a></h3>
     <p class="location"><?= format_adresse(notfalse(DB\query_adresse($offre['id_adresse']))) ?></p>
     <p><?= $offre['resume'] ?></p>
     <p class="category"><?= $offre['categorie'] ?></p>
-    <a href="/autres_pages/detail_offre.php?id=<?= $offre['id'] ?>">
-        <button class="btn-more-info">En savoir plus</button>
-    </a>
 </div>
 <?php
 }

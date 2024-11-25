@@ -35,6 +35,20 @@
     margin-top: 10px;
 }
 
+.offer-card h3 a {
+    text-decoration: none;
+}
+
+/* Offer card foil */
+.offer-card h3 a::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+}
+
 .offer-card .offer-card p {
     margin: 5px 0;
     color: #555;
