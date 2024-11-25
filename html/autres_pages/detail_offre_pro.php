@@ -83,28 +83,37 @@ if ($offre) {
             <div class="page_modif">
                 <a class="modifier" href="https://413.ventsdouest.dev/autres_pages/modifier_offre.php">Modifier</a>
             </div>
-        </section>
-        <section class="offer-details">
-            <div class="offer-main-photo">
-                <img src="/images/offre/<?= $image_pricipale ?>.jpg" alt="Main Photo" class="offer-photo-large">
-                <!-- <div class="offer-photo-gallery">
-                     <img src="/images/offre/Radôme2.jpg" alt="Photo 2" class="offer-photo-small">
-                    <img src="/images/offre/Radôme3.jpg" alt="Photo 3" class="offer-photo-small"> 
-                </div> -->
-            </div>
+            <section class="offer-details">
+            <section class="offer-main-photo">
+                <div class="carousel-container">
+                    <div class="carousel">
+                        <!-- Image principale -->
+                        <?php if ($image_pricipale): ?>
+                            <div class="carousel-slide">
+                                <?php put_image($image_pricipale) ?>
+                            </div>
+                        <?php endif ?>
+
+                        <!-- Galerie d'images -->
+                        <?php if (!empty($gallerie)): ?>
+                            <?php foreach ($gallerie as $image): ?>
+                                <div class="carousel-slide">
+                                    <?php put_image(DB\query_image($image)) ?>
+                                </div>
+                            <?php endforeach ?>
+                        <?php endif ?>
+                    </div>
+
+                    <!-- Boutons de navigation -->
+                    <button class="carousel-prev" aria-label="Image précédente">❮</button>
+                    <button class="carousel-next" aria-label="Image suivante">❯</button>
+                </div>
+            </section>
 
             <div class="offer-info">
                 <h2><?= $titre ?></h2>
                 <p class="description"><?= $description ?></p>
-                <div class="offer-status">
-                    <!-- <p class="price">Prix&nbsp;: 13-39€</p>
-                    <p class="status">Statut&nbsp;: <span class="open">Ouvert</span></p>
-                    <p class="rating">Note&nbsp;: ★★★★☆ (4.7/5, 256 avis)</p>
-                    <p class="hours">Horaires&nbsp;: 9h30 - 18h30</p>
-                    <button class="btn-reserve">Réserver</button> -->
-                </div>
             </div>
-        </section>
 
         <!-- Location -->
         <section class="offer-location">
