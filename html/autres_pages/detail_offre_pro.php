@@ -6,13 +6,13 @@ require_once 'redirect.php';
 require_once 'component/Page.php';
 require_once 'component/offre.php';
 
-$page = new Page("offre : {$args['id']}",
-    ['https://unpkg.com/leaflet@1.7.1/dist/leaflet.css'],
-    ['https://unpkg.com/leaflet@1.7.1/dist/leaflet.js' => 'async']);
-
 $args = [
     'id' => getarg($_GET, 'id', arg_filter(FILTER_VALIDATE_INT))
 ];
+
+$page = new Page("offre : {$args['id']}",
+    ['https://unpkg.com/leaflet@1.7.1/dist/leaflet.css'],
+    ['https://unpkg.com/leaflet@1.7.1/dist/leaflet.js' => 'async']);
 
 if ($_POST) {
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
