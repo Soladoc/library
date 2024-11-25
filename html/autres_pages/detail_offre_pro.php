@@ -32,6 +32,7 @@ if ($_POST) {
         $site_web = $offre['url_site_web'];
         $image_pricipale = $offre['id_image_principale'];
         $en_ligne = $offre['en_ligne'];
+        echo $en_ligne;
         $info_adresse = DB\query_adresse($adresse);
         $avis = DB\query_avis();
         // Vérifier si l'adresse existe
@@ -72,7 +73,7 @@ if ($_POST) {
             <form id="toggleForm" method="POST">
                 <div class='online'>
                     <div>
-                        <?php if ($en_ligne) { ?>
+                        <?php if ($en_ligne!= null) { ?>
                         <p>Offre en ligne</p>
                         <button type="button" class="hors_ligne" onclick="enableValidate()">Mettre hors ligne</button>
                         <?php } else { ?>
