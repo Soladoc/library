@@ -178,7 +178,7 @@ function bind_values(PDOStatement $stmt, array $params)
     }
 }
 
-function filter_null_values(array $array): array
+function filter_null_args(array $array): array
 {
     return array_filter($array, fn($e) => $e[0] !== null);
 }

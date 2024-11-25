@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Cause une erreur si la valeur fournie est strictement égale à `false`.
  *

@@ -24,7 +24,7 @@ final class Offre
 
     static function get_offres(?int $id_professionnel = null, ?bool $en_ligne = null): array
     {
-        $args = DB\filter_null_values(['id_professionnel' => [$id_professionnel, PDO::PARAM_INT], 'en_ligne' => [$en_ligne, PDO::PARAM_BOOL]]);
+        $args = DB\filter_null_args(['id_professionnel' => [$id_professionnel, PDO::PARAM_INT], 'en_ligne' => [$en_ligne, PDO::PARAM_BOOL]]);
         $stmt = notfalse(DB\connect()->prepare('select * from offres' . DB\where_clause(DB\BoolOperator::AND, array_keys($args))));
         DB\bind_values($stmt, $args);
         notfalse($stmt->execute());

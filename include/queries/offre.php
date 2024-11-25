@@ -2,7 +2,6 @@
 namespace DB;
 require_once 'db.php';
 require_once 'util.php';
-require_once 'queries/util.php';
 use PDO, Iterator;
 
 function query_offre(int $id_offre): array|false
@@ -16,7 +15,7 @@ function query_offre(int $id_offre): array|false
 function query_offres_count(?int $id_professionnel = null, ?bool $en_ligne = null): int
 {
     $args = filter_null_args(['id_professionnel' => [$id_professionnel, PDO::PARAM_INT], 'en_ligne' => [$en_ligne, PDO::PARAM_BOOL]]);
-    $stmt = notfalse(connect()->prepare('select count(*) from offres' . _where_clause('and', array_keys($args))));
+    $stmt = notfalse(connect()->prepare('select count(*) from offres' . where_clause(BoolOperator::AND, array_keys($args))));
     bind_values($stmt, $args);
     notfalse($stmt->execute());
     return notfalse($stmt->fetchColumn());
@@ -25,7 +24,7 @@ function query_offres_count(?int $id_professionnel = null, ?bool $en_ligne = nul
 function query_offres(?int $id_professionnel = null, ?bool $en_ligne = null): Iterator
 {
     $args = filter_null_args(['id_professionnel' => [$id_professionnel, PDO::PARAM_INT], 'en_ligne' => [$en_ligne, PDO::PARAM_BOOL]]);
-    $stmt = notfalse(connect()->prepare('select * from offres' . _where_clause('and', array_keys($args))));
+    $stmt = notfalse(connect()->prepare('select * from offres' . where_clause(BoolOperator::AND, array_keys($args))));
     bind_values($stmt, $args);
     notfalse($stmt->execute());
     return $stmt->getIterator();
@@ -146,8 +145,7 @@ function insert_into_activite(
         'age_requis' => [$age_requis, PDO::PARAM_INT],
         'prestations_non_incluses' => [$prestations_non_incluses, PDO::PARAM_STR],
     ]);
-    $stmt = notfalse(connect()->prepare(_insert_into_returning_id('activite', $args)));
-    bind_values($stmt, $args);
+    $stmt = insert_into_returning_id('activite', $args);
     notfalse($stmt->execute());
     return notfalse($stmt->fetchColumn());
 }
@@ -159,7 +157,7 @@ function insert_into_parc_attractions(
     $args = $offre_args + filter_null_args([
         'id_image_plan' => [$id_image_plan, PDO::PARAM_INT],
     ]);
-    $stmt = notfalse(connect()->prepare(_insert_into_returning_id('parc_attractions', $args)));
+    $stmt = insert_into_returning_id('parc_attractions', $args);
     bind_values($stmt, $args);
     notfalse($stmt->execute());
     return notfalse($stmt->fetchColumn());
@@ -184,7 +182,7 @@ function insert_into_restaurant(
         'sert_diner' => [$sert_diner, PDO::PARAM_BOOL],
         'sert_boissons' => [$sert_boissons, PDO::PARAM_BOOL],
     ]);
-    $stmt = notfalse(connect()->prepare(_insert_into_returning_id('restaurant', $args)));
+    $stmt = insert_into_returning_id('restaurant', $args);
     bind_values($stmt, $args);
     notfalse($stmt->execute());
     return notfalse($stmt->fetchColumn());
@@ -206,8 +204,7 @@ function insert_into_spectacle(
         'indication_duree' => [$indication_duree, PDO::PARAM_STR],
         'capacite_accueil' => [$capacite_accueil, PDO::PARAM_INT],
     ]);
-    $stmt = notfalse(connect()->prepare(_insert_into_returning_id('spectacle', $args)));
-    bind_values($stmt, $args);
+    $stmt = insert_into_returning_id('spectacle', $args);
     notfalse($stmt->execute());
     return notfalse($stmt->fetchColumn());
 }
@@ -225,7 +222,7 @@ function insert_into_visite(
     $args = $offre_args + filter_null_args([
         'indication_duree' => [$indication_duree, PDO::PARAM_STR],
     ]);
-    $stmt = notfalse(connect()->prepare(_insert_into_returning_id('visite', $args)));
+    $stmt = insert_into_returning_id('visite', $args);
     bind_values($stmt, $args);
     notfalse($stmt->execute());
     return notfalse($stmt->fetchColumn());

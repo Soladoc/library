@@ -122,7 +122,7 @@ final class Adresse
      */
     function push_to_db(?int $id_adresse = null): void
     {
-        $args = DB\filter_null_values([
+        $args = DB\filter_null_args([
             'code_commune' => [$this->commune->code, PDO::PARAM_INT],
             'numero_departement' => [$this->commune->numero_departement, PDO::PARAM_INT],
             'numero_voie' => [$this->numero_voie, PDO::PARAM_INT],

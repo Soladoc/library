@@ -2,7 +2,6 @@
 namespace DB;
 use PDO;
 require_once 'db.php';
-require_once 'queries/util.php';
 
 require_once 'queries/offre.php';
 
@@ -122,7 +121,7 @@ function query_get_siren(int $id_compte): int
 function query_communes(?string $nom = null): array
 {
     $args = filter_null_args(['nom' => [$nom, PDO::PARAM_STR]]);
-    $stmt = notfalse(connect()->prepare('select * from _commune' . _where_clause('and', array_keys($args))));
+    $stmt = notfalse(connect()->prepare('select * from _commune' . where_clause(BoolOperator::AND, array_keys($args))));
     bind_values($stmt, $args);
     notfalse($stmt->execute());
     return notfalse($stmt->fetchAll());
@@ -131,7 +130,7 @@ function query_communes(?string $nom = null): array
 function query_avis(?int $id_membre_auteur = null, ?int $id_offre = null): array
 {
     $args = filter_null_args(['id_membre_auteur' => [$id_membre_auteur, PDO::PARAM_INT], 'id_offre' => [$id_offre, PDO::PARAM_INT]]);
-    $stmt = notfalse(connect()->prepare('select * from avis ' . _where_clause('and', array_keys($args))));
+    $stmt = notfalse(connect()->prepare('select * from avis ' . where_clause(BoolOperator::AND, array_keys($args))));
     bind_values($stmt, $args);
     notfalse($stmt->execute());
     return $stmt->fetchAll();
@@ -237,8 +236,7 @@ function insert_adresse(
         'latitude' => [$latitude, PDO_PARAM_DECIMAL],
         'longitude' => [$longitude, PDO_PARAM_DECIMAL],
     ]);
-    $stmt = notfalse(connect()->prepare(_insert_into_returning_id('_adresse', $args)));
-    bind_values($stmt, $args);
+    $stmt = insert_into_returning_id('_adresse', $args);
     notfalse($stmt->execute());
     return notfalse($stmt->fetchColumn());
 }
@@ -258,8 +256,7 @@ function insert_uploaded_image(array $img, ?string $legende = null): array
         'mime_subtype' => [$mime_subtype, PDO::PARAM_STR],
         'legende' => [$legende, PDO::PARAM_STR],
     ]);
-    $stmt = notfalse(connect()->prepare(_insert_into_returning_id('_image', $args)));
-    bind_values($stmt, $args);
+    $stmt = insert_into_returning_id('_image', $args);
     notfalse($stmt->execute());
     $id_image = notfalse($stmt->fetchColumn());
 

@@ -53,7 +53,7 @@ final class Image
 
     function push_to_db()
     {
-        $args = DB\filter_null_values([
+        $args = DB\filter_null_args([
             'taille' => [$this->taille, PDO::PARAM_INT],
             'mime_subtype' => [$this->mime_subtype, PDO::PARAM_STR],
             'legende' => [$this->legende, PDO::PARAM_STR],
