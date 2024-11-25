@@ -35,6 +35,10 @@
     margin-top: 10px;
 }
 
+.offer-card h3 a {
+    text-decoration: none;
+}
+
 /* Offer card foil */
 .offer-card h3 a::after {
     content: "";
