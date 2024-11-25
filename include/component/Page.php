@@ -77,25 +77,25 @@ final class Page
 <header>
     <div class="logo">
         <?php if (Auth\est_connecte_pro()) { ?>
-            <a href="accPro.php"><img src="../images/logo.png" alt="Logo pact"></a>
+            <a href="accPro.php"><img src="/images/logo.png" alt="Logo pact"></a>
         <?php } else { ?>
-            <a href="accueil.php"><img src="../images/logo.png" alt="Logo pact"></a>
+            <a href="accueil.php"><img src="/images/logo.png" alt="Logo pact"></a>
         <?php } ?>
     </div>
     <?php
     if (Auth\est_connecte()) {
         // Vérification du statut de la session
         ?>
-        <a href="../connexion/logout.php">
+        <a href="/connexion/logout.php">
             <div class="auth-button">
-                <img src="../images/profile-icon.png" alt="Profil">
+                <img src="/images/profile-icon.png" alt="Profil">
                 <span>Déconnexion</span>
             </div>
         </a>
         <?php if (Auth\est_connecte_pro()) { ?>
             <a href="facturation.php">
                 <div class="acces-facturation">
-                <img src="../images/facturation.png" alt="Profil">
+                <img src="/images/facturation.png" alt="Profil">
                     <span>Facturation</span>
                 </div>
             </a>
@@ -105,7 +105,7 @@ final class Page
         ?>
         <a href="connexion.php">
             <div class="auth-button">
-                <img src="../images/profile-icon.png" alt="Profil">
+                <img src="/images/profile-icon.png" alt="Profil">
                 <span>Connexion</span>
             </div>
         </a>
@@ -122,16 +122,16 @@ final class Page
 <footer>
     <div class="footer-content">
         <div class="footer-logo">
-            <a href="/"><img src="../images/logo_vertical_big.png" alt="Logo PACT" width="500" height="500" loading="lazy"></a>
+            <a href="/"><img src="/images/logo_vertical_big.png" alt="Logo PACT" width="500" height="500" loading="lazy"></a>
             <article>
                 <p><a href="https://github.com/5cover/413/issues/new" target="_blank" rel="noopener noreferrer">Nous contacter</a></p>
             </article>
         </div>
         <ul class="social-links">
-            <li><a href="https://www.facebook.com" target="_blank" rel="noopener noreferrer"><img src="../images/social/facebook.png" alt="Facebook" width="90" height="90" loading="lazy" title="Facebook"></a></li>
-            <li><a href="https://www.instagram.com" target="_blank" rel="noopener noreferrer"><img src="../images/social/instagram.png" alt="Instagram" width="90" height="90" loading="lazy" title="Instagram"></a></li>
-            <li><a href="https://www.x.com" target="_blank" rel="noopener noreferrer"><img src="../images/social/x.png" alt="X" width="90" height="90" loading="lazy" title="X"></a></li>
-            <li><a href="https://www.youtube.com" target="_blank" rel="noopener noreferrer"><img src="../images/social/youtube.png" alt="YouTube" width="90" height="90" loading="lazy" title="YouTube"></a></li>
+            <li><a href="https://www.facebook.com" target="_blank" rel="noopener noreferrer"><img src="/images/social/facebook.png" alt="Facebook" width="90" height="90" loading="lazy" title="Facebook"></a></li>
+            <li><a href="https://www.instagram.com" target="_blank" rel="noopener noreferrer"><img src="/images/social/instagram.png" alt="Instagram" width="90" height="90" loading="lazy" title="Instagram"></a></li>
+            <li><a href="https://www.x.com" target="_blank" rel="noopener noreferrer"><img src="/images/social/x.png" alt="X" width="90" height="90" loading="lazy" title="X"></a></li>
+            <li><a href="https://www.youtube.com" target="_blank" rel="noopener noreferrer"><img src="/images/social/youtube.png" alt="YouTube" width="90" height="90" loading="lazy" title="YouTube"></a></li>
         </ul>
         <article>
             <p><a href="/plan-du-site">Plan du site</a></p>

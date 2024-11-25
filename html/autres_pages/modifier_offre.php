@@ -310,7 +310,7 @@ if ($_POST) {
                     </li>
             </ul>
             <aside>
-                <img src="../icon/icons8-haute-importance-100.png" alt="Haute importance" width="25" height="25">
+                <img src="/icon/icons8-haute-importance-100.png" alt="Haute importance" width="25" height="25">
                 <p>
                    Attention! Une fois l'option choisi vous ne pourrez plus la modifier.
                 </p>
