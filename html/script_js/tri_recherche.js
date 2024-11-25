@@ -190,7 +190,6 @@ function displayOffers() {
         
         if (offer.prix_min!=null){
         offerElement.innerHTML = `
-            <div class="offer-card">
             <h3><a href="/autres_pages/detail_offre.php?id=${offer.id}&pro=true">${offer.titre}</a></h3>
             <img src="../images_utilisateur/${offer.id_image_principale}.jpg" 
                 onerror="this.onerror=null; 
@@ -209,11 +208,9 @@ function displayOffers() {
             <p>Adresse : ${offer.formatted_address}</p>
             <p>À partir de : ${offer.prix_min}€</p>
             <p>Note : ${offer.note_moyenne}/5</p>
-            <p>Date : ${formattedDate}</p>
-            </div>`;
+            <p>Date : ${formattedDate}</p>`;
         } else {
             offerElement.innerHTML = `
-            <div class="offer-card">
             <h3><a href="/autres_pages/detail_offre.php?id=${offer.id}&pro=true">${offer.titre}</a></h3>
             <img src="../images_utilisateur/${offer.id_image_principale}.jpg" 
                 onerror="this.onerror=null; 
@@ -232,8 +229,7 @@ function displayOffers() {
             <p>Adresse : ${offer.formatted_address}</p>
             <p>Gratuit</p>
             <p>Note : ${offer.note_moyenne}/5</p>
-            <p>Date : ${formattedDate}</p>
-            </div>`;
+            <p>Date : ${formattedDate}</p>`;
         }
         offerList.appendChild(offerElement);
     });
