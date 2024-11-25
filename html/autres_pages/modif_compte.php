@@ -216,7 +216,7 @@ if ($_POST) {
             <?php if ($error = $_GET['error_confirmation'] ?? null) { ?>
             <p class="error"><?= $error ?></p>
             <?php } ?>
-            <button type="submit" class="btn-connexion">valider</button>
+            <button type="submit" >valider</button>
         </div>
 
        
