@@ -33,7 +33,7 @@ DB\transaction(function () {
     );
 
     // Insérer l'offre
-    $DB\offre_args = DB\offre_args(
+    $offre_args = DB\offre_args(
         $id_adresse,
         move_uploaded_image($args['file_image_principale']),
         $id_professionnel,
@@ -46,23 +46,23 @@ DB\transaction(function () {
 
     $id_offre = match ($args['type_offre']) {
         'activite' => DB\insert_into_activite(
-            $DB\offre_args,
+            $offre_args,
             extract_indication_duree($args),
             $args['prestations_incluses'],
             $args['age_requis'],
             $args['prestations_non_incluses'],
         ),
         'parc-attractions' => DB\insert_into_parc_attractions(
-            $DB\offre_args,
+            $offre_args,
             move_uploaded_image($args['file_image_plan']),
         ),
         'spectacle' => DB\insert_into_spectacle(
-            $DB\offre_args,
+            $offre_args,
             extract_indication_duree($args),
             $args['capacite_accueil'],
         ),
         'restaurant' => DB\insert_into_restaurant(
-            $DB\offre_args,
+            $offre_args,
             $args['carte'],
             $args['richesse'],
             $args['sert_petit_dejeuner'],
@@ -72,7 +72,7 @@ DB\transaction(function () {
             $args['sert_boissons'],
         ),
         'visite' => DB\insert_into_visite(
-            $DB\offre_args,
+            $offre_args,
             extract_indication_duree($args),
         ),
     };
