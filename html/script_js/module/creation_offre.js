@@ -1,7 +1,5 @@
 import DynamicTable from './DynamicTable.js';
 
-const type_offre = new URLSearchParams(window.location.search).get('type_offre');
-
 // Grille tarifaire
 {
     const i_nom = 0, i_montant = 1;
@@ -10,7 +8,7 @@ const type_offre = new URLSearchParams(window.location.search).get('type_offre')
         document.getElementById('table-tarifs'),
         document.getElementById('template-tarif-tr'),
         function (tr) {
-            return !this.has_row(row => row[i_nom] === nom(tr).value);
+            return !this.has_row((/** @type {string[]} */ row) => row[i_nom] === nom(tr).value);
         },
         (tr, row) => {
             nom(tr).value = row[i_nom];
@@ -94,50 +92,5 @@ const type_offre = new URLSearchParams(window.location.search).get('type_offre')
         btn_remove.addEventListener('click', () => tr_horaire.remove());
 
         return tr_horaire;
-    }
-}
-
-// Image previews
-{
-    setup_preview('image_principale');
-    setup_preview('gallerie');
-    if (type_offre === 'parc-attractions') {
-        setup_preview('image_plan');
-    }
-    function setup_preview(input_image_id) {
-        const e_input_image = document.getElementById(input_image_id);
-        const e_preview = document.getElementById(input_image_id + '-preview');
-        addEventListener('change', () => preview_image(e_input_image, e_preview));
-    }
-
-    /**
-     * @param {HTMLInputElement} e_input_image 
-     * @param {HTMLElement} e_preview 
-    */
-    function preview_image(e_input_image, e_preview) {
-        e_preview.textContent = '';
-
-        for (const file of e_input_image.files) {
-            if (!file.type.match('image.*')) {
-                continue;
-            }
-
-            const reader = new FileReader();
-
-            reader.addEventListener('load', function (event) {
-                const imageUrl = event.target.result;
-                const image = new Image();
-
-                image.addEventListener('load', function () {
-                    e_preview.appendChild(image);
-                });
-
-                image.src = imageUrl;
-                image.style.width = '200px'; // Indiquez les dimensions souhaitées ici.
-                image.style.height = 'auto'; // Vous pouvez également utiliser "px" si vous voulez spécifier une hauteur.
-            });
-
-            reader.readAsDataURL(file);
-        }
     }
 }
