@@ -1,4 +1,3 @@
-
 /* Offres */
 .offer-list {
     display: flex;
@@ -64,4 +63,17 @@
     font-weight: bold;
     font-size: 14px;
     font-family: "Tw Cen MT", sans-serif;
+}
+
+/* Responsiveness */
+@media (max-width: 768px) {
+    .offer-card {
+        width: 48%;
+    }
+}
+
+@media (max-width: 576px) {
+    .offer-card {
+        width: 100%;
+    }
 }
