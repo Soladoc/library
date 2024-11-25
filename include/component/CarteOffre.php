@@ -1,5 +1,6 @@
 <?php
 require_once 'util.php';
+require_once 'redirect.php';
 require_once 'model/Offre.php';
 
 final class CarteOffre
@@ -26,7 +27,7 @@ final class CarteOffre
     <p class="location"><?= $this->offre->adresse->format() ?></p>
     <p><?= $this->offre->resume ?></p>
     <p class="category"><?= $this->offre->categorie ?></p>
-    <a href="/autres_pages/detail_offre.php?id=<?= $this->offre->id ?>">
+    <a href="<?= location_detail_offre($this->offre->id) ?>">
         <button class="btn-more-info">En savoir plus</button>
     </a>
 </div>

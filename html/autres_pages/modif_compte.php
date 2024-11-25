@@ -71,12 +71,12 @@ if ($_POST) {
 
         if ($new_mdp && password_verify($old_mdp, $mdp_hash)) {
         if ($confirmation_mdp === $new_mdp) {
-            DB\query_uptate_mdp($id, password_hash($new_mdp)); 
+            DB\query_uptate_mdp($id, password_hash($new_mdp));  // todo: cette fonction est appelée incorrectement (MARIUS LIS LA DOC stp!!)
         } else {
-            redirect_to(location_modif_compte('Mot de passe de confirmation different.'));
+            redirect_to(location_modifier_compte('Mot de passe de confirmation different.'));
         }
         } else {
-            redirect_to(location_modif_compte(error: 'Mot de passe incorrect.'));
+            redirect_to(location_modifier_compte(error: 'Mot de passe incorrect.'));
         }
     }
     
@@ -127,7 +127,7 @@ if ($membre !== false) {
     <form action="modif_compte.php?id=<?= $id ?>" method="POST">
 
 
-        <a href="/autres_pages/detail_compte.php?id=<?= $id ?>">retour</a>
+        <a href="<?= location_detail_compte($id) ?>">retour</a>
         <?php if ($membre !== false) { ?>
             <div>
                 <div id="pseudo">

@@ -1,4 +1,5 @@
 <?php
+require_once 'redirect.php';
 
 final class CarteOffrePro
 {
@@ -30,7 +31,7 @@ final class CarteOffrePro
             Note&nbsp;: <?= $this->offre->note_moyenne ?> /5 ★ (<?= $this->offre->nb_avis ?> avis)
         <?php } ?>
     </p>
-    <a href="/autres_pages/detail_offre.php?id=<?= $this->offre->id ?>&pro=true">
+    <a href="<?= location_detail_offre_pro($this->offre->id) ?>">
         <button class="btn-more-info">En savoir plus</button>
     </a>
 </div>

@@ -2,6 +2,7 @@
 require_once 'component/offre.php';
 require_once 'component/Page.php';
 require_once 'auth.php';
+require_once 'redirect.php';
 require_once 'queries/offre.php';
 
 $page = new Page('Accueil Professionnel');
@@ -22,7 +23,7 @@ $nb_offres_en_ligne = DB\query_offres_count($id_professionnel, en_ligne: true)
     <main>
 
         <h1>Accueil Professionnel</h1>
-        <a class="btn-more-info" href="/autres_pages/choix_categorie_creation_offre.php">Créer une offre</a>
+        <a class="btn-more-info" href="<?= location_creation_offre() ?>">Créer une offre</a>
 
         <h3><?= $nb_offres ?> offres</h3>
         <section class="online-offers">
