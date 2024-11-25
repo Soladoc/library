@@ -65,19 +65,19 @@ if ($_POST) {
     }
 
     // modif Nom ------------------------------------------------------------------------------------------------------------------
-    $new_Nom = getarg($_POST, 'new_Nom', null, false);
+    $new_Nom = getarg($_POST, 'new_nom', null, false);
     if ($new_Nom) {
         DB\query_update_Nom($id, $new_Nom);
     }
 
     // modif Prenom ------------------------------------------------------------------------------------------------------------------
-    $new_Prenom = getarg($_POST, 'new_Prenom', null, required: false);
+    $new_Prenom = getarg($_POST, 'new_prenom', null, required: false);
     if ($new_Prenom) {
         DB\query_update_prenom($id, $new_Prenom);
     }
 
     // modif Email ------------------------------------------------------------------------------------------------------------------
-    $new_Email = getarg($_POST, 'new_Email', null, false);
+    $new_Email = getarg($_POST, 'new_email', null, false);
     if ($new_Email) {
         DB\query_update_email($id, $new_Email);
     }
@@ -95,7 +95,7 @@ if ($_POST) {
 
     if ($new_mdp && password_verify($old_mdp, $mdp_hash)) {
         if ($confirmation_mdp === $new_mdp) {
-            update_mdp($id, $new_mdp);  // todo: cette fonction n'exite pas
+            DB\query_uptate_mdp($id, $new_mdp); 
         } else {
             redirect_to(location_connexion('Mot de passe de confirmation different.'));
         }
