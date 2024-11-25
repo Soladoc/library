@@ -1,7 +1,11 @@
 <?php
 require_once 'auth.php';
 require_once 'component/offre.php';
-require_once 'component/head.php';
+require_once 'component/Page.php';
+
+$page = new Page("offre : {$args['id']}",
+    ['https://unpkg.com/leaflet@1.7.1/dist/leaflet.css'],
+    ['https://unpkg.com/leaflet@1.7.1/dist/leaflet.js' => 'async']);
 
 $args = [
     'id' => getarg($_GET, 'id', arg_filter(FILTER_VALIDATE_INT)),
@@ -33,16 +37,7 @@ if ($_POST) {
 
 $offre = query_offre($args['id']);
 if ($offre === false) {
-    put_head('Erreur ID',
-        ['https://unpkg.com/leaflet@1.7.1/dist/leaflet.css'],
-        ['https://unpkg.com/leaflet@1.7.1/dist/leaflet.js' => 'async']);
-    require 'component/header.php';
-    echo "</br></br>L'offre que vous cherchez n'existe pas";
-    ?>
-    <script>console.log("Pas d'offre n°<?php echo $args['id'] ?>")</script>
-    <?php
-    require 'component/footer.php';
-    exit;
+    html_error("Pas d'offre n°{$args['id']}");
 }
 assert($offre['id'] === $args['id']);
 
@@ -59,11 +54,7 @@ $avis = query_avis()
 <!DOCTYPE html>
 <html lang="fr">
 
-<?php
-put_head("offre : {$args['id']}",
-    ['https://unpkg.com/leaflet@1.7.1/dist/leaflet.css'],
-    ['https://unpkg.com/leaflet@1.7.1/dist/leaflet.js' => 'async']);
-?>
+<?php $page->put_head() ?>
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -78,7 +69,7 @@ put_head("offre : {$args['id']}",
     // print_r($gallerie);
     // echo '</pre>';
 
-    require 'component/header.php'
+    $page->put_header();
     ?>
     <!-- Offer Details -->
     <main>
@@ -203,7 +194,7 @@ put_head("offre : {$args['id']}",
             </div>
         </section>
     </main>
-    <?php require 'component/footer.php' ?>
+    <?php $page->put_footer() ?>
     <script>
         // // OpenStreetMap Integration
         // var map = L.map('map').setView([48.779, -3.518], 13);

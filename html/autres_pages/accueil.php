@@ -1,15 +1,17 @@
 <?php
 require_once 'component/offre.php';
-require_once 'component/head.php';
+require_once 'component/Page.php';
+
+$page = new Page('Accueil');
 ?>
 
 <!DOCTYPE html>
 <html lang="fr">
 
-<?php put_head('Accueil') ?>
+<?php $page->put_head() ?>
 
 <body>
-    <?php require 'component/header.php' ?>
+    <?php $page->put_header() ?>
     <main>
         <!-- Section de recherche -->
         <section class="search-section">
@@ -39,7 +41,7 @@ require_once 'component/head.php';
             </div>
         </section>
     </main>
-    <?php require 'component/footer.php' ?>
+    <?php $page->put_footer() ?>
 </body>
 
 </html>

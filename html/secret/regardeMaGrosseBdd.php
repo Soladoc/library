@@ -1,14 +1,16 @@
 <?php
-require_once 'component/head.php';
+require_once 'component/Page.php';
 
-function escape(string $name): string
+$page = new Page('regarde dans la bdd');
+
+function quote(string $name): string
 {
     return '"' . str_replace('"', '""', $name) . '"';
 }
 
 require_once 'db.php';
 if ($table = $_GET['table'] ?? null) {
-    $results = db_connect()->query('table ' . escape($_GET['schema'] ?: 'pact') . '.' . escape($table))->fetchAll();
+    $results = db_connect()->query('table ' . quote($_GET['schema'] ?: 'pact') . '.' . quote($table))->fetchAll();
     // Vérifier s'il y a des résultats
     if ($results) {
         echo "<table border='1'>";
@@ -37,10 +39,10 @@ if ($table = $_GET['table'] ?? null) {
 <!DOCTYPE html>
 <html lang="fr">
 
-<?php put_head('regarde dans la bdd') ?>
+<?php $page->put_head() ?>
 
 <body>
-    <?php require 'component/header.php' ?>
+    <?php $page->put_header() ?>
     <main>
         <!-- Section des offres à la une -->
         <h1>regarde dans la bdd</h1>
@@ -64,7 +66,7 @@ if ($table = $_GET['table'] ?? null) {
             </div>
         </section>
     </main>
-    <?php require 'component/footer.php' ?>
+    <?php $page->put_footer() ?>
 
 </body>
 

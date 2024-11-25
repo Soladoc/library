@@ -2,8 +2,10 @@
 require_once 'util.php';
 require_once 'queries.php';
 require_once 'redirect.php';
-require_once 'component/head.php';
+require_once 'component/Page.php';
 require_once 'component/inputs.php';
+
+$page = new Page('Création de compte membre');
 
 function fail(string $error): never
 {
@@ -61,10 +63,10 @@ if (isset($_POST['motdepasse'])) {
 <!DOCTYPE html>
 <html lang="en">
 
-<?php put_head('Création de compte membre') ?>
+<?php $page->put_head() ?>
 
 <body>
-    <?php require 'component/header.php' ?>
+    <?php $page->put_header() ?>
     <main>
         <h1>Créer un compte membre</h1>
         <section class="connexion">
@@ -115,7 +117,7 @@ if (isset($_POST['motdepasse'])) {
             </div>
         </section>
     </main>
-    <?php require 'component/footer.php' ?>
+    <?php $page->put_footer() ?>
 </body>
 
 </html>

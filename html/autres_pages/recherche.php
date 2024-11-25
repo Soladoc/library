@@ -13,7 +13,7 @@ require_once 'component/offre.php'
     <script src="/script_js/tri_recherche.js" defer></script>
 </head>
 <body>
-    <?php require 'component/header.php' ?>
+    <?php $page->put_header() ?>
     <main>
         <section class="search-section">
             <h1>Recherche</h1>
@@ -63,7 +63,7 @@ require_once 'component/offre.php'
             </div>
         </section>
     </main>
-    <?php require 'component/footer.php' ?>
+    <?php $page->put_footer() ?>
     <script src="/script_js/tri_recherche.js"></script>
     <script>
         <?php

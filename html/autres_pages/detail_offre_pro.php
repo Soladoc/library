@@ -3,7 +3,11 @@ require_once 'db.php';
 require_once 'util.php';
 require_once 'queries.php';
 require_once 'redirect.php';
-require_once 'component/head.php';
+require_once 'component/Page.php';
+
+$page = new Page("offre : {$args['id']}",
+    ['https://unpkg.com/leaflet@1.7.1/dist/leaflet.css'],
+    ['https://unpkg.com/leaflet@1.7.1/dist/leaflet.js' => 'async']);
 
 $args = [
     'id' => getarg($_GET, 'id', arg_filter(FILTER_VALIDATE_INT))
@@ -58,12 +62,10 @@ if ($_POST) {
 <!DOCTYPE html>
 <html lang="fr">
 
-<?php put_head("offre : {$args['id']}",
-    ['https://unpkg.com/leaflet@1.7.1/dist/leaflet.css'],
-    ['https://unpkg.com/leaflet@1.7.1/dist/leaflet.js' => 'async']); ?>>
+<?php $page->put_head(); ?>>
 
 <body>
-    <?php require 'component/header.php' ?>
+    <?php $page->put_header() ?>
     <!-- Offer Details -->
     <main>
         <section class="modif">
@@ -152,7 +154,7 @@ if ($_POST) {
             </div>
             </section>
     </main>
-    <?php require 'component/footer.php' ?>
+    <?php $page->put_footer() ?>
 
     <script>
     // // OpenStreetMap Integration

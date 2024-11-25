@@ -4,7 +4,11 @@ require_once 'auth.php';
 require_once 'util.php';
 require_once 'const.php';
 require_once 'component/inputs.php';
-require_once 'component/head.php';
+require_once 'component/Page.php';
+
+$page = new Page("Création d'une offre",
+    ['creation_offre.css'],
+    ['module/creation_offre.js' => 'defer type="module"']);
 
 $id_professionnel = exiger_connecte_pro();
 
@@ -80,12 +84,10 @@ if ($_POST) {
 <!DOCTYPE html>
 <html lang="fr">
 
-<?php put_head("Création d'une offre",
-    ['creation_offre.css'],
-    ['module/creation_offre.js' => 'defer type="module"']) ?>
+<?php $page->put_head() ?>
 
 <body>
-    <?php require 'component/header.php' ?>
+    <?php $page->put_header() ?>
     <main>
         <section id="titre-creation-offre">
             <h1>Créer <?= CATEGORIES_OFFRE[$args['type_offre']] ?></h1>
@@ -309,7 +311,7 @@ if ($_POST) {
             <button type="submit">Valider</button>
         </form>
     </main>
-    <?php require 'component/footer.php' ?>
+    <?php $page->put_footer() ?>
     
 </body>
 

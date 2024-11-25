@@ -1,7 +1,9 @@
 <?php
 require_once 'component/offre.php';
-require_once 'component/head.php';
+require_once 'component/Page.php';
 require_once 'auth.php';
+
+$page = new Page('Facturation');
 
 $id_professionnel = exiger_connecte_pro();
 ?>
@@ -10,10 +12,10 @@ $id_professionnel = exiger_connecte_pro();
 <!DOCTYPE html>
 <html lang="fr">
 
-<?php put_head('Facturation') ?>
+<?php $page->put_head() ?>
 
 <body>
-    <?php require 'component/header.php' ?>
+    <?php $page->put_header() ?>
     <main>
         <?php
         $offres = query_offres($id_professionnel);

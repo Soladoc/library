@@ -2,8 +2,12 @@
 require_once 'util.php';
 require_once 'queries.php';
 require_once 'redirect.php';
-require_once 'component/head.php';
+require_once 'component/Page.php';
 require_once 'component/offre.php';
+
+$page = new Page("detail_compte_membre : {$args['id']}",
+    ['https://unpkg.com/leaflet@1.7.1/dist/leaflet.css'],
+    ['https://unpkg.com/leaflet@1.7.1/dist/leaflet.js' => 'async']);
 
 $args = [
     'id' => getarg($_GET, 'id', arg_filter(FILTER_VALIDATE_INT))
@@ -66,15 +70,10 @@ if ($_POST) {
 <!DOCTYPE html>
 <html lang="fr">
 
-<?php put_head("detail_compte_membre : {$args['id']}",
-    ['https://unpkg.com/leaflet@1.7.1/dist/leaflet.css'],
-    ['https://unpkg.com/leaflet@1.7.1/dist/leaflet.js' => 'async']) ?>
+<?php $page->put_head() ?>
 
 <body>
-    <?php
-
-    require 'component/header.php'
-    ?>
+    <?php $page->put_header() ?>
 
     <main>
         <section id="info_compte">
@@ -144,7 +143,7 @@ if ($_POST) {
 
     </main>
 
-    <?php require 'component/footer.php' ?>
+    <?php $page->put_footer() ?>
 
 </body>
 

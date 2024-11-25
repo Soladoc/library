@@ -2,9 +2,11 @@
 require_once 'util.php';
 require_once 'queries.php';
 require_once 'redirect.php';
-require_once 'component/head.php';
+require_once 'component/Page.php';
 require_once 'component/offre.php';
 require_once 'component/inputs.php';
+
+$page = new Page('Modification compte (todo)');
 
 $args = [
     'id' => getarg($_GET, 'id', arg_filter(FILTER_VALIDATE_INT))
@@ -105,15 +107,10 @@ if ($_POST) {
 ?>
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
+<?php $page->put_head() ?>
 <body>
-    
-</body>
-</html>
+<?php $page->put_header() ?>
+<main>
 
 <section id="info_compte">  
     <form action="modif_compte.php?id=<?php echo $id ?>" method="POST">
@@ -229,11 +226,7 @@ if ($_POST) {
     </form>
 </section>
 
-            
-
-
-
-
-
-
-
+</main>
+<?php $page->put_footer() ?>
+</body>
+</html>

@@ -3,7 +3,9 @@ require_once 'db.php';
 require_once 'auth.php';
 require_once 'const.php';
 require_once 'redirect.php';
-require_once 'component/head.php';
+require_once 'component/Page.php';
+
+$page = new Page('Modifier un avis');
 
 exiger_connecte_membre();
 
@@ -38,10 +40,10 @@ if (isset($_POST['date'])) {
 <!DOCTYPE html>
 <html lang="en">
 
-<?php put_head('Modifier un avis'); ?>
+<?php $page->put_head(); ?>
 
 <body>
-    <?php require 'component/header.php'; ?>
+    <?php $page->put_header() ?>
     <main>
         <h2>Modifier votre avis</h2>
 
@@ -79,7 +81,7 @@ if (isset($_POST['date'])) {
             <button type="submit" class="btn-publish">Modifier</button>
         </form>
     </main>
-    <?php require 'component/footer.php'; ?>
+    <?php $page->put_footer() ?>
 </body>
 </html>
 <?php } ?>

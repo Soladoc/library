@@ -1,7 +1,5 @@
 <?php
 
-error_reporting(E_ALL & ~E_NOTICE);
-
 /**
  * Cause une erreur si la valeur fournie est strictement égale à `false`.
  *

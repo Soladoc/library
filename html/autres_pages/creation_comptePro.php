@@ -2,8 +2,10 @@
 require_once 'db.php';
 require_once 'util.php';
 require_once 'redirect.php';
-require_once 'component/head.php';
+require_once 'component/Page.php';
 require_once 'component/inputs.php';
+
+$page = new Page('CoCréer un compte pronnexion');
 
 function fail(string $error)
 {
@@ -85,10 +87,10 @@ if ($_POST) {
 <!DOCTYPE html>
 <html lang="fr">
 
-<?php put_head('CoCréer un compte pronnexion') ?>
+<?php $page->put_head() ?>
 
 <body>
-    <?php require 'component/header.php' ?>
+    <?php $page->put_header() ?>
     <main>
         <!-- Section des offres à la une -->
         <h1>Créer un compte professionnel</h1>
@@ -141,7 +143,7 @@ if ($_POST) {
             </div>
         </section>
     </main>
-    <?php require 'component/footer.php' ?>
+    <?php $page->put_footer() ?>
 
     <script>
     // Fonction pour afficher ou masquer la ligne supplémentaire
