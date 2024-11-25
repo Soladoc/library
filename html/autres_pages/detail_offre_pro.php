@@ -4,14 +4,15 @@ require_once 'util.php';
 require_once 'queries.php';
 require_once 'redirect.php';
 require_once 'component/Page.php';
-
-$page = new Page("offre : {$args['id']}",
-    ['https://unpkg.com/leaflet@1.7.1/dist/leaflet.css'],
-    ['https://unpkg.com/leaflet@1.7.1/dist/leaflet.js' => 'async']);
+require_once 'component/offre.php';
 
 $args = [
     'id' => getarg($_GET, 'id', arg_filter(FILTER_VALIDATE_INT))
 ];
+
+$page = new Page("offre : {$args['id']}",
+    ['https://unpkg.com/leaflet@1.7.1/dist/leaflet.css'],
+    ['https://unpkg.com/leaflet@1.7.1/dist/leaflet.js' => 'async']);
 
 if ($_POST) {
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -32,7 +33,6 @@ if ($_POST) {
         $site_web = $offre['url_site_web'];
         $image_pricipale = $offre['id_image_principale'];
         $en_ligne = $offre['en_ligne'];
-        echo $en_ligne;
         $info_adresse = DB\query_adresse($adresse);
         $avis = DB\query_avis();
         // Vérifier si l'adresse existe
@@ -73,7 +73,7 @@ if ($_POST) {
             <form id="toggleForm" method="POST">
                 <div class='online'>
                     <div>
-                        <?php if ($en_ligne!= null) { ?>
+                        <?php if ($en_ligne) { ?>
                         <p>Offre en ligne</p>
                         <button type="button" class="hors_ligne" onclick="enableValidate()">Mettre hors ligne</button>
                         <?php } else { ?>

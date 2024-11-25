@@ -7,14 +7,22 @@ require_once 'auth.php';
 
 final class Page
 {
+    private const BASE_STYLESHEETS = [
+        '/style/style.css',
+        '/style/offre_card.css',
+    ];
+    private const BASE_SCRIPTS = [
+        '/script_js/base.js' => 'defer',
+    ];
+
     readonly string $title;
     readonly array $stylesheets;
     readonly array $scripts;
 
     /**
      * @param string $title Le titre du document.
-     * @param array $stylesheets Un liste de chemins relatifs dans au dossier `/style` des feuilles de style CSS à inclure.
-     * @param array $scripts Un tableau associatif mappant des chemins relatifs au dossier `/script_js` des script JS à inclure vers leurs paramètres qui correspond au reste de l'attribut.
+     * @param array<string> $stylesheets Un liste de chemins relatifs dans au dossier `/style` des feuilles de style CSS à inclure.
+     * @param array<string, string> $scripts Un tableau associatif mappant des chemins relatifs au dossier `/script_js` des script JS à inclure vers leurs paramètres qui correspond au reste de l'attribut.
      */
     function __construct(string $title, array $stylesheets = [], array $scripts = [])
     {
@@ -53,16 +61,14 @@ final class Page
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><?= htmlspecialchars($this->title) ?></title>
-    <link rel="stylesheet" href="/style/style.css">
     <?php
-    foreach ($this->stylesheets as $href) {
+    foreach (self::BASE_STYLESHEETS + $this->stylesheets as $href) {
         // Si c'est une URL (contient un ':'), on laisse tel quel. Sinon on préfixe par le dossier des feuilles de style.
         ?><link rel="stylesheet" href="<?= str_contains($href, ':') ? $href : "/style/$href" ?>"><?php
     }
     ?>
-    <script defer src="/script_js/base.js"></script>
     <?php
-    foreach ($this->scripts as $src => $attrs) {
+    foreach (self::BASE_SCRIPTS + $this->scripts as $src => $attrs) {
         // Idem.
         ?><script <?= $attrs ?> src="<?= str_contains($src, ':') ? $src : "/script_js/$src" ?>"></script><?php
     }
