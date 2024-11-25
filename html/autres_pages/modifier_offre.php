@@ -4,9 +4,13 @@ require_once 'auth.php';
 require_once 'util.php';
 require_once 'const.php';
 require_once 'component/inputs.php';
-require_once 'component/head.php';
+require_once 'component/Page.php';
 
-$id_professionnel = exiger_connecte_pro();
+$page = new Page("Création d'une offre",
+    ['creation_offre.css'],
+    ['module/creation_offre.js' => 'defer type="module"']);
+
+$id_professionnel = Auth\exiger_connecte_pro();
 
 //ne continue dans la page que si id_offre existe et est valide
 if ( !isset($_GET['id_offre']) ) {
@@ -95,12 +99,10 @@ if ($_POST) {
 <!DOCTYPE html>
 <html lang="fr">
 
-<?php put_head("Création d'une offre",
-    ['creation_offre.css'],
-    ['module/creation_offre.js' => 'defer type="module"']) ?>
+<?php $page->put_head() ?>
 
 <body>
-    <?php require 'component/header.php' ?>
+    <?php $page->put_header() ?>
     <main>
         <section id="titre-creation-offre">
             <h1>Modifier <?= CATEGORIES_OFFRE[$args['type_offre']] ?></h1>
@@ -293,7 +295,7 @@ if ($_POST) {
         <section id="type-abonnement">
             <ul id="liste-choix-abonnement">
                 <?php
-                if (!exists_pro_prive($id_professionnel)) {
+                if (!DB\exists_pro_prive($id_professionnel)) {
                     ?> 
                     <li>
                         <label><input form="f" name="libelle_abonnement" value="gratuit" type="radio">Gratuit</label>
@@ -310,7 +312,7 @@ if ($_POST) {
                     </li>
             </ul>
             <aside>
-                <img src="../icon/icons8-haute-importance-100.png" alt="Haute importance" width="25" height="25">
+                <img src="/icon/icons8-haute-importance-100.png" alt="Haute importance" width="25" height="25">
                 <p>
                    Attention! Une fois l'option choisi vous ne pourrez plus la modifier.
                 </p>
@@ -324,7 +326,7 @@ if ($_POST) {
             <button type="submit">Valider</button>
         </form>
     </main>
-    <?php require 'component/footer.php' ?>
+    <?php $page->put_footer() ?>
     
 </body>
 

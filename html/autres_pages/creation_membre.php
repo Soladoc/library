@@ -2,8 +2,10 @@
 require_once 'util.php';
 require_once 'queries.php';
 require_once 'redirect.php';
-require_once 'component/head.php';
+require_once 'component/Page.php';
 require_once 'component/inputs.php';
+
+$page = new Page('Création de compte membre');
 
 function fail(string $error): never
 {
@@ -12,12 +14,12 @@ function fail(string $error): never
 
 if (isset($_POST['motdepasse'])) {
     $pseudo = $_POST['pseudo'];
-    if (query_membre($pseudo)) {
+    if (DB\query_membre($pseudo)) {
         fail('Ce pseudo est déjà utilisé.');
     }
 
     $email = $_POST['email'];
-    if (query_membre($email) or query_professionnel($email)) {
+    if (DB\query_membre($email) or DB\query_professionnel($email)) {
         fail('Cette adresse e-mail est déjà utilisée.');
     }
 
@@ -26,7 +28,7 @@ if (isset($_POST['motdepasse'])) {
     }
     $nomCommune = $_POST['adresse'];
 
-    $stmt = db_connect()->prepare('SELECT code, numero_departement FROM pact._commune WHERE nom = ?');
+    $stmt = DB\connect()->prepare('SELECT code, numero_departement FROM pact._commune WHERE nom = ?');
     $stmt->execute([$nomCommune]);
     $commune = $stmt->fetch(PDO::FETCH_ASSOC);
 
@@ -37,14 +39,14 @@ if (isset($_POST['motdepasse'])) {
     $codeCommune = $commune['code'];
     $numeroDepartement = $commune['numero_departement'];
 
-    $stmt = db_connect()->prepare(' INSERT INTO pact._adresse (code_commune, numero_departement) VALUES ( ?, ?) RETURNING id');
+    $stmt = DB\connect()->prepare(' INSERT INTO pact._adresse (code_commune, numero_departement) VALUES ( ?, ?) RETURNING id');
     $stmt->execute([$codeCommune, $numeroDepartement]);
 
     $idAdresse = $stmt->fetchColumn();
 
     $mdp_hash = notfalse(password_hash($_POST['motdepasse'], PASSWORD_DEFAULT));
 
-    $stmt = db_connect()->prepare('insert into pact.membre (pseudo, nom, prenom, telephone, email, mdp_hash, id_adresse) values (?, ?, ?, ?, ?, ?, ?)');
+    $stmt = DB\connect()->prepare('insert into pact.membre (pseudo, nom, prenom, telephone, email, mdp_hash, id_adresse) values (?, ?, ?, ?, ?, ?, ?)');
 
     $stmt->execute([
         $pseudo,
@@ -61,10 +63,10 @@ if (isset($_POST['motdepasse'])) {
 <!DOCTYPE html>
 <html lang="en">
 
-<?php put_head('Création de compte membre') ?>
+<?php $page->put_head() ?>
 
 <body>
-    <?php require 'component/header.php' ?>
+    <?php $page->put_header() ?>
     <main>
         <h1>Créer un compte membre</h1>
         <section class="connexion">
@@ -115,7 +117,7 @@ if (isset($_POST['motdepasse'])) {
             </div>
         </section>
     </main>
-    <?php require 'component/footer.php' ?>
+    <?php $page->put_footer() ?>
 </body>
 
 </html>

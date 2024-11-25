@@ -2,15 +2,19 @@
 require_once 'util.php';
 require_once 'queries.php';
 require_once 'redirect.php';
-require_once 'component/head.php';
+require_once 'component/Page.php';
 require_once 'component/offre.php';
+
+$page = new Page("detail_compte_membre : {$args['id']}",
+    ['https://unpkg.com/leaflet@1.7.1/dist/leaflet.css'],
+    ['https://unpkg.com/leaflet@1.7.1/dist/leaflet.js' => 'async']);
 
 $args = [
     'id' => getarg($_GET, 'id', arg_filter(FILTER_VALIDATE_INT))
 ];
 $id = $args['id'];
-$membre = query_compte_membre($args['id']);
-$pro = query_compte_professionnel($args['id']);
+$membre = DB\query_compte_membre($args['id']);
+$pro = DB\query_compte_professionnel($args['id']);
 
 if ($membre !== false) {
     // echo '<pre>';
@@ -23,7 +27,7 @@ if ($membre !== false) {
     $prenom = $membre['prenom'];
     $telephone = $membre['telephone'];
     $id_adresse = $membre['id_adresse'];
-    $adresse = query_adresse($id_adresse);
+    $adresse = DB\query_adresse($id_adresse);
 } else if ($pro !== false) {
     // echo '<pre>';
     // print_r($pro);
@@ -35,10 +39,10 @@ if ($membre !== false) {
     $prenom = $pro['prenom'];
     $telephone = $pro['telephone'];
     $id_adresse = $pro['id_adresse'];
-    $adresse = query_adresse($id_adresse);
+    $adresse = DB\query_adresse($id_adresse);
 
-    if (exists_pro_prive($id)) {
-        $siren = query_get_siren($id);
+    if (DB\exists_pro_prive($id)) {
+        $siren = DB\query_get_siren($id);
     }
 } else {
     html_error("le compte d'ID {$args['id']} n'existe pas");
@@ -66,15 +70,10 @@ if ($_POST) {
 <!DOCTYPE html>
 <html lang="fr">
 
-<?php put_head("detail_compte_membre : {$args['id']}",
-    ['https://unpkg.com/leaflet@1.7.1/dist/leaflet.css'],
-    ['https://unpkg.com/leaflet@1.7.1/dist/leaflet.js' => 'async']) ?>
+<?php $page->put_head() ?>
 
 <body>
-    <?php
-
-    require 'component/header.php'
-    ?>
+    <?php $page->put_header() ?>
 
     <main>
         <section id="info_compte">
@@ -83,7 +82,7 @@ if ($_POST) {
                 ?>
             <div id="pseudo">
                 <p>Pseudo : </p>
-                <?php echo $pseudo ?>
+                <?= $pseudo ?>
             </div>
             <?php } else if ($pro !== false) { ?>
                 <div id="denomination">
@@ -96,7 +95,7 @@ if ($_POST) {
 
                 <?php
 
-                if (exists_pro_prive($id)) {
+                if (DB\exists_pro_prive($id)) {
                     ?>
                     <div id="siren">
                     <p>siren : </p>
@@ -113,30 +112,28 @@ if ($_POST) {
 
             <div id="nom">
                 <p>Nom : </p>
-                <?php echo $nom ?>
+                <?= $nom ?>
             </div>
 
             <div id="prenom">
                 <p>Prenom : </p>
-                <?php echo $prenom ?>
+                <?= $prenom ?>
             </div>
 
             <div id="email">
                 <p>Email : </p>
-                <?php echo $email ?>
+                <?= $email ?>
             </div>
 
             <div id="telephone">
                 <p>Numero de telephone : </p>
-                <?php echo $telephone ?>
+                <?= $telephone ?>
             </div>
 
             <div id="adresse">
                 <p>adresse : </p>
-                <?php
-                echo format_adresse($adresse);
-                ?> </div>
-        <a href="modif_compte.php?id=<?php echo $id ?>">modifier</a>
+                <?= format_adresse($adresse) ?> </div>
+        <a href="modif_compte.php?id=<?= $id ?>">modifier</a>
             <?php ?>
             
            
@@ -144,7 +141,7 @@ if ($_POST) {
 
     </main>
 
-    <?php require 'component/footer.php' ?>
+    <?php $page->put_footer() ?>
 
 </body>
 

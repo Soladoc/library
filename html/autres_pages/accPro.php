@@ -1,21 +1,24 @@
 <?php
 require_once 'component/offre.php';
-require_once 'component/head.php';
+require_once 'component/Page.php';
 require_once 'auth.php';
+require_once 'queries/offre.php';
 
-$id_professionnel = exiger_connecte_pro();
+$page = new Page('Accueil Professionnel');
 
-$nb_offres = query_offres_count($id_professionnel);
-$nb_offres_en_ligne = query_offres_count($id_professionnel, en_ligne: true)
+$id_professionnel = Auth\exiger_connecte_pro();
+
+$nb_offres = DB\query_offres_count($id_professionnel);
+$nb_offres_en_ligne = DB\query_offres_count($id_professionnel, en_ligne: true)
 ?>
 
 <!DOCTYPE html>
 <html lang="fr">
 
-<?php put_head('Accueil Professionnel') ?>
+<?php $page->put_head() ?>
 
 <body>
-    <?php require 'component/header.php' ?>
+    <?php $page->put_header() ?>
     <main>
 
         <h1>Accueil Professionnel</h1>
@@ -28,11 +31,10 @@ $nb_offres_en_ligne = query_offres_count($id_professionnel, en_ligne: true)
 
             <div class="offer-list">
                 <?php
-                $offres_en_ligne = query_offres($id_professionnel, en_ligne: true);
-                while ($offre = $offres_en_ligne->fetch()) {
+                $offres_en_ligne = DB\query_offres($id_professionnel, en_ligne: true);
+                foreach ($offres_en_ligne as $offre) {
                     put_card_offre_pro($offre);
                 }
-                notfalse($offres_en_ligne->closeCursor())
                 ?>
             </div>
         </section>
@@ -43,11 +45,10 @@ $nb_offres_en_ligne = query_offres_count($id_professionnel, en_ligne: true)
 
             <div class="offer-carousel">
                 <?php
-                $offres_hors_ligne = query_offres($id_professionnel, en_ligne: false);
-                while ($offre = $offres_hors_ligne->fetch()) {
+                $offres_hors_ligne = DB\query_offres($id_professionnel, en_ligne: false);
+                foreach($offres_hors_ligne as $offre) {
                     put_card_offre_pro($offre);
                 }
-                $offres_hors_ligne->closeCursor()
                 ?>
             </div>
         </section>
@@ -59,7 +60,7 @@ $nb_offres_en_ligne = query_offres_count($id_professionnel, en_ligne: true)
             </div>
         </a>
     </main>
-    <?php require 'component/footer.php' ?>
+    <?php $page->put_footer() ?>
 </body>
 
 </html>

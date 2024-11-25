@@ -1,3 +1,12 @@
+'use strict';
+
+let offers = []; // This will be populated with data from PHP
+async function initializeOffers() {
+    offers = await (await fetch(`/json/offres.php`)).json();
+    displayOffers();
+}
+initializeOffers();
+
 const subcategories = {
     restauration: ['Française', 'Fruits de mer', 'Asiatique', 'Indienne', 'Italienne', 'Gastronomique', 'Restauration rapide', 'Crêperie'],
     activite: ['Urbain', 'Nature', 'Plein air', 'Culturel', 'Patrimoine', 'Histoire', 'Sport', 'Nautique', 'Gastronomie', 'Musée', 'Atelier', 'Musique', 'Famille'],
@@ -35,8 +44,6 @@ function showSubcategories() {
     }
 }
 
-let offers = []; // This will be populated with data from PHP
-
 function sortOffers(criteria, ascending = true) {
     offers.sort((a, b) => {
         let valueA = a[criteria];
@@ -57,11 +64,6 @@ function sortOffers(criteria, ascending = true) {
     displayOffers();
 }
 
-function initializeOffers(offersData) {
-    offers = offersData;
-    displayOffers();
-}
-
 function displayOffers() {
     const offerList = document.querySelector('.offer-list');
     offerList.innerHTML = ''; // Clear existing offers
@@ -76,6 +78,7 @@ function displayOffers() {
             year: 'numeric'
         });
         
+        if (offer.prix_min!=null){
         offerElement.innerHTML = `
             <h3>${offer.titre}</h3>
             <img src="../images_utilisateur/${offer.id_image_principale}.jpg" 
@@ -99,6 +102,31 @@ function displayOffers() {
             <a href="/autres_pages/detail_offre.php?id=${offer.id}&pro=true">
                 <button class="btn-more-info">En savoir plus</button>
             </a>`;
+        } else {
+            offerElement.innerHTML = `
+            <h3>${offer.titre}</h3>
+            <img src="../images_utilisateur/${offer.id_image_principale}.jpg" 
+                onerror="this.onerror=null; 
+                  this.src='../images_utilisateur/${offer.id_image_principale}.png';
+                  this.onerror=function(){
+                        this.onerror=null; 
+                        this.src='../images_utilisateur/${offer.id_image_principale}.webp';
+                        this.onerror=function(){
+                            this.onerror=null;
+                            this.src='../images_utilisateur/${offer.id_image_principale}.jpeg';
+                        }
+                    }
+            ">
+            <p>Catégorie : ${offer.categorie}</p>
+            <p>Description : ${offer.resume}</p>
+            <p>Adresse : ${offer.formatted_address}</p>
+            <p>Gratuit</p>
+            <p>Note : ${offer.note_moyenne}/5</p>
+            <p>Date : ${formattedDate}</p>
+            <a href="/autres_pages/detail_offre.php?id=${offer.id}&pro=true">
+                <button class="btn-more-info">En savoir plus</button>
+            </a>`;
+        }
         offerList.appendChild(offerElement);
     });
 }

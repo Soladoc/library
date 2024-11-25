@@ -1,6 +1,8 @@
 <?php
-require_once 'component/head.php';
+require_once 'component/Page.php';
 require_once 'util.php';
+
+$page = new Page('Connexion');
 
 $return_url = getarg($_GET, 'return_url', required: false);
 $error = getarg($_GET, 'error', required: false);
@@ -9,17 +11,17 @@ $error = getarg($_GET, 'error', required: false);
 <!DOCTYPE html>
 <html lang="fr">
 
-<?php put_head('Connexion') ?>
+<?php $page->put_head() ?>
 
 <body>
-<?php require 'component/header.php' ?>
+<?php $page->put_header() ?>
 <main>
     <h1>Connexion</h1>
     <section class="connexion">
         <div class="champ-connexion">
             <br>
             <!-- Formulaire de connexion -->
-            <form action="../connexion/login.php" method="POST">
+            <form action="/connexion/login.php" method="POST">
                 <div class="champ">
                     <label for="login">Adresse e-mail ou pseudo *</label>
                     <input id="login" name="login" type="text" placeholder="exemple@mail.fr" required>
@@ -50,7 +52,7 @@ $error = getarg($_GET, 'error', required: false);
         </div>
     </section>
 </main>
-<?php require 'component/footer.php' ?>
+<?php $page->put_footer() ?>
 </body>
 
 </html>

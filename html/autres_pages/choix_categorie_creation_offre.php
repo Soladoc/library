@@ -1,15 +1,18 @@
 <?php
-require_once 'component/head.php';
+require_once 'component/Page.php';
+
+$page = new Page("Choix de l'offre", ['choix_categorie_creation_offre.css']);
 ?>
 
 <!DOCTYPE html>
 <html lang="en">
 
-<?php put_head("Choix de l'offre", ['choix_categorie_creation_offre.css']) ?>
+<?php $page->put_head() ?>
 
 <body>
-    <?php require 'component/header.php' ?>
+    <?php $page->put_header() ?>
     <form action="creation_offre.php" method="get">
+        <!-- Todo: utiliser constant categories -->
         <p>Choisissez la catégorie de votre offre</p>
         <button type="submit" name="type_offre" value="spectacle">Spectacle</button>
         <button type="submit" name="type_offre" value="parc-attractions">Parc d'attraction</button>

@@ -1,7 +1,11 @@
 <?php
 require_once 'auth.php';
 require_once 'component/offre.php';
-require_once 'component/head.php';
+require_once 'component/Page.php';
+
+$page = new Page("offre : {$args['id']}",
+    ['https://unpkg.com/leaflet@1.7.1/dist/leaflet.css'],
+    ['https://unpkg.com/leaflet@1.7.1/dist/leaflet.js' => 'async']);
 
 $args = [
     'id' => getarg($_GET, 'id', arg_filter(FILTER_VALIDATE_INT)),
@@ -14,11 +18,11 @@ if ($_POST) {
         'note' => getarg($_POST, 'rating', arg_filter(FILTER_VALIDATE_INT)),
         'contexte' => getarg($_POST, 'contexte'),
     ];
-    if (($id_membre_co = id_membre_connecte()) === null) {
+    if (($id_membre_co = Auth\id_membre_connecte()) === null) {
         $error_message = 'Veuillez vous connecter pour publier un avis.';
     } else {
         $querry = 'INSERT INTO pact.avis (id_membre_auteur,id_offre,commentaire,date_experience,note,contexte) VALUES (?,?,?,?,?,?);';
-        $stmt = db_connect()->prepare($querry);
+        $stmt = DB\connect()->prepare($querry);
         $stmt->execute([
             $id_membre_co,
             $args['id'],
@@ -31,39 +35,26 @@ if ($_POST) {
     }
 }
 
-$offre = query_offre($args['id']);
+$offre = DB\query_offre($args['id']);
 if ($offre === false) {
-    put_head('Erreur ID',
-        ['https://unpkg.com/leaflet@1.7.1/dist/leaflet.css'],
-        ['https://unpkg.com/leaflet@1.7.1/dist/leaflet.js' => 'async']);
-    require 'component/header.php';
-    echo "</br></br>L'offre que vous cherchez n'existe pas";
-    ?>
-    <script>console.log("Pas d'offre n°<?php echo $args['id'] ?>")</script>
-    <?php
-    require 'component/footer.php';
-    exit;
+    html_error("Pas d'offre n°{$args['id']}");
 }
 assert($offre['id'] === $args['id']);
 
 $titre = $offre['titre'];
 $description = $offre['description_detaillee'];
 $site_web = $offre['url_site_web'];
-$image_pricipale = query_image($offre['id_image_principale']);
-$adresse = notfalse(query_adresse($offre['id_adresse']));
+$image_pricipale = DB\query_image($offre['id_image_principale']);
+$adresse = notfalse(DB\query_adresse($offre['id_adresse']));
 
-$gallerie = query_gallerie($args['id']);
-$avis = query_avis()
+$gallerie = DB\query_gallerie($args['id']);
+$avis = DB\query_avis()
 ?>
 
 <!DOCTYPE html>
 <html lang="fr">
 
-<?php
-put_head("offre : {$args['id']}",
-    ['https://unpkg.com/leaflet@1.7.1/dist/leaflet.css'],
-    ['https://unpkg.com/leaflet@1.7.1/dist/leaflet.js' => 'async']);
-?>
+<?php $page->put_head() ?>
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -78,7 +69,7 @@ put_head("offre : {$args['id']}",
     // print_r($gallerie);
     // echo '</pre>';
 
-    require 'component/header.php'
+    $page->put_header();
     ?>
     <!-- Offer Details -->
     <main>
@@ -89,18 +80,18 @@ put_head("offre : {$args['id']}",
                         <!-- Image principale -->
                         <?php if ($image_pricipale): ?>
                             <div class="carousel-slide">
-                                <?php put_image($image_pricipale); ?>
+                                <?php put_image($image_pricipale) ?>
                             </div>
-                        <?php endif; ?>
+                        <?php endif ?>
 
                         <!-- Galerie d'images -->
                         <?php if (!empty($gallerie)): ?>
                             <?php foreach ($gallerie as $image): ?>
                                 <div class="carousel-slide">
-                                    <?php put_image(query_image($image)); ?>
+                                    <?php put_image(DB\query_image($image)) ?>
                                 </div>
-                            <?php endforeach; ?>
-                        <?php endif; ?>
+                            <?php endforeach ?>
+                        <?php endif ?>
                     </div>
 
                     <!-- Boutons de navigation -->
@@ -139,7 +130,7 @@ put_head("offre : {$args['id']}",
                     <p class="error-message"><?= htmlspecialchars($error_message) ?></p>
                     <?php elseif (isset($success_message)): ?>
                     <p class="success-message"><?= htmlspecialchars($success_message) ?></p>
-                    <?php endif; ?>
+                    <?php endif ?>
                 </div>
                 <form method="post" action="detail_offre.php?id=<?= $args['id'] ?>">
                     <textarea name="commentaire" placeholder="Votre avis..." required></textarea>
@@ -173,10 +164,10 @@ put_head("offre : {$args['id']}",
                 <h4>Avis de la communauté</h4>
                 <div class="review-summary">
                 <h4>Résumé des notes</h4>
-                <p>Nombre d'avis : <?= query_avis_count($args['id']) ?></p>
+                <p>Nombre d'avis : <?= DB\query_avis_count($args['id']) ?></p>
                 <p>Moyenne&nbsp;: <?php if ($offre['note_moyenne'] != null) { echo round($offre['note_moyenne'], 2); } else { echo 0; } ?>/5 ★</p>
                 <div class="rating-distribution">
-                    <?php $avis = query_avis(id_offre: $offre['id']); ?>
+                    <?php $avis = DB\query_avis(id_offre: $offre['id']) ?>
                     <p>5 étoiles&nbsp;: <?= count(array_filter($avis, fn($a) => $a['note'] === 5)) ?> avis.</p>
                     <p>4 étoiles&nbsp;: <?= count(array_filter($avis, fn($a) => $a['note'] === 4)) ?> avis.</p>
                     <p>3 étoiles&nbsp;: <?= count(array_filter($avis, fn($a) => $a['note'] === 3)) ?> avis.</p>
@@ -190,8 +181,8 @@ put_head("offre : {$args['id']}",
                             <p class="review-contexte">Contexte&nbsp;: <?= htmlspecialchars($avis_temp['contexte']) ?></p>
                             <p><?= htmlspecialchars($avis_temp['commentaire']) ?></p>
                             <p class="review-date"><?= htmlspecialchars($avis_temp['date_experience']) ?></p>
-                            <?php if (($id_membre_co = id_membre_connecte()) !== null && $avis_temp['id_membre_auteur'] === $id_membre_co) { ?>
-                            <form method="post" action="../avis/modifier.php?avis_id=<?= $avis_temp['id'] ?>&offre=<?= $args['id'] ?>">
+                            <?php if (($id_membre_co = Auth\id_membre_connecte()) !== null && $avis_temp['id_membre_auteur'] === $id_membre_co) { ?>
+                            <form method="post" action="/avis/modifier.php?avis_id=<?= $avis_temp['id'] ?>&offre=<?= $args['id'] ?>">
                                 <button type="submit" class="btn-modif">Modifier</button>
                             </form>
                             <?php } ?> 
@@ -203,7 +194,7 @@ put_head("offre : {$args['id']}",
             </div>
         </section>
     </main>
-    <?php require 'component/footer.php' ?>
+    <?php $page->put_footer() ?>
     <script>
         // // OpenStreetMap Integration
         // var map = L.map('map').setView([48.779, -3.518], 13);

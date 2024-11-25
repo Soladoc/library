@@ -1,12 +1,10 @@
 <?php
 
-error_reporting(E_ALL & ~E_NOTICE);
-
 /**
  * Cause une erreur si la valeur fournie est strictement égale à `false`.
  *
  * @template T
- * @param T $valeur La valeur à comparer à `false` avec l'opérateur `===`
+ * @param T|false $valeur La valeur à comparer à `false` avec l'opérateur `===`
  * @param string $message Le message d'erreur à afficher si $valeur était `false`
  * @return T $valeur si elle n'était pas strictement égale à `false`.
  * @throws Exception Si $valeur est `false`.
@@ -196,7 +194,7 @@ function soa_to_aos(array $array): array
 
 /**
  * Formate une adresse dans un format humainement lisible.
- * @param array $adresse L'adresse (ligne issue de la BDD, voir `query_adresse`)
+ * @param array $adresse L'adresse (ligne issue de la BDD, voir `DB\query_adresse`)
  * @return string
  */
 function format_adresse(array $adresse)
@@ -209,6 +207,6 @@ function format_adresse(array $adresse)
         . elvis($adresse['complement_numero'], ' ')
         . elvis($adresse['nom_voie'], ', ')
         . elvis($adresse['localite'], ', ')
-        . elvis(query_commune($adresse['code_commune'], $adresse['numero_departement'])['nom'], ', ')
-        . query_codes_postaux($adresse['code_commune'], $adresse['numero_departement'])[0];
+        . elvis(DB\query_commune($adresse['code_commune'], $adresse['numero_departement'])['nom'], ', ')
+        . DB\query_codes_postaux($adresse['code_commune'], $adresse['numero_departement'])[0];
 }

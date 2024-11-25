@@ -12,26 +12,26 @@ $args = [
 ];
 
 // Connection membre
-$user = query_membre($args['login']);
+$user = DB\query_membre($args['login']);
 
 if (!empty($user)) {
     if (!password_verify($args['mdp'], $user['mdp_hash'])) {
         fail();
     }
     session_regenerate_id(true);
-    se_connecter_membre($user['id']);
+    Auth\se_connecter_membre($user['id']);
     succeed('/autres_pages/accueil.php');
 }
 
 // Connection professionnel
-$user = query_professionnel($args['login']);
+$user = DB\query_professionnel($args['login']);
 
 if (!empty($user)) {
     if (!password_verify($args['mdp'], $user['mdp_hash'])) {
         fail();
     }
     session_regenerate_id(true);
-    se_connecter_pro($user['id']);
+    Auth\se_connecter_pro($user['id']);
     succeed('/autres_pages/accPro.php');
 }
 

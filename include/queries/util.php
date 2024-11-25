@@ -1,4 +1,7 @@
 <?php
+namespace DB;
+
+use PDO, PDOStatement;
 
 const PDO_PARAM_DECIMAL = PDO::PARAM_STR;
 
