@@ -202,18 +202,7 @@ function displayOffers() {
         if (offer.prix_min!=null){
         offerElement.innerHTML = `
             <h3><a href="/autres_pages/detail_offre.php?id=${offer.id}">${offer.titre}</a></h3>
-            <img src="../images_utilisateur/${offer.id_image_principale}.jpg" 
-                onerror="this.onerror=null; 
-                  this.src='../images_utilisateur/${offer.id_image_principale}.png';
-                  this.onerror=function(){
-                        this.onerror=null; 
-                        this.src='../images_utilisateur/${offer.id_image_principale}.webp';
-                        this.onerror=function(){
-                            this.onerror=null;
-                            this.src='../images_utilisateur/${offer.id_image_principale}.jpeg';
-                        }
-                    }
-            ">
+            <img src="${get_image_filename(offer.id_image_principale)}">
             <p>Catégorie : ${offer.categorie}</p>
             <p>Description : ${offer.resume}</p>
             <p>Adresse : ${offer.formatted_address}</p>
@@ -223,7 +212,7 @@ function displayOffers() {
         } else {
             offerElement.innerHTML = `
             <h3><a href="/autres_pages/detail_offre.php?id=${offer.id}">${offer.titre}</a></h3>
-            <img src="../images_utilisateur/${offer.id_image_principale}.${}">
+            <img src="${get_image_filename(offer.id_image_principale)}">
             <p>Catégorie : ${offer.categorie}</p>
             <p>Description : ${offer.resume}</p>
             <p>Adresse : ${offer.formatted_address}</p>
@@ -256,6 +245,9 @@ sortButtons.forEach(button => {
     });
 });
 
-function get_image_extension(id_image) {
-    
+/**
+ * @param {number} id_image
+ */
+function get_image_filename(id_image) {
+    return `/images_utilisateur/${id_image}.${images[id_image].mime_subtype}`;
 }
