@@ -135,18 +135,7 @@ function displayOffers(offersToDisplay = offers) {
         if (offer.prix_min!=null){
         offerElement.innerHTML = `
             <h3>${offer.titre}</h3>
-            <img src="../images_utilisateur/${offer.id_image_principale}.jpg" 
-                onerror="this.onerror=null; 
-                  this.src='../images_utilisateur/${offer.id_image_principale}.png';
-                  this.onerror=function(){
-                        this.onerror=null; 
-                        this.src='../images_utilisateur/${offer.id_image_principale}.webp';
-                        this.onerror=function(){
-                            this.onerror=null;
-                            this.src='../images_utilisateur/${offer.id_image_principale}.jpeg';
-                        }
-                    }
-            ">
+            <img src="${get_image_filename(offer.id_image_principale)}">
             <p>Catégorie : ${offer.categorie}</p>
             <p>Description : ${offer.resume}</p>
             <p>Adresse : ${offer.formatted_address}</p>
@@ -159,18 +148,7 @@ function displayOffers(offersToDisplay = offers) {
         } else {
             offerElement.innerHTML = `
             <h3>${offer.titre}</h3>
-            <img src="../images_utilisateur/${offer.id_image_principale}.jpg" 
-                onerror="this.onerror=null; 
-                  this.src='../images_utilisateur/${offer.id_image_principale}.png';
-                  this.onerror=function(){
-                        this.onerror=null; 
-                        this.src='../images_utilisateur/${offer.id_image_principale}.webp';
-                        this.onerror=function(){
-                            this.onerror=null;
-                            this.src='../images_utilisateur/${offer.id_image_principale}.jpeg';
-                        }
-                    }
-            ">
+            <img src="${get_image_filename(offer.id_image_principale)}">
             <p>Catégorie : ${offer.categorie}</p>
             <p>Description : ${offer.resume}</p>
             <p>Adresse : ${offer.formatted_address}</p>
