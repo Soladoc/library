@@ -10,7 +10,7 @@ $page = new Page("Création d'une offre",
     ['creation_offre.css'],
     ['module/creation_offre.js' => 'defer type="module"']);
 
-$id_professionnel = exiger_connecte_pro();
+$id_professionnel = Auth\exiger_connecte_pro();
 
 $args = [
     //ne lance pas la page et génère une errreur si il n'y a pas de get

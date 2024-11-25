@@ -4,7 +4,7 @@
  * Cause une erreur si la valeur fournie est strictement égale à `false`.
  *
  * @template T
- * @param T $valeur La valeur à comparer à `false` avec l'opérateur `===`
+ * @param T|false $valeur La valeur à comparer à `false` avec l'opérateur `===`
  * @param string $message Le message d'erreur à afficher si $valeur était `false`
  * @return T $valeur si elle n'était pas strictement égale à `false`.
  * @throws Exception Si $valeur est `false`.
