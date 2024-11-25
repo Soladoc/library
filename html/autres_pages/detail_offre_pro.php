@@ -34,6 +34,7 @@ if ($offre) {
     $en_ligne = $offre['en_ligne'];
     $info_adresse = DB\query_adresse($adresse);
     $avis = DB\query_avis();
+    $gallerie = DB\query_gallerie($args['id']);
     // Vérifier si l'adresse existe
     if ($info_adresse) {
         // Construire une chaîne lisible pour l'adresse
