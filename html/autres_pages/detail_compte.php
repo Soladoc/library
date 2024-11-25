@@ -82,7 +82,7 @@ if ($_POST) {
                 ?>
             <div id="pseudo">
                 <p>Pseudo : </p>
-                <?php echo $pseudo ?>
+                <?= $pseudo ?>
             </div>
             <?php } else if ($pro !== false) { ?>
                 <div id="denomination">
@@ -112,22 +112,22 @@ if ($_POST) {
 
             <div id="nom">
                 <p>Nom : </p>
-                <?php echo $nom ?>
+                <?= $nom ?>
             </div>
 
             <div id="prenom">
                 <p>Prenom : </p>
-                <?php echo $prenom ?>
+                <?= $prenom ?>
             </div>
 
             <div id="email">
                 <p>Email : </p>
-                <?php echo $email ?>
+                <?= $email ?>
             </div>
 
             <div id="telephone">
                 <p>Numero de telephone : </p>
-                <?php echo $telephone ?>
+                <?= $telephone ?>
             </div>
 
             <div id="adresse">
@@ -135,7 +135,7 @@ if ($_POST) {
                 <?php
                 echo format_adresse($adresse);
                 ?> </div>
-        <a href="modif_compte.php?id=<?php echo $id ?>">modifier</a>
+        <a href="modif_compte.php?id=<?= $id ?>">modifier</a>
             <?php ?>
             
            

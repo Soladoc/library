@@ -113,15 +113,15 @@ if ($_POST) {
 <main>
 
 <section id="info_compte">  
-    <form action="modif_compte.php?id=<?php echo $id ?>" method="POST">
+    <form action="modif_compte.php?id=<?= $id ?>" method="POST">
 
 
-        <a href="/autres_pages/detail_compte.php?id=<?php echo $id ?>">retour</a>
+        <a href="/autres_pages/detail_compte.php?id=<?= $id ?>">retour</a>
         <?php if ($membre !== false) { ?>
             <div>
                 <div id="pseudo">
                     <label>Pseudo : </label>
-                    <?php echo $pseudo ?>
+                    <?= $pseudo ?>
                 </div>
                 <input id="new_pseudo" name="new_pseudo" type="text" placeholder="votre nouveau pseudo">
             </div>
@@ -129,7 +129,7 @@ if ($_POST) {
             <div>
                 <div id="denomination">
                     <label>Denomination : </label>
-                    <?php echo $denomination ?>
+                    <?= $denomination ?>
                 </div>
                 <input id="new_denomination" name="new_denomination" type="text" placeholder="votre nouvelle denomination">
             </div>
@@ -154,7 +154,7 @@ if ($_POST) {
         <div>
             <div>
                 <label>Nom : </label>
-                <?php echo $nom ?>
+                <?= $nom ?>
             </div>
             <input id="new_nom" name="new_nom" type="text" placeholder="votre nouveau nom">
         </div>
@@ -162,7 +162,7 @@ if ($_POST) {
         <div>
             <div>
                 <label>Prenom : </label>
-                <?php echo $prenom ?>
+                <?= $prenom ?>
             </div>
             <input id="new_prenom" name="new_prenom" type="text" placeholder="votre nouveau prenom">
         </div>
@@ -170,7 +170,7 @@ if ($_POST) {
         <div>
             <div>
                 <label>Email : </label>
-                <?php echo $email ?>
+                <?= $email ?>
             </div>
             <input id="new_email" name="new_email" type="new_email" placeholder="votre nouvel email">
 
@@ -178,7 +178,7 @@ if ($_POST) {
         <div></div>
             <div id="telephone">
                 <label>Numero telephone : </label>
-                <?php echo $telephone ?>
+                <?= $telephone ?>
             </div>
             <input id="new_telephone" name="new_telephone" type="tel" placeholder="votre nouveau numero telephone">
 
