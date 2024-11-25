@@ -16,33 +16,6 @@ $id = $args['id'];
 $membre = DB\query_compte_membre($args['id']);
 $pro = DB\query_compte_professionnel($args['id']);
 
-if ($membre !== false) {
-    // echo '<pre>';
-    // print_r($membre);
-    // echo '</pre>';
-    $pseudo = $membre['pseudo'];
-    $email = $membre['email'];
-    $mdp = unserialize($membre['mdp_hash']);
-    $nom = $membre['nom'];
-    $prenom = $membre['prenom'];
-    $telephone = $membre['telephone'];
-    $id_adresse = $membre['id_adresse'];
-    $adresse = DB\query_adresse($id_adresse);
-} else if ($pro !== false) {
-    // echo '<pre>';
-    // print_r($pro);
-    // echo '</pre>';
-    $denomination = $pro['denomination'];
-    $email = $pro['email'];
-    $mdp_hash = unserialize($pro['mdp_hash']);
-    $nom = $pro['nom'];
-    $prenom = $pro['prenom'];
-    $telephone = $pro['telephone'];
-    $id_adresse = $pro['id_adresse'];
-    $adresse = DB\query_adresse($id_adresse);
-} else {
-    html_error("le compte d'ID {$args['id']} n'existe pas");
-}
 // Afficher le détail du compte du membre
 
 if ($_POST) {
@@ -107,6 +80,36 @@ if ($_POST) {
         }
     }
     
+}
+
+
+
+if ($membre !== false) {
+    // echo '<pre>';
+    // print_r($membre);
+    // echo '</pre>';
+    $pseudo = $membre['pseudo'];
+    $email = $membre['email'];
+    $mdp = unserialize($membre['mdp_hash']);
+    $nom = $membre['nom'];
+    $prenom = $membre['prenom'];
+    $telephone = $membre['telephone'];
+    $id_adresse = $membre['id_adresse'];
+    $adresse = DB\query_adresse($id_adresse);
+} else if ($pro !== false) {
+    // echo '<pre>';
+    // print_r($pro);
+    // echo '</pre>';
+    $denomination = $pro['denomination'];
+    $email = $pro['email'];
+    $mdp_hash = unserialize($pro['mdp_hash']);
+    $nom = $pro['nom'];
+    $prenom = $pro['prenom'];
+    $telephone = $pro['telephone'];
+    $id_adresse = $pro['id_adresse'];
+    $adresse = DB\query_adresse($id_adresse);
+} else {
+    html_error("le compte d'ID {$args['id']} n'existe pas");
 }
 
 ?>
