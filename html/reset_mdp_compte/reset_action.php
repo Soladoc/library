@@ -4,7 +4,7 @@ require_once 'queries.php';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $email = trim($_POST['login']);
-    $user = query_membre($email) ?: query_professionnel($email);
+    $user = DB\query_membre($email) ?: DB\query_professionnel($email);
 
     if ($user) {
         $user_id = $user['id'];
