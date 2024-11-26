@@ -16,14 +16,14 @@ $error = getarg($_GET, 'error', required: false);
 <body>
 <?php $page->put_header() ?>
 <main>
-    <h1>Connexion</h1>
+    <h1>Reinitialiser le mot de passe</h1>
     <section class="connexion">
         <div class="champ-connexion">
             <br>
             <!-- Formulaire de connexion -->
             <form action="/connexion/login.php" method="POST">
                 <div class="champ">
-                    <label for="login">Adresse e-mail ou pseudo *</label>
+                    <label for="login">Adresse e-mail *</label>
                     <input id="login" name="login" type="text" placeholder="exemple@mail.fr" required>
                 </div>
                 <br>
