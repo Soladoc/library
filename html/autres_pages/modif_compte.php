@@ -232,7 +232,7 @@ if ($membre !== false) {
             <p class="error"><?= $error_mdp ?></p>
             <?php } ?>
             <button type="submit">valider</button>
-            <p class="error"><?= htmlspecialchars($error) ?></p>
+            <p class="error"><?= htmlspecialchars($error_mdp) ?></p>
         </div>
 
        
