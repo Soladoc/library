@@ -8,6 +8,8 @@ require_once 'component/inputs.php';
 
 $page = new Page('Modification compte (todo)');
 $error_mdp = null;
+$error_tel = null;
+$error_email = null;
 
 $args = [
     'id' => getarg($_GET, 'id', arg_filter(FILTER_VALIDATE_INT))
@@ -63,11 +65,23 @@ if ($_POST) {
     if ($new_email) {
         DB\query_update_email($id, $new_Email);
     }
+    if (!filter_var($new_email, FILTER_VALIDATE_EMAIL)) {
+        $error_email = "Email incorrect";
+      }
 
     // modif telephone ------------------------------------------------------------------------------------------------------------------
     $new_telephone = getarg($_POST, 'new_telephone', null, false);
+
+    
     if ($new_telephone) {
-        DB\query_update_telephone($id, $new_telephone);
+        if(!preg_match("#^[0-9]{10}$#", $new_telephone)){
+            $error_tel = "Numéro incorrect, doit être composé de 10 chiffres ou 9 si utilisation de +33";
+          
+          }
+          else {
+            DB\query_update_telephone($id, $new_telephone);
+
+          }
     }
 
     // modif mot de passe ------------------------------------------------------------------------------------------------------------------
@@ -194,15 +208,20 @@ if ($membre !== false) {
                 <?= $email ?>
             </div>
             <input id="new_email" name="new_email" type="new_email" placeholder="votre nouvel email">
-
+            <?php if ($error_email !== null) { ?>
+                <p class="error"><?= htmlspecialchars($error_email) ?></p>
+            <?php } ?>
+            error_email
         </div>
-        <div></div>
+        <div>
             <div id="telephone">
                 <label>Numero telephone : </label>
                 <?= $telephone ?>
             </div>
             <input id="new_telephone" name="new_telephone" type="tel" placeholder="votre nouveau numero telephone">
-
+            <?php if ($error_tel !== null) { ?>
+                <p class="error"><?= htmlspecialchars($error_tel) ?></p>
+            <?php } ?>
         </div>
 
         <div>
