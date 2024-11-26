@@ -69,6 +69,9 @@ function sortOffers(criteria, ascending = true) {
         } else if (criteria === 'date') {
             valueA = new Date(valueA);
             valueB = new Date(valueB);
+            // Si la date n'est pas valide, la mettre à une valeur par défaut
+            if (isNaN(valueA)) valueA = new Date(0);  // Date par défaut (1er janvier 1970)
+            if (isNaN(valueB)) valueB = new Date(0);
         }
 
         if (ascending) {
@@ -151,6 +154,7 @@ sortButtons.forEach(button => {
         sortOffers(criteria, ascending);
     });
 });
+
 
 document.getElementById('sort-price-up').addEventListener('click', () => sortOffers('prix_min', false));
 document.getElementById('sort-price-down').addEventListener('click', () => sortOffers('prix_min', true));
