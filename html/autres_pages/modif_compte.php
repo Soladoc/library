@@ -67,16 +67,20 @@ if ($_POST) {
     
     if($old_mdp){
         $new_mdp = getarg($_POST, 'new_mdp', null, false);
-        $confirmation_mdp = getarg($_POST, 'confirmation_mdp', null, false);
+        $confirmation_mdp = getarg($_POST, 'confirmation_mdp', filter: null, required: false);
+        print_r ('test');
+        print_r ($new_mdp);
+        print_r (password_verify($old_mdp, $mdp_hash));
+        print_r ('fin test');
 
         if ($new_mdp && password_verify($old_mdp, $mdp_hash)) {
-        if ($confirmation_mdp === $new_mdp) {
-            DB\query_uptate_mdp($id, password_hash($new_mdp, algo: PASSWORD_DEFAULT)); 
+            if ($confirmation_mdp === $new_mdp) {
+                DB\query_uptate_mdp($id, password_hash($new_mdp, algo: PASSWORD_DEFAULT)); 
+            } else {
+                redirect_to(location: location_modif_compte($id,'Mot de passe de confirmation different.'));
+            }
         } else {
-            redirect_to(location_modif_compte($id,'Mot de passe de confirmation different.'));
-        }
-        } else {
-            redirect_to(location_modif_compte($id,'Mot de passe incorrect.'));
+            redirect_to(location: location_modif_compte($id,error: 'Mot de passe incorrect.'));
 
         }
     }
@@ -89,9 +93,9 @@ $pro = DB\query_compte_professionnel($args['id']);
 
 
 if ($membre !== false) {
-    // echo '<pre>';
-    // print_r($membre);
-    // echo '</pre>';
+    echo '<pre>';
+    print_r($membre);
+    echo '</pre>';
     $pseudo = $membre['pseudo'];
     $email = $membre['email'];
     $mdp = unserialize($membre['mdp_hash']);
