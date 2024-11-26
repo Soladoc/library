@@ -30,7 +30,7 @@ $error = getarg($_GET, 'error', required: false);
                 <?php if ($error !== null) { ?>
                     <p class="error"><?= htmlspecialchars($error) ?></p>
                 <?php } ?>
-                <button type="submit" class="btn-connexion">Se connecter</button>
+                <button type="submit" class="btn-connexion">Envoyer un mail</button>
                 <?php if ($return_url !== null) { ?>
                     <input type="hidden" name="return_url" value="<?= htmlspecialchars($return_url) ?>">
                 <?php } ?>
