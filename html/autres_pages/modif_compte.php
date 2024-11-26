@@ -88,10 +88,9 @@ if ($_POST) {
                 $error_mdp = 'Mot de passe de confirmation different.';
             }
         } else {
-            $error_mdp = 'Mot de passe incorrect.';
-    }
+            $error_mdp = 'Mot de passe incorrect.'; }
     
-}
+    }}
 
 $membre = DB\query_compte_membre($args['id']);
 $pro = DB\query_compte_professionnel($args['id']);
