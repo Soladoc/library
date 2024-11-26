@@ -63,17 +63,21 @@ function sortOffers(criteria, ascending = true) {
         let valueA = a[criteria];
         let valueB = b[criteria];
 
+        // Si la catégorie est prix_min ou note_moyenne, on les convertit en nombres
         if (criteria === 'prix_min' || criteria === 'note_moyenne') {
             valueA = parseFloat(valueA) || 0;
             valueB = parseFloat(valueB) || 0;
         } else if (criteria === 'creee_le') {
+            // Assure-toi que les valeurs de date sont valides
             valueA = new Date(valueA);
             valueB = new Date(valueB);
-            // Si la date n'est pas valide, la mettre à une valeur par défaut
-            if (isNaN(valueA)) valueA = new Date(0);  // Date par défaut (1er janvier 1970)
+            
+            // Vérifie que les dates sont valides
+            if (isNaN(valueA)) valueA = new Date(0);  // Date invalide, valeur par défaut
             if (isNaN(valueB)) valueB = new Date(0);
         }
 
+        // Tri ascendant ou descendant
         if (ascending) {
             return valueA < valueB ? -1 : 1;
         } else {
@@ -110,12 +114,11 @@ function displayOffers(offersToDisplay = offers) {
 
         // Formate la date
         const date = new Date(offer.creee_le);
-        const formattedDate = date instanceof Date && !isNaN(date) ? date.toLocaleDateString('fr-FR', {
-            day: '2-digit',
-            month: '2-digit',
-            year: 'numeric'
-        }) : 'Date inconnue';
+        const formattedDate = date instanceof Date && !isNaN(date) 
+            ? date.toLocaleDateString('fr-FR', { day: '2-digit', month: '2-digit', year: 'numeric' }) 
+            : 'Date inconnue';
 
+        // Affichage des offres avec ou sans prix minimum
         if (offer.prix_min != null) {
             offerElement.innerHTML = `
                 <h3><a href="/autres_pages/detail_offre.php?id=${offer.id}">${offer.titre}</a></h3>
@@ -143,6 +146,7 @@ function displayOffers(offersToDisplay = offers) {
         offerList.appendChild(offerElement);
     });
 }
+
 
 const sortButtons = document.querySelectorAll('.btn-sort');
 sortButtons.forEach(button => {
