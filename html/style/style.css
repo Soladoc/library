@@ -716,50 +716,44 @@ a:not(:hover, :focus, :focus-within) {
     background-color: #0056b3;
 }
 
-/* Conteneur principal */
+.hidden {
+    display: none;
+}
+
 .carousel-container {
     position: relative;
     width: 100%;
     max-width: 600px;
-    /* Largeur maximale */
     margin: auto;
     overflow: hidden;
-    /* Masque les images hors cadre */
     border: 2px solid black;
-    /* Bordure noire */
     border-radius: 10px;
-    /* Bords arrondis */
+    background-color: white;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
 }
 
-/* Liste des slides */
 .carousel {
     display: flex;
     transition: transform 0.5s ease-in-out;
-    /* Animation de défilement */
     width: 100%;
 }
 
-/* Chaque slide */
 .carousel-slide {
     min-width: 100%;
-    /* Chaque slide occupe 100% du conteneur */
     box-sizing: border-box;
     display: flex;
     justify-content: center;
     align-items: center;
 }
 
-/* Les images */
 .carousel-slide img {
     width: 100%;
-    /* Image prend toute la largeur */
     height: auto;
-    /* Ajustement automatique de la hauteur */
+    object-fit: cover;
+    aspect-ratio: 16/9;
     border-radius: 10px;
-    /* Bords arrondis */
 }
 
-/* Boutons de navigation */
 .carousel-prev,
 .carousel-next {
     position: absolute;
@@ -767,11 +761,16 @@ a:not(:hover, :focus, :focus-within) {
     transform: translateY(-50%);
     background-color: rgba(0, 0, 0, 0.5);
     color: white;
-    border: none;
+    border: 2px solid white;
     padding: 10px;
     cursor: pointer;
     z-index: 10;
     border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .carousel-prev {
@@ -787,7 +786,6 @@ a:not(:hover, :focus, :focus-within) {
     background-color: rgba(0, 0, 0, 0.8);
 }
 
-/* Responsive design */
 @media (max-width: 768px) {
     .carousel-container {
         max-width: 100%;
@@ -796,6 +794,8 @@ a:not(:hover, :focus, :focus-within) {
     .carousel-prev,
     .carousel-next {
         padding: 8px;
+        width: 35px;
+        height: 35px;
     }
 }
 

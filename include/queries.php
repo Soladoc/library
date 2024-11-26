@@ -138,7 +138,7 @@ function query_avis(?int $id_membre_auteur = null, ?int $id_offre = null): array
 
 // Update-----------------------------------------------------------------------------------------------------------
 
-function query_uptate_mdp(int $id_compte, $new_mdp): void
+function query_uptate_mdp(int $id_compte,string $new_mdp): void
 {
     $stmt = notfalse(connect()->prepare('UPDATE _compte SET mdp_hash = ? WHERE id = ?;'));
     bind_values($stmt, [1 => [$new_mdp, PDO::PARAM_STR], 2 => [$id_compte, PDO::PARAM_INT]]);

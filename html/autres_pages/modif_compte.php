@@ -7,14 +7,23 @@ require_once 'component/offre.php';
 require_once 'component/inputs.php';
 
 $page = new Page('Modification compte (todo)');
+$error_mdp = null;
 
 $args = [
     'id' => getarg($_GET, 'id', arg_filter(FILTER_VALIDATE_INT))
 ];
-
 $id = $args['id'];
-$membre = DB\query_compte_membre($args['id']);
-$pro = DB\query_compte_professionnel($args['id']);
+
+$membre = DB\query_compte_membre($id);
+$pro = DB\query_compte_professionnel($id);
+if ($membre !== false) {
+    $mdp_hash =$membre['mdp_hash'];
+} else if ($pro !== false) {
+    $mdp_hash = $pro['mdp_hash'];
+} else {
+    html_error("le compte d'ID {$args['id']} n'existe pas");
+}
+
 
 // Afficher le détail du compte du membre
 
@@ -38,20 +47,20 @@ if ($_POST) {
     }
 
     // modif Nom ------------------------------------------------------------------------------------------------------------------
-    $new_Nom = getarg($_POST, 'new_nom', null, false);
-    if ($new_Nom) {
+    $new_nom = getarg($_POST, 'new_nom', null, false);
+    if ($new_nom) {
         DB\query_update_Nom($id, $new_Nom);
     }
 
     // modif Prenom ------------------------------------------------------------------------------------------------------------------
-    $new_Prenom = getarg($_POST, 'new_prenom', null, required: false);
-    if ($new_Prenom) {
+    $new_prenom = getarg($_POST, 'new_prenom', null, required: false);
+    if ($new_prenom) {
         DB\query_update_prenom($id, $new_Prenom);
     }
 
     // modif Email ------------------------------------------------------------------------------------------------------------------
-    $new_Email = getarg($_POST, 'new_email', null, false);
-    if ($new_Email) {
+    $new_email = getarg($_POST, 'new_email', null, false);
+    if ($new_email) {
         DB\query_update_email($id, $new_Email);
     }
 
@@ -64,20 +73,22 @@ if ($_POST) {
     // modif mot de passe ------------------------------------------------------------------------------------------------------------------
     
     $old_mdp = getarg($_POST, 'old_mdp', null, false);
-    
     if($old_mdp){
         $new_mdp = getarg($_POST, 'new_mdp', null, false);
-        $confirmation_mdp = getarg($_POST, 'confirmation_mdp', null, false);
+        $confirmation_mdp = getarg($_POST, 'confirmation_mdp', filter: null, required: false);
+        print_r ('test');
+        print_r ($new_mdp);
+        print_r (password_verify($old_mdp, $mdp_hash));
+        print_r ('fin test');
 
         if ($new_mdp && password_verify($old_mdp, $mdp_hash)) {
-        if ($confirmation_mdp === $new_mdp) {
-            DB\query_uptate_mdp($id, password_hash($new_mdp));  // todo: cette fonction est appelée incorrectement (MARIUS LIS LA DOC stp!!)
+            if ($confirmation_mdp === $new_mdp) {
+                DB\query_uptate_mdp($id, password_hash($new_mdp, algo: PASSWORD_DEFAULT)); 
+            } else {
+                $error_mdp = 'Mot de passe de confirmation different.';
+            }
         } else {
-            redirect_to(location_modifier_compte('Mot de passe de confirmation different.'));
-        }
-        } else {
-            redirect_to(location_modifier_compte(error: 'Mot de passe incorrect.'));
-        }
+            $error_mdp = 'Mot de passe incorrect.';
     }
     
 }
@@ -88,12 +99,12 @@ $pro = DB\query_compte_professionnel($args['id']);
 
 
 if ($membre !== false) {
-    // echo '<pre>';
-    // print_r($membre);
-    // echo '</pre>';
+    echo '<pre>';
+    print_r($membre);
+    echo '</pre>';
     $pseudo = $membre['pseudo'];
     $email = $membre['email'];
-    $mdp = unserialize($membre['mdp_hash']);
+    $mdp_hash =$membre['mdp_hash'];
     $nom = $membre['nom'];
     $prenom = $membre['prenom'];
     $telephone = $membre['telephone'];
@@ -105,7 +116,7 @@ if ($membre !== false) {
     // echo '</pre>';
     $denomination = $pro['denomination'];
     $email = $pro['email'];
-    $mdp_hash = unserialize($pro['mdp_hash']);
+    $mdp_hash = $pro['mdp_hash'];
     $nom = $pro['nom'];
     $prenom = $pro['prenom'];
     $telephone = $pro['telephone'];
@@ -215,19 +226,17 @@ if ($membre !== false) {
             </div>
             <div class="champ">
                 <label for="mdp">Nouveau mot de passe *</label>
-                <input id="new_mdp" name="mdp" type="password" placeholder="**********">
+                <input id="new_mdp" name="new_mdp" type="password" placeholder="**********">
             </div>
             <div class="champ">
                 <label for="mdp">confirmation mot de passe *</label>
-                <input id="confirmation_mdp" name="mdp" type="password" placeholder="**********">
+                <input id="confirmation_mdp" name="confirmation_mdp" type="password" placeholder="**********">
             </div>
-            <?php if ($error = $_GET['error_mdp'] ?? null) { ?>
-            <p class="error"><?= $error ?></p>
-            <?php } ?>
-            <?php if ($error = $_GET['error_confirmation'] ?? null) { ?>
-            <p class="error"><?= $error ?></p>
+            <?php if ($error_mdp !== null) { ?>
+                <p class="error"><?= htmlspecialchars($error_mdp) ?></p>
             <?php } ?>
             <button type="submit">valider</button>
+            
         </div>
 
        
