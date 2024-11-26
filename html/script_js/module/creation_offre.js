@@ -1,11 +1,11 @@
 import DynamicTable from './DynamicTable.js';
 
 // Grille tarifaire
-{
+const table_tarifs = document.getElementById('table-tarifs');
+if (table_tarifs !== null) {
     const i_nom = 0, i_montant = 1;
-
     const tarifs = new DynamicTable(
-        document.getElementById('table-tarifs'),
+        table_tarifs,
         document.getElementById('template-tarif-tr'),
         function (tr) {
             return !this.has_row((/** @type {string[]} */ row) => row[i_nom] === nom(tr).value);

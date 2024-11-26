@@ -20,7 +20,7 @@ final class MultiRange
     /**
      * @param NonEmptyRange[] $ranges
      */
-    private function __construct(array $ranges)
+    function __construct(array $ranges)
     {
         $this->ranges = $ranges;
     }

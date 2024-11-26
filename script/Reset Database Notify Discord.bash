@@ -64,28 +64,30 @@ gh_job_logs() {
 # Constants
 
 readonly failure_jokes=(
-    'ET BOUM!'
-    'patatrasss'
-    'faut dormir'
-    'this is fine'
-    'allo allo la terre appelle'
-    'on attend que @Raph repare ça'
-    'chui pas venu ici pour souffrir ok'
-    "c'est l'heure de la pause café :coffee:"
-    '@Marius cherche pas les données sont perdues'
-    'According to all known laws of aviation, there is no way a bee should be able to fly.'
-    '**Demoman**: "One crossed wire, one wayward pinch of potassium chlorate, one errant twitch... and KABLOOIE!'
-    ':coffee: :coffee: :coffee: :coffee: :coffee: :coffee: :coffee: :coffee: :coffee: :coffee: :coffee: :coffee: :coffee: :coffee: :coffee: :coffee: :coffee: :coffee: :coffee: :coffee: :coffee: :coffee: :coffee: :coffee: :coffee: :coffee: :coffee: :coffee: :coffee: :coffee: :coffee: :coffee: :coffee: :coffee: :coffee: :coffee: :coffee: :coffee: :coffee: :coffee: :coffee: :coffee: :coffee: :coffee: :coffee: :coffee: :coffee: :coffee: :coffee: :coffee: :coffee: :coffee: :coffee: :coffee: :coffee: :coffee: :coffee: :coffee: :coffee: :coffee: :coffee: :coffee: :coffee: :coffee: :coffee: :coffee: :coffee: :coffee: :coffee:'
+    '> ET BOUM!'
+    '> patatrasss'
+    '> faut dormir'
+    '> this is fine'
+    '> allo allo la terre appelle'
+    '> on attend que @Raph repare ça'
+    '> chui pas venu ici pour souffrir ok'
+    "> c'est l'heure de la pause café :coffee:"
+    '> @Marius cherche pas les données sont perdues'
+    '> According to all known laws of aviation, there is no way a bee should be able to fly.'
+    '> **Demoman**: "One crossed wire, one wayward pinch of potassium chlorate, one errant twitch... and KABLOOIE!'
+    '> :coffee: :coffee: :coffee: :coffee: :coffee: :coffee: :coffee: :coffee: :coffee: :coffee: :coffee: :coffee: :coffee: :coffee: :coffee: :coffee: :coffee: :coffee: :coffee: :coffee: :coffee: :coffee: :coffee: :coffee: :coffee: :coffee: :coffee: :coffee: :coffee: :coffee: :coffee: :coffee: :coffee: :coffee: :coffee: :coffee: :coffee: :coffee: :coffee: :coffee: :coffee: :coffee: :coffee: :coffee: :coffee: :coffee: :coffee: :coffee: :coffee: :coffee: :coffee: :coffee: :coffee: :coffee: :coffee: :coffee: :coffee: :coffee: :coffee: :coffee: :coffee: :coffee: :coffee: :coffee: :coffee: :coffee: :coffee: :coffee: :coffee:'
+    'https://tenor.com/view/city-lights-lights-off-gif-14713523'
 )
 
 readonly success_cheers=(
-    'Happy happy joy joy!'
-    'Fortitudine vincimus.'
-    'Moriturus te salutat.'
-    '..#]^@^@^@ NO CARRIER'
-    'Pulvis et umbra sumus.'
-    'Post proelium, praemium.'
-    'Ceterum censeo Carthaginem esse delendam.'
+    '> Happy happy joy joy!'
+    '> Fortitudine vincimus.'
+    '> Moriturus te salutat.'
+    '> ..#]^@^@^@ NO CARRIER'
+    '> Pulvis et umbra sumus.'
+    '> Post proelium, praemium.'
+    '> Ceterum censeo Carthaginem esse delendam.'
+    'https://tenor.com/view/homer-simpson-spinning-chair-nuclear-gif-10974154'
 )
 
 readonly log_lines=20
@@ -127,8 +129,9 @@ link_part="\`$DISPLAY_TITLE\` > \`$failed_step_name\` (step $failed_step_number)
 if [[ "$CONCLUSION" == failure ]]; then
     send_msg $dmf_suppress_embeds <<EOF
 @everyone $ACTOR a cassé la BDD :skull:
+$link_part
 
-> $(array_pick_random "${failure_jokes[@]}")
+$(array_pick_random "${failure_jokes[@]}")
 
 Dernières $log_lines lignes du log :
 
@@ -142,6 +145,6 @@ elif [[ "$CONCLUSION" == success ]]; then
 @everyone Bravo à $ACTOR pour avoir réparé la BDD en $repair_duration :+1:
 $link_part
 
-> $(array_pick_random "${success_cheers[@]}")
+$(array_pick_random "${success_cheers[@]}")
 EOF
 fi

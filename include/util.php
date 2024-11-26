@@ -192,8 +192,8 @@ function single_or_default(array $array, mixed $default = null): mixed
  * @return array<int, mixed> The resulting "array of structures".
  *
  * @example
- * Input: ['a' => [1, 2], 'b' => [3, 4]]
- * Output: [[a' => 1, 'b' => 3], ['a' => 2, 'b' => 4]]
+ * Input: ['debut' => [1, 3], 'fin' => [2, 4]]
+ * Output: [['debut' => 1, 'fin' => 2], ['debut' => 3, 'fin' => 4]]
  */
 function soa_to_aos(array $array): array
 {

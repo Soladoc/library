@@ -86,3 +86,7 @@ section {
         display: none;
     }
 }
+
+#liste-choix-abonnement {
+    list-style: none;
+}

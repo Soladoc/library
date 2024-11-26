@@ -43,10 +43,13 @@ test_case('[" \m","\n "]', true, ' m', 'n ', true, fn($e) => $e);
 function test_case(string $output, bool $lower_inc, mixed $lower, mixed $upper, bool $upper_inc, callable $parse_bound): void
 {
     $r = NonEmptyRange::parse($output, $parse_bound);
-    assert_equal($r->lower_inc, $lower_inc);
-    assert_equal($r->lower, $lower);
-    assert_equal($r->upper, $upper);
-    assert_equal($r->upper_inc, $upper_inc);
+    assert_strictly_equal($r->lower_inc, $lower_inc);
+    assert_strictly_equal($r->lower, $lower);
+    assert_strictly_equal($r->upper, $upper);
+    assert_strictly_equal($r->upper_inc, $upper_inc);
+
+    $roundtripped = NonEmptyRange::parse($r, $parse_bound);
+    assert_equal($r, $roundtripped);
 }
 
 /**

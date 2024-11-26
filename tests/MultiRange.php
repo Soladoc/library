@@ -28,7 +28,7 @@ test_throws('{[5,1]}', parse_int(...), fn($e) => $e instanceof RangeException);
  */
 function test_case(string $output, int $range_count, callable $parse_bound): void {
     $r = MultiRange::parse($output, $parse_bound);
-    assert_equal(count($r->ranges), $range_count);
+    assert_strictly_equal(count($r->ranges), $range_count);
 }
 
 /**

@@ -1,4 +1,8 @@
 <?php
+require_once "model/MultiRange.php";
+require_once "model/NonEmptyRange.php";
+require_once "model/Time.php";
+require_once "model/Timestamp.php";
 
 // Conserve les images uploadées durant cette transaction pour les supprimer en cas d'erreur. Comme ça on ne pollue pas le dossier.
 $uploaded_files = [];
@@ -10,8 +14,14 @@ function move_uploaded_image(array $file)
     return $id_image;
 }
 
+/*?>
+<pre><samp><?= htmlspecialchars(print_r($_GET, true)) ?></samp></pre>
+<pre><samp><?= htmlspecialchars(print_r($_POST, true)) ?></samp></pre>
+<pre><samp><?= htmlspecialchars(print_r($_FILES, true)) ?></samp></pre>
+<?php*/
+
 DB\transaction(function () {
-    global $args, $id_professionnel;
+    global $args, $id_professionnel, $id_offre;
 
     // Récupérer la commune
     // todo: make this better (by inputting either nom or code postal)
@@ -32,6 +42,13 @@ DB\transaction(function () {
         $args['adresse_precision_ext'],
     );
 
+    // Périodes d'ouverture
+    $periodes_ouverture = new MultiRange(array_map(
+        fn($debut, $fin) => new NonEmptyRange(true, Timestamp::parse($debut), Timestamp::parse($fin), false),
+        $args['periodes']['debut'],
+        $args['periodes']['fin']
+    ));
+
     // Insérer l'offre
     $offre_args = DB\offre_args(
         $id_adresse,
@@ -41,6 +58,7 @@ DB\transaction(function () {
         $args['titre'],
         $args['resume'],
         $args['description_detaillee'],
+        $periodes_ouverture,
         $args['url_site_web']
     );
 
@@ -94,19 +112,22 @@ DB\transaction(function () {
 
     // Horaires
     foreach ($args['horaires'] as $dow => $horaires) {
-        foreach (soa_to_aos($horaires) as $horaire) {
-            DB\offre_insert_horaire($id_offre, $dow, $horaire['debut'], $horaire['fin']);
-        }
-    }
-
-    // Périodes
-    foreach (soa_to_aos($args['periodes']) as $periode) {
-        DB\offre_insert_periode($id_offre, $periode['debut'], $periode['fin']);
-    }
+        DB\offre_insert_ouverture_hebdomadaire($id_offre, $dow, new MultiRange(array_map(
+            fn($debut, $fin) => new NonEmptyRange(true, Time::parse($debut), Time::parse($fin), false),
+            $horaires['debut'],
+            $horaires['fin']
+        )));
+    } 
 }, function () {
     global $uploaded_files;
-    array_walk($uploaded_files, unlink(...));
+    foreach ($uploaded_files as $file);{
+        unlink($file);
+    }
 });
+
+// Rediriger vers la page de détaille de l'offre en cas de succès.
+// En cas d'échec, l'exception est jetée par DB\transaction(), donc on attenti pas cette ligne.
+redirect_to(location_detail_offre_pro($id_offre));
 
 function extract_indication_duree(array $args): string
 {

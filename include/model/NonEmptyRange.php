@@ -7,6 +7,8 @@ require_once 'util.php';
  */
 final class NonEmptyRange
 {
+    
+
     /*
      * From the PostgresQL doc :
      * > Each bound value can be quoted using " (double quote) characters. This is necessary if the bound value contains parentheses, brackets, commas, double quotes, or backslashes, since these characters would otherwise be taken as part of the range syntax. To put a double quote or backslash in a quoted bound value, precede it with a backslash. (Also, a pair of double quotes within a double-quoted bound value is taken to represent a double quote character, analogously to the rules for single quotes in SQL literal strings.) Alternatively, you can avoid quoting and use backslash-escaping to protect all data characters that would otherwise be taken as range syntax. Also, to write a bound value that is an empty string, write "", since writing nothing means an infinite bound.
@@ -16,17 +18,17 @@ final class NonEmptyRange
      * This parsing algorithm does not support backslash-escaping in unquoted bounds nor additional characters outside quoted bounds.
      */
 
-    // group 2 and 3 -> replace
-    // \\ -> \
-    // \" -> "
-    // "" -> "
     private const READ_PATTERN = <<<'REGEX'
     /^\s*([[(])(?|([^()[\],"\'\\]*)|"((?:[^"\\]|\\.|"")*)"),(?|([^()[\],"\'\\]*)|"((?:[^"\\]|\\.|"")*)")([])])/s
-REGEX;
+    REGEX;
 
     private const PARSE_PATTERN = <<<'REGEX'
-/^\s*([[(])(?|([^()[\],"\'\\]*)|"((?:[^"\\]|\\.|"")*)"),(?|([^()[\],"\'\\]*)|"((?:[^"\\]|\\.|"")*)")([])])\s*$/s
-REGEX;
+    /^\s*([[(])(?|([^()[\],"\'\\]*)|"((?:[^"\\]|\\.|"")*)"),(?|([^()[\],"\'\\]*)|"((?:[^"\\]|\\.|"")*)")([])])\s*$/s
+    REGEX;
+
+    private const RESERVED_CHAR_PATTERN = <<<'REGEX'
+    /[()[\],"\'\\]/
+    REGEX;
 
     private static function unescape_bound(string $parsed_bound): string
     {
@@ -76,9 +78,13 @@ REGEX;
             . ($this->upper_inc ? ']' : ')');
     }
 
-    private static function quote(string $str): string
+    private static function quote(mixed $value): string
     {
-        return '"' . str_replace(['"', '\\'], ['""', '\\\\'], $str) . '"';
+        $str = strval($value);
+        if (preg_match(self::RESERVED_CHAR_PATTERN, $str)) {
+            return '"' . str_replace(['"', '\\'], ['""', '\\\\'], $str) . '"';
+        }
+        return $str;
     }
 
     /*

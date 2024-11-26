@@ -4,9 +4,13 @@ function f_never_called(): callable {
     return fn(...$_) => assert(false, "I wasn't supposed to be called");
 }
 
-function assert_equal(mixed $a, mixed $b): void
+function assert_strictly_equal(mixed $a, mixed $b): void
 {
-    assert($a === $b, "$a !== $b");
+    assert($a === $b, "$a === $b");
+}
+
+function assert_equal(mixed $a, mixed $b): void {
+    assert($a == $b, "$a == $b");
 }
 
 function parse_int(string $value): int|false
