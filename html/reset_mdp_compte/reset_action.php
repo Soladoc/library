@@ -1,5 +1,6 @@
 <?php
 require_once 'util.php';
+require_once 'queries.php';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $email_or_pseudo = trim($_POST['login']);
