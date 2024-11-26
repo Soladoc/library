@@ -1,4 +1,6 @@
 <?php
+
+use function Auth\location_home;
 require_once 'auth.php';
 require_once 'util.php';
 require_once 'queries.php';
@@ -26,7 +28,7 @@ if (!empty($user)) {
     }
     session_regenerate_id(true);
     Auth\se_connecter_membre($user['id']);
-    succeed('/autres_pages/accueil.php');
+    succeed();
 }
 
 // Connection professionnel
@@ -38,7 +40,7 @@ if (!empty($user)) {
     }
     session_regenerate_id(true);
     Auth\se_connecter_pro($user['id']);
-    succeed('/autres_pages/accPro.php');
+    succeed();
 }
 
 fail();
@@ -49,9 +51,9 @@ function fail(): never
     exit;
 }
 
-function succeed(string $default_location): never
+function succeed(): never
 {
     global $args;
-    redirect_to($args['return_url'] ?? $default_location);
+    redirect_to($args['return_url'] ?? location_home());
     exit;
 }

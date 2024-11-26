@@ -10,6 +10,7 @@ final class Page
     private const BASE_STYLESHEETS = [
         'style.css',
         'offer-list.css',
+        'footer.css',
     ];
     private const BASE_SCRIPTS = [
         'base.js' => 'defer',

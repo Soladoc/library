@@ -1,6 +1,7 @@
 <?php
 
 require_once 'queries.php';
+require_once 'redirect.php';
 require_once 'util.php';
 
 /**
@@ -10,7 +11,11 @@ require_once 'util.php';
  */
 function put_image(array $image)
 {
-?><img src="<?= "/images_utilisateur/{$image['id']}.{$image['mime_subtype']}" ?>" alt="<?= $image['legende'] ?: "Image de l'offre" ?>" title="<?= $image['legende'] ?>"><?php
+?>
+<img src="<?= "/images_utilisateur/{$image['id']}.{$image['mime_subtype']}" ?>"
+    alt="<?= $image['legende'] ?: "Image de l'offre" ?>"
+    title="<?= $image['legende'] ?>">
+<?php
 }
 
 /**
@@ -24,7 +29,7 @@ function put_card_offre_pro(array $offre)
 ?>
 <div class="offer-card">
     <?php put_image(DB\query_image($offre['id_image_principale'])) ?>
-    <h3><a href="/autres_pages/detail_offre_pro.php?id=<?= $offre['id'] ?>"><?= $offre['titre'] ?></a></h3>
+    <h3><a href="<?= location_detail_offre_pro($offre['id']) ?>"><?= $offre['titre'] ?></a></h3>
     <p class="location"><?= format_adresse(notfalse(DB\query_adresse($offre['id_adresse']))) ?></p>
     <p class="category"><?= $offre['categorie'] ?></p>
     <p class="rating">
@@ -46,7 +51,7 @@ function put_card_offre(array $offre)
 ?>
 <div class="offer-card">
     <?php put_image(DB\query_image($offre['id_image_principale'])) ?>
-    <h3><a href="/autres_pages/detail_offre.php?id=<?= $offre['id'] ?>"><?= $offre['titre'] ?></a></h3>
+    <h3><a href="<?= location_detail_offre($offre['id']) ?>"><?= $offre['titre'] ?></a></h3>
     <p class="location"><?= format_adresse(notfalse(DB\query_adresse($offre['id_adresse']))) ?></p>
     <p><?= $offre['resume'] ?></p>
     <p class="category"><?= $offre['categorie'] ?></p>

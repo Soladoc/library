@@ -2,6 +2,7 @@
 
 for (const e of document.getElementsByClassName('input-duration')) setup_input_duration(e);
 for (const e of document.getElementsByClassName('input-address')) setup_input_address(e);
+for (const e of document.getElementsByClassName('input-image')) setup_input_image(e);
 
 /**
  * @param {HTMLElement} element
@@ -71,26 +72,61 @@ function setup_input_address(element) {
     // Behaviors
     // - Update readonly summary accordingly
     const input_summary = element.querySelector('summary input');
-    const inputs = Array.from(document.querySelectorAll('label input'));
+    const inputs = Array.from(element.querySelectorAll('label input'));
     inputs.forEach(input => {
         input.addEventListener('input', format_summary);
     });
     format_summary();
 
     function format_summary() {
-        input_summary.value = format_adresse(...inputs.map(i => i.value))
+        input_summary.value = format_adresse(...inputs.map(i => i.value));
+    }
+
+    function format_adresse(commune, localite, nom_voie, numero_voie, complement_numero, precision_int, precision_ext) {
+        return elvis(precision_ext, ', ')
+            + elvis(precision_int, ', ')
+            + elvis(numero_voie, ' ')
+            + elvis(complement_numero, ' ')
+            + elvis(nom_voie, ', ')
+            + elvis(localite, ', ')
+            + commune;
+    }
+
+    function elvis(value, suffix) {
+        return value ? `${value}${suffix}` : '';
     }
 }
-function format_adresse(commune, localite, nom_voie, numero_voie, complement_numero, precision_int, precision_ext) {
-    return elvis(precision_ext, ', ')
-        + elvis(precision_int, ', ')
-        + elvis(numero_voie, ' ')
-        + elvis(complement_numero, ' ')
-        + elvis(nom_voie, ', ')
-        + elvis(localite, ', ')
-        + commune;
+
+/**
+ * @param {HTMLElement} element 
+ */
+function setup_input_image(element) {
+    // Behaviors
+    // - Dynamic preview
+    const e_input_image = element.querySelector('input[type=file]');
+    const e_preview = document.getElementById(element.id + '-preview');
+    addEventListener('change', () => preview_image(e_input_image, e_preview));
 }
 
-function elvis(value, suffix) {
-    return value ? `${value}${suffix}` : '';
+/**
+ * @param {HTMLInputElement} e_input_image 
+ * @param {HTMLElement} e_preview 
+*/
+function preview_image(e_input_image, e_preview) {
+    e_preview.textContent = '';
+    for (const file of e_input_image.files) {
+        if (!file.type.match('image.*')) {
+            continue;
+        }
+        const reader = new FileReader();
+        reader.addEventListener('load', function (event) {
+            const image = new Image();
+            image.addEventListener('load', function () {
+                e_preview.appendChild(image);
+            });
+            image.src = event.target.result;
+        });
+
+        reader.readAsDataURL(file);
+    }
 }

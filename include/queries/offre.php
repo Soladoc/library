@@ -2,7 +2,6 @@
 namespace DB;
 require_once 'db.php';
 require_once 'util.php';
-require_once 'queries/util.php';
 use PDO, Iterator;
 
 function query_offre(int $id_offre): array|false
@@ -16,7 +15,7 @@ function query_offre(int $id_offre): array|false
 function query_offres_count(?int $id_professionnel = null, ?bool $en_ligne = null): int
 {
     $args = filter_null_args(['id_professionnel' => [$id_professionnel, PDO::PARAM_INT], 'en_ligne' => [$en_ligne, PDO::PARAM_BOOL]]);
-    $stmt = notfalse(connect()->prepare('select count(*) from offres' . _where_clause('and', array_keys($args))));
+    $stmt = notfalse(connect()->prepare('select count(*) from offres' . where_clause(BoolOperator::AND, array_keys($args))));
     bind_values($stmt, $args);
     notfalse($stmt->execute());
     return notfalse($stmt->fetchColumn());
@@ -25,7 +24,7 @@ function query_offres_count(?int $id_professionnel = null, ?bool $en_ligne = nul
 function query_offres(?int $id_professionnel = null, ?bool $en_ligne = null): Iterator
 {
     $args = filter_null_args(['id_professionnel' => [$id_professionnel, PDO::PARAM_INT], 'en_ligne' => [$en_ligne, PDO::PARAM_BOOL]]);
-    $stmt = notfalse(connect()->prepare('select * from offres' . _where_clause('and', array_keys($args))));
+    $stmt = notfalse(connect()->prepare('select * from offres' . where_clause(BoolOperator::AND, array_keys($args))));
     bind_values($stmt, $args);
     notfalse($stmt->execute());
     return $stmt->getIterator();
@@ -74,34 +73,36 @@ function offre_insert_tarif(int $id_offre, string $nom, float $montant)
 }
 
 /**
- * Summary of offre_insert_horaire
+ * Insère les horaires d'ouverture hebdomadaires d'une offre.
  * @param int $id_offre
  * @param int $dow The day of the week as Sunday (0) to Saturday (6)
- * @param string $heure_debut A PostgreSQL TIME input string
- * @param string $heure_fin A PostgreSQL TIME input string.
+ * @param \MultiRange<\Time> $horaires Les horaires pour ce jour
  * @return void
  */
-function offre_insert_horaire(int $id_offre, int $dow, string $heure_debut, string $heure_fin)
+function offre_insert_ouverture_hebdomadaire(int $id_offre, int $dow, \MultiRange $horaires)
 {
-    $stmt = notfalse(connect()->prepare('insert into horaire_ouverture (id_offre, dow, heure_debut, heure_fin) values (?,?,?,?)'));
-    bind_values($stmt, [1 => [$id_offre, PDO::PARAM_INT], 2 => [$dow, PDO::PARAM_INT], 3 => [$heure_debut, PDO::PARAM_STR], 4 => [$heure_fin, PDO::PARAM_STR]]);
+    $stmt = notfalse(connect()->prepare('insert into _ouverture_hebdomadaire (id_offre, dow, horaires) values (?,?,?)'));
+    bind_values($stmt, [
+        1 => [$id_offre, PDO::PARAM_INT],
+        2 => [$dow, PDO::PARAM_INT],
+        3 => [$horaires, PDO::PARAM_STR],
+    ]);
     notfalse($stmt->execute());
 }
 
 /**
- * Summary of offre_insert_periode
- * @param int $id_offre
- * @param string $debut_le A PostgreSQL TIMESTAMP input string.
- * @param string $fin_le A PostgreSQL TIMESTAMP input string.
- * @return void
+ * Génère les arguments communs pour l'insertion d'offre.
+ * @param int $id_adresse
+ * @param int $id_image_principale
+ * @param int $id_professionnel
+ * @param string $libelle_abonnement
+ * @param string $titre
+ * @param string $resume
+ * @param string $description_detaillee
+ * @param \MultiRange<\Timestamp>
+ * @param ?string $url_site_web
+ * @return array Les arguments communs pour l'insertion d'offre.
  */
-function offre_insert_periode(int $id_offre, string $debut_le, string $fin_le)
-{
-    $stmt = notfalse(connect()->prepare('insert into periode_ouverture (id_offre, debut_le, fin_le) values (?,?,?,?)'));
-    bind_values($stmt, [1 => [$id_offre, PDO::PARAM_INT], 2 => [$debut_le, PDO::PARAM_STR], 3 => [$fin_le, PDO::PARAM_STR]]);
-    notfalse($stmt->execute());
-}
-
 function offre_args(
     int $id_adresse,
     int $id_image_principale,
@@ -110,7 +111,8 @@ function offre_args(
     string $titre,
     string $resume,
     string $description_detaillee,
-    ?string $url_site_web = null,
+    \MultiRange $periodes_ouverture,
+    ?string $url_site_web,
 ): array {
     return filter_null_args([
         'id_adresse' => [$id_adresse, PDO::PARAM_INT],
@@ -120,18 +122,19 @@ function offre_args(
         'titre' => [$titre, PDO::PARAM_STR],
         'resume' => [$resume, PDO::PARAM_STR],
         'description_detaillee' => [$description_detaillee, PDO::PARAM_STR],
+        'periodes_ouverture' => [$periodes_ouverture, PDO::PARAM_STR],
         'url_site_web' => [$url_site_web, PDO::PARAM_STR],
     ]);
 }
 
 /**
  * Insérer une activité.
- * @param array $offre_args
+ * @param array $offre_args Les arguments communs pour les offres générés par la fonction `DB\offre_args`. Les arguments communs pour les offres générés par la fonction `DB\offre_args`
  * @param string $indication_duree ISO8601 or Postgres syntax INTERVAL string expected.
  * @param string $prestation_incluses
  * @param mixed $age_requis
  * @param mixed $prestations_non_incluses
- * @return int
+ * @return int L'ID de l'activté insérée.
  */
 function insert_into_activite(
     array $offre_args,
@@ -146,12 +149,17 @@ function insert_into_activite(
         'age_requis' => [$age_requis, PDO::PARAM_INT],
         'prestations_non_incluses' => [$prestations_non_incluses, PDO::PARAM_STR],
     ]);
-    $stmt = notfalse(connect()->prepare(_insert_into_returning_id('activite', $args)));
-    bind_values($stmt, $args);
+    $stmt = insert_into_returning_id('activite', $args);
     notfalse($stmt->execute());
     return notfalse($stmt->fetchColumn());
 }
 
+/**
+ * Insérer un parc d'attractions.
+ * @param array $offre_args Les arguments communs pour les offres générés par la fonction `DB\offre_args`.
+ * @param int $id_image_plan
+ * @return int L'ID du parc d'attractions inséré.
+ */
 function insert_into_parc_attractions(
     array $offre_args,
     int $id_image_plan,
@@ -159,12 +167,24 @@ function insert_into_parc_attractions(
     $args = $offre_args + filter_null_args([
         'id_image_plan' => [$id_image_plan, PDO::PARAM_INT],
     ]);
-    $stmt = notfalse(connect()->prepare(_insert_into_returning_id('parc_attractions', $args)));
+    $stmt = insert_into_returning_id('parc_attractions', $args);
     bind_values($stmt, $args);
     notfalse($stmt->execute());
     return notfalse($stmt->fetchColumn());
 }
 
+/**
+ * Insérer un restaurant.
+ * @param array $offre_args Les arguments communs pour les offres générés par la fonction `DB\offre_args`.
+ * @param string $carte
+ * @param int $richesse
+ * @param ?bool $sert_petit_dejeuner
+ * @param ?bool $sert_brunch
+ * @param ?bool $sert_dejeuner
+ * @param ?bool $sert_diner
+ * @param ?bool $sert_boissons
+ * @return int
+ */
 function insert_into_restaurant(
     array $offre_args,
     string $carte,
@@ -184,7 +204,7 @@ function insert_into_restaurant(
         'sert_diner' => [$sert_diner, PDO::PARAM_BOOL],
         'sert_boissons' => [$sert_boissons, PDO::PARAM_BOOL],
     ]);
-    $stmt = notfalse(connect()->prepare(_insert_into_returning_id('restaurant', $args)));
+    $stmt = insert_into_returning_id('restaurant', $args);
     bind_values($stmt, $args);
     notfalse($stmt->execute());
     return notfalse($stmt->fetchColumn());
@@ -192,7 +212,7 @@ function insert_into_restaurant(
 
 /**
  * Insérer un spectacle.
- * @param array $offre_args
+ * @param array $offre_args Les arguments communs pour les offres générés par la fonction `DB\offre_args`.
  * @param string $indication_duree ISO8601 or Postgres syntax INTERVAL string expected.
  * @param int $capacite_accueil
  * @return int
@@ -206,15 +226,14 @@ function insert_into_spectacle(
         'indication_duree' => [$indication_duree, PDO::PARAM_STR],
         'capacite_accueil' => [$capacite_accueil, PDO::PARAM_INT],
     ]);
-    $stmt = notfalse(connect()->prepare(_insert_into_returning_id('spectacle', $args)));
-    bind_values($stmt, $args);
+    $stmt = insert_into_returning_id('spectacle', $args);
     notfalse($stmt->execute());
     return notfalse($stmt->fetchColumn());
 }
 
 /**
  * Insérer une visite.
- * @param array $offre_args
+ * @param array $offre_args Les arguments communs pour les offres générés par la fonction `DB\offre_args`.
  * @param string $indication_duree ISO8601 or Postgres syntax INTERVAL string expected.
  * @return int
  */
@@ -225,7 +244,7 @@ function insert_into_visite(
     $args = $offre_args + filter_null_args([
         'indication_duree' => [$indication_duree, PDO::PARAM_STR],
     ]);
-    $stmt = notfalse(connect()->prepare(_insert_into_returning_id('visite', $args)));
+    $stmt = insert_into_returning_id('visite', $args);
     bind_values($stmt, $args);
     notfalse($stmt->execute());
     return notfalse($stmt->fetchColumn());

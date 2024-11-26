@@ -283,9 +283,9 @@ create table _reponse (
 
 create table _ouverture_hebdomadaire (
     id_offre int
-        constraint horaires_ouverture_fk_offre references _offre,
+        constraint ouverture_hebdomadaire_fk_offre references _offre,
     dow int check (dow between 0 and 6),
-    constraint horaires_ouverture_pk primary key (id_offre, dow),
+    constraint ouverture_hebdomadaire_pk primary key (id_offre, dow),
 
     horaires timemultirange not null check (not isempty(horaires))
 );

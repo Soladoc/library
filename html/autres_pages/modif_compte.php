@@ -89,9 +89,6 @@ if ($_POST) {
             }
         } else {
             $error_mdp = 'Mot de passe incorrect.';
-
-
-        }
     }
     
 }
@@ -141,7 +138,7 @@ if ($membre !== false) {
     <form action="modif_compte.php?id=<?= $id ?>" method="POST">
 
 
-        <a href="/autres_pages/detail_compte.php?id=<?= $id ?>">retour</a>
+        <a href="<?= location_detail_compte($id) ?>">retour</a>
         <?php if ($membre !== false) { ?>
             <div>
                 <div id="pseudo">

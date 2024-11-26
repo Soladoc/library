@@ -82,7 +82,7 @@ if ($offre) {
                 </div>
             </form>
             <div class="page_modif">
-                <a class="modifier" href="https://413.ventsdouest.dev/autres_pages/modifier_offre.php">Modifier</a>
+                <a class="modifier" href="<?php location_modifier_offre($args['id']) ?>">Modifier</a>
             </div>
             <section class="offer-details">
                 <section class="offer-main-photo">

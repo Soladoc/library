@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Cause une erreur si la valeur fournie est strictement égale à `false`.
  *
@@ -7,20 +6,25 @@
  * @param T|false $valeur La valeur à comparer à `false` avec l'opérateur `===`
  * @param string $message Le message d'erreur à afficher si $valeur était `false`
  * @return T $valeur si elle n'était pas strictement égale à `false`.
- * @throws Exception Si $valeur est `false`.
+ * @throws DomainException Si $valeur est `false`.
  */
 function notfalse(mixed $valeur, string $message = 'was false'): mixed
 {
     if ($valeur === false) {
-        ?>
-        <pre><?= $message ?></pre>
-        <?php
-        throw new Exception($message);
+        throw new DomainException($message);
     }
     return $valeur;
 }
 
-function array_pop_key(array &$array, string $key): mixed
+/**
+ * Supprime une clé d'un tableu et retourne la valeur associée.
+ * @template T
+ * @param T[] $array Le tableau à modifier.
+ * @param string|int $key La clé à retirer. Elle doit exister dans le tableau.
+ * @throws \Exception Si la clé n'existe pas dans le tableau.
+ * @return T La valeur associée à la clé retirée.
+ */
+function array_pop_key(array &$array, string|int $key): mixed
 {
     if (!array_key_exists($key, $array)) {
         throw new Exception("Array must contain key '$key'");
@@ -188,8 +192,8 @@ function single_or_default(array $array, mixed $default = null): mixed
  * @return array<int, mixed> The resulting "array of structures".
  *
  * @example
- * Input: ['a' => [1, 2], 'b' => [3, 4]]
- * Output: [[a' => 1, 'b' => 3], ['a' => 2, 'b' => 4]]
+ * Input: ['debut' => [1, 3], 'fin' => [2, 4]]
+ * Output: [['debut' => 1, 'fin' => 2], ['debut' => 3, 'fin' => 4]]
  */
 function soa_to_aos(array $array): array
 {
