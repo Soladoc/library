@@ -66,7 +66,7 @@ function sortOffers(criteria, ascending = true) {
         if (criteria === 'prix_min' || criteria === 'note_moyenne') {
             valueA = parseFloat(valueA) || 0;
             valueB = parseFloat(valueB) || 0;
-        } else if (criteria === 'date') {
+        } else if (criteria === 'creee_le') {
             valueA = new Date(valueA);
             valueB = new Date(valueB);
             // Si la date n'est pas valide, la mettre à une valeur par défaut
@@ -160,8 +160,8 @@ document.getElementById('sort-price-up').addEventListener('click', () => sortOff
 document.getElementById('sort-price-down').addEventListener('click', () => sortOffers('prix_min', true));
 document.getElementById('sort-rating-up').addEventListener('click', () => sortOffers('note_moyenne', false));
 document.getElementById('sort-rating-down').addEventListener('click', () => sortOffers('note_moyenne', true));
-document.getElementById('sort-date-up').addEventListener('click', () => sortOffers('date', false));
-document.getElementById('sort-date-down').addEventListener('click', () => sortOffers('date', true));
+document.getElementById('sort-date-up').addEventListener('click', () => sortOffers('creee_le', false));
+document.getElementById('sort-date-down').addEventListener('click', () => sortOffers('creee_le', true));
 document.getElementById('main-category').addEventListener('change', showSubcategories);
 
 function get_image_filename(id_image) {
