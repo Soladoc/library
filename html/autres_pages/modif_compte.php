@@ -12,18 +12,18 @@ $error_mdp = null;
 $args = [
     'id' => getarg($_GET, 'id', arg_filter(FILTER_VALIDATE_INT))
 ];
+$id = $args['id'];
+$membre = DB\query_compte_membre($args['id']);
+$pro = DB\query_compte_professionnel($args['id']);
 if ($membre !== false) {
     $mdp_hash =$membre['mdp_hash'];
 
 } else if ($pro !== false) {
-
     $mdp_hash = $pro['mdp_hash'];
 } else {
     html_error("le compte d'ID {$args['id']} n'existe pas");
 }
-$id = $args['id'];
-$membre = DB\query_compte_membre($args['id']);
-$pro = DB\query_compte_professionnel($args['id']);
+
 
 // Afficher le détail du compte du membre
 
