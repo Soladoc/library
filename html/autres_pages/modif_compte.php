@@ -51,23 +51,27 @@ if ($_POST) {
     // modif Nom ------------------------------------------------------------------------------------------------------------------
     $new_nom = getarg($_POST, 'new_nom', null, false);
     if ($new_nom) {
-        DB\query_update_Nom($id, $new_Nom);
+        DB\query_update_Nom($id, $new_nom);
     }
 
     // modif Prenom ------------------------------------------------------------------------------------------------------------------
     $new_prenom = getarg($_POST, 'new_prenom', null, required: false);
     if ($new_prenom) {
-        DB\query_update_prenom($id, $new_Prenom);
+        DB\query_update_prenom($id, $new_prenom);
     }
 
     // modif Email ------------------------------------------------------------------------------------------------------------------
     $new_email = getarg($_POST, 'new_email', null, false);
     if ($new_email) {
-        DB\query_update_email($id, $new_Email);
+        if (!filter_var($new_email, FILTER_VALIDATE_EMAIL)) {
+            $error_email = "Email incorrect";
+          }
+          else{
+            DB\query_update_email($id, $new_email);
+
+          }
     }
-    if (!filter_var($new_email, FILTER_VALIDATE_EMAIL)) {
-        $error_email = "Email incorrect";
-      }
+    
 
     // modif telephone ------------------------------------------------------------------------------------------------------------------
     $new_telephone = getarg($_POST, 'new_telephone', null, false);
@@ -75,7 +79,7 @@ if ($_POST) {
     
     if ($new_telephone) {
         if(!preg_match("#^[0-9]{10}$#", $new_telephone)){
-            $error_tel = "Numéro incorrect, doit être composé de 10 chiffres ou 9 si utilisation de +33";
+            $error_tel = "Numéro incorrect, doit être composé de 10 chiffres";
           
           }
           else {
@@ -90,21 +94,27 @@ if ($_POST) {
     if($old_mdp){
         $new_mdp = getarg($_POST, 'new_mdp', null, false);
         $confirmation_mdp = getarg($_POST, 'confirmation_mdp', filter: null, required: false);
-        print_r ('test');
-        print_r ($new_mdp);
-        print_r (password_verify($old_mdp, $mdp_hash));
-        print_r ('fin test');
-
-        if ($new_mdp && password_verify($old_mdp, $mdp_hash)) {
-            if ($confirmation_mdp === $new_mdp) {
-                DB\query_uptate_mdp($id, password_hash($new_mdp, algo: PASSWORD_DEFAULT)); 
+        // print_r ('test');
+        // print_r ($new_mdp);
+        // print_r (password_verify($old_mdp, $mdp_hash));
+        // print_r ('fin test');
+        if (password_verify($old_mdp, $mdp_hash)) {
+            # code...
+        
+            if ($new_mdp) {
+                if ($confirmation_mdp === $new_mdp) {
+                    DB\query_uptate_mdp($id, password_hash($new_mdp, algo: PASSWORD_DEFAULT)); 
+                } else {
+                    $error_mdp = 'Mot de passe de confirmation different.';
+                }
             } else {
-                $error_mdp = 'Mot de passe de confirmation different.';
-            }
+                $error_mdp = 'Nouveau mot de passe manquant.'; }
+
         } else {
             $error_mdp = 'Mot de passe incorrect.'; }
     
-    }}
+    }
+}
 
 $membre = DB\query_compte_membre($args['id']);
 $pro = DB\query_compte_professionnel($args['id']);
@@ -211,7 +221,7 @@ if ($membre !== false) {
             <?php if ($error_email !== null) { ?>
                 <p class="error"><?= htmlspecialchars($error_email) ?></p>
             <?php } ?>
-            error_email
+            
         </div>
         <div>
             <div id="telephone">
