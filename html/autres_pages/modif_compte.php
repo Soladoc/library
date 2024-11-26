@@ -51,19 +51,19 @@ if ($_POST) {
     // modif Nom ------------------------------------------------------------------------------------------------------------------
     $new_nom = getarg($_POST, 'new_nom', null, false);
     if ($new_nom) {
-        DB\query_update_Nom($id, $new_Nom);
+        DB\query_update_Nom($id, $new_nom);
     }
 
     // modif Prenom ------------------------------------------------------------------------------------------------------------------
     $new_prenom = getarg($_POST, 'new_prenom', null, required: false);
     if ($new_prenom) {
-        DB\query_update_prenom($id, $new_Prenom);
+        DB\query_update_prenom($id, $new_prenom);
     }
 
     // modif Email ------------------------------------------------------------------------------------------------------------------
     $new_email = getarg($_POST, 'new_email', null, false);
     if ($new_email) {
-        DB\query_update_email($id, $new_Email);
+        DB\query_update_email($id, $new_email);
     }
     if (!filter_var($new_email, FILTER_VALIDATE_EMAIL)) {
         $error_email = "Email incorrect";
@@ -211,7 +211,7 @@ if ($membre !== false) {
             <?php if ($error_email !== null) { ?>
                 <p class="error"><?= htmlspecialchars($error_email) ?></p>
             <?php } ?>
-            error_email
+            
         </div>
         <div>
             <div id="telephone">
