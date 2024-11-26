@@ -26,9 +26,10 @@ const subcategories = {
 function showSubcategories() {
     const mainCategory = document.getElementById('main-category').value;
     const subcategoryContainer = document.getElementById('subcategory-list');
-    subcategoryContainer.innerHTML = '';
+    subcategoryContainer.innerHTML = ''; // Réinitialise les sous-catégories précédentes
 
     if (mainCategory && subcategories[mainCategory]) {
+        // Crée les sous-catégories pour la catégorie sélectionnée
         subcategories[mainCategory].forEach(subcategory => {
             const wrapper = document.createElement('div');
 
@@ -48,11 +49,13 @@ function showSubcategories() {
             subcategoryContainer.appendChild(wrapper);
         });
 
+        // Affiche la section des sous-catégories
         document.getElementById('subcategories').classList.remove('hidden');
     } else {
+        // Masque la section des sous-catégories si aucune catégorie n'est sélectionnée
         document.getElementById('subcategories').classList.add('hidden');
     }
-    filterOffers();  // Call filterOffers after updating subcategories
+    filterOffers();  // Applique immédiatement le filtre après avoir mis à jour les sous-catégories
 }
 
 function sortOffers(criteria, ascending = true) {
