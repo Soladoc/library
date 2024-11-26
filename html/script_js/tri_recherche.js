@@ -4,7 +4,7 @@ async function getDataJson(url) {
     return await (await fetch(url)).json();
 }
 
-let offers; // This will be populated with data from PHP
+let offers; // Will be populated with data from PHP
 let images;
 
 async function initializeOffers() {
@@ -37,7 +37,7 @@ function showSubcategories() {
             checkbox.id = subcategory;
             checkbox.name = 'subcategory';
             checkbox.value = subcategory;
-            checkbox.addEventListener('change', filterOffers);//+
+            checkbox.addEventListener('change', filterOffers);
 
             const label = document.createElement('label');
             label.htmlFor = subcategory;
@@ -52,15 +52,7 @@ function showSubcategories() {
     } else {
         document.getElementById('subcategories').classList.add('hidden');
     }
-    if (mainCategory && subcategories[mainCategory]) {//-
-        subcategories[mainCategory].forEach(subcategory => {
-            checkbox.addEventListener('change', filterOffers);
-        });
-        document.getElementById('subcategories').classList.remove('hidden');
-    } else {
-        document.getElementById('subcategories').classList.add('hidden');
-    }
-    filterOffers();
+    filterOffers();  // Call filterOffers after updating subcategories
 }
 
 function sortOffers(criteria, ascending = true) {
@@ -68,21 +60,17 @@ function sortOffers(criteria, ascending = true) {
         let valueA = a[criteria];
         let valueB = b[criteria];
 
-        if (criteria === 'prix_min') {
-            valueA = parseFloat(valueA) || 0;
-            valueB = parseFloat(valueB) || 0;
-        } else if (criteria === 'note_moyenne') {
+        if (criteria === 'prix_min' || criteria === 'note_moyenne') {
             valueA = parseFloat(valueA) || 0;
             valueB = parseFloat(valueB) || 0;
         } else if (criteria === 'date') {
             valueA = new Date(valueA);
             valueB = new Date(valueB);
         }
+
         if (ascending) {
-            return valueA < valueB ? 1 : -1;
             return valueA < valueB ? -1 : 1;
         } else {
-            return valueA > valueB ? 1 : -1;
             return valueA > valueB ? -1 : 1;
         }
     });
@@ -116,11 +104,11 @@ function displayOffers(offersToDisplay = offers) {
 
         // Formate la date
         const date = new Date(offer.creee_le);
-        const formattedDate = date.toLocaleDateString('fr-FR', {
+        const formattedDate = date instanceof Date && !isNaN(date) ? date.toLocaleDateString('fr-FR', {
             day: '2-digit',
             month: '2-digit',
             year: 'numeric'
-        });
+        }) : 'Date inconnue';
 
         if (offer.prix_min != null) {
             offerElement.innerHTML = `
@@ -171,9 +159,6 @@ document.getElementById('sort-date-down').addEventListener('click', () => sortOf
 document.getElementById('main-category').addEventListener('change', showSubcategories);
 
 
-function get_image_filename(id_image) {
-    return `/images_utilisateur/${id_image}.${images[id_image].mime_subtype}`;
-}
 function get_image_filename(id_image) {
     return `/images_utilisateur/${id_image}.${images[id_image].mime_subtype}`;
 }
