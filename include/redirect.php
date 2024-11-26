@@ -57,7 +57,7 @@ function location_modifier_offre(int $id_offre): string
     return "/autres_pages/modifier_offre.php?id_offre=$id_offre";
 }
 
-function location_modif_compte(int $id, ?string $error = null): string
+function location_modifier_compte(int $id, ?string $error = null): string
 {
     return '/autres_pages/modif_compte.php?id='.$id.'&return_url=' . urlencode($_SERVER['REQUEST_URI'])
         . ($error === null ? null : '&error=' . urlencode($error));
