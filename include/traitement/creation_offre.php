@@ -63,14 +63,14 @@ DB\transaction(function () {
     );
 
     $id_offre = match ($args['type_offre']) {
-        'activite' => DB\insert_into_activite(
+        'activité' => DB\insert_into_activite(
             $offre_args,
             extract_indication_duree($args),
             $args['prestations_incluses'],
             $args['age_requis'],
             $args['prestations_non_incluses'],
         ),
-        'parc-attractions' => DB\insert_into_parc_attractions(
+        'parc d\'attractions' => DB\insert_into_parc_attractions(
             $offre_args,
             move_uploaded_image($args['file_image_plan']),
         ),
