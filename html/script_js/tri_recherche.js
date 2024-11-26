@@ -201,8 +201,9 @@ async function initializeOffers() {
 function showSubcategories() {
     const mainCategory = document.getElementById('main-category').value;
     const subcategoryContainer = document.getElementById('subcategory-list');
-    subcategoryContainer.innerHTML = ''; // Reset
+    subcategoryContainer.innerHTML = ''; // Réinitialisation
 
+    // Vérification si la catégorie principale existe et si elle a des sous-catégories
     if (mainCategory && subcategories[mainCategory]) {
         subcategories[mainCategory].forEach(subcategory => {
             const wrapper = document.createElement('div');
@@ -212,6 +213,8 @@ function showSubcategories() {
             checkbox.id = subcategory;
             checkbox.name = 'subcategory';
             checkbox.value = subcategory;
+
+            // Ajout de l'événement 'change' pour chaque checkbox
             checkbox.addEventListener('change', filterOffers);
 
             const label = document.createElement('label');
@@ -223,17 +226,14 @@ function showSubcategories() {
             subcategoryContainer.appendChild(wrapper);
         });
 
+        // Afficher le conteneur des sous-catégories
         document.getElementById('subcategories').classList.remove('hidden');
     } else {
+        // Masquer le conteneur des sous-catégories si pas de sous-catégorie
         document.getElementById('subcategories').classList.add('hidden');
     }
-    subcategories[mainCategory].forEach(subcategory => {
-        checkbox.addEventListener('change', filterOffers);
-    });
-    /*    document.getElementById('subcategories').classList.remove('hidden');
-    } else {
-        document.getElementById('subcategories').classList.add('hidden');
-    }*/
+
+    // Appliquer le filtre une fois la sélection faite
     filterOffers();
 }
 
