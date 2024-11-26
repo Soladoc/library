@@ -27,7 +27,7 @@ if ($_POST) {
         'horaires' => getarg($_POST, 'horaires', required: false) ?? ['debut' => [], 'fin' => []],
         'periodes' => getarg($_POST, 'periodes', required: false) ?? ['debut' => [], 'fin' => []],
         'resume' => getarg($_POST, 'resume'),
-        'tags' => getarg($_POST, 'tags', arg_filter(FILTER_DEFAULT, FILTER_REQUIRE_ARRAY)),
+        'tags' => getarg($_POST, 'tags', arg_filter(FILTER_DEFAULT, FILTER_REQUIRE_ARRAY), required: false) ?? [],
         'tarifs' => getarg($_POST, 'tarifs', required: false) ?? [],
         'titre' => getarg($_POST, 'titre'),
         'adresse_localite' => getarg($_POST, 'adresse_localite', required: false),
