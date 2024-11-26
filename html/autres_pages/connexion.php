@@ -41,13 +41,9 @@ $error = getarg($_GET, 'error', required: false);
             </form>
             <br><br>
             <label>Pas de compte&nbsp;?</label>
-            <a href="creation_membre.php">
-                <button class="btn-creer">Créer un compte personnel</button>
-            </a>
+            <a href="creation_membre.php" class="btn-creer">Créer un compte personnel</a>
             <label>OU</label>
-            <a href="creation_comptePro.php">
-                <button class="btn-creer">Créer un compte professionnel</button>
-            </a>
+            <a href="creation_comptePro.php" class="btn-creer">Créer un compte professionnel</a>
             <br>
         </div>
     </section>
