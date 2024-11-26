@@ -73,10 +73,10 @@ if ($_POST) {
         if ($confirmation_mdp === $new_mdp) {
             DB\query_uptate_mdp($id, password_hash($new_mdp, algo: PASSWORD_DEFAULT)); 
         } else {
-            redirect_to(location_modif_compte('Mot de passe de confirmation different.',$id));
+            redirect_to(location_modif_compte($id,'Mot de passe de confirmation different.'));
         }
         } else {
-            redirect_to(location_modif_compte('Mot de passe incorrect.',$id));
+            redirect_to(location_modif_compte($id,'Mot de passe incorrect.'));
 
         }
     }
