@@ -171,7 +171,6 @@ document.getElementById('sort-date-up').addEventListener('click', () => sortOffe
 document.getElementById('sort-date-down').addEventListener('click', () => sortOffers('creee_le', true));//+
 document.getElementById('main-category').addEventListener('change', showSubcategories);
 
-//-
 const sortButtons = document.querySelectorAll('.btn-sort');
 sortButtons.forEach(button => {
     button.addEventListener('click', () => {
@@ -335,24 +334,11 @@ document.getElementById('sort-date-up').addEventListener('click', () => sortOffe
 document.getElementById('sort-date-down').addEventListener('click', () => sortOffers('creee_le', true));
 document.getElementById('main-category').addEventListener('change', showSubcategories);
 
-const sortButtons = document.querySelectorAll('.btn-sort');
-sortButtons.forEach(button => {
-    button.addEventListener('click', () => {
-        sortButtons.forEach(btn => btn.classList.remove('active'));
-        button.classList.add('active');
-        const criteria = button.dataset.criteria;
-        const ascending = button.dataset.order === 'asc';
-        sortOffers(criteria, ascending);
-    });
-});
-
-
 
 function get_image_filename(id_image) {
     return `/images_utilisateur/${id_image}.${images[id_image].mime_subtype}`;
 }
 function get_image_filename(id_image) {
     return `/images_utilisateur/${id_image}.${images[id_image].mime_subtype}`;
-}
 }
 initializeOffers()
