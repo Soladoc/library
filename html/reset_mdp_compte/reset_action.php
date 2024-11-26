@@ -1,9 +1,10 @@
 <?php
 require_once 'util.php';
+require_once 'queries.php';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $email_or_pseudo = trim($_POST['login']);
-    $user = query_membre($email_or_pseudo) ?: query_professionnel($email_or_pseudo);
+    $email = trim($_POST['login']);
+    $user = query_membre($email) ?: query_professionnel($email);
 
     if ($user) {
         $user_id = $user['id'];
