@@ -13,11 +13,11 @@ $args = [
     'id' => getarg($_GET, 'id', arg_filter(FILTER_VALIDATE_INT))
 ];
 $id = $args['id'];
-$membre = DB\query_compte_membre($args['id']);
-$pro = DB\query_compte_professionnel($args['id']);
+
+$membre = DB\query_compte_membre($id);
+$pro = DB\query_compte_professionnel($id);
 if ($membre !== false) {
     $mdp_hash =$membre['mdp_hash'];
-
 } else if ($pro !== false) {
     $mdp_hash = $pro['mdp_hash'];
 } else {
@@ -47,20 +47,20 @@ if ($_POST) {
     }
 
     // modif Nom ------------------------------------------------------------------------------------------------------------------
-    $new_Nom = getarg($_POST, 'new_nom', null, false);
-    if ($new_Nom) {
+    $new_nom = getarg($_POST, 'new_nom', null, false);
+    if ($new_nom) {
         DB\query_update_Nom($id, $new_Nom);
     }
 
     // modif Prenom ------------------------------------------------------------------------------------------------------------------
-    $new_Prenom = getarg($_POST, 'new_prenom', null, required: false);
-    if ($new_Prenom) {
+    $new_prenom = getarg($_POST, 'new_prenom', null, required: false);
+    if ($new_prenom) {
         DB\query_update_prenom($id, $new_Prenom);
     }
 
     // modif Email ------------------------------------------------------------------------------------------------------------------
-    $new_Email = getarg($_POST, 'new_email', null, false);
-    if ($new_Email) {
+    $new_email = getarg($_POST, 'new_email', null, false);
+    if ($new_email) {
         DB\query_update_email($id, $new_Email);
     }
 
