@@ -3,7 +3,13 @@ require_once 'auth.php';
 require_once 'util.php';
 require_once 'queries.php';
 require_once 'redirect.php';
-
+?>
+<pre>
+<?php
+print_r($_POST)
+?>
+</pre>
+<?php
 // Récupérer les données du formulaire
 $args = [
     'login' => getarg($_POST, 'login'),
