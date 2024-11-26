@@ -73,7 +73,6 @@ if ($_POST) {
     // modif mot de passe ------------------------------------------------------------------------------------------------------------------
     
     $old_mdp = getarg($_POST, 'old_mdp', null, false);
-    print_r ($old_mdp);
     if($old_mdp){
         $new_mdp = getarg($_POST, 'new_mdp', null, false);
         $confirmation_mdp = getarg($_POST, 'confirmation_mdp', filter: null, required: false);
@@ -230,11 +229,11 @@ if ($membre !== false) {
             </div>
             <div class="champ">
                 <label for="mdp">Nouveau mot de passe *</label>
-                <input id="new_mdp" name="mdp" type="password" placeholder="**********">
+                <input id="new_mdp" name="new_mdp" type="password" placeholder="**********">
             </div>
             <div class="champ">
                 <label for="mdp">confirmation mot de passe *</label>
-                <input id="confirmation_mdp" name="mdp" type="password" placeholder="**********">
+                <input id="confirmation_mdp" name="confirmation_mdp" type="password" placeholder="**********">
             </div>
             <?php if ($error_mdp !== null) { ?>
                 <p class="error"><?= htmlspecialchars($error_mdp) ?></p>
