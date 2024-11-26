@@ -68,10 +68,10 @@ if ($_POST) {
     if($old_mdp){
         $new_mdp = getarg($_POST, 'new_mdp', null, false);
         $confirmation_mdp = getarg($_POST, 'confirmation_mdp', filter: null, required: false);
-        echo 'test';
-        echo $new_mdp;
-        echo password_verify($old_mdp, $mdp_hash);
-        echo 'fin test';
+        print_r ('test');
+        print_r ($new_mdp);
+        print_r (password_verify($old_mdp, $mdp_hash));
+        print_r ('fin test');
 
         if ($new_mdp && password_verify($old_mdp, $mdp_hash)) {
             if ($confirmation_mdp === $new_mdp) {
