@@ -848,6 +848,10 @@ a:not(:hover, :focus, :focus-within) {
     background-color: #0056b3;
 }
 
+.hidden {
+    display: none;
+}
+
 /* Conteneur principal */
 .carousel-container {
     position: relative;
