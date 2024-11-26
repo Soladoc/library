@@ -156,7 +156,6 @@ document.getElementById('sort-rating-up').addEventListener('click', () => sortOf
 document.getElementById('sort-rating-down').addEventListener('click', () => sortOffers('note_moyenne', true));
 document.getElementById('sort-date-up').addEventListener('click', () => sortOffers('date', false));
 document.getElementById('sort-date-down').addEventListener('click', () => sortOffers('date', true));
-document.getElementById('main-category').addEventListener('change', showSubcategories);
 
 
 function get_image_filename(id_image) {
