@@ -860,8 +860,8 @@ a:not(:hover, :focus, :focus-within) {
     overflow: hidden;
     border: 2px solid black;
     border-radius: 10px;
-    padding: 10px;
     background-color: white;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
 }
 
 .carousel {
@@ -869,7 +869,6 @@ a:not(:hover, :focus, :focus-within) {
     transition: transform 0.5s ease-in-out;
     width: 100%;
 }
-
 
 .carousel-slide {
     min-width: 100%;
@@ -879,7 +878,6 @@ a:not(:hover, :focus, :focus-within) {
     align-items: center;
 }
 
-
 .carousel-slide img {
     width: 100%;
     height: auto;
@@ -887,7 +885,6 @@ a:not(:hover, :focus, :focus-within) {
     aspect-ratio: 16/9;
     border-radius: 10px;
 }
-
 
 .carousel-prev,
 .carousel-next {
@@ -933,3 +930,4 @@ a:not(:hover, :focus, :focus-within) {
         height: 35px;
     }
 }
+
