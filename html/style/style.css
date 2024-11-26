@@ -434,14 +434,14 @@ h1 {
 /* Bloc 1 : Informations de l'offre */
 .offer-details {
     display: flex;
-    justify-content: space-around;
-    background-color: white;
-    padding: 20px;
-    margin: 20px 0;
+    flex-wrap: wrap;
 }
 
 .offer-main-photo {
-    width: 30%;
+    flex: 0 0 50%;
+    max-width: 50%;
+    display: flex;
+    align-items: flex-start;
 }
 
 .offer-photo-large {
@@ -461,12 +461,26 @@ h1 {
 }
 
 .offer-info {
-    width: 40%;
+    flex: 1 1 50%;
+    max-width: 50%;
+    margin-left: 1rem;
 }
 
-.description {
-    font-size: 1.2em;
-    margin-bottom: 10px;
+.offer-info .description {
+    display: block;
+    overflow-wrap: break-word;
+}
+
+@media (max-width: 1024px) {
+    .offer-details {
+        display: block;
+    }
+
+    .offer-main-photo,
+    .offer-info {
+        max-width: 100%;
+        flex: none;
+    }
 }
 
 .offer-status {
