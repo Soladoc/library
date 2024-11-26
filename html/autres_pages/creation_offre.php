@@ -252,7 +252,7 @@ if ($_POST) {
             <h2>Informations détaillées</h2>
             <?php
             switch ($args['type_offre']) {
-                case 'activite':
+                case 'activité':
                     ?>
                     <p><label>Âge requis&nbsp;: <input form="f" name="age_requis" type="number" min="1"> an</label></p>
                     <p>Prestations incluses*</p>
@@ -262,7 +262,7 @@ if ($_POST) {
                     <?php
                     put_input_indication_duree();
                     break;
-                case 'parc-attractions':
+                case 'parc d\'attractions':
                     ?>
                     <p><label>Âge requis&nbsp;: <input form="f" name="age_requis" type="number" min="1"> an</label></p>
                     <fieldset>
