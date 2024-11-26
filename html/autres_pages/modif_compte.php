@@ -63,11 +63,15 @@ if ($_POST) {
     // modif Email ------------------------------------------------------------------------------------------------------------------
     $new_email = getarg($_POST, 'new_email', null, false);
     if ($new_email) {
-        DB\query_update_email($id, $new_email);
+        if (!filter_var($new_email, FILTER_VALIDATE_EMAIL)) {
+            $error_email = "Email incorrect";
+          }
+          else{
+            DB\query_update_email($id, $new_email);
+
+          }
     }
-    if (!filter_var($new_email, FILTER_VALIDATE_EMAIL)) {
-        $error_email = "Email incorrect";
-      }
+    
 
     // modif telephone ------------------------------------------------------------------------------------------------------------------
     $new_telephone = getarg($_POST, 'new_telephone', null, false);
