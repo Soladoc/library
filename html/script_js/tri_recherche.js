@@ -282,49 +282,49 @@ function filterOffers() {
 }
 
 function displayOffers(offersToDisplay = offers) {
-    function displayOffers(offersToDisplay) {
-        offersToDisplay.forEach(offer => {
-            const offerList = document.querySelector('.offer-list');
-            offerList.innerHTML = '';
-            offers.forEach(offer => {
-                const offerElement = document.createElement('div');
-                offerElement.className = 'offer-card';
-                // Formate la date
-                const date = new Date(offer.creee_le);
-                const formattedDate = date.toLocaleDateString('fr-FR', {
-                    day: '2-digit',
-                    month: '2-digit',
-                    year: 'numeric'
-                }
-            );
+    const offerList = document.querySelector('.offer-list');
+    offerList.innerHTML = ''; // Réinitialisation avant de commencer à ajouter les éléments
 
-            if (offer.prix_min != null) {
-                offerElement.innerHTML = `
-                    <h3><a href="/autres_pages/detail_offre.php?id=${offer.id}">${offer.titre}</a></h3>
-                    <img src="${get_image_filename(offer.id_image_principale)}">
-                    <p>Catégorie : ${offer.categorie}</p>
-                    <p>Description : ${offer.resume}</p>
-                    <p>Adresse : ${offer.formatted_address}</p>
-                    <p>À partir de : ${offer.prix_min}€</p>
-                    <p>Note : ${offer.note_moyenne}/5</p>
-                    <p>Date : ${formattedDate}</p>
-                `;
-            } else {
-                offerElement.innerHTML = `
-                    <h3><a href="/autres_pages/detail_offre.php?id=${offer.id}">${offer.titre}</a></h3>
-                    <img src="${get_image_filename(offer.id_image_principale)}">
-                    <p>Catégorie : ${offer.categorie}</p>
-                    <p>Description : ${offer.resume}</p>
-                    <p>Adresse : ${offer.formatted_address}</p>
-                    <p>Gratuit</p>
-                    <p>Note : ${offer.note_moyenne}/5</p>
-                    <p>Date : ${formattedDate}</p>
-                `;
-            }
-            offerList.appendChild(offerElement);
+    offersToDisplay.forEach(offer => {
+        const offerElement = document.createElement('div');
+        offerElement.className = 'offer-card';
+
+        // Formate la date
+        const date = new Date(offer.creee_le);
+        const formattedDate = date.toLocaleDateString('fr-FR', {
+            day: '2-digit',
+            month: '2-digit',
+            year: 'numeric'
         });
+
+        if (offer.prix_min != null) {
+            offerElement.innerHTML = `
+                <h3><a href="/autres_pages/detail_offre.php?id=${offer.id}">${offer.titre}</a></h3>
+                <img src="${get_image_filename(offer.id_image_principale)}">
+                <p>Catégorie : ${offer.categorie}</p>
+                <p>Description : ${offer.resume}</p>
+                <p>Adresse : ${offer.formatted_address}</p>
+                <p>À partir de : ${offer.prix_min}€</p>
+                <p>Note : ${offer.note_moyenne}/5</p>
+                <p>Date : ${formattedDate}</p>
+            `;
+        } else {
+            offerElement.innerHTML = `
+                <h3><a href="/autres_pages/detail_offre.php?id=${offer.id}">${offer.titre}</a></h3>
+                <img src="${get_image_filename(offer.id_image_principale)}">
+                <p>Catégorie : ${offer.categorie}</p>
+                <p>Description : ${offer.resume}</p>
+                <p>Adresse : ${offer.formatted_address}</p>
+                <p>Gratuit</p>
+                <p>Note : ${offer.note_moyenne}/5</p>
+                <p>Date : ${formattedDate}</p>
+            `;
+        }
+
+        offerList.appendChild(offerElement);
     });
 }
+
 
 // Event listeners for sort buttons
 document.getElementById('sort-price-up').addEventListener('click', () => sortOffers('prix_min', false));
