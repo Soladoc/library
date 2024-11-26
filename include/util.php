@@ -20,6 +20,16 @@ function notfalse(mixed $valeur, string $message = 'was false'): mixed
     return $valeur;
 }
 
+function array_pop_key(array &$array, string $key): mixed
+{
+    if (!array_key_exists($key, $array)) {
+        throw new Exception("Array must contain key '$key'");
+    }
+    $value = $array[$key];
+    unset($array[$key]);
+    return $value;
+}
+
 /**
  * Détermine si tous les éléments d'un tableau satisfont un prédicat.
  * @template T
@@ -97,10 +107,10 @@ function html_error(mixed $arg): never
 {
     ?>
     <p>Erreur: <?= strval($arg) ?></p><?php
-    if ($arg instanceof Throwable) {
-        throw $arg;
-    }
-    throw new Exception($arg);
+      if ($arg instanceof Throwable) {
+          throw $arg;
+      }
+      throw new Exception($arg);
 }
 
 /**
@@ -131,7 +141,7 @@ function f_is_in(array $allowed_values): callable
  */
 function f_array_has_keys(array $keys): callable
 {
-    return fn($value) => is_array($value) && array_every($keys, fn($key) => isset($value[$key]));
+    return fn($value) => is_array($value) && array_every($keys, fn($key) => isset ($value[$key]));
 }
 
 /**

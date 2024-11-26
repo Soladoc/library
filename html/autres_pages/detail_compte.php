@@ -5,13 +5,15 @@ require_once 'redirect.php';
 require_once 'component/Page.php';
 require_once 'component/offre.php';
 
+$args = [
+    'id' => getarg($_GET, 'id', arg_filter(FILTER_VALIDATE_INT))
+];
+
 $page = new Page("detail_compte_membre : {$args['id']}",
     ['https://unpkg.com/leaflet@1.7.1/dist/leaflet.css'],
     ['https://unpkg.com/leaflet@1.7.1/dist/leaflet.js' => 'async']);
 
-$args = [
-    'id' => getarg($_GET, 'id', arg_filter(FILTER_VALIDATE_INT))
-];
+
 $id = $args['id'];
 $membre = DB\query_compte_membre($args['id']);
 $pro = DB\query_compte_professionnel($args['id']);
