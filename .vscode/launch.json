@@ -23,10 +23,14 @@
             }
         },
         {
-            "name": "Debug current script in console",
+            "name": "Debug testing script",
             "type": "php",
             "request": "launch",
             "program": "${file}",
+            "runtimeArgs": [
+              "-c",
+              "${workspaceFolder}/tests/php.ini"
+            ],
             "cwd": "${fileDirname}",
             "externalConsole": false,
             "port": 9003

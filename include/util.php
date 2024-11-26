@@ -6,15 +6,12 @@
  * @param T|false $valeur La valeur à comparer à `false` avec l'opérateur `===`
  * @param string $message Le message d'erreur à afficher si $valeur était `false`
  * @return T $valeur si elle n'était pas strictement égale à `false`.
- * @throws Exception Si $valeur est `false`.
+ * @throws DomainException Si $valeur est `false`.
  */
 function notfalse(mixed $valeur, string $message = 'was false'): mixed
 {
     if ($valeur === false) {
-        ?>
-        <pre><?= $message ?></pre>
-        <?php
-        throw new Exception($message);
+        throw new DomainException($message);
     }
     return $valeur;
 }

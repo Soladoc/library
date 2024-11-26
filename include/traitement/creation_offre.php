@@ -1,6 +1,6 @@
 <?php
 
-// Conserve les images uploadées durant cette DB\transaction pour les supprimer en cas d'erreur. Comme ça on ne pollue pas le dossier.
+// Conserve les images uploadées durant cette transaction pour les supprimer en cas d'erreur. Comme ça on ne pollue pas le dossier.
 $uploaded_files = [];
 
 function move_uploaded_image(array $file)
