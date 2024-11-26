@@ -1,5 +1,9 @@
 <?php
-// todo: chage that to use the non-slugged versions only
+
+/**
+ * Des propositions de tag.
+ * @var array
+ */
 const DEFAULT_TAGS = [
     'atelier',
     'cinéma',
@@ -16,6 +20,10 @@ const DEFAULT_TAGS = [
     'urbain',
 ];
 
+/**
+ * Des propositions de tag de restaurant.
+ * @var string[]
+ */
 const TAGS_RESTAURANT = [
     'asiatique',
     'crêperie',
@@ -26,26 +34,39 @@ const TAGS_RESTAURANT = [
     'restauration rapide',
 ];
 
+/**
+ * Les catégories d'offres.
+ * Les clés correspondent au type énuméré `categorie_offre` dans `types.sql`.
+ * Les valeurs correspondent au nom de catégorie précédé par un article indéfini.
+ * @var array<string, string>
+ */
 const CATEGORIES_OFFRE = [
-    'activite' => 'une activité',
-    'parc-attractions' => "un parc d'attractions",
+    'activité' => 'une activité',
+    "parc d'attractions" => "un parc d'attractions",
     'restaurant' => 'un restaurant',
     'spectacle' => 'un spectacle',
-    'visite' => 'une visite',
-    '' => 'une offre',
+    'visite' => 'une visite'
 ];
 
-// L'ordre des valeurs est important (0 => dimanche -> samedi => 6)
+/**
+ * Les jours de la semaine. Les indices représentent les numéros (de 0 à 6 pour dimanche à samedi). Cet ordre est notamment utilisé dans JavaScript et PostgreSQL.
+ *
+ * @var array<int, string>
+ */
 const JOURS_SEMAINE = [
-    'dimanche',
-    'lundi',
-    'mardi',
-    'mercredi',
-    'jeudi',
-    'vendredi',
-    'samedi',
+    0 => 'dimanche',
+    1 => 'lundi',
+    2 => 'mardi',
+    3 => 'mercredi',
+    4 => 'jeudi',
+    5 => 'vendredi',
+    6 => 'samedi',
 ];
 
+/**
+ * Des propositions de contextes de visite pour les avis.
+ * @var string[]
+ */
 const CONTEXTES_VISITE = [
     'affaires',
     'couple',
@@ -53,3 +74,9 @@ const CONTEXTES_VISITE = [
     'famille',
     'amis',
 ];
+
+/**
+ * Le chemin absolu de du dossier racine du serveur.
+ * @var string
+ */
+const DOCUMENT_ROOT = '/var/www/html';
