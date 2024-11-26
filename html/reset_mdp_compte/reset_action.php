@@ -25,7 +25,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         // Envoyer un email avec le lien de réinitialisation
         $subject = "Réinitialisation de votre mot de passe";
         $message = "Bonjour,\n\nCliquez sur ce lien pour réinitialiser votre mot de passe : $reset_link\n\nCe lien expirera dans une heure.";
-        $headers = "From: no-reply@yourwebsite.com";
+        $headers = "From: no-reply@ventsdouest.dev";
 
         mail($user['email'], $subject, $message, $headers);
 
