@@ -93,9 +93,9 @@ $pro = DB\query_compte_professionnel($args['id']);
 
 
 if ($membre !== false) {
-    // echo '<pre>';
-    // print_r($membre);
-    // echo '</pre>';
+    echo '<pre>';
+    print_r($membre);
+    echo '</pre>';
     $pseudo = $membre['pseudo'];
     $email = $membre['email'];
     $mdp = unserialize($membre['mdp_hash']);
