@@ -149,7 +149,6 @@ sortButtons.forEach(button => {
     });
 });
 
-// Event listeners for sort buttons
 document.getElementById('sort-price-up').addEventListener('click', () => sortOffers('prix_min', false));
 document.getElementById('sort-price-down').addEventListener('click', () => sortOffers('prix_min', true));
 document.getElementById('sort-rating-up').addEventListener('click', () => sortOffers('note_moyenne', false));
