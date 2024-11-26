@@ -64,7 +64,7 @@ if ($_POST) {
     // modif mot de passe ------------------------------------------------------------------------------------------------------------------
     
     $old_mdp = getarg($_POST, 'old_mdp', null, false);
-    
+    print_r ($old_mdp);
     if($old_mdp){
         $new_mdp = getarg($_POST, 'new_mdp', null, false);
         $confirmation_mdp = getarg($_POST, 'confirmation_mdp', filter: null, required: false);
