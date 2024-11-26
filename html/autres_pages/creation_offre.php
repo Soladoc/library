@@ -51,12 +51,12 @@ if ($_POST) {
     }
 
     $args += match ($args['type_offre']) {
-        'activite' => indication_duree_args() + [
+        'activité' => indication_duree_args() + [
             'age_requis' => getarg($_POST, 'age_requis', arg_filter(FILTER_VALIDATE_INT, ['min_range' => 1]), required: false),
             'prestations_incluses' => getarg($_POST, 'prestations_incluses'),
             'prestations_non_incluses' => getarg($_POST, 'prestations_non_incluses')
         ],
-        'parc-attractions' => [
+        'parc d\'attractions' => [
             'file_image_plan' => getarg($_FILES, 'image_plan'),
         ],
         'spectacle' => indication_duree_args() + [
