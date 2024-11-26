@@ -23,6 +23,12 @@ test_case('[1296  ,  3299]', true, 1296, 3299, true, parse_int(...));
 test_case('(1296  ,  3299]', false, 1296, 3299, true, parse_int(...));
 test_case('[" 1296  ",]', true, 1296, null, false, parse_int(...));
 
+test_case('[fff,ggg]', true, 'fff', 'ggg', true, fn($e) => $e);
+test_case('["fff","ggg"]', true, 'fff', 'ggg', true, fn($e) => $e);
+test_case('["fff",ggg]', true, 'fff', 'ggg', true, fn($e) => $e);
+test_case('["""\"\\\\",£££]', true, '""\\', '£££', true, fn($e) => $e);
+test_case('[ plg , £££ ]', true, ' plg ', ' £££ ', true, fn($e) => $e);
+
 /**
  * Cas de test nominal.
  * @template T

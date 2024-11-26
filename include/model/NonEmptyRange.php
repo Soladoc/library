@@ -86,6 +86,31 @@ REGEX;
         return notfalse(self::from_match($match, $parse_bound));
     }
 
+    /*
+     * parse() method:
+     *
+     * Expects the input string to contain ONLY the range expression
+     * Must match the entire string exactly
+     * Throws a DomainException if the string doesn't match the expected format
+     * Returns a complete NonEmptyRange object
+     * Best used when you know you have an isolated range string
+     *
+     * read() method:
+     *
+     * Can handle input strings that contain the range expression plus additional content after it
+     * Only needs to match at the start of the string
+     * Returns false if no match is found instead of throwing an exception
+     * Returns both the parsed NonEmptyRange object AND the number of characters read
+     * Better suited for parsing ranges that might be embedded in larger text or when you need to read multiple ranges sequentially
+     * For example:
+     *
+     * parse("[1,5]") would work
+     * parse("[1,5] extra stuff") would fail
+     * read("[1,5] extra stuff") would work and tell you it read 5 characters
+     * read("invalid") would return false
+     * The read() method is more flexible and forgiving, while parse() is stricter and ensures the entire input is a valid range format.
+     */
+
     /**
      * Lit un `NonEmptyRange` à partir de la sortie PostgreSQL.
      * @template TBound
@@ -118,5 +143,4 @@ REGEX;
             $upper_delim === ']',
         );
     }
-
 }

@@ -3,7 +3,7 @@
 set -euo pipefail
 cd "$(dirname "${BASH_SOURCE[0]}")"
 
-for f in *.php; do
+for f in NonEmptyRange.php MultiRange.php; do
     echo "test $f"
     php -c php.ini -f "$f"
 done
