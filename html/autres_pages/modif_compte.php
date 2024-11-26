@@ -7,6 +7,7 @@ require_once 'component/offre.php';
 require_once 'component/inputs.php';
 
 $page = new Page('Modification compte (todo)');
+$error_mdp = null;
 
 $args = [
     'id' => getarg($_GET, 'id', arg_filter(FILTER_VALIDATE_INT))
@@ -77,10 +78,11 @@ if ($_POST) {
             if ($confirmation_mdp === $new_mdp) {
                 DB\query_uptate_mdp($id, password_hash($new_mdp, algo: PASSWORD_DEFAULT)); 
             } else {
-                redirect_to(location: location_modif_compte($id,'Mot de passe de confirmation different.'));
+                $error_mdp = 'Mot de passe de confirmation different.';
             }
         } else {
-            redirect_to(location: location_modif_compte($id,error: 'Mot de passe incorrect.'));
+            $error_mdp = 'Mot de passe incorrect.';
+
 
         }
     }
@@ -226,13 +228,11 @@ if ($membre !== false) {
                 <label for="mdp">confirmation mot de passe *</label>
                 <input id="confirmation_mdp" name="mdp" type="password" placeholder="**********">
             </div>
-            <?php if ($error = $_GET['error_mdp'] ?? null) { ?>
-            <p class="error"><?= $error ?></p>
-            <?php } ?>
-            <?php if ($error = $_GET['error_confirmation'] ?? null) { ?>
-            <p class="error"><?= $error ?></p>
+            <?php if ($error_mdp !== null) { ?>
+            <p class="error"><?= $error_mdp ?></p>
             <?php } ?>
             <button type="submit">valider</button>
+            <p class="error"><?= htmlspecialchars($error) ?></p>
         </div>
 
        
