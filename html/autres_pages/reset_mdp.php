@@ -21,7 +21,7 @@ $error = getarg($_GET, 'error', required: false);
         <div class="champ-connexion">
             <br>
             <!-- Formulaire de connexion -->
-            <form action="/connexion/login.php" method="POST">
+            <form action="../reset_mdp_compte/reset_action.php" method="POST">
                 <div class="champ">
                     <label for="login">Adresse e-mail *</label>
                     <input id="login" name="login" type="text" placeholder="exemple@mail.fr" required>
