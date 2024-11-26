@@ -12,7 +12,7 @@ $error_mdp = null;
 $args = [
     'id' => getarg($_GET, 'id', arg_filter(FILTER_VALIDATE_INT))
 ];
-$mdp_hash = isset($membre['mdp_hash']) ? $membre['mdp_hash'] : (isset($pro['mdp_hash']) ? $pro['mdp_hash'] : null);
+$mdp_hash = isset($membre['mdp_hash']) ? $membre['mdp_hash'] : (isset($pro['mdp_hash']) ? $pro['mdp_hash']);
 
 $id = $args['id'];
 $membre = DB\query_compte_membre($args['id']);
