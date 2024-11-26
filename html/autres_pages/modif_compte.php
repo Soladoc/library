@@ -76,7 +76,8 @@ if ($_POST) {
             redirect_to(location_modif_compte('Mot de passe de confirmation different.',$id));
         }
         } else {
-            redirect_to(location_modif_compte(error: 'Mot de passe incorrect.',$id));
+            redirect_to(location_modif_compte('Mot de passe incorrect.',$id));
+
         }
     }
     
