@@ -2,7 +2,7 @@
 require_once 'component/Page.php';
 require_once 'util.php';
 
-$page = new Page('Connexion');
+$page = new Page('Reinitialiser le mot de passe');
 
 $return_url = getarg($_GET, 'return_url', required: false);
 $error = getarg($_GET, 'error', required: false);
