@@ -17,7 +17,7 @@ $page = new Page('Recherche', scripts: [
             <h1>Recherche</h1>
             <br>
             <div class="search-bar">
-                <input type="text" placeholder="Rechercher des activités, restaurants, spectacles...">
+                <input id="barre-recherche" type="text" placeholder="Rechercher des activités, restaurants, spectacles...">
                 <a href="">
                     <button class="btn-search">Rechercher</button>
                 </a>
