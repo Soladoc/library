@@ -32,22 +32,18 @@ $error = getarg($_GET, 'error', required: false);
                     <input id="mdp" name="mdp" type="password" placeholder="**********" required>
                 </div>
                 <?php if ($error !== null) { ?>
-                    <p class="error"><?= $error ?></p>
+                    <p class="error"><?= htmlspecialchars($error) ?></p>
                 <?php } ?>
                 <button type="submit" class="btn-connexion">Se connecter</button>
                 <?php if ($return_url !== null) { ?>
-                    <input type="hidden" name="return_url" value="<?= $return_url ?>">
+                    <input type="hidden" name="return_url" value="<?= htmlspecialchars($return_url) ?>">
                 <?php } ?>
             </form>
             <br><br>
             <label>Pas de compte&nbsp;?</label>
-            <a href="creation_membre.php">
-                <button class="btn-creer">Créer un compte personnel</button>
-            </a>
+            <a href="creation_membre.php" class="btn-creer">Créer un compte personnel</a>
             <label>OU</label>
-            <a href="creation_comptePro.php">
-                <button class="btn-creer">Créer un compte professionnel</button>
-            </a>
+            <a href="creation_comptePro.php" class="btn-creer">Créer un compte professionnel</a>
             <br>
         </div>
     </section>
