@@ -6,6 +6,8 @@ require_once 'model/NonEmptyRange.php';
 /**
  * @template T Type du multirange.
  * Abstraction du type PostgreSQL `<type>multirange`
+ * 
+ * N'effectue pas de normalisation.
  */
 final class MultiRange
 {
@@ -21,6 +23,11 @@ final class MultiRange
     private function __construct(array $ranges)
     {
         $this->ranges = $ranges;
+    }
+
+    function __tostring(): string
+    {
+        return '{' . implode(',', $this->ranges) . '}';
     }
 
     /**

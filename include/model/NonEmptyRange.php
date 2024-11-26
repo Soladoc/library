@@ -21,16 +21,16 @@ final class NonEmptyRange
     // \" -> "
     // "" -> "
     private const READ_PATTERN = <<<'REGEX'
-/^\s*([[(])(?|([^()[\],"\'\\]*)|"((?:[^"\\]|\\\\|\\"|"")*)"),(?|([^()[\],"\'\\]*)|"((?:[^"\\]|\\\\|\\"|"")*)")([])])/u
+    /^\s*([[(])(?|([^()[\],"\'\\]*)|"((?:[^"\\]|\\.|"")*)"),(?|([^()[\],"\'\\]*)|"((?:[^"\\]|\\.|"")*)")([])])/s
 REGEX;
 
     private const PARSE_PATTERN = <<<'REGEX'
-/^\s*([[(])(?|([^()[\],"\'\\]*)|"((?:[^"\\]|\\\\|\\"|"")*)"),(?|([^()[\],"\'\\]*)|"((?:[^"\\]|\\\\|\\"|"")*)")([])])\s*$/u
+/^\s*([[(])(?|([^()[\],"\'\\]*)|"((?:[^"\\]|\\.|"")*)"),(?|([^()[\],"\'\\]*)|"((?:[^"\\]|\\.|"")*)")([])])\s*$/s
 REGEX;
 
     private static function unescape_bound(string $parsed_bound): string
     {
-        return str_replace(['\\\\', '\"', '""'], ['\\', '"', '"'], $parsed_bound);
+        return preg_replace(['/\\\\(.)/s', '/""/'], ['$1', '"'], $parsed_bound);
     }
 
     /**
@@ -69,21 +69,16 @@ REGEX;
         $this->upper_inc = $upper !== null && $upper_inc;
     }
 
-    /**
-     * Parse un `NonEmptyRange` à partir de la sortie PostgreSQL.
-     * @template TBound
-     * @param string $output La chaîne à parser.
-     * @param callable(string): TBound|false $parse_bound La fonction parsant les bornes. Peut retourner `false` si la syntaxe est invalide.
-     * @return NonEmptyRange<TBound> Un nouveau range non vide.
-     * @throws DomainException Quand $output ne correspond pas à la syntax attendue.
-     */
-    static function parse(string $output, callable $parse_bound): NonEmptyRange
+    function __tostring(): string
     {
-        $match = null;
-        if (!preg_match(self::PARSE_PATTERN, $output, $match, 0)) {
-            throw new DomainException();
-        }
-        return notfalse(self::from_match($match, $parse_bound));
+        return ($this->lower_inc ? '[' : '(')
+            . self::quote($this->lower) . ',' . self::quote($this->upper)
+            . ($this->upper_inc ? ']' : ')');
+    }
+
+    private static function quote(string $str): string
+    {
+        return '"' . str_replace(['"', '\\'], ['""', '\\\\'], $str) . '"';
     }
 
     /*
@@ -110,6 +105,23 @@ REGEX;
      * read("invalid") would return false
      * The read() method is more flexible and forgiving, while parse() is stricter and ensures the entire input is a valid range format.
      */
+
+    /**
+     * Parse un `NonEmptyRange` à partir de la sortie PostgreSQL.
+     * @template TBound
+     * @param string $output La chaîne à parser.
+     * @param callable(string): TBound|false $parse_bound La fonction parsant les bornes. Peut retourner `false` si la syntaxe est invalide.
+     * @return NonEmptyRange<TBound> Un nouveau range non vide.
+     * @throws DomainException Quand $output ne correspond pas à la syntax attendue.
+     */
+    static function parse(string $output, callable $parse_bound): NonEmptyRange
+    {
+        $match = null;
+        if (!preg_match(self::PARSE_PATTERN, $output, $match, 0)) {
+            throw new DomainException();
+        }
+        return notfalse(self::from_match($match, $parse_bound));
+    }
 
     /**
      * Lit un `NonEmptyRange` à partir de la sortie PostgreSQL.

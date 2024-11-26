@@ -17,6 +17,8 @@ test_throws('{[5,1', f_never_called(), fn($e) => $e instanceof DomainException);
 test_throws('{[5,1]', f_never_called(), fn($e) => $e instanceof DomainException);
 test_throws('{[5,1]}', parse_int(...), fn($e) => $e instanceof RangeException);
 
+//echo MultiRange::parse("{[1,2]}", parse_int(...)) . PHP_EOL;
+
 /**
  * Cas de test nominal.
  * @param string $output
