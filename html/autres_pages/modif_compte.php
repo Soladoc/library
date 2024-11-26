@@ -12,6 +12,7 @@ $error_mdp = null;
 $args = [
     'id' => getarg($_GET, 'id', arg_filter(FILTER_VALIDATE_INT))
 ];
+$mdp_hash = isset($membre['mdp_hash']) ? $membre['mdp_hash'] : (isset($pro['mdp_hash']) ? $pro['mdp_hash'] : null);
 
 $id = $args['id'];
 $membre = DB\query_compte_membre($args['id']);
@@ -100,7 +101,7 @@ if ($membre !== false) {
     echo '</pre>';
     $pseudo = $membre['pseudo'];
     $email = $membre['email'];
-    $mdp = unserialize($membre['mdp_hash']);
+    $mdp_hash =$membre['mdp_hash'];
     $nom = $membre['nom'];
     $prenom = $membre['prenom'];
     $telephone = $membre['telephone'];
@@ -112,7 +113,7 @@ if ($membre !== false) {
     // echo '</pre>';
     $denomination = $pro['denomination'];
     $email = $pro['email'];
-    $mdp_hash = unserialize($pro['mdp_hash']);
+    $mdp_hash = $pro['mdp_hash'];
     $nom = $pro['nom'];
     $prenom = $pro['prenom'];
     $telephone = $pro['telephone'];
@@ -229,10 +230,10 @@ if ($membre !== false) {
                 <input id="confirmation_mdp" name="mdp" type="password" placeholder="**********">
             </div>
             <?php if ($error_mdp !== null) { ?>
-            <p class="error"><?= $error_mdp ?></p>
+                <p class="error"><?= htmlspecialchars($error_mdp) ?></p>
             <?php } ?>
             <button type="submit">valider</button>
-            <p class="error"><?= htmlspecialchars($error_mdp) ?></p>
+            
         </div>
 
        
