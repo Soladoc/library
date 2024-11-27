@@ -103,7 +103,7 @@ if ($_POST) {
         
             if ($new_mdp) {
                 if ($confirmation_mdp === $new_mdp) {
-                    DB\query_uptate_mdp($id, password_hash($new_mdp, algo: PASSWORD_DEFAULT)); 
+                    DB\query_uptate_mdp($id, password_hash($new_mdp, algo: PASSWORD_DEFAULT));
                 } else {
                     $error_mdp = 'Mot de passe de confirmation different.';
                 }
