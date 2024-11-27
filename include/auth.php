@@ -57,7 +57,7 @@ function exiger_connecte_pro(): int
     if (($id = id_pro_connecte()) !== null) {
         return $id;
     }
-    redirect_to(location_connexion());
+    redirect_to(location_connexion(return_url: $_SERVER['REQUEST_URI']));
     exit;
 }
 
@@ -101,7 +101,7 @@ function exiger_connecte_membre(): int
     if (($id = id_membre_connecte()) !== null) {
         return $id;
     }
-    redirect_to(location_connexion());
+    redirect_to(location_connexion(return_url: $_SERVER['REQUEST_URI']));
     exit;
 }
 
