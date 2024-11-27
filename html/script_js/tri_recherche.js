@@ -19,7 +19,6 @@ initializeOffers();
 const subcategories = {
     restaurant: ['Française', 'Fruits de mer', 'Asiatique', 'Indienne', 'Italienne', 'Gastronomique', 'Restauration rapide', 'Crêperie'],
     activité: ['Urbain', 'Nature', 'Plein air', 'Culturel', 'Patrimoine', 'Histoire', 'Sport', 'Nautique', 'Gastronomie', 'Musée', 'Atelier', 'Musique', 'Famille'],
-    visite: ['Parc d\'attractions'],
     spectacle: ['Cinéma', 'Cirque', 'Son et lumière', 'Humour']
 };
 

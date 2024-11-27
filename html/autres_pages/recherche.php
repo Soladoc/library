@@ -34,6 +34,7 @@ $page = new Page('Recherche', scripts: [
                         <option value="activité">Activité</option>
                         <option value="visite">Visite</option>
                         <option value="spectacle">Spectacle</option>
+                        <option value="parc d'attractions">Parc d'attractions</option>
                     </select>
                 </div>
             </div>
