@@ -12,7 +12,7 @@ jobs:
         run: |
           send_msg() {
               jq --slurp --raw-input --compact-output --arg flags "${1-0}" '{content:.,$flags}' |
-                  curl --data @- "$DISCORD_WEBHOOK_URL" \
+                  curl --data @- "${{secrets.DISCORD_WEBHOOK_URL}}" \
                       --header "Accept: application/json" \
                       --header "Content-Type: application/json"
           }
