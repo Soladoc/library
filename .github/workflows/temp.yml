@@ -1,0 +1,24 @@
+name: Send discord message
+on:
+  workflow_dispatch:
+defaults:
+  run:
+    shell: bash
+jobs:
+  notify:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Send Discord message
+        run: |
+          send_msg() {
+              jq --slurp --raw-input --compact-output --arg flags "${1-0}" '{content:.,$flags}' |
+                  curl --data @- "$DISCORD_WEBHOOK_URL" \
+                      --header "Accept: application/json" \
+                      --header "Content-Type: application/json"
+          }
+
+          send_msg <<EOF
+          Slt tout le monde c'est Raphaël jsp si vous recevrez ce message mais mon compte Discord a été désactivé jsp pourquoi j'ai fait appel je croise les doigts car j'ai rien fait de mal moi :sob:.
+          Enfin bref on se voit demain allez bye bonne nuit @everyone.
+          EOF
+
