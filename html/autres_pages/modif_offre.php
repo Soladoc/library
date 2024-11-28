@@ -6,8 +6,9 @@ require_once 'util.php';
 require_once 'const.php';
 require_once 'component/inputs.php';
 require_once 'component/Page.php';
+require_once 'component/InputDuree.php';
 
-$page = new Page("Modifier offre",
+$page = new Page("Modifurlier offre",
     ['creation_offre.css'],
     ['module/creation_offre.js' => 'defer type="module"']);
 
@@ -131,15 +132,16 @@ if ($_POST) {
                 </p>
                 <label for="resume">Resumé*</label>
                 <p>
-                    <input form="f" id="resume" name="resume" type="text" value="<?= htmlspecialchars($offre['titre']) ?>" required>
+                    <input form="f" id="resume" name="resume" type="text" value="<?= htmlspecialchars($offre['resume']) ?>" required>
                 </p>
                 <label for="adresse">Adresse*</label>
                 <?php
-                put_input_address('adresse', 'adresse_', 'f')
+                put_input_address('adresse', 'adresse_', 'f');
+                $url = htmlspecialchars($offre['url_site_web'] ?? '');
                 ?>
                 <label for="site">Site Web</label>
                 <p>
-                    <input form="f" id="url_site_web" name="url_site_web" type="url">
+                    <input form="f" id="url_site_web" name="url_site_web" type="url" value="<?=$url ?>">
                 </p>
             </div>
         </section>
@@ -259,14 +261,19 @@ if ($_POST) {
             <?php
             switch ($args['type_offre']) {
                 case 'activité':
+                    $info = DB\query_activite($offre['id']);
                     ?>
-                    <p><label>Âge requis&nbsp;: <input form="f" name="age_requis" type="number" min="1"> an</label></p>
+                    <p><label>Âge requis&nbsp;: <input form="f" name="age_requis" type="number" min="1" value="<?= htmlspecialchars($info['age_requis']) ?>"> an</label></p>
                     <p>Prestations incluses*</p>
-                    <textarea form="f" name="prestations_incluses" required><?= htmlspecialchars($offre['prestations_incluses']) ?></textarea>
+                    <?php 
+                        $prestations_incluses = htmlspecialchars($info['prestations_incluses'] ?? '');
+                        $prestations_non_incluses = htmlspecialchars($info['prestations_non_incluses'] ?? '');
+                    ?>
+                    <textarea form="f" name="prestations_incluses" required><?= $prestations_incluses?></textarea>
                     <p>Prestations non incluses</p>
-                    <textarea form="f" name="prestations_non_incluses"><?= htmlspecialchars($offre['prestations_non_incluses']) ?></textarea>
+                    <textarea form="f" name="prestations_non_incluses"><?= $prestations_non_incluses?></textarea>
                     <?php
-                    put_input_indication_duree();
+                    put_input_indication_duree(Duree::parse($info['indication_duree']));
                     break;
                 case 'parc d\'attractions':
                     ?>
@@ -320,9 +327,9 @@ if ($_POST) {
 
 </html>
 <?php
-function put_input_indication_duree()
+function put_input_indication_duree(Duree $duree)
 {
     ?>
-        <label>Durée estimée&nbsp;: <?php put_input_duration('f', 'indication_duree', 'indication_duree_') ?></label>
+        <label>Durée estimée&nbsp;: <?php (new InputDuree('f', 'indication_duree', 'indication_duree_'))->put() ?></label>
         <?php
 }
