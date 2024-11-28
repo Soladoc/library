@@ -9,7 +9,10 @@ $args = [
 
 $page = new Page("offre : {$args['id']}",
     ['https://unpkg.com/leaflet@1.7.1/dist/leaflet.css'],
-    ['https://unpkg.com/leaflet@1.7.1/dist/leaflet.js' => 'async']);
+    [
+        'https://unpkg.com/leaflet@1.7.1/dist/leaflet.js' => 'async',
+        'carrousel.js' => 'defer',
+    ]);
 
 if ($_POST) {
     $args += [
@@ -55,13 +58,6 @@ $avis = DB\query_avis()
 <html lang="fr">
 
 <?php $page->put_head() ?>
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Détails Offre</title>
-    <link rel="stylesheet" href="/style/style.css">
-    <script src="/script_js/carrousel.js" defer></script>
-</head>
 <body>
     <?php
     // TODO suprimmer ca quand romain aura sort that out
