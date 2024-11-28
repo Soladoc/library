@@ -21,13 +21,13 @@ function notfalse(mixed $valeur, string $message = 'was false'): mixed
  * @template T
  * @param T[] $array Le tableau à modifier.
  * @param string|int $key La clé à retirer. Elle doit exister dans le tableau.
- * @throws \Exception Si la clé n'existe pas dans le tableau.
+ * @throws \DomainException Si la clé n'existe pas dans le tableau.
  * @return T La valeur associée à la clé retirée.
  */
 function array_pop_key(array &$array, string|int $key): mixed
 {
     if (!array_key_exists($key, $array)) {
-        throw new Exception("Array must contain key '$key'");
+        throw new DomainException("Array must contain key '$key'");
     }
     $value = $array[$key];
     unset($array[$key]);
@@ -105,7 +105,8 @@ function arg_filter(int $filter, array|int $options = 0): callable
 
 /**
  * Affiche un message d'erreur HTML et jette une exception.
- * @param mixed $arg La valeur à inclure avec le message d'erreur. Si c'est une instance de `Throwable`, est est aussi jetée. Sinon, elle est englobée dans une `Exception` puis jetée.
+ * @param mixed $arg La valeur à inclure avec le message d'erreur. Si c'est une instance de `Throwable`, est est aussi jetée. Sinon, elle est englobée dans une `DomainException` puis jetée.
+ * @throws DomainException
  */
 function html_error(mixed $arg): never
 {
@@ -114,7 +115,7 @@ function html_error(mixed $arg): never
       if ($arg instanceof Throwable) {
           throw $arg;
       }
-      throw new Exception($arg);
+      throw new DomainException($arg);
 }
 
 /**
@@ -153,12 +154,12 @@ function f_array_has_keys(array $keys): callable
  * @template T
  * @param array<T> $array Un tableau devant contenir extactement 1 élément.
  * @return T Le seul élément de $array.
- * @throws Exception Si $array ne contient pas exactement 1 élément.
+ * @throws DomainException Si $array ne contient pas exactement 1 élément.
  */
 function single(array $array): mixed
 {
     if (count($array) !== 1) {
-        throw new Exception('Array contains not a single value');
+        throw new DomainException('Array contains not a single value');
     }
     return $array[0];
 }
@@ -169,7 +170,7 @@ function single(array $array): mixed
  * @param array<T> $array Un tableau devant contenir 0 ou 1 élément.
  * @param T $default La valeur par défaut à retourner quand $array est vide.
  * @return T Le seul élément de $array, ou $default si $array est vide.
- * @throws Exception Si le tableau contient plus d'une valeur.
+ * @throws DomainException Si le tableau contient plus d'une valeur.
  */
 function single_or_default(array $array, mixed $default = null): mixed
 {
@@ -177,7 +178,7 @@ function single_or_default(array $array, mixed $default = null): mixed
         return $default;
     }
     if (count($array) !== 1) {
-        throw new Exception('Array contains not a single value');
+        throw new DomainException('Array contains not a single value');
     }
     return $array[0];
 }
