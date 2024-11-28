@@ -259,7 +259,7 @@ if ($_POST) {
             <?php
             switch ($args['type_offre']) {
                 case 'activité':
-                    $info = DB\query_offre($offre['id']);
+                    $info = DB\query_activite($offre['id']);
                     ?>
                     <p><label>Âge requis&nbsp;: <input form="f" name="age_requis" type="number" min="1" value="<?= htmlspecialchars($info['age_requis']) ?>"> an</label></p>
                     <p>Prestations incluses*</p>
