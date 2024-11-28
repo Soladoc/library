@@ -128,7 +128,7 @@ link_part="\`$DISPLAY_TITLE\` > \`$failed_step_name\` (step $failed_step_number)
 
 if [[ "$CONCLUSION" == failure ]]; then
     send_msg $dmf_suppress_embeds <<EOF
-@everyone $ACTOR a cassé la BDD :skull:
+@here $ACTOR a cassé la BDD :skull:
 $link_part
 
 $(array_pick_random "${failure_jokes[@]}")
@@ -142,7 +142,7 @@ EOF
 elif [[ "$CONCLUSION" == success ]]; then
     repair_duration="$(fmt_hms "$(date_diff "$TIMESTAMP" "$prev_timestamp")")"
     send_msg $dmf_suppress_embeds <<EOF
-@everyone Bravo à $ACTOR pour avoir réparé la BDD en $repair_duration :+1:
+@here Bravo à $ACTOR pour avoir réparé la BDD en $repair_duration :+1:
 $link_part
 
 $(array_pick_random "${success_cheers[@]}")
