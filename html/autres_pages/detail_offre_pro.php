@@ -123,7 +123,7 @@ if ($offre) {
             <h3>Emplacement et coordonnées</h3>
             <!-- <div id="map" class="map"></div> -->
             <div class="contact-info">
-                <p><strong>Adresse&nbsp;:</strong> <?= $adresse ?></p>
+                <p><strong>Adresse&nbsp;:</strong> <?= $adresse_complete ?></p>
                 <p><strong>Site web&nbsp;:</strong> <a href="<?= $site_web ?>"><?= $site_web ?></a></p>
                 <!-- <p><strong>Téléphone&nbsp;:</strong> 02 96 46 63 80</p> -->
             </div>
