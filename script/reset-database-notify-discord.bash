@@ -1,6 +1,9 @@
 #!/usr/bin/env bash
 
 set -xeuo pipefail
+cd "$(dirname "${BASH_SOURCE[0]}")"
+
+. lib/discord.bash
 
 # Functions
 
@@ -31,16 +34,6 @@ date_diff() {
 fmt_hms() {
     local h=0$(($1 / 3600)) m=0$(($1 / 60 % 60)) s=0$(($1 % 60))
     echo "${h: -2}:${m: -2}:${s: -2}"
-}
-
-# Send a message to the Discord webhook.
-# $1: integer: message flags bitfield (default 0)
-# stdin: string: the message to send
-send_msg() {
-    jq --slurp --raw-input --compact-output --arg flags "${1-0}" '{content:.,$flags}' |
-        curl --data @- "$DISCORD_WEBHOOK_URL" \
-            --header "Accept: application/json" \
-            --header "Content-Type: application/json"
 }
 
 # The last lines of the step log.
@@ -91,9 +84,6 @@ readonly success_cheers=(
 )
 
 readonly log_lines=20
-
-# Discord message flag: do not include any embeds when serializing this message
-readonly dmf_suppress_embeds=4
 
 readonly relevant_job='Reset Database'
 
