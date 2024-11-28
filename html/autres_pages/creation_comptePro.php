@@ -56,7 +56,7 @@ if ($_POST) {
 
     $idAdresse = $stmt->fetchColumn();
 
-    if ($type === 'prive') {
+    if ($args['type'] === 'prive') {
         $stmt = DB\connect()->prepare('insert into pro_prive (email, mdp_hash, nom, prenom, telephone, id_adresse, denomination, siren) values (?, ?, ?, ?, ?, ?, ?, ?)');
         $stmt->execute([
             $args['email'],

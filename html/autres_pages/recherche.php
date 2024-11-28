@@ -17,7 +17,7 @@ $page = new Page('Recherche', scripts: [
             <h1>Recherche</h1>
             <br>
             <div class="search-bar">
-                <input type="text" placeholder="Rechercher des activités, restaurants, spectacles...">
+                <input id="barre-recherche" type="text" placeholder="Rechercher des activités, restaurants, spectacles...">
                 <a href="">
                     <button class="btn-search">Rechercher</button>
                 </a>
@@ -28,12 +28,13 @@ $page = new Page('Recherche', scripts: [
             <div class="categories">
                 <h3>Catégories</h3>
                 <div class="category-dropdown">
-                    <select id="main-category" onchange="showSubcategories()">
+                    <select id="main-category" onchange="showSubcategories">
                         <option value="">-- Sélectionnez une catégorie --</option>
-                        <option value="restauration">Restauration</option>
-                        <option value="activite">Activité</option>
+                        <option value="restaurant">Restauration</option>
+                        <option value="activité">Activité</option>
                         <option value="visite">Visite</option>
                         <option value="spectacle">Spectacle</option>
+                        <option value="parc_d_attractions">Parc d'attractions</option>
                     </select>
                 </div>
             </div>
@@ -47,10 +48,10 @@ $page = new Page('Recherche', scripts: [
             <br>
             <h3>Options de tri</h3>
             <div class="sorting-buttons">
-                <button id="sort-price-down" class="btn-sort" data-criteria="prix" data-order="desc">Prix croissant</button>
-                <button id="sort-price-up" class="btn-sort" data-criteria="prix" data-order="asc">Prix décroissant</button>
-                <button id="sort-rating-up" class="btn-sort" data-criteria="note" data-order="asc">Note croissante</button>
-                <button id="sort-rating-down" class="btn-sort" data-criteria="note" data-order="desc">Note décroissante</button>
+                <button id="sort-price-up" class="btn-sort" data-criteria="prix" data-order="asc">Prix croissant</button>
+                <button id="sort-price-down" class="btn-sort" data-criteria="prix" data-order="desc">Prix décroissant</button>
+                <button id="sort-rating-down" class="btn-sort" data-criteria="note" data-order="desc">Note croissante</button>
+                <button id="sort-rating-up" class="btn-sort" data-criteria="note" data-order="asc">Note décroissante</button>
                 <button id="sort-date-up" class="btn-sort" data-criteria="date" data-order="asc">Plus récent</button>
                 <button id="sort-date-down" class="btn-sort" data-criteria="date" data-order="desc">Moins récent</button>
             </div>

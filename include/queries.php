@@ -139,7 +139,7 @@ function query_avis(?int $id_membre_auteur = null, ?int $id_offre = null): array
 
 // Update-----------------------------------------------------------------------------------------------------------
 
-function query_uptate_mdp(int $id_compte, $new_mdp): void
+function query_uptate_mdp(int $id_compte,string $new_mdp): void
 {
     $stmt = notfalse(connect()->prepare('UPDATE _compte SET mdp_hash = ? WHERE id = ?;'));
     bind_values($stmt, [1 => [$new_mdp, PDO::PARAM_STR], 2 => [$id_compte, PDO::PARAM_INT]]);
@@ -272,9 +272,10 @@ function insert_uploaded_image(array $img, ?string $legende = null): array
  * @return bool `true` si un professionnel privé d'id $id_pro_prive existe, `false` sinon.
  */
 function exists_pro_prive(int $id_pro_prive): bool
-{
+{   
     $stmt = notfalse(connect()->prepare('select ? in (select id from pro_prive)'));
     bind_values($stmt, [1 => [$id_pro_prive, PDO::PARAM_INT]]);
+    notfalse($stmt->execute());
     return $stmt->fetchColumn();
 }
 
@@ -287,5 +288,6 @@ function exists_offre(int $id_offre): bool
 {
     $stmt = notfalse(connect()->prepare('select ? in (select id from offres)'));
     bind_values($stmt, [1 => [$id_offre, PDO::PARAM_INT]]);
+    notfalse($stmt->execute());
     return $stmt->fetchColumn();
 }

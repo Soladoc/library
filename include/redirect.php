@@ -14,12 +14,13 @@ function redirect_to(string $location): never
 /**
  * Obtient l'URL de la page de connexion.
  * @param ?string $error L'erreur à afficher. `null` pour pas d'erreur.
+ * @param ?string $return_url L'URL ou rediriger lorsque la connexion réussit. `null` indique de rediriger l'utilisateur vers la page d'accueil (pro ou membre).
  * @return string L'URL de la page de connection.
  */
-function location_connexion(?string $error = null): string
+function location_connexion(?string $error = null, ?string $return_url = null): string
 {
-    return '/autres_pages/connexion.php?return_url=' . urlencode($_SERVER['REQUEST_URI'])
-        . ($error === null ? null : '&error=' . urlencode($error));
+    
+    return '/autres_pages/connexion.php?' . http_build_query(['error' => $error, 'return_url' => $return_url]);
 }
 
 /**
@@ -57,8 +58,8 @@ function location_modifier_offre(int $id_offre): string
     return "/autres_pages/modifier_offre.php?id_offre=$id_offre";
 }
 
-function location_modifier_compte(?string $error = null): string
+function location_modifier_compte(int $id, ?string $error = null): string
 {
-    return '/autres_pages/modif_compte.php?return_url=' . urlencode($_SERVER['REQUEST_URI'])
+    return '/autres_pages/modif_compte.php?id='.$id.'&return_url=' . urlencode($_SERVER['REQUEST_URI'])
         . ($error === null ? null : '&error=' . urlencode($error));
 }

@@ -133,7 +133,7 @@ function offre_args(
  * Insérer une activité.
  * @param array $offre_args Les arguments communs pour les offres générés par la fonction `DB\offre_args`. Les arguments communs pour les offres générés par la fonction `DB\offre_args`
  * @param string $indication_duree ISO8601 or Postgres syntax INTERVAL string expected.
- * @param string $prestation_incluses
+ * @param string $prestations_incluses
  * @param mixed $age_requis
  * @param mixed $prestations_non_incluses
  * @return int L'ID de l'activté insérée.
@@ -141,13 +141,13 @@ function offre_args(
 function insert_into_activite(
     array $offre_args,
     string $indication_duree,
-    string $prestation_incluses,
+    string $prestations_incluses,
     ?int $age_requis = null,
     ?string $prestations_non_incluses = null,
 ): int {
     $args = $offre_args + filter_null_args([
         'indication_duree' => [$indication_duree, PDO::PARAM_STR],
-        'prestation_incluses' => [$prestation_incluses, PDO::PARAM_STR],
+        'prestations_incluses' => [$prestations_incluses, PDO::PARAM_STR],
         'age_requis' => [$age_requis, PDO::PARAM_INT],
         'prestations_non_incluses' => [$prestations_non_incluses, PDO::PARAM_STR],
     ]);

@@ -6,6 +6,14 @@ require_once 'util.php';
 require_once 'queries.php';
 require_once 'redirect.php';
 
+
+if (!isset($_POST['login'])) {
+    echo "Le champ 'login' est manquant.";
+}
+if (!isset($_POST['mdp'])) {
+    echo "Le champ 'mdp' est manquant .";
+}
+
 // Récupérer les données du formulaire
 $args = [
     'login' => getarg($_POST, 'login'),

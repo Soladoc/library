@@ -1,6 +1,9 @@
 #!/usr/bin/env bash
 
 set -xeuo pipefail
+cd "$(dirname "${BASH_SOURCE[0]}")"
+
+. lib/discord.bash
 
 # Functions
 
@@ -31,16 +34,6 @@ date_diff() {
 fmt_hms() {
     local h=0$(($1 / 3600)) m=0$(($1 / 60 % 60)) s=0$(($1 % 60))
     echo "${h: -2}:${m: -2}:${s: -2}"
-}
-
-# Send a message to the Discord webhook.
-# $1: integer: message flags bitfield (default 0)
-# stdin: string: the message to send
-send_msg() {
-    jq --slurp --raw-input --compact-output --arg flags "${1-0}" '{content:.,$flags}' |
-        curl --data @- "$DISCORD_WEBHOOK_URL" \
-            --header "Accept: application/json" \
-            --header "Content-Type: application/json"
 }
 
 # The last lines of the step log.
@@ -92,9 +85,6 @@ readonly success_cheers=(
 
 readonly log_lines=20
 
-# Discord message flag: do not include any embeds when serializing this message
-readonly dmf_suppress_embeds=4
-
 readonly relevant_job='Reset Database'
 
 # Main logic
@@ -127,8 +117,8 @@ readonly failed_job_url="${job[0]}" failed_step_name="${job[1]}" failed_step_num
 link_part="\`$DISPLAY_TITLE\` > \`$failed_step_name\` (step $failed_step_number) ([job]($failed_job_url))"
 
 if [[ "$CONCLUSION" == failure ]]; then
-    send_msg $dmf_suppress_embeds <<EOF
-@everyone $ACTOR a cassé la BDD :skull:
+    send_msg $DMF_SUPPRESS_EMBEDS <<EOF
+@here $ACTOR a cassé la BDD :skull:
 $link_part
 
 $(array_pick_random "${failure_jokes[@]}")
@@ -141,8 +131,8 @@ $(gh_job_logs "$failed_step_number" "$failed_step_name" $log_lines)
 EOF
 elif [[ "$CONCLUSION" == success ]]; then
     repair_duration="$(fmt_hms "$(date_diff "$TIMESTAMP" "$prev_timestamp")")"
-    send_msg $dmf_suppress_embeds <<EOF
-@everyone Bravo à $ACTOR pour avoir réparé la BDD en $repair_duration :+1:
+    send_msg $DMF_SUPPRESS_EMBEDS <<EOF
+@here Bravo à $ACTOR pour avoir réparé la BDD en $repair_duration :+1:
 $link_part
 
 $(array_pick_random "${success_cheers[@]}")

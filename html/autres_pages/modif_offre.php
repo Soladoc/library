@@ -7,17 +7,23 @@ require_once 'const.php';
 require_once 'component/inputs.php';
 require_once 'component/Page.php';
 
-$page = new Page("Création d'une offre",
+$page = new Page("Modifier offre",
     ['creation_offre.css'],
     ['module/creation_offre.js' => 'defer type="module"']);
 
 $id_professionnel = Auth\exiger_connecte_pro();
 $est_prive = DB\exists_pro_prive($id_professionnel);
 
+
+$offre = DB\query_offre($_GET['id']);
+print_r($offre);
+
 $args = [
     // ne lance pas la page et génère une errreur si il n'y a pas de get
     'type_offre' => getarg($_GET, 'type_offre', arg_check(f_is_in(array_keys(CATEGORIES_OFFRE)))),
 ];
+
+
 
 if ($_POST) {
     $args += [
@@ -87,7 +93,7 @@ if ($_POST) {
 <body>
     <?php $page->put_header() ?>
     <main>
-        <h1>Créer <?= CATEGORIES_OFFRE[$args['type_offre']] ?></h1>
+        <h1>Modifier <?= CATEGORIES_OFFRE[$args['type_offre']] ?></h1>
 
         <section id="type-abonnement">
             <h2>Abonnement</h2>
@@ -237,7 +243,7 @@ if ($_POST) {
             <label for="description_detaillee">
                 <h2>Description détaillée</h2>
             </label>
-            <textarea form="f" id="description_detaillee" name="description_detaillee" required></textarea>
+            <textarea form="f" id="description_detaillee" name="description_detaillee" required><?= htmlspecialchars($offre['description_detaillee']) ?></textarea>
         </section>
 
         <section id="image-creation-offre">
@@ -256,9 +262,9 @@ if ($_POST) {
                     ?>
                     <p><label>Âge requis&nbsp;: <input form="f" name="age_requis" type="number" min="1"> an</label></p>
                     <p>Prestations incluses*</p>
-                    <textarea form="f" name="prestations_incluses" required></textarea>
+                    <textarea form="f" name="prestations_incluses" required><?= htmlspecialchars($offre['prestations_incluses']) ?></textarea>
                     <p>Prestations non incluses</p>
-                    <textarea form="f" name="prestations_non_incluses"></textarea>
+                    <textarea form="f" name="prestations_non_incluses"><?= htmlspecialchars($offre['prestations_non_incluses']) ?></textarea>
                     <?php
                     put_input_indication_duree();
                     break;
