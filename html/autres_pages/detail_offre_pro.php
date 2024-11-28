@@ -32,7 +32,7 @@ if ($offre) {
     $site_web = $offre['url_site_web'];
     $image_pricipale = DB\query_image($offre['id_image_principale']);
     $en_ligne = $offre['en_ligne'];
-    $info_adresse = notfalse(DB\query_adresse($offre['id_adresse']));
+    $info_adresse = DB\query_adresse($adresse);
     $avis = DB\query_avis();
     $gallerie = DB\query_gallerie($args['id']);
     // Vérifier si l'adresse existe
@@ -123,7 +123,7 @@ if ($offre) {
             <h3>Emplacement et coordonnées</h3>
             <!-- <div id="map" class="map"></div> -->
             <div class="contact-info">
-                <p><strong>Adresse&nbsp;:</strong> <?= $adresse_complete ?></p>
+                <p><strong>Adresse&nbsp;:</strong> <?= $adresse ?></p>
                 <p><strong>Site web&nbsp;:</strong> <a href="<?= $site_web ?>"><?= $site_web ?></a></p>
                 <!-- <p><strong>Téléphone&nbsp;:</strong> 02 96 46 63 80</p> -->
             </div>
