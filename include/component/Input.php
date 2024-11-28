@@ -1,7 +1,7 @@
 <?php
 
 /**
- * @template TModel Le type de modèle entrée.
+ * Un composant d'entrée d'un modèle.
  */
 abstract class Input
 {
@@ -21,18 +21,4 @@ abstract class Input
         $this->id = $id;
         $this->name = $name;
     }
-
-    /**
-     * Récupère l'entrée.
-     * @param array $get_or_post `$_GET` ou `$_POST`.
-     * @return ?TModel
-     */
-    abstract function getarg(array $get_or_post, bool $required = true);
-
-    /**
-     * Affiche l'HTML du composant.
-     * @param ?TModel $current L'entité à mettre a jour ou `null` pour une création.
-     * @return void
-     */
-    abstract function put($current = null): void;
 }

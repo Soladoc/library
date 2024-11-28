@@ -1,4 +1,5 @@
 <?php
+
 require_once 'util.php';
 require_once 'model/Commune.php';
 
@@ -65,36 +66,28 @@ final class Adresse
 
     private ?int $id;
 
-    function __get(string $name) {
-        return match ($name) {
-            'id' => $this->id,
-            default => throw new Exception("Invalid property: '$name'"),
-        };
-    }
-
-    private function __construct(array $data)
-    {
-        $this->id = $data['id'] ?? null;
-        $this->commune = $data['commune'];
-        $this->numero_voie = $data['numero_voie'] ?: null;
-        $this->complement_numero = $data['complement_numero'] ?: null;
-        $this->nom_voie = $data['nom_voie'] ?: null;
-        $this->localite = $data['localite'] ?: null;
-        $this->precision_int = $data['precision_int'] ?: null;
-        $this->precision_ext = $data['precision_ext'] ?: null;
-        $this->latitude = $data['latitude'] ?: null;
-        $this->longitude = $data['longitude'] ?: null;
-    }
-
-    /**
-     * Construit une adresse à partir des données produites par le composant d'input.
-     * @param array $data Les données produites par le composant d'input d'adresse.
-     * @return Adresse Une nouvelle adresse, non-existante dans la BDD.
-     */
-    static function from_input(array $data): Adresse
-    {
-        $data['commune'] = notfalse(Commune::from_db_by_nom($data['commune']));
-        return new Adresse($data);
+    function __construct(
+        Commune $commune,
+        ?int $numero_voie,
+        ?string $complement_numero,
+        ?string $nom_voie,
+        ?string $localite,
+        ?string $precision_int,
+        ?string $precision_ext,
+        ?float $latitude,
+        ?float $longitude,
+        ?int $id = null,
+    ) {
+        $this->id = $id;
+        $this->commune = $commune;
+        $this->numero_voie = $numero_voie;
+        $this->complement_numero = $complement_numero;
+        $this->nom_voie = $nom_voie;
+        $this->localite = $localite;
+        $this->precision_int = $precision_int;
+        $this->precision_ext = $precision_ext;
+        $this->latitude = $latitude;
+        $this->longitude = $longitude;
     }
 
     /**
@@ -108,21 +101,26 @@ final class Adresse
         DB\bind_values($stmt, [1 => [$id_adresse, PDO::PARAM_INT]]);
         notfalse($stmt->execute());
         $row = $stmt->fetch();
-        return $row === false ? false : self::from_db_row($row);
-    }
-
-    private static function from_db_row(array $row): Adresse
-    {
-        $row['commune'] = Commune::from_db($row['code_commune'], $row['numero_departement']);
-        return new Adresse($row);
+        return $row === false ? false : new Adresse(
+            Commune::from_db($row['code_commune'], $row['numero_departement']),
+            $row['numero_voie'] ?? null,
+            $row['complement_numero'] ?? null,
+            $row['nom_voie'] ?? null,
+            $row['localite'] ?? null,
+            $row['precision_int'] ?? null,
+            $row['precision_ext'] ?? null,
+            $row['latitude'] ?? null,
+            $row['longitude'] ?? null,
+            $id_adresse,
+        );
     }
 
     /**
-     * Pousse cette adresse dans la BDD, en l'insérant si elle n'existe pas ou en la mettant à jour.
+     * Pousse cette adresse vers la BDD, soit l'insérant, soit en la mettant à jour si elle y existe déjà.
      */
-    function push_to_db(?int $id_adresse = null): void
+    function push_to_db(): void
     {
-        $args = DB\filter_null_args([
+        $args = [
             'code_commune' => [$this->commune->code, PDO::PARAM_INT],
             'numero_departement' => [$this->commune->numero_departement, PDO::PARAM_INT],
             'numero_voie' => [$this->numero_voie, PDO::PARAM_INT],
@@ -133,7 +131,7 @@ final class Adresse
             'precision_ext' => [$this->precision_ext, PDO::PARAM_STR],
             'latitude' => [$this->latitude, DB\PDO_PARAM_DECIMAL],
             'longitude' => [$this->longitude, DB\PDO_PARAM_DECIMAL],
-        ]);
+        ];
         if ($this->id === null) {
             $stmt = DB\insert_into_returning_id(self::TABLE, $args);
             notfalse($stmt->execute());
@@ -144,6 +142,22 @@ final class Adresse
             ]);
             notfalse($stmt->execute());
         }
+    }
+
+    /**
+     * Supprime cette adresse de la BDD.
+     * @throws LogicException Quand adresse n'existe pas dans la BDD.
+     * @return void
+     */
+    function delete_from_db(): void
+    {
+        if ($this->id === null) {
+            throw new LogicException("Cette adresse n'existe pas dans la BDD et ne peut donc pas être supprimée");
+        }
+        $stmt = notfalse(DB\connect()->prepare('delete from ' . self::TABLE . ' where id = ?'));
+        DB\bind_values($stmt, [1 => [$this->id, PDO::PARAM_INT]]);
+        notfalse($stmt->execute());
+        $this->id = null;
     }
 
     function format(): string

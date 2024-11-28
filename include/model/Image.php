@@ -12,8 +12,13 @@ final class Image
 
     private const TABLE = '_image';
 
-    private function __construct(int $taille, string $mime_subtype, ?string $legende, ?int $id = null, ?string $tmp_name = null)
-    {
+    function __construct(
+        int $taille,
+        string $mime_subtype,
+        ?string $legende,
+        ?string $tmp_name = null,
+        ?int $id = null,
+    ) {
         $this->taille = $taille;
         $this->mime_subtype = $mime_subtype;
         $this->legende = $legende;
@@ -27,18 +32,23 @@ final class Image
         DB\bind_values($stmt, [1 => [$id_image, PDO::PARAM_INT]]);
         notfalse($stmt->execute());
         $row = $stmt->fetch();
-        return $row === false ? false : new Image($row['taille'], $row['mime_subtype'], $row['legende'], id: $id_image);
+        return $row === false ? false : new Image(
+            $row['taille'],
+            $row['mime_subtype'],
+            $row['legende'],
+            $id_image,
+        );
     }
 
-    static function from_input(int $taille, string $mime_subtype, string $tmp_name, ?string $legende): Image
-    {
-        return new Image($taille, $mime_subtype, $legende, tmp_name: $tmp_name);
-    }
-
+    /**
+     * Déplace cette image téléversée vers le dossier des images utilisateur.
+     * @throws \LogicException
+     * @return void
+     */
     function move_uploaded_image()
     {
         if (!$this->tmp_name) {
-            throw new Exception("Impossible de déplacer l'image. Soit l'image a déjà été déplacée, soit elle provient de la BDD");
+            throw new LogicException("Impossible de déplacer l'image. Soit l'image a déjà été déplacée, soit elle provient de la BDD");
         }
         notfalse(move_uploaded_file($this->tmp_name, DOCUMENT_ROOT . $this->upload_location()));
         $this->tmp_name = null;
@@ -53,11 +63,11 @@ final class Image
 
     function push_to_db()
     {
-        $args = DB\filter_null_args([
+        $args = [
             'taille' => [$this->taille, PDO::PARAM_INT],
             'mime_subtype' => [$this->mime_subtype, PDO::PARAM_STR],
             'legende' => [$this->legende, PDO::PARAM_STR],
-        ]);
+        ];
         if ($this->id === null) {
             $stmt = DB\insert_into_returning_id(self::TABLE, $args);
             DB\bind_values($stmt, $args);

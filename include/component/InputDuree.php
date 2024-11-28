@@ -6,7 +6,6 @@ require_once 'model/Duree.php';
 /**
  * Composant d'input de durée (jours, heures, minutes).
  * Demander à Raphaël si besoin de d'autres unités.
- * @extends Input<Duree>
  */
 final class InputDuree extends Input
 {
@@ -16,17 +15,25 @@ final class InputDuree extends Input
     }
 
     /**
-     * @inheritDoc
+     * Récupère l'adresse saisie.
+     * @param array $get_or_post `$_GET` ou `$_POST` (selon la méthode du formulaire)
+     * @param bool $required Si la durée est requise. Quand la durée est manquante, si `false` a été passé, la fonciton retourne `null`. Sinon, déclenche une erreur.
      */
-    function getarg(array $get_or_post, bool $required = true): ?Duree {
+    function get(array $get_or_post, bool $required = true): ?Duree
+    {
         $data = getarg($get_or_post, $this->name, required: $required);
-        return $data === null ? null : Duree::from_input($data);
+        return $data === null ? null : new Duree(
+            getarg($data, 'jours', arg_filter(FILTER_VALIDATE_INT)),
+            getarg($data, 'heures', arg_filter(FILTER_VALIDATE_INT)),
+            getarg($data, 'minutes', arg_filter(FILTER_VALIDATE_INT)),
+        );
     }
 
     /**
-     * @inheritDoc
+     * Affiche l'HTML du composant.
+     * @param ?Duree $current La duréee à modifier ou `null` pour une création.
      */
-    function put($current): void
+    function put(?Duree $current = null): void
     {
         $form_attr = $this->form_id ? "form=\"$this->form_id\"" : '';
 ?>

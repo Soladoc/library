@@ -6,15 +6,11 @@ final class Duree
     readonly int $heures;
     readonly int $minutes;
 
-    private function __construct(array $data)
+    function __construct(int $jours, int $heures, int $minutes)
     {
-        $this->jours = $data['jours'];
-        $this->heures = $data['heures'];
-        $this->minutes = $data['minutes'];
-    }
-
-    static function from_input(array $data): Duree {
-        return new Duree($data);
+        $this->jours = $jours;
+        $this->heures = $heures;
+        $this->minutes = $minutes;
     }
 
     /**
@@ -23,7 +19,7 @@ final class Duree
      */
     function format(): string
     {
-        return static::make_interval(
+        return self::make_interval(
             $this->jours,
             $this->heures,
             $this->minutes,

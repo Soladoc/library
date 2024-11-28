@@ -4,9 +4,6 @@ require_once 'util.php';
 require_once 'component/Input.php';
 require_once 'model/Adresse.php';
 
-/**
- * @extends Input<Adresse>
- */
 final class InputAdresse extends Input
 {
     function __construct(string $id = '', string $name = '', string $form_id = '')
@@ -15,17 +12,33 @@ final class InputAdresse extends Input
     }
 
     /**
-     * @inheritDoc
+     * Récupère l'adresse saisie.
+     * @param array $get_or_post `$_GET` ou `$_POST` (selon la méthode du formulaire)
+     * @param ?int $current_id_adresse L'ID de l'adresse à modifier ou `null` pour une création.
+     * @param bool $required Si l'adresse est requise. Quand l'adresse est manquante, si `false` a été passé, la fonciton retourne `null`. Sinon, déclenche une erreur.
      */
-    function getarg(array $get_or_post, bool $required = true): ?Adresse {
+    function get(array $get_or_post, ?int $current_id_adresse = null, bool $required = true): ?Adresse
+    {
         $data = getarg($get_or_post, $this->name, required: $required);
-        return $data === null ? null : Adresse::from_input($data);
+        return $data === null ? null : new Adresse(
+            notfalse(Commune::from_db_by_nom($data['commune'])),
+            getarg($data, 'numero_voie', arg_filter(FILTER_VALIDATE_INT, ['min_range' => 1]), required: false),
+            $data['complement_numero'] ?? null,
+            $data['nom_voie'] ?? null,
+            $data['localite'] ?? null,
+            $data['precision_int'] ?? null,
+            $data['precision_ext'] ?? null,
+            $data['latitude'] ?? null,
+            $data['longitude'] ?? null,
+            $current_id_adresse
+        );
     }
 
     /**
-     * @inheritDoc
+     * Affiche l'HTML du composant.
+     * @param ?Adresse $current L'adresse à modifier ou `null` pour une création.
      */
-    function put($current = null): void
+    function put(?Adresse $current = null): void
     {
         $form_attr = $this->form_id ? "form=\"$this->form_id\"" : '';
         self::put_datalist();

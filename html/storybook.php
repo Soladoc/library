@@ -1,9 +1,9 @@
 <?php
 require_once 'util.php';
-require_once 'component/head.php';
 require_once 'component/InputAdresse.php';
 require_once 'component/InputDuree.php';
 require_once 'component/InputImage.php';
+require_once 'component/Page.php';
 
 $page = new Page('Storybook');
 
@@ -25,7 +25,7 @@ $page = new Page('Storybook');
 <?php
 {
     $input_adresse = new InputAdresse('adresse', 'adresse');
-    $adresse = $input_adresse->getarg($_GET, required: false);
+    $adresse = $input_adresse->get($_GET, required: false);
 ?>
 
 <h3>Entrée</h3>
@@ -51,7 +51,7 @@ $page = new Page('Storybook');
 <?php
 {
     $input_duree = new InputDuree('duree', 'duree');
-    $duree = $input_duree->getarg($_GET, required: false);
+    $duree = $input_duree->get($_GET, required: false);
 ?>
 <h3>Entrée</h3>
 
@@ -74,7 +74,7 @@ $page = new Page('Storybook');
 <?php
 {
     $input_image = new InputImage("Image d'exemple", 'image', 'image');
-    $image = $input_image->getarg($_GET, required: false);
+    $image = $input_image->get($_GET, required: false);
 ?>
 <h3>Entrée</h3>
 
@@ -85,7 +85,7 @@ $page = new Page('Storybook');
 
 <?php if ($image) { ?>
 <h3>Sortie</h3>
-<?php $image->put_figure() ?>
+<?php (new ImageView($image))->put_figure() ?>
 <pre><samp>
     <?php var_dump($image) ?>
 </samp></pre>

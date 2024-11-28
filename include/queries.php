@@ -224,7 +224,7 @@ function insert_adresse(
     ?float $latitude = null,
     ?float $longitude = null,
 ): int {
-    $args = filter_null_args([
+    $args = [
         'code_commune' => [$code_commune, PDO::PARAM_INT],
         'numero_departement' => [$numero_departement, PDO::PARAM_INT],
         'numero_voie' => [$numero_voie, PDO::PARAM_INT],
@@ -235,7 +235,7 @@ function insert_adresse(
         'precision_ext' => [$precision_ext, PDO::PARAM_STR],
         'latitude' => [$latitude, PDO_PARAM_DECIMAL],
         'longitude' => [$longitude, PDO_PARAM_DECIMAL],
-    ]);
+    ];
     $stmt = insert_into_returning_id('_adresse', $args);
     notfalse($stmt->execute());
     return notfalse($stmt->fetchColumn());
