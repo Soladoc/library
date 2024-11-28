@@ -21,4 +21,4 @@ jobs:
       - name: Send Discord message
         env:
           DISCORD_WEBHOOK_URL: '${{secrets.DISCORD_WEBHOOK_URL}}'
-        run: 'cd "$GITHUB_WORKSPACE"/script && ./discord-send-msg.bash "@here Serveur mis à jour."'
+        run: 'cd "$GITHUB_WORKSPACE"/script && ./discord-send-msg.bash "Serveur mis à jour."'
