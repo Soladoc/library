@@ -273,8 +273,8 @@ function insert_uploaded_image(array $img, ?string $legende = null): array
 function exists_pro_prive(int $id_pro_prive): bool
 {   
     var_dump($id_pro_prive);
-    $stmt = notfalse(connect()->prepare('select exists(select from pro_prive where id = ?)'));
-    bind_values($stmt, [1 => [$id_pro_prive, PDO::PARAM_INT]]);
+    $stmt = notfalse(connect()->prepare('select exists(select from pro_prive where id = :a)'));
+    bind_values($stmt, [':a' => [$id_pro_prive, PDO::PARAM_INT]]);
     var_dump($stmt->queryString);
     $a=$stmt->fetchColumn();
     var_dump($a);
