@@ -263,9 +263,23 @@ if ($_POST) {
                     ?>
                     <p><label>Âge requis&nbsp;: <input form="f" name="age_requis" type="number" min="1" value="<?= htmlspecialchars($info['age_requis']) ?>"> an</label></p>
                     <p>Prestations incluses*</p>
-                    <textarea form="f" name="prestations_incluses" required><?= htmlspecialchars($info['prestations_incluses']) ?></textarea>
+                    <?php 
+                        if(htmlspecialchars($info['prestations_incluses'])==null){
+                            $rempli = "";
+                        }else{
+                            $rempli =  htmlspecialchars($info['prestations_incluses'])==null;
+                        }
+                    ?>
+                    <textarea form="f" name="prestations_incluses" required><?= htmlspecialchars($rempli)?></textarea>
                     <p>Prestations non incluses</p>
-                    <textarea form="f" name="prestations_non_incluses"><?= htmlspecialchars($info['prestations_non_incluses']) ?></textarea>
+                    <?php 
+                        if(htmlspecialchars($info['prestations_non_incluses'])==null){
+                            $non_rempli = "";
+                        }else{
+                            $non_rempli =  htmlspecialchars($info['prestations_non_incluses'])==null;
+                        }
+                    ?>
+                    <textarea form="f" name="prestations_non_incluses"><?= htmlspecialchars($non_rempli)?></textarea>
                     <?php
                     put_input_indication_duree();
                     break;
