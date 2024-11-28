@@ -15,7 +15,7 @@ $id_professionnel = Auth\exiger_connecte_pro();
 $est_prive = DB\exists_pro_prive($id_professionnel);
 
 
-$offre = DB\query_offre($POST['id']);
+$offre = DB\query_offre($GET['id']);
 echo $offre;
 
 $args = [
