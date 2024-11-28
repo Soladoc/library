@@ -5,7 +5,7 @@ require_once 'auth.php';
 require_once 'util.php';
 require_once 'const.php';
 require_once 'component/inputs.php';
-require_once 'component/Purlage.php';
+require_once 'component/Page.php';
 require_once 'component/InputDuree.php';
 
 $page = new Page("Modifurlier offre",
