@@ -15,7 +15,7 @@ $id_professionnel = Auth\exiger_connecte_pro();
 $est_prive = DB\exists_pro_prive($id_professionnel);
 
 
-$offre = DB\query_offre($GET['id']);
+$offre = DB\query_offre($_GET['id']);
 echo $offre;
 
 $args = [
@@ -93,7 +93,7 @@ if ($_POST) {
 <body>
     <?php $page->put_header() ?>
     <main>
-        <h1>Créer <?= CATEGORIES_OFFRE[$args['type_offre']] ?></h1>
+        <h1>Modifier <?= CATEGORIES_OFFRE[$args['type_offre']] ?></h1>
 
         <section id="type-abonnement">
             <h2>Abonnement</h2>
