@@ -1,0 +1,22 @@
+name: temp
+on:
+  push:
+    branches:
+      - main
+    paths-ignore:
+      - '**.sql'
+jobs:
+  update_server:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Send Discord message
+        env:
+          DISCORD_WEBHOOK_URL: '${{secrets.DISCORD_WEBHOOK_URL}}'
+        run: |
+          cd "$GITHUB_WORKSPACE"/script && ./discord-send-msg.bash "L'alt que j'ai créé aujourd'hui vient d'être désactivé -_-
+          Bon, si vous avez des questions je m'apelle [bardiniraphael](https://www.instagram.com/bardiniraphael/) sur Instagram.
+          Allez, bonne soirée.
+          *Envoyé depuis mon Bash $BASH_VERSION"
