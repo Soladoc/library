@@ -14,10 +14,16 @@ $page = new Page("Modifier offre",
 $id_professionnel = Auth\exiger_connecte_pro();
 $est_prive = DB\exists_pro_prive($id_professionnel);
 
+
+$offre = DB\query_offre($POST['id']);
+echo $offre;
+
 $args = [
     // ne lance pas la page et génère une errreur si il n'y a pas de get
     'type_offre' => getarg($_GET, 'type_offre', arg_check(f_is_in(array_keys(CATEGORIES_OFFRE)))),
 ];
+
+
 
 if ($_POST) {
     $args += [
