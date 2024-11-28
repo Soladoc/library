@@ -237,7 +237,7 @@ if ($_POST) {
             <label for="description_detaillee">
                 <h2>Description détaillée</h2>
             </label>
-            <textarea form="f" id="description_detaillee" name="description_detaillee" required></textarea>
+            <textarea form="f" id="description_detaillee" name="description_detaillee" required><?= htmlspecialchars($offre['description_detaillee']) ?></textarea>
         </section>
 
         <section id="image-creation-offre">
@@ -256,9 +256,9 @@ if ($_POST) {
                     ?>
                     <p><label>Âge requis&nbsp;: <input form="f" name="age_requis" type="number" min="1"> an</label></p>
                     <p>Prestations incluses*</p>
-                    <textarea form="f" name="prestations_incluses" required></textarea>
+                    <textarea form="f" name="prestations_incluses" required><?= htmlspecialchars($offre['prestations_incluses']) ?></textarea>
                     <p>Prestations non incluses</p>
-                    <textarea form="f" name="prestations_non_incluses"></textarea>
+                    <textarea form="f" name="prestations_non_incluses"><?= htmlspecialchars($offre['prestations_non_incluses']) ?></textarea>
                     <?php
                     put_input_indication_duree();
                     break;
