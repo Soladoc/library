@@ -26,6 +26,12 @@ final class Duree
         );
     }
 
+    static function parse(string $output): Duree {
+        $matches = [];
+        preg_match('/(\d+\.\d+) hours (\d+\.\d+) mins (\d+\.\d+) secs/', $output, $matches);
+        return new Duree($matches[1], $matches[2], $matches[3]);
+    }
+
     private static function make_interval(int $days, int $hours, int $mins)
     {
         $stmt = notfalse(DB\connect()->prepare('select make_interval(days => ?, hours => ?, mins => ?)'));

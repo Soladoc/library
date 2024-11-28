@@ -5,9 +5,10 @@ require_once 'auth.php';
 require_once 'util.php';
 require_once 'const.php';
 require_once 'component/inputs.php';
-require_once 'component/Page.php';
+require_once 'component/Purlage.php';
+require_once 'component/InputDuree.php';
 
-$page = new Page("Modifier offre",
+$page = new Page("Modifurlier offre",
     ['creation_offre.css'],
     ['module/creation_offre.js' => 'defer type="module"']);
 
@@ -272,7 +273,7 @@ if ($_POST) {
                     <p>Prestations non incluses</p>
                     <textarea form="f" name="prestations_non_incluses"><?= $prestations_non_incluses?></textarea>
                     <?php
-                    put_input_indication_duree();
+                    put_input_indication_duree(Duree::parse($info['indication_duree']));
                     break;
                 case 'parc d\'attractions':
                     ?>
@@ -326,9 +327,9 @@ if ($_POST) {
 
 </html>
 <?php
-function put_input_indication_duree()
+function put_input_indication_duree(Duree $duree)
 {
     ?>
-        <label>Durée estimée&nbsp;: <?php put_input_duration('f', 'indication_duree', 'indication_duree_') ?></label>
+        <label>Durée estimée&nbsp;: <?php (new InputDuree('f', 'indication_duree', 'indication_duree_'))->put() ?></label>
         <?php
 }
