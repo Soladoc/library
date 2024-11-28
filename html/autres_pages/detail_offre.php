@@ -47,7 +47,7 @@ assert($offre['id'] === $args['id']);
 $titre = $offre['titre'];
 $description = $offre['description_detaillee'];
 $site_web = $offre['url_site_web'];
-$image_pricipale = DB\query_image($offre['id_image_principale']);
+$image_pricipale = notfalse(Image::from_db($offre['id_image_principale']));
 $adresse = notfalse(DB\query_adresse($offre['id_adresse']));
 
 $gallerie = DB\query_gallerie($args['id']);
@@ -74,20 +74,16 @@ $avis = DB\query_avis()
                 <div class="carousel-container">
                     <div class="carousel">
                         <!-- Image principale -->
-                        <?php if ($image_pricipale): ?>
-                            <div class="carousel-slide">
-                                <?php put_image($image_pricipale) ?>
+                        <div class="carousel-slide">
+                                <?php (new ImageView($image_pricipale))->put_img() ?>
                             </div>
-                        <?php endif ?>
 
-                        <!-- Galerie d'images -->
-                        <?php if (!empty($gallerie)): ?>
-                            <?php foreach ($gallerie as $image): ?>
+                            <!-- Galerie d'images -->
+                            <?php foreach ($gallerie as $id_image): ?>
                                 <div class="carousel-slide">
-                                    <?php put_image(DB\query_image($image)) ?>
+                                    <?php (new ImageView(Image::from_db($id_image)))->put_img() ?>
                                 </div>
                             <?php endforeach ?>
-                        <?php endif ?>
                     </div>
 
                     <!-- Boutons de navigation -->
