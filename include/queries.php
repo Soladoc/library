@@ -1,6 +1,8 @@
 <?php
 namespace DB;
+
 use PDO;
+
 require_once 'db.php';
 
 require_once 'queries/offre.php';
@@ -31,7 +33,6 @@ function query_images(): \Iterator
     notfalse($stmt->execute());
     return $stmt->getIterator();
 }
-
 
 function query_image(int $id_image): array
 {
