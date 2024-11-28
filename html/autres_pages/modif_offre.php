@@ -16,7 +16,7 @@ $est_prive = DB\exists_pro_prive($id_professionnel);
 
 
 $offre = DB\query_offre($_GET['id']);
-echo $offre;
+print_r($offre);
 
 $args = [
     // ne lance pas la page et génère une errreur si il n'y a pas de get
