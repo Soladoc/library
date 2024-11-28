@@ -131,7 +131,7 @@ if ($_POST) {
                 </p>
                 <label for="resume">Resumé*</label>
                 <p>
-                    <input form="f" id="resume" name="resume" type="text" value="<?= htmlspecialchars($offre['titre']) ?>" required>
+                    <input form="f" id="resume" name="resume" type="text" value="<?= htmlspecialchars($offre['resume']) ?>" required>
                 </p>
                 <label for="adresse">Adresse*</label>
                 <?php
@@ -259,12 +259,13 @@ if ($_POST) {
             <?php
             switch ($args['type_offre']) {
                 case 'activité':
+                    $info = DB\query_offre($offre['id']);
                     ?>
-                    <p><label>Âge requis&nbsp;: <input form="f" name="age_requis" type="number" min="1"> an</label></p>
+                    <p><label>Âge requis&nbsp;: <input form="f" name="age_requis" type="number" min="1" value="<?= htmlspecialchars($info['age_requis']) ?>"> an</label></p>
                     <p>Prestations incluses*</p>
-                    <textarea form="f" name="prestations_incluses" required><?= htmlspecialchars($offre['prestations_incluses']) ?></textarea>
+                    <textarea form="f" name="prestations_incluses" required><?= htmlspecialchars($info['prestations_incluses']) ?></textarea>
                     <p>Prestations non incluses</p>
-                    <textarea form="f" name="prestations_non_incluses"><?= htmlspecialchars($offre['prestations_non_incluses']) ?></textarea>
+                    <textarea form="f" name="prestations_non_incluses"><?= htmlspecialchars($info['prestations_non_incluses']) ?></textarea>
                     <?php
                     put_input_indication_duree();
                     break;
