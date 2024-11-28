@@ -127,11 +127,11 @@ if ($_POST) {
             <div>
                 <label for="titre">Titre*</label>
                 <p>
-                    <input form="f" id="titre" name="titre" type="text" value="<?= htmlspecialchars($offre['titre']) ?>"required>
+                    <input form="f" id="titre" name="titre" type="text" value="<?= htmlspecialchars($offre['titre']) ?>" required>
                 </p>
                 <label for="resume">Resumé*</label>
                 <p>
-                    <input form="f" id="resume" name="resume" type="text" required>
+                    <input form="f" id="resume" name="resume" type="text" value="<?= htmlspecialchars($offre['titre']) ?>" required>
                 </p>
                 <label for="adresse">Adresse*</label>
                 <?php
