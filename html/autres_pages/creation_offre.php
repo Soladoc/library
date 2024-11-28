@@ -14,7 +14,7 @@ $page = new Page("Création d'une offre",
 $id_professionnel = Auth\exiger_connecte_pro();
 echo $id_professionnel;
 $est_prive = DB\exists_pro_prive($id_professionnel);
-echo $est_prive;
+print_r($est_prive);
 
 $args = [
     // ne lance pas la page et génère une errreur si il n'y a pas de get
