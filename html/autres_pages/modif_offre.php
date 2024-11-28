@@ -265,18 +265,18 @@ if ($_POST) {
                     <p>Prestations incluses*</p>
                     <?php 
                         if(htmlspecialchars($info['prestations_incluses'])==null){
-                            $rempli = "";
+                            $rempli = " ";
                         }else{
-                            $rempli =  htmlspecialchars($info['prestations_incluses'])==null;
+                            $rempli =  htmlspecialchars($info['prestations_incluses']);
                         }
                     ?>
                     <textarea form="f" name="prestations_incluses" required><?= htmlspecialchars($rempli)?></textarea>
                     <p>Prestations non incluses</p>
                     <?php 
                         if(htmlspecialchars($info['prestations_non_incluses'])==null){
-                            $non_rempli = "";
+                            $non_rempli = " ";
                         }else{
-                            $non_rempli =  htmlspecialchars($info['prestations_non_incluses'])==null;
+                            $non_rempli =  htmlspecialchars($info['prestations_non_incluses']);
                         }
                     ?>
                     <textarea form="f" name="prestations_non_incluses"><?= htmlspecialchars($non_rempli)?></textarea>
