@@ -111,7 +111,7 @@ create table _offre (
     resume ligne not null,
     description_detaillee paragraphe not null,
     modifiee_le timestamp not null,
-    url_site_web varchar(2047) not null,
+    url_site_web varchar(2047),
     periodes_ouverture tsmultirange not null
 );
 
@@ -135,9 +135,9 @@ create table _activite (
         constraint activite_pk primary key
         constraint activite_inherits_offre references _offre,
     indication_duree interval not null,
-    age_requis int not null,
+    age_requis int check (age_requis > 0),
     prestations_incluses paragraphe not null,
-    prestations_non_incluses paragraphe not null
+    prestations_non_incluses paragraphe check (prestations_non_incluses <> '')
 );
 
 create table _visite (
