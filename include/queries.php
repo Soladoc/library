@@ -274,6 +274,7 @@ function exists_pro_prive(int $id_pro_prive): bool
 {   
     var_dump($id_pro_prive);
     $stmt = notfalse(connect()->prepare('select exists(select from pro_prive where id = ?)'));
+    var_dump($stmt->queryString);
     bind_values($stmt, [1 => [$id_pro_prive, PDO::PARAM_INT]]);
     $a=$stmt->fetchColumn();
     var_dump($a);
