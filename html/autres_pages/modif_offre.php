@@ -135,11 +135,12 @@ if ($_POST) {
                 </p>
                 <label for="adresse">Adresse*</label>
                 <?php
-                put_input_address('adresse', 'adresse_', 'f')
+                put_input_address('adresse', 'adresse_', 'f');
+                $url = htmlspecialchars($offre['url_site_web'] ?? '');
                 ?>
                 <label for="site">Site Web</label>
                 <p>
-                    <input form="f" id="url_site_web" name="url_site_web" type="url">
+                    <input form="f" id="url_site_web" name="url_site_web" type="url" value="<?=$url ?>">
                 </p>
             </div>
         </section>
