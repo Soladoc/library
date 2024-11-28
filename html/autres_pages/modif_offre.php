@@ -7,7 +7,7 @@ require_once 'const.php';
 require_once 'component/inputs.php';
 require_once 'component/Page.php';
 
-$page = new Page("Création d'une offre",
+$page = new Page("Modifier offre",
     ['creation_offre.css'],
     ['module/creation_offre.js' => 'defer type="module"']);
 
