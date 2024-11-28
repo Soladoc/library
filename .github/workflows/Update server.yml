@@ -13,9 +13,12 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Update server
+        env:
+          ARTIFACT_SSH_KEY: '${{secrets.ARTIFACT_SSH_KEY}}'
+          ARTIFACT_HOST: '${{secrets.ARTIFACT_HOST}}'
         run: 'cd "$GITHUB_WORKSPACE"/script && ./server-run-script.bash ./server/update.bash'
 
       - name: Send Discord message
         env:
-          DISCORD_WEBHOOK_URL: "${{secrets.DISCORD_WEBHOOK_URL}}"
+          DISCORD_WEBHOOK_URL: '${{secrets.DISCORD_WEBHOOK_URL}}'
         run: 'cd "$GITHUB_WORKSPACE"/script && ./discord-send-msg.bash "@here Serveur mis à jour."'
