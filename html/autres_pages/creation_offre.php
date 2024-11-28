@@ -12,9 +12,7 @@ $page = new Page("Création d'une offre",
     ['module/creation_offre.js' => 'defer type="module"']);
 
 $id_professionnel = Auth\exiger_connecte_pro();
-echo $id_professionnel;
 $est_prive = DB\exists_pro_prive($id_professionnel);
-var_dump($est_prive);
 
 $args = [
     // ne lance pas la page et génère une errreur si il n'y a pas de get
