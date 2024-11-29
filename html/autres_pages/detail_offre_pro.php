@@ -82,8 +82,7 @@ if ($offre) {
                 </div>
             </form>
             <div class="page_modif">
-                <a class="modifier" href="<?php location_modifier_offre($args['id']) ?>">Modifier</a>
-                <a class="modifier" href="<?php location_modifier_offre($args['id']) ?>">Modifier</a>
+                <a class="modifier" href="modifier_offre.php?<?=$args['id']?>$type=<?=$offre['type']?>">Modifier</a>
             </div>
             <section class="offer-details">
                 <section class="offer-main-photo">
