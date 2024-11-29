@@ -5,7 +5,6 @@ require_once 'component/Page.php';
 $page = new Page('Accueil');
 
 
-$recherche = null;
 
 $valider = getarg($_GET,"valider",required: false);
 $mot_cle= getarg($_GET,"mot_cle",required: false);
@@ -29,7 +28,7 @@ if ($valider && !empty($mot_cle)) {
         <section class="search-section">
             <h1>Accueil</h1>
             <br>
-            <form action="" name="bare_de_recherche" method="get" class="search-bar">
+            <form action="recherche.php" name="bare_de_recherche" method="get" class="search-bar">
 
                 <input type="text" name="mot_cle" value="<?php echo $mot_cle ?>" placeholder=">Mots-clés">
                 <input type="submit" name="valider" value="Recherche">
@@ -49,6 +48,7 @@ if ($valider && !empty($mot_cle)) {
                     $offres = DB\query_offres_a_une();
 
                 }
+                
                 // Préparer et exécuter la requête SQL pour récupérer toutes les offres
 
                 // Boucler sur les résultats pour afficher chaque offre
