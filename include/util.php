@@ -21,11 +21,11 @@ function notfalse(mixed $valeur, string $message = 'was false'): mixed
  * Supprime une clé d'un tableu et retourne la valeur associée.
  * @template T
  * @param T[] $array Le tableau à modifier.
- * @param string|int $key La clé à retirer. Elle doit exister dans le tableau.
- * @throws \DomainException Si la clé n'existe pas dans le tableau.
+ * @param bool|float|int|resource|string|null $key La clé à retirer. Elle doit exister dans le tableau.
+ * @throws DomainException Si la clé n'existe pas dans le tableau.
  * @return T La valeur associée à la clé retirée.
  */
-function array_pop_key(array &$array, string|int $key): mixed
+function array_pop_key(array &$array, bool|float|int|resource|string|null $key): mixed
 {
     if (!array_key_exists($key, $array)) {
         throw new DomainException("Array must contain key '$key'");
@@ -63,7 +63,7 @@ function array_every(array $arr, callable $predicate): bool
  */
 function getarg(array $source, string $nom, ?callable $filter = null, bool $required = true): mixed
 {
-    if (!isset($source[$nom]) || $source[$nom] === '') {
+    if (!array_key_exists($nom, $source) || $source[$nom] === '') {
         if ($required) {
             dbg_print($source);
             html_error("argument manquant: $nom");
