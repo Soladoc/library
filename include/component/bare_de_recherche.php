@@ -11,7 +11,7 @@ $modif_affichage = false;
 
 
 if (isset($valider)&& !empty(trim($mot_cle))) {
-     $tab = DB/querry_select_offre_motcle($mot_cle);
+     $tab = DB\query_select_offre_motcle($mot_cle);
     $modif_affichage = true;
 
 }

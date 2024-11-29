@@ -44,7 +44,7 @@ if (isset($valider)&& !empty(trim($mot_cle))) {
             <div class="offer-list">
                 <?php
                 if ($modif_affichage) {
-                    $offres = DB/querry_select_offre_motcle($mot_cle);
+                    $offres = DB\query_select_offre_motcle($mot_cle);
                 }
                 else {
                     // Préparer et exécuter la requête SQL pour récupérer toutes les offres
