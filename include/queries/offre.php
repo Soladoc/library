@@ -1,9 +1,7 @@
 <?php
 namespace DB;
-
 require_once 'db.php';
 require_once 'util.php';
-
 use PDO, Iterator;
 
 function query_offre(int $id_offre): array|false
@@ -250,12 +248,4 @@ function insert_into_visite(
     bind_values($stmt, $args);
     notfalse($stmt->execute());
     return notfalse($stmt->fetchColumn());
-}
-
-function query_activite(int $id_activite): array|false
-{
-    $stmt = notfalse(connect()->prepare('select * from _activite where id = ?'));
-    bind_values($stmt, [1 => [$id_activite, PDO::PARAM_INT]]);
-    notfalse($stmt->execute());
-    return $stmt->fetch();
 }

@@ -1,11 +1,16 @@
 <?php 
+
+
+
+
+
 $mot_cle= $_GET["mot_cle"];
 $recherche = $_GET["valider"]; 
 
 
 
 if (isset($valider)&& !empty(trim($mot_cle))) {
-    querry_select_offre_motcle($mot_cle);
+    DB/querry_select_offre_motcle($mot_cle);
 
 }
 
