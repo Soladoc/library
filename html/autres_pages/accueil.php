@@ -30,7 +30,7 @@ if (isset($valider)&& !empty(trim($mot_cle))) {
             <br>
             <form action="" name="bare_de_recherche" method="get" >
 
-                <input type="text" name="mot_cle" value="<?php echo $mot_cle ?>" placeholder=">Mots-clés">
+                <input type="text" name="mot_cle" placeholder=">Mots-clés"  value="<?php echo $mot_cle ?>">
                 <input type="submit" name="valider" value="Recherche" class="btn-search">
             </form>
                 <!-- <input type="text" placeholder="Rechercher des activités, restaurants, spectacles...">
