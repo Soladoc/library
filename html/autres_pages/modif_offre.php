@@ -235,7 +235,7 @@ if ($_POST) {
             <ul id="list-tag">
                 <?php
                 // Récupération des tags associés à l'offre
-                $tags_remplis = array_column(DB\query_tags($offre['id']), 'tag');
+                $tags_remplis = DB\query_tags($offre['id']);
                 $tags_disponibles = $args['type_offre'] === 'restaurant' ? TAGS_RESTAURANT : DEFAULT_TAGS;
                 print_r($tags_remplis);
                 foreach ($tags_disponibles as $tag) {
