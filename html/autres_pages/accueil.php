@@ -4,15 +4,15 @@ require_once 'component/Page.php';
 
 $page = new Page('Accueil');
 
-$mot_cle= null;
+
 $recherche = null; 
 $valider = getarg($_GET,"valider");
 $modif_affichage = false;
 
-if ($valider && !empty(trim($mot_cle))) {
+if ($valider && !empty($mot_cle)) {
     $modif_affichage = true;
-    $mot_cle= $_GET["mot_cle"];
-    $recherche = $_GET["valider"]; 
+    $mot_cle= getarg($_GET,"mot_cle");
+    $recherche = getarg($_GET,"valider"); 
 }
 ?>
 
