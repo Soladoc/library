@@ -8,7 +8,7 @@ require_once 'component/inputs.php';
 require_once 'component/Page.php';
 require_once 'component/InputDuree.php';
 
-$page = new Page("Modifurlier offre",
+$page = new Page("Modifier offre",
     ['creation_offre.css'],
     ['module/creation_offre.js' => 'defer type="module"']);
 
@@ -234,9 +234,20 @@ if ($_POST) {
             <h2>Tags</h2>
             <ul id="list-tag">
                 <?php
-                foreach ($args['type_offre'] === 'restaurant' ? TAGS_RESTAURANT : DEFAULT_TAGS as $tag) {
+                // Récupération des tags associés à l'offre
+                $tags_remplis = array_column(DB\query_tags($offre['id']), 'tag');
+                $tags_disponibles = $args['type_offre'] === 'restaurant' ? TAGS_RESTAURANT : DEFAULT_TAGS;
+
+                foreach ($tags_disponibles as $tag) {
+                    // Si le tag est déjà dans les tags remplis, ajoutez 'checked'
+                    $checked = in_array($tag, $tags_remplis) ? 'checked' : '';
                     ?>
-                    <li><label><input form="f" name="tags[<?= $tag ?>]" type="checkbox"><?= $tag ?></label></li>
+                    <li>
+                        <label>
+                            <input form="f" name="tags[<?= htmlspecialchars($tag) ?>]" type="checkbox" <?= $checked ?>>
+                            <?= htmlspecialchars($tag) ?>
+                        </label>
+                    </li>
                 <?php } ?>
             </ul>
         </section>

@@ -84,7 +84,6 @@ if ($offre) {
             </form>
             <div class="page_modif">
                 <a class="modifier" href="modif_offre.php?id=<?= $args['id']?>&type_offre=<?= $offre['categorie']?>">Modifier</a>
-                <a class="modifier" href="modifier_offre.php?id=<?= isset($args['id']) ? urlencode($args['id']) : '' ?>&type=<?= isset($offre['type']) ? urlencode($offre['type']) : '' ?>">Modifier</a>
             </div>
             <section class="offer-details">
                 <section class="offer-main-photo">
