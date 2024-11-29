@@ -1,8 +1,6 @@
 <?php
 namespace DB;
-
 use PDO;
-
 require_once 'db.php';
 
 require_once 'queries/offre.php';
@@ -33,6 +31,7 @@ function query_images(): \Iterator
     notfalse($stmt->execute());
     return $stmt->getIterator();
 }
+
 
 function query_image(int $id_image): array
 {
@@ -131,10 +130,22 @@ function query_communes(?string $nom = null): array
 function query_avis(?int $id_membre_auteur = null, ?int $id_offre = null): array
 {
     $args = filter_null_args(['id_membre_auteur' => [$id_membre_auteur, PDO::PARAM_INT], 'id_offre' => [$id_offre, PDO::PARAM_INT]]);
-    $stmt = notfalse(connect()->prepare('select * from avis ' . where_clause(BoolOperator::AND, array_keys($args))));
+    $stmt = notfalse(connect()->prepare('select * from avis ' . where_clause(BoolOperator::AND, clauses: array_keys($args))));
     bind_values($stmt, $args);
     notfalse($stmt->execute());
     return $stmt->fetchAll();
+}
+
+function query_select_offre_motcle(string $motcle):array{
+    $mots=explode(" ",trim($motcle));
+    for($i=0; $i<count($mots); $i++) {
+        $mc[$i] = "titre like '%".$mots[$i]."%'";
+    }
+    $stmt = notfalse(connect()->prepare('select * from offres ' . where_clause(BoolOperator::AND, array_keys($mots))));
+    notfalse($stmt->execute());
+    return $stmt->fetchAll();
+    
+
 }
 
 // Update-----------------------------------------------------------------------------------------------------------
@@ -225,7 +236,7 @@ function insert_adresse(
     ?float $latitude = null,
     ?float $longitude = null,
 ): int {
-    $args = [
+    $args = filter_null_args([
         'code_commune' => [$code_commune, PDO::PARAM_INT],
         'numero_departement' => [$numero_departement, PDO::PARAM_INT],
         'numero_voie' => [$numero_voie, PDO::PARAM_INT],
@@ -236,7 +247,7 @@ function insert_adresse(
         'precision_ext' => [$precision_ext, PDO::PARAM_STR],
         'latitude' => [$latitude, PDO_PARAM_DECIMAL],
         'longitude' => [$longitude, PDO_PARAM_DECIMAL],
-    ];
+    ]);
     $stmt = insert_into_returning_id('_adresse', $args);
     notfalse($stmt->execute());
     return notfalse($stmt->fetchColumn());
@@ -272,10 +283,9 @@ function insert_uploaded_image(array $img, ?string $legende = null): array
  * @return bool `true` si un professionnel privé d'id $id_pro_prive existe, `false` sinon.
  */
 function exists_pro_prive(int $id_pro_prive): bool
-{   
+{
     $stmt = notfalse(connect()->prepare('select ? in (select id from pro_prive)'));
     bind_values($stmt, [1 => [$id_pro_prive, PDO::PARAM_INT]]);
-    notfalse($stmt->execute());
     return $stmt->fetchColumn();
 }
 
@@ -288,6 +298,5 @@ function exists_offre(int $id_offre): bool
 {
     $stmt = notfalse(connect()->prepare('select ? in (select id from offres)'));
     bind_values($stmt, [1 => [$id_offre, PDO::PARAM_INT]]);
-    notfalse($stmt->execute());
     return $stmt->fetchColumn();
 }

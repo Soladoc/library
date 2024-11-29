@@ -176,11 +176,6 @@ function bind_values(PDOStatement $stmt, array $params)
     }
 }
 
-/**
- * Retire les arguments `null` avant le `bind_values` pour pouvoir utiliser la valeur par défaut de la colonne dans les INSERT.
- * @param array $array
- * @return array
- */
 function filter_null_args(array $array): array
 {
     return array_filter($array, fn($e) => $e[0] !== null);
