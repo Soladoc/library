@@ -117,7 +117,7 @@ readonly failed_job_url="${job[0]}" failed_step_name="${job[1]}" failed_step_num
 link_part="\`$DISPLAY_TITLE\` > \`$failed_step_name\` (step $failed_step_number) ([job]($failed_job_url))"
 
 if [[ "$CONCLUSION" == failure ]]; then
-    send_msg $DMF_SUPPRESS_EMBEDS <<EOF
+    discord_send_msg $DMF_SUPPRESS_EMBEDS <<EOF
 @here $ACTOR a cassé la BDD :skull:
 $link_part
 
@@ -131,7 +131,7 @@ $(gh_job_logs "$failed_step_number" "$failed_step_name" $log_lines)
 EOF
 elif [[ "$CONCLUSION" == success ]]; then
     repair_duration="$(fmt_hms "$(date_diff "$TIMESTAMP" "$prev_timestamp")")"
-    send_msg $DMF_SUPPRESS_EMBEDS <<EOF
+    discord_send_msg $DMF_SUPPRESS_EMBEDS <<EOF
 @here Bravo à $ACTOR pour avoir réparé la BDD en $repair_duration :+1:
 $link_part
 

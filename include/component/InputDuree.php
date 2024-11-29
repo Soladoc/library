@@ -23,9 +23,9 @@ final class InputDuree extends Input
     {
         $data = getarg($get_or_post, $this->name, required: $required);
         return $data === null ? null : new Duree(
-            getarg($data, 'jours', arg_filter(FILTER_VALIDATE_INT)),
-            getarg($data, 'heures', arg_filter(FILTER_VALIDATE_INT)),
-            getarg($data, 'minutes', arg_filter(FILTER_VALIDATE_INT)),
+            days: getarg($data, 'jours', arg_filter(FILTER_VALIDATE_INT)),
+            hours: getarg($data, 'heures', arg_filter(FILTER_VALIDATE_INT)),
+            minutes: getarg($data, 'minutes', arg_filter(FILTER_VALIDATE_INT)),
         );
     }
 
@@ -44,7 +44,7 @@ final class InputDuree extends Input
         type="number"
         min="0"
         required
-        value="<?= $current?->jours ?? 0 ?>"> jour(s)
+        value="<?= $current?->days ?? 0 ?>"> jour(s)
     <input <?= $form_attr ?>
         id="<?= $this->id ?>_heures"
         name="<?= $this->name ?>[heures]"
@@ -52,7 +52,7 @@ final class InputDuree extends Input
         min="0"
         max="24"
         required
-        value="<?= $current?->heures ?? 0 ?>"> heure(s)
+        value="<?= $current?->hours ?? 0 ?>"> heure(s)
     <input <?= $form_attr ?>
         id="<?= $this->id ?>_minutes"
         name="<?= $this->name ?>[minutes]"

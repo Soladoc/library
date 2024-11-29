@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Cause une erreur si la valeur fournie est strictement égale à `false`.
  *
@@ -112,10 +113,10 @@ function html_error(mixed $arg): never
 {
     ?>
     <p>Erreur: <?= strval($arg) ?></p><?php
-      if ($arg instanceof Throwable) {
-          throw $arg;
-      }
-      throw new DomainException($arg);
+    if ($arg instanceof Throwable) {
+        throw $arg;
+    }
+    throw new DomainException($arg);
 }
 
 /**
@@ -146,7 +147,7 @@ function f_is_in(array $allowed_values): callable
  */
 function f_array_has_keys(array $keys): callable
 {
-    return fn($value) => is_array($value) && array_every($keys, fn($key) => isset ($value[$key]));
+    return fn($value) => is_array($value) && array_every($keys, fn($key) => isset($value[$key]));
 }
 
 /**
@@ -205,6 +206,30 @@ function soa_to_aos(array $array): array
         }
     }
     return $result;
+}
+
+/**
+ * Parse un entier.
+ * @param string $value La valeur à parser.
+ * @param mixed $min_range La valeur minimale.
+ * @return int|false L'entier parsé ou `false` en cas d'erreur de syntaxe.
+ */
+function parse_int(string $value, ?int $min_range = null): int|false
+{
+    return filter_var($value, FILTER_VALIDATE_INT,
+        $min_range === null ? 0 : ['min_range' => $min_range]);
+}
+
+/**
+ * Parse un flottant.
+ * @param string $value La valeur à parser.
+ * @param mixed $min_range La valeur minimale.
+ * @return float|false Le floattant parsé ou `false` en cas d'erreur de syntaxe.
+ */
+function parse_float(string $value, ?float $min_range = null): float|false
+{
+    return filter_var($value, FILTER_VALIDATE_FLOAT,
+        $min_range === null ? 0 : ['min_range' => $min_range]);
 }
 
 /**
