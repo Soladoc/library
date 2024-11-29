@@ -2,6 +2,7 @@
 require_once 'auth.php';
 require_once 'component/offre.php';
 require_once 'component/Page.php';
+require_once 'component/ImageView.php';
 
 $args = [
     'id' => getarg($_GET, 'id', arg_filter(FILTER_VALIDATE_INT)),
@@ -76,6 +77,7 @@ $avis = DB\query_avis()
         <section class="offer-details">
             <section class="offer-main-photo">
                 <div class="carousel-container">
+                <div class="carousel-container">
                     <div class="carousel">
                         <!-- Image principale -->
                         <?php if ($image_pricipale): ?>
@@ -93,7 +95,6 @@ $avis = DB\query_avis()
                             <?php endforeach ?>
                         <?php endif ?>
                     </div>
-
                     <!-- Boutons de navigation -->
                     <button class="carousel-prev" aria-label="Image précédente">❮</button>
                     <button class="carousel-next" aria-label="Image suivante">❯</button>

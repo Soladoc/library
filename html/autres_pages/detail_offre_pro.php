@@ -83,17 +83,16 @@ if ($offre) {
             </form>
             <div class="page_modif">
                 <a class="modifier" href="<?php location_modifier_offre($args['id']) ?>">Modifier</a>
+                <a class="modifier" href="<?php location_modifier_offre($args['id']) ?>">Modifier</a>
             </div>
             <section class="offer-details">
                 <section class="offer-main-photo">
                     <div class="carousel-container">
                         <div class="carousel">
                             <!-- Image principale -->
-                            <?php if ($image_pricipale): ?>
-                                <div class="carousel-slide">
-                                    <?php put_image($image_pricipale) ?>
-                                </div>
-                            <?php endif ?>
+                            <div class="carousel-slide">
+                                <?php (new ImageView($image_pricipale))->put_img() ?>
+                            </div>
 
                             <!-- Galerie d'images -->
                             <?php if (!empty($gallerie)): ?>
