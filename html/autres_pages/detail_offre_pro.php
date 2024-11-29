@@ -30,7 +30,7 @@ if ($offre) {
     $description = $offre['description_detaillee'];
     $adresse = $offre['id_adresse'];
     $site_web = $offre['url_site_web'];
-    $image_pricipale = DB\query_image($offre['id_image_principale']);
+    $image_pricipale = notfalse(Image::from_db($offre['id_image_principale']));
     $en_ligne = $offre['en_ligne'];
     $info_adresse = DB\query_adresse($adresse);
     $avis = DB\query_avis();
@@ -82,13 +82,12 @@ if ($offre) {
                 </div>
             </form>
             <div class="page_modif">
-                <a class="modifier" href="modifier_offre.php?<?=$args['id']?>$type=<?=$offre['type']?>">Modifier</a>
+                <a class="modifier" href="modifier_offre.php?id=<?= isset($args['id']) ? urlencode($args['id']) : '' ?>&type=<?= isset($offre['type']) ? urlencode($offre['type']) : '' ?>">Modifier</a>
             </div>
             <section class="offer-details">
                 <section class="offer-main-photo">
                     <div class="carousel-container">
                         <div class="carousel">
-                            <!-- Image principale -->
                             <div class="carousel-slide">
                                 <?php (new ImageView($image_pricipale))->put_img() ?>
                             </div>

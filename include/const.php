@@ -2,7 +2,7 @@
 
 /**
  * Des propositions de tag.
- * @var array
+ * @var string[]
  */
 const DEFAULT_TAGS = [
     'atelier',

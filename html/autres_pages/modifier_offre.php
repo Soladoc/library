@@ -4,9 +4,9 @@ require_once 'queries.php';
 require_once 'auth.php';
 require_once 'util.php';
 require_once 'const.php';
-require_once 'component/inputs.php';
-require_once 'component/Page.php';
-require_once 'component/InputDuree.php';
+require_once 'inputs.php';
+require_once 'Page.php';
+require_once 'InputDuree.php';
 
 $page = new Page("Modifurlier offre",
     ['creation_offre.css'],
