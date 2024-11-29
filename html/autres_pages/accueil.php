@@ -43,7 +43,7 @@ if ($valider && !empty($mot_cle)) {
                 <?php
 
                 if ($modif_affichage) {
-                    $offres = DB\querry_select_offre_motcle($mot_cle);
+                    $offres = DB\query_select_offre_motcle($mot_cle);
                 }
                 else {
                     $offres = DB\query_offres_a_une();
