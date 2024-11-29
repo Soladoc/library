@@ -12,6 +12,9 @@ async function initializeOffers() {
         getDataJson(`/json/offres.php`),
         getDataJson(`/json/images.php`),
     ]);
+    for (let offer of offers) {
+        offer.tags = await getDataJson(`/json/tags.php?id=${offer.id}`);
+    }
     filterOffers();
 }
 initializeOffers();
@@ -98,8 +101,10 @@ function filterOffers() {
             return false;
         }
         if (selectedSubcategories.length > 0) {
-            const offerSubcategories = offer.sous_categorie.split(',').map(sub => sub.trim());
-            return selectedSubcategories.some(selected => offerSubcategories.includes(selected));
+            if (!offer.tags || offer.tags.length === 0) {
+                return false;
+            }
+            return selectedSubcategories.some(selected => offer.tags.includes(selected));
         }
         return true;
     });
