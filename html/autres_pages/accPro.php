@@ -4,6 +4,7 @@ require_once 'component/Page.php';
 require_once 'auth.php';
 require_once 'redirect.php';
 require_once 'queries/offre.php';
+require_once 'comonent/CarteOffrePro.php';
 
 $page = new Page('Accueil Professionnel');
 
@@ -32,9 +33,9 @@ $nb_offres_en_ligne = DB\query_offres_count($id_professionnel, en_ligne: true)
 
             <div class="offer-list">
                 <?php
-                $offres_en_ligne = DB\query_offres($id_professionnel, en_ligne: true);
+                $offres_en_ligne = Offre::from_db_all($id_professionnel, en_ligne: true);
                 foreach ($offres_en_ligne as $offre) {
-                    put_card_offre_pro($offre);
+                    (new CarteOffrePro($offre))->put();
                 }
                 ?>
             </div>
@@ -46,9 +47,9 @@ $nb_offres_en_ligne = DB\query_offres_count($id_professionnel, en_ligne: true)
 
             <div class="offer-carousel">
                 <?php
-                $offres_hors_ligne = DB\query_offres($id_professionnel, en_ligne: false);
+                $offres_hors_ligne = Offre::from_db_all($id_professionnel, en_ligne: false);
                 foreach($offres_hors_ligne as $offre) {
-                    put_card_offre_pro($offre);
+                    (new CarteOffrePro($offre))->put();
                 }
                 ?>
             </div>
