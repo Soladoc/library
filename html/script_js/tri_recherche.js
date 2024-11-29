@@ -22,10 +22,10 @@ initializeOffers();
 
 const subcategories = {
     restaurant: ['Française', 'Fruits de mer', 'Asiatique', 'Indienne', 'Italienne', 'Gastronomique', 'Restauration rapide', 'Crêperie'],
-    activité: ['Atelier','Cinéma','Cirque','Culturel','Famille','Histoire','Humour','Musée','Musique','Nature','Patrimoine','Son et lumière','Urbain',],
-    spectacle: ['Atelier','Cinéma','Cirque','Culturel','Famille','Histoire','Humour','Musée','Musique','Nature','Patrimoine','Son et lumière','Urbain',],
-    visite: ['Atelier','Cinéma','Cirque','Culturel','Famille','Histoire','Humour','Musée','Musique','Nature','Patrimoine','Son et lumière','Urbain',],
-    parc_d_attraction: ['Atelier','Cinéma','Cirque','Culturel','Famille','Histoire','Humour','Musée','Musique','Nature','Patrimoine','Son et lumière','Urbain',]
+    activité: ['Atelier','Cinéma','Cirque','Culturel','Famille','Histoire','Humour','Musée','Musique','Nature','Patrimoine','Son et lumière','Urbain','Sport',],
+    spectacle: ['Atelier','Cinéma','Cirque','Culturel','Famille','Histoire','Humour','Musée','Musique','Nature','Patrimoine','Son et lumière','Urbain','Sport',],
+    visite: ['Atelier','Cinéma','Cirque','Culturel','Famille','Histoire','Humour','Musée','Musique','Nature','Patrimoine','Son et lumière','Urbain','Sport',],
+    parc_d_attraction: ['Atelier','Cinéma','Cirque','Culturel','Famille','Histoire','Humour','Musée','Musique','Nature','Patrimoine','Son et lumière','Urbain','Sport',]
 };
 
 function showSubcategories() {
