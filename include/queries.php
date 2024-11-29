@@ -146,11 +146,11 @@ function query_select_offre_motcle(string $motcle):array{
         // return $res->fetchAll();
 
     $args = filter_null_args(['motcle' => [$motcle, PDO::PARAM_INT]]);
-    $stmt = notfalse(connect()->prepare('select * from avis ' . where_clause(BoolOperator::AND, array_keys($mots))));
+    $stmt = notfalse(connect()->prepare('select * from offres ' . where_clause(BoolOperator::AND, array_keys($mots))));
     bind_values($stmt, $args);
     notfalse($stmt->execute());
     return $stmt->fetchAll();
-    }
+    
 
 }
 
