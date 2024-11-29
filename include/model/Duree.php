@@ -27,26 +27,37 @@ final class Duree
 
     function __toString(): string
     {
-        return "$this->years years $this->months mons $this->days days $this->hours hours $this->minutes mins $this->seconds secs";
+        return "$this->years years $this->months mons $this->days days $this->hours:$this->minutes:$this->seconds";
     }
 
     /**
      * Parse une durée depuis la sortie PostgreSQL.
-     * @param string $output La durée en sortie de PostgreSQL
+     * @param string $output La durée en sortie de PostgreSQL format `postgres`
      * @throws \DomainException Quand la sortie est invalide.
      * @return Duree Une nouvelle durée représentant $output.
      */
     static function parse(string $output): Duree
     {
         $matches = [];
-        preg_match('/(\d+) years (\d+) mons (\d+) days (\d+) hours (\d+) mins (\d*\.?\d+) secs/', $output, $matches);
-        if (count($matches) !== 7
-                || false === ($years = parse_int($matches[1], 0))
-                || false === ($months = parse_int($matches[2], 0))
-                || false === ($days = parse_int($matches[3], 0))
-                || false === ($hours = parse_int($matches[4], 0))
-                || false === ($minutes = parse_int($matches[5], 0))
-                || false === ($seconds = parse_float($matches[6], 0))) {
+        $years = 0;
+        $months = 0;
+        $days = 0;
+        if (notfalse(preg_match('/(\d+) years/', $output, $matches)) === 1) {
+            if (false === ($years = parse_int($matches[1]))) throw new DomainException();
+        }
+        if (notfalse(preg_match('/(\d+) mons/', $output, $matches)) === 1) {
+            if (false === ($months = parse_int($matches[1]))) throw new DomainException();
+        }
+        if (notfalse(preg_match('/(\d+) days/', $output, $matches)) === 1) {
+            if (false === ($days = parse_int($matches[1]))) throw new DomainException();
+        }
+        $hours = 0;
+        $minutes = 0;
+        $seconds = 0;
+        if (notfalse(preg_match('/(\d+):(\d+):(\d*\.?\d+)/', $output, $matches)) === 0
+                || false === ($hours = parse_int($matches[1], 0))
+                || false === ($minutes = parse_int($matches[2], 0))
+                || false === ($seconds = parse_float($matches[3], 0))) {
             throw new DomainException();
         }
         return new Duree($years, $months, $days, $hours, $minutes, $seconds);
