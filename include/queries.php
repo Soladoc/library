@@ -113,7 +113,7 @@ function query_tags(int $id): array|false
     bind_values($stmt, [1 => [$id, PDO::PARAM_INT]]);
     notfalse($stmt->execute());
     $a= $stmt->fetch();
-    var_dump($a);
+    //var_dump($a);
     return $a;
 }
 
