@@ -12,9 +12,6 @@ async function initializeOffers() {
         getDataJson(`/json/offres.php`),
         getDataJson(`/json/images.php`),
     ]);
-    for (let offer of offers) {
-        offer.tags = await getDataJson(`/json/tags.php?id=${offer.id_offre}`);
-    }
     filterOffers();
 }
 initializeOffers();

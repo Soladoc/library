@@ -113,7 +113,7 @@ function query_compte_professionnel(int $id): array|false
 
 function query_tags(int $id): array|false
 {
-    $stmt = notfalse(connect()->prepare('select * from _tags where id_offre = ?'));
+    $stmt = notfalse(connect()->prepare('select tag from _tags where id_offre = ?'));
     bind_values($stmt, [1 => [$id, PDO::PARAM_INT]]);
     notfalse($stmt->execute());
     return $stmt->fetch();
