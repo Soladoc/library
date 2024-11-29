@@ -11,7 +11,7 @@ $error_tel = null;
 $error_email = null;
 
 $args = [
-    'id' => getarg($_GET, 'id', arg_filter(FILTER_VALIDATE_INT))
+    'id' => getarg($_GET, 'id', arg_int())
 ];
 $id = $args['id'];
 

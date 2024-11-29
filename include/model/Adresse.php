@@ -4,10 +4,17 @@ require_once 'util.php';
 require_once 'model/Commune.php';
 
 /**
- * @property-read ?int $name L'ID. `null` si cette adresse n'existe pas dans la BDD.
+ * @property-read ?int $id L'ID. `null` si cette adresse n'existe pas dans la BDD.
  */
 final class Adresse
 {
+    function __get(string $name)
+    {
+        return match ($name) {
+            'id' => $this->id,
+        };
+    }
+
     private const TABLE = '_adresse';
 
     /**

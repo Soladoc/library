@@ -23,7 +23,7 @@ final class InputAdresse extends Input
         return $data === null ? null : new Adresse(
             $current_id_adresse,
             notfalse(Commune::from_db_by_nom($data['commune'])),
-            getarg($data, 'numero_voie', arg_filter(FILTER_VALIDATE_INT, ['min_range' => 1]), required: false),
+            getarg($data, 'numero_voie', arg_int(1), required: false),
             $data['complement_numero'] ?? null,
             $data['nom_voie'] ?? null,
             $data['localite'] ?? null,

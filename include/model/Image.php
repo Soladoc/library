@@ -2,14 +2,24 @@
 require_once 'const.php';
 require_once 'util.php';
 
+/**
+ * @property-read ?int $id L'ID. `null` si cette image n'existe pas dans la BDD.
+ */
 final class Image
 {
+    function __get(string $name)
+    {
+        return match ($name) {
+            'id' => $this->id,
+        };
+    }
+
     private ?int $id;
     readonly int $taille;
     readonly string $mime_subtype;
     readonly ?string $legende;
     private ?string $tmp_name;
-    
+
     private const TABLE = '_image';
 
     function __construct(

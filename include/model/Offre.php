@@ -1,16 +1,33 @@
 <?php
 require_once 'db.php';
+require_once 'model/Abonnement.php';
+require_once 'model/MultiRange.php';
 require_once 'model/Adresse.php';
+require_once 'model/Duree.php';
 require_once 'model/Image.php';
 require_once 'model/Professionnel.php';
 require_once 'model/Signalable.php';
+require_once 'model/Timestamp.php';
 
 /**
  * Une offre touristique.
+ * @property-read ?int $id L'ID. `null` si cette image n'existe pas dans la BDD.
+ * @property-read int $nb_avis Le nombre d'avis ce cette offre. 0 si elle n'existe pas dans la BDD.
  */
 abstract class Offre implements Signalable
 {
+    function __get(string $name)
+    {
+        return match ($name) {
+            'id' => $this->id,
+            'nb_avis' => $this->id === null ? 0 : $this->nb_avis ??= Avis::get_count($this->id),
+        };
+    }
+
     private const TABLE = 'offres';
+    const CATEGORIE = self::CATEGORIE;  // Constante devant être définie dans les sous-classes
+
+    private int $nb_avis;
 
     private readonly ?int $id;
 
@@ -93,7 +110,7 @@ abstract class Offre implements Signalable
     readonly ?float $prix_min;
 
     /**
-     * La date de création de cette offre. Est égale à $modifee_le si cette offre n'a jamais été modifée.
+     * La date de création de cette offre. Est égale à $modifiee_le si cette offre n'a jamais été modifée.
      * @var Timestamp
      */
     readonly Timestamp $creee_le;
@@ -128,7 +145,7 @@ abstract class Offre implements Signalable
      * @param string $description_detaillee
      * @param ?string $url_site_web
      * @param MultiRange<Timestamp> $periodes_ouverture
-     * @param Timestamp $modifee_le
+     * @param Timestamp $modifiee_le
      * @param bool $en_ligne
      * @param float $note_moyenne
      * @param ?float $prix_min
@@ -148,7 +165,7 @@ abstract class Offre implements Signalable
         string $description_detaillee,
         ?string $url_site_web,
         MultiRange $periodes_ouverture,
-        Timestamp $modifee_le,
+        Timestamp $modifiee_le,
         bool $en_ligne,
         float $note_moyenne,
         ?float $prix_min,
@@ -167,7 +184,7 @@ abstract class Offre implements Signalable
         $this->description_detaillee = $description_detaillee;
         $this->url_site_web = $url_site_web;
         $this->periodes_ouverture = $periodes_ouverture;
-        $this->modifee_le = $modifee_le;
+        $this->modifiee_le = $modifiee_le;
         $this->en_ligne = $en_ligne;
         $this->note_moyenne = $note_moyenne;
         $this->prix_min = $prix_min;
@@ -234,7 +251,7 @@ abstract class Offre implements Signalable
         require_once 'model/Spectacle.php';
         require_once 'model/Restaurant.php';
         $common_args = [
-            getarg($row, 'id', arg_filter(FILTER_VALIDATE_INT)),
+            getarg($row, 'id', arg_int()),
             Adresse::from_db(getarg($row, 'id_adresse')),
             Image::from_db(getarg($row, 'id_image_principale')),
             Professionnel::from_db(getarg($row, 'id_professionnel')),
@@ -242,43 +259,43 @@ abstract class Offre implements Signalable
             getarg($row, 'titre'),
             getarg($row, 'resume'),
             getarg($row, 'description_detaillee'),
-            getarg($row, 'url_site_web'),
-            getarg($row, 'periodes_ouverture'),
-            Timestamp::parse(getarg($row, 'modifee_le')),
-            getarg($row, 'en_ligne', arg_filter(FILTER_VALIDATE_BOOL)),
-            getarg($row, 'note_moyenne', arg_filter(FILTER_VALIDATE_FLOAT)),
-            getarg($row, 'prix_min', arg_filter(FILTER_VALIDATE_FLOAT)),
+            getarg($row, 'url_site_web', required: false),
+            MultiRange::parse(getarg($row, 'periodes_ouverture'), Timestamp::parse(...)),
+            Timestamp::parse(getarg($row, 'modifiee_le')),
+            getarg($row, 'en_ligne'),
+            getarg($row, 'note_moyenne', arg_float()),
+            getarg($row, 'prix_min', arg_float(), required: false),
             Timestamp::parse(getarg($row, 'creee_le')),
             Duree::parse(getarg($row, 'en_ligne_ce_mois_pendant')),
             Timestamp::parse(getarg($row, 'changement_ouverture_suivant_le')),
-            getarg($row, 'est_ouverte', arg_filter(FILTER_VALIDATE_BOOL)),
+            getarg($row, 'est_ouverte'),
         ];
         return match ($row['categorie']) {
             'activité' => new Activite(
                 ...$common_args,
                 indication_duree: Duree::parse(getarg($row, 'indication_duree')),
-                age_requis: getarg($row, 'age_requis', arg_filter(FILTER_VALIDATE_INT)),
+                age_requis: getarg($row, 'age_requis', arg_int(), required: false),
                 prestations_incluses: getarg($row, 'prestations_incluses'),
-                prestations_non_incluses: getarg($row, 'prestations_non_incluses'),
+                prestations_non_incluses: getarg($row, 'prestations_non_incluses', required: false),
             ),
-            "parc d'attractions" => new ParcAttactions(
+            "parc d'attractions" => new ParcAttractions(
                 ...$common_args,
-                id_image_plan: Image::from_db($row['id_image_plan']),
+                image_plan: Image::from_db($row['id_image_plan']),
             ),
             'restaurant' => new Restaurant(
                 ...$common_args,
                 carte: getarg($row, 'carte'),
-                richesse: getarg($row, 'richesse', arg_filter(FILTER_VALIDATE_INT)),
-                sert_petit_dejeuner: getarg($row, 'sert_petit_dejeuner', arg_filter(FILTER_VALIDATE_BOOL)),
-                sert_brunch: getarg($row, 'sert_brunch', arg_filter(FILTER_VALIDATE_BOOL)),
-                sert_dejeuner: getarg($row, 'sert_dejeuner', arg_filter(FILTER_VALIDATE_BOOL)),
-                sert_diner: getarg($row, 'sert_diner', arg_filter(FILTER_VALIDATE_BOOL)),
-                sert_boissons: getarg($row, 'sert_boissons', arg_filter(FILTER_VALIDATE_BOOL)),
+                richesse: getarg($row, 'richesse', arg_int()),
+                sert_petit_dejeuner: getarg($row, 'sert_petit_dejeuner'),
+                sert_brunch: getarg($row, 'sert_brunch'),
+                sert_dejeuner: getarg($row, 'sert_dejeuner'),
+                sert_diner: getarg($row, 'sert_diner'),
+                sert_boissons: getarg($row, 'sert_boissons'),
             ),
             'spectacle' => new Spectacle(
                 ...$common_args,
                 indication_duree: Duree::parse(getarg($row, 'indication_duree')),
-                capacite_accueil: getarg($row, 'capacite_accueil', arg_filter(FILTER_VALIDATE_INT)),
+                capacite_accueil: getarg($row, 'capacite_accueil', arg_int()),
             ),
             'visite' => new Visite(
                 ...$common_args,

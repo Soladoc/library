@@ -1,6 +1,7 @@
 <?php
 require_once 'model/Compte.php';
 // todo
+
 /* abstract */
 class Professionnel extends Compte
 {
@@ -41,19 +42,19 @@ class Professionnel extends Compte
         $stmt = notfalse(DB\connect()->prepare('select * from ' . self::TABLE . ' where id = ?'));
         DB\bind_values($stmt, [1 => [$id_professionnel, PDO::PARAM_INT]]);
         notfalse($stmt->execute());
-        return self::from_db_row($stmt->fetchAll());
+        return self::from_db_row($stmt->fetch());
     }
 
     private static function from_db_row(array $row): Professionnel
     {
         return new Professionnel(
-            getarg($row, 'id', arg_filter(FILTER_VALIDATE_INT)),
+            getarg($row, 'id', arg_int()),
             getarg($row, 'email'),
             getarg($row, 'mdp_hash'),
             getarg($row, 'nom'),
             getarg($row, 'prenom'),
             getarg($row, 'telephone'),
-            Adresse::from_db(getarg($row, 'adresse')),
+            Adresse::from_db(getarg($row, 'id_adresse')),
             getarg($row, 'denomination'),
         );
     }

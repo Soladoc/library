@@ -24,7 +24,7 @@ final class InputImage extends Input
         $file = getarg($_FILES, $this->name, required: $required);
         return $file === null ? $file : new Image(
             $current_id_image,
-            getarg($file, 'size', arg_filter(FILTER_VALIDATE_INT)),
+            getarg($file, 'size', arg_int()),
             explode('/', $file['type'], 2)[1],
             getarg($get_or_post, "{$this->name}_legende", required: false),
             $file['tmp_name'],

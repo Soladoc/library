@@ -65,6 +65,7 @@ function getarg(array $source, string $nom, ?callable $filter = null, bool $requ
 {
     if (!isset($source[$nom]) || $source[$nom] === '') {
         if ($required) {
+            dbg_print($source);
             html_error("argument manquant: $nom");
         } else {
             return null;
@@ -74,8 +75,8 @@ function getarg(array $source, string $nom, ?callable $filter = null, bool $requ
 }
 
 /**
- * Crée un filtre pour `getarg` qui valide l'argumnet via prédicat.
- * @param callable(mixed): bool Une fonction prédicat.
+ * Crée un filtre pour `getarg` qui valide l'argument via prédicat.
+ * @param callable(mixed): bool $check Une fonction prédicat.
  * @return callable(string, mixed): mixed Un filtre utilisable par la fonction `getarg`.
  */
 function arg_check(callable $check): callable
@@ -85,6 +86,28 @@ function arg_check(callable $check): callable
             html_error("argument $name invalide: " . var_export($value, true));
         }
         return $value;
+    };
+}
+
+function arg_int(?int $min_range = null)
+{
+    return function (string $name, mixed $value) use ($min_range) {
+        $val = parse_int($value, $min_range);
+        if ($val === false) {
+            html_error("argument $name invalide: " . var_export($value, true));
+        }
+        return $val;
+    };
+}
+
+function arg_float(?int $min_range = null)
+{
+    return function (string $name, mixed $value) use ($min_range) {
+        $val = parse_float($value, $min_range);
+        if ($val === false) {
+            html_error("argument $name invalide: " . var_export($value, true));
+        }
+        return $val;
     };
 }
 
@@ -217,8 +240,13 @@ function soa_to_aos(array $array): array
  */
 function parse_int(string $value, ?int $min_range = null): int|false
 {
-    return filter_var($value, FILTER_VALIDATE_INT,
-        $min_range === null ? 0 : ['min_range' => $min_range]);
+    $value = trim($value);
+    if ($value === '') return false;
+    $value = ltrim($value, '0');  // remove leading zeroes
+    return $value
+        ? filter_var($value, FILTER_VALIDATE_INT,
+            $min_range === null ? 0 : ['min_range' => $min_range])
+        : 0;
 }
 
 /**
@@ -229,8 +257,13 @@ function parse_int(string $value, ?int $min_range = null): int|false
  */
 function parse_float(string $value, ?float $min_range = null): float|false
 {
-    return filter_var($value, FILTER_VALIDATE_FLOAT,
-        $min_range === null ? 0 : ['min_range' => $min_range]);
+    $value = trim($value);
+    if ($value === '') return false;
+    $value = ltrim($value, '0');  // remove leading zeroes
+    return $value
+        ? filter_var($value, FILTER_VALIDATE_FLOAT,
+            $min_range === null ? 0 : ['min_range' => $min_range])
+        : 0;
 }
 
 /**
@@ -250,4 +283,14 @@ function format_adresse(array $adresse)
         . elvis($adresse['localite'], ', ')
         . elvis(DB\query_commune($adresse['code_commune'], $adresse['numero_departement'])['nom'], ', ')
         . DB\query_codes_postaux($adresse['code_commune'], $adresse['numero_departement'])[0];
+}
+
+/**
+ * DÉBOGAGE UNIQUEMENT - Affiche une valeur
+ * @param mixed $value
+ * @return void
+ */
+function dbg_print(mixed $value): void
+{
+?><pre><samp><?= htmlspecialchars(var_export($value, true)) ?></samp></pre><?php
 }

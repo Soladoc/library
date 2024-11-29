@@ -1,7 +1,10 @@
 <?php
 require_once 'model/Offre.php';
+
 final class ParcAttractions extends Offre
 {
+    const CATEGORIE = "parc d'attractions";
+
     private const TABLE = '_activite';
 
     readonly Image $image_plan;
@@ -18,7 +21,7 @@ final class ParcAttractions extends Offre
      * @param string $description_detaillee
      * @param ?string $url_site_web
      * @param MultiRange<Timestamp> $periodes_ouverture
-     * @param Timestamp $modifee_le
+     * @param Timestamp $modifiee_le
      * @param bool $en_ligne
      * @param float $note_moyenne
      * @param ?float $prix_min
@@ -39,7 +42,7 @@ final class ParcAttractions extends Offre
         string $description_detaillee,
         ?string $url_site_web,
         MultiRange $periodes_ouverture,
-        Timestamp $modifee_le,
+        Timestamp $modifiee_le,
         bool $en_ligne,
         float $note_moyenne,
         ?float $prix_min,
@@ -60,7 +63,7 @@ final class ParcAttractions extends Offre
             $description_detaillee,
             $url_site_web,
             $periodes_ouverture,
-            $modifee_le,
+            $modifiee_le,
             $en_ligne,
             $note_moyenne,
             $prix_min,

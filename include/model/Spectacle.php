@@ -1,7 +1,10 @@
 <?php
 require_once 'Offre.php';
+
 final class Spectacle extends Offre
 {
+    const CATEGORIE = 'spectacle';
+
     private const TABLE = '_visite';
 
     readonly Duree $indication_duree;
@@ -19,7 +22,7 @@ final class Spectacle extends Offre
      * @param string $description_detaillee
      * @param ?string $url_site_web
      * @param MultiRange<Timestamp> $periodes_ouverture
-     * @param Timestamp $modifee_le
+     * @param Timestamp $modifiee_le
      * @param bool $en_ligne
      * @param float $note_moyenne
      * @param ?float $prix_min
@@ -41,7 +44,7 @@ final class Spectacle extends Offre
         string $description_detaillee,
         ?string $url_site_web,
         MultiRange $periodes_ouverture,
-        Timestamp $modifee_le,
+        Timestamp $modifiee_le,
         bool $en_ligne,
         float $note_moyenne,
         ?float $prix_min,
@@ -63,7 +66,7 @@ final class Spectacle extends Offre
             $description_detaillee,
             $url_site_web,
             $periodes_ouverture,
-            $modifee_le,
+            $modifiee_le,
             $en_ligne,
             $note_moyenne,
             $prix_min,

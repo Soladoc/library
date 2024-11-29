@@ -5,7 +5,7 @@ require_once 'redirect.php';
 require_once 'component/Page.php';
 
 $args = [
-    'id' => getarg($_GET, 'id', arg_filter(FILTER_VALIDATE_INT))
+    'id' => getarg($_GET, 'id', arg_int())
 ];
 
 $page = new Page("detail_compte_membre : {$args['id']}",
