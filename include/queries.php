@@ -150,9 +150,10 @@ function query_select_offre_motcle(string $motcle):array{
 
     $mots=explode(" ",trim($motcle));
     for($i=0; $i<count($mots); $i++) {
-        $mc[$i] = "titre like '%".$mots[$i]."%'";
+        $mc[$i] = "titre ilike '%".$mots[$i]."%'";
     }
     $stmt = notfalse(connect()->prepare('select * from offres where ' .implode(" and ", $mc)));
+    var_dump($stmt->queryString);
     // bind_values($stmt, $args);
     notfalse($stmt->execute());
     return $stmt->fetchAll();
