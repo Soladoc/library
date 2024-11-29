@@ -5,6 +5,7 @@ require_once 'queries.php';
 require_once 'redirect.php';
 require_once 'component/Page.php';
 require_once 'component/offre.php';
+require_once 'component/ImageView.php';
 
 $args = [
     'id' => getarg($_GET, 'id', arg_filter(FILTER_VALIDATE_INT))
@@ -82,7 +83,7 @@ if ($offre) {
                 </div>
             </form>
             <div class="page_modif">
-                <a class="modifier" href="modifier_offre.php?id=<?= isset($args['id']) ? urlencode($args['id']) : '' ?>&type=<?= isset($offre['type']) ? urlencode($offre['type']) : '' ?>">Modifier</a>
+                <a class="modifier" href="modif_offre.php?id=<?= $args['id']?>&type_offre=<?= $offre['categorie']?>">Modifier</a>
             </div>
             <section class="offer-details">
                 <section class="offer-main-photo">
@@ -91,15 +92,16 @@ if ($offre) {
                             <div class="carousel-slide">
                                 <?php (new ImageView($image_pricipale))->put_img() ?>
                             </div>
+                            <div class="carousel-slide">
+                                <?php (new ImageView($image_pricipale))->put_img() ?>
+                            </div>
 
                             <!-- Galerie d'images -->
-                            <?php if (!empty($gallerie)): ?>
-                                <?php foreach ($gallerie as $image): ?>
-                                    <div class="carousel-slide">
-                                        <?php put_image(DB\query_image($image)) ?>
-                                    </div>
-                                <?php endforeach ?>
-                            <?php endif ?>
+                            <?php foreach ($gallerie as $id_image): ?>
+                                <div class="carousel-slide">
+                                    <?php (new ImageView(Image::from_db($id_image)))->put_img() ?>
+                                </div>
+                            <?php endforeach ?>
                         </div>
 
                         <!-- Boutons de navigation -->

@@ -16,9 +16,9 @@ begin
     ) values (
         new.id,
         new.indication_duree,
-        coalesce(new.age_requis, 0),
+        new.age_requis,
         new.prestations_incluses,
-        coalesce(new.prestations_non_incluses, '')
+        new.prestations_non_incluses
     );
     return new;
 end

@@ -32,7 +32,6 @@ function query_images(): \Iterator
     return $stmt->getIterator();
 }
 
-
 function query_image(int $id_image): array
 {
     $stmt = notfalse(connect()->prepare('select * from _image where id = ?'));
@@ -110,7 +109,7 @@ function query_compte_professionnel(int $id): array|false
 
 function query_tags(int $id): array|false
 {
-    $stmt = notfalse(connect()->prepare('select * from _tags where id_offre = ?'));
+    $stmt = notfalse(connect()->prepare('select tag from _tags where id_offre = ?'));
     bind_values($stmt, [1 => [$id, PDO::PARAM_INT]]);
     notfalse($stmt->execute());
     return $stmt->fetch();
@@ -155,13 +154,11 @@ function query_select_offre_motcle(string $motcle):array{
     bind_values($stmt, $args);
     notfalse($stmt->execute());
     return $stmt->fetchAll();
-    
-
 }
 
 // Update-----------------------------------------------------------------------------------------------------------
 
-function query_uptate_mdp(int $id_compte,string $new_mdp): void
+function query_uptate_mdp(int $id_compte, string $new_mdp): void
 {
     $stmt = notfalse(connect()->prepare('UPDATE _compte SET mdp_hash = ? WHERE id = ?;'));
     bind_values($stmt, [1 => [$new_mdp, PDO::PARAM_STR], 2 => [$id_compte, PDO::PARAM_INT]]);
@@ -295,8 +292,10 @@ function insert_uploaded_image(array $img, ?string $legende = null): array
  */
 function exists_pro_prive(int $id_pro_prive): bool
 {
+{
     $stmt = notfalse(connect()->prepare('select ? in (select id from pro_prive)'));
     bind_values($stmt, [1 => [$id_pro_prive, PDO::PARAM_INT]]);
+    notfalse($stmt->execute());
     return $stmt->fetchColumn();
 }
 
@@ -309,5 +308,6 @@ function exists_offre(int $id_offre): bool
 {
     $stmt = notfalse(connect()->prepare('select ? in (select id from offres)'));
     bind_values($stmt, [1 => [$id_offre, PDO::PARAM_INT]]);
+    notfalse($stmt->execute());
     return $stmt->fetchColumn();
 }

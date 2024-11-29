@@ -1,9 +1,4 @@
 <?php 
-
-
-
-
-
 $mot_cle= $_GET["mot_cle"];
 $recherche = $_GET["valider"]; 
 $modif_affichage = false;

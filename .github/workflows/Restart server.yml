@@ -1,0 +1,33 @@
+name: Restart server
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+    paths:
+      - '.github/workflows/Restart Server.yml'
+defaults:
+  run:
+    shell: bash
+jobs:
+  restart_server:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Send discord message before
+        env:
+          DISCORD_WEBHOOK_URL: "${{secrets.DISCORD_WEBHOOK_URL}}"
+        run: 'cd "$GITHUB_WORKSPACE"/script" && ./discord-send-msg.bash "@here Redémarrage serveur."'
+
+      - name: Restart Server
+        env:
+          ARTIFACT_SSH_KEY: '${{secrets.ARTIFACT_SSH_KEY}}'
+          ARTIFACT_HOST: '${{secrets.ARTIFACT_HOST}}'
+        run: 'cd "$GITHUB_WORKSPACE"/script && ./server-run-script.bash ./server/restart.bash'
+
+      - name: Send discord message after
+        env:
+          DISCORD_WEBHOOK_URL: "${{secrets.DISCORD_WEBHOOK_URL}}"
+        run: 'cd "$GITHUB_WORKSPACE"/script" && ./discord-send-msg.bash "@here Serveur redémarré."'

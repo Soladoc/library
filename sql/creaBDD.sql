@@ -32,14 +32,14 @@ create table _adresse (
     numero_departement num_departement not null,
     constraint adresse_fk_commune foreign key (code_commune, numero_departement) references _commune,
 
-    numero_voie int not null default 0,
-    complement_numero varchar(10) not null default '',
+    numero_voie int check (numero_voie > 0),
+    complement_numero varchar(10) check (complement_numero <> ''),
     constraint adresse_check_numero_voie_complement_numero check (numero_voie is not null or complement_numero is null),
 
-    nom_voie ligne not null default '',
-    localite ligne not null default '',
-    precision_int ligne not null default '',
-    precision_ext ligne not null default '',
+    nom_voie ligne check (nom_voie <> ''),
+    localite ligne check (localite <> ''),
+    precision_int ligne check (precision_int <> ''),
+    precision_ext ligne check (precision_ext <> ''),
 
     latitude decimal,
     longitude decimal,
@@ -59,7 +59,7 @@ create table _image (
         constraint image_pk primary key,
     taille int not null,
     mime_subtype varchar(127) not null,
-    legende ligne not null default ''
+    legende ligne check (legende <> '')
 );
 comment on column _image.taille is 'Mime subtype (part after "image/"). Used as a file extension.';
 
@@ -111,7 +111,7 @@ create table _offre (
     resume ligne not null,
     description_detaillee paragraphe not null,
     modifiee_le timestamp not null,
-    url_site_web varchar(2047) not null,
+    url_site_web varchar(2047),
     periodes_ouverture tsmultirange not null
 );
 
@@ -135,9 +135,9 @@ create table _activite (
         constraint activite_pk primary key
         constraint activite_inherits_offre references _offre,
     indication_duree interval not null,
-    age_requis int not null,
+    age_requis int check (age_requis > 0),
     prestations_incluses paragraphe not null,
-    prestations_non_incluses paragraphe not null
+    prestations_non_incluses paragraphe check (prestations_non_incluses <> '')
 );
 
 create table _visite (

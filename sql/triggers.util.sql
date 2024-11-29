@@ -73,7 +73,7 @@ begin
         new.titre,
         new.resume,
         new.description_detaillee,
-        coalesce(new.url_site_web, ''),
+        new.url_site_web,
         new.modifiee_le,
         coalesce(new.periodes_ouverture, '{}')
     );

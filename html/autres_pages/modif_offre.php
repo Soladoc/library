@@ -6,18 +6,25 @@ require_once 'util.php';
 require_once 'const.php';
 require_once 'component/inputs.php';
 require_once 'component/Page.php';
+require_once 'component/InputDuree.php';
 
-$page = new Page("Création d'une offre",
+$page = new Page("Modifurlier offre",
     ['creation_offre.css'],
     ['module/creation_offre.js' => 'defer type="module"']);
 
 $id_professionnel = Auth\exiger_connecte_pro();
 $est_prive = DB\exists_pro_prive($id_professionnel);
 
+
+$offre = DB\query_offre($_GET['id']);
+print_r($offre);
+
 $args = [
     // ne lance pas la page et génère une errreur si il n'y a pas de get
     'type_offre' => getarg($_GET, 'type_offre', arg_check(f_is_in(array_keys(CATEGORIES_OFFRE)))),
 ];
+
+
 
 if ($_POST) {
     $args += [
@@ -87,7 +94,7 @@ if ($_POST) {
 <body>
     <?php $page->put_header() ?>
     <main>
-        <h1>Créer <?= CATEGORIES_OFFRE[$args['type_offre']] ?></h1>
+        <h1>Modifier <?= CATEGORIES_OFFRE[$args['type_offre']] ?></h1>
 
         <section id="type-abonnement">
             <h2>Abonnement</h2>
@@ -121,19 +128,20 @@ if ($_POST) {
             <div>
                 <label for="titre">Titre*</label>
                 <p>
-                    <input form="f" id="titre" name="titre" type="text" required>
+                    <input form="f" id="titre" name="titre" type="text" value="<?= htmlspecialchars($offre['titre']) ?>" required>
                 </p>
                 <label for="resume">Resumé*</label>
                 <p>
-                    <input form="f" id="resume" name="resume" type="text" required>
+                    <input form="f" id="resume" name="resume" type="text" value="<?= htmlspecialchars($offre['resume']) ?>" required>
                 </p>
                 <label for="adresse">Adresse*</label>
                 <?php
-                put_input_address('adresse', 'adresse_', 'f')
+                put_input_address('adresse', 'adresse_', 'f');
+                $url = htmlspecialchars($offre['url_site_web'] ?? '');
                 ?>
                 <label for="site">Site Web</label>
                 <p>
-                    <input form="f" id="url_site_web" name="url_site_web" type="url">
+                    <input form="f" id="url_site_web" name="url_site_web" type="url" value="<?=$url ?>">
                 </p>
             </div>
         </section>
@@ -237,7 +245,7 @@ if ($_POST) {
             <label for="description_detaillee">
                 <h2>Description détaillée</h2>
             </label>
-            <textarea form="f" id="description_detaillee" name="description_detaillee" required></textarea>
+            <textarea form="f" id="description_detaillee" name="description_detaillee" required><?= htmlspecialchars($offre['description_detaillee']) ?></textarea>
         </section>
 
         <section id="image-creation-offre">
@@ -253,14 +261,19 @@ if ($_POST) {
             <?php
             switch ($args['type_offre']) {
                 case 'activité':
+                    $info = DB\query_activite($offre['id']);
                     ?>
-                    <p><label>Âge requis&nbsp;: <input form="f" name="age_requis" type="number" min="1"> an</label></p>
+                    <p><label>Âge requis&nbsp;: <input form="f" name="age_requis" type="number" min="1" value="<?= htmlspecialchars($info['age_requis']) ?>"> an</label></p>
                     <p>Prestations incluses*</p>
-                    <textarea form="f" name="prestations_incluses" required></textarea>
+                    <?php 
+                        $prestations_incluses = htmlspecialchars($info['prestations_incluses'] ?? '');
+                        $prestations_non_incluses = htmlspecialchars($info['prestations_non_incluses'] ?? '');
+                    ?>
+                    <textarea form="f" name="prestations_incluses" required><?= $prestations_incluses?></textarea>
                     <p>Prestations non incluses</p>
-                    <textarea form="f" name="prestations_non_incluses"></textarea>
+                    <textarea form="f" name="prestations_non_incluses"><?= $prestations_non_incluses?></textarea>
                     <?php
-                    put_input_indication_duree();
+                    put_input_indication_duree(Duree::parse($info['indication_duree']));
                     break;
                 case 'parc d\'attractions':
                     ?>
@@ -314,9 +327,9 @@ if ($_POST) {
 
 </html>
 <?php
-function put_input_indication_duree()
+function put_input_indication_duree(Duree $duree)
 {
     ?>
-        <label>Durée estimée&nbsp;: <?php put_input_duration('f', 'indication_duree', 'indication_duree_') ?></label>
+        <label>Durée estimée&nbsp;: <?php (new InputDuree('f', 'indication_duree', 'indication_duree_'))->put() ?></label>
         <?php
 }
