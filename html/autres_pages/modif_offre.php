@@ -101,16 +101,24 @@ if ($_POST) {
             <?php if ($est_prive) { ?> 
             <ul id="liste-choix-abonnement">
                 <li>
-                    <label><input form="f"
-                        name="libelle_abonnement"
-                        value="standard"
-                        type="radio"> Standard</label>
+                    <label>
+                        <input form="f"
+                                name="libelle_abonnement"
+                                value="standard"
+                                type="radio" 
+                                <?= $offre['libelle_abonnement'] === 'standard' ? 'checked' : '' ?>>
+                        Standard
+                    </label>
                 </li>
                 <li>
-                    <label><input form="f"
-                        name="libelle_abonnement"
-                        value="premium"
-                        type="radio"> Premium</label>
+                    <label>
+                        <input form="f"
+                                name="libelle_abonnement"
+                                value="premium"
+                                type="radio" 
+                                <?= $offre['libelle_abonnement'] === 'premium' ? 'checked' : '' ?>>
+                        Premium
+                    </label>
                 </li>
             </ul>
             <aside>
@@ -235,9 +243,9 @@ if ($_POST) {
             <ul id="list-tag">
                 <?php
                 // Récupération des tags associés à l'offre
+                //$tags_remplis = DB\query_tags($offre['id']);
                 $tags_remplis = array_column(DB\query_tags($offre['id']), 'tag');
                 $tags_disponibles = $args['type_offre'] === 'restaurant' ? TAGS_RESTAURANT : DEFAULT_TAGS;
-
                 foreach ($tags_disponibles as $tag) {
                     // Si le tag est déjà dans les tags remplis, ajoutez 'checked'
                     $checked = in_array($tag, $tags_remplis) ? 'checked' : '';
