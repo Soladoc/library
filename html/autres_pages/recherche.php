@@ -1,5 +1,4 @@
 <?php
-require_once 'component/offre.php';
 require_once 'component/Page.php';
 
 $page = new Page('Recherche', scripts: [

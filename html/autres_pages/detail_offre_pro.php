@@ -4,7 +4,6 @@ require_once 'util.php';
 require_once 'queries.php';
 require_once 'redirect.php';
 require_once 'component/Page.php';
-require_once 'component/offre.php';
 require_once 'component/ImageView.php';
 
 $args = [

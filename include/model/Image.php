@@ -5,19 +5,19 @@ require_once 'util.php';
 final class Image
 {
     private ?int $id;
-    private ?string $tmp_name;
     readonly int $taille;
     readonly string $mime_subtype;
     readonly ?string $legende;
-
+    private ?string $tmp_name;
+    
     private const TABLE = '_image';
 
     function __construct(
+        ?int $id,
         int $taille,
         string $mime_subtype,
         ?string $legende,
         ?string $tmp_name = null,
-        ?int $id = null,
     ) {
         $this->taille = $taille;
         $this->mime_subtype = $mime_subtype;
@@ -33,10 +33,10 @@ final class Image
         notfalse($stmt->execute());
         $row = $stmt->fetch();
         return $row === false ? false : new Image(
+            $id_image,
             $row['taille'],
             $row['mime_subtype'],
             $row['legende'],
-            $id_image,
         );
     }
 

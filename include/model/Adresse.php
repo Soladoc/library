@@ -67,6 +67,7 @@ final class Adresse
     private ?int $id;
 
     function __construct(
+        ?int $id,
         Commune $commune,
         ?int $numero_voie,
         ?string $complement_numero,
@@ -76,7 +77,6 @@ final class Adresse
         ?string $precision_ext,
         ?float $latitude,
         ?float $longitude,
-        ?int $id = null,
     ) {
         $this->id = $id;
         $this->commune = $commune;
@@ -102,6 +102,7 @@ final class Adresse
         notfalse($stmt->execute());
         $row = $stmt->fetch();
         return $row === false ? false : new Adresse(
+            $id_adresse,
             Commune::from_db($row['code_commune'], $row['numero_departement']),
             $row['numero_voie'] ?? null,
             $row['complement_numero'] ?? null,
@@ -111,7 +112,6 @@ final class Adresse
             $row['precision_ext'] ?? null,
             $row['latitude'] ?? null,
             $row['longitude'] ?? null,
-            $id_adresse,
         );
     }
 

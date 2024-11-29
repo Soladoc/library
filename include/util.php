@@ -54,11 +54,12 @@ function array_every(array $arr, callable $predicate): bool
 
 /**
  * Valide et récupère un argument d'un tableau source.
- * @param array $source Le tableau source d'où récupérer l'argument (tel que `$_GET`, `$_POST` ou `$_FILES$`).
+ * @template T
+ * @param T[] $source Le tableau source d'où récupérer l'argument (tel que `$_GET`, `$_POST` ou `$_FILES$`).
  * @param string $nom Le nom de l'argument (clé dans le tableau) à récupérer.
- * @param ?callable(string, mixed): mixed $filter Un filtre optionnel à appliquer à la valeur, donné par `arg_check` ou `arg_filter`. Une erreur HTML est jetée si l'argument (la valeur de $source à la clé $nom) ne satisfait pas le filtre
+ * @param ?callable(string, T): mixed $filter Un filtre optionnel à appliquer à la valeur, donné par `arg_check` ou `arg_filter`. Une erreur HTML est jetée si l'argument (la valeur de $source à la clé $nom) ne satisfait pas le filtre
  * @param bool $required Si cet argument est obligatoire. Si `true` et l'argument n'est pas présent, une erreur HTML est jetée.
- * @return mixed L'argument récupéré et potentiellement transformé (si $filter est non `null`). Si l'argument n'est pas requis ($required est `false`) et manquant (il n'y a pas de clé $nom dans $source), `null` est retourné.
+ * @return ?T L'argument récupéré et potentiellement transformé (si $filter est non `null`). Si l'argument n'est pas requis ($required est `false`) et manquant (il n'y a pas de clé $nom dans $source), `null` est retourné.
  */
 function getarg(array $source, string $nom, ?callable $filter = null, bool $required = true): mixed
 {

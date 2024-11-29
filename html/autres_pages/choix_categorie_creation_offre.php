@@ -22,7 +22,7 @@ $page = new Page("Choix de l'offre", ['choix_categorie_creation_offre.css']);
 
 </html>
 <!--
-    @brief: fichier qui redirige un professionel vers la pagef de création adapté a l'offre qu'il 
+    @brief: fichier qui redirige un professionnel vers la pagef de création adapté a l'offre qu'il 
     shouaite crééer
     @author: Benjamin dummont-Girard
 
