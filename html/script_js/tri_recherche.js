@@ -97,8 +97,9 @@ function filterOffers() {
         if (mainCategory && offer.categorie.toLowerCase() !== mainCategory.toLowerCase()) {
             return false;
         }
-        if (selectedSubcategories.length > 0 && !selectedSubcategories.includes(offer.sous_categorie)) {
-            return false;
+        if (selectedSubcategories.length > 0) {
+            const offerSubcategories = offer.sous_categorie.split(',').map(sub => sub.trim());
+            return selectedSubcategories.some(selected => offerSubcategories.includes(selected));
         }
         return true;
     });
