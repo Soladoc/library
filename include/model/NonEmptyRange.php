@@ -71,7 +71,7 @@ final class NonEmptyRange
         $this->upper_inc = $upper !== null && $upper_inc;
     }
 
-    function __tostring(): string
+    function __toString(): string
     {
         return ($this->lower_inc ? '[' : '(')
             . self::quote($this->lower) . ',' . self::quote($this->upper)

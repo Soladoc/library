@@ -1,9 +1,7 @@
 <?php
 namespace DB;
-
 require_once 'db.php';
 require_once 'util.php';
-
 use PDO, Iterator;
 
 function query_offre(int $id_offre): array|false

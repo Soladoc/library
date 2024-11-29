@@ -1,11 +1,18 @@
 <?php 
+
+
+
+
+
 $mot_cle= $_GET["mot_cle"];
 $recherche = $_GET["valider"]; 
+$modif_affichage = false;
 
 
 
 if (isset($valider)&& !empty(trim($mot_cle))) {
-    querry_select_offre_motcle($mot_cle);
+     $tab = DB\query_select_offre_motcle($mot_cle);
+    $modif_affichage = true;
 
 }
 
@@ -32,11 +39,11 @@ if (isset($valider)&& !empty(trim($mot_cle))) {
 if ($recherche) {
     ?> 
     <div id="recherche">
-        <div id="">
+        <div id="offre_recherhce">
             <ol>
                 <?php for ($i=0; $i < count($tab); $i++) { 
                     ?>
-                    <li>resultat</li>
+                    <li><?php echo $tab[$i]["titre"] ?></li>
                     <?php
                 }?>
 

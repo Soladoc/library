@@ -2,41 +2,53 @@
 
 final class Duree
 {
-    readonly int $jours;
-    readonly int $heures;
+    readonly int $years;
+    readonly int $months;
+    readonly int $days;
+    readonly int $hours;
     readonly int $minutes;
+    readonly float $seconds;
 
-    function __construct(int $jours, int $heures, int $minutes)
-    {
-        $this->jours = $jours;
-        $this->heures = $heures;
+    function __construct(
+        int $years = 0,
+        int $months = 0,
+        int $days = 0,
+        int $hours = 0,
+        int $minutes = 0,
+        float $seconds = 0,
+    ) {
+        $this->years = $years;
+        $this->months = $months;
+        $this->days = $days;
+        $this->hours = $hours;
         $this->minutes = $minutes;
+        $this->seconds = $seconds;
+    }
+
+    function __toString(): string
+    {
+        return "$this->years years $this->months mons $this->days days $this->hours hours $this->minutes mins $this->seconds secs";
     }
 
     /**
-     * Format la durée en INTERVAL PostgreSQL.
-     * @return string La durée formatée en une chaîne d'entrée valide pour le type INTERVAL PostgreSQL.
+     * Parse une durée depuis la sortie PostgreSQL.
+     * @param string $output La durée en sortie de PostgreSQL
+     * @throws \DomainException Quand la sortie est invalide.
+     * @return Duree Une nouvelle durée représentant $output.
      */
-    function format(): string
+    static function parse(string $output): Duree
     {
-        return self::make_interval(
-            $this->jours,
-            $this->heures,
-            $this->minutes,
-        );
-    }
-
-    static function parse(string $output): Duree {
         $matches = [];
-        preg_match('/(\d+\.\d+) hours (\d+\.\d+) mins (\d+\.\d+) secs/', $output, $matches);
-        return new Duree($matches[1], $matches[2], $matches[3]);
-    }
-
-    private static function make_interval(int $days, int $hours, int $mins)
-    {
-        $stmt = notfalse(DB\connect()->prepare('select make_interval(days => ?, hours => ?, mins => ?)'));
-        DB\bind_values($stmt, [1 => [$days, PDO::PARAM_INT], 2 => [$hours, PDO::PARAM_INT], 3 => [$mins, PDO::PARAM_INT]]);
-        notfalse($stmt->execute());
-        return notfalse($stmt->fetchColumn());
+        preg_match('/(\d+) years (\d+) mons (\d+) days (\d+) hours (\d+) mins (\d*\.?\d+) secs/', $output, $matches);
+        if (count($matches) !== 7
+                || false === ($years = parse_int($matches[1], 0))
+                || false === ($months = parse_int($matches[2], 0))
+                || false === ($days = parse_int($matches[3], 0))
+                || false === ($hours = parse_int($matches[4], 0))
+                || false === ($minutes = parse_int($matches[5], 0))
+                || false === ($seconds = parse_float($matches[6], 0))) {
+            throw new DomainException();
+        }
+        return new Duree($years, $months, $days, $hours, $minutes, $seconds);
     }
 }

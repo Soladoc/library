@@ -25,7 +25,7 @@ final class MultiRange
         $this->ranges = $ranges;
     }
 
-    function __tostring(): string
+    function __toString(): string
     {
         return '{' . implode(',', $this->ranges) . '}';
     }
