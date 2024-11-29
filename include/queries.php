@@ -1,9 +1,7 @@
 <?php
 namespace DB;
 
-
 use PDO;
-
 
 require_once 'db.php';
 
@@ -147,27 +145,26 @@ function query_avis(?int $id_membre_auteur = null, ?int $id_offre = null): array
     return $stmt->fetchAll();
 }
 
-function query_select_offre_motcle(string $motcle):array{
-    $mots=explode(" ",trim($motcle));
-    // for ($i=0; $i <count($mots) ; $i++) { 
+function query_select_offre_motcle(string $motcle): array
+{
+    $mots = explode(' ', trim($motcle));
+    // for ($i=0; $i <count($mots) ; $i++) {
     //     $mc[$i]="titre like '%".$mc[$i]."%'";
-        // $res =$PDO->prepare("select id frome offre where  ".implode(" and ",$mc));
-        // $res->setFetchMode(PDO::FETCH_ASSOC);
-        // $res->execute();
-        // return $res->fetchAll();
+    // $res =$PDO->prepare("select id frome offre where  ".implode(" and ",$mc));
+    // $res->setFetchMode(PDO::FETCH_ASSOC);
+    // $res->execute();
+    // return $res->fetchAll();
 
     $args = filter_null_args(['motcle' => [$motcle, PDO::PARAM_INT]]);
     $stmt = notfalse(connect()->prepare('select * from avis ' . where_clause(BoolOperator::AND, array_keys($mots))));
     bind_values($stmt, $args);
     notfalse($stmt->execute());
     return $stmt->fetchAll();
-    }
-
 }
 
 // Update-----------------------------------------------------------------------------------------------------------
 
-function query_uptate_mdp(int $id_compte,string $new_mdp): void
+function query_uptate_mdp(int $id_compte, string $new_mdp): void
 {
     $stmt = notfalse(connect()->prepare('UPDATE _compte SET mdp_hash = ? WHERE id = ?;'));
     bind_values($stmt, [1 => [$new_mdp, PDO::PARAM_STR], 2 => [$id_compte, PDO::PARAM_INT]]);
@@ -254,7 +251,6 @@ function insert_adresse(
     ?float $longitude = null,
 ): int {
     $args = [
-    $args = [
         'code_commune' => [$code_commune, PDO::PARAM_INT],
         'numero_departement' => [$numero_departement, PDO::PARAM_INT],
         'numero_voie' => [$numero_voie, PDO::PARAM_INT],
@@ -265,7 +261,6 @@ function insert_adresse(
         'precision_ext' => [$precision_ext, PDO::PARAM_STR],
         'latitude' => [$latitude, PDO_PARAM_DECIMAL],
         'longitude' => [$longitude, PDO_PARAM_DECIMAL],
-    ];
     ];
     $stmt = insert_into_returning_id('_adresse', $args);
     notfalse($stmt->execute());
@@ -302,8 +297,7 @@ function insert_uploaded_image(array $img, ?string $legende = null): array
  * @return bool `true` si un professionnel privé d'id $id_pro_prive existe, `false` sinon.
  */
 function exists_pro_prive(int $id_pro_prive): bool
-{   
-{   
+{
     $stmt = notfalse(connect()->prepare('select ? in (select id from pro_prive)'));
     bind_values($stmt, [1 => [$id_pro_prive, PDO::PARAM_INT]]);
     notfalse($stmt->execute());
