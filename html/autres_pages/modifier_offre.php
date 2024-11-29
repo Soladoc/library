@@ -1,51 +1,41 @@
 <?php
+
 require_once 'queries.php';
 require_once 'auth.php';
 require_once 'util.php';
 require_once 'const.php';
 require_once 'component/inputs.php';
 require_once 'component/Page.php';
+require_once 'component/InputDuree.php';
 
-$page = new Page("Création d'une offre",
+$page = new Page("Modifurlier offre",
     ['creation_offre.css'],
     ['module/creation_offre.js' => 'defer type="module"']);
 
 $id_professionnel = Auth\exiger_connecte_pro();
+$est_prive = DB\exists_pro_prive($id_professionnel);
 
-//ne continue dans la page que si id_offre existe et est valide
-if ( !isset($_GET['id_offre']) ) {
-    html_error('Erreur dans la requette de la page : id_offre manquant');
-    exit;
-}else {
-    if (!DB\exists_offre($_GET['id_offre'])) {
-        echo DB\exists_offre($_GET['id_offre']);
-        echo $_GET['id_offre'];
-        //html_error('Erreur: l\'offre n\'existe pas');
-        exit;
-    }
-}
+
+$offre = DB\query_offre($_GET['id']);
+print_r($offre);
 
 $args = [
-    'type_offre' => getarg($_GET, 'id_offre', arg_check(f_is_in(array_keys(CATEGORIES_OFFRE)))),
-    'libelle_abonnement' => 'gratuit',  // getarg($_GET, 'type_offre'),
+    // ne lance pas la page et génère une errreur si il n'y a pas de get
+    'type_offre' => getarg($_GET, 'type_offre', arg_check(f_is_in(array_keys(CATEGORIES_OFFRE)))),
 ];
-echo "<pre>";
-print_r($args);
-echo "</pre>";
+
+
 
 if ($_POST) {
-    ?><pre><?= htmlspecialchars(print_r($_GET, true)) ?></pre><?php
-    ?><pre><?= htmlspecialchars(print_r($_POST, true)) ?></pre><?php
-    ?><pre><?= htmlspecialchars(print_r($_FILES, true)) ?></pre><?php
     $args += [
         'adresse_commune' => ucfirst(getarg($_POST, 'adresse_commune')),
         'adresse_complement_numero' => getarg($_POST, 'adresse_complement_numero', required: false),
         'description_detaillee' => getarg($_POST, 'description_detaillee'),
-        'horaires' => getarg($_POST, 'horaires', required: false) ?? [],
-        'periodes' => getarg($_POST, 'periodes', required: false) ?? [],
+        'horaires' => getarg($_POST, 'horaires', required: false) ?? ['debut' => [], 'fin' => []],
+        'periodes' => getarg($_POST, 'periodes', required: false) ?? ['debut' => [], 'fin' => []],
         'resume' => getarg($_POST, 'resume'),
-        'tags' => getarg($_POST, 'tags', arg_filter(FILTER_DEFAULT, FILTER_REQUIRE_ARRAY)),
-        'tarifs' => getarg($_POST, 'tarifs') ?? [],
+        'tags' => getarg($_POST, 'tags', arg_filter(FILTER_DEFAULT, FILTER_REQUIRE_ARRAY), required: false) ?? [],
+        'tarifs' => getarg($_POST, 'tarifs', required: false) ?? [],
         'titre' => getarg($_POST, 'titre'),
         'adresse_localite' => getarg($_POST, 'adresse_localite', required: false),
         'adresse_nom_voie' => getarg($_POST, 'adresse_nom_voie', required: false),
@@ -53,7 +43,7 @@ if ($_POST) {
         'adresse_precision_ext' => getarg($_POST, 'adresse_precision_ext', required: false),
         'adresse_precision_int' => getarg($_POST, 'adresse_precision_int', required: false),
         'url_site_web' => getarg($_POST, 'url_site_web', required: false),
-        'libelle_abonnement' => getarg($_POST, 'libelle_abonnement', required: true),
+        'libelle_abonnement' => getarg($_POST, 'libelle_abonnement', required: false) ?? 'gratuit',
         'file_gallerie' => getarg($_FILES, 'gallerie'),
         'file_image_principale' => getarg($_FILES, 'image_principale'),
     ];
@@ -71,7 +61,7 @@ if ($_POST) {
         'activité' => indication_duree_args() + [
             'age_requis' => getarg($_POST, 'age_requis', arg_filter(FILTER_VALIDATE_INT, ['min_range' => 1]), required: false),
             'prestations_incluses' => getarg($_POST, 'prestations_incluses'),
-            'prestations_non_incluses' => getarg($_POST, 'prestations_non_incluses')
+            'prestations_non_incluses' => getarg($_POST, 'prestations_non_incluses', required: false)
         ],
         'parc d\'attractions' => [
             'file_image_plan' => getarg($_FILES, 'image_plan'),
@@ -104,8 +94,33 @@ if ($_POST) {
 <body>
     <?php $page->put_header() ?>
     <main>
-        <section id="titre-creation-offre">
-            <h1>Modifier <?= CATEGORIES_OFFRE[$args['type_offre']] ?></h1>
+        <h1>Modifier <?= CATEGORIES_OFFRE[$args['type_offre']] ?></h1>
+
+        <section id="type-abonnement">
+            <h2>Abonnement</h2>
+            <?php if ($est_prive) { ?> 
+            <ul id="liste-choix-abonnement">
+                <li>
+                    <label><input form="f"
+                        name="libelle_abonnement"
+                        value="standard"
+                        type="radio"> Standard</label>
+                </li>
+                <li>
+                    <label><input form="f"
+                        name="libelle_abonnement"
+                        value="premium"
+                        type="radio"> Premium</label>
+                </li>
+            </ul>
+            <aside>
+                <img src="/icon/icons8-haute-importance-100.png" alt="Haute importance" width="25" height="25">
+                <p>Attention! Une fois l'option choisi vous ne pourrez plus la modifier.</p>
+            </aside>
+            <?php } else { ?>
+                <p>Comme vous êtres un professionnel public, l'offre crée sera gratuite (pas de facturation)</p>
+                <p><a href="https://example.com">Plus d'informations&hellip;</a></p>
+            <?php } ?>
         </section>
 
         <section id="info-generales">
@@ -113,19 +128,20 @@ if ($_POST) {
             <div>
                 <label for="titre">Titre*</label>
                 <p>
-                    <input form="f" id="titre" name="titre" type="text" required>
+                    <input form="f" id="titre" name="titre" type="text" value="<?= htmlspecialchars($offre['titre']) ?>" required>
                 </p>
                 <label for="resume">Resumé*</label>
                 <p>
-                    <input form="f" id="resume" name="resume" type="text" required>
+                    <input form="f" id="resume" name="resume" type="text" value="<?= htmlspecialchars($offre['resume']) ?>" required>
                 </p>
                 <label for="adresse">Adresse*</label>
                 <?php
-                put_input_address('adresse', 'adresse_', 'f')
+                put_input_address('adresse', 'adresse_', 'f');
+                $url = htmlspecialchars($offre['url_site_web'] ?? '');
                 ?>
                 <label for="site">Site Web</label>
                 <p>
-                    <input form="f" id="url_site_web" name="url_site_web" type="url">
+                    <input form="f" id="url_site_web" name="url_site_web" type="url" value="<?=$url ?>">
                 </p>
             </div>
         </section>
@@ -137,26 +153,30 @@ if ($_POST) {
         </section>
         <section id="tarifs">
             <h2>Tarifs</h2>
-            <table id="table-tarifs">
-                <thead>
-                    <tr>
-                        <th>Nom</th>
-                        <th>Montant</th>
-                    </tr>
-                </thead>
-                <tbody>
-                </tbody>
-                <tfoot>
-                    <tr>
-                        <td><input type="text" placeholder="Enfant, Sénior&hellip;" required></td>
-                        <td><input type="number" min="0" placeholder="Prix" required> €</td>
-                    </tr>
-                </tfoot>
-            </table>
-            <template id="template-tarif-tr"><tr>
-                <td><input form="f" name="tarifs[nom][]" type="text" placeholder="Enfant, Sénior&hellip;" required readonly></td>
-                <td><input form="f" name="tarifs[montant][]" type="number" min="0" placeholder="Prix" required> €</td>
-            </tr></template>
+            <?php if ($est_prive) { ?>
+                <table id="table-tarifs">
+                    <thead>
+                        <tr>
+                            <th>Nom</th>
+                            <th>Montant</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                            <td><input type="text" placeholder="Enfant, Sénior&hellip;" required></td>
+                            <td><input type="number" min="0" placeholder="Prix" required> €</td>
+                        </tr>
+                    </tfoot>
+                </table>
+                <template id="template-tarif-tr"><tr>
+                    <td><input form="f" name="tarifs[nom][]" type="text" placeholder="Enfant, Sénior&hellip;" required readonly></td>
+                    <td><input form="f" name="tarifs[montant][]" type="number" min="0" placeholder="Prix" required> €</td>
+                </tr></template>
+            <?php } else { ?>
+                <p>En tant que professionnel public, vous ne pouvez pas ajouter de grillle tarifaire à votre offre gratuite.</p>
+            <?php } ?>
         </section>
 
         <section id="horaires-hebdomadaires">
@@ -225,7 +245,7 @@ if ($_POST) {
             <label for="description_detaillee">
                 <h2>Description détaillée</h2>
             </label>
-            <textarea form="f" id="description_detaillee" name="description_detaillee" required></textarea>
+            <textarea form="f" id="description_detaillee" name="description_detaillee" required><?= htmlspecialchars($offre['description_detaillee']) ?></textarea>
         </section>
 
         <section id="image-creation-offre">
@@ -241,14 +261,19 @@ if ($_POST) {
             <?php
             switch ($args['type_offre']) {
                 case 'activité':
+                    $info = DB\query_activite($offre['id']);
                     ?>
-                    <p><label>Âge requis&nbsp;: <input form="f" name="age_requis" type="number" min="1"> an</label></p>
+                    <p><label>Âge requis&nbsp;: <input form="f" name="age_requis" type="number" min="1" value="<?= htmlspecialchars($info['age_requis']) ?>"> an</label></p>
                     <p>Prestations incluses*</p>
-                    <textarea form="f" name="prestations_incluses" required></textarea>
+                    <?php 
+                        $prestations_incluses = htmlspecialchars($info['prestations_incluses'] ?? '');
+                        $prestations_non_incluses = htmlspecialchars($info['prestations_non_incluses'] ?? '');
+                    ?>
+                    <textarea form="f" name="prestations_incluses" required><?= $prestations_incluses?></textarea>
                     <p>Prestations non incluses</p>
-                    <textarea form="f" name="prestations_non_incluses"></textarea>
+                    <textarea form="f" name="prestations_non_incluses"><?= $prestations_non_incluses?></textarea>
                     <?php
-                    put_input_indication_duree();
+                    put_input_indication_duree(Duree::parse($info['indication_duree']));
                     break;
                 case 'parc d\'attractions':
                     ?>
@@ -292,36 +317,6 @@ if ($_POST) {
             ?>
         </section>
 
-        <section id="type-abonnement">
-            <ul id="liste-choix-abonnement">
-                <?php
-                if (!DB\exists_pro_prive($id_professionnel)) {
-                    ?> 
-                    <li>
-                        <label><input form="f" name="libelle_abonnement" value="gratuit" type="radio">Gratuit</label>
-                    </li>
-            </ul>
-                <?php
-                } else {
-                    ?>
-                    <li>
-                        <label><input form="f" name="libelle_abonnement" value="standard" type="radio">Standard</label>
-                    </li>
-                    <li>
-                        <label><input form="f" name="libelle_abonnement" value="premium" type="radio">Premium</label>
-                    </li>
-            </ul>
-            <aside>
-                <img src="/icon/icons8-haute-importance-100.png" alt="Haute importance" width="25" height="25">
-                <p>
-                   Attention! Une fois l'option choisi vous ne pourrez plus la modifier.
-                </p>
-            </aside>
-                <?php
-                }
-                ?>
-        </section>
-
         <form id="f" method="post" enctype="multipart/form-data">
             <button type="submit">Valider</button>
         </form>
@@ -332,9 +327,9 @@ if ($_POST) {
 
 </html>
 <?php
-function put_input_indication_duree()
+function put_input_indication_duree(Duree $duree)
 {
     ?>
-        <label>Durée estimée&nbsp;: <?php put_input_duration('f', 'indication_duree', 'indication_duree_') ?></label>
+        <label>Durée estimée&nbsp;: <?php (new InputDuree('f', 'indication_duree', 'indication_duree_'))->put() ?></label>
         <?php
 }
