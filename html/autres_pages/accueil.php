@@ -5,12 +5,13 @@ require_once 'component/Page.php';
 $page = new Page('Accueil');
 
 
-$mot_cle= $_GET["mot_cle"];
-$recherche = $_GET["valider"]; 
+
 $modif_affichage = false;
 
 if (isset($valider)&& !empty(trim($mot_cle))) {
     $modif_affichage = true;
+    $mot_cle= $_GET["mot_cle"];
+    $recherche = $_GET["valider"]; 
 }
 ?>
 
