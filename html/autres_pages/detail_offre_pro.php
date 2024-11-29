@@ -5,7 +5,6 @@ require_once 'queries.php';
 require_once 'redirect.php';
 require_once 'component/Page.php';
 require_once 'component/offre.php';
-require_once 'component/ImageView.php';
 
 $args = [
     'id' => getarg($_GET, 'id', arg_filter(FILTER_VALIDATE_INT))
@@ -84,6 +83,7 @@ if ($offre) {
             </form>
             <div class="page_modif">
                 <a class="modifier" href="<?php location_modifier_offre($args['id']) ?>">Modifier</a>
+                <a class="modifier" href="<?php location_modifier_offre($args['id']) ?>">Modifier</a>
             </div>
             <section class="offer-details">
                 <section class="offer-main-photo">
@@ -95,11 +95,13 @@ if ($offre) {
                             </div>
 
                             <!-- Galerie d'images -->
-                            <?php foreach ($gallerie as $id_image): ?>
-                                <div class="carousel-slide">
-                                    <?php (new ImageView(Image::from_db($id_image)))->put_img() ?>
-                                </div>
-                            <?php endforeach ?>
+                            <?php if (!empty($gallerie)): ?>
+                                <?php foreach ($gallerie as $image): ?>
+                                    <div class="carousel-slide">
+                                        <?php put_image(DB\query_image($image)) ?>
+                                    </div>
+                                <?php endforeach ?>
+                            <?php endif ?>
                         </div>
 
                         <!-- Boutons de navigation -->

@@ -249,11 +249,3 @@ function insert_into_visite(
     notfalse($stmt->execute());
     return notfalse($stmt->fetchColumn());
 }
-
-function query_activite(int $id_activite): array|false
-{
-    $stmt = notfalse(connect()->prepare('select * from _activite where id = ?'));
-    bind_values($stmt, [1 => [$id_activite, PDO::PARAM_INT]]);
-    notfalse($stmt->execute());
-    return $stmt->fetch();
-}

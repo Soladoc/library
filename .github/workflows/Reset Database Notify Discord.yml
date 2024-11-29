@@ -1,4 +1,4 @@
-name: Reset Database notify Discord
+name: Reset Database Notify Discord
 on:
   workflow_run:
     workflows: [Reset Database]
@@ -13,8 +13,7 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
-
-      - name: Send Discord message
+      - name: Send Discord notification
         env:
           ACTOR: "[${{github.event.workflow_run.actor.login}}](${{github.event.workflow_run.actor.html_url}})"
           CONCLUSION: "${{github.event.workflow_run.conclusion}}"
@@ -26,5 +25,5 @@ jobs:
           WORKFLOW_ID: "${{github.event.workflow_run.workflow_id}}"
           JOB_ID: "${{github.event.workflow_run.name}}"
           DISPLAY_TITLE: "${{github.event.workflow_run.display_title}}"
-        run: '"$GITHUB_WORKSPACE"/script/reset-database-notify-discord.bash'
+        run: '"$GITHUB_WORKSPACE/script/Reset Database Notify Discord.bash"'
 

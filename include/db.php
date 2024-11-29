@@ -116,8 +116,6 @@ function quote_string(string $string): string
 /**
  * Generates a WHERE clause for a SQL query based on an array of key-value pairs.
  *
- * This function is an internal implementation detail and should not be called directly outside of this module, as it could pose a security risk.
- *
  * @param BoolOperator $operator The logical operator to use between clauses.
  * @param array $clauses An array containing the conditions for the WHERE clause.
  * @return string The generated WHERE clause, or an empty string if no clauses are provided.
@@ -178,11 +176,6 @@ function bind_values(PDOStatement $stmt, array $params)
     }
 }
 
-/**
- * Retire les arguments `null` avant le `bind_values` pour pouvoir utiliser la valeur par défaut de la colonne dans les INSERT.
- * @param array $array
- * @return array
- */
 function filter_null_args(array $array): array
 {
     return array_filter($array, fn($e) => $e[0] !== null);

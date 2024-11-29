@@ -32,6 +32,7 @@ function query_images(): \Iterator
     return $stmt->getIterator();
 }
 
+
 function query_image(int $id_image): array
 {
     $stmt = notfalse(connect()->prepare('select * from _image where id = ?'));
@@ -285,7 +286,6 @@ function exists_pro_prive(int $id_pro_prive): bool
 {
     $stmt = notfalse(connect()->prepare('select ? in (select id from pro_prive)'));
     bind_values($stmt, [1 => [$id_pro_prive, PDO::PARAM_INT]]);
-    notfalse($stmt->execute());
     return $stmt->fetchColumn();
 }
 
@@ -298,6 +298,5 @@ function exists_offre(int $id_offre): bool
 {
     $stmt = notfalse(connect()->prepare('select ? in (select id from offres)'));
     bind_values($stmt, [1 => [$id_offre, PDO::PARAM_INT]]);
-    notfalse($stmt->execute());
     return $stmt->fetchColumn();
 }
