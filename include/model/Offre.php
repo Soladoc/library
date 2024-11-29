@@ -7,7 +7,7 @@ require_once 'model/Duree.php';
 require_once 'model/Image.php';
 require_once 'model/Professionnel.php';
 require_once 'model/Signalable.php';
-require_once 'model/Timestamp.php';
+require_once 'model/FiniteTimestamp.php';
 
 /**
  * Une offre touristique.
@@ -81,15 +81,15 @@ abstract class Offre implements Signalable
 
     /**
      * Les périodes d'ouverture.
-     * @var MultiRange<Timestamp>
+     * @var MultiRange<FiniteTimestamp>
      */
     readonly MultiRange $periodes_ouverture;
 
     /**
      * La date de dernière mise à jour (incluant la création).
-     * @var Timestamp
+     * @var FiniteTimestamp
      */
-    readonly Timestamp $modifiee_le;
+    readonly FiniteTimestamp $modifiee_le;
 
     /**
      * Si cette offre est en ligne.
@@ -111,9 +111,9 @@ abstract class Offre implements Signalable
 
     /**
      * La date de création de cette offre. Est égale à $modifiee_le si cette offre n'a jamais été modifée.
-     * @var Timestamp
+     * @var FiniteTimestamp
      */
-    readonly Timestamp $creee_le;
+    readonly FiniteTimestamp $creee_le;
 
     /**
      * La durée pendant laquelle cette offre a été en ligne pendant ce mois.
@@ -123,9 +123,9 @@ abstract class Offre implements Signalable
 
     /**
      * Quand aura lieu le prochain changement d'ouverture (passage de ouvert -> fermé (fermetrue) / fermé -> ouvert (ouverture)).
-     * @var Timestamp
+     * @var FiniteTimestamp
      */
-    readonly Timestamp $changement_ouverture_suivant_le;
+    readonly FiniteTimestamp $changement_ouverture_suivant_le;
 
     /**
      * Si cette offre est actuellement ouverte.
@@ -144,14 +144,14 @@ abstract class Offre implements Signalable
      * @param string $resume
      * @param string $description_detaillee
      * @param ?string $url_site_web
-     * @param MultiRange<Timestamp> $periodes_ouverture
-     * @param Timestamp $modifiee_le
+     * @param MultiRange<FiniteTimestamp> $periodes_ouverture
+     * @param FiniteTimestamp $modifiee_le
      * @param bool $en_ligne
      * @param float $note_moyenne
      * @param ?float $prix_min
-     * @param Timestamp $creee_le
+     * @param FiniteTimestamp $creee_le
      * @param Duree $en_ligne_ce_mois_pendant
-     * @param Timestamp $changement_ouverture_suivant_le
+     * @param FiniteTimestamp $changement_ouverture_suivant_le
      * @param bool $est_ouverte
      */
     function __construct(
@@ -165,13 +165,13 @@ abstract class Offre implements Signalable
         string $description_detaillee,
         ?string $url_site_web,
         MultiRange $periodes_ouverture,
-        Timestamp $modifiee_le,
+        FiniteTimestamp $modifiee_le,
         bool $en_ligne,
         float $note_moyenne,
         ?float $prix_min,
-        Timestamp $creee_le,
+        FiniteTimestamp $creee_le,
         Duree $en_ligne_ce_mois_pendant,
-        Timestamp $changement_ouverture_suivant_le,
+        FiniteTimestamp $changement_ouverture_suivant_le,
         bool $est_ouverte,
     ) {
         $this->id = $id;
@@ -260,14 +260,14 @@ abstract class Offre implements Signalable
             getarg($row, 'resume'),
             getarg($row, 'description_detaillee'),
             getarg($row, 'url_site_web', required: false),
-            MultiRange::parse(getarg($row, 'periodes_ouverture'), Timestamp::parse(...)),
-            Timestamp::parse(getarg($row, 'modifiee_le')),
+            MultiRange::parse(getarg($row, 'periodes_ouverture'), FiniteTimestamp::parse(...)),
+            FiniteTimestamp::parse(getarg($row, 'modifiee_le')),
             getarg($row, 'en_ligne'),
             getarg($row, 'note_moyenne', arg_float()),
             getarg($row, 'prix_min', arg_float(), required: false),
-            Timestamp::parse(getarg($row, 'creee_le')),
+            FiniteTimestamp::parse(getarg($row, 'creee_le')),
             Duree::parse(getarg($row, 'en_ligne_ce_mois_pendant')),
-            Timestamp::parse(getarg($row, 'changement_ouverture_suivant_le')),
+            FiniteTimestamp::parse(getarg($row, 'changement_ouverture_suivant_le')),
             getarg($row, 'est_ouverte'),
         ];
         return match ($row['categorie']) {

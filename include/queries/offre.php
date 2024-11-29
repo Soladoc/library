@@ -101,7 +101,7 @@ function offre_insert_ouverture_hebdomadaire(int $id_offre, int $dow, \MultiRang
  * @param string $titre
  * @param string $resume
  * @param string $description_detaillee
- * @param \MultiRange<\Timestamp>
+ * @param \MultiRange<\FiniteTimestamp>
  * @param ?string $url_site_web
  * @return array Les arguments communs pour l'insertion d'offre.
  */

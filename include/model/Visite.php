@@ -22,14 +22,14 @@ final class Visite extends Offre
      * @param string $resume
      * @param string $description_detaillee
      * @param ?string $url_site_web
-     * @param MultiRange<Timestamp> $periodes_ouverture
-     * @param Timestamp $modifiee_le
+     * @param MultiRange<FiniteTimestamp> $periodes_ouverture
+     * @param FiniteTimestamp $modifiee_le
      * @param bool $en_ligne
      * @param float $note_moyenne
      * @param ?float $prix_min
-     * @param Timestamp $creee_le
+     * @param FiniteTimestamp $creee_le
      * @param Duree $en_ligne_ce_mois_pendant
-     * @param Timestamp $changement_ouverture_suivant_le
+     * @param FiniteTimestamp $changement_ouverture_suivant_le
      * @param bool $est_ouverte
      * @param Duree $indication_duree
      */
@@ -44,13 +44,13 @@ final class Visite extends Offre
         string $description_detaillee,
         ?string $url_site_web,
         MultiRange $periodes_ouverture,
-        Timestamp $modifiee_le,
+        FiniteTimestamp $modifiee_le,
         bool $en_ligne,
         float $note_moyenne,
         ?float $prix_min,
-        Timestamp $creee_le,
+        FiniteTimestamp $creee_le,
         Duree $en_ligne_ce_mois_pendant,
-        Timestamp $changement_ouverture_suivant_le,
+        FiniteTimestamp $changement_ouverture_suivant_le,
         bool $est_ouverte,
         Duree $indication_duree,
     ) {

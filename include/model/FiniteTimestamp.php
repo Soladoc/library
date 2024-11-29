@@ -3,9 +3,9 @@
 require_once 'util.php';
 
 /**
- * Abstraction du type PostgesQL TIMESTAMP (WITHOUT TIME ZONE). 
+ * Abstraction du type PostgeSQL TIMESTAMP (WITHOUT TIME ZONE) fini.
  */
-final class Timestamp {
+final class FiniteTimestamp {
     private const FORMAT = 'Y-m-d H:i:s';
     private readonly DateTimeImmutable $datetime;
 
@@ -13,7 +13,12 @@ final class Timestamp {
         $this->datetime = $datetime;
     }
 
-    static function parse(string $timestamp): Timestamp {
+    /**
+     * Parse un timestamp depuis la sortie PostgreSQL.
+     * @param string $timestamp La sortie PostgreSQL
+     * @return FiniteTimestamp Un nouveau timestamp.
+     */
+    static function parse(string $timestamp): FiniteTimestamp {
         return new self(notfalse(DateTimeImmutable::createFromFormat(self::FORMAT, $timestamp)));
     }
 
