@@ -112,7 +112,9 @@ function query_tags(int $id): array|false
     $stmt = notfalse(connect()->prepare('select tag from _tags where id_offre = ?'));
     bind_values($stmt, [1 => [$id, PDO::PARAM_INT]]);
     notfalse($stmt->execute());
-    return $stmt->fetch();
+    $a= $stmt->fetch();
+    var_dump($a);
+    return $a;
 }
 
 function query_get_siren(int $id_compte): int
@@ -150,7 +152,7 @@ function query_select_offre_motcle(string $motcle):array{
     for($i=0; $i<count($mots); $i++) {
         $mc[$i] = "titre like '%".$mots[$i]."%'";
     }
-    $stmt = notfalse(connect()->prepare('select * from offres ' .implode(" and ", $mc)));
+    $stmt = notfalse(connect()->prepare('select * from offres where ' .implode(" and ", $mc)));
     // bind_values($stmt, $args);
     notfalse($stmt->execute());
     return $stmt->fetchAll();
