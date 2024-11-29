@@ -29,12 +29,11 @@ if ($valider && !empty($mot_cle)) {
         <section class="search-section">
             <h1>Accueil</h1>
             <br>
-            <div class="search-bar">
-                <input type="text" placeholder="Rechercher des activités, restaurants, spectacles...">
-                <a href="recherche.php">
-                    <button class="btn-search">Rechercher</button>
-                </a>
-            </div>
+            <form action="" name="bare_de_recherche" method="get" class="search-bar">
+
+                <input type="text" name="mot_cle" value="<?php echo $mot_cle ?>" placeholder=">Mots-clés">
+                <input type="submit" name="valider" value="Recherche">
+            </form>
         </section>
 
         <!-- Section des offres à la une -->
@@ -42,8 +41,15 @@ if ($valider && !empty($mot_cle)) {
             <h2>Offres à la une</h2>
             <div class="offer-list">
                 <?php
+
+                if ($modif_affichage) {
+                    $offres = DB\query_select_offre_motcle($mot_cle);
+                }
+                else {
+                    $offres = DB\query_offres_a_une();
+
+                }
                 // Préparer et exécuter la requête SQL pour récupérer toutes les offres
-                $offres = DB\query_offres_a_une();
 
                 // Boucler sur les résultats pour afficher chaque offre
                 foreach ($offres as $offre) {
