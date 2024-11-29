@@ -18,6 +18,7 @@ const DEFAULT_TAGS = [
     'patrimoine',
     'son et lumière',
     'urbain',
+    'sport',
 ];
 
 /**
