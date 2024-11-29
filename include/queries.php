@@ -149,7 +149,9 @@ function query_select_offre_motcle(string $motcle):array{
     for($i=0; $i<count($mots); $i++) {
         $mc[$i] = "titre like '%".$mots[$i]."%'";
     }
-    $stmt = notfalse(connect()->prepare('select * from offres ' . where_clause(BoolOperator::AND, array_keys($mots))));
+    $args = filter_null_args(['motcle' => [$motcle, PDO::PARAM_STR]]);
+    $stmt = notfalse(connect()->prepare('select * from offres ' .implode(" and ", $mc)));
+    bind_values($stmt, $args);
     notfalse($stmt->execute());
     return $stmt->fetchAll();
     

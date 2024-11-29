@@ -13,7 +13,7 @@ $modif_affichage = false;
 
 if ($valider && !empty($mot_cle)) {
     $modif_affichage = true;
-    $mot_cle= getarg($_GET,"mot_cle");
+    $mot_cle= getarg( $_GET,"mot_cle");
 }
 ?>
 
