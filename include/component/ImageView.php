@@ -8,7 +8,7 @@ final class ImageView
 {
     readonly Image $image;
 
-    private function __construct(Image $image)
+    function __construct(Image $image)
     {
         $this->image = $image;
     }
