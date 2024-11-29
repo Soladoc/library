@@ -5,8 +5,9 @@ require_once 'component/Page.php';
 $page = new Page('Accueil');
 
 
-$recherche = null; 
-$valider = getarg($_GET,"valider");
+$recherche = null;
+
+$valider = getarg($_GET,"valider",required: false);
 $modif_affichage = false;
 
 if ($valider && !empty($mot_cle)) {
