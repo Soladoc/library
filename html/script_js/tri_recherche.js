@@ -12,6 +12,9 @@ async function initializeOffers() {
         getDataJson(`/json/offres.php`),
         getDataJson(`/json/images.php`),
     ]);
+    for (let offer of offers) {
+        offer.tags = await getDataJson(`/json/tags.php?id=${offer.id}`);
+    }
     filterOffers();
 }
 initializeOffers();
@@ -36,7 +39,7 @@ function showSubcategories() {
 
             const checkbox = document.createElement('input');
             checkbox.type = 'checkbox';
-            checkbox.id = subcategory;
+            checkbox.id = toLowerCase(subcategory);
             checkbox.name = 'subcategory';
             checkbox.value = subcategory;
             checkbox.addEventListener('change', filterOffers);
@@ -92,14 +95,16 @@ function sortOffers(criteria, ascending = true) {
 function filterOffers() {
     const mainCategory = document.getElementById('main-category').value;
     const subcategoryCheckboxes = document.querySelectorAll('input[name="subcategory"]:checked');
-    const selectedSubcategories = Array.from(subcategoryCheckboxes).map(cb => cb.value);
+    const selectedSubcategories = Array.from(subcategoryCheckboxes).map(cb => cb.id);
     const filteredOffers = offers.filter(offer => {
         if (mainCategory && offer.categorie.toLowerCase() !== mainCategory.toLowerCase()) {
             return false;
         }
         if (selectedSubcategories.length > 0) {
-            const offerSubcategories = offer.sous_categorie.split(',').map(sub => sub.trim());
-            return selectedSubcategories.some(selected => offerSubcategories.includes(selected));
+            if (!offer.tags || offer.tags.length === 0) {
+                return false;
+            }
+            return selectedSubcategories.some(selected => offer.tags.includes(selected));
         }
         return true;
     });
