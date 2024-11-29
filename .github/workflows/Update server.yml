@@ -1,0 +1,21 @@
+name: Update server
+on:
+  push:
+    branches:
+      - main
+    paths-ignore:
+      - '**.sql'
+jobs:
+  update_server:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Update server
+        run: 'cd "$GITHUB_WORKSPACE"/script && ./server-run-script.bash ./server/update.bash'
+
+      - name: Send Discord message
+        env:
+          DISCORD_WEBHOOK_URL: "${{secrets.DISCORD_WEBHOOK_URL}}"
+        run: 'cd "$GITHUB_WORKSPACE"/script && ./discord-send-msg.bash "@here Serveur mis à jour."'
