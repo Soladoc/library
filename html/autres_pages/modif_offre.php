@@ -8,7 +8,7 @@ require_once 'component/inputs.php';
 require_once 'component/Page.php';
 require_once 'component/InputDuree.php';
 
-$page = new Page("Modifurlier offre",
+$page = new Page("Modifier offre",
     ['creation_offre.css'],
     ['module/creation_offre.js' => 'defer type="module"']);
 
