@@ -146,6 +146,20 @@ function query_avis(?int $id_membre_auteur = null, ?int $id_offre = null): array
     return $stmt->fetchAll();
 }
 
+function query_select_offre_motcle(string $motcle):array{
+    $mots=explode(" ",trim($motcle));
+    for($i=0; $i<count($mots); $i++) {
+        $mc[$i] = "titre like '%".$mots[$i]."%'";
+    }
+    $args = filter_null_args(['motcle' => [$motcle, PDO::PARAM_STR]]);
+    $stmt = notfalse(connect()->prepare('select * from offres ' .implode(" and ", $mc)));
+    bind_values($stmt, $args);
+    notfalse($stmt->execute());
+    return $stmt->fetchAll();
+    
+
+}
+
 // Update-----------------------------------------------------------------------------------------------------------
 
 function query_uptate_mdp(int $id_compte,string $new_mdp): void
