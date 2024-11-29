@@ -13,7 +13,7 @@ async function initializeOffers() {
         getDataJson(`/json/images.php`),
     ]);
     for (let offer of offers) {
-        offer.tags = await getDataJson(`/json/tags.php?id=${offer.id}`);
+        offer.tags = await getDataJson(`/json/tags.php?id=${offer.id_offre}`);
     }
     filterOffers();
 }
