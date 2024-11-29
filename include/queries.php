@@ -108,6 +108,14 @@ function query_compte_professionnel(int $id): array|false
     return $stmt->fetch();
 }
 
+function query_tags(int $id): array|false
+{
+    $stmt = notfalse(connect()->prepare('select * from _tags where id_offre = ?'));
+    bind_values($stmt, [1 => [$id, PDO::PARAM_INT]]);
+    notfalse($stmt->execute());
+    return $stmt->fetch();
+}
+
 function query_get_siren(int $id_compte): int
 {
     $stmt = notfalse(connect()->prepare('select siren from pro_prive where id = ?'));
