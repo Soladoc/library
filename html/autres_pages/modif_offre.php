@@ -101,16 +101,24 @@ if ($_POST) {
             <?php if ($est_prive) { ?> 
             <ul id="liste-choix-abonnement">
                 <li>
-                    <label><input form="f"
-                        name="libelle_abonnement"
-                        value="standard"
-                        type="radio"> Standard</label>
+                    <label>
+                        <input form="f"
+                                name="libelle_abonnement"
+                                value="standard"
+                                type="radio" 
+                                <?= $offre['libelle_abonnement'] === 'standard' ? 'checked' : '' ?>>
+                        Standard
+                    </label>
                 </li>
                 <li>
-                    <label><input form="f"
-                        name="libelle_abonnement"
-                        value="premium"
-                        type="radio"> Premium</label>
+                    <label>
+                        <input form="f"
+                                name="libelle_abonnement"
+                                value="premium"
+                                type="radio" 
+                                <?= $offre['libelle_abonnement'] === 'premium' ? 'checked' : '' ?>>
+                        Premium
+                    </label>
                 </li>
             </ul>
             <aside>
