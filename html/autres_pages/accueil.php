@@ -1,6 +1,7 @@
 <?php
 require_once 'component/offre.php';
 require_once 'component/Page.php';
+require_once 'component/CardOffre.php';
 
 $page = new Page('Accueil');
 
