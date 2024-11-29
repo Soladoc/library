@@ -238,7 +238,6 @@ if ($_POST) {
                 //$tags_remplis = DB\query_tags($offre['id']);
                 $tags_remplis = array_column(DB\query_tags($offre['id']), 'tag');
                 $tags_disponibles = $args['type_offre'] === 'restaurant' ? TAGS_RESTAURANT : DEFAULT_TAGS;
-                print_r($tags_remplis);
                 foreach ($tags_disponibles as $tag) {
                     // Si le tag est déjà dans les tags remplis, ajoutez 'checked'
                     $checked = in_array($tag, $tags_remplis) ? 'checked' : '';
