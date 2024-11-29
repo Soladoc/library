@@ -1,4 +1,4 @@
-name: Reset Database notify Discord
+name: Reset database notify Discord
 on:
   workflow_run:
     workflows: [Reset Database]
