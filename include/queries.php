@@ -1,7 +1,9 @@
 <?php
 namespace DB;
 
+
 use PDO;
+
 
 require_once 'db.php';
 
@@ -33,7 +35,6 @@ function query_images(): \Iterator
     notfalse($stmt->execute());
     return $stmt->getIterator();
 }
-
 
 function query_image(int $id_image): array
 {
@@ -148,15 +149,19 @@ function query_avis(?int $id_membre_auteur = null, ?int $id_offre = null): array
 
 function query_select_offre_motcle(string $motcle):array{
     $mots=explode(" ",trim($motcle));
-    for($i=0; $i<count($mots); $i++) {
-        $mc[$i] = "titre like '%".$mots[$i]."%'";
-    }
-    $args = filter_null_args(['motcle' => [$motcle, PDO::PARAM_STR]]);
-    $stmt = notfalse(connect()->prepare('select * from offres ' .implode(" and ", $mc)));
+    // for ($i=0; $i <count($mots) ; $i++) { 
+    //     $mc[$i]="titre like '%".$mc[$i]."%'";
+        // $res =$PDO->prepare("select id frome offre where  ".implode(" and ",$mc));
+        // $res->setFetchMode(PDO::FETCH_ASSOC);
+        // $res->execute();
+        // return $res->fetchAll();
+
+    $args = filter_null_args(['motcle' => [$motcle, PDO::PARAM_INT]]);
+    $stmt = notfalse(connect()->prepare('select * from avis ' . where_clause(BoolOperator::AND, array_keys($mots))));
     bind_values($stmt, $args);
     notfalse($stmt->execute());
     return $stmt->fetchAll();
-    
+    }
 
 }
 
@@ -249,6 +254,7 @@ function insert_adresse(
     ?float $longitude = null,
 ): int {
     $args = [
+    $args = [
         'code_commune' => [$code_commune, PDO::PARAM_INT],
         'numero_departement' => [$numero_departement, PDO::PARAM_INT],
         'numero_voie' => [$numero_voie, PDO::PARAM_INT],
@@ -259,6 +265,7 @@ function insert_adresse(
         'precision_ext' => [$precision_ext, PDO::PARAM_STR],
         'latitude' => [$latitude, PDO_PARAM_DECIMAL],
         'longitude' => [$longitude, PDO_PARAM_DECIMAL],
+    ];
     ];
     $stmt = insert_into_returning_id('_adresse', $args);
     notfalse($stmt->execute());
@@ -296,8 +303,10 @@ function insert_uploaded_image(array $img, ?string $legende = null): array
  */
 function exists_pro_prive(int $id_pro_prive): bool
 {   
+{   
     $stmt = notfalse(connect()->prepare('select ? in (select id from pro_prive)'));
     bind_values($stmt, [1 => [$id_pro_prive, PDO::PARAM_INT]]);
+    notfalse($stmt->execute());
     return $stmt->fetchColumn();
 }
 
@@ -310,5 +319,6 @@ function exists_offre(int $id_offre): bool
 {
     $stmt = notfalse(connect()->prepare('select ? in (select id from offres)'));
     bind_values($stmt, [1 => [$id_offre, PDO::PARAM_INT]]);
+    notfalse($stmt->execute());
     return $stmt->fetchColumn();
 }
