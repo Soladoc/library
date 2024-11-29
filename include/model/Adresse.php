@@ -15,7 +15,7 @@ final class Adresse
         };
     }
 
-    private const TABLE = '_adresse';
+    protected const TABLE = '_adresse';
 
     /**
      * La commune.
@@ -104,7 +104,7 @@ final class Adresse
      */
     static function from_db(int $id_adresse): Adresse|false
     {
-        $stmt = notfalse(DB\connect()->prepare('select * from ' . self::TABLE . ' where id = ?'));
+        $stmt = notfalse(DB\connect()->prepare('select code_commune,numero_departement,numero_voie,complement_numero,nom_voie,localite,precision_int,precision_ext,latitude,longitude from ' . self::TABLE . ' where id = ?'));
         DB\bind_values($stmt, [1 => [$id_adresse, PDO::PARAM_INT]]);
         notfalse($stmt->execute());
         $row = $stmt->fetch();

@@ -23,12 +23,13 @@ test_case('[1296  ,  3299]', true, 1296, 3299, true, parse_int(...));
 test_case('(1296  ,  3299]', false, 1296, 3299, true, parse_int(...));
 test_case('[" 1296  ",]', true, 1296, null, false, parse_int(...));
 
-test_case('[fff,ggg]', true, 'fff', 'ggg', true, fn($e) => $e);
-test_case('["fff","ggg"]', true, 'fff', 'ggg', true, fn($e) => $e);
-test_case('["fff",ggg]', true, 'fff', 'ggg', true, fn($e) => $e);
-test_case('["""\"\\\\",£££]', true, '""\\', '£££', true, fn($e) => $e);
-test_case('[ plg , £££ ]', true, ' plg ', ' £££ ', true, fn($e) => $e);
-test_case('[" \m","\n "]', true, ' m', 'n ', true, fn($e) => $e);
+test_case('[fff,ggg]', true, 'fff', 'ggg', true);
+test_case('["fff","ggg"]', true, 'fff', 'ggg', true);
+test_case('["fff",ggg]', true, 'fff', 'ggg', true);
+test_case('["""\"\\\\",£££]', true, '""\\', '£££', true);
+test_case('[ plg , £££ ]', true, ' plg ', ' £££ ', true);
+test_case('[" \m","\n "]', true, ' m', 'n ', true);
+
 /**
  * Cas de test nominal.
  * @template T
@@ -37,10 +38,10 @@ test_case('[" \m","\n "]', true, ' m', 'n ', true, fn($e) => $e);
  * @param T $lower
  * @param T $upper
  * @param bool $upper_inc
- * @param callable(string): T $parse_bound
+ * @param ?callable(string): T $parse_bound
  * @return void
  */
-function test_case(string $output, bool $lower_inc, mixed $lower, mixed $upper, bool $upper_inc, callable $parse_bound): void
+function test_case(string $output, bool $lower_inc, mixed $lower, mixed $upper, bool $upper_inc, ?callable $parse_bound = null): void
 {
     $r = NonEmptyRange::parse($output, $parse_bound);
     assert_strictly_equal($r->lower_inc, $lower_inc);

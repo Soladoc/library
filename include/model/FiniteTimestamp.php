@@ -14,12 +14,14 @@ final class FiniteTimestamp {
     }
 
     /**
-     * Parse un timestamp depuis la sortie PostgreSQL.
-     * @param string $timestamp La sortie PostgreSQL
-     * @return FiniteTimestamp Un nouveau timestamp.
+     * Parse un timestamp fini depuis la sortie PostgreSQL.
+     * @param ?string $output La sortie PostgreSQL.
+     * @return ?FiniteTimestamp Un nouveau timestamp fini, ou `null` si `$output` était `null` (à l'instar de PostgreSQL, cette fonction propage `null`)
+     * @throws DomainException En cas de mauvaise syntaxe.
      */
-    static function parse(string $timestamp): FiniteTimestamp {
-        return new self(notfalse(DateTimeImmutable::createFromFormat(self::FORMAT, $timestamp)));
+    static function parse(?string $output): ?FiniteTimestamp {
+        return $output === null ? null
+            : new self(notfalse(DateTimeImmutable::createFromFormat(self::FORMAT, $output)));
     }
 
     function __toString(): string {

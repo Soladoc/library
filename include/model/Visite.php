@@ -5,7 +5,7 @@ final class Visite extends Offre
 {
     const CATEGORIE = 'visite';
 
-    private const TABLE = '_visite';
+    protected const TABLE = 'visite';
 
     readonly Duree $indication_duree;
 
@@ -29,7 +29,7 @@ final class Visite extends Offre
      * @param ?float $prix_min
      * @param FiniteTimestamp $creee_le
      * @param Duree $en_ligne_ce_mois_pendant
-     * @param FiniteTimestamp $changement_ouverture_suivant_le
+     * @param ?FiniteTimestamp $changement_ouverture_suivant_le
      * @param bool $est_ouverte
      * @param Duree $indication_duree
      */
@@ -50,7 +50,7 @@ final class Visite extends Offre
         ?float $prix_min,
         FiniteTimestamp $creee_le,
         Duree $en_ligne_ce_mois_pendant,
-        FiniteTimestamp $changement_ouverture_suivant_le,
+        ?FiniteTimestamp $changement_ouverture_suivant_le,
         bool $est_ouverte,
         Duree $indication_duree,
     ) {
@@ -75,5 +75,31 @@ final class Visite extends Offre
             $est_ouverte,
         );
         $this->indication_duree = $indication_duree;
+    }
+
+
+    protected static function from_db_row(array $row): self
+    {
+        return new self(
+            $row['id'],
+            Adresse::from_db($row['id_adresse']),
+            Image::from_db($row['id_image_principale']),
+            Professionnel::from_db($row['id_professionnel']),
+            Abonnement::from_db($row['libelle_abonnement']),
+            $row['titre'],
+            $row['resume'],
+            $row['description_detaillee'],
+            $row['url_site_web'] ?? null,
+            MultiRange::parse($row['periodes_ouverture'], FiniteTimestamp::parse(...)),
+            FiniteTimestamp::parse($row['modifiee_le']),
+            $row['en_ligne'],
+            notfalse(parse_float($row['note_moyenne'] ?? null)),
+            notfalse(parse_float($row['prix_min'] ?? null)),
+            FiniteTimestamp::parse($row['creee_le']),
+            Duree::parse($row['en_ligne_ce_mois_pendant']),
+            FiniteTimestamp::parse($row['changement_ouverture_suivant_le'] ?? null),
+            $row['est_ouverte'],
+            Duree::parse($row['indication_duree']),
+        );
     }
 }

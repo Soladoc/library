@@ -4,7 +4,7 @@ require_once 'db.php';
 
 final class Avis
 {
-    private const TABLE = 'avis';
+    protected const TABLE = 'avis';
 
     /**
      * Obtient le nombre d'avis d'une offre.

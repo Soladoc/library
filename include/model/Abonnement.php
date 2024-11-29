@@ -3,7 +3,7 @@ require_once 'db.php';
 
 final class Abonnement
 {
-    private const TABLE = '_abonnement';
+    protected const TABLE = '_abonnement';
 
     readonly string $libelle;
     readonly float $prix_journalier;
@@ -22,10 +22,10 @@ final class Abonnement
     {
         self::$instances ??= array_map(
             fn($row) => new Abonnement(
-                getarg($row, 'libelle'),
-                getarg($row, 'prix_journalier', arg_float()),
+                $row['libelle'],
+                parse_float($row['prix_journalier']),
             ),
-            array_column(DB\connect()->query('select * from ' . self::TABLE)->fetchAll(), null, 'libelle'),
+            array_column(DB\connect()->query('select libelle, prix_journalier from ' . self::TABLE)->fetchAll(), null, 'libelle'),
         );
         return self::$instances[$libelle_abonnement];
     }

@@ -24,7 +24,7 @@ abstract class Offre implements Signalable
         };
     }
 
-    private const TABLE = 'offres';
+    protected const TABLE = 'offres';
     const CATEGORIE = self::CATEGORIE;  // Constante devant être définie dans les sous-classes
 
     private int $nb_avis;
@@ -110,7 +110,7 @@ abstract class Offre implements Signalable
     readonly ?float $prix_min;
 
     /**
-     * La date de création de cette offre. Est égale à $modifiee_le si cette offre n'a jamais été modifée.
+     * La date de création de cette offre. Est égale à `$modifiee_le` si cette offre n'a jamais été modifée.
      * @var FiniteTimestamp
      */
     readonly FiniteTimestamp $creee_le;
@@ -125,7 +125,7 @@ abstract class Offre implements Signalable
      * Quand aura lieu le prochain changement d'ouverture (passage de ouvert -> fermé (fermetrue) / fermé -> ouvert (ouverture)).
      * @var FiniteTimestamp
      */
-    readonly FiniteTimestamp $changement_ouverture_suivant_le;
+    readonly ?FiniteTimestamp $changement_ouverture_suivant_le;
 
     /**
      * Si cette offre est actuellement ouverte.
@@ -151,7 +151,7 @@ abstract class Offre implements Signalable
      * @param ?float $prix_min
      * @param FiniteTimestamp $creee_le
      * @param Duree $en_ligne_ce_mois_pendant
-     * @param FiniteTimestamp $changement_ouverture_suivant_le
+     * @param ?FiniteTimestamp $changement_ouverture_suivant_le
      * @param bool $est_ouverte
      */
     function __construct(
@@ -171,7 +171,7 @@ abstract class Offre implements Signalable
         ?float $prix_min,
         FiniteTimestamp $creee_le,
         Duree $en_ligne_ce_mois_pendant,
-        FiniteTimestamp $changement_ouverture_suivant_le,
+        ?FiniteTimestamp $changement_ouverture_suivant_le,
         bool $est_ouverte,
     ) {
         $this->id = $id;
@@ -196,111 +196,128 @@ abstract class Offre implements Signalable
 
     /**
      * Récupère les offres "À la Une" de la BDD.
-     * @return Offre[] Les offres "À la Une" de la BDD.
+     * @return Iterator<int, Offre> Les offres "À la Une" de la BDD, indexés par ID.
      */
-    static function from_db_a_la_une(): array
+    static function from_db_a_la_une(): Iterator
     {
-        require_once 'model/ParcAttractions.php';
-        require_once 'model/Activite.php';
-        require_once 'model/Visite.php';
-        require_once 'model/Spectacle.php';
-        require_once 'model/Restaurant.php';
-        $stmt = notfalse(DB\connect()->prepare('select * from ' . self::TABLE . '
-            left join _activite using (id)
-            left join _parc_attractions using (id)
-            left join _restaurant using (id)
-            left join _spectacle using (id)
-            left join _visite using (id)
-        where note_moyenne = 5'));  // todo: temporaire : le temps qu'on fasse marcher les options
+        if (static::TABLE === self::TABLE) {
+            require_once 'model/ParcAttractions.php';
+            require_once 'model/Activite.php';
+            require_once 'model/Visite.php';
+            require_once 'model/Spectacle.php';
+            require_once 'model/Restaurant.php';
+            foreach (Activite::from_db_a_la_une() as $id => $row) {
+                yield $id => $row;
+            }
+            foreach (ParcAttractions::from_db_a_la_une() as $id => $row) {
+                yield $id => $row;
+            }
+            foreach (Restaurant::from_db_a_la_une() as $id => $row) {
+                yield $id => $row;
+            }
+            foreach (Spectacle::from_db_a_la_une() as $id => $row) {
+                yield $id => $row;
+            }
+            foreach (Visite::from_db_a_la_une() as $id => $row) {
+                yield $id => $row;
+            }
+            return;
+        }
+        // todo: where temporaire : le temps qu'on fasse marcher les options
+        $stmt = notfalse(DB\connect()->prepare('select * from ' . static::TABLE . ' where note_moyenne = 5'));
         notfalse($stmt->execute());
-        return array_map(self::from_db_row(...), $stmt->fetchAll());
+        while (false !== $row = $stmt->fetch()) {
+            yield $row['id'] => static::from_db_row($row);
+        }
     }
 
     /**
      * Récupère des offres de la BDD.
      * @param mixed $id_professionnel L'ID du professionnel dont on veut récupérer les offres, ou `null` pour récupérer les offres de tous les professionnels.
      * @param mixed $en_ligne Si on veut les offres actuellement en ligne ou hors ligne, ou `null` pour les deux.
-     * @return Offre[] Les offres de la BDD répondant au critères passés en paramètre.
+     * @return Iterator<int, Offre> Les offres de la BDD répondant au critères passés en paramètre.
      */
-    static function from_db_all(?int $id_professionnel = null, ?bool $en_ligne = null): array
+    static function from_db_all(?int $id_professionnel = null, ?bool $en_ligne = null): Iterator
     {
+        if (static::TABLE === self::TABLE) {
+            require_once 'model/ParcAttractions.php';
+            require_once 'model/Activite.php';
+            require_once 'model/Visite.php';
+            require_once 'model/Spectacle.php';
+            require_once 'model/Restaurant.php';
+            foreach (Activite::from_db_all($id_professionnel, $en_ligne) as $id => $row) {
+                yield $id => $row;
+            }
+            foreach (ParcAttractions::from_db_all($id_professionnel, $en_ligne) as $id => $row) {
+                yield $id => $row;
+            }
+            foreach (Restaurant::from_db_all($id_professionnel, $en_ligne) as $id => $row) {
+                yield $id => $row;
+            }
+            foreach (Spectacle::from_db_all($id_professionnel, $en_ligne) as $id => $row) {
+                yield $id => $row;
+            }
+            foreach (Visite::from_db_all($id_professionnel, $en_ligne) as $id => $row) {
+                yield $id => $row;
+            }
+            return;
+        }
         $args = DB\filter_null_args(['id_professionnel' => [$id_professionnel, PDO::PARAM_INT], 'en_ligne' => [$en_ligne, PDO::PARAM_BOOL]]);
-        $stmt = notfalse(DB\connect()->prepare('select * from ' . self::TABLE . DB\where_clause(DB\BoolOperator::AND, array_keys($args))));
+        $stmt = notfalse(DB\connect()->prepare('select * from ' . static::TABLE . DB\where_clause(DB\BoolOperator::AND, array_keys($args))));
         DB\bind_values($stmt, $args);
         notfalse($stmt->execute());
-        return array_map(self::from_db_row(...), $stmt->fetchAll());
-    }
-
-    static function from_db_by_motcle(string $motcle): array
-    {
-        $mots = array_map(fn($mot) => 'titre ilike ' . DB\quote_string("%$mot%"), explode(' ', trim($motcle)));
-        $stmt = notfalse(DB\connect()->prepare('select * from offres where ' . implode(' and ', $mots)));
-        notfalse($stmt->execute());
-        return array_map(self::from_db_row(...), $stmt->fetchAll());
+        while (false !== $row = $stmt->fetch()) {
+            yield $row['id'] => static::from_db_row($row);
+        }
     }
 
     /**
-     * @param string[] $row
+     * Récupère les offres de la BDD dont le titre correspond à une recherche.
+     * @param string $motcle La chaîne recherchée
+     * @return Iterator<int, Offre>
+     */
+    static function from_db_by_motcle(string $motcle): Iterator
+    {
+        if (static::TABLE === self::TABLE) {
+            require_once 'model/ParcAttractions.php';
+            require_once 'model/Activite.php';
+            require_once 'model/Visite.php';
+            require_once 'model/Spectacle.php';
+            require_once 'model/Restaurant.php';
+            foreach (Activite::from_db_by_motcle($motcle) as $id => $row) {
+                yield $id => $row;
+            }
+            foreach (ParcAttractions::from_db_by_motcle($motcle) as $id => $row) {
+                yield $id => $row;
+            }
+            foreach (Restaurant::from_db_by_motcle($motcle) as $id => $row) {
+                yield $id => $row;
+            }
+            foreach (Spectacle::from_db_by_motcle($motcle) as $id => $row) {
+                yield $id => $row;
+            }
+            foreach (Visite::from_db_by_motcle($motcle) as $id => $row) {
+                yield $id => $row;
+            }
+            return;
+        }
+        $stmt = notfalse(DB\connect()->prepare('select * from ' . static::TABLE . ' where '
+            . implode(' and ', array_map(
+                fn($mot) => 'titre ilike ' . DB\quote_string("%$mot%"),
+                explode(' ', trim($motcle)),
+            ))));
+        notfalse($stmt->execute());
+        while (false !== $row = $stmt->fetch()) {
+            yield $row['id'] => static::from_db_row($row);
+        }
+    }
+
+    /**
+     * @param (string|int|bool)[] $row
      * @return Offre
      */
-    private static function from_db_row(array $row): Offre
+    protected static function from_db_row(array $row): Offre
     {
-        require_once 'model/ParcAttractions.php';
-        require_once 'model/Activite.php';
-        require_once 'model/Visite.php';
-        require_once 'model/Spectacle.php';
-        require_once 'model/Restaurant.php';
-        $common_args = [
-            getarg($row, 'id', arg_int()),
-            Adresse::from_db(getarg($row, 'id_adresse')),
-            Image::from_db(getarg($row, 'id_image_principale')),
-            Professionnel::from_db(getarg($row, 'id_professionnel')),
-            Abonnement::from_db(getarg($row, 'libelle_abonnement')),
-            getarg($row, 'titre'),
-            getarg($row, 'resume'),
-            getarg($row, 'description_detaillee'),
-            getarg($row, 'url_site_web', required: false),
-            MultiRange::parse(getarg($row, 'periodes_ouverture'), FiniteTimestamp::parse(...)),
-            FiniteTimestamp::parse(getarg($row, 'modifiee_le')),
-            getarg($row, 'en_ligne'),
-            getarg($row, 'note_moyenne', arg_float()),
-            getarg($row, 'prix_min', arg_float(), required: false),
-            FiniteTimestamp::parse(getarg($row, 'creee_le')),
-            Duree::parse(getarg($row, 'en_ligne_ce_mois_pendant')),
-            FiniteTimestamp::parse(getarg($row, 'changement_ouverture_suivant_le')),
-            getarg($row, 'est_ouverte'),
-        ];
-        return match ($row['categorie']) {
-            'activité' => new Activite(
-                ...$common_args,
-                indication_duree: Duree::parse(getarg($row, 'indication_duree')),
-                age_requis: getarg($row, 'age_requis', arg_int(), required: false),
-                prestations_incluses: getarg($row, 'prestations_incluses'),
-                prestations_non_incluses: getarg($row, 'prestations_non_incluses', required: false),
-            ),
-            "parc d'attractions" => new ParcAttractions(
-                ...$common_args,
-                image_plan: Image::from_db($row['id_image_plan']),
-            ),
-            'restaurant' => new Restaurant(
-                ...$common_args,
-                carte: getarg($row, 'carte'),
-                richesse: getarg($row, 'richesse', arg_int()),
-                sert_petit_dejeuner: getarg($row, 'sert_petit_dejeuner'),
-                sert_brunch: getarg($row, 'sert_brunch'),
-                sert_dejeuner: getarg($row, 'sert_dejeuner'),
-                sert_diner: getarg($row, 'sert_diner'),
-                sert_boissons: getarg($row, 'sert_boissons'),
-            ),
-            'spectacle' => new Spectacle(
-                ...$common_args,
-                indication_duree: Duree::parse(getarg($row, 'indication_duree')),
-                capacite_accueil: getarg($row, 'capacite_accueil', arg_int()),
-            ),
-            'visite' => new Visite(
-                ...$common_args,
-                indication_duree: Duree::parse(getarg($row, 'indication_duree')),
-            ),
-        };
+        throw new LogicException('from_db_row doit être overriden');
     }
 }

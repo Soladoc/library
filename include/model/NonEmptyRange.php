@@ -116,11 +116,11 @@ final class NonEmptyRange
      * Parse un `NonEmptyRange` à partir de la sortie PostgreSQL.
      * @template TBound
      * @param string $output La chaîne à parser.
-     * @param callable(string): TBound|false $parse_bound La fonction parsant les bornes. Peut retourner `false` si la syntaxe est invalide.
+     * @param callable(string): TBound|false $parse_bound La fonction parsant les bornes. Peut retourner `false` si la syntaxe est invalide. `null` implique la fonciton identité.
      * @return NonEmptyRange<TBound> Un nouveau range non vide.
      * @throws DomainException Quand $output ne correspond pas à la syntax attendue.
      */
-    static function parse(string $output, callable $parse_bound): NonEmptyRange
+    static function parse(string $output, ?callable $parse_bound = null): NonEmptyRange
     {
         $match = null;
         if (!preg_match(self::PARSE_PATTERN, $output, $match, 0)) {
@@ -133,10 +133,10 @@ final class NonEmptyRange
      * Lit un `NonEmptyRange` à partir de la sortie PostgreSQL.
      * @template TBound
      * @param string $source La chaîne d'où lire. Doit commencer par le range, mais peut être plus longue.
-     * @param callable(string): TBound|false $parse_bound La fonction parsant les bornes. Peut returner `false` si la syntaxe est invalide.
+     * @param callable(string): TBound|false $parse_bound La fonction parsant les bornes. Peut returner `false` si la syntaxe est invalide. `null` implique la fonction identité.
      * @return array{NonEmptyRange<TBound>, int}|false Le couple du nouveau range non vide et du nombre de caractères lus, ou `false` en cas d'erreur.
      */
-    static function read(string $source, callable $parse_bound): array|false
+    static function read(string $source, ?callable $parse_bound = null): array|false
     {
         $match = null;
         if (!preg_match(self::READ_PATTERN, $source, $match, 0)) {
@@ -146,8 +146,10 @@ final class NonEmptyRange
         return $range === false ? false : [$range, strlen($match[0])];
     }
 
-    private static function from_match(array $match, callable $parse_bound): NonEmptyRange|false
+    private static function from_match(array $match, ?callable $parse_bound): NonEmptyRange|false
     {
+        $parse_bound ??= fn($x) => $x;
+
         [, $lower_delim, $lower, $upper, $upper_delim] = $match;
         $lower = $lower === '' ? null : $parse_bound(self::unescape_bound($lower));
         $upper = $upper === '' ? null : $parse_bound(self::unescape_bound($upper));

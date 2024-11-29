@@ -4,7 +4,7 @@ require_once 'db.php';
 /**
  * Affiche le composant d'input d'adresse postale.
  *
- * Noms dans le POST (optionellement suffixés par $prefix)
+ * Noms dans le POST (optionellement suffixés par `$prefix`)
  *
  * - `commune`
  * - `localite`

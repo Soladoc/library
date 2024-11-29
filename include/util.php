@@ -21,11 +21,11 @@ function notfalse(mixed $valeur, string $message = 'was false'): mixed
  * Supprime une clé d'un tableu et retourne la valeur associée.
  * @template T
  * @param T[] $array Le tableau à modifier.
- * @param bool|float|int|resource|string|null $key La clé à retirer. Elle doit exister dans le tableau.
+ * @param bool|float|int|string|null $key La clé à retirer. Elle doit exister dans le tableau.
  * @throws DomainException Si la clé n'existe pas dans le tableau.
  * @return T La valeur associée à la clé retirée.
  */
-function array_pop_key(array &$array, bool|float|int|resource|string|null $key): mixed
+function array_pop_key(array &$array, bool|float|int|string|null $key): mixed
 {
     if (!array_key_exists($key, $array)) {
         throw new DomainException("Array must contain key '$key'");
@@ -89,26 +89,62 @@ function arg_check(callable $check): callable
     };
 }
 
-function arg_int(?int $min_range = null)
+/**
+ * Crée un filtre `getarg` pour un entier.
+ * @param ?int $min_range La valeur minimale de l'entier ou `null` pour pas de minimum.
+ * @return callable(string, mixed): ?int Un filter utilisable par la fonction `getarg`.
+ * @throws DomainException En cas de mauvaise syntaxe.
+ */
+function arg_int(?int $min_range = null): callable
 {
     return function (string $name, mixed $value) use ($min_range) {
-        $val = parse_int($value, $min_range);
-        if ($val === false) {
+        if (false === ($val = parse_int($value, $min_range))) {
             html_error("argument $name invalide: " . var_export($value, true));
         }
         return $val;
     };
 }
 
+/**
+ * Crée un filtre `getarg` pour un flottant.
+ * @param ?float $min_range La valeur minimale du floattant ou `null` pour pas de minimum.
+ * @return callable(string, mixed): ?float Un filter utilisable par la fonction `getarg`.
+ */
 function arg_float(?int $min_range = null)
 {
     return function (string $name, mixed $value) use ($min_range) {
-        $val = parse_float($value, $min_range);
-        if ($val === false) {
+        if (false === ($val = parse_float($value, $min_range))) {
             html_error("argument $name invalide: " . var_export($value, true));
         }
         return $val;
     };
+}
+
+/**
+ * Parse un entier.
+ * @param ?string $output Un entier sous forme de chaîne.
+ * @param ?int $min_range La valeur minimale de l'entier ou `null` pour pas de minimum.
+ * @return int|null|false L'entier parsé ou `false` en cas de mauvaise syntaxe, ou `null` si `$value` était `null` (à l'instar de PostgreSQL, cette fonction propage `null`).
+ */
+function parse_int(?string $output, ?int $min_range = null): int|null|false
+{
+    // remove trailing zeros before filtering
+    return $output === null ? null : filter_var(
+        notfalse(preg_replace('/^\s*0+(?=\d)/', '', $output)), FILTER_VALIDATE_INT,
+        $min_range === null ? 0 : ['min_range' => $min_range],
+    );
+}
+
+/**
+ * Parse un flottant.
+ * @param ?string $output Un flottant sous forme de chaîne.
+ * @param ?float $min_range La valeur minimale du flottant ou `null` pour pas de minimum.
+ * @return float|null|false Le flottant parsé ou `false` en cas de mauvaise syntaxe, ou `null` is `$value` était `null` (à l'instar de PostgreSQL, cette fonction propage `null`).
+ */
+function parse_float(?string $output, ?float $min_range = null): float|null|false
+{
+    return $output === null ? null : filter_var($output, FILTER_VALIDATE_FLOAT,
+        $min_range === null ? 0 : ['min_range' => $min_range]);
 }
 
 /**
@@ -233,40 +269,6 @@ function soa_to_aos(array $array): array
 }
 
 /**
- * Parse un entier.
- * @param string $value La valeur à parser.
- * @param mixed $min_range La valeur minimale.
- * @return int|false L'entier parsé ou `false` en cas d'erreur de syntaxe.
- */
-function parse_int(string $value, ?int $min_range = null): int|false
-{
-    $value = trim($value);
-    if ($value === '') return false;
-    $value = ltrim($value, '0');  // remove leading zeroes
-    return $value
-        ? filter_var($value, FILTER_VALIDATE_INT,
-            $min_range === null ? 0 : ['min_range' => $min_range])
-        : 0;
-}
-
-/**
- * Parse un flottant.
- * @param string $value La valeur à parser.
- * @param mixed $min_range La valeur minimale.
- * @return float|false Le floattant parsé ou `false` en cas d'erreur de syntaxe.
- */
-function parse_float(string $value, ?float $min_range = null): float|false
-{
-    $value = trim($value);
-    if ($value === '') return false;
-    $value = ltrim($value, '0');  // remove leading zeroes
-    return $value
-        ? filter_var($value, FILTER_VALIDATE_FLOAT,
-            $min_range === null ? 0 : ['min_range' => $min_range])
-        : 0;
-}
-
-/**
  * Formate une adresse dans un format humainement lisible.
  * @param array $adresse L'adresse (ligne issue de la BDD, voir `DB\query_adresse`)
  * @return string
@@ -292,5 +294,5 @@ function format_adresse(array $adresse)
  */
 function dbg_print(mixed $value): void
 {
-?><pre><samp><?= htmlspecialchars(var_export($value, true)) ?></samp></pre><?php
+?><pre><samp><?php var_dump($value) ?></samp></pre><?php
 }

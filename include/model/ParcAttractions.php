@@ -5,7 +5,7 @@ final class ParcAttractions extends Offre
 {
     const CATEGORIE = "parc d'attractions";
 
-    private const TABLE = '_activite';
+    protected const TABLE = 'parc_attractions';
 
     readonly Image $image_plan;
 
@@ -27,7 +27,7 @@ final class ParcAttractions extends Offre
      * @param ?float $prix_min
      * @param FiniteTimestamp $creee_le
      * @param Duree $en_ligne_ce_mois_pendant
-     * @param FiniteTimestamp $changement_ouverture_suivant_le
+     * @param ?FiniteTimestamp $changement_ouverture_suivant_le
      * @param bool $est_ouverte
      * @param Image $image_plan
      */
@@ -48,7 +48,7 @@ final class ParcAttractions extends Offre
         ?float $prix_min,
         FiniteTimestamp $creee_le,
         Duree $en_ligne_ce_mois_pendant,
-        FiniteTimestamp $changement_ouverture_suivant_le,
+        ?FiniteTimestamp $changement_ouverture_suivant_le,
         bool $est_ouverte,
         Image $image_plan,
     ) {
@@ -73,5 +73,30 @@ final class ParcAttractions extends Offre
             $est_ouverte,
         );
         $this->image_plan = $image_plan;
+    }
+
+    protected static function from_db_row(array $row): self
+    {
+        return new self(
+            $row['id'],
+            Adresse::from_db($row['id_adresse']),
+            Image::from_db($row['id_image_principale']),
+            Professionnel::from_db($row['id_professionnel']),
+            Abonnement::from_db($row['libelle_abonnement']),
+            $row['titre'],
+            $row['resume'],
+            $row['description_detaillee'],
+            $row['url_site_web'] ?? null,
+            MultiRange::parse($row['periodes_ouverture'], FiniteTimestamp::parse(...)),
+            FiniteTimestamp::parse($row['modifiee_le']),
+            $row['en_ligne'],
+            notfalse(parse_float($row['note_moyenne'] ?? null)),
+            notfalse(parse_float($row['prix_min'] ?? null)),
+            FiniteTimestamp::parse($row['creee_le']),
+            Duree::parse($row['en_ligne_ce_mois_pendant']),
+            FiniteTimestamp::parse($row['changement_ouverture_suivant_le'] ?? null),
+            $row['est_ouverte'],
+            Image::from_db($row['id_image_plan']),
+        );
     }
 }

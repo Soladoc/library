@@ -20,7 +20,7 @@ final class Image
     readonly ?string $legende;
     private ?string $tmp_name;
 
-    private const TABLE = '_image';
+    protected const TABLE = '_image';
 
     function __construct(
         ?int $id,

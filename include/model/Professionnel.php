@@ -5,7 +5,7 @@ require_once 'model/Compte.php';
 /* abstract */
 class Professionnel extends Compte
 {
-    private const TABLE = 'professionnel';
+    protected const TABLE = 'professionnel';
 
     private ?int $id;
     readonly string $denomination;
@@ -45,17 +45,21 @@ class Professionnel extends Compte
         return self::from_db_row($stmt->fetch());
     }
 
+    /**
+     * @param (string|int|bool)[] $row
+     * @return Professionnel
+     */
     private static function from_db_row(array $row): Professionnel
     {
         return new Professionnel(
-            getarg($row, 'id', arg_int()),
-            getarg($row, 'email'),
-            getarg($row, 'mdp_hash'),
-            getarg($row, 'nom'),
-            getarg($row, 'prenom'),
-            getarg($row, 'telephone'),
-            Adresse::from_db(getarg($row, 'id_adresse')),
-            getarg($row, 'denomination'),
+            $row['id'],
+            $row['email'],
+            $row['mdp_hash'],
+            $row['nom'],
+            $row['prenom'],
+            $row['telephone'],
+            Adresse::from_db($row['id_adresse']),
+            $row['denomination'],
         );
     }
 }
