@@ -12,6 +12,10 @@ async function initializeOffers() {
         getDataJson(`/json/offres.php`),
         getDataJson(`/json/images.php`),
     ]);
+    offers = offers.map(offer => ({
+        ...offer,
+        tags: offer.tags || []
+    }));
     filterOffers();
 }
 initializeOffers();
@@ -36,7 +40,7 @@ function showSubcategories() {
 
             const checkbox = document.createElement('input');
             checkbox.type = 'checkbox';
-            checkbox.id = toLowerCase(subcategory);
+            checkbox.id = subcategory;
             checkbox.name = 'subcategory';
             checkbox.value = subcategory;
             checkbox.addEventListener('change', filterOffers);
@@ -101,7 +105,8 @@ function filterOffers() {
             if (!offer.tags || offer.tags.length === 0) {
                 return false;
             }
-            return selectedSubcategories.some(selected => offer.tags.includes(selected));
+            const lowerCaseTags = offer.tags.map(tag => tag.toLowerCase());
+            return selectedSubcategories.some(selected => lowerCaseTags.includes(selected));
         }
         return true;
     });
