@@ -23,4 +23,4 @@ jobs:
           DISCORD_WEBHOOK_URL: '${{secrets.DISCORD_WEBHOOK_URL}}'
           ACTOR: "${{github.actor}}"
           COMMIT: "${{ github.event.head_commit.message }}"
-        run: 'cd "$GITHUB_WORKSPACE"/script && ./discord-send-msg.bash "Serveur mis à jour ($ACTOR - `$COMMIT`)"'
+        run: 'cd "$GITHUB_WORKSPACE"/script && ./discord-send-msg.bash "Serveur mis à jour ($ACTOR - \`$COMMIT\`)"'
