@@ -19,6 +19,11 @@ create type categorie_offre as enum (
     'parc d''attractions'
 );
 
+create type secteur as enum (
+    'public ou associatif',
+    'privé'
+);
+
 -- DOMAINES
 
 create domain num_departement as char(3);

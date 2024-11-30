@@ -31,7 +31,7 @@ with
                 '2024-06-11 22:44:47',
                 15,
                 1,
-                'gratuit',
+                'standard',
                 'Crêperie Les Alizés',
                 'La Crêperie Les Alizés est une délicieuse crêperie située à Paimpol. Découvrez nos goutûs plats.',
                 'La Crêperie Les Alizés est une délicieuse crêperie située à Paimpol. Découvrez nos goutûs plats. Oui, je suis détaillé. Me demandez pas plus de détails. Je ne suis qu''un restaurant',

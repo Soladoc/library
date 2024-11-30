@@ -49,6 +49,11 @@ create function insert_offre (new record) returns int as $$
 declare
     id_signalable int;
 begin
+    if (new.libelle_abonnement = 'gratuit') = new.id_professionnel in (select id from _prive) then
+        raise 'Cette offre (%) d''abonnement % ne peut pas être administrée par un professionnel du secteur %',
+            new.titre, new.libelle_abonnement, professionnel_secteur(new.id_professionnel);
+    end if;
+
     new.modifiee_le = coalesce(new.modifiee_le, localtimestamp);
 
     insert into pact._signalable default values returning id into id_signalable;

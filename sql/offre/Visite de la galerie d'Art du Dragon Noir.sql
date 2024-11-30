@@ -29,7 +29,7 @@ with
                 '2024-07-28 05:16:37',
                 '0:45:',
                 36,
-                1,
+                2,
                 'gratuit',
                 'Visite de la galerie d''Art du Dragon Noir',
                 'Découvrez la fascinante Galerie d''Art du Dragon Noir lors de cette visite guidée exclusive. Plongez dans un univers artistique unique où chaque œuvre raconte une histoire captivante. Cette expérience immersive vous permettra d''explorer des collections variées, allant des peintures contemporaines aux sculptures traditionnelles, tout en bénéficiant des explications passionnantes de notre guide expert. Ne manquez pas cette opportunité de vous imprégner de l''art sous toutes ses formes.',
