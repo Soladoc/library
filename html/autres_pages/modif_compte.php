@@ -133,9 +133,9 @@ if ($membre !== false) {
     $id_adresse = $membre['id_adresse'];
     $adresse = DB\query_adresse($id_adresse);
 } else if ($pro !== false) {
-    // echo '<pre>';
-    // print_r($pro);
-    // echo '</pre>';
+    echo '<pre>';
+    print_r($pro);
+    echo '</pre>';
     $denomination = $pro['denomination'];
     $email = $pro['email'];
     $mdp_hash = $pro['mdp_hash'];
