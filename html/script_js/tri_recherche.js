@@ -119,10 +119,9 @@ function filterOffers() {
         }
 
         // Filtrage par mot-clé
-        if (keywordInput) {
-            console.log("test ipu");
+        if (keywordInput.length > 0) {
             const matchesCategory = offer.categorie && offer.categorie.toLowerCase().includes(keywordInput);
-            const matchesTitre = offer.titre && offer.titre.some(titre => titre.toLowerCase().includes(keywordInput));
+            const matchesTitre = offer.titre && offer.titre.toLowerCase().includes(keywordInput);
             if (!matchesCategory && !matchesTitre) {
                 return false;
             }
@@ -131,7 +130,7 @@ function filterOffers() {
         // Si tout est valide, inclure cette offre
         return true;
     });
-    console.log(offers);
+    
     // Affichage des offres filtrées
     displayOffers(filteredOffers);
 }
