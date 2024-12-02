@@ -4,6 +4,7 @@ require_once 'auth.php';
 require_once 'const.php';
 require_once 'redirect.php';
 require_once 'component/Page.php';
+require_once 'offre.php';
 
 $page = new Page('Modifier un avis');
 
