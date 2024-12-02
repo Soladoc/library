@@ -120,6 +120,7 @@ function filterOffers() {
 
         // Filtrage par mot-clé
         if (keywordInput) {
+            console.log(offer);
             const matchesCategory = offer.categorie && offer.categorie.toLowerCase().includes(keywordInput);
             const matchesTitre = offer.titre && offer.titre.some(titre => titre.toLowerCase().includes(keywordInput));
             if (!matchesCategory && !matchesTitre) {
