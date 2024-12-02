@@ -121,8 +121,8 @@ function filterOffers() {
         // Filtrage par mot-clé
         if (keywordInput) {
             const matchesCategory = offer.categorie && offer.categorie.toLowerCase().includes(keywordInput);
-            const matchesTags = offer.tags && offer.tags.some(tag => tag.toLowerCase().includes(keywordInput));
-            if (!matchesCategory && !matchesTags) {
+            const matchesTitre = offer.titre && offer.titre.some(titre => titre.toLowerCase().includes(keywordInput));
+            if (!matchesCategory && !matchesTitre) {
                 return false;
             }
         }
