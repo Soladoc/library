@@ -810,14 +810,14 @@ a:not(:hover, :focus, :focus-within) {
     width: 300px;
 }
 
-main#detail_compte {
+body#detail_compte {
     display: block;
-    max-width: 800px;
+    /* max-width: 800px;
     margin: 2rem auto;
     background-color: white;
     border-radius: 8px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    padding: 2rem;
+    padding: 2rem; */
 }
 
 section#info_compte {
@@ -856,6 +856,6 @@ section#info_compte div span {
     text-align: center;
 }
 
-a:hover {
+#info_compte a:hover {
     background-color: #2980b9;
 }
