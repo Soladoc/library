@@ -99,6 +99,12 @@ final class Page
                 <span>Déconnexion</span>
             </div>
         </a>
+        <a href="/connexion/detail_compte.php?=<?php Auth\id_compte_connecte()?>">
+            <div class="auth-button">
+                <img src="" alt="Profil">
+                <span>Compte</span>
+            </div>
+        </a>
         <?php if (Auth\est_connecte_pro()) { ?>
             <a href="facturation.php">
                 <div class="acces-facturation">
