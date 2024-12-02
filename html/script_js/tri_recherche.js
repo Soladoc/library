@@ -1,4 +1,4 @@
-'use strict';
+// 'use strict';
 
 async function getDataJson(url) {
     return await (await fetch(url)).json();
