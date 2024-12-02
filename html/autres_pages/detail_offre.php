@@ -39,17 +39,17 @@ if ($_POST) {
     }
 }
 
-$offre = DB\query_offre($args['id']);
+$offre = Offre::from_db($args['id']);
 if ($offre === false) {
     html_error("Pas d'offre n°{$args['id']}");
 }
-assert($offre['id'] === $args['id']);
+assert($offre->id === $args['id']);
 
-$titre = $offre['titre'];
-$description = $offre['description_detaillee'];
-$site_web = $offre['url_site_web'];
-$image_pricipale = notfalse(Image::from_db($offre['id_image_principale']));
-$adresse = notfalse(DB\query_adresse($offre['id_adresse']));
+$titre = $offre->titre;
+$description = $offre->description_detaillee;
+$site_web = $offre->url_site_web;
+$image_pricipale = $offre->image_principale;
+$adresse = $offre->adresse;
 
 $gallerie = DB\query_gallerie($args['id']);
 $avis = DB\query_avis()
@@ -107,7 +107,7 @@ $avis = DB\query_avis()
             <h3>Emplacement et coordonnées</h3>
             <!-- <div id="map" class="map"></div> -->
             <div class="contact-info">
-                <p><strong>Adresse&nbsp;:</strong> <?= format_adresse($adresse) ?></p>
+                <p><strong>Adresse&nbsp;:</strong> <?= $adresse->format() ?></p>
                 <p><strong>Site web&nbsp;:</strong> <a href="<?= $site_web ?>"><?= $site_web ?></a></p>
                 <!-- <p><strong>Téléphone&nbsp;:</strong> 02 96 46 63 80</p> -->
             </div>
@@ -158,9 +158,9 @@ $avis = DB\query_avis()
                 <div class="review-summary">
                 <h4>Résumé des notes</h4>
                 <p>Nombre d'avis : <?= DB\query_avis_count($args['id']) ?></p>
-                <p>Moyenne&nbsp;: <?php if ($offre['note_moyenne'] != null) { echo round($offre['note_moyenne'], 2); } else { echo 0; } ?>/5 ★</p>
+                <p>Moyenne&nbsp;: <?php if ($offre->note_moyenne !== null) { echo round($offre->note_moyenne, 2); } else { echo 0; } ?>/5 ★</p>
                 <div class="rating-distribution">
-                    <?php $avis = DB\query_avis(id_offre: $offre['id']) ?>
+                    <?php $avis = DB\query_avis(id_offre: $offre->id) ?>
                     <p>5 étoiles&nbsp;: <?= count(array_filter($avis, fn($a) => $a['note'] === 5)) ?> avis.</p>
                     <p>4 étoiles&nbsp;: <?= count(array_filter($avis, fn($a) => $a['note'] === 4)) ?> avis.</p>
                     <p>3 étoiles&nbsp;: <?= count(array_filter($avis, fn($a) => $a['note'] === 3)) ?> avis.</p>
