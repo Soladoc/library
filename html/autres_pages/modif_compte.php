@@ -155,7 +155,7 @@ if ($membre !== false) {
 <!DOCTYPE html>
 <html lang="fr">
 <?php $page->put_head() ?>
-<body>
+<body id='detail_compte'>
 <?php $page->put_header() ?>
 <main>
 
@@ -189,21 +189,21 @@ if ($membre !== false) {
         <?php } ?>
 
         <div>
-            <div>
+            <div id="nom">
                 <label>Nom : </label>
             </div>
             <input id="new_nom" name="new_nom" type="text" value="<?= htmlspecialchars($nom) ?>" placeholder="votre nouveau nom">
         </div>
         </br>
         <div>
-            <div>
+            <div id="prenom">
                 <label>Prénom : </label>
             </div>
             <input id="new_prenom" name="new_prenom" type="text" value="<?= htmlspecialchars($prenom) ?>" placeholder="votre nouveau prénom">
         </div>
         </br>
         <div>
-            <div>
+            <div id="email">
                 <label>Email : </label>
             </div>
             <input id="new_email" name="new_email" type="email" value="<?= htmlspecialchars($email) ?>" placeholder="votre nouvel email">
