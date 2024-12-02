@@ -24,20 +24,14 @@ if ($valider && !empty($mot_cle)) {
 <body>
     <?php $page->put_header() ?>
     <main>
-        <?php require_once 'util.php'; require_once 'queries.php'; dbg_print(query_tags(1));?>
+        <?php require_once 'util.php'; require_once 'queries.php'; dbg_print(DB\query_tags(11));?>
         <section class="search-section">
             <h1>Recherche</h1>
             <br>
             <div class="search-bar">
-                <input id="barre-recherche" type="text" placeholder="Rechercher des activités, restaurants, spectacles...">
-                <a href="">
-                    <button class="btn-search">Rechercher</button>
-                </a>
-                <form action="recherche.php" name="bare_de_recherche" method="get" class="search-bar">
-
-                    <input type="text" name="mot_cle" value="<?php echo $mot_cle ?>" placeholder=">Mots-clés">
-                    <input type="submit" name="valider" value="Recherche">
-                </form>
+                <!-- <input id="barre-recherche" type="text" placeholder="Rechercher des activités, restaurants, spectacles..."> -->
+                <input type="text" id="keyword-search" placeholder="Rechercher par mot-clé"oninput="filterOffers()">
+                
             </div>
         </section>
 
