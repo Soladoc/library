@@ -16,7 +16,6 @@ async function initializeOffers() {
         ...offer,
         tags: Array.isArray(offer.tags) ? offer.tags.flatMap(tag => Array.isArray(tag) ? tag : [tag]) : []
     }));
-    console.log('Initialized offers:', offers);
     filterOffers();
 }
 initializeOffers();
@@ -119,7 +118,7 @@ function filterOffers() {
     const subcategoryCheckboxes = document.querySelectorAll('input[name="subcategory"]:checked');
     const selectedSubcategories = Array.from(subcategoryCheckboxes).map(cb => cb.id.toLowerCase());
     const keywordInput = document.getElementById('keyword-search').value.trim().toLowerCase();
-
+    console.log('Selected subcategories:', selectedSubcategories);
     // Filtrage des offres
     const filteredOffers = offers.filter(offer => {
         // Filtrage par catégorie principale
@@ -139,6 +138,7 @@ function filterOffers() {
                     return '';
                 }
             });
+            console.log('Offer tags:', lowerCaseTags);
             const hasMatchingTag = selectedSubcategories.some(selected => lowerCaseTags.includes(selected));
             return hasMatchingTag;
         }
