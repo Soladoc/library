@@ -2,6 +2,7 @@
 require_once 'auth.php';
 require_once 'component/Page.php';
 require_once 'component/ImageView.php';
+require_once 'queries.php';
 
 $args = [
     'id' => getarg($_GET, 'id', arg_int()),
