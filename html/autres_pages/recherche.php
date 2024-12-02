@@ -15,6 +15,12 @@ if ($valider && !empty($mot_cle)) {
     $mot_cle= getarg( $_GET,"mot_cle");
 }
 
+if($_POST){
+    $mot_cle= getarg($_POST,'mot_cle',required: false);
+    if(!$mot_cle){
+        $mot_cle = null;
+    }
+}
 
 ?>
 
@@ -29,7 +35,7 @@ if ($valider && !empty($mot_cle)) {
             <br>
             <div class="search-bar">
                 <!-- <input id="barre-recherche" type="text" placeholder="Rechercher des activités, restaurants, spectacles..."> -->
-                <input type="text" id="keyword-search" placeholder="Rechercher par mot-clé" oninput="filterOffers()">
+                <input type="text" id="keyword-search" value="<?= $mot_cle ?>" placeholder="Rechercher par mot-clé" oninput="filterOffers()">
                 
             </div>
         </section>
