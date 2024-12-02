@@ -16,10 +16,10 @@ function move_uploaded_image(array $file)
 }
 
 DB\transaction(function () {
-    global $args, $id_professionnel, $id_offre;
+    global $args, $id_professionnel, $id_offre, $input_adresse;
 
     /** @var Adresse */
-    $adresse = $args['adresse'];
+    $adresse = $input_adresse->get($_POST);
 
 
     // Insérer l'adresse

@@ -15,6 +15,8 @@ $page = new Page("Création d'une offre",
 $id_professionnel = Auth\exiger_connecte_pro();
 $est_prive = DB\exists_pro_prive($id_professionnel);
 
+$input_adresse = new InputAdresse('adresse', 'adresse', 'f');
+
 $args = [
     // ne lance pas la page et génère une errreur si il n'y a pas de get
     'type_offre' => getarg($_GET, 'type_offre', arg_check(f_is_in(array_keys(CATEGORIES_OFFRE)))),
@@ -22,9 +24,8 @@ $args = [
 
 if ($_POST) {
     $args += [
-        'adresse' => getarg($_POST, 'adresse'),
         'description_detaillee' => getarg($_POST, 'description_detaillee'),
-        'horaires' => getarg($_POST, 'horaires', required: false) ?? ['debut' => [], 'fin' => []],
+        'horaires' => getarg($_POST, 'horaires', required: false) ?? [],
         'periodes' => getarg($_POST, 'periodes', required: false) ?? ['debut' => [], 'fin' => []],
         'resume' => getarg($_POST, 'resume'),
         'tags' => getarg($_POST, 'tags', arg_filter(FILTER_DEFAULT, FILTER_REQUIRE_ARRAY), required: false) ?? [],
@@ -123,7 +124,7 @@ if ($_POST) {
                     <input form="f" id="resume" name="resume" type="text" required>
                 </p>
                 <label for="adresse">Adresse*</label>
-                <?php (new InputAdresse('adresse', 'adresse', 'f'))->put() ?>
+                <?php $input_adresse->put() ?>
                 <label for="site">Site Web</label>
                 <p>
                     <input form="f" id="url_site_web" name="url_site_web" type="url">
