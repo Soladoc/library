@@ -167,7 +167,7 @@ create table _parc_attractions (
         constraint parc_attractions_inherits_offre references _offre,
     id_image_plan int not null
         constraint parc_attractions_fk_image_plan_parc references _image,
-    nb_attactions int not null check (nb_attactions >= 0),
+    nb_attractions int not null check (nb_attractions >= 0),
     age_requis int check (age_requis > 0)
 );
 
