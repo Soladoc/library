@@ -72,8 +72,8 @@ function sortOffers(criteria, ascending = true) {
         if (criteria === 'prix_min' || criteria === 'note_moyenne') {
             valueA = parseFloat(valueA) || 0;
             valueB = parseFloat(valueB) || 0;
+        // Sinon on vérifie si ce sont des dates
         } else if (criteria === 'creee_le') {
-            // Assure-toi que les valeurs de date sont valides
             valueA = new Date(valueA);
             valueB = new Date(valueB);
             
