@@ -59,7 +59,7 @@ if ($membre !== false) {
     <style>
 
 
-        main {
+        main#detail_compte {
             max-width: 800px;
             margin: 2rem auto;
             background-color: white;
@@ -97,7 +97,7 @@ if ($membre !== false) {
 <body>
 <?php $page->put_header() ?>
 
-    <main>
+    <main id="detail_compte" >
         <section id="info_compte">
             <!-- PHP dynamique commence ici -->
             <?php if ($membre !== false): ?>
