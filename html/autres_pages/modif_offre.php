@@ -44,7 +44,7 @@ if ($_POST) {
         'adresse_precision_int' => getarg($_POST, 'adresse_precision_int', required: false),
         'url_site_web' => getarg($_POST, 'url_site_web', required: false),
         'libelle_abonnement' => getarg($_POST, 'libelle_abonnement', required: false) ?? 'gratuit',
-        'file_gallerie' => getarg($_FILES, 'gallerie'),
+        'file_galerie' => getarg($_FILES, 'galerie'),
         'file_image_principale' => getarg($_FILES, 'image_principale'),
     ];
 
@@ -268,11 +268,11 @@ if ($_POST) {
         </section>
 
         <section id="image-creation-offre">
-            <label for="gallerie[]">
-                <h2>Gallerie</h2>
+            <label for="galerie[]">
+                <h2>Galerie</h2>
             </label>
-            <input form="f" id="gallerie" name="gallerie[]" type="file" accept="image/*" multiple>
-            <div id="gallerie-preview"></div>
+            <input form="f" id="galerie" name="galerie[]" type="file" accept="image/*" multiple>
+            <div id="galerie-preview"></div>
         </section>
 
         <section id="infos-detaillees">

@@ -52,7 +52,7 @@ $site_web = $offre->url_site_web;
 $image_pricipale = $offre->image_principale;
 $adresse = $offre->adresse;
 
-$gallerie = DB\query_gallerie($args['id']);
+$galerie = DB\query_galerie($args['id']);
 $avis = DB\query_avis()
 ?>
 
@@ -64,7 +64,7 @@ $avis = DB\query_avis()
     <?php
     // TODO suprimmer ca quand romain aura sort that out
     // echo '<pre>';
-    // print_r($gallerie);
+    // print_r($galerie);
     // echo '</pre>';
 
     $page->put_header();
@@ -81,7 +81,7 @@ $avis = DB\query_avis()
                             </div>
 
                             <!-- Galerie d'images -->
-                            <?php foreach ($gallerie as $id_image): ?>
+                            <?php foreach ($galerie as $id_image): ?>
                                 <div class="carousel-slide">
                                     <?php (new ImageView(Image::from_db($id_image)))->put_img() ?>
                                 </div>

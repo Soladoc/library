@@ -34,7 +34,7 @@ if ($offre) {
     $en_ligne = $offre['en_ligne'];
     $info_adresse = DB\query_adresse($adresse);
     $avis = DB\query_avis();
-    $gallerie = DB\query_gallerie($args['id']);
+    $galerie = DB\query_galerie($args['id']);
     // Vérifier si l'adresse existe
     if ($info_adresse) {
         // Construire une chaîne lisible pour l'adresse
@@ -96,7 +96,7 @@ if ($offre) {
                             </div>
 
                             <!-- Galerie d'images -->
-                            <?php foreach ($gallerie as $id_image): ?>
+                            <?php foreach ($galerie as $id_image): ?>
                                 <div class="carousel-slide">
                                     <?php (new ImageView(Image::from_db($id_image)))->put_img() ?>
                                 </div>
