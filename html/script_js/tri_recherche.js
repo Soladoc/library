@@ -93,32 +93,12 @@ function sortOffers(criteria, ascending = true) {
     filterOffers();
 }
 
-// function filterOffers() {
-//     const mainCategory = document.getElementById('main-category').value;
-//     const subcategoryCheckboxes = document.querySelectorAll('input[name="subcategory"]:checked');
-//     const selectedSubcategories = Array.from(subcategoryCheckboxes).map(cb => cb.id);
-//     const filteredOffers = offers.filter(offer => {
-//         if (mainCategory && offer.categorie.toLowerCase() !== mainCategory.toLowerCase()) {
-//             return false;
-//         }
-//         if (selectedSubcategories.length > 0) {
-//             if (!offer.tags || offer.tags.length === 0) {
-//                 return false;
-//             }
-//             const lowerCaseTags = offer.tags.map(tag => tag.toLowerCase());
-//             return selectedSubcategories.some(selected => lowerCaseTags.includes(selected));
-//         }
-//         return true;
-//     });
-//     displayOffers(filteredOffers);
-// }
 function filterOffers() {
     // Récupération des filtres
     const mainCategory = document.getElementById('main-category').value.trim().toLowerCase();
     const subcategoryCheckboxes = document.querySelectorAll('input[name="subcategory"]:checked');
     const selectedSubcategories = Array.from(subcategoryCheckboxes).map(cb => cb.id.toLowerCase());
     const keywordInput = document.getElementById('keyword-search').value.trim().toLowerCase();
-    console.log('Selected subcategories:', selectedSubcategories);
     // Filtrage des offres
     const filteredOffers = offers.filter(offer => {
         // Filtrage par catégorie principale
@@ -154,7 +134,6 @@ function filterOffers() {
     // Affichage des offres filtrées
     displayOffers(filteredOffers);
 }
-
 
 function displayOffers(offersToDisplay = offers) {
     const offerList = document.querySelector('.offer-list');
@@ -199,7 +178,6 @@ function displayOffers(offersToDisplay = offers) {
     });
 }
 
-
 const sortButtons = document.querySelectorAll('.btn-sort');
 sortButtons.forEach(button => {
     button.addEventListener('click', () => {
@@ -210,7 +188,6 @@ sortButtons.forEach(button => {
         sortOffers(criteria, ascending);
     });
 });
-
 
 document.getElementById('sort-price-up').addEventListener('click', () => sortOffers('prix_min', false));
 document.getElementById('sort-price-down').addEventListener('click', () => sortOffers('prix_min', true));

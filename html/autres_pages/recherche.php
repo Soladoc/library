@@ -22,7 +22,6 @@ if ($valider && !empty($mot_cle)) {
 <html lang="fr">
 <?php $page->put_head() ?>
 <body>
-<script src="/script_js/tri_recherche.js"></script>
     <?php $page->put_header() ?>
     <main>
         <section class="search-section">
@@ -30,7 +29,7 @@ if ($valider && !empty($mot_cle)) {
             <br>
             <div class="search-bar">
                 <!-- <input id="barre-recherche" type="text" placeholder="Rechercher des activités, restaurants, spectacles..."> -->
-                <input type="text" id="keyword-search" placeholder="Rechercher par mot-clé" oninput="filterOffers()">
+                <input type="text" id="keyword-search" placeholder="Rechercher par mot-clé" oninput="console.log('tstZ')">
                 
             </div>
         </section>
