@@ -201,7 +201,7 @@ if ($membre !== false) {
             </div>
             <input id="new_prenom" name="new_prenom" type="text" value="<?= htmlspecialchars($prenom) ?>" placeholder="votre nouveau prénom">
         </div>
-
+        </br>
         <div>
             <div>
                 <label>Email : </label>
@@ -211,7 +211,7 @@ if ($membre !== false) {
                 <p class="error"><?= htmlspecialchars($error_email) ?></p>
             <?php } ?>
         </div>
-
+        </br>
         <div>
             <div id="telephone">
                 <label>Numéro de téléphone : </label>
@@ -221,7 +221,7 @@ if ($membre !== false) {
                 <p class="error"><?= htmlspecialchars($error_tel) ?></p>
             <?php } ?>
         </div>
-
+        </br>
         <div id="adresse">
                 <p>Adresse : </p>
                 <?= format_adresse($adresse) ?>
@@ -229,9 +229,10 @@ if ($membre !== false) {
             <?php put_input_address('', 'adresse', 'adresse_') ?>
 
         </div>
-
+        </br>
         <div id='changer_mdp'>
-            <label>Modifier son mot de passe</label>                        
+            <label>Modifier son mot de passe</label>
+            </br>                        
             <div class="champ">
                 <label for="mdp">Mot de passe actuel *</label>
                 <input id="mdp" name="old_mdp" type="password" placeholder="**********">
