@@ -21,7 +21,9 @@ with
                 titre,
                 resume,
                 description_detaillee,
-                url_site_web
+                url_site_web,
+                age_requis,
+                nb_attractions
             )
         values
             (
@@ -104,7 +106,9 @@ Site en accès libre jusqu''à 23h00, placé sous vidéo-surveillance.
 Toilettes et douche.
 Aire camping-car.
 Camping et snack sur le site.',
-                'https://www.ville-loudeac.fr/listes/parc-aquarev'
+                'https://www.ville-loudeac.fr/listes/parc-aquarev',
+                8,
+                19
             )
         returning
             id
