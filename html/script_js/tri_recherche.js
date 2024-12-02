@@ -132,8 +132,8 @@ function filterOffers() {
                 return false;
             }
             const lowerCaseTags = offer.tags.map(tag => {
-                if (typeof tag === 'string') {
-                    return tag.toLowerCase();
+                if (typeof tag[0] === 'string') {
+                    return tag[0].toLowerCase();
                 } else {
                     return '';
                 }
