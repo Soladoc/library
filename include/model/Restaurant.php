@@ -101,14 +101,14 @@ final class Restaurant extends Offre
         $this->sert_boissons = $sert_boissons;
     }
 
-    protected static function from_db_row(array $row): self
+    protected static function from_db_row(array $row, string $id_column = 'id'): self
     {
         return new self(
-            $row['id'],
-            Adresse::from_db($row['id_adresse']),
-            Image::from_db($row['id_image_principale']),
-            Professionnel::from_db($row['id_professionnel']),
-            Abonnement::from_db($row['libelle_abonnement']),
+            $row[$id_column],
+            Adresse::from_db_row($row, 'id_adresse'),
+            Image::from_db_row($row, 'id_image_principale'),
+            Professionnel::from_db_row($row, 'id_professionnel'),
+            Abonnement::get($row['libelle_abonnement']),
             $row['titre'],
             $row['resume'],
             $row['description_detaillee'],

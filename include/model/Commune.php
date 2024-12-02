@@ -33,8 +33,8 @@ final class Commune
         return $nom === false ? false : new Commune($code, $numero_departement, $nom);
     }
 
-    static function from_db_row(array $row): Commune {
-        return new Commune($row['code'], $row['numero_departement'], $row['nom']);
+    static function from_db_row(array $row, string $code_column = 'code', string $numero_departement_column = 'numero_departement'): Commune {
+        return new Commune($row[$code_column], $row[$numero_departement_column], $row['nom']);
     }
 
     /**

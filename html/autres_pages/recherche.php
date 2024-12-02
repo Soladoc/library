@@ -56,8 +56,10 @@ if ($valider && !empty($mot_cle)) {
             </div>
             <input type="hidden" id="selected-category" name="category" value="">
             <div id="subcategories" class="hidden">
-                <h3>Sous-catégories</h3>
-                <div class="subcategory-list" id="subcategory-list"></div>
+                <h3>Tags</h3>
+                <div class="subcategory-list" id="subcategory-list">
+
+                </div>
             </div>
         </section>
         <section class="sorting-section">

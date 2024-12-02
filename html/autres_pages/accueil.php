@@ -42,13 +42,7 @@ if ($valider && !empty($mot_cle)) {
             <div class="offer-list">
                 <?php
 
-                if ($modif_affichage) {
-                    $offres = Offre::from_db_by_motcle($mot_cle);
-                }
-                else {
-                    $offres = Offre::from_db_a_la_une();
-
-                }
+                $offres = $modif_affichage ? Offre::from_db_by_motcle($mot_cle) : Offre::from_db_a_la_une();
                 
                 // Préparer et exécuter la requête SQL pour récupérer toutes les offres
 

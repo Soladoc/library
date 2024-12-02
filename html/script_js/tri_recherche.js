@@ -14,7 +14,7 @@ async function initializeOffers() {
     ]);
     offers = offers.map(offer => ({
         ...offer,
-        tags: offer.tags || []
+        tags: (offer.tags || []).map(tag => String(tag))
     }));
     filterOffers();
 }
@@ -40,13 +40,13 @@ function showSubcategories() {
 
             const checkbox = document.createElement('input');
             checkbox.type = 'checkbox';
-            checkbox.id = subcategory;
+            checkbox.id = subcategory.toLowerCase().replace(/\s+/g, '-');
             checkbox.name = 'subcategory';
             checkbox.value = subcategory;
             checkbox.addEventListener('change', filterOffers);
 
             const label = document.createElement('label');
-            label.htmlFor = subcategory;
+            label.htmlFor = checkbox.id;
             label.innerText = subcategory;
 
             wrapper.appendChild(checkbox);
@@ -116,10 +116,14 @@ function filterOffers() {
     // Récupération des filtres
     const mainCategory = document.getElementById('main-category').value.trim().toLowerCase();
     const subcategoryCheckboxes = document.querySelectorAll('input[name="subcategory"]:checked');
+<<<<<<< HEAD
     const selectedSubcategories = Array.from(subcategoryCheckboxes).map(cb => cb.id.toLowerCase());
     const keywordInput = document.getElementById('keyword-search').value.trim().toLowerCase();
 
     // Filtrage des offres
+=======
+    const selectedSubcategories = Array.from(subcategoryCheckboxes).map(cb => cb.value.toLowerCase());
+>>>>>>> 85b2a079fb4f13eb3979dd0d81064bb6f41f4555
     const filteredOffers = offers.filter(offer => {
         // Filtrage par catégorie principale
         if (mainCategory && offer.categorie.toLowerCase() !== mainCategory) {
@@ -128,13 +132,24 @@ function filterOffers() {
 
         // Filtrage par sous-catégories
         if (selectedSubcategories.length > 0) {
-            if (!offer.tags || offer.tags.length === 0) {
+            if (!offer.tags || !Array.isArray(offer.tags) || offer.tags.length === 0) {
                 return false;
             }
+<<<<<<< HEAD
             const lowerCaseTags = offer.tags.map(tag => tag.toLowerCase());
             if (!selectedSubcategories.some(selected => lowerCaseTags.includes(selected))) {
                 return false;
             }
+=======
+            const lowerCaseTags = offer.tags.map(tag => {
+                if (typeof tag === 'string') {
+                    return tag.toLowerCase();
+                } else {
+                    return '';
+                }
+            });
+            return selectedSubcategories.some(selected => lowerCaseTags.includes(selected));
+>>>>>>> 85b2a079fb4f13eb3979dd0d81064bb6f41f4555
         }
 
         // Filtrage par mot-clé

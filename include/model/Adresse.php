@@ -114,7 +114,7 @@ final class Adresse
             a.latitude,
             a.longitude,
             a.numero_departement,
-            a.code_commune code,
+            a.code_commune,
             c.nom from '
             . self::TABLE . ' a inner join ' . Commune::TABLE
             . ' c on a.numero_departement = c.numero_departement'
@@ -123,9 +123,20 @@ final class Adresse
         DB\bind_values($stmt, [1 => [$id_adresse, PDO::PARAM_INT]]);
         notfalse($stmt->execute());
         $row = $stmt->fetch();
-        return $row === false ? false : new Adresse(
-            $id_adresse,
-            Commune::from_db_row($row),
+        if ($row === false) return false;
+        $row['id'] = $id_adresse;
+        return self::from_db_row($row);
+    }
+
+    /**
+     * @param (string|int|bool)[] $row
+     * @return Adresse
+     */
+    static function from_db_row(array $row, string $id_column = 'id'): Adresse
+    {
+        return new Adresse(
+            $row[$id_column],
+            Commune::from_db_row($row, 'code_commune'),
             $row['numero_voie'] ?? null,
             $row['complement_numero'] ?? null,
             $row['nom_voie'] ?? null,
