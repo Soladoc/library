@@ -24,7 +24,7 @@ if ($valider && !empty($mot_cle)) {
 <body>
     <?php $page->put_header() ?>
     <main>
-        <!--<?php require_once 'util.php'; require_once 'queries.php'; dbg_print(DB\query_tags(1));?>-->
+        <?php require_once 'util.php'; require_once 'queries.php'; dbg_print(DB\query_tags(11));?>
         <section class="search-section">
             <h1>Recherche</h1>
             <br>
