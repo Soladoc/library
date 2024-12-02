@@ -58,6 +58,7 @@ if ($membre !== false) {
 <?php $page->put_header() ?>
 
     <main  >
+        <h1>Informations de votre compte</h1>
         <section id="info_compte">
             <!-- PHP dynamique commence ici -->
             <?php if ($membre !== false): ?>
