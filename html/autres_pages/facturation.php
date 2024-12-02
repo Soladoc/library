@@ -1,7 +1,7 @@
 <?php
 require_once 'component/Page.php';
 require_once 'auth.php';
-
+require_once 'queries/offre.php';
 $page = new Page('Facturation');
 
 $id_professionnel = Auth\exiger_connecte_pro();
