@@ -11,7 +11,7 @@ begin
         id,
         id_image_plan,
         nb_attractions,
-        age_requis,
+        age_requis
     ) values (
         new.id,
         new.id_image_plan,
