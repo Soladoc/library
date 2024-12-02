@@ -34,6 +34,7 @@ if ($valider && !empty($mot_cle)) {
                     <button class="btn-search">Rechercher</button>
                 </a>
                 <form action="recherche.php" name="bare_de_recherche" method="get" class="search-bar">
+
                     <input type="text" name="mot_cle" value="<?php echo $mot_cle ?>" placeholder=">Mots-clés">
                     <input type="submit" name="valider" value="Recherche">
                 </form>
