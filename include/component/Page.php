@@ -99,7 +99,7 @@ final class Page
                 <span>Déconnexion</span>
             </div>
         </a>
-        <a href="/autres_pages/detail_compte.php?id=<?php Auth\id_compte_connecte()?>">
+        <a href="/autres_pages/detail_compte.php?id=<?= Auth\id_compte_connecte()?>">
             <div class="auth-button">
                 <img src="" alt="Profil">
                 <span>Compte</span>
