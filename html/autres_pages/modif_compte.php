@@ -161,8 +161,6 @@ if ($membre !== false) {
 
 <section id="info_compte">  
     <form action="modif_compte.php?id=<?= $id ?>" method="POST">
-
-        <a href="<?= location_detail_compte($id) ?>">retour</a>
         <?php if ($membre !== false) { ?>
             <div>
                 <div id="pseudo">
@@ -247,6 +245,7 @@ if ($membre !== false) {
                 <p class="error"><?= htmlspecialchars($error_mdp) ?></p>
             <?php } ?>
             <button type="submit">Valider</button>
+            <button><a href="<?= location_detail_compte($id) ?>">retour</a> </button>
         </div>
     </form>
 </section>
