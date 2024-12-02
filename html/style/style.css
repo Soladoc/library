@@ -811,6 +811,7 @@ a:not(:hover, :focus, :focus-within) {
 }
 
 main#detail_compte {
+    display: block;
     max-width: 800px;
     margin: 2rem auto;
     background-color: white;

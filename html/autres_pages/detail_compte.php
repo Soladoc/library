@@ -54,10 +54,10 @@ if ($membre !== false) {
 <html lang="fr">
 <?php $page->put_head() ?>
 
-<body>
+<body id="detail_compte">
 <?php $page->put_header() ?>
 
-    <main id="detail_compte" >
+    <main  >
         <section id="info_compte">
             <!-- PHP dynamique commence ici -->
             <?php if ($membre !== false): ?>
