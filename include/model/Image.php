@@ -42,19 +42,8 @@ final class Image
         DB\bind_values($stmt, [1 => [$id_image, PDO::PARAM_INT]]);
         notfalse($stmt->execute());
         $row = $stmt->fetch();
-        if ($row === false) return false;
-        $row['id'] = $id_image;
-        return self::from_db_row($row);
-    }
-
-    /**
-     * @param (string|int|bool)[] $row
-     * @return Image
-     */
-    static function from_db_row(array $row, string $id_column = 'id'): Image
-    {
-        return new Image(
-            $row[$id_column],
+        return $row === false ? false : new Image(
+            $id_image,
             $row['taille'],
             $row['mime_subtype'],
             $row['legende'],
