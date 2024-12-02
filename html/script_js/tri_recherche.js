@@ -14,7 +14,7 @@ async function initializeOffers() {
     ]);
     offers = offers.map(offer => ({
         ...offer,
-        tags: Array.isArray(offer.tags) ? offer.tags.flatMap(tag => Array.isArray(tag) ? tag : [tag]) : []
+        tags: Array.isArray(offer.tags) ? offer.tags.map(tagObj => tagObj.tag.toLowerCase()) : []
     }));
     filterOffers();
 }
@@ -131,16 +131,11 @@ function filterOffers() {
             if (!offer.tags || !Array.isArray(offer.tags) || offer.tags.length === 0) {
                 return false;
             }
-            const lowerCaseTags = offer.tags.map(tag => {
-                if (typeof tag[0] === 'string') {
-                    return tag[0].toLowerCase();
-                } else {
-                    return '';
-                }
-            });
-            console.log('Offer tags:', lowerCaseTags);
-            const hasMatchingTag = selectedSubcategories.some(selected => lowerCaseTags.includes(selected));
-            return hasMatchingTag;
+            console.log('Offer tags:', offer.tags);
+            const hasMatchingTag = selectedSubcategories.some(selected => offer.tags.includes(selected));
+            if (!hasMatchingTag) {
+                return false;
+            }
         }
 
         // Filtrage par mot-clé
