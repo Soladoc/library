@@ -30,7 +30,7 @@ with
                 3,
                 46,
                 1,
-                'gratuit',
+                'standard',
                 'Parc de loisirs Aquarev',
                 'Découvrez le parc de loisirs Aquarev, véritable poumon vert de Loudéac.',
                 '## Un « rêve » aménagé en pleine nature

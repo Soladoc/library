@@ -193,7 +193,7 @@ create table _moyen_paiement (
 create table _public (
     id int
         constraint public_pk primary key
-        constraint public_inherits_profesionnel references _professionnel
+        constraint public_inherits_professionnel references _professionnel
 );
 
 create table _membre (

@@ -23,9 +23,9 @@ final class InputDuree extends Input
     {
         $data = getarg($get_or_post, $this->name, required: $required);
         return $data === null ? null : new Duree(
-            days: getarg($data, 'jours', arg_filter(FILTER_VALIDATE_INT)),
-            hours: getarg($data, 'heures', arg_filter(FILTER_VALIDATE_INT)),
-            minutes: getarg($data, 'minutes', arg_filter(FILTER_VALIDATE_INT)),
+            days: parse_int($data['jours']),
+            hours: parse_int($data['heures']),
+            minutes: parse_int($data['minutes']),
         );
     }
 

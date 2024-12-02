@@ -28,7 +28,7 @@ with
             (
                 (table id_adresse),
                 '2024-03-29 21:32:54',
-                1,
+                2,
                 10,
                 'gratuit',
                 'Initiation au char à voile sur la plage de Trestraou',

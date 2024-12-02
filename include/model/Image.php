@@ -2,22 +2,32 @@
 require_once 'const.php';
 require_once 'util.php';
 
+/**
+ * @property-read ?int $id L'ID. `null` si cette image n'existe pas dans la BDD.
+ */
 final class Image
 {
+    function __get(string $name)
+    {
+        return match ($name) {
+            'id' => $this->id,
+        };
+    }
+
     private ?int $id;
-    private ?string $tmp_name;
     readonly int $taille;
     readonly string $mime_subtype;
     readonly ?string $legende;
+    private ?string $tmp_name;
 
-    private const TABLE = '_image';
+    protected const TABLE = '_image';
 
     function __construct(
+        ?int $id,
         int $taille,
         string $mime_subtype,
         ?string $legende,
         ?string $tmp_name = null,
-        ?int $id = null,
     ) {
         $this->taille = $taille;
         $this->mime_subtype = $mime_subtype;
@@ -33,10 +43,10 @@ final class Image
         notfalse($stmt->execute());
         $row = $stmt->fetch();
         return $row === false ? false : new Image(
+            $id_image,
             $row['taille'],
             $row['mime_subtype'],
             $row['legende'],
-            $id_image,
         );
     }
 

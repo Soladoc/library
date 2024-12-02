@@ -1,6 +1,7 @@
 <?php
-require_once 'component/offre.php';
 require_once 'component/Page.php';
+require_once 'component/CarteOffre.php';
+require_once 'model/Offre.php';
 
 $page = new Page('Accueil');
 
@@ -42,10 +43,10 @@ if ($valider && !empty($mot_cle)) {
                 <?php
 
                 if ($modif_affichage) {
-                    $offres = DB\query_select_offre_motcle($mot_cle);
+                    $offres = Offre::from_db_by_motcle($mot_cle);
                 }
                 else {
-                    $offres = DB\query_offres_a_une();
+                    $offres = Offre::from_db_a_la_une();
 
                 }
                 
@@ -53,7 +54,7 @@ if ($valider && !empty($mot_cle)) {
 
                 // Boucler sur les résultats pour afficher chaque offre
                 foreach ($offres as $offre) {
-                    put_card_offre($offre);
+                    (new CarteOffre($offre))->put();
                 }
                 ?>
             </div>

@@ -3,7 +3,6 @@ require_once 'util.php';
 require_once 'queries.php';
 require_once 'redirect.php';
 require_once 'component/Page.php';
-require_once 'component/offre.php';
 require_once 'component/inputs.php';
 
 $page = new Page('Modification compte (todo)');
@@ -12,7 +11,7 @@ $error_tel = null;
 $error_email = null;
 
 $args = [
-    'id' => getarg($_GET, 'id', arg_filter(FILTER_VALIDATE_INT))
+    'id' => getarg($_GET, 'id', arg_int())
 ];
 $id = $args['id'];
 

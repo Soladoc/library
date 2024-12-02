@@ -32,12 +32,14 @@ final class Duree
 
     /**
      * Parse une durée depuis la sortie PostgreSQL.
-     * @param string $output La durée en sortie de PostgreSQL format `postgres`
-     * @throws \DomainException Quand la sortie est invalide.
-     * @return Duree Une nouvelle durée représentant $output.
+     * @param ?string $output La sortie PostgreSQL en format d'intervalle `postgres`.
+     * @return ?Duree Un nouvelle durée, ou `null` si `$output` était `null` (à l'instar de PostgreSQL, cette fonction propage `null`)
+     * @throws DomainException En cas de mauvaise syntaxe.
      */
-    static function parse(string $output): Duree
+    static function parse(?string $output): ?Duree
     {
+        if ($output === null) return null;
+
         $matches = [];
         $years = 0;
         $months = 0;

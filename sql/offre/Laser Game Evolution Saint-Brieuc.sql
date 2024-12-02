@@ -30,7 +30,7 @@ with
             (
                 (table id_adresse),
                 '2024-02-26 07:25:38',
-                1,
+                2,
                 29,
                 'gratuit',
                 'https://saint-brieuc.lasergame-evolution.fr/',

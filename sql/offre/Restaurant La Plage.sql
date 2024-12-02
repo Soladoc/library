@@ -31,7 +31,7 @@ with
                 '2024-08-04 06:18:31',
                 1,
                 1,
-                'gratuit',
+                'premium',
                 'La Plage',
                 'La Plage est un délicieux restaurant situé à Trestraou. Découvrez nos goutûs plats.',
                 'La Plage est un délicieux restaurant situé à Trestraou. Découvrez nos goutûs plats. Oui, je suis détaillé. Me demandez pas plus de détails. Je ne suis qu''un restaurant.',

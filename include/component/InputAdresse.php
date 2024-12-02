@@ -21,16 +21,16 @@ final class InputAdresse extends Input
     {
         $data = getarg($get_or_post, $this->name, required: $required);
         return $data === null ? null : new Adresse(
+            $current_id_adresse,
             notfalse(Commune::from_db_by_nom($data['commune'])),
-            getarg($data, 'numero_voie', arg_filter(FILTER_VALIDATE_INT, ['min_range' => 1]), required: false),
+            getarg($data, 'numero_voie', arg_int(1), required: false),
             $data['complement_numero'] ?? null,
             $data['nom_voie'] ?? null,
             $data['localite'] ?? null,
             $data['precision_int'] ?? null,
             $data['precision_ext'] ?? null,
             $data['latitude'] ?? null,
-            $data['longitude'] ?? null,
-            $current_id_adresse
+            $data['longitude'] ?? null
         );
     }
 

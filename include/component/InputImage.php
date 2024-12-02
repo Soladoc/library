@@ -23,11 +23,11 @@ final class InputImage extends Input
     {
         $file = getarg($_FILES, $this->name, required: $required);
         return $file === null ? $file : new Image(
-            getarg($file, 'size', arg_filter(FILTER_VALIDATE_INT)),
-            explode('/', $file['type'], 2)[1],
-            $file['tmp_name'],
-            getarg($get_or_post, "{$this->name}_legende", required: false),
             $current_id_image,
+            getarg($file, 'size', arg_int()),
+            explode('/', $file['type'], 2)[1],
+            getarg($get_or_post, "{$this->name}_legende", required: false),
+            $file['tmp_name'],
         );
     }
 

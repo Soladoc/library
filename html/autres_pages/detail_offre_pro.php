@@ -4,11 +4,10 @@ require_once 'util.php';
 require_once 'queries.php';
 require_once 'redirect.php';
 require_once 'component/Page.php';
-require_once 'component/offre.php';
 require_once 'component/ImageView.php';
 
 $args = [
-    'id' => getarg($_GET, 'id', arg_filter(FILTER_VALIDATE_INT))
+    'id' => getarg($_GET, 'id', arg_int())
 ];
 
 $page = new Page("offre : {$args['id']}",

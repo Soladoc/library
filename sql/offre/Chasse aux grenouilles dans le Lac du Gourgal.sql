@@ -29,7 +29,7 @@ with
                 '2024-03-17 02:52:43',
                 1,
                 5,
-                'gratuit',
+                'standard',
                 'Chasse aux grenouilles dans le Lac du Gourgal',
                 'Chasse aux grenouilles dans le Lac du Gourgal résumé',
                 'Chasse aux grenouilles dans le Lac du Gourgal description',

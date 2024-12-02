@@ -2,7 +2,7 @@
 require_once "model/MultiRange.php";
 require_once "model/NonEmptyRange.php";
 require_once "model/Time.php";
-require_once "model/Timestamp.php";
+require_once "model/FiniteTimestamp.php";
 
 // Conserve les images uploadées durant cette transaction pour les supprimer en cas d'erreur. Comme ça on ne pollue pas le dossier.
 $uploaded_files = [];
@@ -44,7 +44,7 @@ DB\transaction(function () {
 
     // Périodes d'ouverture
     $periodes_ouverture = new MultiRange(array_map(
-        fn($debut, $fin) => new NonEmptyRange(true, Timestamp::parse($debut), Timestamp::parse($fin), false),
+        fn($debut, $fin) => new NonEmptyRange(true, FiniteTimestamp::parse($debut), FiniteTimestamp::parse($fin), false),
         $args['periodes']['debut'],
         $args['periodes']['fin']
     ));

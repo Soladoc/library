@@ -31,7 +31,7 @@ with
                 '2024-02-15 06:59:05',
                 13,
                 1,
-                'gratuit',
+                'premium',
                 'Crêperie de l''Abbaye de Beauport',
                 'La Crêperie de l''Abbaye de Beauport est une délicieuse crêperie située à Paimpol. Découvrez nos goutûs plats.',
                 'La Crêperie de l''Abbaye de Beauport est une délicieuse crêperie située à Paimpol. Découvrez nos goutûs plats. Oui, je suis détaillé. Me demandez pas plus de détails. Je ne suis qu''un restaurant',

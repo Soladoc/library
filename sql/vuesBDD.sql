@@ -49,7 +49,13 @@ create view restaurant as select * from _restaurant
 create view membre as select * from _membre
     join _compte using (id);
 
-create view professionnel as select * from _professionnel
+create view
+    professionnel as
+select
+    *,
+    professionnel_secteur(id) secteur
+from
+    _professionnel
     join _compte using (id);
 
 create view pro_prive as select * from _prive

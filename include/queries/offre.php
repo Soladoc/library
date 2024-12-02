@@ -34,7 +34,7 @@ function query_offres(?int $id_professionnel = null, ?bool $en_ligne = null): It
 
 function query_offres_a_une(): Iterator
 {
-    $stmt = notfalse(connect()->prepare('select * from offres where note_moyenne = 5'));
+    $stmt = notfalse(connect()->prepare("SELECT * FROM offres WHERE libelle_abonnement = 'premium' ORDER BY RANDOM() LIMIT 5"));
     notfalse($stmt->execute());
     return $stmt->getIterator();
 }
@@ -101,7 +101,7 @@ function offre_insert_ouverture_hebdomadaire(int $id_offre, int $dow, \MultiRang
  * @param string $titre
  * @param string $resume
  * @param string $description_detaillee
- * @param \MultiRange<\Timestamp>
+ * @param \MultiRange<\FiniteTimestamp>
  * @param ?string $url_site_web
  * @return array Les arguments communs pour l'insertion d'offre.
  */

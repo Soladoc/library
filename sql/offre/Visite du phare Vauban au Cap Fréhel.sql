@@ -28,7 +28,7 @@ with
                 (table id_adresse),
                 '2024-04-03 17:14:47',
                 8,
-                1,
+                2,
                 'gratuit',
                 '1:30:',
                 'Visite du phare Vauban au Cap Fréhel',

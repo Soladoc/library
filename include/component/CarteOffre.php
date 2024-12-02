@@ -2,6 +2,7 @@
 require_once 'util.php';
 require_once 'redirect.php';
 require_once 'model/Offre.php';
+require_once 'component/ImageView.php';
 
 final class CarteOffre
 {
@@ -26,7 +27,7 @@ final class CarteOffre
     <h3><?= $this->offre->titre ?></h3>
     <p class="location"><?= $this->offre->adresse->format() ?></p>
     <p><?= $this->offre->resume ?></p>
-    <p class="category"><?= $this->offre->categorie ?></p>
+    <p class="category"><?= $this->offre::CATEGORIE ?></p>
     <a href="<?= location_detail_offre($this->offre->id) ?>">
         <button class="btn-more-info">En savoir plus</button>
     </a>

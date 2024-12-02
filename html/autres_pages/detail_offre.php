@@ -1,10 +1,10 @@
 <?php
 require_once 'auth.php';
-require_once 'component/offre.php';
 require_once 'component/Page.php';
+require_once 'component/ImageView.php';
 
 $args = [
-    'id' => getarg($_GET, 'id', arg_filter(FILTER_VALIDATE_INT)),
+    'id' => getarg($_GET, 'id', arg_int()),
 ];
 
 $page = new Page("offre : {$args['id']}",
@@ -18,7 +18,7 @@ if ($_POST) {
     $args += [
         'commentaire' => getarg($_POST, 'commentaire'),
         'date_avis' => getarg($_POST, 'date'),
-        'note' => getarg($_POST, 'rating', arg_filter(FILTER_VALIDATE_INT)),
+        'note' => getarg($_POST, 'rating', arg_int()),
         'contexte' => getarg($_POST, 'contexte'),
     ];
     if (($id_membre_co = Auth\id_membre_connecte()) === null) {

@@ -39,7 +39,7 @@ if ($_POST) {
         'titre' => getarg($_POST, 'titre'),
         'adresse_localite' => getarg($_POST, 'adresse_localite', required: false),
         'adresse_nom_voie' => getarg($_POST, 'adresse_nom_voie', required: false),
-        'adresse_numero_voie' => getarg($_POST, 'adresse_numero_voie', arg_filter(FILTER_VALIDATE_INT, ['min_range' => 1]), required: false),
+        'adresse_numero_voie' => getarg($_POST, 'adresse_numero_voie', arg_int(1), required: false),
         'adresse_precision_ext' => getarg($_POST, 'adresse_precision_ext', required: false),
         'adresse_precision_int' => getarg($_POST, 'adresse_precision_int', required: false),
         'url_site_web' => getarg($_POST, 'url_site_web', required: false),
@@ -51,15 +51,15 @@ if ($_POST) {
     function indication_duree_args(): array
     {
         return [
-            'indication_duree_jours' => getarg($_POST, 'indication_duree_jours', arg_filter(FILTER_VALIDATE_INT, ['min_range' => 0])),
-            'indication_duree_heures' => getarg($_POST, 'indication_duree_heures', arg_filter(FILTER_VALIDATE_INT, ['min_range' => 0])),
-            'indication_duree_minutes' => getarg($_POST, 'indication_duree_minutes', arg_filter(FILTER_VALIDATE_INT, ['min_range' => 0])),
+            'indication_duree_jours' => getarg($_POST, 'indication_duree_jours', arg_int(0)),
+            'indication_duree_heures' => getarg($_POST, 'indication_duree_heures', arg_int(0)),
+            'indication_duree_minutes' => getarg($_POST, 'indication_duree_minutes', arg_int(0)),
         ];
     }
 
     $args += match ($args['type_offre']) {
         'activité' => indication_duree_args() + [
-            'age_requis' => getarg($_POST, 'age_requis', arg_filter(FILTER_VALIDATE_INT, ['min_range' => 1]), required: false),
+            'age_requis' => getarg($_POST, 'age_requis', arg_int(1), required: false),
             'prestations_incluses' => getarg($_POST, 'prestations_incluses'),
             'prestations_non_incluses' => getarg($_POST, 'prestations_non_incluses', required: false)
         ],
@@ -67,7 +67,7 @@ if ($_POST) {
             'file_image_plan' => getarg($_FILES, 'image_plan'),
         ],
         'spectacle' => indication_duree_args() + [
-            'capacite_accueil' => getarg($_POST, 'capacite_accueil', arg_filter(FILTER_VALIDATE_INT, ['min_range' => 0])),
+            'capacite_accueil' => getarg($_POST, 'capacite_accueil', arg_int(0)),
         ],
         'restaurant' => [
             'carte' => getarg($_POST, 'carte'),

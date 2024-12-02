@@ -31,15 +31,17 @@ final class MultiRange
     }
 
     /**
-     * Parse un `MultiRange` à partir de la sortie PostgreSQL.
+     * Parse un multirange depuis la sortie PostgreSQL.
      * @template TBound
-     * @param string $output La chaîne représentant un `TimeMultiRange` retournée par PostgreSQL.
-     * @param callable(string): TBound $parse_bound La fonction parsant les bornes. Peut jeter `DomainException` si la syntaxe est invalide.
-     * @return MultiRange<TBound>
-     * @throws DomainException Quand $output ne correspond pas à la syntax attendue.
+     * @param ?string $output La sortie PostgreSQL.
+     * @param callable(string): TBound $parse_bound La fonction parsant les bornes. Peut jeter `DomainException` si la syntaxe est invalide. `null` implique la fonction identité.
+     * @return ?MultiRange<TBound> Un nouveau timestamp, ou `null` si `$output` était `null` (à l'instar de PostgreSQL, cette fonction propage `null`)
+     * @throws DomainException En cas de mauvaise syntaxe.
      */
-    public static function parse(string $output, callable $parse_bound): MultiRange
+    public static function parse(?string $output, ?callable $parse_bound = null): ?MultiRange
     {
+        if ($output === null) return null;
+
         $output = trim($output);
         if (strlen($output) === 0 || $output[0] !== '{' || $output[-1] !== '}') {
             throw new DomainException();

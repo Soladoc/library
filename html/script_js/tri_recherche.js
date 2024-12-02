@@ -4,7 +4,7 @@ async function getDataJson(url) {
     return await (await fetch(url)).json();
 }
 
-let offers; // Will be populated with data from PHP
+let offers;
 let images;
 
 async function initializeOffers() {

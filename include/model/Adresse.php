@@ -4,11 +4,18 @@ require_once 'util.php';
 require_once 'model/Commune.php';
 
 /**
- * @property-read ?int $name L'ID. `null` si cette adresse n'existe pas dans la BDD.
+ * @property-read ?int $id L'ID. `null` si cette adresse n'existe pas dans la BDD.
  */
 final class Adresse
 {
-    private const TABLE = '_adresse';
+    function __get(string $name)
+    {
+        return match ($name) {
+            'id' => $this->id,
+        };
+    }
+
+    protected const TABLE = '_adresse';
 
     /**
      * La commune.
@@ -67,6 +74,7 @@ final class Adresse
     private ?int $id;
 
     function __construct(
+        ?int $id,
         Commune $commune,
         ?int $numero_voie,
         ?string $complement_numero,
@@ -76,7 +84,6 @@ final class Adresse
         ?string $precision_ext,
         ?float $latitude,
         ?float $longitude,
-        ?int $id = null,
     ) {
         $this->id = $id;
         $this->commune = $commune;
@@ -97,11 +104,12 @@ final class Adresse
      */
     static function from_db(int $id_adresse): Adresse|false
     {
-        $stmt = notfalse(DB\connect()->prepare('select * from ' . self::TABLE . ' where id = ?'));
+        $stmt = notfalse(DB\connect()->prepare('select code_commune,numero_departement,numero_voie,complement_numero,nom_voie,localite,precision_int,precision_ext,latitude,longitude from ' . self::TABLE . ' where id = ?'));
         DB\bind_values($stmt, [1 => [$id_adresse, PDO::PARAM_INT]]);
         notfalse($stmt->execute());
         $row = $stmt->fetch();
         return $row === false ? false : new Adresse(
+            $id_adresse,
             Commune::from_db($row['code_commune'], $row['numero_departement']),
             $row['numero_voie'] ?? null,
             $row['complement_numero'] ?? null,
@@ -111,7 +119,6 @@ final class Adresse
             $row['precision_ext'] ?? null,
             $row['latitude'] ?? null,
             $row['longitude'] ?? null,
-            $id_adresse,
         );
     }
 

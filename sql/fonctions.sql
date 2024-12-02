@@ -56,17 +56,28 @@ comment on function offre_creee_le (int) is
 
 create function offre_categorie (p_id_offre int) returns categorie_offre as $$
     select case
-        when p_id_offre in (select id from pact._restaurant) then categorie_offre 'restaurant'
-        when p_id_offre in (select id from pact._activite) then categorie_offre 'activité'
-        when p_id_offre in (select id from pact._visite) then categorie_offre 'visite'
-        when p_id_offre in (select id from pact._spectacle) then categorie_offre 'spectacle'
-        when p_id_offre in (select id from pact._parc_attractions) then categorie_offre 'parc d''attractions'
+        when p_id_offre in (select id from _activite) then categorie_offre 'activité'
+        when p_id_offre in (select id from _parc_attractions) then categorie_offre 'parc d''attractions'
+        when p_id_offre in (select id from _restaurant) then categorie_offre 'restaurant'
+        when p_id_offre in (select id from _spectacle) then categorie_offre 'spectacle'
+        when p_id_offre in (select id from _visite) then categorie_offre 'visite'
     end
 $$ language sql strict stable;
 comment on function offre_categorie (int) is
 'Retourne la catégorie d''une offre.
 @param p_id_offre l''ID de l''offre
 @returns La catégorie de l''offre d''ID @p p_id_offre.';
+
+create function professionnel_secteur (p_id_professionnel int) returns secteur as $$
+    select case
+        when p_id_professionnel in (select id from _prive) then secteur 'privé'
+        when p_id_professionnel in (select id from _public) then secteur 'public ou associatif'
+    end
+$$ language sql strict stable;
+comment on function professionnel_secteur (int) is
+'Retourne le secteur d''un professionnel.
+@param p_id_professionnel l''ID du professionnel
+@returns Le secteur du professionnel d''ID @p p_id_professionnel.';
 
 create function offre_changement_ouverture_suivant_le (
     p_id_offre int,
