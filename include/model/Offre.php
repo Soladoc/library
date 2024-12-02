@@ -335,8 +335,7 @@ abstract class Offre implements Signalable
         $stmt = notfalse(DB\connect()->prepare('select offre_categorie(?)'));
         bind_values($stmt, [1 => [$id_offre, PDO::PARAM_INT]]);
         notfalse($stmt->execute());
-        $row = $stmt->fetch();
-        return $row === false ? false : match (notfalse($stmt->fetchColumn())) {
+        return match (notfalse($stmt->fetchColumn())) {
             Activite::CATEGORIE => Activite::from_db($row),
             ParcAttractions::CATEGORIE => ParcAttractions::from_db($row),
             Restaurant::CATEGORIE => Restaurant::from_db($row),
