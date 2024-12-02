@@ -154,107 +154,108 @@ if ($membre !== false) {
 ?>
 <!DOCTYPE html>
 <html lang="fr">
-<?php $page->put_head() ?>
-<body id='detail_compte'>
-<?php $page->put_header() ?>
-<main>
+    <?php $page->put_head() ?>
+    <body id='detail_compte'>
+    <?php $page->put_header() ?>
+    <main>
 
-<section id="info_compte">  
-    <form action="modif_compte.php?id=<?= $id ?>" method="POST">
-        <?php if ($membre !== false) { ?>
-            <div>
-                <div id="pseudo">
-                    <label>Pseudo : </label>
-                </div>
-                <input id="new_pseudo" name="new_pseudo" type="text" value="<?= htmlspecialchars($pseudo) ?>" placeholder="votre nouveau pseudo">
-            </div>
-        </br>
-        <?php } else if ($pro !== false) { ?>
-            <div>
-                <div id="denomination">
-                    <label>Dénomination : </label>
-                </div>
-                <input id="new_denomination" name="new_denomination" type="text" value="<?= htmlspecialchars($denomination) ?>" placeholder="votre nouvelle dénomination">
-            </div>
-            </br>
-            <?php if (DB\exists_pro_prive($id)) { ?>
-                <div>
-                    <div id="siren">
-                        <label>Siren : </label>
+        <section id="info_compte">  
+            <form action="modif_compte.php?id=<?= $id ?>" method="POST">
+                <?php if ($membre !== false) { ?>
+                    <div>
+                        <div id="pseudo">
+                            <label>Pseudo : </label>
+                        </div>
+                        <input id="new_pseudo" name="new_pseudo" type="text" value="<?= htmlspecialchars($pseudo) ?>" placeholder="votre nouveau pseudo">
                     </div>
-                    <input type="text" id="new_siren" name="new_siren" value="<?= htmlspecialchars($siren) ?>" placeholder="231 654 988" oninput="formatInput(this)" maxlength="12">
+                </br>
+                <?php } else if ($pro !== false) { ?>
+                    <div>
+                        <div id="denomination">
+                            <label>Dénomination : </label>
+                        </div>
+                        <input id="new_denomination" name="new_denomination" type="text" value="<?= htmlspecialchars($denomination) ?>" placeholder="votre nouvelle dénomination">
+                    </div>
+                    </br>
+                    <?php if (DB\exists_pro_prive($id)) { ?>
+                        <div>
+                            <div id="siren">
+                                <label>Siren : </label>
+                            </div>
+                            <input type="text" id="new_siren" name="new_siren" value="<?= htmlspecialchars($siren) ?>" placeholder="231 654 988" oninput="formatInput(this)" maxlength="12">
+                        </div>
+                    </br>
+                    <?php } ?>
+                <?php } ?>
+
+                <div>
+                    <div id="nom">
+                        <label>Nom : </label>
+                    </div>
+                    <input id="new_nom" name="new_nom" type="text" value="<?= htmlspecialchars($nom) ?>" placeholder="votre nouveau nom">
                 </div>
-            </br>
-            <?php } ?>
-        <?php } ?>
+                </br>
+                <div>
+                    <div id="prenom">
+                        <label>Prénom : </label>
+                    </div>
+                    <input id="new_prenom" name="new_prenom" type="text" value="<?= htmlspecialchars($prenom) ?>" placeholder="votre nouveau prénom">
+                </div>
+                </br>
+                <div>
+                    <div id="email">
+                        <label>Email : </label>
+                    </div>
+                    <input id="new_email" name="new_email" type="email" value="<?= htmlspecialchars($email) ?>" placeholder="votre nouvel email">
+                    <?php if ($error_email !== null) { ?>
+                        <p class="error"><?= htmlspecialchars($error_email) ?></p>
+                    <?php } ?>
+                </div>
+                </br>
+                <div>
+                    <div id="telephone">
+                        <label>Numéro de téléphone : </label>
+                    </div>
+                    <input id="new_telephone" name="new_telephone" type="tel" value="<?= htmlspecialchars($telephone) ?>" placeholder="votre nouveau numéro de téléphone">
+                    <?php if ($error_tel !== null) { ?>
+                        <p class="error"><?= htmlspecialchars($error_tel) ?></p>
+                    <?php } ?>
+                </div>
+                </br>
+                <div id="adresse">
+                        <p>Adresse : </p>
+                        <?= format_adresse($adresse) ?>
+                </div>
+                    <?php put_input_address('', 'adresse', 'adresse_') ?>
 
-        <div>
-            <div id="nom">
-                <label>Nom : </label>
-            </div>
-            <input id="new_nom" name="new_nom" type="text" value="<?= htmlspecialchars($nom) ?>" placeholder="votre nouveau nom">
-        </div>
-        </br>
-        <div>
-            <div id="prenom">
-                <label>Prénom : </label>
-            </div>
-            <input id="new_prenom" name="new_prenom" type="text" value="<?= htmlspecialchars($prenom) ?>" placeholder="votre nouveau prénom">
-        </div>
-        </br>
-        <div>
-            <div id="email">
-                <label>Email : </label>
-            </div>
-            <input id="new_email" name="new_email" type="email" value="<?= htmlspecialchars($email) ?>" placeholder="votre nouvel email">
-            <?php if ($error_email !== null) { ?>
-                <p class="error"><?= htmlspecialchars($error_email) ?></p>
-            <?php } ?>
-        </div>
-        </br>
-        <div>
-            <div id="telephone">
-                <label>Numéro de téléphone : </label>
-            </div>
-            <input id="new_telephone" name="new_telephone" type="tel" value="<?= htmlspecialchars($telephone) ?>" placeholder="votre nouveau numéro de téléphone">
-            <?php if ($error_tel !== null) { ?>
-                <p class="error"><?= htmlspecialchars($error_tel) ?></p>
-            <?php } ?>
-        </div>
-        </br>
-        <div id="adresse">
-                <p>Adresse : </p>
-                <?= format_adresse($adresse) ?>
-        </div>
-            <?php put_input_address('', 'adresse', 'adresse_') ?>
+                </div>
+                </br>
+                <div id='changer_mdp'>
+                    <label>Modifier son mot de passe</label>
+                    </br>                        
+                    <div class="champ">
+                        <label for="mdp">Mot de passe actuel *</label>
+                        <input id="mdp" name="old_mdp" type="password" placeholder="**********">
+                    </div>
+                    <div class="champ">
+                        <label for="new_mdp">Nouveau mot de passe *</label>
+                        <input id="new_mdp" name="new_mdp" type="password" placeholder="**********">
+                    </div>
+                    <div class="champ">
+                        <label for="confirmation_mdp">Confirmation mot de passe *</label>
+                        <input id="confirmation_mdp" name="confirmation_mdp" type="password" placeholder="**********">
+                    </div>
+                    <?php if ($error_mdp !== null) { ?>
+                        <p class="error"><?= htmlspecialchars($error_mdp) ?></p>
+                    <?php } ?>
+                    
+                </div>
+                <button type="submit">Valider</button>
+                    <button><a href="<?= location_detail_compte($id) ?>">retour</a> </button>
+            </form>
+        </section>
 
-        </div>
-        </br>
-        <div id='changer_mdp'>
-            <label>Modifier son mot de passe</label>
-            </br>                        
-            <div class="champ">
-                <label for="mdp">Mot de passe actuel *</label>
-                <input id="mdp" name="old_mdp" type="password" placeholder="**********">
-            </div>
-            <div class="champ">
-                <label for="new_mdp">Nouveau mot de passe *</label>
-                <input id="new_mdp" name="new_mdp" type="password" placeholder="**********">
-            </div>
-            <div class="champ">
-                <label for="confirmation_mdp">Confirmation mot de passe *</label>
-                <input id="confirmation_mdp" name="confirmation_mdp" type="password" placeholder="**********">
-            </div>
-            <?php if ($error_mdp !== null) { ?>
-                <p class="error"><?= htmlspecialchars($error_mdp) ?></p>
-            <?php } ?>
-            <button type="submit">Valider</button>
-            <button><a href="<?= location_detail_compte($id) ?>">retour</a> </button>
-        </div>
-    </form>
-</section>
-
-</main>
-<?php $page->put_footer() ?>
+    </main>
+    <?php $page->put_footer() ?>
 </body>
 </html>
