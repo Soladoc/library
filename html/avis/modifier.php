@@ -20,7 +20,7 @@ $avis = $stmt->fetch(PDO::FETCH_ASSOC);
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && $_POST['action'] === 'supprimer') {
     $stmt = DB\query_supprime_avis($id_avis);
     if ($stmt==true) {
-        redirect_to(location_detail_offre($id_offre) . '?message=avis_supprime');
+        redirect_to(location_detail_offre($id_offre));
         exit;
     } else {
         $error_message = 'Une erreur est survenue lors de la suppression de l\'avis.';
