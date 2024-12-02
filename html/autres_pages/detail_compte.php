@@ -48,23 +48,6 @@ if ($membre !== false) {
 } else {
     html_error("le compte d'ID {$args['id']} n'existe pas");
 }
-// Afficher le détail du compte du membre
-
-if ($_POST) {
-    $new_mdp = getarg($_POST, 'new_mdp');
-    $confirmation_mdp = getarg($_POST, 'confirmation_mdp');
-    $old_mdp = getarg($_POST, 'old_mdp');
-
-    if ($new_mdp && password_verify($old_mdp, $mdp_hash)) {
-        if ($confirmation_mdp === $new_mdp) {
-            update_mdp($id, $new_mdp);  // todo: cette fonction n'exite pas
-        } else {
-            redirect_to(location_connexion('Mot de passe de confirmation different.'));
-        }
-    } else {
-        redirect_to(location_connexion(error: 'Mot de passe incorrect.'));
-    }
-}
 
 ?>
 
