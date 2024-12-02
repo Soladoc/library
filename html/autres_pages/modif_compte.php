@@ -180,7 +180,7 @@ if ($membre !== false) {
             <?php if (DB\exists_pro_prive($id)) { ?>
                 <div>
                     <div id="siren">
-                        <label>SIREN : </label>
+                        <label>Siren : </label>
                     </div>
                     <input type="text" id="new_siren" name="new_siren" value="<?= htmlspecialchars($siren) ?>" placeholder="231 654 988" oninput="formatInput(this)" maxlength="12">
                 </div>
@@ -222,7 +222,7 @@ if ($membre !== false) {
         </div>
 
         <div id="adresse">
-                <p>adresse : </p>
+                <p>Adresse : </p>
                 <?= format_adresse($adresse) ?>
         </div>
             <?php put_input_address('', 'adresse', 'adresse_') ?>
