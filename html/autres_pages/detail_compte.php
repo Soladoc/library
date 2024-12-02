@@ -82,7 +82,7 @@ if ($membre !== false) {
                 if (DB\exists_pro_prive($id)) {
                     ?>
                     <div id="siren">
-                    <p>siren : </p>
+                    <p>Siren : </p>
                 <?php
                 echo $siren
                 ?> </div><?php
