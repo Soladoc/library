@@ -36,6 +36,7 @@
 }
 
 .offer-card h3 a {
+    color: unset;
     text-decoration: none;
 }
 
