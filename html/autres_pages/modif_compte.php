@@ -121,9 +121,9 @@ $pro = DB\query_compte_professionnel($args['id']);
 
 
 if ($membre !== false) {
-    echo '<pre>';
-    print_r($membre);
-    echo '</pre>';
+    // echo '<pre>';
+    // print_r($membre);
+    // echo '</pre>';
     $pseudo = $membre['pseudo'];
     $email = $membre['email'];
     $mdp_hash =$membre['mdp_hash'];
@@ -133,9 +133,9 @@ if ($membre !== false) {
     $id_adresse = $membre['id_adresse'];
     $adresse = DB\query_adresse($id_adresse);
 } else if ($pro !== false) {
-    echo '<pre>';
-    print_r($pro);
-    echo '</pre>';
+    // echo '<pre>';
+    // print_r($pro);
+    // echo '</pre>';
     $denomination = $pro['denomination'];
     $email = $pro['email'];
     $mdp_hash = $pro['mdp_hash'];
