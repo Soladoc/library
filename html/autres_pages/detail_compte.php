@@ -94,10 +94,10 @@ if ($membre !== false) {
 
             <?php } ?>
 
-            <label for="nom">Nom :*</label>
-                <p>
-                    <input form="f" id="nom" name="nom" type="text" value="<?= htmlspecialchars($nom) ?>" required>
-                </p>
+            <div id="nom">
+                <p>Nom : </p>
+                <?= $nom ?>
+            </div>
 
             <div id="prenom">
                 <p>Prenom : </p>
