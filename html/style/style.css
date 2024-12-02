@@ -805,3 +805,7 @@ a:not(:hover, :focus, :focus-within) {
     height: auto;
 }
 
+#changer_mdp {
+    padding: 20 px;
+    width: 300px;
+}

@@ -50,83 +50,135 @@ if ($membre !== false) {
 }
 
 ?>
-
 <!DOCTYPE html>
 <html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Informations Compte</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f5f5f5;
+            color: #333;
+        }
 
-<?php $page->put_head() ?>
+        header, footer {
+            background-color: #2c3e50;
+            color: white;
+            text-align: center;
+            padding: 1rem;
+        }
 
+        main {
+            max-width: 800px;
+            margin: 2rem auto;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            padding: 2rem;
+        }
+
+        section#info_compte {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        section#info_compte div {
+            display: flex;
+            justify-content: space-between;
+            border-bottom: 1px solid #ddd;
+            padding-bottom: 0.5rem;
+        }
+
+        section#info_compte div p {
+            margin: 0;
+            font-weight: bold;
+            color: #555;
+        }
+
+        section#info_compte div span {
+            font-weight: normal;
+            color: #333;
+        }
+
+        a {
+            display: inline-block;
+            text-decoration: none;
+            background-color: #3498db;
+            color: white;
+            padding: 0.8rem 1.5rem;
+            border-radius: 5px;
+            font-size: 1rem;
+            margin-top: 1rem;
+            text-align: center;
+        }
+
+        a:hover {
+            background-color: #2980b9;
+        }
+    </style>
+</head>
 <body>
-    <?php $page->put_header() ?>
+    <header>
+        <h1>Informations du Compte</h1>
+    </header>
 
     <main>
         <section id="info_compte">
-            <?php
-            if ($membre !== false) {
-                ?>
-            <div id="pseudo">
-                <p>Pseudo : </p>
-                <?= $pseudo ?>
-            </div>
-            <?php } else if ($pro !== false) { ?>
+            <!-- PHP dynamique commence ici -->
+            <?php if ($membre !== false): ?>
+                <div id="pseudo">
+                    <p>Pseudo :</p>
+                    <span><?= $pseudo ?></span>
+                </div>
+            <?php elseif ($pro !== false): ?>
                 <div id="denomination">
-                <p>Denomination : </p>
-                <?php
-                echo $denomination
-                ?> </div>
-
-                
-
-                <?php
-
-                if (DB\exists_pro_prive($id)) {
-                    ?>
+                    <p>Dénomination :</p>
+                    <span><?= $denomination ?></span>
+                </div>
+                <?php if (DB\exists_pro_prive($id)): ?>
                     <div id="siren">
-                    <p>Siren : </p>
-                <?php
-                echo $siren
-                ?> </div><?php
-                }
-                ?>
-                
-           
-
-
-            <?php } ?>
+                        <p>Siren :</p>
+                        <span><?= $siren ?></span>
+                    </div>
+                <?php endif; ?>
+            <?php endif; ?>
 
             <div id="nom">
-                <p>Nom : </p>
-                <?= $nom ?>
+                <p>Nom :</p>
+                <span><?= $nom ?></span>
             </div>
 
             <div id="prenom">
-                <p>Prenom : </p>
-                <?= $prenom ?>
+                <p>Prénom :</p>
+                <span><?= $prenom ?></span>
             </div>
 
             <div id="email">
-                <p>Email : </p>
-                <?= $email ?>
+                <p>Email :</p>
+                <span><?= $email ?></span>
             </div>
 
             <div id="telephone">
-                <p>Numero de telephone : </p>
-                <?= $telephone ?>
+                <p>Numéro de téléphone :</p>
+                <span><?= $telephone ?></span>
             </div>
 
             <div id="adresse">
-                <p>adresse : </p>
-                <?= format_adresse($adresse) ?> </div>
-        <a href="modif_compte.php?id=<?= $id ?>">modifier</a>
-            <?php ?>
-            
-           
-        </section>
+                <p>Adresse :</p>
+                <span><?= format_adresse($adresse) ?></span>
+            </div>
 
+            <a href="modif_compte.php?id=<?= $id ?>">Modifier</a>
+        </section>
     </main>
 
-    <?php $page->put_footer() ?>
-
+    <footer>
+        <p>&copy; <?= date('Y') ?> MERMTREM Solutions. Tous droits réservés.</p>
+    </footer>
 </body>
-
 </html>

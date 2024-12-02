@@ -168,6 +168,7 @@ if ($membre !== false) {
                 </div>
                 <input id="new_pseudo" name="new_pseudo" type="text" value="<?= htmlspecialchars($pseudo) ?>" placeholder="votre nouveau pseudo">
             </div>
+        </br>
         <?php } else if ($pro !== false) { ?>
             <div>
                 <div id="denomination">
@@ -175,6 +176,7 @@ if ($membre !== false) {
                 </div>
                 <input id="new_denomination" name="new_denomination" type="text" value="<?= htmlspecialchars($denomination) ?>" placeholder="votre nouvelle dénomination">
             </div>
+            </br>
             <?php if (DB\exists_pro_prive($id)) { ?>
                 <div>
                     <div id="siren">
@@ -182,6 +184,7 @@ if ($membre !== false) {
                     </div>
                     <input type="text" id="new_siren" name="new_siren" value="<?= htmlspecialchars($siren) ?>" placeholder="231 654 988" oninput="formatInput(this)" maxlength="12">
                 </div>
+            </br>
             <?php } ?>
         <?php } ?>
 
@@ -191,14 +194,14 @@ if ($membre !== false) {
             </div>
             <input id="new_nom" name="new_nom" type="text" value="<?= htmlspecialchars($nom) ?>" placeholder="votre nouveau nom">
         </div>
-
+        </br>
         <div>
             <div>
                 <label>Prénom : </label>
             </div>
             <input id="new_prenom" name="new_prenom" type="text" value="<?= htmlspecialchars($prenom) ?>" placeholder="votre nouveau prénom">
         </div>
-
+        </br>
         <div>
             <div>
                 <label>Email : </label>
@@ -208,7 +211,7 @@ if ($membre !== false) {
                 <p class="error"><?= htmlspecialchars($error_email) ?></p>
             <?php } ?>
         </div>
-
+        </br>
         <div>
             <div id="telephone">
                 <label>Numéro de téléphone : </label>
@@ -218,7 +221,7 @@ if ($membre !== false) {
                 <p class="error"><?= htmlspecialchars($error_tel) ?></p>
             <?php } ?>
         </div>
-
+        </br>
         <div id="adresse">
                 <p>Adresse : </p>
                 <?= format_adresse($adresse) ?>
@@ -226,9 +229,10 @@ if ($membre !== false) {
             <?php put_input_address('', 'adresse', 'adresse_') ?>
 
         </div>
-
+        </br>
         <div id='changer_mdp'>
-            <label>Modifier son mot de passe</label>                        
+            <label>Modifier son mot de passe</label>
+            </br>                        
             <div class="champ">
                 <label for="mdp">Mot de passe actuel *</label>
                 <input id="mdp" name="old_mdp" type="password" placeholder="**********">
