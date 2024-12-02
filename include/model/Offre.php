@@ -336,11 +336,11 @@ abstract class Offre implements Signalable
         bind_values($stmt, [1 => [$id_offre, PDO::PARAM_INT]]);
         notfalse($stmt->execute());
         return match (notfalse($stmt->fetchColumn())) {
-            Activite::CATEGORIE => Activite::from_db($row),
-            ParcAttractions::CATEGORIE => ParcAttractions::from_db($row),
-            Restaurant::CATEGORIE => Restaurant::from_db($row),
-            Spectacle::CATEGORIE => Spectacle::from_db($row),
-            Visite::CATEGORIE => Visite::from_db($row),
+            Activite::CATEGORIE => Activite::from_db($id_offre),
+            ParcAttractions::CATEGORIE => ParcAttractions::from_db($id_offre),
+            Restaurant::CATEGORIE => Restaurant::from_db($id_offre),
+            Spectacle::CATEGORIE => Spectacle::from_db($id_offre),
+            Visite::CATEGORIE => Visite::from_db($id_offre),
         };
     }
 
