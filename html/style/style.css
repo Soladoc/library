@@ -804,3 +804,48 @@ a:not(:hover, :focus, :focus-within) {
     width: 200px;
     height: auto;
 }
+
+#info_compte div {
+    margin-bottom: 15px;
+}
+
+#info_compte p {
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+#info_compte a {
+    display: inline-block;
+    margin-top: 20px;
+    text-decoration: none;
+    background-color: #4a90e2;
+    color: #fff;
+    padding: 10px 20px;
+    border-radius: 4px;
+    transition: background-color 0.3s;
+}
+
+#info_compte a:hover {
+    background-color: #3578b4;
+}
+
+#pseudo, #denomination, #siren, #nom, #prenom, #email, #telephone, #adresse {
+    font-size: 1.1rem;
+    color: #555;
+}
+
+/* Styles pour les petits écrans */
+@media (max-width: 768px) {
+    main {
+        margin: 10px;
+    }
+
+    section#info_compte {
+        padding: 15px;
+    }
+
+    #info_compte a {
+        width: 100%;
+        text-align: center;
+    }
+}
