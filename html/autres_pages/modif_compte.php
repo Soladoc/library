@@ -168,6 +168,7 @@ if ($membre !== false) {
                 </div>
                 <input id="new_pseudo" name="new_pseudo" type="text" value="<?= htmlspecialchars($pseudo) ?>" placeholder="votre nouveau pseudo">
             </div>
+        </br>
         <?php } else if ($pro !== false) { ?>
             <div>
                 <div id="denomination">
@@ -175,6 +176,7 @@ if ($membre !== false) {
                 </div>
                 <input id="new_denomination" name="new_denomination" type="text" value="<?= htmlspecialchars($denomination) ?>" placeholder="votre nouvelle dénomination">
             </div>
+            </br>
             <?php if (DB\exists_pro_prive($id)) { ?>
                 <div>
                     <div id="siren">
@@ -182,6 +184,7 @@ if ($membre !== false) {
                     </div>
                     <input type="text" id="new_siren" name="new_siren" value="<?= htmlspecialchars($siren) ?>" placeholder="231 654 988" oninput="formatInput(this)" maxlength="12">
                 </div>
+            </br>
             <?php } ?>
         <?php } ?>
 
@@ -191,7 +194,7 @@ if ($membre !== false) {
             </div>
             <input id="new_nom" name="new_nom" type="text" value="<?= htmlspecialchars($nom) ?>" placeholder="votre nouveau nom">
         </div>
-
+        </br>
         <div>
             <div>
                 <label>Prénom : </label>
