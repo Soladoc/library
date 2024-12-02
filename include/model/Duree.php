@@ -44,22 +44,19 @@ final class Duree
         $years = 0;
         $months = 0;
         $days = 0;
-        if (notfalse(preg_match('/(\d+) years/', $output, $matches)) === 1) {
-            if (false === ($years = parse_int($matches[1]))) throw new DomainException();
-        }
-        if (notfalse(preg_match('/(\d+) mons/', $output, $matches)) === 1) {
-            if (false === ($months = parse_int($matches[1]))) throw new DomainException();
-        }
-        if (notfalse(preg_match('/(\d+) days/', $output, $matches)) === 1) {
-            if (false === ($days = parse_int($matches[1]))) throw new DomainException();
-        }
         $hours = 0;
         $minutes = 0;
         $seconds = 0;
-        if (notfalse(preg_match('/(\d+):(\d+):(\d*\.?\d+)/', $output, $matches)) === 0
-                || false === ($hours = parse_int($matches[1], 0))
+        if (notfalse(preg_match('/(\d+) years/', $output, $matches)) === 1
+            && false === ($years = parse_int($matches[1]))
+            || notfalse(preg_match('/(\d+) mons/', $output, $matches)) === 1
+            && false === ($months = parse_int($matches[1]))
+            || notfalse(preg_match('/(\d+) days/', $output, $matches)) === 1
+            && false === ($days = parse_int($matches[1]))
+            || notfalse(preg_match('/(\d+):(\d+):(\d*\.?\d+)/', $output, $matches)) === 1
+            && (false === ($hours = parse_int($matches[1], 0))
                 || false === ($minutes = parse_int($matches[2], 0))
-                || false === ($seconds = parse_float($matches[3], 0))) {
+                || false === ($seconds = parse_float($matches[3], 0)))) {
             throw new DomainException();
         }
         return new Duree($years, $months, $days, $hours, $minutes, $seconds);

@@ -205,50 +205,6 @@ function query_update_siren(int $id_compte, $new_siren): void
 // Insertions---------------------------------------------------------------------------------------------------------
 
 /**
- * Insère une nouvelle adresse dans la BDD et retourne son ID.
- *
- * @param int $code_commune
- * @param int $numero_departement
- * @param int|null $numero_voie
- * @param string|null $complement_numero
- * @param string|null $nom_voie
- * @param string|null $localite
- * @param string|null $precision_int
- * @param string|null $precision_ext
- * @param float|null $latitude
- * @param float|null $longitude
- * @return int L'ID de l'adresse nouvellement insérée.
- */
-function insert_adresse(
-    int $code_commune,
-    int $numero_departement,
-    ?int $numero_voie = null,
-    ?string $complement_numero = null,
-    ?string $nom_voie = null,
-    ?string $localite = null,
-    ?string $precision_int = null,
-    ?string $precision_ext = null,
-    ?float $latitude = null,
-    ?float $longitude = null,
-): int {
-    $args = filter_null_args([
-        'code_commune' => [$code_commune, PDO::PARAM_INT],
-        'numero_departement' => [$numero_departement, PDO::PARAM_INT],
-        'numero_voie' => [$numero_voie, PDO::PARAM_INT],
-        'complement_numero' => [$complement_numero, PDO::PARAM_INT],
-        'nom_voie' => [$nom_voie, PDO::PARAM_STR],
-        'localite' => [$localite, PDO::PARAM_STR],
-        'precision_int' => [$precision_int, PDO::PARAM_STR],
-        'precision_ext' => [$precision_ext, PDO::PARAM_STR],
-        'latitude' => [$latitude, PDO_PARAM_DECIMAL],
-        'longitude' => [$longitude, PDO_PARAM_DECIMAL],
-    ]);
-    $stmt = insert_into_returning_id('_adresse', $args);
-    notfalse($stmt->execute());
-    return notfalse($stmt->fetchColumn());
-}
-
-/**
  * Insère une image dans la BDD et retourne le tuple du nom de fichier et de l'ID de l'image insérée .
  *
  * @param array $img Un tableau associatif contenant les attributs de l'image, avec les clés `'size'`, `'type'` et `'tmp_name'`.

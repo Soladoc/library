@@ -6,6 +6,7 @@ require_once 'util.php';
 require_once 'const.php';
 require_once 'component/inputs.php';
 require_once 'component/Page.php';
+require_once 'component/InputAdresse.php';
 
 $page = new Page("Création d'une offre",
     ['creation_offre.css'],
@@ -21,8 +22,7 @@ $args = [
 
 if ($_POST) {
     $args += [
-        'adresse_commune' => ucfirst(getarg($_POST, 'adresse_commune')),
-        'adresse_complement_numero' => getarg($_POST, 'adresse_complement_numero', required: false),
+        'adresse' => getarg($_POST, 'adresse'),
         'description_detaillee' => getarg($_POST, 'description_detaillee'),
         'horaires' => getarg($_POST, 'horaires', required: false) ?? ['debut' => [], 'fin' => []],
         'periodes' => getarg($_POST, 'periodes', required: false) ?? ['debut' => [], 'fin' => []],
@@ -30,11 +30,6 @@ if ($_POST) {
         'tags' => getarg($_POST, 'tags', arg_filter(FILTER_DEFAULT, FILTER_REQUIRE_ARRAY), required: false) ?? [],
         'tarifs' => getarg($_POST, 'tarifs', required: false) ?? [],
         'titre' => getarg($_POST, 'titre'),
-        'adresse_localite' => getarg($_POST, 'adresse_localite', required: false),
-        'adresse_nom_voie' => getarg($_POST, 'adresse_nom_voie', required: false),
-        'adresse_numero_voie' => getarg($_POST, 'adresse_numero_voie', arg_int(1), required: false),
-        'adresse_precision_ext' => getarg($_POST, 'adresse_precision_ext', required: false),
-        'adresse_precision_int' => getarg($_POST, 'adresse_precision_int', required: false),
         'url_site_web' => getarg($_POST, 'url_site_web', required: false),
         'libelle_abonnement' => getarg($_POST, 'libelle_abonnement', required: false) ?? 'gratuit',
         'file_gallerie' => getarg($_FILES, 'gallerie'),
@@ -56,7 +51,7 @@ if ($_POST) {
             'prestations_incluses' => getarg($_POST, 'prestations_incluses'),
             'prestations_non_incluses' => getarg($_POST, 'prestations_non_incluses', required: false)
         ],
-        'parc d\'attractions' => [
+        "parc d'attractions" => [
             'file_image_plan' => getarg($_FILES, 'image_plan'),
         ],
         'spectacle' => indication_duree_args() + [
@@ -128,9 +123,7 @@ if ($_POST) {
                     <input form="f" id="resume" name="resume" type="text" required>
                 </p>
                 <label for="adresse">Adresse*</label>
-                <?php
-                put_input_address('adresse', 'adresse_', 'f')
-                ?>
+                <?php (new InputAdresse('adresse', 'adresse', 'f'))->put() ?>
                 <label for="site">Site Web</label>
                 <p>
                     <input form="f" id="url_site_web" name="url_site_web" type="url">
@@ -262,7 +255,7 @@ if ($_POST) {
                     <?php
                     put_input_indication_duree();
                     break;
-                case 'parc d\'attractions':
+                case "parc d'attractions":
                     ?>
                     <p><label>Âge requis&nbsp;: <input form="f" name="age_requis" type="number" min="1"> an</label></p>
                     <fieldset>
