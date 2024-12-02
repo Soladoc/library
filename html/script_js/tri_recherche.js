@@ -117,7 +117,7 @@ function filterOffers() {
     const mainCategory = document.getElementById('main-category').value.trim().toLowerCase();
     const subcategoryCheckboxes = document.querySelectorAll('input[name="subcategory"]:checked');
     const selectedSubcategories = Array.from(subcategoryCheckboxes).map(cb => cb.id.toLowerCase());
-    const keywordInput = document.getElementById('keyword-search').value.trim().toLowerCase();
+    //const keywordInput = document.getElementById('keyword-search').value.trim().toLowerCase();
 
     // Filtrage des offres
     const filteredOffers = offers.filter(offer => {
@@ -138,13 +138,13 @@ function filterOffers() {
         }
 
         // Filtrage par mot-clé
-        if (keywordInput) {
+        /*if (keywordInput) {
             const matchesCategory = offer.categorie && offer.categorie.toLowerCase().includes(keywordInput);
             const matchesTags = offer.tags && offer.tags.some(tag => tag.toLowerCase().includes(keywordInput));
             if (!matchesCategory && !matchesTags) {
                 return false;
             }
-        }
+        }*/
 
         // Si tout est valide, inclure cette offre
         return true;
