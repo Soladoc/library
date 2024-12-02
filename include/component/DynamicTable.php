@@ -3,13 +3,12 @@ require_once 'util.php';
 
 
 /**
- * @template T
- * @extends Input<T[]>
+ * @extends Input<string[]>
  */
 final class DynamicTable extends Input {
 
     /**
-     * @var callable(DynamicTable, ?T): void
+     * @var callable(DynamicTable, ?string[]): void
      */
     private readonly Closure $put_row;
 
@@ -24,36 +23,29 @@ final class DynamicTable extends Input {
     private readonly array $columns;
 
     /**
-     * @var callable(array): T
-     */
-    private readonly Closure $get;
-
-    /**
-     * @param callable(DynamicTable, ?T): void $put_row
+     * @param callable(DynamicTable, ?string[]): void $put_row
      * @param callable(DynamicTable): void $put_prompt
-     * @param callable(array): T $get
      * @param string[] $columns
      * @param string $id
      * @param string $name
      * @param string $form_id
      */
-    function __construct(array $columns, callable $put_row, callable $put_prompt, callable $get, string $id, string $name = '', string $form_id = '') {
+    function __construct(array $columns, callable $put_row, callable $put_prompt, string $id, string $name = '', string $form_id = '') {
         parent::__construct($id, $name, $form_id);
         $this->put_row = Closure::fromCallable($put_row);
         $this->put_prompt = Closure::fromCallable($put_prompt);
-        $this->get = Closure::fromCallable($get);
         $this->columns = $columns;
     }
 
     /**
      * @param array $get_or_post
      * @param bool $required
-     * @return T[]
+     * @return ?string[]
      */
     function get(array $get_or_post, bool $required = true): ?array {
         $rows = getarg($get_or_post, $this->name, required: $required);
         if ($rows === null) return null;
-        array_map($this->get, soa_to_aos($rows));
+        return soa_to_aos($rows);
     }
 
     /**

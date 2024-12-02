@@ -31,14 +31,14 @@ require_once 'model/Tarifs.php';
  * @property Professionnel $professionnel
  * @property Abonnement $abonnement
  *
- * @property-read int $nb_avis Le nombre d'avis ce cette offre. 0 si elle n'existe pas dans la BDD. Calculé.
- * @property-read bool $en_ligne Calculé.
- * @property-read float $note_moyenne Calculé.
- * @property-read ?float $prix_min Calculé.
- * @property-read FiniteTimestamp $creee_le Calculé.
- * @property-read Duree $en_ligne_ce_mois_pendant Calculé.
- * @property-read ?FiniteTimestamp $changement_ouverture_suivant_le Calculé.
- * @property-read bool $est_ouverte Calculé.
+ * @property-read ?int $nb_avis Le nombre d'avis ce cette offre. Calculé. `null` si cette offre n'existe pas dans la BDD.
+ * @property-read ?bool $en_ligne Calculé. `null` si cette offre n'existe pas dans la BDD.
+ * @property-read ?float $note_moyenne Calculé. `null` si cette offre n'existe pas dans la BDD.
+ * @property-read ?float $prix_min Calculé. `null` si cette offre n'existe pas dans la BDD.
+ * @property-read ?FiniteTimestamp $creee_le Calculé. `null` si cette offre n'existe pas dans la BDD.
+ * @property-read ?Duree $en_ligne_ce_mois_pendant Calculé. `null` si cette offre n'existe pas dans la BDD.
+ * @property-read ?FiniteTimestamp $changement_ouverture_suivant_le Calculé. `null` si cette offre n'existe pas dans la BDD.
+ * @property-read ?bool $est_ouverte Calculé. `null` si cette offre n'existe pas dans la BDD.
  */
 abstract class Offre extends Model implements Signalable
 {
@@ -60,7 +60,14 @@ abstract class Offre extends Model implements Signalable
     ];
 
     protected const INSERT_FIELDS = [
-        'modifiee_le' => ['modifee_le', PDO::PARAM_INT],
+        'modifiee_le'                     => ['modifee_le', PDO::PARAM_INT],
+        'en_ligne'                        => ['en_ligne',   PDO::PARAM_BOOL],
+        'note_moyenne'                    => ['note_moyenne', PDO_PARAM_FLOAT],
+        'prix_min'                        => ['prix_min',     PDO_PARAM_FLOAT],
+        'creee_le'                        => ['creee_le',                        PDO::PARAM_STR],
+        'en_ligne_ce_mois_pendant'        => ['en_ligne_ce_mois_pendant',        PDO::PARAM_STR],
+        'changement_ouverture_suivant_le' => ['changement_ouverture_suivant_le', PDO::PARAM_STR],
+        'est_ouverte'                     => ['est_ouverte',                     PDO::PARAM_BOOL],
     ];
 
     function __get(string $name): mixed
@@ -111,17 +118,13 @@ abstract class Offre extends Model implements Signalable
      * @param ?string $url_site_web
      * @param MultiRange<FiniteTimestamp> $periodes_ouverture
      * @param ?FiniteTimestamp $modifiee_le
-     * @param bool $en_ligne
+     * @param ?bool $en_ligne
      * @param ?float $note_moyenne
      * @param ?float $prix_min
-     * @param FiniteTimestamp $creee_le
-     * @param Duree $en_ligne_ce_mois_pendant
+     * @param ?FiniteTimestamp $creee_le
+     * @param ?Duree $en_ligne_ce_mois_pendant
      * @param ?FiniteTimestamp $changement_ouverture_suivant_le
-     * @param bool $est_ouverte
-     * @param string[] $tags
-     * @param array<string, float> $tarifs
-     * @param array<int, MultiRange<Time>> $horaires
-     * @param Image[] $galerie
+     * @param ?bool $est_ouverte
      */
     function __construct(
         ?int $id,
@@ -135,13 +138,13 @@ abstract class Offre extends Model implements Signalable
         ?string $url_site_web,
         MultiRange $periodes_ouverture,
         ?FiniteTimestamp $modifiee_le,
-        bool $en_ligne,
+        ?bool $en_ligne,
         ?float $note_moyenne,
         ?float $prix_min,
-        FiniteTimestamp $creee_le,
-        Duree $en_ligne_ce_mois_pendant,
+        ?FiniteTimestamp $creee_le,
+        ?Duree $en_ligne_ce_mois_pendant,
         ?FiniteTimestamp $changement_ouverture_suivant_le,
-        bool $est_ouverte,
+        ?bool $est_ouverte,
     ) {
         $this->id                              = $id;
         $this->adresse                         = $adresse;

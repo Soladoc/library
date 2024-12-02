@@ -5,8 +5,6 @@ use PDO, PDOStatement;
 
 require_once 'util.php';
 
-const PDO_PARAM_DECIMAL = PDO::PARAM_STR;
-
 $_pdo = null;
 
 /**

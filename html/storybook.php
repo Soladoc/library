@@ -62,7 +62,7 @@ $page = new Page('Storybook');
 
 <?php if ($duree) { ?>
 <h3>Sortie</h3>
-<p><?= $duree->format() ?></p>
+<p><?= $duree ?></p>
 <pre><samp>
     <?php var_dump($duree) ?>
 </samp></pre>

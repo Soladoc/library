@@ -56,7 +56,7 @@ final class InputOffre extends Input
         );
         $this->tarifs = new DynamicTable(
             ['Nom', 'Montant'],
-            function (DynamicTable $dt, ?Tarifs $tarif) {
+            function (DynamicTable $dt, ?array $row) {
                 $form_attr = $dt->form_id ? "form=\"$dt->form_id\"" : '';
                 ?>
 <td><input <?= $form_attr ?>
@@ -64,14 +64,14 @@ final class InputOffre extends Input
     type="text"
     placeholder="Enfant, Sénior&hellip;"
     required readonly
-    value="<?= $tarif?->nom ?>"></td>
+    value="<?= $row === null ? null : $row[0] ?>"></td>
 <td><input <?= $form_attr ?>
     name="<?= $this->name('tarifs') ?>[montant][]"
     type="number"
     min="0"
     placeholder="Prix"
     required
-    value="<?= $tarif?->montant ?>"> €</td>
+    value="<?= $row === null ? null : $row[1] ?>"> €</td>
 <?php
             },
             function (DynamicTable $dt) {
@@ -80,24 +80,23 @@ final class InputOffre extends Input
 <td><input type="number" min="0" placeholder="Prix" required> €</td>
 <?php
             },
-            fn(array $row) => new Tarifs($row['nom'], $row['montant']),
             $this->id('tarifs'),
             $this->name('tarifs'),
             $form_id,
         );
         $this->periodes = new DynamicTable(
             ['Début', 'Fin'],
-            function (DynamicTable $dt, ?NonEmptyRange $horaire) {
+            function (DynamicTable $dt, ?array $horaire) {
                 $form_attr = $dt->form_id ? "form=\"$dt->form_id\"" : '';
 ?>
 <td><input <?= $form_attr ?>
     name="<?= $this->name('periodes') ?>[debut][]"
     type="datetime-local"
-    value="<?= $horaire?->lower ?>)"></td>
+    value="<?= $horaire === null ? null : $horaire[0] ?>)"></td>
 <td><input <?= $form_attr ?>
     name="<?= $this->name('periodes') ?>[fin][]"
     type="datetime-local"
-    value="<?= $horaire?->upper ?>"></td>
+    value="<?= $horaire === null ? null : $horaire[1] ?>"></td>
 <?php
             },
             function (DynamicTable $dt) {
@@ -106,7 +105,6 @@ final class InputOffre extends Input
 <td><input type="datetime-local" placeholder="Fin" required></td>
 <?php
             },
-            fn(array $row) => new NonEmptyRange(true, FiniteTimestamp::parse($row['debut']), FiniteTimestamp::parse($row['fin']), false),
             $this->id('periodes'),
             $this->name('periodes'),
             $form_id
@@ -134,6 +132,8 @@ final class InputOffre extends Input
             getarg($get_or_post, $this->name('periodes'), required: false) ?? ['debut' => [], 'fin' => []],
             null,
         ];
+
+        // todo: map horaires and periodes
 
         $file_galerie = getarg($get_or_post, $this->name('galerie'), required: false);
         $horaires = getarg($get_or_post, $this->name('horaires'), required: false) ?? [];
@@ -370,9 +370,18 @@ final class InputOffre extends Input
             $parc_attractions = $current;
             ?>
             ?>
-            <p><label>Âge requis&nbsp;: <input <?= $form_attr ?> name="<?= $this->name('age_requis') ?>" type="number" min="1"> an</label></p>
+            <p><label>Âge requis&nbsp;: <input <?= $form_attr ?>
+                name="<?= $this->name('age_requis') ?>"
+                type="number"
+                min="1"
+                value="<?= $parc_attractions?->age_requis ?>"> an</label></p>
             <fieldset>
-                <p><label>Plan* &nbsp;: <input <?= $form_attr ?> id="<?= $this->id('image_plan') ?>" name="<?= $this->name('image_plan') ?>" type="file" accept="image/*" required></label></p>
+                <p><label>Plan* &nbsp;: <input <?= $form_attr ?>
+                    id="<?= $this->id('image_plan') ?>"
+                    name="<?= $this->name('image_plan') ?>"
+                    type="file"
+                    accept="image/*"
+                    required></label></p>
                 <div id="<?= $this->id('image_plan-preview') ?>"></div>
             </fieldset>
             <?php

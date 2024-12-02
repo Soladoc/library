@@ -8,9 +8,13 @@ require_once 'model/Offre.php';
 final class ParcAttractions extends Offre
 {
     protected const FIELDS = parent::FIELDS + [
+        'age_requis' => [null, 'age_requis', PDO::PARAM_INT],
+        'nb_attractions' => [null, 'nb_attractions', PDO::PARAM_INT],
         'image_plan' => ['id', 'id_image_plan', PDO::PARAM_INT],
     ];
 
+    protected ?int $age_requis;
+    protected int $nb_attractions;
     protected Image $image_plan;
 
     /**

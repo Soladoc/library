@@ -81,3 +81,5 @@ const CONTEXTES_VISITE = [
  * @var string
  */
 const DOCUMENT_ROOT = '/var/www/html';
+
+const PDO_PARAM_FLOAT = PDO::PARAM_STR;
