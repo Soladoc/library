@@ -120,7 +120,7 @@ function filterOffers() {
 
         // Filtrage par mot-clé
         if (keywordInput) {
-            console.log(offers[1]);
+            console.log("test ipu");
             const matchesCategory = offer.categorie && offer.categorie.toLowerCase().includes(keywordInput);
             const matchesTitre = offer.titre && offer.titre.some(titre => titre.toLowerCase().includes(keywordInput));
             if (!matchesCategory && !matchesTitre) {
@@ -131,7 +131,7 @@ function filterOffers() {
         // Si tout est valide, inclure cette offre
         return true;
     });
-
+    console.log(offers);
     // Affichage des offres filtrées
     displayOffers(filteredOffers);
 }
