@@ -52,48 +52,8 @@ if ($membre !== false) {
 ?>
 <!DOCTYPE html>
 <html lang="fr">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Informations Compte</title>
-    <style>
+<?php $page->put_head() ?>
 
-
-        main#detail_compte {
-            max-width: 800px;
-            margin: 2rem auto;
-            background-color: white;
-            border-radius: 8px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            padding: 2rem;
-        }
-
-        section#info_compte {
-            display: flex;
-            flex-direction: column;
-            gap: 1.5rem;
-        }
-
-        section#info_compte div {
-            display: flex;
-            justify-content: space-between;
-            border-bottom: 1px solid #ddd;
-            padding-bottom: 0.5rem;
-        }
-
-        section#info_compte div p {
-            margin: 0;
-            font-weight: bold;
-            color: #555;
-        }
-
-        section#info_compte div span {
-            font-weight: normal;
-            color: #333;
-        }
-
-    </style>
-</head>
 <body>
 <?php $page->put_header() ?>
 
