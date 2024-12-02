@@ -1,4 +1,4 @@
-<button?php
+<?php
 require_once 'util.php';
 require_once 'queries.php';
 require_once 'redirect.php';
