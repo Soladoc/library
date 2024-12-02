@@ -221,11 +221,12 @@ if ($membre !== false) {
             <?php } ?>
         </div>
 
-        <div>
-            <div id="adresse">
-                <label>Adresse :</label>
-            </div>
-            <?= put_input_address($adresse, 'adresse', 'adresse_') ?>
+        <div id="adresse">
+                <p>adresse : </p>
+                <?= format_adresse($adresse) ?>
+        </div>
+            <?php put_input_address('', 'adresse', 'adresse_') ?>
+
         </div>
 
         <div id='changer_mdp'>
