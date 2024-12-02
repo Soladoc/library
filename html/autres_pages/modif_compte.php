@@ -1,4 +1,4 @@
-<?php
+<button?php
 require_once 'util.php';
 require_once 'queries.php';
 require_once 'redirect.php';
@@ -251,7 +251,7 @@ if ($membre !== false) {
                         
                     </div>
                     <button type="submit">Valider</button>
-                    <a href="<?= location_detail_compte($id) ?>">retour</a> 
+                    <button href="<?= location_detail_compte($id) ?>">retour</button> 
                 </form>
             </section>
 
