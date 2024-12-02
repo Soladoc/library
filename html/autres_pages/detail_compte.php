@@ -130,9 +130,7 @@ if ($membre !== false) {
     </style>
 </head>
 <body>
-    <header>
-        <h1>Informations du Compte</h1>
-    </header>
+<?php $page->put_head() ?>
 
     
     <section id="info_compte">
@@ -183,9 +181,8 @@ if ($membre !== false) {
             <a id="btn_modifier" href="modif_compte.php?id=<?= $id ?>">Modifier</a>
         </section>
     </main>
+    <?php $page->put_footer() ?>
 
-    <footer>
-        <p>&copy; <?= date('Y') ?> MERMTREM Solutions. Tous droits réservés.</p>
-    </footer>
+   
 </body>
 </html>
