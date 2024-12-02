@@ -16,6 +16,7 @@ async function initializeOffers() {
         ...offer,
         tags: Array.isArray(offer.tags) ? offer.tags.flatMap(tag => Array.isArray(tag) ? tag : [tag]) : []
     }));
+    console.log('Initialized offers:', offers);
     filterOffers();
 }
 initializeOffers();
