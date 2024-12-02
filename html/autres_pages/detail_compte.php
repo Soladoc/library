@@ -82,7 +82,7 @@ if ($membre !== false) {
                 if (DB\exists_pro_prive($id)) {
                     ?>
                     <div id="siren">
-                    <p>siren : </p>
+                    <p>Siren : </p>
                 <?php
                 echo $siren
                 ?> </div><?php
@@ -94,10 +94,10 @@ if ($membre !== false) {
 
             <?php } ?>
 
-            <div id="nom">
-                <p>Nom : </p>
-                <?= $nom ?>
-            </div>
+            <label for="nom">Nom :*</label>
+                <p>
+                    <input form="f" id="nom" name="nom" type="text" value="<?= htmlspecialchars($nom) ?>" required>
+                </p>
 
             <div id="prenom">
                 <p>Prenom : </p>
