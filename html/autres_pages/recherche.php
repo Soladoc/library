@@ -33,10 +33,9 @@ if ($valider && !empty($mot_cle)) {
                     <button class="btn-search">Rechercher</button>
                 </a>
                 <form action="recherche.php" name="bare_de_recherche" method="get" class="search-bar">
-
-                <input type="text" name="mot_cle" value="<?php echo $mot_cle ?>" placeholder=">Mots-clés">
-                <input type="submit" name="valider" value="Recherche">
-            </form>
+                    <input type="text" name="mot_cle" value="<?php echo $mot_cle ?>" placeholder=">Mots-clés">
+                    <input type="submit" name="valider" value="Recherche">
+                </form>
             </div>
         </section>
 
@@ -56,8 +55,10 @@ if ($valider && !empty($mot_cle)) {
             </div>
             <input type="hidden" id="selected-category" name="category" value="">
             <div id="subcategories" class="hidden">
-                <h3>Sous-catégories</h3>
-                <div class="subcategory-list" id="subcategory-list"></div>
+                <h3>Tags</h3>
+                <div class="subcategory-list" id="subcategory-list">
+
+                </div>
             </div>
         </section>
         <section class="sorting-section">

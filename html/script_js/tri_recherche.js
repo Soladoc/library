@@ -40,13 +40,13 @@ function showSubcategories() {
 
             const checkbox = document.createElement('input');
             checkbox.type = 'checkbox';
-            checkbox.id = subcategory;
+            checkbox.id = subcategory.toLowerCase().replace(/\s+/g, '-');
             checkbox.name = 'subcategory';
             checkbox.value = subcategory;
             checkbox.addEventListener('change', filterOffers);
 
             const label = document.createElement('label');
-            label.htmlFor = subcategory;
+            label.htmlFor = checkbox.id;
             label.innerText = subcategory;
 
             wrapper.appendChild(checkbox);
@@ -96,7 +96,7 @@ function sortOffers(criteria, ascending = true) {
 function filterOffers() {
     const mainCategory = document.getElementById('main-category').value;
     const subcategoryCheckboxes = document.querySelectorAll('input[name="subcategory"]:checked');
-    const selectedSubcategories = Array.from(subcategoryCheckboxes).map(cb => cb.id);
+    const selectedSubcategories = Array.from(subcategoryCheckboxes).map(cb => cb.value.toLowerCase());
     const filteredOffers = offers.filter(offer => {
         if (mainCategory && offer.categorie.toLowerCase() !== mainCategory.toLowerCase()) {
             return false;
