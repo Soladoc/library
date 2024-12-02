@@ -121,9 +121,9 @@ $pro = DB\query_compte_professionnel($args['id']);
 
 
 if ($membre !== false) {
-    echo '<pre>';
-    print_r($membre);
-    echo '</pre>';
+    // echo '<pre>';
+    // print_r($membre);
+    // echo '</pre>';
     $pseudo = $membre['pseudo'];
     $email = $membre['email'];
     $mdp_hash =$membre['mdp_hash'];
@@ -144,6 +144,9 @@ if ($membre !== false) {
     $telephone = $pro['telephone'];
     $id_adresse = $pro['id_adresse'];
     $adresse = DB\query_adresse($id_adresse);
+    if (DB\exists_pro_prive($id)) {
+        $siren = DB\query_get_siren($id);
+    }
 } else {
     html_error("le compte d'ID {$args['id']} n'existe pas");
 }
@@ -183,8 +186,7 @@ if ($membre !== false) {
                     <div>
                     <div id="siren">
                     <label>siren : </label>
-                <?php
-                echo $siren
+                <?= $siren
                 ?> </div>
                     <input type="text" id="new_siren" name="new_siren" placeholder="231 654 988" oninput="formatInput(this)" maxlength="12">
             </div><?php
