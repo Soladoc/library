@@ -22,20 +22,16 @@ if ($valider && !empty($mot_cle)) {
 <html lang="fr">
 <?php $page->put_head() ?>
 <body>
+<script src="script_js\tri_recherche.js"></script>
     <?php $page->put_header() ?>
     <main>
         <section class="search-section">
             <h1>Recherche</h1>
             <br>
             <div class="search-bar">
-                <input id="barre-recherche" type="text" placeholder="Rechercher des activités, restaurants, spectacles...">
-                <a href="">
-                    <button class="btn-search">Rechercher</button>
-                </a>
-                <form action="recherche.php" name="bare_de_recherche" method="get" class="search-bar">
-                    <input type="text" name="mot_cle" value="<?php echo $mot_cle ?>" placeholder=">Mots-clés">
-                    <input type="submit" name="valider" value="Recherche">
-                </form>
+                <!-- <input id="barre-recherche" type="text" placeholder="Rechercher des activités, restaurants, spectacles..."> -->
+                <input type="text" id="keyword-search" placeholder="Rechercher par mot-clé" oninput="filterOffers()">
+                
             </div>
         </section>
 
@@ -43,7 +39,7 @@ if ($valider && !empty($mot_cle)) {
             <div class="categories">
                 <h3>Catégories</h3>
                 <div class="category-dropdown">
-                    <select id="main-category" onchange="showSubcategories">
+                    <select id="main-category" onchange="showSubcategories()">
                         <option value="">-- Sélectionnez une catégorie --</option>
                         <option value="restaurant">Restauration</option>
                         <option value="activité">Activité</option>

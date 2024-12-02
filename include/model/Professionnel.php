@@ -39,29 +39,18 @@ class Professionnel extends Compte
      */
     static function from_db(int $id_professionnel): Professionnel|false
     {
-        $stmt = notfalse(DB\connect()->prepare('select email,mdp_hash,nom,prenom,telephone,denomination,a.* from '
-            . self::TABLE . ' inner join ' . Adresse::TABLE . ' a on a.id = id_adresse where id = ?'));
+        $stmt = notfalse(DB\connect()->prepare('select * from ' . self::TABLE . ' where id = ?'));
         DB\bind_values($stmt, [1 => [$id_professionnel, PDO::PARAM_INT]]);
         notfalse($stmt->execute());
         $row = $stmt->fetch();
-        if ($row === false) return false;
-        return self::from_db_row($row);
-    }
-
-    /**
-     * @param (string|int|bool)[] $row
-     * @return Professionnel
-     */
-    static function from_db_row(array $row, string $id_column = 'id'): Professionnel
-    {
-        return new Professionnel(
-            $row[$id_column],
+        return $row === false ? false : new Professionnel(
+            $row['id'],
             $row['email'],
             $row['mdp_hash'],
             $row['nom'],
             $row['prenom'],
             $row['telephone'],
-            Adresse::from_db_row($row, 'id_adresse'),
+            Adresse::from_db($row['id_adresse']),
             $row['denomination'],
         );
     }
