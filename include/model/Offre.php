@@ -318,26 +318,29 @@ abstract class Offre implements Signalable
 
     static function from_db(int $id_offre): Offre|false
     {
-        $stmt = notfalse(DB\connect()->prepare('select * from ' . static::TABLE . ' where id = ?'));
-        bind_values($stmt, [1 => [$id_offre, PDO::PARAM_INT]]);
-        notfalse($stmt->execute());
-        $row = $stmt->fetch();
-        if ($row === false) return false;
-
         if (static::TABLE !== self::TABLE) {
+            $stmt = notfalse(DB\connect()->prepare('select * from ' . static::TABLE . ' where id = ?'));
+            bind_values($stmt, [1 => [$id_offre, PDO::PARAM_INT]]);
+            notfalse($stmt->execute());
+            $row = $stmt->fetch();
+            if ($row === false) return false;
             return static::from_db_row($row);
         }
+
         require_once 'model/Activite.php';
         require_once 'model/ParcAttractions.php';
         require_once 'model/Restaurant.php';
         require_once 'model/Spectacle.php';
         require_once 'model/Visite.php';
-        return match ($row['categorie']) {
-            Activite::CATEGORIE => Activite::from_db_row($row),
-            ParcAttractions::CATEGORIE => ParcAttractions::from_db_row($row),
-            Restaurant::CATEGORIE => Restaurant::from_db_row($row),
-            Spectacle::CATEGORIE => Spectacle::from_db_row($row),
-            Visite::CATEGORIE => Visite::from_db_row($row),
+        $stmt = notfalse(DB\connect()->prepare('select offre_categorie(?)'));
+        bind_values($stmt, [1 => [$id_offre, PDO::PARAM_INT]]);
+        notfalse($stmt->execute());
+        return match (notfalse($stmt->fetchColumn())) {
+            Activite::CATEGORIE => Activite::from_db($row),
+            ParcAttractions::CATEGORIE => ParcAttractions::from_db($row),
+            Restaurant::CATEGORIE => Restaurant::from_db($row),
+            Spectacle::CATEGORIE => Spectacle::from_db($row),
+            Visite::CATEGORIE => Visite::from_db($row),
         };
     }
 
