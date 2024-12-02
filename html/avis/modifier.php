@@ -16,6 +16,16 @@ $stmt = DB\connect()->prepare('SELECT * FROM pact._avis WHERE id = ?');
 $stmt->execute([$id_avis]);
 $avis = $stmt->fetch(PDO::FETCH_ASSOC);
 
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['action'] === 'supprimer') {
+    $stmt = DB\query_supprime_avis($id_avis);
+    if ($stmt==true) {
+        redirect_to(location_detail_offre($id_offre) . '?message=avis_supprime');
+        exit;
+    } else {
+        $error_message = 'Une erreur est survenue lors de la suppression de l\'avis.';
+    }
+}
+
 // Traitement du formulaire si la méthode POST est utilisée
 if (isset($_POST['date'])) {
     $commentaire = htmlspecialchars(trim($_POST['commentaire']));
