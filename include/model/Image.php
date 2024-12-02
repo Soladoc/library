@@ -51,10 +51,10 @@ final class Image
      * @param (string|int|bool)[] $row
      * @return Image
      */
-    static function from_db_row(array $row): Image
+    static function from_db_row(array $row, string $id_column = 'id'): Image
     {
         return new Image(
-            $row['id'],
+            $row[$id_column],
             $row['taille'],
             $row['mime_subtype'],
             $row['legende'],
