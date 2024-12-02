@@ -144,6 +144,9 @@ if ($membre !== false) {
     $telephone = $pro['telephone'];
     $id_adresse = $pro['id_adresse'];
     $adresse = DB\query_adresse($id_adresse);
+    if (DB\exists_pro_prive($id)) {
+        $siren = $pro['siren'];
+    }
 } else {
     html_error("le compte d'ID {$args['id']} n'existe pas");
 }
