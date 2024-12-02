@@ -48,102 +48,67 @@ if ($membre !== false) {
 } else {
     html_error("le compte d'ID {$args['id']} n'existe pas");
 }
-// Afficher le détail du compte du membre
-
-if ($_POST) {
-    $new_mdp = getarg($_POST, 'new_mdp');
-    $confirmation_mdp = getarg($_POST, 'confirmation_mdp');
-    $old_mdp = getarg($_POST, 'old_mdp');
-
-    if ($new_mdp && password_verify($old_mdp, $mdp_hash)) {
-        if ($confirmation_mdp === $new_mdp) {
-            update_mdp($id, $new_mdp);  // todo: cette fonction n'exite pas
-        } else {
-            redirect_to(location_connexion('Mot de passe de confirmation different.'));
-        }
-    } else {
-        redirect_to(location_connexion(error: 'Mot de passe incorrect.'));
-    }
-}
 
 ?>
-
 <!DOCTYPE html>
 <html lang="fr">
-
 <?php $page->put_head() ?>
 
-<body>
-    <?php $page->put_header() ?>
+<body id="detail_compte">
+<?php $page->put_header() ?>
 
-    <main>
+    <main  >
+        <h1>Informations de votre compte</h1>
         <section id="info_compte">
-            <?php
-            if ($membre !== false) {
-                ?>
-            <div id="pseudo">
-                <p>Pseudo : </p>
-                <?= $pseudo ?>
-            </div>
-            <?php } else if ($pro !== false) { ?>
+            <!-- PHP dynamique commence ici -->
+            <?php if ($membre !== false): ?>
+                <div id="pseudo">
+                    <p>Pseudo :</p>
+                    <span><?= $pseudo ?></span>
+                </div>
+            <?php elseif ($pro !== false): ?>
                 <div id="denomination">
-                <p>Denomination : </p>
-                <?php
-                echo $denomination
-                ?> </div>
-
-                
-
-                <?php
-
-                if (DB\exists_pro_prive($id)) {
-                    ?>
+                    <p>Dénomination :</p>
+                    <span><?= $denomination ?></span>
+                </div>
+                <?php if (DB\exists_pro_prive($id)): ?>
                     <div id="siren">
-                    <p>siren : </p>
-                <?php
-                echo $siren
-                ?> </div><?php
-                }
-                ?>
-                
-           
-
-
-            <?php } ?>
+                        <p>Siren :</p>
+                        <span><?= $siren ?></span>
+                    </div>
+                <?php endif; ?>
+            <?php endif; ?>
 
             <div id="nom">
-                <p>Nom : </p>
-                <?= $nom ?>
+                <p>Nom :</p>
+                <span><?= $nom ?></span>
             </div>
 
             <div id="prenom">
-                <p>Prenom : </p>
-                <?= $prenom ?>
+                <p>Prénom :</p>
+                <span><?= $prenom ?></span>
             </div>
 
             <div id="email">
-                <p>Email : </p>
-                <?= $email ?>
+                <p>Email :</p>
+                <span><?= $email ?></span>
             </div>
 
             <div id="telephone">
-                <p>Numero de telephone : </p>
-                <?= $telephone ?>
+                <p>Numéro de téléphone :</p>
+                <span><?= $telephone ?></span>
             </div>
 
             <div id="adresse">
-                <p>adresse : </p>
-                <?= format_adresse($adresse) ?> </div>
-        <a href="modif_compte.php?id=<?= $id ?>">modifier</a>
-            <?php ?>
-            
-           
-        </section>
+                <p>Adresse :</p>
+                <span><?= format_adresse($adresse) ?></span>
+            </div>
 
+            <a href="modif_compte.php?id=<?= $id ?>">Modifier</a>
+        </section>
     </main>
 
     <?php $page->put_footer() ?>
 
 </body>
-
 </html>

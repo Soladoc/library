@@ -804,3 +804,67 @@ a:not(:hover, :focus, :focus-within) {
     width: 200px;
     height: auto;
 }
+
+#changer_mdp {
+    padding: 20 px;
+    width: 300px;
+}
+
+body#detail_compte {
+    display: block;
+  
+}
+body#detail_compte main{
+    max-width: 800px;
+    margin: 2rem auto;
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    padding: 2rem;
+
+}
+section#info_compte {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+section#info_compte div {
+    display: flex;
+    justify-content: space-between;
+    border-bottom: 1px solid #ddd;
+    padding-bottom: 0.5rem;
+}
+
+section#info_compte div p {
+    margin: 0;
+    font-weight: bold;
+    color: #555;
+}
+
+section#info_compte div span {
+    font-weight: normal;
+    color: #333;
+}
+
+#info_compte a {
+    display: inline-block;
+    text-decoration: none;
+    background-color: #3498db;
+    color: white;
+    padding: 0.8rem 1.5rem;
+    border-radius: 5px;
+    font-size: 1rem;
+    margin-top: 1rem;
+    text-align: center;
+}
+
+#info_compte a:hover {
+    background-color: #2980b9;
+}
+
+#changer_mdp {
+    display: flex;
+    flex-direction: column;
+
+}

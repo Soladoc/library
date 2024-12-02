@@ -178,6 +178,7 @@ $avis = DB\query_avis()
                             <?php if (($id_membre_co = Auth\id_membre_connecte()) !== null && $avis_temp['id_membre_auteur'] === $id_membre_co) { ?>
                             <form method="post" action="/avis/modifier.php?avis_id=<?= $avis_temp['id'] ?>&offre=<?= $args['id'] ?>">
                                 <button type="submit" class="btn-modif">Modifier</button>
+                                <button type="submit" name="action" value="supprimer">Supprimer</button>
                             </form>
                             <?php } ?> 
                         </div>

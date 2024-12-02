@@ -15,6 +15,12 @@ if ($valider && !empty($mot_cle)) {
     $mot_cle= getarg( $_GET,"mot_cle");
 }
 
+if($_POST){
+    $mot_cle= getarg($_POST,'mot_cle',required: false);
+    if(!$mot_cle){
+        $mot_cle = null;
+    }
+}
 
 ?>
 
@@ -22,7 +28,6 @@ if ($valider && !empty($mot_cle)) {
 <html lang="fr">
 <?php $page->put_head() ?>
 <body>
-<script src="script_js\tri_recherche.js"></script>
     <?php $page->put_header() ?>
     <main>
         <section class="search-section">
@@ -30,7 +35,7 @@ if ($valider && !empty($mot_cle)) {
             <br>
             <div class="search-bar">
                 <!-- <input id="barre-recherche" type="text" placeholder="Rechercher des activités, restaurants, spectacles..."> -->
-                <input type="text" id="keyword-search" placeholder="Rechercher par mot-clé" oninput="filterOffers()">
+                <input type="text" id="keyword-search" value="<?= $mot_cle ?>" placeholder="Rechercher par mot-clé" oninput="filterOffers()">
                 
             </div>
         </section>
@@ -61,12 +66,12 @@ if ($valider && !empty($mot_cle)) {
             <br>
             <h3>Options de tri</h3>
             <div class="sorting-buttons">
-                <button id="sort-price-up" class="btn-sort" data-criteria="prix" data-order="asc">Prix croissant</button>
-                <button id="sort-price-down" class="btn-sort" data-criteria="prix" data-order="desc">Prix décroissant</button>
-                <button id="sort-rating-down" class="btn-sort" data-criteria="note" data-order="desc">Note croissante</button>
-                <button id="sort-rating-up" class="btn-sort" data-criteria="note" data-order="asc">Note décroissante</button>
-                <button id="sort-date-up" class="btn-sort" data-criteria="date" data-order="asc">Plus récent</button>
-                <button id="sort-date-down" class="btn-sort" data-criteria="date" data-order="desc">Moins récent</button>
+                <button id="sort-price-down" class="btn-sort" data-criteria="prix">Prix croissant</button>
+                <button id="sort-price-up" class="btn-sort" data-criteria="prix">Prix décroissant</button>
+                <button id="sort-rating-down" class="btn-sort" data-criteria="note">Note croissante</button>
+                <button id="sort-rating-up" class="btn-sort" data-criteria="note">Note décroissante</button>
+                <button id="sort-date-up" class="btn-sort" data-criteria="date">Plus récent</button>
+                <button id="sort-date-down" class="btn-sort" data-criteria="date">Moins récent</button>
             </div>
         </section>
         <section class="highlight-offers">

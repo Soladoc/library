@@ -4,6 +4,7 @@ require_once 'auth.php';
 require_once 'const.php';
 require_once 'redirect.php';
 require_once 'component/Page.php';
+require_once 'queries/offre.php';
 
 $page = new Page('Modifier un avis');
 
@@ -15,6 +16,16 @@ $id_offre = intval($_GET['offre']);
 $stmt = DB\connect()->prepare('SELECT * FROM pact._avis WHERE id = ?');
 $stmt->execute([$id_avis]);
 $avis = $stmt->fetch(PDO::FETCH_ASSOC);
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
+    $stmt = DB\query_supprime_avis($id_avis);
+    if ($stmt==true) {
+        redirect_to(location_detail_offre($id_offre));
+        exit;
+    } else {
+        $error_message = 'Une erreur est survenue lors de la suppression de l\'avis.';
+    }
+}
 
 // Traitement du formulaire si la méthode POST est utilisée
 if (isset($_POST['date'])) {
