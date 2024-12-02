@@ -128,38 +128,46 @@ function where_clause(BoolOperator $operator, array $clauses): string
 }
 
 /**
- * Prépare un *statement* INSERT INTO pour 1 ligne retournant la colonne *id*.
+ * Prépare un *statement* INSERT INTO pour 1 ligne retournant des colonnes.
  * @param string $table La table dans laquelle insérer
- * @param array $values Les noms de colonne => leur valeur.
+ * @param array $args Les noms de colonne => leur valeur.
+ * @param string[] $returning Les colonnes a mettre dans la clause RETURNING.
  * @return PDOStatement Une *statement* prêt à l'exécution, retournant un table 1x1, la valeur de la colonne ID.
  */
-function insert_into_returning_id(string $table, array $values): PDOStatement
+function insert_into(string $table, array $args, array $returning = []): PDOStatement
 {
-    if (!$values) {
+    if (!$args) {
         return notfalse(connect()->prepare("insert into $table default values"));
     }
-    $column_names = implode(',', array_keys($values));
-    $arg_names = implode(',', array_map(fn($col) => ":$col", array_keys($values)));
-    $stmt = notfalse(connect()->prepare("insert into $table ($column_names) values ($arg_names) returning id"));
-    bind_values($stmt, $values);
+    $column_names = implode(',', array_keys($args));
+    $arg_names = implode(',', array_map(fn($col) => ":$col", array_keys($args)));
+    $returning = $returning ? 'returning ' . implode(',', array_map(quote_identifier(...), $returning)) : '';
+    $stmt = notfalse(connect()->prepare("insert into $table ($column_names) values ($arg_names) $returning"));
+    bind_values($stmt, $args);
     return $stmt;
 }
 
 /**
  * Prépare un *statement* UPDATE.
  * @param string $table La table dans la quelle mettre à jour.
- * @param array $values Les colonnes à modifier => leurs valeurs pour la clause SET du UPDATE.
- * @param array $where_key_values Les colonnes clés => leurs valeurs pour la clause WHERE du UPDATE.
+ * @param array $args Les colonnes à modifier => leurs valeurs pour la clause SET du UPDATE.
+ * @param array $key_args Les colonnes clés => leurs valeurs pour la clause WHERE du UPDATE.
  * @return PDOStatement Un *statement* prêt à l'exécution, ne retournant rien.
  */
-function update(string $table, array $values, array $where_key_values): PDOStatement
+function update(string $table, array $args, array $key_args): PDOStatement
 {
-    if (!$values) {
+    if (!$args) {
         return notfalse(connect()->prepare('select null'));  // todo: does a empty string work as a noop? test it when we get a working thing.
     }
-    $sets = implode(',', array_map(fn($col) => "$col = :$col", array_keys($values)));
-    $stmt = notfalse(connect()->prepare("update $table set $sets" . where_clause(BoolOperator::AND, $where_key_values)));
-    bind_values($stmt, $values);
+    $sets = implode(',', array_map(fn($col) => "$col = :$col", array_keys($args)));
+    $stmt = notfalse(connect()->prepare("update $table set $sets" . where_clause(BoolOperator::AND, $key_args)));
+    bind_values($stmt, $args);
+    return $stmt;
+}
+
+function delete_from(string $table, array $key_args): PDOStatement {
+    $stmt = notfalse(connect()->prepare("delete from $table " . where_clause(BoolOperator::AND, $key_args)));
+    bind_values($stmt, $key_args);
     return $stmt;
 }
 
@@ -167,11 +175,11 @@ function update(string $table, array $values, array $where_key_values): PDOState
  * Binds types values to a statement.
  *
  * @param PDOStatement $stmt The statement on which to bind values.
- * @param array<int|string,array{mixed, int}> $params An associative array mapping from the parameter name to a tuple of the parameter value and the PDO type (e.g. a PDO::PARAM_* constant value)
+ * @param array<int|string,array{mixed, int}> $args An associative array mapping from the parameter name to a tuple of the parameter value and the PDO type (e.g. a PDO::PARAM_* constant value)
  */
-function bind_values(PDOStatement $stmt, array $params)
+function bind_values(PDOStatement $stmt, array $args)
 {
-    foreach ($params as $name => [$value, $type]) {
+    foreach ($args as $name => [$value, $type]) {
         notfalse($stmt->bindValue($name, $value, $type));
     }
 }

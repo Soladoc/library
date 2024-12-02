@@ -79,9 +79,9 @@ DB\transaction(function () {
         ),
     };
 
-    // Gallerie
-    foreach (soa_to_aos($args['file_gallerie']) as $img) {
-        DB\offre_insert_gallerie_image($id_offre, move_uploaded_image($img));
+    // Galerie
+    foreach (soa_to_aos($args['file_galerie']) as $img) {
+        DB\offre_insert_galerie_image($id_offre, move_uploaded_image($img));
     }
 
     // Tags

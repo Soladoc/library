@@ -322,12 +322,12 @@ create table _langue_visite (
     constraint langue_visite_pk primary key (code_langue, id_visite)
 );
 
-create table _gallerie (
+create table _galerie (
     id_offre int
-        constraint gallerie_fk_offre references _offre,
+        constraint galerie_fk_offre references _offre,
     id_image int
-        constraint gallerie_fk_image references _image,
-    constraint gallerie_pk primary key (id_offre, id_image)
+        constraint galerie_fk_image references _image,
+    constraint galerie_pk primary key (id_offre, id_image)
 );
 
 create table _changement_etat (

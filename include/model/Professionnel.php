@@ -1,14 +1,20 @@
 <?php
 require_once 'model/Compte.php';
-// todo
 
-/* abstract */
+
+/**
+ * @inheritDoc
+ * @property string $denomination
+ */
+// todo make this abstract 
 class Professionnel extends Compte
 {
-    const TABLE = 'professionnel';
+    protected const FIELDS = [
+        'denomination' => [null, 'denomination', PDO::PARAM_STR],
+    ];
 
-    private ?int $id;
-    readonly string $denomination;
+    protected ?int $id;
+    protected string $denomination;
 
     function __construct(
         ?int $id,
@@ -54,4 +60,6 @@ class Professionnel extends Compte
             $row['denomination'],
         );
     }
+
+    const TABLE = 'professionnel';
 }

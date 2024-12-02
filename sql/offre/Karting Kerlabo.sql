@@ -74,7 +74,7 @@ with
             ('etudiant', (table id_offre), 15)
     )
 insert into
-    _gallerie (id_offre, id_image)
+    _galerie (id_offre, id_image)
 values
     ((table id_offre), 24),
     ((table id_offre), 25),

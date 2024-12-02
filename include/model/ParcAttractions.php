@@ -1,13 +1,17 @@
 <?php
 require_once 'model/Offre.php';
 
+/**
+ * @inheritDoc
+ * @property Image $image_plan
+ */
 final class ParcAttractions extends Offre
 {
-    const CATEGORIE = "parc d'attractions";
+    protected const FIELDS = parent::FIELDS + [
+        'image_plan' => ['id', 'id_image_plan', PDO::PARAM_INT],
+    ];
 
-    const TABLE = 'parc_attractions';
-
-    readonly Image $image_plan;
+    protected Image $image_plan;
 
     /**
      * Construit une nouvelle activité.
@@ -21,7 +25,7 @@ final class ParcAttractions extends Offre
      * @param string $description_detaillee
      * @param ?string $url_site_web
      * @param MultiRange<FiniteTimestamp> $periodes_ouverture
-     * @param FiniteTimestamp $modifiee_le
+     * @param ?FiniteTimestamp $modifiee_le
      * @param bool $en_ligne
      * @param ?float $note_moyenne
      * @param ?float $prix_min
@@ -42,7 +46,7 @@ final class ParcAttractions extends Offre
         string $description_detaillee,
         ?string $url_site_web,
         MultiRange $periodes_ouverture,
-        FiniteTimestamp $modifiee_le,
+        ?FiniteTimestamp $modifiee_le,
         bool $en_ligne,
         ?float $note_moyenne,
         ?float $prix_min,
@@ -99,4 +103,7 @@ final class ParcAttractions extends Offre
             Image::from_db($row['id_image_plan']),
         );
     }
+
+    const CATEGORIE = "parc d'attractions";
+    const TABLE     = 'parc_attractions';
 }

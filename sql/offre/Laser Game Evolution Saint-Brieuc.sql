@@ -60,7 +60,7 @@ with
             ((table id_offre), id_membre ('ltorvalds'), 3, 'amis', '2024-05-02', 'Ambiance sympa mais prix élevés.')
     )
 insert into
-    _gallerie (id_offre, id_image)
+    _galerie (id_offre, id_image)
 values
     ((table id_offre), 30),
     ((table id_offre), 31),

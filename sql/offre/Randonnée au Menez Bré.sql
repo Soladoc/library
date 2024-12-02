@@ -66,7 +66,7 @@ Rejoignez-nous pour une aventure inoubliable au cœur de la Bretagne et découvr
     ),
     s2 as (
         insert into
-            _gallerie (id_offre, id_image)
+            _galerie (id_offre, id_image)
         values
             ((table id_offre), 39),
             ((table id_offre), 40)

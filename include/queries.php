@@ -41,12 +41,12 @@ function query_image(int $id_image): array
 }
 
 /**
- * Récupère les images de la gallerie d'une offre.
+ * Récupère les images de la galerie d'une offre.
  * @return array<int> Un tableau d'ID d'images. Utiliser `query_image` pour retrouver les infos sur l'image.
  */
-function query_gallerie(int $id_offre): array
+function query_galerie(int $id_offre): array
 {
-    $stmt = notfalse(connect()->prepare('select id_image from _gallerie where id_offre = ?'));
+    $stmt = notfalse(connect()->prepare('select id_image from _galerie where id_offre = ?'));
     bind_values($stmt, [1 => [$id_offre, PDO::PARAM_INT]]);
     notfalse($stmt->execute());
     return array_map(fn($row) => $row['id_image'], $stmt->fetchAll());
@@ -231,7 +231,7 @@ function insert_uploaded_image(array $img, ?string $legende = null): array
         'mime_subtype' => [$mime_subtype, PDO::PARAM_STR],
         'legende' => [$legende, PDO::PARAM_STR],
     ]);
-    $stmt = insert_into_returning_id('_image', $args);
+    $stmt = insert_into('_image', $args, ['id']);
     notfalse($stmt->execute());
     $id_image = notfalse($stmt->fetchColumn());
 

@@ -2,16 +2,18 @@
 
 final class ProfessionnelPublic extends Professionnel
 {
-    function __construct(string $email,
+    function __construct(
+        string $email,
+        ?int $id,
         string $mdp_hash,
         string $nom,
         string $prenom,
         string $telephone,
         Adresse $adresse,
         string $denomination,
-        ?int $id)
-    {
+    ) {
         parent::__construct(
+            $id,
             $email,
             $mdp_hash,
             $nom,
@@ -19,7 +21,6 @@ final class ProfessionnelPublic extends Professionnel
             $telephone,
             $adresse,
             $denomination,
-            $id,
         );
     }
 }

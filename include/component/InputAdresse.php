@@ -4,6 +4,9 @@ require_once 'util.php';
 require_once 'component/Input.php';
 require_once 'model/Adresse.php';
 
+/**
+ * @extends Input<Adresse>
+ */
 final class InputAdresse extends Input
 {
     function __construct(string $id = '', string $name = '', string $form_id = '')
@@ -15,7 +18,7 @@ final class InputAdresse extends Input
      * Récupère l'adresse saisie.
      * @param array $get_or_post `$_GET` ou `$_POST` (selon la méthode du formulaire)
      * @param ?int $current_id_adresse L'ID de l'adresse à modifier ou `null` pour une création.
-     * @param bool $required Si l'adresse est requise. Quand l'adresse est manquante, si `false` a été passé, la fonciton retourne `null`. Sinon, déclenche une erreur.
+     * @param bool $required Si l'adresse est requise. Quand l'adresse est manquante, si `false` a été passé, la fonction retourne `null`. Sinon, déclenche une erreur.
      */
     function get(array $get_or_post, ?int $current_id_adresse = null, bool $required = true): ?Adresse
     {
@@ -38,7 +41,7 @@ final class InputAdresse extends Input
      * Affiche l'HTML du composant.
      * @param ?Adresse $current L'adresse à modifier ou `null` pour une création.
      */
-    function put(?Adresse $current = null): void
+    function put(mixed $current = null): void
     {
         $form_attr = $this->form_id ? "form=\"$this->form_id\"" : '';
         self::put_datalist();

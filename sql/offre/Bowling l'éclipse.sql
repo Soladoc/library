@@ -89,7 +89,7 @@ with
             )
     )
 insert into
-    _gallerie (id_offre, id_image)
+    _galerie (id_offre, id_image)
 values
     ((table id_offre), 16),
     ((table id_offre), 18),

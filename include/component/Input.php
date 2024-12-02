@@ -2,6 +2,7 @@
 
 /**
  * Un composant d'entrée d'un modèle.
+ * @template T Le modèle entré
  */
 abstract class Input
 {
@@ -20,5 +21,30 @@ abstract class Input
         $this->form_id = $form_id;
         $this->id = $id;
         $this->name = $name;
+    }
+
+    /**
+     * Affiche l'HTML du composant
+     * @param ?T $current La valeur à modifier, `null` pour une création.
+     * @return void
+     */
+    abstract function put(mixed $current = null): void;
+
+    /**
+     * Gets a field "name" attribute.
+     * @param string $name The inner name.
+     * @return string
+     */
+    protected function name(string $name): string {
+        return $this->name ? "$this->name[$name]" : $name;
+    }
+
+    /**
+     * Gets a field "id" attribute.
+     * @param string $id The inner id.
+     * @return string
+     */
+    protected function id(string $id): string {
+        return $this->id ? "{$this->id}_$id" : $id;
     }
 }

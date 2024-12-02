@@ -2,8 +2,11 @@
 
 final class Professionnelprive extends Professionnel
 {
-    readonly string $siren;
-    function __construct(string $email,
+    protected string $siren;
+
+    function __construct(
+        string $email,
+        ?int $id,
         string $mdp_hash,
         string $nom,
         string $prenom,
@@ -11,9 +14,9 @@ final class Professionnelprive extends Professionnel
         Adresse $adresse,
         string $denomination,
         string $siren,
-        ?int $id)
-    {
+    ) {
         parent::__construct(
+            $id,
             $email,
             $mdp_hash,
             $nom,
@@ -21,7 +24,6 @@ final class Professionnelprive extends Professionnel
             $telephone,
             $adresse,
             $denomination,
-            $id,
         );
         $this->siren = $siren;
     }

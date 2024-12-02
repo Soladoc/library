@@ -5,73 +5,45 @@ require_once 'model/Commune.php';
 
 /**
  * @property-read ?int $id L'ID. `null` si cette adresse n'existe pas dans la BDD.
+ * @property Commune $commune
+ * @property ?int $numero_voie
+ * @property ?string $complement_numero
+ * @property ?string $nom_voie
+ * @property ?string $localite
+ * @property ?string $precision_int
+ * @property ?string $precision_ext
+ * @property ?float $latitude
+ * @property ?float $longitude
+ * @property ?int $id
  */
 final class Adresse
 {
-    function __get(string $name)
-    {
-        return match ($name) {
-            'id' => $this->id,
-        };
-    }
+    protected const FIELDS = [
+        'commune'           => ['id', 'id_commune', PDO::PARAM_INT],
+        'numero_voie'       => [null, 'numero_voie',       PDO::PARAM_STR],
+        'complement_numero' => [null, 'complement_numero', PDO::PARAM_STR],
+        'nom_voie'          => [null, 'nom_voie',          PDO::PARAM_STR],
+        'localite'          => [null, 'localite',          PDO::PARAM_STR],
+        'precision_int'     => [null, 'precision_int',     PDO::PARAM_STR],
+        'precision_ext'     => [null, 'precision_ext',     PDO::PARAM_STR],
+        'latitude'          => [null, 'latitude',          PDO::PARAM_STR],
+        'longitude'         => [null, 'longitude',         PDO::PARAM_STR],
+    ];
 
-    const TABLE = '_adresse';
+    protected const KEY_FIELDS = [
+        'id' => ['id', PDO::PARAM_INT],
+    ];
 
-    /**
-     * La commune.
-     * @var Commune
-     */
-    public Commune $commune;
-
-    /**
-     * Le numéro de voie.
-     * @var ?int
-     */
-    public ?int $numero_voie;
-
-    /**
-     * Le complément du numéro de voie.
-     * @var ?string
-     */
-    public ?string $complement_numero;
-
-    /**
-     * Le nom de voie.
-     * @var ?string
-     */
-    public ?string $nom_voie;
-
-    /**
-     * La localité (hameau/lieu-dit).
-     * @var ?string
-     */
-    public ?string $localite;
-
-    /**
-     * La précision interne.
-     * @var ?string
-     */
-    public ?string $precision_int;
-
-    /**
-     * La précision externe.
-     * @var ?string
-     */
-    public ?string $precision_ext;
-
-    /**
-     * La latitude.
-     * @var ?float
-     */
-    public ?float $latitude;
-
-    /**
-     * La longitude.
-     * @var ?float
-     */
-    public ?float $longitude;
-
-    private ?int $id;
+    protected Commune $commune;
+    protected ?int $numero_voie;
+    protected ?string $complement_numero;
+    protected ?string $nom_voie;
+    protected ?string $localite;
+    protected ?string $precision_int;
+    protected ?string $precision_ext;
+    protected ?float $latitude;
+    protected ?float $longitude;
+    protected ?int $id;
 
     function __construct(
         ?int $id,
@@ -85,16 +57,16 @@ final class Adresse
         ?float $latitude,
         ?float $longitude,
     ) {
-        $this->id = $id;
-        $this->commune = $commune;
-        $this->numero_voie = $numero_voie;
+        $this->id                = $id;
+        $this->commune           = $commune;
+        $this->numero_voie       = $numero_voie;
         $this->complement_numero = $complement_numero;
-        $this->nom_voie = $nom_voie;
-        $this->localite = $localite;
-        $this->precision_int = $precision_int;
-        $this->precision_ext = $precision_ext;
-        $this->latitude = $latitude;
-        $this->longitude = $longitude;
+        $this->nom_voie          = $nom_voie;
+        $this->localite          = $localite;
+        $this->precision_int     = $precision_int;
+        $this->precision_ext     = $precision_ext;
+        $this->latitude          = $latitude;
+        $this->longitude         = $longitude;
     }
 
     /**
@@ -137,51 +109,6 @@ final class Adresse
         );
     }
 
-    /**
-     * Pousse cette adresse vers la BDD, soit l'insérant, soit en la mettant à jour si elle y existe déjà.
-     */
-    function push_to_db(): void
-    {
-        $args = [
-            'code_commune' => [$this->commune->code, PDO::PARAM_INT],
-            'numero_departement' => [$this->commune->numero_departement, PDO::PARAM_INT],
-            'numero_voie' => [$this->numero_voie, PDO::PARAM_INT],
-            'complement_numero' => [$this->complement_numero, PDO::PARAM_INT],
-            'nom_voie' => [$this->nom_voie, PDO::PARAM_STR],
-            'localite' => [$this->localite, PDO::PARAM_STR],
-            'precision_int' => [$this->precision_int, PDO::PARAM_STR],
-            'precision_ext' => [$this->precision_ext, PDO::PARAM_STR],
-            'latitude' => [$this->latitude, DB\PDO_PARAM_DECIMAL],
-            'longitude' => [$this->longitude, DB\PDO_PARAM_DECIMAL],
-        ];
-        if ($this->id === null) {
-            $stmt = DB\insert_into_returning_id(self::TABLE, $args);
-            notfalse($stmt->execute());
-            $this->id = $stmt->fetchColumn();
-        } else {
-            $stmt = DB\update(self::TABLE, $args, [
-                'id' => [$this->id, PDO::PARAM_INT]
-            ]);
-            notfalse($stmt->execute());
-        }
-    }
-
-    /**
-     * Supprime cette adresse de la BDD.
-     * @throws LogicException Quand adresse n'existe pas dans la BDD.
-     * @return void
-     */
-    function delete_from_db(): void
-    {
-        if ($this->id === null) {
-            throw new LogicException("Cette adresse n'existe pas dans la BDD et ne peut donc pas être supprimée");
-        }
-        $stmt = notfalse(DB\connect()->prepare('delete from ' . self::TABLE . ' where id = ?'));
-        DB\bind_values($stmt, [1 => [$this->id, PDO::PARAM_INT]]);
-        notfalse($stmt->execute());
-        $this->id = null;
-    }
-
     function format(): string
     {
         return elvis($this->precision_ext, ', ')
@@ -193,4 +120,6 @@ final class Adresse
             . elvis($this->commune->nom, ', ')
             . $this->commune->code_postaux()[0];
     }
+
+    const TABLE = '_adresse';
 }

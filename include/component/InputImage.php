@@ -3,6 +3,9 @@ require_once 'util.php';
 require_once 'component/Input.php';
 require_once 'model/Image.php';
 
+/**
+ * @extends Input<Image>
+ */
 final class InputImage extends Input
 {
     readonly string $fieldset_legend;
@@ -17,7 +20,7 @@ final class InputImage extends Input
      * Récupère l'image saisie.
      * @param array $get_or_post `$_GET` ou `$_POST` (selon la méthode du formulaire)
      * @param ?int $current_id_image L'ID de l'image à modifier ou `null` pour une création.
-     * @param bool $required Si l'image est requise. Quand l'image est manquante, si `false` a été passé, la fonciton retourne `null`. Sinon, déclenche une erreur.
+     * @param bool $required Si l'image est requise. Quand l'image est manquante, si `false` a été passé, la fonction retourne `null`. Sinon, déclenche une erreur.
      */
     function get(array $get_or_post, ?int $current_id_image = null, bool $required = true): ?Image
     {
@@ -34,7 +37,7 @@ final class InputImage extends Input
     /**
      * @inheritDoc
      */
-    function put($current = null): void
+    function put(mixed $current = null): void
     {
         $form_attr = $this->form_id ? "form=\"$this->form_id\"" : '';
 ?>
@@ -55,7 +58,7 @@ final class InputImage extends Input
             placeholder="Légende">
     </p>
     <div id="<?= $this->id ?>-preview">
-        <?php $current?->put_img() ?>
+        <?php if ($current !== null) (new ImageView($current))->put_img() ?>
     </div>
 </fieldset>
 <?php

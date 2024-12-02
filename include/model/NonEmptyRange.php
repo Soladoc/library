@@ -116,7 +116,7 @@ final class NonEmptyRange
      * Parse un `NonEmptyRange` à partir de la sortie PostgreSQL.
      * @template TBound
      * @param string $output La chaîne à parser.
-     * @param callable(string): TBound|false $parse_bound La fonction parsant les bornes. Peut retourner `false` si la syntaxe est invalide. `null` implique la fonciton identité.
+     * @param callable(string): TBound|false $parse_bound La fonction parsant les bornes. Peut retourner `false` si la syntaxe est invalide. `null` implique la fonction identité.
      * @return NonEmptyRange<TBound> Un nouveau range non vide.
      * @throws DomainException Quand $output ne correspond pas à la syntax attendue.
      */

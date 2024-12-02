@@ -53,9 +53,9 @@ function offre_alterner_etat(int $id_offre): void
     notfalse($stmt->execute());
 }
 
-function offre_insert_gallerie_image(int $id_offre, int $id_image)
+function offre_insert_galerie_image(int $id_offre, int $id_image)
 {
-    $stmt = notfalse(connect()->prepare('insert into _gallerie (id_offre, id_image) values (?,?)'));
+    $stmt = notfalse(connect()->prepare('insert into _galerie (id_offre, id_image) values (?,?)'));
     bind_values($stmt, [1 => [$id_offre, PDO::PARAM_INT], 2 => [$id_image, PDO::PARAM_INT]]);
     notfalse($stmt->execute());
 }
@@ -151,7 +151,7 @@ function insert_into_activite(
         'age_requis' => [$age_requis, PDO::PARAM_INT],
         'prestations_non_incluses' => [$prestations_non_incluses, PDO::PARAM_STR],
     ]);
-    $stmt = insert_into_returning_id('activite', $args);
+    $stmt = insert_into('activite', $args, ['id']);
     notfalse($stmt->execute());
     return notfalse($stmt->fetchColumn());
 }
@@ -169,7 +169,7 @@ function insert_into_parc_attractions(
     $args = $offre_args + filter_null_args([
         'id_image_plan' => [$id_image_plan, PDO::PARAM_INT],
     ]);
-    $stmt = insert_into_returning_id('parc_attractions', $args);
+    $stmt = insert_into('parc_attractions', $args, ['id']);
     bind_values($stmt, $args);
     notfalse($stmt->execute());
     return notfalse($stmt->fetchColumn());
@@ -206,7 +206,7 @@ function insert_into_restaurant(
         'sert_diner' => [$sert_diner, PDO::PARAM_BOOL],
         'sert_boissons' => [$sert_boissons, PDO::PARAM_BOOL],
     ]);
-    $stmt = insert_into_returning_id('restaurant', $args);
+    $stmt = insert_into('restaurant', $args, ['id']);
     bind_values($stmt, $args);
     notfalse($stmt->execute());
     return notfalse($stmt->fetchColumn());
@@ -228,7 +228,7 @@ function insert_into_spectacle(
         'indication_duree' => [$indication_duree, PDO::PARAM_STR],
         'capacite_accueil' => [$capacite_accueil, PDO::PARAM_INT],
     ]);
-    $stmt = insert_into_returning_id('spectacle', $args);
+    $stmt = insert_into('spectacle', $args, ['id']);
     notfalse($stmt->execute());
     return notfalse($stmt->fetchColumn());
 }
@@ -246,7 +246,7 @@ function insert_into_visite(
     $args = $offre_args + filter_null_args([
         'indication_duree' => [$indication_duree, PDO::PARAM_STR],
     ]);
-    $stmt = insert_into_returning_id('visite', $args);
+    $stmt = insert_into('visite', $args, ['id']);
     bind_values($stmt, $args);
     notfalse($stmt->execute());
     return notfalse($stmt->fetchColumn());

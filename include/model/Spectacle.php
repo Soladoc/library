@@ -1,14 +1,20 @@
 <?php
 require_once 'Offre.php';
 
+/**
+ * @inheritDoc
+ * @property Duree $indication_duree
+ * @property int $capacite_accueil
+ */
 final class Spectacle extends Offre
 {
-    const CATEGORIE = 'spectacle';
+    protected const FIELDS = parent::FIELDS + [
+        'indication_duree' => [null, 'indication_duree', PDO::PARAM_STR],
+        'capacite_accueil' => [null, 'capacite_accueil', PDO::PARAM_INT],
+    ];
 
-    const TABLE = 'spectacle';
-
-    readonly Duree $indication_duree;
-    readonly int $capacite_accueil;
+    protected Duree $indication_duree;
+    protected int $capacite_accueil;
 
     /**
      * Construit une nouvelle activité.
@@ -22,7 +28,7 @@ final class Spectacle extends Offre
      * @param string $description_detaillee
      * @param ?string $url_site_web
      * @param MultiRange<FiniteTimestamp> $periodes_ouverture
-     * @param FiniteTimestamp $modifiee_le
+     * @param ?FiniteTimestamp $modifiee_le
      * @param bool $en_ligne
      * @param ?float $note_moyenne
      * @param ?float $prix_min
@@ -44,7 +50,7 @@ final class Spectacle extends Offre
         string $description_detaillee,
         ?string $url_site_web,
         MultiRange $periodes_ouverture,
-        FiniteTimestamp $modifiee_le,
+        ?FiniteTimestamp $modifiee_le,
         bool $en_ligne,
         ?float $note_moyenne,
         ?float $prix_min,
@@ -104,4 +110,7 @@ final class Spectacle extends Offre
             $row['capacite_accueil'],
         );
     }
+
+    const CATEGORIE = 'spectacle';
+    const TABLE     = 'spectacle';
 }

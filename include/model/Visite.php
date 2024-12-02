@@ -1,13 +1,17 @@
 <?php
 require_once 'model/Offre.php';
 
+/**
+ * @inheritDoc
+ * @property Duree $indication_duree
+ */
 final class Visite extends Offre
 {
-    const CATEGORIE = 'visite';
+    protected const FIELDS = parent::FIELDS + [
+        'indication_duree' => [null, 'indication_duree', PDO::PARAM_STR],
+    ];
 
-    const TABLE = 'visite';
-
-    readonly Duree $indication_duree;
+    protected Duree $indication_duree;
 
     // todo: langues
 
@@ -23,7 +27,7 @@ final class Visite extends Offre
      * @param string $description_detaillee
      * @param ?string $url_site_web
      * @param MultiRange<FiniteTimestamp> $periodes_ouverture
-     * @param FiniteTimestamp $modifiee_le
+     * @param ?FiniteTimestamp $modifiee_le
      * @param bool $en_ligne
      * @param ?float $note_moyenne
      * @param ?float $prix_min
@@ -44,7 +48,7 @@ final class Visite extends Offre
         string $description_detaillee,
         ?string $url_site_web,
         MultiRange $periodes_ouverture,
-        FiniteTimestamp $modifiee_le,
+        ?FiniteTimestamp $modifiee_le,
         bool $en_ligne,
         ?float $note_moyenne,
         ?float $prix_min,
@@ -77,7 +81,6 @@ final class Visite extends Offre
         $this->indication_duree = $indication_duree;
     }
 
-
     protected static function from_db_row(array $row): self
     {
         return new self(
@@ -102,4 +105,7 @@ final class Visite extends Offre
             Duree::parse($row['indication_duree']),
         );
     }
+
+    const CATEGORIE = 'visite';
+    const TABLE     = 'visite';
 }

@@ -1,16 +1,26 @@
 <?php
 require_once 'model/Offre.php';
 
+/**
+ * @inheritDoc
+ * @property Duree $indication_duree
+ * @property ?int $age_requis
+ * @property string $prestations_incluses
+ * @property ?string $prestations_non_incluses
+ */
 final class Activite extends Offre
 {
-    const CATEGORIE = 'activité';
+    protected const FIELDS = parent::FIELDS + [
+        'indication_duree'         => [null, 'indication_duree',         PDO::PARAM_STR],
+        'age_requis'               => [null, 'age_requis',               PDO::PARAM_INT],
+        'prestations_incluses'     => [null, 'prestations_incluses',     PDO::PARAM_STR],
+        'prestations_non_incluses' => [null, 'prestations_non_incluses', PDO::PARAM_STR],
+    ];
 
-    const TABLE = 'activite';
-
-    readonly Duree $indication_duree;
-    readonly ?int $age_requis;
-    readonly string $prestations_incluses;
-    readonly ?string $prestations_non_incluses;
+    protected Duree $indication_duree;
+    protected ?int $age_requis;
+    protected string $prestations_incluses;
+    protected ?string $prestations_non_incluses;
 
     /**
      * Construit une nouvelle activité.
@@ -24,7 +34,7 @@ final class Activite extends Offre
      * @param string $description_detaillee
      * @param ?string $url_site_web
      * @param MultiRange<FiniteTimestamp> $periodes_ouverture
-     * @param FiniteTimestamp $modifiee_le
+     * @param ?FiniteTimestamp $modifiee_le
      * @param bool $en_ligne
      * @param ?float $note_moyenne
      * @param ?float $prix_min
@@ -48,7 +58,7 @@ final class Activite extends Offre
         string $description_detaillee,
         ?string $url_site_web,
         MultiRange $periodes_ouverture,
-        FiniteTimestamp $modifiee_le,
+        ?FiniteTimestamp $modifiee_le,
         bool $en_ligne,
         ?float $note_moyenne,
         ?float $prix_min,
@@ -81,9 +91,9 @@ final class Activite extends Offre
             $changement_ouverture_suivant_le,
             $est_ouverte,
         );
-        $this->indication_duree = $indication_duree;
-        $this->age_requis = $age_requis;
-        $this->prestations_incluses = $prestations_incluses;
+        $this->indication_duree         = $indication_duree;
+        $this->age_requis               = $age_requis;
+        $this->prestations_incluses     = $prestations_incluses;
         $this->prestations_non_incluses = $prestations_non_incluses;
     }
 
@@ -115,4 +125,7 @@ final class Activite extends Offre
             $row['prestations_non_incluses'] ?? null,
         );
     }
+
+    const CATEGORIE = 'activité';
+    const TABLE     = 'activite';
 }

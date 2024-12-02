@@ -6,6 +6,7 @@ require_once 'model/Duree.php';
 /**
  * Composant d'input de durée (jours, heures, minutes).
  * Demander à Raphaël si besoin de d'autres unités.
+ * @extends Input<Duree>
  */
 final class InputDuree extends Input
 {
@@ -17,7 +18,7 @@ final class InputDuree extends Input
     /**
      * Récupère l'adresse saisie.
      * @param array $get_or_post `$_GET` ou `$_POST` (selon la méthode du formulaire)
-     * @param bool $required Si la durée est requise. Quand la durée est manquante, si `false` a été passé, la fonciton retourne `null`. Sinon, déclenche une erreur.
+     * @param bool $required Si la durée est requise. Quand la durée est manquante, si `false` a été passé, la fonction retourne `null`. Sinon, déclenche une erreur.
      */
     function get(array $get_or_post, bool $required = true): ?Duree
     {
