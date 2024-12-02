@@ -103,7 +103,7 @@ if ($membre !== false) {
                 <span><?= format_adresse($adresse) ?></span>
             </div>
 
-            <button><a href="modif_compte.php?id=<?= $id ?>">Modifier</a></button>
+            <a href="modif_compte.php?id=<?= $id ?>">Modifier</a>
         </section>
     </main>
 
