@@ -3,7 +3,7 @@ require_once 'db.php';
 
 final class Abonnement
 {
-    private const TABLE = '_abonnement';
+    const TABLE = '_abonnement';
 
     readonly string $libelle;
     readonly float $prix_journalier;
@@ -18,7 +18,7 @@ final class Abonnement
 
     private static ?array $instances;
 
-    static function get(string $libelle_abonnement): Abonnement
+    static function from_db(string $libelle_abonnement): Abonnement
     {
         self::$instances ??= array_map(
             fn($row) => new Abonnement(

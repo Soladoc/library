@@ -225,7 +225,7 @@ abstract class Offre implements Signalable
             return;
         }
         // todo: where temporaire : le temps qu'on fasse marcher les options
-        $stmt = notfalse(DB\connect()->prepare(self::make_select() . ' where note_moyenne = 5'));
+        $stmt = notfalse(DB\connect()->prepare('select * from ' . static::TABLE . ' where note_moyenne = 5'));
         notfalse($stmt->execute());
         while (false !== $row = $stmt->fetch()) {
             yield $row['id'] => static::from_db_row($row);
@@ -264,7 +264,7 @@ abstract class Offre implements Signalable
             return;
         }
         $args = DB\filter_null_args(['id_professionnel' => [$id_professionnel, PDO::PARAM_INT], 'en_ligne' => [$en_ligne, PDO::PARAM_BOOL]]);
-        $stmt = notfalse(DB\connect()->prepare(self::make_select() . DB\where_clause(DB\BoolOperator::AND, array_keys($args))));
+        $stmt = notfalse(DB\connect()->prepare('select * from ' . static::TABLE . DB\where_clause(DB\BoolOperator::AND, array_keys($args))));
         DB\bind_values($stmt, $args);
         notfalse($stmt->execute());
         while (false !== $row = $stmt->fetch()) {
@@ -302,7 +302,7 @@ abstract class Offre implements Signalable
             }
             return;
         }
-        $stmt = notfalse(DB\connect()->prepare(self::make_select() . ' where '
+        $stmt = notfalse(DB\connect()->prepare('select * from ' . static::TABLE . ' where '
             . implode(' and ', array_map(
                 fn($mot) => 'titre ilike ' . DB\quote_string("%$mot%"),
                 explode(' ', trim($motcle)),
@@ -318,14 +318,4 @@ abstract class Offre implements Signalable
      * @return Offre
      */
     protected static abstract function from_db_row(array $row): Offre;
-
-    private static function make_select(): string
-    {
-        assert(self::TABLE !== static::TABLE);
-        return 'select * from ' . static::TABLE . ' o'
-            . ' inner join ' . Adresse::TABLE . ' a on a.id = o.id_adresse'
-            . ' inner join ' . Commune::TABLE . ' c on c.code = a.code_commune and c.numero_departement = a.numero_departement'
-            . ' inner join ' . Image::TABLE . ' i on i.id = o.id_image_principale'
-            . ' inner join ' . Professionnel::TABLE . ' p on p.id = o.id_professionnel';
-    }
 }

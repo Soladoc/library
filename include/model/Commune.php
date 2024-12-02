@@ -32,11 +32,6 @@ final class Commune
         $nom = $stmt->fetchColumn();
         return $nom === false ? false : new Commune($code, $numero_departement, $nom);
     }
-
-    static function from_db_row(array $row, string $code_column = 'code', string $numero_departement_column = 'numero_departement'): Commune {
-        return new Commune($row[$code_column], $row[$numero_departement_column], $row['nom']);
-    }
-
     /**
      * Retourne les code postaux de cette commune.
      * @return string[] Les codes postaux de cette commune.
