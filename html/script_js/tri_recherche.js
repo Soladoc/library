@@ -93,25 +93,67 @@ function sortOffers(criteria, ascending = true) {
     filterOffers();
 }
 
+// function filterOffers() {
+//     const mainCategory = document.getElementById('main-category').value;
+//     const subcategoryCheckboxes = document.querySelectorAll('input[name="subcategory"]:checked');
+//     const selectedSubcategories = Array.from(subcategoryCheckboxes).map(cb => cb.id);
+//     const filteredOffers = offers.filter(offer => {
+//         if (mainCategory && offer.categorie.toLowerCase() !== mainCategory.toLowerCase()) {
+//             return false;
+//         }
+//         if (selectedSubcategories.length > 0) {
+//             if (!offer.tags || offer.tags.length === 0) {
+//                 return false;
+//             }
+//             const lowerCaseTags = offer.tags.map(tag => tag.toLowerCase());
+//             return selectedSubcategories.some(selected => lowerCaseTags.includes(selected));
+//         }
+//         return true;
+//     });
+//     displayOffers(filteredOffers);
+}
 function filterOffers() {
-    const mainCategory = document.getElementById('main-category').value;
+    // Récupération des filtres
+    const mainCategory = document.getElementById('main-category').value.trim().toLowerCase();
     const subcategoryCheckboxes = document.querySelectorAll('input[name="subcategory"]:checked');
-    const selectedSubcategories = Array.from(subcategoryCheckboxes).map(cb => cb.id);
+    const selectedSubcategories = Array.from(subcategoryCheckboxes).map(cb => cb.id.toLowerCase());
+    const keywordInput = document.getElementById('keyword-search').value.trim().toLowerCase();
+
+    // Filtrage des offres
     const filteredOffers = offers.filter(offer => {
-        if (mainCategory && offer.categorie.toLowerCase() !== mainCategory.toLowerCase()) {
+        // Filtrage par catégorie principale
+        if (mainCategory && offer.categorie.toLowerCase() !== mainCategory) {
             return false;
         }
+
+        // Filtrage par sous-catégories
         if (selectedSubcategories.length > 0) {
             if (!offer.tags || offer.tags.length === 0) {
                 return false;
             }
             const lowerCaseTags = offer.tags.map(tag => tag.toLowerCase());
-            return selectedSubcategories.some(selected => lowerCaseTags.includes(selected));
+            if (!selectedSubcategories.some(selected => lowerCaseTags.includes(selected))) {
+                return false;
+            }
         }
+
+        // Filtrage par mot-clé
+        if (keywordInput) {
+            const matchesCategory = offer.categorie && offer.categorie.toLowerCase().includes(keywordInput);
+            const matchesTags = offer.tags && offer.tags.some(tag => tag.toLowerCase().includes(keywordInput));
+            if (!matchesCategory && !matchesTags) {
+                return false;
+            }
+        }
+
+        // Si tout est valide, inclure cette offre
         return true;
     });
+
+    // Affichage des offres filtrées
     displayOffers(filteredOffers);
 }
+
 
 function displayOffers(offersToDisplay = offers) {
     const offerList = document.querySelector('.offer-list');
