@@ -114,7 +114,7 @@ final class Adresse
             a.latitude,
             a.longitude,
             a.numero_departement,
-            a.code_commune code,
+            a.code_commune,
             c.nom from '
             . self::TABLE . ' a inner join ' . Commune::TABLE
             . ' c on a.numero_departement = c.numero_departement'
@@ -132,11 +132,11 @@ final class Adresse
      * @param (string|int|bool)[] $row
      * @return Adresse
      */
-    static function from_db_row(array $row): Adresse
+    static function from_db_row(array $row, string $id_column = 'id'): Adresse
     {
         return new Adresse(
-            $row['id'],
-            Commune::from_db_row($row),
+            $row[$id_column],
+            Commune::from_db_row($row, 'code_commune'),
             $row['numero_voie'] ?? null,
             $row['complement_numero'] ?? null,
             $row['nom_voie'] ?? null,

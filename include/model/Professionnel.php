@@ -52,16 +52,16 @@ class Professionnel extends Compte
      * @param (string|int|bool)[] $row
      * @return Professionnel
      */
-    static function from_db_row(array $row): Professionnel
+    static function from_db_row(array $row, string $id_column = 'id'): Professionnel
     {
         return new Professionnel(
-            $row['id'],
+            $row[$id_column],
             $row['email'],
             $row['mdp_hash'],
             $row['nom'],
             $row['prenom'],
             $row['telephone'],
-            Adresse::from_db_row($row),
+            Adresse::from_db_row($row, 'id_adresse'),
             $row['denomination'],
         );
     }
