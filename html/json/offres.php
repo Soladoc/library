@@ -1,6 +1,6 @@
 <?php
 require_once 'queries.php';
-require_once 'MultiRange.php';
+//require_once 'model/MultiRange.php';
 header('Content-Type: application/json; charset=utf-8');
 
 $offres = iterator_to_array(DB\query_offres(), false);
