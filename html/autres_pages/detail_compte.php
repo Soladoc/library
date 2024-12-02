@@ -65,12 +65,7 @@ if ($membre !== false) {
             color: #333;
         }
 
-        header, footer {
-            background-color: #2c3e50;
-            color: white;
-            text-align: center;
-            padding: 1rem;
-        }
+
 
         main {
             max-width: 800px;
@@ -123,9 +118,8 @@ if ($membre !== false) {
     </style>
 </head>
 <body>
-    <header>
-        <h1>Informations du Compte</h1>
-    </header>
+<?php $page->put_header() ?>
+
 
     <main>
         <section id="info_compte">
@@ -177,8 +171,7 @@ if ($membre !== false) {
         </section>
     </main>
 
-    <footer>
-        <p>&copy; <?= date('Y') ?> MERMTREM Solutions. Tous droits réservés.</p>
-    </footer>
+    <?php $page->put_footer() ?>
+
 </body>
 </html>
