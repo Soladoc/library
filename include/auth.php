@@ -71,6 +71,15 @@ function id_pro_connecte(): ?int
 }
 
 /**
+ * Retourne l'ID du compte (membre ou professionnel) actuellement connecté.
+ * @return ?int L'ID du compte actuellement connecté, ou `null` s la session actuelle n'est pas connectée.
+ */
+function id_compte_connecte(): ?int
+{
+    return id_pro_connecte() ?? id_membre_connecte();
+}
+
+/**
  * Sommes-nous connectés en tant que professionnel?
  * @return bool `true` si nous (la session courante) sommes connectés en tant que professionnel, `false` sinon.
  */
