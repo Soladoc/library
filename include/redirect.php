@@ -55,7 +55,7 @@ function location_detail_compte(int $id_compte): string
 
 function location_modifier_offre(int $id_offre): string
 {
-    return "/autres_pages/modifier_offre.php?id_offre=$id_offre";
+    return "/autres_pages/modif_offre.php?id_offre=$id_offre";
 }
 
 function location_modifier_compte(int $id, ?string $error = null): string
