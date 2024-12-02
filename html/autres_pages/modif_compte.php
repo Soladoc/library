@@ -186,8 +186,7 @@ if ($membre !== false) {
                     <div>
                     <div id="siren">
                     <label>siren : </label>
-                <?php
-                echo $siren
+                <?= $siren
                 ?> </div>
                     <input type="text" id="new_siren" name="new_siren" placeholder="231 654 988" oninput="formatInput(this)" maxlength="12">
             </div><?php
