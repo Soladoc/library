@@ -14,7 +14,6 @@ final class Adresse
             'id' => $this->id,
         };
     }
-
     protected const TABLE = '_adresse';
 
     /**

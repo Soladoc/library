@@ -3,6 +3,7 @@ require_once "model/MultiRange.php";
 require_once "model/NonEmptyRange.php";
 require_once "model/Time.php";
 require_once "model/FiniteTimestamp.php";
+require_once "model/Adresse.php";
 
 // Conserve les images uploadées durant cette transaction pour les supprimer en cas d'erreur. Comme ça on ne pollue pas le dossier.
 $uploaded_files = [];
@@ -14,33 +15,16 @@ function move_uploaded_image(array $file)
     return $id_image;
 }
 
-/*?>
-<pre><samp><?= htmlspecialchars(print_r($_GET, true)) ?></samp></pre>
-<pre><samp><?= htmlspecialchars(print_r($_POST, true)) ?></samp></pre>
-<pre><samp><?= htmlspecialchars(print_r($_FILES, true)) ?></samp></pre>
-<?php*/
-
 DB\transaction(function () {
     global $args, $id_professionnel, $id_offre;
 
-    // Récupérer la commune
-    // todo: make this better (by inputting either nom or code postal)
-    $commune = single_or_default(DB\query_communes($args['adresse_commune']));
-    if ($commune === null) {
-        html_error("la commune {$args['adresse_commune']} n'existe pas");
-    }
+    /** @var Adresse */
+    $adresse = $args['adresse'];
+
+
     // Insérer l'adresse
     // todo: adresses localisées
-    $id_adresse = DB\insert_adresse(
-        $commune['code'],
-        $commune['numero_departement'],
-        $args['adresse_numero_voie'],
-        $args['adresse_complement_numero'],
-        $args['adresse_nom_voie'],
-        $args['adresse_localite'],
-        $args['adresse_precision_int'],
-        $args['adresse_precision_ext'],
-    );
+    $adresse->push_to_db();
 
     // Périodes d'ouverture
     $periodes_ouverture = new MultiRange(array_map(
@@ -51,7 +35,7 @@ DB\transaction(function () {
 
     // Insérer l'offre
     $offre_args = DB\offre_args(
-        $id_adresse,
+        $adresse->id,
         move_uploaded_image($args['file_image_principale']),
         $id_professionnel,
         $args['libelle_abonnement'],

@@ -1,13 +1,14 @@
 <?php
 require_once 'db.php';
 require_once 'model/Abonnement.php';
-require_once 'model/MultiRange.php';
 require_once 'model/Adresse.php';
+require_once 'model/Avis.php';
 require_once 'model/Duree.php';
+require_once 'model/FiniteTimestamp.php';
 require_once 'model/Image.php';
+require_once 'model/MultiRange.php';
 require_once 'model/Professionnel.php';
 require_once 'model/Signalable.php';
-require_once 'model/FiniteTimestamp.php';
 
 /**
  * Une offre touristique.

@@ -1,4 +1,6 @@
 <?php
+require_once 'model/Offre.php';
+require_once 'component/ImageView.php';
 require_once 'redirect.php';
 
 final class CarteOffrePro
@@ -23,7 +25,7 @@ final class CarteOffrePro
     <?php $this->image_principale->put_img() ?>
     <h3><?= $this->offre->titre ?></h3>
     <p class="location"><?= $this->offre->adresse->format() ?></p>
-    <p class="category"><?= $this->offre::categorie ?></p>
+    <p class="category"><?= $this->offre::CATEGORIE ?></p>
     <p class="rating">
         <?php if ($this->offre->nb_avis === 0) { ?>
             Aucun avis

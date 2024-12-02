@@ -3,7 +3,7 @@ require_once 'component/Page.php';
 require_once 'auth.php';
 require_once 'redirect.php';
 require_once 'queries/offre.php';
-require_once 'comonent/CarteOffrePro.php';
+require_once 'component/CarteOffrePro.php';
 
 $page = new Page('Accueil Professionnel');
 
