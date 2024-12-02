@@ -135,7 +135,6 @@ function filterOffers() {
     displayOffers(filteredOffers);
 }
 
-
 function displayOffers(offersToDisplay = offers) {
     const offerList = document.querySelector('.offer-list');
     offerList.innerHTML = ''; // Réinitialisation avant de commencer à ajouter les éléments
@@ -179,7 +178,6 @@ function displayOffers(offersToDisplay = offers) {
     });
 }
 
-
 const sortButtons = document.querySelectorAll('.btn-sort');
 sortButtons.forEach(button => {
     button.addEventListener('click', () => {
@@ -190,7 +188,6 @@ sortButtons.forEach(button => {
         sortOffers(criteria, ascending);
     });
 });
-
 
 document.getElementById('sort-price-up').addEventListener('click', () => sortOffers('prix_min', false));
 document.getElementById('sort-price-down').addEventListener('click', () => sortOffers('prix_min', true));
