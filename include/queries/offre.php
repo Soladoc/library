@@ -17,9 +17,10 @@ function query_offre(int $id_offre): array|false
 function query_supprime_avis(int $id_avis): bool
 {
     $stmt = notfalse(connect()->prepare('DELETE FROM _avis WHERE id = ?'));
-    bind_values($stmt, [1 => $id_avis, PDO::PARAM_INT]);
+    $stmt->bindValue(1, $id_avis, PDO::PARAM_INT);
     return $stmt->execute();
 }
+
 
 
 function query_offres_count(?int $id_professionnel = null, ?bool $en_ligne = null): int
