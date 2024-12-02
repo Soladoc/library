@@ -3,7 +3,10 @@
 set -euo pipefail
 cd "$(dirname "${BASH_SOURCE[0]}")"
 
-for f in NonEmptyRange.php MultiRange.php Duree.php; do
+for f in *.php; do
+    if [[ "$f" == testing.php ]]; then
+        continue
+    fi
     echo "test $f"
     php -c php.ini -f "$f"
 done
