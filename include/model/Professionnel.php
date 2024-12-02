@@ -35,24 +35,16 @@ class Professionnel extends Compte
     /**
      * Récupère un professionnel de la BDD.
      * @param int $id_professionnel
-     * @return Professionnel
+     * @return Professionnel|false
      */
-    static function from_db(int $id_professionnel): Professionnel
+    static function from_db(int $id_professionnel): Professionnel|false
     {
         $stmt = notfalse(DB\connect()->prepare('select * from ' . self::TABLE . ' where id = ?'));
         DB\bind_values($stmt, [1 => [$id_professionnel, PDO::PARAM_INT]]);
         notfalse($stmt->execute());
-        return self::from_db_row($stmt->fetch());
-    }
-
-    /**
-     * @param (string|int|bool)[] $row
-     * @return Professionnel
-     */
-    private static function from_db_row(array $row): Professionnel
-    {
-        return new Professionnel(
-            $row[$id_column],
+        $row = $stmt->fetch();
+        return $row === false ? false : new Professionnel(
+            $row['id'],
             $row['email'],
             $row['mdp_hash'],
             $row['nom'],

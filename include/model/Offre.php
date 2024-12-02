@@ -317,8 +317,5 @@ abstract class Offre implements Signalable
      * @param (string|int|bool)[] $row
      * @return Offre
      */
-    protected static function from_db_row(array $row): Offre
-    {
-        throw new LogicException('from_db_row doit être overriden');
-    }
+    protected static abstract function from_db_row(array $row): Offre;
 }

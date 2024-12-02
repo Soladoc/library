@@ -125,7 +125,7 @@ final class Adresse
         $row = $stmt->fetch();
         return $row === false ? false : new Adresse(
             $id_adresse,
-            Commune::from_db_row($row),
+            Commune::from_db($row['code_commune'], $row['numero_departement']),
             $row['numero_voie'] ?? null,
             $row['complement_numero'] ?? null,
             $row['nom_voie'] ?? null,
