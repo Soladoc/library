@@ -9,10 +9,14 @@ begin
     new.id = insert_offre(new);
     insert into pact._parc_attractions (
         id,
-        id_image_plan
+        id_image_plan,
+        nb_attractions,
+        age_requis,
     ) values (
         new.id,
-        new.id_image_plan
+        new.id_image_plan,
+        new.nb_attractions,
+        new.age_requis
     );
     return new;
 end
