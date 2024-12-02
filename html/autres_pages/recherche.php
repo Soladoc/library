@@ -22,9 +22,10 @@ if ($valider && !empty($mot_cle)) {
 <html lang="fr">
 <?php $page->put_head() ?>
 <body>
-<script src="\html\script_js\tri_recherche.js"></script>
+<script src="/html/script_js/tri_recherche.js"></script>
     <?php $page->put_header() ?>
     <main>
+        <?php require_once 'util.php'; require_once 'queries.php'; dbg_print(DB\query_tags(11));?>
         <section class="search-section">
             <h1>Recherche</h1>
             <br>
