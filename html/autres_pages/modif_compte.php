@@ -251,7 +251,7 @@ if ($membre !== false) {
                         
                     </div>
                     <button type="submit">Valider</button>
-                    <button href="<?= location_detail_compte($id) ?>">retour</button> 
+                    <a href="<?= location_detail_compte($id) ?>">retour</a> 
                 </form>
             </section>
 
