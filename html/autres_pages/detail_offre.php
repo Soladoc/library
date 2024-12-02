@@ -1,5 +1,6 @@
 <?php
 require_once 'auth.php';
+require_once 'model/Offre.php';
 require_once 'component/Page.php';
 require_once 'component/ImageView.php';
 require_once 'queries.php';
