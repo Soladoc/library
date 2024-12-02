@@ -57,14 +57,6 @@ if ($membre !== false) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Informations Compte</title>
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: #f5f5f5;
-            color: #333;
-        }
-
 
 
         main {
@@ -100,26 +92,10 @@ if ($membre !== false) {
             color: #333;
         }
 
-        a {
-            display: inline-block;
-            text-decoration: none;
-            background-color: #3498db;
-            color: white;
-            padding: 0.8rem 1.5rem;
-            border-radius: 5px;
-            font-size: 1rem;
-            margin-top: 1rem;
-            text-align: center;
-        }
-
-        a:hover {
-            background-color: #2980b9;
-        }
     </style>
 </head>
 <body>
 <?php $page->put_header() ?>
-
 
     <main>
         <section id="info_compte">
