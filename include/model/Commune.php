@@ -2,6 +2,8 @@
 
 final class Commune
 {
+    const TABLE = '_commune';
+
     readonly int $code;
     readonly string $nom;
     readonly string $numero_departement;
@@ -15,7 +17,7 @@ final class Commune
 
     static function from_db_by_nom(string $nom): Commune|false
     {
-        $stmt = notfalse(DB\connect()->prepare('select code, numero_departement from _commune where nom = ?'));
+        $stmt = notfalse(DB\connect()->prepare('select code, numero_departement from ' . self::TABLE . ' where nom = ?'));
         DB\bind_values($stmt, [1 => [$nom, PDO::PARAM_STR]]);
         notfalse($stmt->execute());
         $row = $stmt->fetch();
@@ -24,11 +26,15 @@ final class Commune
 
     static function from_db(int $code, string $numero_departement): Commune|false
     {
-        $stmt = notfalse(DB\connect()->prepare('select nom from _commune where code = ? and numero_departement = ?'));
+        $stmt = notfalse(DB\connect()->prepare('select nom from ' . self::TABLE . ' where code = ? and numero_departement = ?'));
         DB\bind_values($stmt, [1 => [$code, PDO::PARAM_INT], 2 => [$numero_departement, PDO::PARAM_STR]]);
         notfalse($stmt->execute());
         $nom = $stmt->fetchColumn();
         return $nom === false ? false : new Commune($code, $numero_departement, $nom);
+    }
+
+    static function from_db_row(array $row): Commune {
+        return new Commune($row['code'], $row['numero_departement'], $row['nom']);
     }
 
     /**

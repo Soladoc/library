@@ -25,7 +25,7 @@ abstract class Offre implements Signalable
         };
     }
 
-    protected const TABLE = 'offres';
+    const TABLE = 'offres';
     const CATEGORIE = self::CATEGORIE;  // Constante devant être définie dans les sous-classes
 
     private int $nb_avis;
@@ -102,7 +102,7 @@ abstract class Offre implements Signalable
      * La note moyenne des avis sur cette offre.
      * @var float
      */
-    readonly float $note_moyenne;
+    readonly ?float $note_moyenne;
 
     /**
      * Le prix minimal dans la grille tarifaire, ou `null` quand il n'y a pas de grille tarifaire.
@@ -148,7 +148,7 @@ abstract class Offre implements Signalable
      * @param MultiRange<FiniteTimestamp> $periodes_ouverture
      * @param FiniteTimestamp $modifiee_le
      * @param bool $en_ligne
-     * @param float $note_moyenne
+     * @param ?float $note_moyenne
      * @param ?float $prix_min
      * @param FiniteTimestamp $creee_le
      * @param Duree $en_ligne_ce_mois_pendant
@@ -168,7 +168,7 @@ abstract class Offre implements Signalable
         MultiRange $periodes_ouverture,
         FiniteTimestamp $modifiee_le,
         bool $en_ligne,
-        float $note_moyenne,
+        ?float $note_moyenne,
         ?float $prix_min,
         FiniteTimestamp $creee_le,
         Duree $en_ligne_ce_mois_pendant,

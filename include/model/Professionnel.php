@@ -5,7 +5,7 @@ require_once 'model/Compte.php';
 /* abstract */
 class Professionnel extends Compte
 {
-    protected const TABLE = 'professionnel';
+    const TABLE = 'professionnel';
 
     private ?int $id;
     readonly string $denomination;

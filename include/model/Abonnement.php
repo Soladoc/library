@@ -3,7 +3,7 @@ require_once 'db.php';
 
 final class Abonnement
 {
-    protected const TABLE = '_abonnement';
+    const TABLE = '_abonnement';
 
     readonly string $libelle;
     readonly float $prix_journalier;

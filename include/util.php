@@ -36,6 +36,23 @@ function array_pop_key(array &$array, bool|float|int|string|null $key): mixed
 }
 
 /**
+ * @template T
+ * @template TResult
+ * @param iterable<T> $array
+ * @param callable(T): TResult|false $map
+ * @return TResult|false
+ */
+function iterator_first_notfalse(iterable $array, callable $map): mixed {
+    foreach ($array as $item) {
+        $r = $map($item);
+        if ($r !== false) {
+            return $r;
+        }
+    }
+    return false;
+}
+
+/**
  * Détermine si tous les éléments d'un tableau satisfont un prédicat.
  * @template T
  * @param T[] $arr Le tableau à tester.

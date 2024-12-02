@@ -5,7 +5,7 @@ final class Spectacle extends Offre
 {
     const CATEGORIE = 'spectacle';
 
-    protected const TABLE = 'spectacle';
+    const TABLE = 'spectacle';
 
     readonly Duree $indication_duree;
     readonly int $capacite_accueil;
@@ -24,7 +24,7 @@ final class Spectacle extends Offre
      * @param MultiRange<FiniteTimestamp> $periodes_ouverture
      * @param FiniteTimestamp $modifiee_le
      * @param bool $en_ligne
-     * @param float $note_moyenne
+     * @param ?float $note_moyenne
      * @param ?float $prix_min
      * @param FiniteTimestamp $creee_le
      * @param Duree $en_ligne_ce_mois_pendant
@@ -46,7 +46,7 @@ final class Spectacle extends Offre
         MultiRange $periodes_ouverture,
         FiniteTimestamp $modifiee_le,
         bool $en_ligne,
-        float $note_moyenne,
+        ?float $note_moyenne,
         ?float $prix_min,
         FiniteTimestamp $creee_le,
         Duree $en_ligne_ce_mois_pendant,

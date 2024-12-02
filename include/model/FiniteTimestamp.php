@@ -6,7 +6,7 @@ require_once 'util.php';
  * Abstraction du type PostgeSQL TIMESTAMP (WITHOUT TIME ZONE) fini.
  */
 final class FiniteTimestamp {
-    private const FORMAT = 'Y-m-d H:i:s';
+    private const FORMATS = ['Y-m-d H:i:s.u', 'Y-m-d H:i:s'];
     private readonly DateTimeImmutable $datetime;
 
     private function __construct(DateTimeImmutable $datetime) {
@@ -21,10 +21,11 @@ final class FiniteTimestamp {
      */
     static function parse(?string $output): ?FiniteTimestamp {
         return $output === null ? null
-            : new self(notfalse(DateTimeImmutable::createFromFormat(self::FORMAT, $output)));
+            : new self(notfalse(iterator_first_notfalse(self::FORMATS,
+                fn($fmt) => DateTimeImmutable::createFromFormat($fmt, $output))));
     }
 
     function __toString(): string {
-        return $this->datetime->format(self::FORMAT);
+        return $this->datetime->format(self::FORMATS[0]);
     }
 }
