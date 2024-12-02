@@ -123,8 +123,19 @@ final class Adresse
         DB\bind_values($stmt, [1 => [$id_adresse, PDO::PARAM_INT]]);
         notfalse($stmt->execute());
         $row = $stmt->fetch();
-        return $row === false ? false : new Adresse(
-            $id_adresse,
+        if ($row === false) return false;
+        $row['id'] = $id_adresse;
+        return self::from_db_row($row);
+    }
+
+    /**
+     * @param (string|int|bool)[] $row
+     * @return Adresse
+     */
+    static function from_db_row(array $row): Adresse
+    {
+        return new Adresse(
+            $row['id'],
             Commune::from_db_row($row),
             $row['numero_voie'] ?? null,
             $row['complement_numero'] ?? null,

@@ -92,10 +92,10 @@ final class Activite extends Offre
         // PDO convertit les booléens et les entiers automatiquement mais pas les flottants.
         return new self(
             $row['id'],
-            Adresse::from_db($row['id_adresse']),
-            Image::from_db($row['id_image_principale']),
-            Professionnel::from_db($row['id_professionnel']),
-            Abonnement::from_db($row['libelle_abonnement']),
+            Adresse::from_db_row($row),
+            Image::from_db_row($row),
+            Professionnel::from_db_row($row),
+            Abonnement::get($row['libelle_abonnement']),
             $row['titre'],
             $row['resume'],
             $row['description_detaillee'],
