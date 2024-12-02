@@ -14,7 +14,7 @@ async function initializeOffers() {
     ]);
     offers = offers.map(offer => ({
         ...offer,
-        tags: offer.tags || []
+        tags: (offer.tags || []).map(tag => String(tag))
     }));
     filterOffers();
 }
@@ -102,10 +102,16 @@ function filterOffers() {
             return false;
         }
         if (selectedSubcategories.length > 0) {
-            if (!offer.tags || offer.tags.length === 0) {
+            if (!offer.tags || !Array.isArray(offer.tags) || offer.tags.length === 0) {
                 return false;
             }
-            const lowerCaseTags = offer.tags.map(tag => tag.toLowerCase());
+            const lowerCaseTags = offer.tags.map(tag => {
+                if (typeof tag === 'string') {
+                    return tag.toLowerCase();
+                } else {
+                    return '';
+                }
+            });
             return selectedSubcategories.some(selected => lowerCaseTags.includes(selected));
         }
         return true;
