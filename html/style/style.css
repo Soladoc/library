@@ -844,7 +844,7 @@ section#info_compte div span {
     color: #333;
 }
 
-#detail_compte a {
+#info_compte a {
     display: inline-block;
     text-decoration: none;
     background-color: #3498db;
