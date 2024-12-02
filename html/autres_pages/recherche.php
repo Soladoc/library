@@ -25,8 +25,6 @@ if ($valider && !empty($mot_cle)) {
 <script src="script_js\tri_recherche.js"></script>
     <?php $page->put_header() ?>
     <main>
-        <?php require_once 'util.php'; require_once 'queries.php'; dbg_print(DB\query_tags(11));?>
-
         <section class="search-section">
             <h1>Recherche</h1>
             <br>
@@ -41,7 +39,7 @@ if ($valider && !empty($mot_cle)) {
             <div class="categories">
                 <h3>Catégories</h3>
                 <div class="category-dropdown">
-                    <select id="main-category" onchange="showSubcategories">
+                    <select id="main-category" onchange="showSubcategories()">
                         <option value="">-- Sélectionnez une catégorie --</option>
                         <option value="restaurant">Restauration</option>
                         <option value="activité">Activité</option>

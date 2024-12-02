@@ -9,3 +9,4 @@ foreach ($offres as &$offre) {
     $offre['tags'] = DB\query_tags($offre['id']);
 }
 echo notfalse(json_encode($offres));
+?>
