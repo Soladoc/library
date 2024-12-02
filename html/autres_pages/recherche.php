@@ -29,7 +29,7 @@ if ($valider && !empty($mot_cle)) {
             <br>
             <div class="search-bar">
                 <!-- <input id="barre-recherche" type="text" placeholder="Rechercher des activités, restaurants, spectacles..."> -->
-                <input type="text" id="keyword-search" placeholder="Rechercher par mot-clé" oninput="console.log('tstZ')">
+                <input type="text" id="keyword-search" placeholder="Rechercher par mot-clé" oninput="filterOffers()">
                 
             </div>
         </section>
