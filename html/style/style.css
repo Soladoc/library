@@ -734,8 +734,8 @@ a:not(:hover, :focus, :focus-within) {
 .carousel-container {
     position: relative;
     width: 100%;
-    max-width: 750px;
-    margin: 0 auto;
+    max-width: 600px;
+    margin: auto;
     overflow: hidden;
     border: 2px solid black;
     border-radius: 10px;
@@ -758,8 +758,8 @@ a:not(:hover, :focus, :focus-within) {
 }
 
 .carousel-slide img {
+    width: 100%;
     height: auto;
-    max-height: 500px;
     object-fit: cover;
     aspect-ratio: 16/9;
     border-radius: 10px;
@@ -780,11 +780,11 @@ a:not(:hover, :focus, :focus-within) {
 }
 
 .carousel-prev {
-    left: -60px;
+    left: 10px;
 }
 
 .carousel-next {
-    right: -60px;
+    right: 10px;
 }
 
 .carousel-prev:hover,
@@ -946,22 +946,3 @@ section#info_compte div span {
     margin-top: 10px;
     display: block;
 }
-
-.offer-title {
-    font-size: 2.5rem;
-    text-align: left;
-    margin-left: auto;
-    margin-right: auto;
-    margin-bottom: 1rem;
-    max-width: 600px;
-    font-weight: bold;
-}
-
-.offer-description {
-    font-size: 1rem;
-    text-align: justify;
-    max-width: 750px;
-    margin: 1rem auto;
-    line-height: 1.5;
-}
-
