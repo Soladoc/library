@@ -95,7 +95,7 @@ final class Page
         ?>
         <a href="/connexion/logout.php">
             <div class="auth-button">
-                <img src="/images/profile-icon.png" alt="Profil">
+                <img src="../../html/images/profile-icon.png" alt="Profil">
                 <span>Déconnexion</span>
             </div>
         </a>
