@@ -20,23 +20,23 @@
 
 ## Membre
      
-1. Creer un compte membre
+7. Creer un compte membre
 
-2. Deconnection / Connection 
+8. Deconnection / Connection 
 
-3. Information du compte
+9. Information du compte
 
-4. Modifier les informations du compte 
+10. Modifier les informations du compte 
     + (montrer les messages d'erreurs)
 
-5. Mettre un avis 
+11. Mettre un avis 
 
-6. Modifier / supprimer un avis 
+12. Modifier / supprimer un avis 
 
 
 
 ## non-connecter
 
-1. Utiliser la recherche
+13. Utiliser la recherche
 
-2. Utiliser les filtres et les tris
+14. Utiliser les filtres et les tris
