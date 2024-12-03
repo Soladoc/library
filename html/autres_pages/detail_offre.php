@@ -22,15 +22,15 @@ if ($_POST) {
         
 
         $querry = 'INSERT INTO pact.avis (id_membre_auteur,id_offre,commentaire,date_experience,note,contexte) VALUES (?,?,?,?,?,?);';
-        $stmt   = DB\connect()->prepare($querry);
-        $stmt->execute([
+        $stmt   = notfalse(DB\connect()->prepare($querry));
+        notfalse($stmt->execute([
             $id_membre_co,
             $args['id'],
             $args['commentaire'],
             $args['date_avis'],
             $args['note'],
             $args['contexte']
-        ]);
+        ]));
         $success_message = 'Avis ajouté avec succès !';
     }
 }
