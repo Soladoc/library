@@ -99,19 +99,21 @@ final class Page
                 <span>Déconnexion</span>
             </div>
         </a>
-        <a href="/autres_pages/detail_compte.php?id=<?= Auth\id_compte_connecte()?>">
-            <div class="auth-button">
-                <img src="" alt="Profil">
-                <span>Compte</span>
-            </div>
-        </a>
-        <?php if (Auth\est_connecte_pro()) { ?>
+        <div>
+            <a href="/autres_pages/detail_compte.php?id=<?= Auth\id_compte_connecte()?>">
+                <div class="auth-button">
+                    <img src="" alt="Profil">
+                    <span>Compte</span>
+                </div>
+            </a>
+            <?php if (Auth\est_connecte_pro()) { ?>
             <a href="facturation.php">
                 <div class="acces-facturation">
-                <img src="/images/facturation.png" alt="Profil">
+                    <img src="/images/facturation.png" alt="Profil">
                     <span>Facturation</span>
                 </div>
             </a>
+        </div>
     <?php
         }
     } else {
