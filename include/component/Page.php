@@ -11,6 +11,7 @@ final class Page
         'style.css',
         'offer-list.css',
         'footer.css',
+        'dynamic-table.css',
     ];
     private const BASE_SCRIPTS = [
         'base.js' => 'defer',

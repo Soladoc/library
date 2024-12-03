@@ -34,7 +34,7 @@ if ($_POST) {
 
     // Rediriger vers la page de détaille de l'offre en cas de succès.
     // En cas d'échec, l'exception est jetée par DB\transaction(), donc on atteint pas cette ligne.
-    redirect_to(location_detail_offre_pro($id_offre));
+    redirect_to(location_detail_offre_pro($offre->id));
 }
 ?>
 <!DOCTYPE html>

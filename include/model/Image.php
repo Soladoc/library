@@ -70,7 +70,7 @@ final class Image extends Model
         if ($this->tmp_name === null) {
             return;
         }
-        $dest = DOCUMENT_ROOT . $this->upload_location();
+        $dest = DB\document_root() . $this->upload_location();
         error_log("Moving uploaded image '$this->tmp_name' to '$dest'.");
         notfalse(move_uploaded_file($this->tmp_name, $dest));
         $this->tmp_name = null;

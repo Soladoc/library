@@ -71,7 +71,7 @@ final class InputOffre extends Input
             <td><input type="number" min="0" placeholder="Prix" required> €</td>
             <?php
             },
-            $this->id('tarifs'),
+            $this->id('table-tarifs'),
             $this->name('tarifs'),
             $form_id,
             [['Adulte', 10]],
@@ -91,7 +91,7 @@ final class InputOffre extends Input
             <td><input type="datetime-local" placeholder="Fin" required></td>
             <?php
             },
-            $this->id('periodes'),
+            $this->id('table-periodes'),
             $this->name('periodes'),
             $form_id
         );
@@ -189,6 +189,8 @@ final class InputOffre extends Input
         foreach ($this->tarifs->get($get_or_post, required: false) ?? [] as $tarif_row) {
             $offre->tarifs->add($tarif_row['nom'], $tarif_row['montant']);
         }
+
+        return $offre;
     }
 
     /**

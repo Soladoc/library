@@ -28,52 +28,62 @@ final class OuvertureHebdomadaire implements ArrayAccess, Equatable
     {
         return $this->offre->id === null ? null : [
             'id_offre' => $this->offre->id,
-            'dow' => $dow,
+            'dow'      => $dow,
         ];
     }
 
     /**
      * @inheritDoc
      */
-    function equals(mixed $other): bool {
+    function equals(mixed $other): bool
+    {
         return $other->ouvertures_hebdomadaires === $this->ouvertures_hebdomadaires;
     }
+
     /**
      * @inheritDoc
      */
-    function offsetExists(mixed $dow): bool {
+    function offsetExists(mixed $dow): bool
+    {
         return isset($this->ouvertures_hebdomadaires[$dow]);
     }
-    
+
     /**
      * @inheritDoc
      */
-    function offsetGet(mixed $dow): MultiRange {
+    function offsetGet(mixed $dow): MultiRange
+    {
         return $this->ouvertures_hebdomadaires[$dow];
     }
-    
+
     /**
      * @inheritDoc
      */
-    function offsetSet(mixed $dow, mixed $horaires): void {
+    function offsetSet(mixed $dow, mixed $horaires): void
+    {
         $this->ouvertures_hebdomadaires[$dow] = $horaires;
     }
-    
+
     /**
      * @inheritDoc
      */
-    function offsetUnset(mixed $dow): void {
+    function offsetUnset(mixed $dow): void
+    {
         unset($this->ouvertures_hebdomadaires[$dow]);
         if (null !== $args = $this->args($dow)) {
             notfalse(DB\delete_from(self::TABLE, $args)->execute());
         }
     }
 
-    function insert(): void {
-        array_walk($this->ouvertures_hebdomadaires, $this->insert_ouverture_hebdomadaire(...));
+    function insert(): void
+    {
+        foreach ($this->ouvertures_hebdomadaires as $dow => $horaires) {
+            $this->insert_ouverture_hebdomadaire($dow, $horaires);
+        }
     }
 
-    private function insert_ouverture_hebdomadaire(int $dow, MultiRange $horaires): void {
+    private function insert_ouverture_hebdomadaire(int $dow, MultiRange $horaires): void
+    {
         if (null !== $args = $this->args($dow)) {
             notfalse(DB\insert_into(self::TABLE, $args + [
                 'horaires' => [$horaires, PDO::PARAM_STR],

@@ -27,13 +27,13 @@ final class InputAdresse extends Input
             $current_id_adresse,
             notfalse(Commune::from_db_by_nom($data['commune'])),
             getarg($data, 'numero_voie', arg_int(1), required: false),
-            $data['complement_numero'] ?? null,
-            $data['nom_voie'] ?? null,
-            $data['localite'] ?? null,
-            $data['precision_int'] ?? null,
-            $data['precision_ext'] ?? null,
-            $data['latitude'] ?? null,
-            $data['longitude'] ?? null
+            $data['complement_numero'] ?: null,
+            $data['nom_voie'] ?: null,
+            $data['localite'] ?: null,
+            $data['precision_int'] ?: null,
+            $data['precision_ext'] ?: null,
+            $data['latitude'] ?: null,
+            $data['longitude'] ?: null,
         );
     }
 
@@ -106,6 +106,8 @@ final class InputAdresse extends Input
         placeholder="bâtiment, voie, résidence (optionnel)&hellip;"
         value="<?= $current?->precision_ext ?>">
     </label></p>
+    <input type="hidden" name="latitude" value="<?= $current?->latitude ?>">
+    <input type="hidden" name="longitude" value="<?= $current?->longitude ?>">
 </details>
 <?php
     }

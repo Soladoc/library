@@ -68,7 +68,7 @@ final class DynamicTable extends Input
     function put(mixed $current = null): void
     {
         ?>
-<table id="<?= $this->id ?>">
+<table id="<?= $this->id ?>" class="dynamic-table">
     <thead>
         <?php foreach ($this->columns as $column) { ?>
             <th><?= $column ?></th>
@@ -85,7 +85,7 @@ final class DynamicTable extends Input
         </tr>
     </tfoot>
 </table>
-<template id="template-<?= $this->id ?>-tr"><tr>
+<template id="<?= $this->id ?>-tr-template"><tr>
     <?php ($this->put_row)($this, null) ?>
 </tr></template>
 <?php

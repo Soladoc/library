@@ -6,7 +6,7 @@ if (table_tarifs !== null) {
     const i_nom = 0, i_montant = 1;
     const tarifs = new DynamicTable(
         table_tarifs,
-        document.getElementById('template-tarif-tr'),
+        document.getElementById('table-tarifs-tr-template'),
         function (tr) {
             return !this.has_row((/** @type {string[]} */ row) => row[i_nom] === nom(tr).value);
         },
@@ -41,7 +41,7 @@ if (table_tarifs !== null) {
 
     const periodes = new DynamicTable(
         document.getElementById('table-periodes'),
-        document.getElementById('template-periode-tr'),
+        document.getElementById('table-periode-tr-template'),
         tr => {
             fin(tr).min = debut(tr).value;
             return true;

@@ -41,39 +41,18 @@ final class Adresse extends Model
         ];
     }
 
-    protected Commune $commune;
-    protected ?int $numero_voie;
-    protected ?string $complement_numero;
-    protected ?string $nom_voie;
-    protected ?string $localite;
-    protected ?string $precision_int;
-    protected ?string $precision_ext;
-    protected ?float $latitude;
-    protected ?float $longitude;
-    protected ?int $id;
-
     function __construct(
-        ?int $id,
-        Commune $commune,
-        ?int $numero_voie          = null,
-        ?string $complement_numero = null,
-        ?string $nom_voie          = null,
-        ?string $localite          = null,
-        ?string $precision_int     = null,
-        ?string $precision_ext     = null,
-        ?float $latitude           = null,
-        ?float $longitude          = null,
+        protected ?int $id,
+        protected Commune $commune,
+        protected ?int $numero_voie          = null,
+        protected ?string $complement_numero = null,
+        protected ?string $nom_voie          = null,
+        protected ?string $localite          = null,
+        protected ?string $precision_int     = null,
+        protected ?string $precision_ext     = null,
+        protected ?float $latitude           = null,
+        protected ?float $longitude          = null,
     ) {
-        $this->id                = $id;
-        $this->commune           = $commune;
-        $this->numero_voie       = $numero_voie;
-        $this->complement_numero = $complement_numero;
-        $this->nom_voie          = $nom_voie;
-        $this->localite          = $localite;
-        $this->precision_int     = $precision_int;
-        $this->precision_ext     = $precision_ext;
-        $this->latitude          = $latitude;
-        $this->longitude         = $longitude;
     }
 
     /**

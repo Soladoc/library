@@ -47,7 +47,9 @@ final class Tarifs implements IteratorAggregate, Equatable
 
     function insert(): void
     {
-        array_walk($this->tarifs, $this->insert_tarif(...));
+        foreach ($this->tarifs as $nom => $montant) {
+            $this->insert_tarif($nom, $montant);
+        };
     }
 
     private function insert_tarif(string $nom, float $montant): void
