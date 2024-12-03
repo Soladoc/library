@@ -5,6 +5,8 @@ cd "$(dirname "${BASH_SOURCE[0]}")"
 
 . lib/discord.bash
 
+env
+
 # Functions
 
 # Call GitHub api with pagination, explicit JSON accept and API version headers.
@@ -119,7 +121,7 @@ link_part="\`$DISPLAY_TITLE\` > \`$failed_step_name\` (step $failed_step_number)
 
 if [[ "$CONCLUSION" == failure ]]; then
     # shellcheck disable=SC2119
-    discord_send_msg <<EOF
+    cat <<EOF
 @here $ACTOR a cassé la BDD :skull:
 $link_part
 
@@ -134,7 +136,7 @@ EOF
 elif [[ "$CONCLUSION" == success ]]; then
     repair_duration="$(fmt_hms "$(date_diff "$TIMESTAMP" "$prev_timestamp")")"
     # shellcheck disable=SC2119
-    discord_send_msg <<EOF
+    cat <<EOF
 @here Bravo à $ACTOR pour avoir réparé la BDD en $repair_duration :+1:
 $link_part
 

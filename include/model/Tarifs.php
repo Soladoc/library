@@ -25,7 +25,9 @@ final class Tarifs implements IteratorAggregate, Equatable
     function add(string $nom, float $montant): void
     {
         $this->tarifs[$nom] = $montant;
-        notfalse(DB\insert_into(self::TABLE, $this->args($nom) + ['montant' => $montant])->execute());
+        notfalse(DB\insert_into(self::TABLE, $this->args($nom) + [
+            'montant' => [$montant, PDO_PARAM_FLOAT],
+        ])->execute());
     }
 
     function remove(string $nom)
@@ -37,8 +39,8 @@ final class Tarifs implements IteratorAggregate, Equatable
     private function args(string $nom): array
     {
         return [
-            'id_offre' => $this->offre->id,
-            'nom' => $nom,
+            'id_offre' => [$this->offre->id, PDO::PARAM_INT],
+            'nom' => [$nom, PDO::PARAM_STR],
         ];
     }
 

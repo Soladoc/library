@@ -122,7 +122,7 @@ final class InputOffre extends Input
                     FiniteTimestamp::parse($row[1]),
                     false,
                 ),
-                getarg($get_or_post, $this->name('periodes'), required: false) ?? [],
+                $this->periodes->get($get_or_post, required: false) ?? [],
             )),
         ];
 
@@ -164,10 +164,10 @@ final class InputOffre extends Input
         // Horaires
         foreach (getarg($get_or_post, $this->name('horaires'), required: false) ?? [] as $dow => $horaires) {
             $offre->ouverture_hebdomadaire[$dow] = new MultiRange(array_map(
-                fn($row) => new NonEmptyRange(
+                fn($horaire_row) => new NonEmptyRange(
                     true,
-                    Time::parse($row[0]),
-                    Time::parse($row[1]),
+                    Time::parse($horaire_row['debut']),
+                    Time::parse($horaire_row['fin']),
                     false,
                 ),
                 $horaires,
@@ -185,8 +185,8 @@ final class InputOffre extends Input
         }
 
         // Tarifs
-        foreach (getarg($get_or_post, $this->name('tarifs'), required: false) ?? [] as $tarif_row) {
-            $offre->tarifs->add($tarif_row[0], $tarif_row[1]);
+        foreach ($this->tarifs->get($get_or_post, required: false) ?? [] as $tarif_row) {
+            $offre->tarifs->add($tarif_row['nom'], $tarif_row['montant']);
         }
     }
 
