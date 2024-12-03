@@ -2,12 +2,12 @@
 require_once 'util.php';
 
 /**
- * @extends Input<string[]>
+ * @extends Input<array>
  */
 final class DynamicTable extends Input
 {
     /**
-     * @var callable(DynamicTable, ?string[]): void
+     * @var callable(DynamicTable, ?array): void
      */
     private readonly Closure $put_row;
 
@@ -17,19 +17,19 @@ final class DynamicTable extends Input
     private readonly Closure $put_prompt;
 
     /**
-     * @var string[]
+     * @var array
      */
     private readonly array $columns;
 
     /**
-     * @var string[][]
+     * @var array[]
      */
     private readonly array $initial_rows;
 
     /**
-     * @param callable(DynamicTable, ?string[]): void $put_row
+     * @param callable(DynamicTable, ?array): void $put_row
      * @param callable(DynamicTable): void $put_prompt
-     * @param string[] $columns
+     * @param array $columns
      * @param string $id
      * @param string $name
      * @param string $form_id
@@ -53,7 +53,7 @@ final class DynamicTable extends Input
     /**
      * @param array $get_or_post
      * @param bool $required
-     * @return ?string[]
+     * @return ?array
      */
     function get(array $get_or_post, bool $required = true): ?array
     {

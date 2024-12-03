@@ -36,6 +36,12 @@ $create_offre_html = notfalse(ob_get_clean());
 $dom = new IvoPetkov\HTML5DOMDocument();
 notfalse($dom->loadHTML($create_offre_html));
 
-fill_input($dom, , )
+check_input($dom, 'libelle_abonnement_standard');
+fill_input($dom, 'titre', 'IUT de Lannion');
+fill_input($dom, 'resume', 'L\'Institut universitaire de technologie de Lannion est une composante de formation de l\'Université de Rennes.');
+fill_input($dom, )
+
+
+// Handle images separately
 
 $request = submit_form($dom, FORM_ID);

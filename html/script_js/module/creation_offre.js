@@ -16,7 +16,6 @@ if (table_tarifs !== null) {
         },
         1,
     );
-    tarifs.add_row(['Adulte', 10]);
     tarifs.setup();
 
     /**

@@ -63,8 +63,8 @@ final class InputOffre extends Input
             function (DynamicTable $dt, ?array $row) {
                 $form_attr = $dt->form_id ? "form=\"$dt->form_id\"" : '';
                 ?>
-            <td><input <?= $form_attr ?> name="<?= $this->name('tarifs') ?>[nom][]" type="text" placeholder="Enfant, Sénior&hellip;" required readonly value="<?= $row === null ? null : $row[0] ?>"></td>
-            <td><input <?= $form_attr ?> name="<?= $this->name('tarifs') ?>[montant][]" type="number" min="0" placeholder="Prix" required value="<?= $row === null ? null : $row[1] ?>"> €</td>
+            <td><input <?= $form_attr ?> name="<?= $this->name('tarifs') ?>[nom][]" type="text" placeholder="Enfant, Sénior&hellip;" required readonly value="<?= $row === null ? null : $row['nom'] ?>"></td>
+            <td><input <?= $form_attr ?> name="<?= $this->name('tarifs') ?>[montant][]" type="number" min="0" placeholder="Prix" required value="<?= $row === null ? null : $row['montant'] ?>"> €</td>
             <?php
             },
             function (DynamicTable $dt) {
@@ -76,7 +76,6 @@ final class InputOffre extends Input
             $this->id('table-tarifs'),
             $this->name('tarifs'),
             $form_id,
-            [['Adulte', 10]],
         );
         $this->periodes = new DynamicTable(
             ['Début', 'Fin'],
