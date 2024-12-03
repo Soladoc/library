@@ -2,7 +2,7 @@
 .offer-list {
     display: flex;
     flex-wrap: wrap;
-    justify-content: space-between;
+    justify-content: flex-start;
     padding: 20px;
     background-color: white;
 }
@@ -13,7 +13,7 @@
     border: 1px solid #ccc;
     border-radius: 15px;
     width: 30%;
-    margin-bottom: 20px;
+    margin: 1em;
     padding: 15px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     transition: transform 0.2s;
