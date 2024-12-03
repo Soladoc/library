@@ -69,6 +69,13 @@ header {
     position: relative;
 }
 
+header #header_pro{
+    display: flex;
+    flex-direction: row;
+
+}
+
+
 .logo {
     position: absolute;
     left: 50%;
