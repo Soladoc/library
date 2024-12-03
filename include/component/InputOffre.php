@@ -45,11 +45,13 @@ final class InputOffre extends Input
             $form_id,
         );
         $this->input_image_principale = new InputImage(
+            'Photo principale',
             $this->id('image_principale'),
             $this->name('image_principale'),
             $form_id,
         );
         $this->input_image_plan = new InputImage(
+            'Photo du plan',
             $this->id('input_image_plan'),
             $this->name('input_image_plan'),
             $form_id,
@@ -83,6 +85,7 @@ final class InputOffre extends Input
             $this->id('tarifs'),
             $this->name('tarifs'),
             $form_id,
+            [['Adulte', 10]],
         );
         $this->periodes = new DynamicTable(
             ['Début', 'Fin'],

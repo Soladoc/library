@@ -1,12 +1,11 @@
 <?php
 require_once 'util.php';
 
-
 /**
  * @extends Input<string[]>
  */
-final class DynamicTable extends Input {
-
+final class DynamicTable extends Input
+{
     /**
      * @var callable(DynamicTable, ?string[]): void
      */
@@ -23,6 +22,11 @@ final class DynamicTable extends Input {
     private readonly array $columns;
 
     /**
+     * @var string[][]
+     */
+    private readonly array $initial_rows = [];
+
+    /**
      * @param callable(DynamicTable, ?string[]): void $put_row
      * @param callable(DynamicTable): void $put_prompt
      * @param string[] $columns
@@ -30,11 +34,20 @@ final class DynamicTable extends Input {
      * @param string $name
      * @param string $form_id
      */
-    function __construct(array $columns, callable $put_row, callable $put_prompt, string $id, string $name = '', string $form_id = '') {
+    function __construct(
+        array $columns,
+        callable $put_row,
+        callable $put_prompt,
+        string $id,
+        string $name        = '',
+        string $form_id     = '',
+        array $initial_rows = []
+    ) {
         parent::__construct($id, $name, $form_id);
-        $this->put_row = Closure::fromCallable($put_row);
-        $this->put_prompt = Closure::fromCallable($put_prompt);
-        $this->columns = $columns;
+        $this->put_row      = Closure::fromCallable($put_row);
+        $this->put_prompt   = Closure::fromCallable($put_prompt);
+        $this->columns      = $columns;
+        $this->initial_rows = $initial_rows;
     }
 
     /**
@@ -42,7 +55,8 @@ final class DynamicTable extends Input {
      * @param bool $required
      * @return ?string[]
      */
-    function get(array $get_or_post, bool $required = true): ?array {
+    function get(array $get_or_post, bool $required = true): ?array
+    {
         $rows = getarg($get_or_post, $this->name, required: $required);
         if ($rows === null) return null;
         return soa_to_aos($rows);
@@ -51,9 +65,9 @@ final class DynamicTable extends Input {
     /**
      * @inheritDoc
      */
-    function put(mixed $current = null): void {
-        $form_attr = $this->form_id ? "form=\"$this->form_id\"" : '';
-?>
+    function put(mixed $current = null): void
+    {
+        ?>
 <table id="<?= $this->id ?>">
     <thead>
         <?php foreach ($this->columns as $column) { ?>
@@ -61,7 +75,7 @@ final class DynamicTable extends Input {
         <?php } ?>
     </thead>
     <tbody>
-        <?php foreach ($current ?? [] as $row) {
+        <?php foreach ($current ?? $this->initial_rows as $row) {
             ($this->put_row)($this, $row);
         } ?>
     </tbody>
