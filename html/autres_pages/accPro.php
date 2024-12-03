@@ -23,7 +23,7 @@ $nb_offres_en_ligne = DB\query_offres_count($id_professionnel, en_ligne: true)
     <main>
 
         <h1>Accueil Professionnel</h1>
-        <a class="btn-more-info" href="<?= location_creation_offre() ?>">Créer une offre</a>
+        <a class="btn-more-info" href="<?= location_creation_offre() ?>" id='bouton_creer_offre'>Créer une offre</a>
 
         <h3><?= $nb_offres ?> offres</h3>
         <section class="online-offers">

@@ -76,9 +76,9 @@ create table _identite (
 create table _compte (
     id int
         constraint compte_pk primary key
-        constraint compte_inherits_identite references _identite,
+        constraint compte_inherits_identite references _identite on delete cascade,
     id_signalable int not null unique
-        constraint compte_inherits_signalable references _signalable,
+        constraint compte_inherits_signalable references _signalable on delete cascade,
     email adresse_email not null unique,
     mdp_hash varchar(255) not null,
     nom mot not null,
@@ -91,14 +91,14 @@ create table _compte (
 create table _professionnel (
     id int
         constraint professionnel_pk primary key
-        constraint professionnel_inherits_compte references _compte,
+        constraint professionnel_inherits_compte references _compte on delete cascade,
     denomination mot not null
 );
 
 create table _offre (
     id int
         constraint offre_pk primary key
-        constraint offre_inherits_signalable references _signalable,
+        constraint offre_inherits_signalable references _signalable on delete cascade,
     id_adresse int not null
         constraint offre_fk_adresse references _adresse,
     id_image_principale int not null
@@ -118,7 +118,7 @@ create table _offre (
 create table _restaurant (
     id int
         constraint restaurant_pk primary key
-        constraint restaurant_inherits_offre references _offre,
+        constraint restaurant_inherits_offre references _offre on delete cascade,
     carte paragraphe not null,
     richesse int not null check (richesse between 1 and 3),
 
@@ -133,7 +133,7 @@ create table _restaurant (
 create table _activite (
     id int
         constraint activite_pk primary key
-        constraint activite_inherits_offre references _offre,
+        constraint activite_inherits_offre references _offre on delete cascade,
     indication_duree interval not null,
     age_requis int check (age_requis > 0),
     prestations_incluses paragraphe not null,
@@ -143,7 +143,7 @@ create table _activite (
 create table _visite (
     id int
         constraint visite_pk primary key
-        constraint visite_inherits_offre references _offre,
+        constraint visite_inherits_offre references _offre on delete cascade,
     indication_duree interval not null
 );
 
@@ -156,7 +156,7 @@ create table _langue (
 create table _spectacle (
     id int
         constraint spectacle_pk primary key
-        constraint spectacle_inherits_offre references _offre,
+        constraint spectacle_inherits_offre references _offre on delete cascade,
     indication_duree interval not null,
     capacite_accueil int not null
 ); 
@@ -164,7 +164,7 @@ create table _spectacle (
 create table _parc_attractions (
     id int
         constraint parc_attractions_pk primary key
-        constraint parc_attractions_inherits_offre references _offre,
+        constraint parc_attractions_inherits_offre references _offre on delete cascade,
     id_image_plan int not null
         constraint parc_attractions_fk_image_plan_parc references _image,
     nb_attractions int not null check (nb_attractions >= 0),
@@ -174,14 +174,14 @@ create table _parc_attractions (
 create table _visiteur (
     id int
         constraint visiteur_pk primary key
-        constraint visiteur_inherits_identite references _identite,
+        constraint visiteur_inherits_identite references _identite on delete cascade,
     ip int not null unique
 );
 
 create table _prive (
     id int
         constraint prive_pk primary key
-        constraint prive_inherits_professionnel references _professionnel,
+        constraint prive_inherits_professionnel references _professionnel on delete cascade,
     siren numero_siren not null unique
 );
 
@@ -189,19 +189,19 @@ create table _moyen_paiement (
     id serial
         constraint moyen_paiement_pk primary key,
     id_prive int not null
-        constraint moyen_paiement_fk_prive references _prive
+        constraint moyen_paiement_fk_prive references _prive on delete cascade
 );
 
 create table _public (
     id int
         constraint public_pk primary key
-        constraint public_inherits_professionnel references _professionnel
+        constraint public_inherits_professionnel references _professionnel on delete cascade
 );
 
 create table _membre (
     id int
         constraint membre_pk primary key
-        constraint membre_inherits_compte references _compte,
+        constraint membre_inherits_compte references _compte on delete cascade,
     pseudo pseudonyme not null unique
 );
 
@@ -211,8 +211,8 @@ create table _facture (
     date date not null,
     remise_ht decimal not null,
     montant_deja_verse decimal not null,
-    id_offre int not null
-        constraint facture_fk_offre references _offre
+    id_offre int -- On ne supprime pas la facture quand l'offre est supprimée
+        constraint facture_fk_offre references _offre on delete set null
 );
 
 create table _prestation (
@@ -223,13 +223,13 @@ create table _prestation (
     tva decimal not null,
     qte int not null,
     id_facture int not null
-        constraint prestation_fk_facture references _facture
+        constraint prestation_fk_facture references _facture on delete cascade
 );
 
 create table _tarif (
     nom mot not null,
     id_offre int
-        constraint tarif_fk_offre references _offre,
+        constraint tarif_fk_offre references _offre on delete cascade,
     constraint tarif_pk primary key (nom, id_offre),
 
     montant decimal not null check (montant >= 0)
@@ -244,7 +244,7 @@ create table _option (
 create table _avis (
     id int
         constraint avis_pk primary key
-        constraint avis_inherits_signalable references _signalable,
+        constraint avis_inherits_signalable references _signalable on delete cascade,
     commentaire paragraphe not null,
     note int not null check (note between 1 and 5),
     publie_le timestamp not null default localtimestamp,
@@ -256,7 +256,7 @@ create table _avis (
     id_membre_auteur int
         constraint avis_fk_membre_auteur references _membre on delete set null,
     id_offre int not null
-        constraint avis_fk_offre references _offre,
+        constraint avis_fk_offre references _offre on delete cascade,
     constraint avis_uniq_auteur_offre unique (id_membre_auteur, id_offre)
 );
 comment on column _avis.id_membre_auteur is 'Devient null (anonyme) quand l''auteur est supprimé';
@@ -265,7 +265,7 @@ comment on constraint avis_uniq_auteur_offre on _avis is 'Un seul avis par coupl
 create table _avis_restaurant (
     id int
         constraint avis_restaurant_pk primary key
-        constraint avis_restaurant_inherits_avis references _avis,
+        constraint avis_restaurant_inherits_avis references _avis on delete cascade,
     note_cuisine int not null check (note_cuisine between 1 and 5),
     note_service int not null check (note_service between 1 and 5),
     note_ambiance int not null check (note_ambiance between 1 and 5),
@@ -275,9 +275,9 @@ create table _avis_restaurant (
 create table _reponse (
     id int
         constraint reponse_pk primary key
-        constraint reponse_inherits_signalable references _signalable,
+        constraint reponse_inherits_signalable references _signalable on delete cascade,
     id_avis int not null unique
-        constraint reponse_avis references _avis,
+        constraint reponse_avis references _avis on delete cascade,
     contenu paragraphe not null
 );
 
@@ -285,7 +285,7 @@ create table _reponse (
 
 create table _ouverture_hebdomadaire (
     id_offre int
-        constraint ouverture_hebdomadaire_fk_offre references _offre,
+        constraint ouverture_hebdomadaire_fk_offre references _offre on delete cascade,
     dow int check (dow between 0 and 6),
     constraint ouverture_hebdomadaire_pk primary key (id_offre, dow),
 
@@ -299,9 +299,9 @@ comment on column _ouverture_hebdomadaire.dow is 'The day of the week as Sunday 
 
 create table _signalement (
     id_membre int
-        constraint signalement_fk_membre references _membre,
+        constraint signalement_fk_membre references _membre on delete cascade,
     id_signalable int
-        constraint signalement_fk_signalable references _signalable,
+        constraint signalement_fk_signalable references _signalable on delete cascade,
     constraint signalement_pk primary key (id_membre, id_signalable),
 
     raison paragraphe not null
@@ -320,13 +320,13 @@ create table _langue_visite (
     code_langue char(2)
         constraint langue_visite_fk_langue references _langue,
     id_visite int
-        constraint langue_visite_fk_visite references _visite,
+        constraint langue_visite_fk_visite references _visite on delete cascade,
     constraint langue_visite_pk primary key (code_langue, id_visite)
 );
 
 create table _galerie (
     id_offre int
-        constraint galerie_fk_offre references _offre,
+        constraint galerie_fk_offre references _offre on delete cascade,
     id_image int
         constraint galerie_fk_image references _image,
     constraint galerie_pk primary key (id_offre, id_image)
@@ -334,7 +334,7 @@ create table _galerie (
 
 create table _changement_etat (
     id_offre int
-        constraint changement_etat_fk_offre references _offre,
+        constraint changement_etat_fk_offre references _offre on delete cascade,
     fait_le timestamp default localtimestamp,
     constraint changement_etat_pk primary key (id_offre, fait_le)
 );
@@ -342,7 +342,7 @@ create table _changement_etat (
 create table _souscription_option (
     id_offre int
         constraint souscription_option_pk primary key
-        constraint souscription_option_fk_offre references _offre,
+        constraint souscription_option_fk_offre references _offre on delete cascade,
     nom_option nom_option not null
         constraint souscription_option_fk_option references _option,
     actif bool default true
@@ -350,9 +350,9 @@ create table _souscription_option (
 
 create table _juge (
     id_identite int
-        constraint approuve_fk_identite references _identite,
+        constraint approuve_fk_identite references _identite on delete cascade,
     id_avis int
-        constraint approuve_fk_avis references _avis,
+        constraint approuve_fk_avis references _avis on delete cascade,
     constraint approuve_pk primary key (id_identite, id_avis),
 
     aime bool not null
@@ -360,7 +360,7 @@ create table _juge (
 
 create table _tags (
     id_offre int
-        constraint tags_fk_offre references _offre,
+        constraint tags_fk_offre references _offre on delete cascade,
     tag mot_minuscule,
     constraint tags_pk primary key (id_offre, tag)
 );

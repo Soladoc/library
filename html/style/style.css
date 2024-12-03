@@ -832,7 +832,6 @@ body#detail_compte main{
     border-radius: 8px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     padding: 2rem;
-
 }
 section#info_compte {
     display: flex;
@@ -878,4 +877,9 @@ section#info_compte div span {
     display: flex;
     flex-direction: column;
 
+}
+
+#bouton_creer_offre {
+    max-width: 200px;
+    margin: 2rem auto;
 }

@@ -43,10 +43,12 @@ begin
         set denomination = new.denomination
         where id = old.id;
         return new;
-    
 end
 $$ language plpgsql;
 
 create trigger tg_update_denomination instead of
 update on professionnel for each row
 execute function membre_update_denomination ();
+
+-- Delete
+create trigger tg_membre_delete instead of delete on membre for each row execute function _compte_delete();
