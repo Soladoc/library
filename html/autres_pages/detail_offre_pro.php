@@ -24,7 +24,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 // Récupérer les données de l'offre
 $offre = DB\query_offre($args['id']);
 
-// Si l'offre est trouvée, afficher ses détails
+// Si l'offre est trouvée, récupère ses détails
 if ($offre) {
     $titre = $offre['titre'];  // Assurez-vous que le nom des colonnes correspond à la base de données
     $description = $offre['description_detaillee'];
@@ -32,11 +32,9 @@ if ($offre) {
     $site_web = $offre['url_site_web'];
     $image_pricipale = notfalse(Image::from_db($offre['id_image_principale']));
     $en_ligne = $offre['en_ligne'];
-    if ($en_ligne!=1) {
-        $en_ligne = 0;
+    if ($en_ligne) {
+        echo 'en ligne';
     }
-    echo $offre['en_ligne'];
-    echo $en_ligne;
     $info_adresse = DB\query_adresse($adresse);
     $avis = DB\query_avis();
     $galerie = DB\query_galerie($args['id']);
@@ -75,7 +73,7 @@ if ($offre) {
             <form id="toggleForm" method="POST">
                 <div class='online'>
                     <div>
-                        <?php if (isset($en_ligne)==1) { ?>
+                        <?php if ($en_ligne) { ?>
                             <p>Offre en ligne</p>
                             <button type="button" class="hors_ligne" onclick="enableValidate()">Mettre hors ligne</button>
                         <?php } else { ?>
