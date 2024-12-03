@@ -4,20 +4,22 @@ require_once 'testing.php';
 require_once 'model/Activite.php';
 
 DB\transaction(function () {
-    $image = Image::from_db(1);
-    echo 'got image' . PHP_EOL;
+    $image = new Image(null, 1, 'nonexistent', 'i don\'t exist');
+    echo 'created image' . PHP_EOL;
+    $adresse = new Adresse(
+        null,
+        commune: Commune::from_db_by_nom('Lannion'),
+        numero_voie: 14,
+        nom_voie: 'Rue Édouard Branly',
+    );
+    echo 'created adresse' . PHP_EOL;
     $pro = Professionnel::from_db(1);
     echo 'got pro' . PHP_EOL;
     $abo = Abonnement::from_db('standard');
     echo 'got abo' . PHP_EOL;
     $offre = new Activite(
         null,
-        new Adresse(
-            null,
-            commune: Commune::from_db_by_nom('Lannion'),
-            numero_voie: 14,
-            nom_voie: 'Rue Édouard Branly',
-        ),
+        $adresse,
         $image,
         $pro,
         $abo,
