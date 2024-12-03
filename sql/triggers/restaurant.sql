@@ -6,7 +6,7 @@ set
 -- Create
 create function restaurant_insert () returns trigger as $$
 begin
-    new.id = insert_offre(new);
+    new = insert_offre(new);
     insert into pact._restaurant (
         id,
         carte,

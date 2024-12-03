@@ -6,7 +6,7 @@ set
 -- Create
 create function pro_public_insert () returns trigger as $$
 begin
-    new.id = insert_compte(new);
+    new = insert_compte(new);
     insert into pact._professionnel (
         id,
         denomination

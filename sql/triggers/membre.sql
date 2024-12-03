@@ -6,7 +6,7 @@ set
 -- Create
 create function membre_insert () returns trigger as $$
 begin
-    new.id = insert_compte(new);
+    new = insert_compte(new);
     insert into pact._membre (
         id,
         pseudo
