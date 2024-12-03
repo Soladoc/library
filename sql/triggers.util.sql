@@ -84,6 +84,27 @@ begin
         new.periodes_ouverture
     );
     insert into pact._changement_etat (id_offre, fait_le) values (new.id, new.modifiee_le);
+
+    select
+        en_ligne,
+        note_moyenne,
+        prix_min,
+        creee_le,
+        en_ligne_ce_mois_pendant,
+        changement_ouverture_suivant_le,
+        est_ouverte
+    from
+        offres
+    where
+        id = new.id
+    into
+        new.en_ligne,
+        new.note_moyenne,
+        new.prix_min,
+        new.creee_le,
+        new.en_ligne_ce_mois_pendant,
+        new.changement_ouverture_suivant_le,
+        new.est_ouverte;
 end
 $$ language plpgsql strict;
 comment on function insert_offre (record) is
