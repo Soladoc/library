@@ -223,7 +223,7 @@ if ($membre !== false) {
                     </div>
                     </br>
                     <div id="adresse">
-                            <p>Adresse : </p>
+                            <label>Adresse : </label>
                             <?= format_adresse($adresse) ?>
                     </div>
                         <?php put_input_address('', 'adresse', 'adresse_') ?>
@@ -231,8 +231,7 @@ if ($membre !== false) {
                     </div>
                     </br>
                     <div id='changer_mdp'>
-                        <label>Modifier son mot de passe</label>
-                        </br>                        
+                        <label>Modifier son mot de passe</label>                      
                         <div class="champ">
                             <label for="mdp">Mot de passe actuel *</label>
                             <input id="mdp" name="old_mdp" type="password" placeholder="**********">
