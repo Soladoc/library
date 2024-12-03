@@ -40,23 +40,23 @@ final class InputDuree extends Input
 ?>
 <p <?= $this->id ? "id=\"$this->id\"" : '' ?> class="input-duration">
     <input <?= $form_attr ?>
-        id="<?= $this->id ?>_jours"
-        name="<?= $this->name ?>[jours]"
+        id="<?= $this->id('jours') ?>"
+        name="<?= $this->name('jours') ?>"
         type="number"
         min="0"
         required
         value="<?= $current?->days ?? 0 ?>"> jour(s)
     <input <?= $form_attr ?>
-        id="<?= $this->id ?>_heures"
-        name="<?= $this->name ?>[heures]"
+        id="<?= $this->id('heures') ?>"
+        name="<?= $this->name('heures') ?>"
         type="number"
         min="0"
         max="24"
         required
         value="<?= $current?->hours ?? 0 ?>"> heure(s)
     <input <?= $form_attr ?>
-        id="<?= $this->id ?>_minutes"
-        name="<?= $this->name ?>[minutes]"
+        id="<?= $this->id('minutes') ?>"
+        name="<?= $this->name('minutes') ?>"
         type="number"
         min="0"
         max="60"

@@ -51,8 +51,8 @@ final class InputAdresse extends Input
         <input <?= $form_attr ?> type="text" readonly>
     </summary>
     <p><label>Commune&nbsp;: <input <?= $form_attr ?>
-        id="<?= $this->id ?>_commune"
-        name="<?= $this->name ?>[commune]"
+        id="<?= $this->id('commune') ?>"
+        name="<?= $this->name('commune') ?>"
         type="text"
         list="datalist-input-address-communes"
         autocomplete="on"
@@ -60,47 +60,47 @@ final class InputAdresse extends Input
         value="<?= $current?->commune->nom ?>">
     </label></p>
     <p><label>Localité&nbsp;: <input <?= $form_attr ?>
-        id="<?= $this->id ?>_localite"
-        name="<?= $this->name ?>[localite]"
+        id="<?= $this->id('localite') ?>"
+        name="<?= $this->name('localite') ?>"
         type="text"
         maxlength="255"
         placeholder="hameau, lieu-dit&hellip; (optionnel)"
         value="<?= $current?->localite ?>">
     </label></p>
     <p><label>Nom voie&nbsp;: <input <?= $form_attr ?>
-        id="<?= $this->id ?>_nom_voie"
-        name="<?= $this->name ?>[nom_voie]"
+        id="<?= $this->id('nom_voie') ?>"
+        name="<?= $this->name('nom_voie') ?>"
         type="text"
         maxlength="255"
         placeholder="rue de l'Église&hellip; (optionnel)"
         value="<?= $current?->nom_voie ?>">
     </label></p>
     <p><label>Numéro voie&nbsp;: <input <?= $form_attr ?>
-        id="<?= $this->id ?>_numero_voie"
-        name="<?= $this->name ?>[numero_voie]"
+        id="<?= $this->id('numero_voie') ?>"
+        name="<?= $this->name('numero_voie') ?>"
         type="number"
         min="1"
         placeholder="1,2&hellip; (optionnel)"
         value="<?= $current?->numero_voie ?>">
     </label></p>
     <p><label>Complément numéro&nbsp;: <input <?= $form_attr ?>
-        id="<?= $this->id ?>_complement_numero"
-        name="<?= $this->name ?>[complement_numero]"
+        id="<?= $this->id('complement_numero') ?>"
+        name="<?= $this->name('complement_numero') ?>"
         type="text"
         maxlength="10"
         placeholder="bis, ter&hellip; (optionnel)"
         value="<?= $current?->complement_numero ?>">
     </label></p>
     <p><label>Précision interne&nbsp;: <input <?= $form_attr ?>
-        id="<?= $this->id ?>_precision_int"
-        name="<?= $this->name ?>[precision_int]"
+        id="<?= $this->id('precision_int') ?>"
+        name="<?= $this->name('precision_int') ?>"
         type="text" maxlength="255"
         placeholder="apt., boîte à lettre, étage (optionnel)&hellip;"
         value="<?= $current?->precision_int ?>">
     </label></p>
     <p><label>Précision externe&nbsp;: <input <?= $form_attr ?>
-        id="<?= $this->id ?>_precision_ext"
-        name="<?= $this->name ?>[precision_ext]"
+        id="<?= $this->id('precision_ext') ?>"
+        name="<?= $this->name('precision_ext') ?>"
         type="text"
         maxlength="255"
         placeholder="bâtiment, voie, résidence (optionnel)&hellip;"
