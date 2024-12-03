@@ -96,41 +96,6 @@ if ($_POST) {
     <main>
         <h1>Modifier <?= CATEGORIES_OFFRE[$args['type_offre']] ?></h1>
 
-        <section id="type-abonnement">
-            <h2>Abonnement</h2>
-            <?php if ($est_prive) { ?> 
-            <ul id="liste-choix-abonnement">
-                <li>
-                    <label>
-                        <input form="f"
-                                name="libelle_abonnement"
-                                value="standard"
-                                type="radio" 
-                                <?= $offre['libelle_abonnement'] === 'standard' ? 'checked' : '' ?>>
-                        Standard
-                    </label>
-                </li>
-                <li>
-                    <label>
-                        <input form="f"
-                                name="libelle_abonnement"
-                                value="premium"
-                                type="radio" 
-                                <?= $offre['libelle_abonnement'] === 'premium' ? 'checked' : '' ?>>
-                        Premium
-                    </label>
-                </li>
-            </ul>
-            <aside>
-                <img src="/icon/icons8-haute-importance-100.png" alt="Haute importance" width="25" height="25">
-                <p>Attention! Une fois l'option choisi vous ne pourrez plus la modifier.</p>
-            </aside>
-            <?php } else { ?>
-                <p>Comme vous êtres un professionnel public, l'offre crée sera gratuite (pas de facturation)</p>
-                <p><a href="https://example.com">Plus d'informations&hellip;</a></p>
-            <?php } ?>
-        </section>
-
         <section id="info-generales">
             <h2>Informations générales</h2>
             <div>
