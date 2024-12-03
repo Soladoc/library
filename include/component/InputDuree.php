@@ -34,7 +34,7 @@ final class InputDuree extends Input
      * Affiche l'HTML du composant.
      * @param ?Duree $current La duréee à modifier ou `null` pour une création.
      */
-    function put(?Duree $current = null): void
+    function put(mixed $current = null): void
     {
         $form_attr = $this->form_id ? "form=\"$this->form_id\"" : '';
 ?>
