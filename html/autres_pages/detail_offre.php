@@ -9,25 +9,18 @@ $args = [
     'id' => getarg($_GET, 'id', arg_int()),
 ];
 
-$page = new Page("offre : {$args['id']}",
-    ['https://unpkg.com/leaflet@1.7.1/dist/leaflet.css'],
-    [
-        'https://unpkg.com/leaflet@1.7.1/dist/leaflet.js' => 'async',
-        'carrousel.js' => 'defer',
-    ]);
-
 if ($_POST) {
     $args += [
         'commentaire' => getarg($_POST, 'commentaire'),
-        'date_avis' => getarg($_POST, 'date'),
-        'note' => getarg($_POST, 'rating', arg_int()),
-        'contexte' => getarg($_POST, 'contexte'),
+        'date_avis'   => getarg($_POST, 'date'),
+        'note'        => getarg($_POST, 'rating', arg_int()),
+        'contexte'    => getarg($_POST, 'contexte'),
     ];
     if (($id_membre_co = Auth\id_membre_connecte()) === null) {
         $error_message = 'Veuillez vous connecter pour publier un avis.';
     } else {
         $querry = 'INSERT INTO pact.avis (id_membre_auteur,id_offre,commentaire,date_experience,note,contexte) VALUES (?,?,?,?,?,?);';
-        $stmt = DB\connect()->prepare($querry);
+        $stmt   = DB\connect()->prepare($querry);
         $stmt->execute([
             $id_membre_co,
             $args['id'],
@@ -46,14 +39,21 @@ if ($offre === false) {
 }
 assert($offre->id === $args['id']);
 
-$titre = $offre->titre;
-$description = $offre->description_detaillee;
-$site_web = $offre->url_site_web;
+$titre           = $offre->titre;
+$description     = $offre->description_detaillee;
+$site_web        = $offre->url_site_web;
 $image_pricipale = $offre->image_principale;
-$adresse = $offre->adresse;
+$adresse         = $offre->adresse;
 
 $galerie = DB\query_galerie($args['id']);
-$avis = DB\query_avis()
+$avis    = DB\query_avis();
+
+$page = new Page($titre,
+    ['https://unpkg.com/leaflet@1.7.1/dist/leaflet.css'],
+    [
+        'https://unpkg.com/leaflet@1.7.1/dist/leaflet.js' => 'async',
+        'carrousel.js'                                    => 'defer',
+    ]);
 ?>
 
 <!DOCTYPE html>
