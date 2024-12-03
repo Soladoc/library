@@ -24,7 +24,7 @@ final class DynamicTable extends Input
     /**
      * @var string[][]
      */
-    private readonly array $initial_rows = [];
+    private readonly array $initial_rows;
 
     /**
      * @param callable(DynamicTable, ?string[]): void $put_row
