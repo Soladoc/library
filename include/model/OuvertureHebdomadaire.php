@@ -7,7 +7,7 @@ require_once 'Equatable.php';
 /**
  * @implements Equatable<OuvertureHebdomadaire>
  */
-final class OuvertureHebdomadaire implements IteratorAggregate, Equatable
+final class OuvertureHebdomadaire implements ArrayAccess, Equatable
 {
     const TABLE = '_ouverture_hebdomadaire';
 
@@ -23,23 +23,6 @@ final class OuvertureHebdomadaire implements IteratorAggregate, Equatable
         $this->offre = $offre;
     }
 
-    /**
-     * @param int $dow
-     * @param MultiRange<Time> $horaires
-     * @return void
-     */
-    function add(int $dow, MultiRange $horaires): void
-    {
-        $this->ouvertures_hebdomadaires[$dow] = $horaires;
-        notfalse(DB\insert_into(self::TABLE, $this->args($dow) + ['horaires' => $horaires])->execute());
-    }
-
-    function remove(string $nom)
-    {
-        unset($this->ouvertures_hebdomadaires[$nom]);
-        notfalse(DB\delete_from(self::TABLE, $this->args($nom))->execute());
-    }
-
     private function args(int $dow): array
     {
         return [
@@ -51,13 +34,36 @@ final class OuvertureHebdomadaire implements IteratorAggregate, Equatable
     /**
      * @inheritDoc
      */
-    public function getIterator(): Traversable {
-        return new ArrayIterator($this->ouvertures_hebdomadaires);
+    public function equals(mixed $other): bool {
+        return $other->ouvertures_hebdomadaires === $this->ouvertures_hebdomadaires;
     }
     /**
      * @inheritDoc
      */
-    public function equals(mixed $other): bool {
-        return $other->ouvertures_hebdomadaires === $this->ouvertures_hebdomadaires;
+    public function offsetExists(mixed $dow): bool {
+        return isset($this->ouvertures_hebdomadaires[$dow]);
+    }
+    
+    /**
+     * @inheritDoc
+     */
+    public function offsetGet(mixed $dow): MultiRange {
+        return $this->ouvertures_hebdomadaires[$dow];
+    }
+    
+    /**
+     * @inheritDoc
+     */
+    public function offsetSet(mixed $dow, mixed $horaires): void {
+        $this->ouvertures_hebdomadaires[$dow] = $horaires;
+        notfalse(DB\insert_into(self::TABLE, $this->args($dow) + ['horaires' => $horaires])->execute());
+    }
+    
+    /**
+     * @inheritDoc
+     */
+    public function offsetUnset(mixed $dow): void {
+        unset($this->ouvertures_hebdomadaires[$dow]);
+        notfalse(DB\delete_from(self::TABLE, $this->args($dow))->execute());
     }
 }

@@ -19,8 +19,7 @@ if ($_POST) {
     if (($id_membre_co = Auth\id_membre_connecte()) === null) {
         $error_message = 'Veuillez vous connecter pour publier un avis.';
     } else {
-        
-
+        dbg_print($_POST);
         $querry = 'INSERT INTO pact.avis (id_membre_auteur,id_offre,commentaire,date_experience,note,contexte) VALUES (?,?,?,?,?,?);';
         $stmt   = notfalse(DB\connect()->prepare($querry));
         notfalse($stmt->execute([
