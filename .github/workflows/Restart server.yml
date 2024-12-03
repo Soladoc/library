@@ -19,7 +19,7 @@ jobs:
       - name: Send discord message before
         env:
           DISCORD_WEBHOOK_URL: "${{secrets.DISCORD_WEBHOOK_URL}}"
-        run: 'cd "$GITHUB_WORKSPACE"/script" && ./discord-send-msg.bash "@here Redémarrage serveur."'
+        run: 'cd "$GITHUB_WORKSPACE"/script && ./discord-send-msg.bash "@here Redémarrage serveur."'
 
       - name: Restart Server
         env:
@@ -30,4 +30,4 @@ jobs:
       - name: Send discord message after
         env:
           DISCORD_WEBHOOK_URL: "${{secrets.DISCORD_WEBHOOK_URL}}"
-        run: 'cd "$GITHUB_WORKSPACE"/script" && ./discord-send-msg.bash "@here Serveur redémarré."'
+        run: 'cd "$GITHUB_WORKSPACE"/script && ./discord-send-msg.bash "@here Serveur redémarré."'
