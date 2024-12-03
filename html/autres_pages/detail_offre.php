@@ -70,25 +70,27 @@ $page = new Page($titre,
     $page->put_header();
     ?>
     <main>
-    <section class="offer-details">
-        <h1 class="offer-title"><?= htmlspecialchars($titre) ?></h1>
-        <div class="carousel-container">
-            <div class="carousel">
-                <div class="carousel-slide">
-                    <?php (new ImageView($image_pricipale))->put_img() ?>
-                </div>
-                <?php foreach ($galerie as $id_image): ?>
+        <section class="offer-details">
+            <h1 class="offer-title"><?= htmlspecialchars($titre) ?></h1>
+            <div class="carousel-container">
+                <div class="carousel">
                     <div class="carousel-slide">
-                        <?php (new ImageView(Image::from_db($id_image)))->put_img() ?>
+                        <?php (new ImageView($image_pricipale))->put_img() ?>
                     </div>
-                <?php endforeach ?>
+                    <?php foreach ($galerie as $id_image): ?>
+                        <div class="carousel-slide">
+                            <?php (new ImageView(Image::from_db($id_image)))->put_img() ?>
+                        </div>
+                    <?php endforeach ?>
+                </div>
+                <button class="carousel-prev" aria-label="Image précédente">❮</button>
+                <button class="carousel-next" aria-label="Image suivante">❯</button>
             </div>
-            <button class="carousel-prev" aria-label="Image précédente">❮</button>
-            <button class="carousel-next" aria-label="Image suivante">❯</button>
-        </div>
 
-        <p class="offer-description"><?= nl2br(htmlspecialchars($description)) ?></p>
-    </section>
+            <div class="offer-description">
+                <p><?= nl2br(htmlspecialchars($description)) ?></p>
+            </div>
+        </section>
         <section class="offer-location">
             <h3>Emplacement et coordonnées</h3>
             <!-- <div id="map" class="map"></div> -->
