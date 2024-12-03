@@ -16,12 +16,12 @@ require_once 'model/Identite.php';
 abstract class Compte extends Identite implements Signalable
 {
     protected const FIELDS = [
-        'email'     => [null, 'email',      PDO::PARAM_STR],
-        'mdp_hash'  => [null, 'mdp_hash',   PDO::PARAM_STR],
-        'nom'       => [null, 'nom',        PDO::PARAM_STR],
-        'prenom'    => [null, 'prenom',     PDO::PARAM_STR],
-        'telephone' => [null, 'telephone',  PDO::PARAM_STR],
-        'adresse'   => [null, 'id_adresse', PDO::PARAM_STR],
+        'email'     => [[null, 'email',      PDO::PARAM_STR]],
+        'mdp_hash'  => [[null, 'mdp_hash',   PDO::PARAM_STR]],
+        'nom'       => [[null, 'nom',        PDO::PARAM_STR]],
+        'prenom'    => [[null, 'prenom',     PDO::PARAM_STR]],
+        'telephone' => [[null, 'telephone',  PDO::PARAM_STR]],
+        'adresse'   => [[null, 'id_adresse', PDO::PARAM_STR]],
     ];
 
     protected string $email;

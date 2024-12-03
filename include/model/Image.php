@@ -12,14 +12,17 @@ require_once 'model/Model.php';
 final class Image extends Model
 {
     protected const FIELDS = [
-        'taille'       => [null, 'taille',       PDO::PARAM_INT],
-        'mime_subtype' => [null, 'mime_subtype', PDO::PARAM_STR],
-        'legende'      => [null, 'legende',      PDO::PARAM_STR],
+        'taille'       => [[null, 'taille',       PDO::PARAM_INT]],
+        'mime_subtype' => [[null, 'mime_subtype', PDO::PARAM_STR]],
+        'legende'      => [[null, 'legende',      PDO::PARAM_STR]],
     ];
 
-    protected const KEY_FIELDS = [
-        'id' => ['id', PDO::PARAM_INT],
-    ];
+    protected static function key_fields()
+    {
+        return [
+            'id' => ['id', PDO::PARAM_INT, null],
+        ];
+    }
 
     protected ?int $id;
     protected int $taille;

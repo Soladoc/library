@@ -9,8 +9,8 @@ require_once 'Offre.php';
 final class Spectacle extends Offre
 {
     protected const FIELDS = parent::FIELDS + [
-        'indication_duree' => [null, 'indication_duree', PDO::PARAM_STR],
-        'capacite_accueil' => [null, 'capacite_accueil', PDO::PARAM_INT],
+        'indication_duree' => [[null, 'indication_duree', PDO::PARAM_STR]],
+        'capacite_accueil' => [[null, 'capacite_accueil', PDO::PARAM_INT]],
     ];
 
     protected Duree $indication_duree;
@@ -29,13 +29,13 @@ final class Spectacle extends Offre
      * @param ?string $url_site_web
      * @param MultiRange<FiniteTimestamp> $periodes_ouverture
      * @param ?FiniteTimestamp $modifiee_le
-     * @param bool $en_ligne
+     * @param ?bool $en_ligne
      * @param ?float $note_moyenne
      * @param ?float $prix_min
-     * @param FiniteTimestamp $creee_le
-     * @param Duree $en_ligne_ce_mois_pendant
+     * @param ?FiniteTimestamp $creee_le
+     * @param ?Duree $en_ligne_ce_mois_pendant
      * @param ?FiniteTimestamp $changement_ouverture_suivant_le
-     * @param bool $est_ouverte
+     * @param ?bool $est_ouverte
      * @param Duree $indication_duree
      * @param int $capacite_accueil
      */
@@ -50,16 +50,18 @@ final class Spectacle extends Offre
         string $description_detaillee,
         ?string $url_site_web,
         MultiRange $periodes_ouverture,
-        ?FiniteTimestamp $modifiee_le,
-        bool $en_ligne,
-        ?float $note_moyenne,
-        ?float $prix_min,
-        FiniteTimestamp $creee_le,
-        Duree $en_ligne_ce_mois_pendant,
-        ?FiniteTimestamp $changement_ouverture_suivant_le,
-        bool $est_ouverte,
+        //
         Duree $indication_duree,
         int $capacite_accueil,
+        //
+        ?FiniteTimestamp $modifiee_le                     = null,
+        ?bool $en_ligne                                   = null,
+        ?float $note_moyenne                              = null,
+        ?float $prix_min                                  = null,
+        ?FiniteTimestamp $creee_le                        = null,
+        ?Duree $en_ligne_ce_mois_pendant                  = null,
+        ?FiniteTimestamp $changement_ouverture_suivant_le = null,
+        ?bool $est_ouverte                                = null,
     ) {
         parent::__construct(
             $id,
@@ -98,6 +100,10 @@ final class Spectacle extends Offre
             $row['description_detaillee'],
             $row['url_site_web'] ?? null,
             MultiRange::parse($row['periodes_ouverture'], FiniteTimestamp::parse(...)),
+            //
+            Duree::parse($row['indication_duree']),
+            $row['capacite_accueil'],
+            //
             FiniteTimestamp::parse($row['modifiee_le']),
             $row['en_ligne'],
             notfalse(parse_float($row['note_moyenne'] ?? null)),
@@ -106,8 +112,6 @@ final class Spectacle extends Offre
             Duree::parse($row['en_ligne_ce_mois_pendant']),
             FiniteTimestamp::parse($row['changement_ouverture_suivant_le'] ?? null),
             $row['est_ouverte'],
-            Duree::parse($row['indication_duree']),
-            $row['capacite_accueil'],
         );
     }
 

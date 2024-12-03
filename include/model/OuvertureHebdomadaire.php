@@ -2,8 +2,12 @@
 
 require_once 'db.php';
 require_once 'model/MultiRange.php';
+require_once 'Equatable.php';
 
-final class OuvertureHebdomadaire implements IteratorAggregate
+/**
+ * @implements Equatable<OuvertureHebdomadaire>
+ */
+final class OuvertureHebdomadaire implements IteratorAggregate, Equatable
 {
     const TABLE = '_ouverture_hebdomadaire';
 
@@ -12,7 +16,7 @@ final class OuvertureHebdomadaire implements IteratorAggregate
     /**
      * @var array<int, MultiRange<Time>>
      */
-    private array $ouvertures_hebdomadaires;
+    private array $ouvertures_hebdomadaires = [];
 
     function __construct(Offre $offre)
     {
@@ -49,5 +53,11 @@ final class OuvertureHebdomadaire implements IteratorAggregate
      */
     public function getIterator(): Traversable {
         return new ArrayIterator($this->ouvertures_hebdomadaires);
+    }
+    /**
+     * @inheritDoc
+     */
+    public function equals(mixed $other): bool {
+        return $other->ouvertures_hebdomadaires === $this->ouvertures_hebdomadaires;
     }
 }

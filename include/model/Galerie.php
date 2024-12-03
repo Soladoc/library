@@ -1,7 +1,11 @@
 <?php
 require_once 'db.php';
+require_once 'Equatable.php';
 
-final class Galerie implements IteratorAggregate {
+/**
+ * @implements Equatable<Galerie>
+ */
+final class Galerie implements IteratorAggregate, Equatable {
     const TABLE = '_galerie';
 
     private readonly Offre $offre;
@@ -9,7 +13,7 @@ final class Galerie implements IteratorAggregate {
     /**
      * @var array<int, Image>
      */
-    private array $images;
+    private array $images = [];
 
     function __construct(Offre $offre) {
         $this->offre = $offre;
@@ -38,5 +42,11 @@ final class Galerie implements IteratorAggregate {
             'id_offre' => [$this->offre->id, PDO::PARAM_INT],
             'id_image' => [$id_image, PDO::PARAM_INT],
         ];
+    }
+    /**
+     * @inheritDoc
+     */
+    public function equals(mixed $other): bool {
+        return $other->images === $this->images;
     }
 }

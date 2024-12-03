@@ -3,8 +3,14 @@
 set -euo pipefail
 cd "$(dirname "${BASH_SOURCE[0]}")"
 
-for f in *.php; do
-    if [[ "$f" == testing.php ]]; then
+if [[ $# -eq 0 ]]; then
+    files=(*.php)
+else
+    files=("$@")
+fi
+
+for f in "${files[@]}"; do
+    if [[ "$f" = testing.php ]]; then
         continue
     fi
     echo "test $f"

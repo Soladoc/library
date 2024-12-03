@@ -2,17 +2,19 @@
 
 require_once 'util.php';
 
-function f_never_called(): callable {
+function f_never_called(): callable
+{
     return fn(...$_) => assert(false, "I wasn't supposed to be called");
 }
 
 function assert_strictly_equal(mixed $a, mixed $b): void
 {
-    assert($a === $b, "$a === $b");
+    assert($a === $b, var_export($a, true) . ' === ' . var_export($b, true));
 }
 
-function assert_equal(mixed $a, mixed $b): void {
-    assert($a == $b, "$a == $b");
+function assert_equal(mixed $a, mixed $b): void
+{
+    assert($a == $b, var_export($a, true) . ' == ' . var_export($b, true));
 }
 
 /**

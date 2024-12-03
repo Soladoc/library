@@ -67,6 +67,7 @@ function transaction(callable $body, ?callable $cleanup = null)
         $body();
         $pdo->commit();
     } catch (\Throwable $e) {
+        echo 'An error occured, cleaning up and rolling back...' . PHP_EOL;
         if ($cleanup !== null)
             $cleanup();
         notfalse($pdo->rollBack(), '$pdo->rollBack() failed');
@@ -158,13 +159,13 @@ function update(string $table, array $args, array $key_args): PDOStatement
         return notfalse(connect()->prepare('select null'));  // todo: does a empty string work as a noop? test it when we get a working thing.
     }
     $sets = implode(',', array_map(fn($col) => "$col = :$col", array_keys($args)));
-    $stmt = notfalse(connect()->prepare("update $table set $sets" . where_clause(BoolOperator::AND, $key_args)));
+    $stmt = notfalse(connect()->prepare("update $table set $sets" . where_clause(BoolOperator::AND, array_keys($key_args))));
     bind_values($stmt, $args);
     return $stmt;
 }
 
 function delete_from(string $table, array $key_args): PDOStatement {
-    $stmt = notfalse(connect()->prepare("delete from $table " . where_clause(BoolOperator::AND, $key_args)));
+    $stmt = notfalse(connect()->prepare("delete from $table " . where_clause(BoolOperator::AND, array_keys($key_args))));
     bind_values($stmt, $key_args);
     return $stmt;
 }

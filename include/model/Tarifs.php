@@ -1,8 +1,12 @@
 <?php
 
 require_once 'db.php';
+require_once 'Equatable.php';
 
-final class Tarifs implements IteratorAggregate
+/**
+ * @implements Equatable<Tarifs>
+ */
+final class Tarifs implements IteratorAggregate, Equatable
 {
     const TABLE = '_tarif';
 
@@ -11,7 +15,7 @@ final class Tarifs implements IteratorAggregate
     /**
      * @var array<string, float>
      */
-    private array $horaires;
+    private array $tarifs = [];
 
     function __construct(Offre $offre)
     {
@@ -20,13 +24,13 @@ final class Tarifs implements IteratorAggregate
 
     function add(string $nom, float $montant): void
     {
-        $this->horaires[$nom] = $montant;
+        $this->tarifs[$nom] = $montant;
         notfalse(DB\insert_into(self::TABLE, $this->args($nom) + ['montant' => $montant])->execute());
     }
 
     function remove(string $nom)
     {
-        unset($this->horaires[$nom]);
+        unset($this->tarifs[$nom]);
         notfalse(DB\delete_from(self::TABLE, $this->args($nom))->execute());
     }
 
@@ -42,6 +46,12 @@ final class Tarifs implements IteratorAggregate
      * @inheritDoc
      */
     public function getIterator(): Traversable {
-        return new ArrayIterator($this->horaires);
+        return new ArrayIterator($this->tarifs);
+    }
+    /**
+     * @inheritDoc
+     */
+    public function equals(mixed $other): bool {
+        return $other->tarifs === $this->tarifs;
     }
 }

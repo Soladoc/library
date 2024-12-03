@@ -1,7 +1,10 @@
 <?php
 
-final class Professionnelprive extends Professionnel
+final class ProfessionnelPrive extends Professionnel
 {
+    protected const FIELDS = parent::FIELDS + [
+        'siren' => [[null, 'siren', PDO::PARAM_STR]],
+    ];
     protected string $siren;
 
     function __construct(

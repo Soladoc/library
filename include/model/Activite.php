@@ -11,10 +11,10 @@ require_once 'model/Offre.php';
 final class Activite extends Offre
 {
     protected const FIELDS = parent::FIELDS + [
-        'indication_duree'         => [null, 'indication_duree',         PDO::PARAM_STR],
-        'age_requis'               => [null, 'age_requis',               PDO::PARAM_INT],
-        'prestations_incluses'     => [null, 'prestations_incluses',     PDO::PARAM_STR],
-        'prestations_non_incluses' => [null, 'prestations_non_incluses', PDO::PARAM_STR],
+        'indication_duree'         => [[null, 'indication_duree',         PDO::PARAM_STR]],
+        'age_requis'               => [[null, 'age_requis',               PDO::PARAM_INT]],
+        'prestations_incluses'     => [[null, 'prestations_incluses',     PDO::PARAM_STR]],
+        'prestations_non_incluses' => [[null, 'prestations_non_incluses', PDO::PARAM_STR]],
     ];
 
     protected Duree $indication_duree;
@@ -35,13 +35,13 @@ final class Activite extends Offre
      * @param ?string $url_site_web
      * @param MultiRange<FiniteTimestamp> $periodes_ouverture
      * @param ?FiniteTimestamp $modifiee_le
-     * @param bool $en_ligne
+     * @param ?bool $en_ligne
      * @param ?float $note_moyenne
      * @param ?float $prix_min
-     * @param FiniteTimestamp $creee_le
-     * @param Duree $en_ligne_ce_mois_pendant
+     * @param ?FiniteTimestamp $creee_le
+     * @param ?Duree $en_ligne_ce_mois_pendant
      * @param ?FiniteTimestamp $changement_ouverture_suivant_le
-     * @param bool $est_ouverte
+     * @param ?bool $est_ouverte
      * @param Duree $indication_duree
      * @param ?int $age_requis
      * @param string $prestations_incluses
@@ -58,18 +58,20 @@ final class Activite extends Offre
         string $description_detaillee,
         ?string $url_site_web,
         MultiRange $periodes_ouverture,
-        ?FiniteTimestamp $modifiee_le,
-        bool $en_ligne,
-        ?float $note_moyenne,
-        ?float $prix_min,
-        FiniteTimestamp $creee_le,
-        Duree $en_ligne_ce_mois_pendant,
-        ?FiniteTimestamp $changement_ouverture_suivant_le,
-        bool $est_ouverte,
+        //
         Duree $indication_duree,
         ?int $age_requis,
         string $prestations_incluses,
         ?string $prestations_non_incluses,
+        //
+        ?FiniteTimestamp $modifiee_le                     = null,
+        ?bool $en_ligne                                   = null,
+        ?float $note_moyenne                              = null,
+        ?float $prix_min                                  = null,
+        ?FiniteTimestamp $creee_le                        = null,
+        ?Duree $en_ligne_ce_mois_pendant                  = null,
+        ?FiniteTimestamp $changement_ouverture_suivant_le = null,
+        ?bool $est_ouverte                                = null,
     ) {
         parent::__construct(
             $id,
@@ -111,6 +113,12 @@ final class Activite extends Offre
             $row['description_detaillee'],
             $row['url_site_web'] ?? null,
             MultiRange::parse($row['periodes_ouverture'], FiniteTimestamp::parse(...)),
+            //
+            Duree::parse($row['indication_duree']),
+            $row['age_requis'] ?? null,
+            $row['prestations_incluses'],
+            $row['prestations_non_incluses'] ?? null,
+            //
             FiniteTimestamp::parse($row['modifiee_le']),
             $row['en_ligne'],
             notfalse(parse_float($row['note_moyenne'] ?? null)),
@@ -119,10 +127,6 @@ final class Activite extends Offre
             Duree::parse($row['en_ligne_ce_mois_pendant']),
             FiniteTimestamp::parse($row['changement_ouverture_suivant_le'] ?? null),
             $row['est_ouverte'],
-            Duree::parse($row['indication_duree']),
-            $row['age_requis'] ?? null,
-            $row['prestations_incluses'],
-            $row['prestations_non_incluses'] ?? null,
         );
     }
 

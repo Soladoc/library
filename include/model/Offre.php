@@ -43,32 +43,38 @@ require_once 'model/Tarifs.php';
 abstract class Offre extends Model implements Signalable
 {
     protected const FIELDS = [
-        'titre'                 => [null,      'titre',                 PDO::PARAM_STR],
-        'resume'                => [null,      'resume',                PDO::PARAM_STR],
-        'description_detaillee' => [null,      'description_detaillee', PDO::PARAM_STR],
-        'modifiee_le'           => [null,      'modifiee_le',           PDO::PARAM_STR],
-        'url_site_web'          => [null,      'url_site_web',          PDO::PARAM_STR],
-        'periodes_ouverture'    => [null,      'periodes_ouverture',    PDO::PARAM_STR],
-        'adresse'               => ['id',      'id_adresse',            PDO::PARAM_INT],
-        'image_principale'      => ['id',      'id_image_principale',   PDO::PARAM_INT],
-        'professionnel'         => ['id',      'id_professionnel',      PDO::PARAM_INT],
-        'abonnement'            => ['libelle', 'libelle_abonnement',    PDO::PARAM_STR],
+        'titre'                 => [[null,      'titre',                 PDO::PARAM_STR]],
+        'resume'                => [[null,      'resume',                PDO::PARAM_STR]],
+        'description_detaillee' => [[null,      'description_detaillee', PDO::PARAM_STR]],
+        'modifiee_le'           => [[null,      'modifiee_le',           PDO::PARAM_STR]],
+        'url_site_web'          => [[null,      'url_site_web',          PDO::PARAM_STR]],
+        'periodes_ouverture'    => [[null,      'periodes_ouverture',    PDO::PARAM_STR]],
+        'adresse'               => [['id',      'id_adresse',            PDO::PARAM_INT]],
+        'image_principale'      => [['id',      'id_image_principale',   PDO::PARAM_INT]],
+        'professionnel'         => [['id',      'id_professionnel',      PDO::PARAM_INT]],
+        'abonnement'            => [['libelle', 'libelle_abonnement',    PDO::PARAM_STR]],
     ];
 
-    protected const KEY_FIELDS = [
-        'id' => ['id', PDO::PARAM_INT],
-    ];
+    protected static function key_fields()
+    {
+        return [
+            'id' => ['id', PDO::PARAM_INT, null],
+        ];
+    }
 
-    protected const INSERT_FIELDS = [
-        'modifiee_le'                     => ['modifee_le', PDO::PARAM_INT],
-        'en_ligne'                        => ['en_ligne',   PDO::PARAM_BOOL],
-        'note_moyenne'                    => ['note_moyenne', PDO_PARAM_FLOAT],
-        'prix_min'                        => ['prix_min',     PDO_PARAM_FLOAT],
-        'creee_le'                        => ['creee_le',                        PDO::PARAM_STR],
-        'en_ligne_ce_mois_pendant'        => ['en_ligne_ce_mois_pendant',        PDO::PARAM_STR],
-        'changement_ouverture_suivant_le' => ['changement_ouverture_suivant_le', PDO::PARAM_STR],
-        'est_ouverte'                     => ['est_ouverte',                     PDO::PARAM_BOOL],
-    ];
+    protected static function insert_fields()
+    {
+        return [
+            'modifiee_le'                     => ['modifiee_le', PDO::PARAM_STR, FiniteTimestamp::parse(...)],
+            'en_ligne'                        => ['en_ligne',    PDO::PARAM_BOOL, null],
+            'note_moyenne'                    => ['note_moyenne', PDO_PARAM_FLOAT, null],
+            'prix_min'                        => ['prix_min',     PDO_PARAM_FLOAT, null],
+            'creee_le'                        => ['creee_le',                        PDO::PARAM_STR, FiniteTimestamp::parse(...)],
+            'en_ligne_ce_mois_pendant'        => ['en_ligne_ce_mois_pendant',        PDO::PARAM_STR, Duree::parse(...)],
+            'changement_ouverture_suivant_le' => ['changement_ouverture_suivant_le', PDO::PARAM_STR, FiniteTimestamp::parse(...)],
+            'est_ouverte'                     => ['est_ouverte',                     PDO::PARAM_BOOL, null],
+        ];
+    }
 
     function __get(string $name): mixed
     {
@@ -78,32 +84,12 @@ abstract class Offre extends Model implements Signalable
         };
     }
 
-    protected ?int $id;
-    protected string $titre;
-    protected string $resume;
-    protected string $description_detaillee;
-    protected ?string $url_site_web;
-    protected MultiRange $periodes_ouverture;
-    protected ?FiniteTimestamp $modifiee_le;
-    protected Adresse $adresse;
-    protected Image $image_principale;
-    protected Professionnel $professionnel;
-    protected Abonnement $abonnement;
+    protected ?int $nb_avis;
 
     readonly Tags $tags;
     readonly Tarifs $tarifs;
     readonly OuvertureHebdomadaire $ouverture_hebdomadaire;
     readonly Galerie $galerie;
-
-    protected ?int $nb_avis;
-
-    protected readonly bool $en_ligne;
-    protected readonly float $note_moyenne;
-    protected readonly ?float $prix_min;
-    protected readonly FiniteTimestamp $creee_le;
-    protected readonly Duree $en_ligne_ce_mois_pendant;
-    protected readonly ?FiniteTimestamp $changement_ouverture_suivant_le;
-    protected readonly bool $est_ouverte;
 
     /**
      * Construit une nouvelle offre.
@@ -127,47 +113,29 @@ abstract class Offre extends Model implements Signalable
      * @param ?bool $est_ouverte
      */
     function __construct(
-        ?int $id,
-        Adresse $adresse,
-        Image $image_principale,
-        Professionnel $professionnel,
-        Abonnement $abonnement,
-        string $titre,
-        string $resume,
-        string $description_detaillee,
-        ?string $url_site_web,
-        MultiRange $periodes_ouverture,
-        ?FiniteTimestamp $modifiee_le,
-        ?bool $en_ligne,
-        ?float $note_moyenne,
-        ?float $prix_min,
-        ?FiniteTimestamp $creee_le,
-        ?Duree $en_ligne_ce_mois_pendant,
-        ?FiniteTimestamp $changement_ouverture_suivant_le,
-        ?bool $est_ouverte,
+        protected ?int $id,
+        protected Adresse $adresse,
+        protected Image $image_principale,
+        protected Professionnel $professionnel,
+        protected Abonnement $abonnement,
+        protected string $titre,
+        protected string $resume,
+        protected string $description_detaillee,
+        protected ?string $url_site_web,
+        protected MultiRange $periodes_ouverture,
+        protected ?FiniteTimestamp $modifiee_le,
+        protected ?bool $en_ligne                                   = null,
+        protected ?float $note_moyenne                              = null,
+        protected ?float $prix_min                                  = null,
+        protected ?FiniteTimestamp $creee_le                        = null,
+        protected ?Duree $en_ligne_ce_mois_pendant                  = null,
+        protected ?FiniteTimestamp $changement_ouverture_suivant_le = null,
+        protected ?bool $est_ouverte                                = null,
     ) {
-        $this->id                              = $id;
-        $this->adresse                         = $adresse;
-        $this->image_principale                = $image_principale;
-        $this->professionnel                   = $professionnel;
-        $this->abonnement                      = $abonnement;
-        $this->titre                           = $titre;
-        $this->resume                          = $resume;
-        $this->description_detaillee           = $description_detaillee;
-        $this->url_site_web                    = $url_site_web;
-        $this->periodes_ouverture              = $periodes_ouverture;
-        $this->modifiee_le                     = $modifiee_le;
-        $this->en_ligne                        = $en_ligne;
-        $this->note_moyenne                    = $note_moyenne;
-        $this->prix_min                        = $prix_min;
-        $this->creee_le                        = $creee_le;
-        $this->en_ligne_ce_mois_pendant        = $en_ligne_ce_mois_pendant;
-        $this->changement_ouverture_suivant_le = $changement_ouverture_suivant_le;
-        $this->est_ouverte                     = $est_ouverte;
-        $this->tags                            = new Tags($this);
-        $this->tarifs                          = new Tarifs($this);
-        $this->ouverture_hebdomadaire          = new OuvertureHebdomadaire($this);
-        $this->galerie                         = new Galerie($this);
+        $this->tags                   = new Tags($this);
+        $this->tarifs                 = new Tarifs($this);
+        $this->ouverture_hebdomadaire = new OuvertureHebdomadaire($this);
+        $this->galerie                = new Galerie($this);
     }
 
     static function from_db(int $id_offre): Offre|false
@@ -227,8 +195,7 @@ abstract class Offre extends Model implements Signalable
             }
             return;
         }
-        // todo: where temporaire : le temps qu'on fasse marcher les options
-        $stmt = notfalse(DB\connect()->prepare('select * from ' . static::TABLE . ' where note_moyenne = 5'));
+        $stmt = notfalse(DB\connect()->prepare('select * from ' . static::TABLE . " where libelle_abonnement = 'premium' order by random() limit 5"));
         notfalse($stmt->execute());
         while (false !== $row = $stmt->fetch()) {
             yield $row['id'] => static::from_db_row($row);
