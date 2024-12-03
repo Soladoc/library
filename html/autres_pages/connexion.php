@@ -44,9 +44,9 @@ $error = getarg($_GET, 'error', required: false);
             <a href="creation_membre.php" class="btn-creer">Créer un compte personnel</a>
             <label>OU</label>
             <a href="creation_comptePro.php" class="btn-creer">Créer un compte professionnel</a>
-            <label>OU</label>
+            <!--<label>OU</label>
             <a href="reset_mdp.php" class="btn-creer">Mot de passe oublié ?</a>
-            <br>
+            <br>-->
         </div>
     </section>
 </main>

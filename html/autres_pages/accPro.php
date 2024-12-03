@@ -41,7 +41,7 @@ $nb_offres_en_ligne = DB\query_offres_count($id_professionnel, en_ligne: true)
         </section>
 
         <section class="offline-offers">
-            <h2>Mes offres hors ligne</h2>
+            <h2>Mes offres hors-ligne</h2>
             <p>Vos offres hors-ligne&nbsp;: <?= $nb_offres - $nb_offres_en_ligne ?> </p>
 
             <div class="offer-carousel">
