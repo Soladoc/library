@@ -24,7 +24,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 // Récupérer les données de l'offre
 $offre = DB\query_offre($args['id']);
 
-// Si l'offre est trouvée, afficher ses détails
+// Si l'offre est trouvée, récupère ses détails
 if ($offre) {
     $titre = $offre['titre'];  // Assurez-vous que le nom des colonnes correspond à la base de données
     $description = $offre['description_detaillee'];
