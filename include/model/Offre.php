@@ -141,7 +141,7 @@ abstract class Offre extends Model implements Signalable
     static function from_db(int $id_offre): Offre|false
     {
         if (static::TABLE !== self::TABLE) {
-            $stmt = notfalse(DB\connect()->prepare('select * from ' . static::TABLE . ' where id = ?'));
+            $stmt = notfalse(DB\connect()->prepare(self::make_select() . ' where id = ?'));
             DB\bind_values($stmt, [1 => [$id_offre, PDO::PARAM_INT]]);
             notfalse($stmt->execute());
             $row = $stmt->fetch();
@@ -196,7 +196,7 @@ abstract class Offre extends Model implements Signalable
             }
             return;
         }
-        $stmt = notfalse(DB\connect()->prepare('select * from ' . static::TABLE . " where libelle_abonnement = 'premium' order by random() limit 5"));
+        $stmt = notfalse(DB\connect()->prepare(self::make_select() . " where libelle_abonnement = 'premium' order by random() limit 5"));
         notfalse($stmt->execute());
         while (false !== $row = $stmt->fetch()) {
             yield $row['id'] => static::from_db_row($row);
@@ -235,7 +235,7 @@ abstract class Offre extends Model implements Signalable
             return;
         }
         $args = DB\filter_null_args(['id_professionnel' => [$id_professionnel, PDO::PARAM_INT], 'en_ligne' => [$en_ligne, PDO::PARAM_BOOL]]);
-        $stmt = notfalse(DB\connect()->prepare('select * from ' . static::TABLE . DB\where_clause(DB\BoolOperator::AND, array_keys($args))));
+        $stmt = notfalse(DB\connect()->prepare(self::make_select() . DB\where_clause(DB\BoolOperator::AND, array_keys($args))));
         DB\bind_values($stmt, $args);
         notfalse($stmt->execute());
         while (false !== $row = $stmt->fetch()) {
@@ -273,7 +273,7 @@ abstract class Offre extends Model implements Signalable
             }
             return;
         }
-        $stmt = notfalse(DB\connect()->prepare('select * from ' . static::TABLE . ' where '
+        $stmt = notfalse(DB\connect()->prepare(self::make_select() . ' where '
             . implode(' and ', array_map(
                 fn($mot) => 'titre ilike ' . DB\quote_string("%$mot%"),
                 explode(' ', trim($motcle)),
@@ -282,6 +282,10 @@ abstract class Offre extends Model implements Signalable
         while (false !== $row = $stmt->fetch()) {
             yield $row['id'] => static::from_db_row($row);
         }
+    }
+
+    private static function make_select(): string {
+        return 'select * from ' . static::TABLE;
     }
 
     /**
