@@ -5,7 +5,7 @@ on:
     branches:
       - main
     paths:
-      - '.github/workflows/Restart Server.yml'
+      - '.github/workflows/Restart server.yml'
 defaults:
   run:
     shell: bash

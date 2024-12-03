@@ -5,7 +5,7 @@ on:
     branches:
       - main
     paths:
-      - '.github/workflows/Reset Database.yml'
+      - '.github/workflows/Reset database.yml'
       - '**.sql'
 jobs:
   reset_db:
