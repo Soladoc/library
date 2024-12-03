@@ -76,9 +76,13 @@ final class DynamicTable extends Input
     </thead>
     <tbody>
         <?php foreach ($current ?? $this->initial_rows as $row) {
-            ($this->put_row)($this, $row);
+            ?>
+            <tr>
+                <?php ($this->put_row)($this, $row); ?>
+                <button class="button-remove-row" type="button">-</button>
+            </tr>
+            <?php
         } ?>
-        <button class="button-remove-row" type="button">-</button>
     </tbody>
     <tfoot>
         <tr>
