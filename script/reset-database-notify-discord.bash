@@ -48,7 +48,7 @@ gh_job_logs() {
     gh-api "repos/$REPOSITORY/actions/runs/$RUN_ID/logs" >"$logs_zip"
 
     # Unzip logs
-    unzip -p "$logs_zip" "$JOB_ID/${1}_$2" |
+    unzip -p "$logs_zip" "$JOB_NAME/${1}_$2.txt" |
         sort |         # sort by timestamp
         tail -n "$3" | # take last entries
         colrm 1 29     # remove timestamp
