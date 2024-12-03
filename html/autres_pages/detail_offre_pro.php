@@ -35,6 +35,8 @@ if ($offre) {
     if (!isset($en_ligne)) {
         $en_ligne = 0;
     }
+    echo $offre['en_ligne'];
+    echo $en_ligne;
     $info_adresse = DB\query_adresse($adresse);
     $avis = DB\query_avis();
     $galerie = DB\query_galerie($args['id']);
