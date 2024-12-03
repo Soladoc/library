@@ -59,7 +59,7 @@ if (isset($_POST['motdepasse'])) {
         ]);
     }catch(PDOException $e){
         echo "Adresse Mail invalide " . $e->getMessage();
-        redirect_to('connexion.php');
+        redirect_to('creation_membre.php');
     }
     redirect_to(location_connexion());  // todo: passer en GET le pseudo pour l'afficher dans le formulaire connexion, pour que l'utilisateur n'ait pas à le retaper.
 } else {
