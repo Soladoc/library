@@ -70,12 +70,12 @@ if ($offre) {
             <form id="toggleForm" method="POST">
                 <div class='online'>
                     <div>
-                        <?php if (isset($en_ligne)!=false) { ?>
-                        <p>Offre en ligne</p>
-                        <button type="button" class="hors_ligne" onclick="enableValidate()">Mettre hors ligne</button>
+                        <?php if (isset($en_ligne)===0) { ?>
+                            <p>Offre en ligne</p>
+                            <button type="button" class="hors_ligne" onclick="enableValidate()">Mettre hors ligne</button>
                         <?php } else { ?>
-                        <p>Offre hors ligne</p>
-                        <button type="button" class="en_ligne" onclick="enableValidate()">Mettre en ligne</button>
+                            <p>Offre hors ligne</p>
+                            <button type="button" class="en_ligne" onclick="enableValidate()">Mettre en ligne</button>
                         <?php } ?>
                     </div>
                     <button type="submit" name="valider" class="valider" id="validateButton" disabled>Valider</button>
