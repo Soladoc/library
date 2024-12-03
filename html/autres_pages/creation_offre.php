@@ -104,10 +104,10 @@ if ($_POST) {
             </ul>
             <aside>
                 <img src="/icon/icons8-haute-importance-100.png" alt="Haute importance" width="25" height="25">
-                <p>Attention! Une fois l'option choisi vous ne pourrez plus la modifier.</p>
+                <p>Attention! Une fois l'option choisie vous ne pourrez plus la modifier.</p>
             </aside>
             <?php } else { ?>
-                <p>Comme vous êtres un professionnel public, l'offre crée sera gratuite (pas de facturation)</p>
+                <p>Comme vous êtes un professionnel public, l'offre créée sera gratuite (pas de facturation)</p>
                 <p><a href="https://example.com">Plus d'informations&hellip;</a></p>
             <?php } ?>
         </section>

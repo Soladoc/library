@@ -28,8 +28,7 @@ execute function _offre_after_update ();
 -- Delete
 create function visite_delete () returns trigger as $$
 begin
-    call delete_offre(old);
-    delete from _image where id = old.id_image_plan;
+    delete from _signalable where id = old.id;
 end
 $$ language plpgsql;
 

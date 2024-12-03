@@ -34,7 +34,7 @@ execute function _offre_after_update ();
 -- Delete
 create function activite_delete () returns trigger as $$
 begin
-    call delete_offre(old);
+    delete from _signalable where id = old.id;
     return old;
 end
 $$ language plpgsql;
