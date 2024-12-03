@@ -44,6 +44,10 @@ final class Image extends Model
         $this->tmp_name     = $tmp_name;
     }
 
+    function insert(): void {
+        parent::insert();
+    }
+
     static function from_db(int $id_image): Image|false
     {
         $stmt = notfalse(DB\connect()->prepare('select taille, mime_subtype, legende from ' . self::TABLE . ' where id = ?'));
@@ -60,15 +64,15 @@ final class Image extends Model
 
     /**
      * Déplace cette image téléversée vers le dossier des images utilisateur.
-     * @throws LogicException
-     * @return void
      */
     function move_uploaded_image(): void
     {
         if ($this->tmp_name === null) {
-            throw new LogicException("Impossible de déplacer l'image. Soit l'image a déjà été déplacée, soit elle provient de la BDD");
+            return;
         }
-        notfalse(move_uploaded_file($this->tmp_name, DOCUMENT_ROOT . $this->upload_location()));
+        $dest = DOCUMENT_ROOT . $this->upload_location();
+        error_log("Moving uploaded image '$this->tmp_name' to '$dest'.");
+        notfalse(move_uploaded_file($this->tmp_name, $dest));
         $this->tmp_name = null;
     }
 

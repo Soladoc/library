@@ -21,7 +21,7 @@ print_r($offre);
 
 $args = [
     // ne lance pas la page et génère une errreur si il n'y a pas de get
-    'type_offre' => getarg($_GET, 'type_offre', arg_check(f_is_in(array_keys(CATEGORIES_OFFRE)))),
+    'categorie' => getarg($_GET, 'categorie', arg_check(f_is_in(array_keys(CATEGORIES_OFFRE)))),
 ];
 
 
@@ -57,7 +57,7 @@ if ($_POST) {
         ];
     }
 
-    $args += match ($args['type_offre']) {
+    $args += match ($args['categorie']) {
         'activité' => indication_duree_args() + [
             'age_requis' => getarg($_POST, 'age_requis', arg_int(1), required: false),
             'prestations_incluses' => getarg($_POST, 'prestations_incluses'),
@@ -94,7 +94,7 @@ if ($_POST) {
 <body>
     <?php $page->put_header() ?>
     <main>
-        <h1>Modifier <?= CATEGORIES_OFFRE[$args['type_offre']] ?></h1>
+        <h1>Modifier <?= CATEGORIES_OFFRE[$args['categorie']] ?></h1>
 
         <section id="info-generales">
             <h2>Informations générales</h2>
@@ -210,7 +210,7 @@ if ($_POST) {
                 // Récupération des tags associés à l'offre
                 //$tags_remplis = DB\query_tags($offre['id']);
                 $tags_remplis = array_column(DB\query_tags($offre['id']), 'tag');
-                $tags_disponibles = $args['type_offre'] === 'restaurant' ? TAGS_RESTAURANT : DEFAULT_TAGS;
+                $tags_disponibles = $args['categorie'] === 'restaurant' ? TAGS_RESTAURANT : DEFAULT_TAGS;
                 foreach ($tags_disponibles as $tag) {
                     // Si le tag est déjà dans les tags remplis, ajoutez 'checked'
                     $checked = in_array($tag, $tags_remplis) ? 'checked' : '';
@@ -243,7 +243,7 @@ if ($_POST) {
         <section id="infos-detaillees">
             <h2>Informations détaillées</h2>
             <?php
-            switch ($args['type_offre']) {
+            switch ($args['categorie']) {
                 case 'activité':
                     $info = DB\query_activite($offre['id']);
                     ?>

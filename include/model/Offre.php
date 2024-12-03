@@ -138,6 +138,17 @@ abstract class Offre extends Model implements Signalable
         $this->galerie                = new Galerie($this);
     }
 
+    function insert(): void {
+        $this->professionnel->insert();
+        $this->adresse->insert();
+        $this->image_principale->insert();
+        parent::insert();
+        $this->tarifs->insert();
+        $this->tags->insert();
+        $this->ouverture_hebdomadaire->insert();
+        $this->galerie->insert();
+    }
+
     static function from_db(int $id_offre): Offre|false
     {
         if (static::TABLE !== self::TABLE) {

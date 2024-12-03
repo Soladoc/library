@@ -6,6 +6,7 @@ require_once 'Equatable.php';
 
 /**
  * @implements Equatable<OuvertureHebdomadaire>
+ * @implements ArrayAccess<int, MultiRange<Time>>
  */
 final class OuvertureHebdomadaire implements ArrayAccess, Equatable
 {
@@ -23,9 +24,9 @@ final class OuvertureHebdomadaire implements ArrayAccess, Equatable
         $this->offre = $offre;
     }
 
-    private function args(int $dow): array
+    private function args(int $dow): ?array
     {
-        return [
+        return $this->offre->id === null ? null : [
             'id_offre' => $this->offre->id,
             'dow' => $dow,
         ];
@@ -34,36 +35,49 @@ final class OuvertureHebdomadaire implements ArrayAccess, Equatable
     /**
      * @inheritDoc
      */
-    public function equals(mixed $other): bool {
+    function equals(mixed $other): bool {
         return $other->ouvertures_hebdomadaires === $this->ouvertures_hebdomadaires;
     }
     /**
      * @inheritDoc
      */
-    public function offsetExists(mixed $dow): bool {
+    function offsetExists(mixed $dow): bool {
         return isset($this->ouvertures_hebdomadaires[$dow]);
     }
     
     /**
      * @inheritDoc
      */
-    public function offsetGet(mixed $dow): MultiRange {
+    function offsetGet(mixed $dow): MultiRange {
         return $this->ouvertures_hebdomadaires[$dow];
     }
     
     /**
      * @inheritDoc
      */
-    public function offsetSet(mixed $dow, mixed $horaires): void {
+    function offsetSet(mixed $dow, mixed $horaires): void {
         $this->ouvertures_hebdomadaires[$dow] = $horaires;
-        notfalse(DB\insert_into(self::TABLE, $this->args($dow) + ['horaires' => $horaires])->execute());
     }
     
     /**
      * @inheritDoc
      */
-    public function offsetUnset(mixed $dow): void {
+    function offsetUnset(mixed $dow): void {
         unset($this->ouvertures_hebdomadaires[$dow]);
-        notfalse(DB\delete_from(self::TABLE, $this->args($dow))->execute());
+        if (null !== $args = $this->args($dow)) {
+            notfalse(DB\delete_from(self::TABLE, $args)->execute());
+        }
+    }
+
+    function insert(): void {
+        array_walk($this->ouvertures_hebdomadaires, $this->insert_ouverture_hebdomadaire(...));
+    }
+
+    private function insert_ouverture_hebdomadaire(int $dow, MultiRange $horaires): void {
+        if (null !== $args = $this->args($dow)) {
+            notfalse(DB\insert_into(self::TABLE, $args + [
+                'horaires' => [$horaires, PDO::PARAM_STR],
+            ])->execute());
+        }
     }
 }

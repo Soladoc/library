@@ -33,7 +33,7 @@ abstract class Model
     function insert(): void
     {
         if ($this->exists_in_db()) {
-            throw new LogicException('This model already exists in the DB.');
+            return;
         }
         $returning_fields = static::key_fields() + static::insert_fields();
         $stmt = DB\insert_into(
@@ -65,7 +65,7 @@ abstract class Model
     function delete(): void
     {
         if (!$this->exists_in_db()) {
-            throw new LogicException('This model must exist in the DB');
+            return;
         }
         $stmt = DB\delete_from(
             static::TABLE,

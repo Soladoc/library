@@ -14,7 +14,7 @@ $page = new Page("Choix de l'offre", ['choix_categorie_creation_offre.css']);
     <form action="creation_offre.php" method="get">
         <p>Choisissez la catégorie de votre offre</p>
         <?php foreach (array_keys(CATEGORIES_OFFRE) as $categorie) { ?> 
-            <button type="submit" name="type_offre" value="<?= $categorie ?>"><?= ucfirst($categorie) ?></button>
+            <button type="submit" name="categorie" value="<?= $categorie ?>"><?= ucfirst($categorie) ?></button>
         <?php } ?>
     </form>
 

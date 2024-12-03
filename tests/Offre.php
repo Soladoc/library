@@ -6,8 +6,6 @@ require_once 'model/Activite.php';
 DB\transaction(function () {
     echo 'creating image' . PHP_EOL;
     $image = new Image(null, 1, 'nonexistent', 'i don\'t exist');
-    echo 'inserting image' . PHP_EOL;
-    $image->insert();
     echo 'creating adresse' . PHP_EOL;
     $adresse = new Adresse(
         null,
@@ -15,8 +13,6 @@ DB\transaction(function () {
         numero_voie: 14,
         nom_voie: 'Rue Édouard Branly',
     );
-    echo 'inserting adresse' . PHP_EOL;
-    $adresse->insert();
     echo 'getting pro' . PHP_EOL;
     $pro = Professionnel::from_db(1);
     echo 'getting abo' . PHP_EOL;

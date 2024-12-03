@@ -14,7 +14,7 @@ $page = new Page("Création d'une offre",
     ['creation_offre.css'],
     ['module/creation_offre.js' => 'defer type="module"']);
 
-$categorie = getarg($_GET, 'type_offre', arg_check(f_is_in(array_keys(CATEGORIES_OFFRE))));
+$categorie = getarg($_GET, 'categorie', arg_check(f_is_in(array_keys(CATEGORIES_OFFRE))));
 
 $input_offre = new InputOffre(
     $categorie,
@@ -23,10 +23,18 @@ $input_offre = new InputOffre(
 );
 
 if ($_POST) {
-    $a = $input_offre->get($_POST);
-    // Délégation du traitement à un autre script pour gagner de la place
-    require 'traitement/creation_offre.php';
-    exit;
+    $offre = $input_offre->get($_POST);
+
+    DB\transaction(fn() => $offre->insert());
+
+    $offre->image_principale->move_uploaded_image();
+    foreach ($offre->galerie as $img) {
+        $img->move_uploaded_image();
+    }
+
+    // Rediriger vers la page de détaille de l'offre en cas de succès.
+    // En cas d'échec, l'exception est jetée par DB\transaction(), donc on atteint pas cette ligne.
+    redirect_to(location_detail_offre_pro($id_offre));
 }
 ?>
 <!DOCTYPE html>

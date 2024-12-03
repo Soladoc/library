@@ -5,6 +5,7 @@ require_once 'Equatable.php';
 
 /**
  * @implements Equatable<Tarifs>
+ * @implements IteratorAggregate<string, float>
  */
 final class Tarifs implements IteratorAggregate, Equatable
 {
@@ -25,35 +26,52 @@ final class Tarifs implements IteratorAggregate, Equatable
     function add(string $nom, float $montant): void
     {
         $this->tarifs[$nom] = $montant;
-        notfalse(DB\insert_into(self::TABLE, $this->args($nom) + [
-            'montant' => [$montant, PDO_PARAM_FLOAT],
-        ])->execute());
+        $this->insert_tarif($nom, $montant);
     }
 
-    function remove(string $nom)
+    function remove(string $nom): void
     {
         unset($this->tarifs[$nom]);
-        notfalse(DB\delete_from(self::TABLE, $this->args($nom))->execute());
+        if (null !== $args = $this->args($nom)) {
+            notfalse(DB\delete_from(self::TABLE, $args)->execute());
+        }
     }
 
-    private function args(string $nom): array
+    private function args(string $nom): ?array
     {
-        return [
+        return $this->offre->id === null ? null : [
             'id_offre' => [$this->offre->id, PDO::PARAM_INT],
-            'nom' => [$nom, PDO::PARAM_STR],
+            'nom'      => [$nom, PDO::PARAM_STR],
         ];
     }
 
+    function insert(): void
+    {
+        array_walk($this->tarifs, $this->insert_tarif(...));
+    }
+
+    private function insert_tarif(string $nom, float $montant): void
+    {
+        if (null !== $args = $this->args($nom)) {
+            notfalse(DB\insert_into(self::TABLE, $args + [
+                'montant' => [$montant, PDO_PARAM_FLOAT],
+            ])->execute());
+        }
+    }
+
     /**
      * @inheritDoc
      */
-    public function getIterator(): Traversable {
+    function getIterator(): Traversable
+    {
         return new ArrayIterator($this->tarifs);
     }
+
     /**
      * @inheritDoc
      */
-    public function equals(mixed $other): bool {
+    function equals(mixed $other): bool
+    {
         return $other->tarifs === $this->tarifs;
     }
 }

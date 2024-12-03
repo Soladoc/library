@@ -66,7 +66,7 @@ final class InputOffre extends Input
             <?php
             },
             function (DynamicTable $dt) {
-            ?>
+                ?>
             <td><input type="text" placeholder="Enfant, Sénior&hellip;" required></td>
             <td><input type="number" min="0" placeholder="Prix" required> €</td>
             <?php
@@ -80,13 +80,13 @@ final class InputOffre extends Input
             ['Début', 'Fin'],
             function (DynamicTable $dt, ?array $horaire) {
                 $form_attr = $dt->form_id ? "form=\"$dt->form_id\"" : '';
-            ?>
+                ?>
             <td><input <?= $form_attr ?> name="<?= $this->name('periodes') ?>[debut][]" type="datetime-local" value="<?= $horaire === null ? null : $horaire[0] ?>)"></td>
             <td><input <?= $form_attr ?> name="<?= $this->name('periodes') ?>[fin][]" type="datetime-local" value="<?= $horaire === null ? null : $horaire[1] ?>"></td>
             <?php
             },
             function (DynamicTable $dt) {
-            ?>
+                ?>
             <td><input type="datetime-local" placeholder="Début" required></td>
             <td><input type="datetime-local" placeholder="Fin" required></td>
             <?php
@@ -103,10 +103,10 @@ final class InputOffre extends Input
      * @param ?int $current_id_offre L'ID de l'offre à modifier ou `null` pour une création.
      * @param bool $required Si l'offre est requise. Quand l'offre est manquante, si `false` a été passé, la fonction retourne `null`. Sinon, déclenche une erreur.
      */
-    public function get(array $get_or_post, ?int $current_id_offre = null, bool $required = true): ?Offre
+    function get(array $get_or_post, ?int $current_id_offre = null, bool $required = true): ?Offre
     {
         $args = [
-            null,
+            $current_id_offre,
             $this->input_adresse->get($_POST, required: $required),
             $this->input_image_principale->get($_POST, required: $required),
             $this->professionnel,
@@ -126,7 +126,8 @@ final class InputOffre extends Input
             )),
         ];
 
-        if ($args[1] === null) return null;
+        if ($args[1] === null)
+            return null;
 
         $offre = match ($this->categorie) {
             Activite::CATEGORIE => new Activite(
@@ -138,7 +139,7 @@ final class InputOffre extends Input
             ),
             ParcAttractions::CATEGORIE => new ParcAttractions(
                 ...$args,
-                image_plan: $this->input_image_plan->get($_POST)
+                image_plan: $this->input_image_plan->get($_POST),
             ),
             Spectacle::CATEGORIE => new Spectacle(
                 ...$args,
@@ -193,10 +194,10 @@ final class InputOffre extends Input
     /**
      * @inheritDoc
      */
-    public function put(mixed $current = null): void
+    function put(mixed $current = null): void
     {
         $id_professionnel = Auth\exiger_connecte_pro();
-        $est_prive        = DB\exists_pro_prive($id_professionnel);
+        $est_prive = DB\exists_pro_prive($id_professionnel);
 
         $form_attr = $this->form_id ? "form=\"$this->form_id\"" : '';
         ?>
@@ -379,7 +380,7 @@ final class InputOffre extends Input
                     </fieldset>
                     <p>Carte</p>
                     <textarea <?= $form_attr ?> name="<?= $this->name('carte') ?>">
-                                <?= $restaurant?->carte ?></textarea>
+                                                <?= $restaurant?->carte ?></textarea>
                     <?php
                     break;
                 case Spectacle::CATEGORIE:
