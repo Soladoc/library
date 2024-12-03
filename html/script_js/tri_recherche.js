@@ -12,10 +12,13 @@ async function initializeOffers() {
         getDataJson(`/json/offres.php`),
         getDataJson(`/json/images.php`),
     ]);
-    offers = offers.map(offer => ({
-        ...offer,
-        tags: Array.isArray(offer.tags) ? offer.tags.map(tagObj => tagObj.tag.toLowerCase()) : []
-    }));
+    offers = offers
+        .filter(offer => offer.en_ligne === true)  // Filter out offers where en_ligne is false
+        .map(offer => ({
+            ...offer,
+            tags: Array.isArray(offer.tags) ? offer.tags.map(tagObj => tagObj.tag.toLowerCase()) : []
+        }))
+    ;
     filterOffers();
 }
 initializeOffers();
