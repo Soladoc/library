@@ -14,13 +14,13 @@ require_once 'model/Offre.php';
 final class Restaurant extends Offre
 {
     protected const FIELDS = parent::FIELDS + [
-        'carte'               => [null, 'carte',               PDO::PARAM_STR],
-        'richesse'            => [null, 'richesse',            PDO::PARAM_INT],
-        'sert_petit_dejeuner' => [null, 'sert_petit_dejeuner', PDO::PARAM_BOOL],
-        'sert_brunch'         => [null, 'sert_brunch',         PDO::PARAM_BOOL],
-        'sert_dejeuner'       => [null, 'sert_dejeuner',       PDO::PARAM_BOOL],
-        'sert_diner'          => [null, 'sert_diner',          PDO::PARAM_BOOL],
-        'sert_boissons'       => [null, 'sert_boissons',       PDO::PARAM_BOOL],
+        'carte'               => [[null, 'carte',               PDO::PARAM_STR]],
+        'richesse'            => [[null, 'richesse',            PDO::PARAM_INT]],
+        'sert_petit_dejeuner' => [[null, 'sert_petit_dejeuner', PDO::PARAM_BOOL]],
+        'sert_brunch'         => [[null, 'sert_brunch',         PDO::PARAM_BOOL]],
+        'sert_dejeuner'       => [[null, 'sert_dejeuner',       PDO::PARAM_BOOL]],
+        'sert_diner'          => [[null, 'sert_diner',          PDO::PARAM_BOOL]],
+        'sert_boissons'       => [[null, 'sert_boissons',       PDO::PARAM_BOOL]],
     ];
 
     const CATEGORIE = 'restaurant';
@@ -49,13 +49,13 @@ final class Restaurant extends Offre
      * @param ?string $url_site_web
      * @param MultiRange<FiniteTimestamp> $periodes_ouverture
      * @param ?FiniteTimestamp $modifiee_le
-     * @param bool $en_ligne
+     * @param ?bool $en_ligne
      * @param ?float $note_moyenne
      * @param ?float $prix_min
-     * @param FiniteTimestamp $creee_le
-     * @param Duree $en_ligne_ce_mois_pendant
+     * @param ?FiniteTimestamp $creee_le
+     * @param ?Duree $en_ligne_ce_mois_pendant
      * @param ?FiniteTimestamp $changement_ouverture_suivant_le
-     * @param bool $est_ouverte
+     * @param ?bool $est_ouverte
      * @param string $carte
      * @param int $richesse
      * @param bool $sert_petit_dejeuner
@@ -75,14 +75,7 @@ final class Restaurant extends Offre
         string $description_detaillee,
         ?string $url_site_web,
         MultiRange $periodes_ouverture,
-        ?FiniteTimestamp $modifiee_le,
-        bool $en_ligne,
-        ?float $note_moyenne,
-        ?float $prix_min,
-        FiniteTimestamp $creee_le,
-        Duree $en_ligne_ce_mois_pendant,
-        ?FiniteTimestamp $changement_ouverture_suivant_le,
-        bool $est_ouverte,
+        //
         string $carte,
         int $richesse,
         bool $sert_petit_dejeuner,
@@ -90,6 +83,15 @@ final class Restaurant extends Offre
         bool $sert_dejeuner,
         bool $sert_diner,
         bool $sert_boissons,
+        //
+        ?FiniteTimestamp $modifiee_le                     = null,
+        ?bool $en_ligne                                   = null,
+        ?float $note_moyenne                              = null,
+        ?float $prix_min                                  = null,
+        ?FiniteTimestamp $creee_le                        = null,
+        ?Duree $en_ligne_ce_mois_pendant                  = null,
+        ?FiniteTimestamp $changement_ouverture_suivant_le = null,
+        ?bool $est_ouverte                                = null,
     ) {
         parent::__construct(
             $id,
@@ -133,6 +135,15 @@ final class Restaurant extends Offre
             $row['description_detaillee'],
             $row['url_site_web'] ?? null,
             MultiRange::parse($row['periodes_ouverture'], FiniteTimestamp::parse(...)),
+            //
+            $row['carte'],
+            $row['richesse'],
+            $row['sert_petit_dejeuner'],
+            $row['sert_brunch'],
+            $row['sert_dejeuner'],
+            $row['sert_diner'],
+            $row['sert_boissons'],
+            //
             FiniteTimestamp::parse($row['modifiee_le']),
             $row['en_ligne'],
             notfalse(parse_float($row['note_moyenne'] ?? null)),
@@ -141,13 +152,6 @@ final class Restaurant extends Offre
             Duree::parse($row['en_ligne_ce_mois_pendant']),
             FiniteTimestamp::parse($row['changement_ouverture_suivant_le'] ?? null),
             $row['est_ouverte'],
-            $row['carte'],
-            $row['richesse'],
-            $row['sert_petit_dejeuner'],
-            $row['sert_brunch'],
-            $row['sert_dejeuner'],
-            $row['sert_diner'],
-            $row['sert_boissons'],
         );
     }
 }

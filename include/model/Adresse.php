@@ -2,6 +2,7 @@
 
 require_once 'util.php';
 require_once 'model/Commune.php';
+require_once 'model/Model.php';
 
 /**
  * @property-read ?int $id L'ID. `null` si cette adresse n'existe pas dans la BDD.
@@ -16,23 +17,29 @@ require_once 'model/Commune.php';
  * @property ?float $longitude
  * @property ?int $id
  */
-final class Adresse
+final class Adresse extends Model
 {
     protected const FIELDS = [
-        'commune'           => ['id', 'id_commune', PDO::PARAM_INT],
-        'numero_voie'       => [null, 'numero_voie',       PDO::PARAM_STR],
-        'complement_numero' => [null, 'complement_numero', PDO::PARAM_STR],
-        'nom_voie'          => [null, 'nom_voie',          PDO::PARAM_STR],
-        'localite'          => [null, 'localite',          PDO::PARAM_STR],
-        'precision_int'     => [null, 'precision_int',     PDO::PARAM_STR],
-        'precision_ext'     => [null, 'precision_ext',     PDO::PARAM_STR],
-        'latitude'          => [null, 'latitude',          PDO::PARAM_STR],
-        'longitude'         => [null, 'longitude',         PDO::PARAM_STR],
+        'commune' => [
+            ['code',               'code_commune',       PDO::PARAM_INT],
+            ['numero_departement', 'numero_departement', PDO::PARAM_STR]
+        ],
+        'numero_voie' => [[null,       'numero_voie',       PDO::PARAM_STR]],
+        'complement_numero' => [[null, 'complement_numero', PDO::PARAM_STR]],
+        'nom_voie' => [[null,          'nom_voie',          PDO::PARAM_STR]],
+        'localite' => [[null,          'localite',          PDO::PARAM_STR]],
+        'precision_int' => [[null,     'precision_int',     PDO::PARAM_STR]],
+        'precision_ext' => [[null,     'precision_ext',     PDO::PARAM_STR]],
+        'latitude' => [[null,          'latitude',          PDO::PARAM_STR]],
+        'longitude' => [[null,         'longitude',         PDO::PARAM_STR]],
     ];
 
-    protected const KEY_FIELDS = [
-        'id' => ['id', PDO::PARAM_INT],
-    ];
+    protected static function key_fields()
+    {
+        return [
+            'id' => ['id', PDO::PARAM_INT, null],
+        ];
+    }
 
     protected Commune $commune;
     protected ?int $numero_voie;
@@ -48,14 +55,14 @@ final class Adresse
     function __construct(
         ?int $id,
         Commune $commune,
-        ?int $numero_voie,
-        ?string $complement_numero,
-        ?string $nom_voie,
-        ?string $localite,
-        ?string $precision_int,
-        ?string $precision_ext,
-        ?float $latitude,
-        ?float $longitude,
+        ?int $numero_voie          = null,
+        ?string $complement_numero = null,
+        ?string $nom_voie          = null,
+        ?string $localite          = null,
+        ?string $precision_int     = null,
+        ?string $precision_ext     = null,
+        ?float $latitude           = null,
+        ?float $longitude          = null,
     ) {
         $this->id                = $id;
         $this->commune           = $commune;

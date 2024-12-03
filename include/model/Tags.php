@@ -1,7 +1,11 @@
 <?php
 require_once 'db.php';
+require_once 'Equatable.php';
 
-final class Tags implements IteratorAggregate
+/**
+ * @implements Equatable<Tags>
+ */
+final class Tags implements IteratorAggregate, Equatable
 {
     const TABLE = '_tags';
 
@@ -42,5 +46,11 @@ final class Tags implements IteratorAggregate
             'id_offre' => [$this->offre->id, PDO::PARAM_INT],
             'tag' => [$tag, PDO::PARAM_STR],
         ];
+    }
+    /**
+     * @inheritDoc
+     */
+    public function equals(mixed $other): bool {
+        return $other->tags === $this->tags;
     }
 }

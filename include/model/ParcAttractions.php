@@ -8,9 +8,9 @@ require_once 'model/Offre.php';
 final class ParcAttractions extends Offre
 {
     protected const FIELDS = parent::FIELDS + [
-        'age_requis' => [null, 'age_requis', PDO::PARAM_INT],
-        'nb_attractions' => [null, 'nb_attractions', PDO::PARAM_INT],
-        'image_plan' => ['id', 'id_image_plan', PDO::PARAM_INT],
+        'age_requis'     => [[null, 'age_requis',     PDO::PARAM_INT]],
+        'nb_attractions' => [[null, 'nb_attractions', PDO::PARAM_INT]],
+        'image_plan'     => [['id', 'id_image_plan',  PDO::PARAM_INT]],
     ];
 
     protected ?int $age_requis;
@@ -30,13 +30,13 @@ final class ParcAttractions extends Offre
      * @param ?string $url_site_web
      * @param MultiRange<FiniteTimestamp> $periodes_ouverture
      * @param ?FiniteTimestamp $modifiee_le
-     * @param bool $en_ligne
+     * @param ?bool $en_ligne
      * @param ?float $note_moyenne
      * @param ?float $prix_min
-     * @param FiniteTimestamp $creee_le
-     * @param Duree $en_ligne_ce_mois_pendant
+     * @param ?FiniteTimestamp $creee_le
+     * @param ?Duree $en_ligne_ce_mois_pendant
      * @param ?FiniteTimestamp $changement_ouverture_suivant_le
-     * @param bool $est_ouverte
+     * @param ?bool $est_ouverte
      * @param Image $image_plan
      */
     function __construct(
@@ -50,15 +50,17 @@ final class ParcAttractions extends Offre
         string $description_detaillee,
         ?string $url_site_web,
         MultiRange $periodes_ouverture,
-        ?FiniteTimestamp $modifiee_le,
-        bool $en_ligne,
-        ?float $note_moyenne,
-        ?float $prix_min,
-        FiniteTimestamp $creee_le,
-        Duree $en_ligne_ce_mois_pendant,
-        ?FiniteTimestamp $changement_ouverture_suivant_le,
-        bool $est_ouverte,
+        //
         Image $image_plan,
+        //
+        ?FiniteTimestamp $modifiee_le                     = null,
+        ?bool $en_ligne                                   = null,
+        ?float $note_moyenne                              = null,
+        ?float $prix_min                                  = null,
+        ?FiniteTimestamp $creee_le                        = null,
+        ?Duree $en_ligne_ce_mois_pendant                  = null,
+        ?FiniteTimestamp $changement_ouverture_suivant_le = null,
+        bool $est_ouverte                                 = null,
     ) {
         parent::__construct(
             $id,
@@ -96,6 +98,9 @@ final class ParcAttractions extends Offre
             $row['description_detaillee'],
             $row['url_site_web'] ?? null,
             MultiRange::parse($row['periodes_ouverture'], FiniteTimestamp::parse(...)),
+            //
+            Image::from_db($row['id_image_plan']),
+            //
             FiniteTimestamp::parse($row['modifiee_le']),
             $row['en_ligne'],
             notfalse(parse_float($row['note_moyenne'] ?? null)),
@@ -104,7 +109,6 @@ final class ParcAttractions extends Offre
             Duree::parse($row['en_ligne_ce_mois_pendant']),
             FiniteTimestamp::parse($row['changement_ouverture_suivant_le'] ?? null),
             $row['est_ouverte'],
-            Image::from_db($row['id_image_plan']),
         );
     }
 

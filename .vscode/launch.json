@@ -1,45 +1,45 @@
 {
-    // Utilisez IntelliSense pour en savoir plus sur les attributs possibles.
-    // Pointez pour afficher la description des attributs existants.
-    // Pour plus d'informations, visitez : https://go.microsoft.com/fwlink/?linkid=830387
-    "version": "0.2.0",
-    "configurations": [
-        {
-            "name": "Launch built-in server and debug",
-            "type": "php",
-            "request": "launch",
-            "cwd": "${workspaceFolder}/html",
-            "runtimeArgs": [
-                "-S",
-                "localhost:8000",
-                "-d",
-                "include_path=${workspaceFolder}/include",
-                "-c",
-                "${workspaceFolder}/cfg/php.ini"
-            ],
-            "port": 9003,
-            "serverReadyAction": {
-                "action": "openExternally"
-            }
-        },
-        {
-            "name": "Debug testing script",
-            "type": "php",
-            "request": "launch",
-            "program": "${file}",
-            "runtimeArgs": [
-              "-c",
-              "${workspaceFolder}/tests/php.ini"
-            ],
-            "cwd": "${fileDirname}",
-            "externalConsole": false,
-            "port": 9003
-        },
-        {
-            "name": "Listen for Xdebug",
-            "type": "php",
-            "request": "launch",
-            "port": 9003
-        }
-    ]
+  // Utilisez IntelliSense pour en savoir plus sur les attributs possibles.
+  // Pointez pour afficher la description des attributs existants.
+  // Pour plus d'informations, visitez : https://go.microsoft.com/fwlink/?linkid=830387
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Launch built-in server and debug",
+      "type": "php",
+      "request": "launch",
+      "cwd": "${workspaceFolder}/html",
+      "runtimeArgs": [
+        "-S",
+        "localhost:8000",
+        "-d",
+        "include_path=${workspaceFolder}/include",
+        "-c",
+        "${workspaceFolder}/cfg/php.ini"
+      ],
+      "port": 9003,
+      "serverReadyAction": {
+        "action": "openExternally"
+      }
+    },
+    {
+      "name": "Debug testing script",
+      "type": "php",
+      "request": "launch",
+      "program": "${file}",
+      "runtimeArgs": [
+        "-c",
+        "${workspaceFolder}/tests/php.ini"
+      ],
+      "cwd": "${fileDirname}",
+      "externalConsole": false,
+      "port": 9003
+    },
+    {
+      "name": "Listen for Xdebug",
+      "type": "php",
+      "request": "launch",
+      "port": 9003
+    }
+  ]
 }
