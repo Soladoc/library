@@ -32,11 +32,9 @@ if ($offre) {
     $site_web = $offre['url_site_web'];
     $image_pricipale = notfalse(Image::from_db($offre['id_image_principale']));
     $en_ligne = $offre['en_ligne'];
-    if ($en_ligne!=1) {
-        $en_ligne = 0;
+    if ($en_ligne) {
+        echo 'en ligne';
     }
-    echo $offre['en_ligne'];
-    echo $en_ligne;
     $info_adresse = DB\query_adresse($adresse);
     $avis = DB\query_avis();
     $galerie = DB\query_galerie($args['id']);
