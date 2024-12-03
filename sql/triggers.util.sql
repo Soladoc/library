@@ -47,14 +47,6 @@ comment on function insert_avis (record, int) is
 'Insère un avis.
 @param new contient les valeurs de l''avis.';
 
-create procedure delete_offre(old record) as $$
-begin
-    delete from _signalable where id = old.id;
-    delete from _image where id = old.id_image_principale;
-    delete from _adresse where id = old.id_adresse;
-end
-$$ language plpgsql;
-
 create function insert_offre (inout new record) as $$
 begin
     if (new.libelle_abonnement = 'gratuit') = new.id_professionnel in (select id from _prive) then
