@@ -879,7 +879,59 @@ section#info_compte div span {
 
 }
 
+.bandeau-etat {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 10px;
+    border-radius: 5px;
+    margin-bottom: 20px;
+}
+
+.bandeau-etat.vert {
+    background-color: #d4f4dd; /* Vert pastel */
+}
+
+.bandeau-etat.rouge {
+    background-color: #f4d4d4; /* Rouge pastel */
+}
+
+.bandeau-etat .bouton {
+    margin: 0 10px;
+    padding: 8px 16px;
+    border: 2px solid #ccc;
+    border-radius: 5px;
+    background-color: #fff;
+    text-align: center;
+    text-decoration: none;
+    font-size: 14px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, border-color 0.3s ease;
+}
+
+.bandeau-etat .bouton:hover {
+    background-color: #eee;
+    border-color: #999;
+}
+
+
 #bouton_creer_offre {
     max-width: 200px;
     margin: 2rem auto;
 }
+
+.review {
+    border: 2px solid black;
+    border-radius: 8px;
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
+    padding: 15px;
+    margin-bottom: 20px;
+}
+
+.review-date {
+    font-size: 12px;
+    color: gray;
+    margin-top: 10px;
+    display: block;
+}
+
