@@ -195,8 +195,7 @@ abstract class Offre extends Model implements Signalable
             }
             return;
         }
-        // todo: where temporaire : le temps qu'on fasse marcher les options
-        $stmt = notfalse(DB\connect()->prepare('select * from ' . static::TABLE . ' where note_moyenne = 5'));
+        $stmt = notfalse(DB\connect()->prepare('select * from ' . static::TABLE . " where libelle_abonnement = 'premium' order by random() limit 5"));
         notfalse($stmt->execute());
         while (false !== $row = $stmt->fetch()) {
             yield $row['id'] => static::from_db_row($row);
