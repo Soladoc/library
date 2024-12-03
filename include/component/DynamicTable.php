@@ -79,7 +79,6 @@ final class DynamicTable extends Input
             ?>
             <tr>
                 <?php ($this->put_row)($this, $row); ?>
-                <td><button class="button-remove-row" type="button">-</button></td>
             </tr>
             <?php
         } ?>

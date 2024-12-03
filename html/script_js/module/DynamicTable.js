@@ -42,6 +42,10 @@ export default class DynamicTable {
             input.addEventListener('input', this.#decide_can_add.bind(this));
         }
 
+        for (const tr of this.#tbody.rows) {
+            this.#setup_row(tr);
+        }
+
         this.#decide_can_add();
     }
 
@@ -50,8 +54,8 @@ export default class DynamicTable {
      * @returns {boolean}
      */
     has_row(predicate) {
-        for (const row of this.#tbody.rows) {
-            if (predicate(Array.from(row.querySelectorAll('input')).map(i => i.value)))
+        for (const tr of this.#tbody.rows) {
+            if (predicate(Array.from(tr.querySelectorAll('input')).map(i => i.value)))
                 return true;
         }
         return false;
@@ -63,8 +67,15 @@ export default class DynamicTable {
     add_row(values) {
         // clone the template and append <tr>
         const tr = this.#tbody.appendChild(this.#template_tr.content.children[0].cloneNode(true));
-
         this.#fill_row(tr, values);
+        this.#setup_row(tr);
+    }
+
+    /**
+     * 
+     * @param {HTMLTableRowElement} tr 
+     */
+    #setup_row(tr) {
         const remove_button = tr.insertCell().appendChild(document.createElement('button'));
         remove_button.className = 'button-remove-row';
         remove_button.type = 'button';
@@ -85,8 +96,8 @@ export default class DynamicTable {
     }
 
     #decide_can_remove() {
-        for (const row of this.#tbody.rows) {
-            row.querySelector('.button-remove-row').disabled = this.#tbody.rows.length <= this.#min_rows;
+        for (const tr of this.#tbody.rows) {
+            tr.querySelector('.button-remove-row').disabled = this.#tbody.rows.length <= this.#min_rows;
         }
     }
 
