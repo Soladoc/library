@@ -70,7 +70,7 @@ if ($offre) {
             <form id="toggleForm" method="POST">
                 <div class='online'>
                     <div>
-                        <?php if (isset($en_ligne)===1) { ?>
+                        <?php if (isset($en_ligne)==1) { ?>
                             <p>Offre en ligne</p>
                             <button type="button" class="hors_ligne" onclick="enableValidate()">Mettre hors ligne</button>
                         <?php } else { ?>
