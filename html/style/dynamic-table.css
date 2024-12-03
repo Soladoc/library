@@ -1,3 +1,7 @@
 .dynamic-table {
     background-color: #EEE;
 }
+
+.dynamic-table tfoot {
+    margin-top: 1em;
+}
