@@ -82,9 +82,6 @@ if ($offre) {
                     <a class="bouton modifier" href="modif_offre.php?id=<?= $args['id'] ?>&type_offre=<?= $offre['categorie'] ?>">Modifier</a>
                 </div>
             </form>
-            <div class="page_modif">
-                <a class="modifier" href="modif_offre.php?id=<?= $args['id']?>&type_offre=<?= $offre['categorie']?>">Modifier</a>
-            </div>
             <section class="offer-details">
                 <section class="offer-main-photo">
                     <div class="carousel-container">
