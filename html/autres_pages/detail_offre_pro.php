@@ -68,17 +68,18 @@ if ($offre) {
     <main>
         <section class="modif">
             <form id="toggleForm" method="POST">
-                <div class='online'>
-                    <div>
-                        <?php if ($en_ligne) { ?>
-                            <p>Offre en ligne</p>
-                            <button type="button" class="hors_ligne" onclick="enableValidate()">Mettre hors ligne</button>
-                        <?php } else { ?>
-                            <p>Offre hors ligne</p>
-                            <button type="button" class="en_ligne" onclick="enableValidate()">Mettre en ligne</button>
-                        <?php } ?>
-                    </div>
-                    <button type="submit" name="valider" class="valider" id="validateButton" disabled>Valider</button>
+                <?php
+                    $bandeau_class = $en_ligne ? 'vert' : 'rouge';
+                ?>
+                <div class="bandeau-etat <?= $bandeau_class ?>">
+                    <p class="etat"><?= $en_ligne ? 'Offre en ligne' : 'Offre hors ligne' ?></p>
+                    <button type="button" class="bouton" onclick="enableValidate()">
+                        <?= $en_ligne ? 'Mettre hors ligne' : 'Mettre en ligne' ?>
+                    </button>
+                    <form id="toggleForm" method="POST" style="display: inline;">
+                        <button type="submit" name="valider" class="bouton" id="validateButton" disabled>Valider</button>
+                    </form>
+                    <a class="bouton modifier" href="modif_offre.php?id=<?= $args['id'] ?>&type_offre=<?= $offre['categorie'] ?>">Modifier</a>
                 </div>
             </form>
             <div class="page_modif">
