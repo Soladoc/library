@@ -69,11 +69,11 @@ final class DynamicTable extends Input
     {
         ?>
 <table id="<?= $this->id ?>" class="dynamic-table">
-    <thead>
+    <thead><tr>
         <?php foreach ($this->columns as $column) { ?>
             <th><?= $column ?></th>
         <?php } ?>
-    </thead>
+    </tr></thead>
     <tbody>
         <?php foreach ($current ?? $this->initial_rows as $row) {
             ?>
