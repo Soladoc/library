@@ -6,7 +6,7 @@ set
 -- Create
 create function activite_insert () returns trigger as $$
 begin
-    new.id = insert_offre(new);
+    new = insert_offre(new);
     insert into pact._activite (
         id,
         indication_duree,

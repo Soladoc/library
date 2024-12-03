@@ -5,13 +5,11 @@ set
 
 -- Create
 create function avis_restaurant_insert () returns trigger as $$
-declare
-    id_avis integer;
 begin
     if offre_categorie(new.id_restaurant) <> 'restaurant' then
         raise 'impossible d''insérer un avis_restaurant pour une offre qui n''est pas un restaurant';
     end if;
-    id_avis = insert_avis(new, new.id_restaurant);
+    new = insert_avis(new, new.id_restaurant);
     insert into pact._avis_restaurant (
         id,
         note_cuisine,
@@ -19,7 +17,7 @@ begin
         note_ambiance,
         note_qualite_prix
     ) values (
-        id_avis,
+        new.id,
         new.note_cuisine,
         new.note_service,
         new.note_ambiance,
