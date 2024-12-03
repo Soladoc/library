@@ -8,7 +8,7 @@ final class Commune
     readonly string $nom;
     readonly string $numero_departement;
 
-    private function __construct(int $code, string $numero_departement, string $nom)
+    function __construct(int $code, string $numero_departement, string $nom)
     {
         $this->code = $code;
         $this->nom = $nom;
