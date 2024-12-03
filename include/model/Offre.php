@@ -285,7 +285,7 @@ abstract class Offre extends Model implements Signalable
     }
 
     private static function make_select(): string {
-        return 'select * from ' . static::TABLE;
+        return 'select * from ' . static::TABLE; // todo: faire des jointures pour gagner en performance
     }
 
     /**
