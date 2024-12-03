@@ -76,6 +76,7 @@ final class InputOffre extends Input
             $this->id('table-tarifs'),
             $this->name('tarifs'),
             $form_id,
+            [['nom' => 'Adulte', 'montant' => 10]],
         );
         $this->periodes = new DynamicTable(
             ['Début', 'Fin'],
