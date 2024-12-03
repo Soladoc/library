@@ -7,6 +7,13 @@ set
 create function restaurant_insert () returns trigger as $$
 begin
     new = insert_offre(new);
+
+    new.sert_petit_dejeuner = coalesce(new.sert_petit_dejeuner, false),
+    new.sert_brunch = coalesce(new.sert_brunch, false),
+    new.sert_dejeuner = coalesce(new.sert_dejeuner, false),
+    new.sert_diner = coalesce(new.sert_diner, false),
+    new.sert_boissons = coalesce(new.sert_boissons, false)
+
     insert into pact._restaurant (
         id,
         carte,
@@ -20,11 +27,11 @@ begin
         new.id,
         new.carte,
         new.richesse,
-        coalesce(new.sert_petit_dejeuner, false),
-        coalesce(new.sert_brunch, false),
-        coalesce(new.sert_dejeuner, false),
-        coalesce(new.sert_diner, false),
-        coalesce(new.sert_boissons, false)
+        new.sert_petit_dejeuner,
+        new.sert_brunch,
+        new.sert_dejeuner,
+        new.sert_diner,
+        new.sert_boissons
     );
     return new;
 end
