@@ -47,16 +47,20 @@ if (isset($_POST['motdepasse'])) {
     $mdp_hash = notfalse(password_hash($_POST['motdepasse'], PASSWORD_DEFAULT));
 
     $stmt = DB\connect()->prepare('insert into pact.membre (pseudo, nom, prenom, telephone, email, mdp_hash, id_adresse) values (?, ?, ?, ?, ?, ?, ?)');
-
-    $stmt->execute([
-        $pseudo,
-        $_POST['nom'],
-        $_POST['prenom'],
-        $_POST['telephone'],
-        $email,
-        $mdp_hash,
-        $idAdresse
-    ]);
+    try{
+        $stmt->execute([
+            $pseudo,
+            $_POST['nom'],
+            $_POST['prenom'],
+            $_POST['telephone'],
+            $email,
+            $mdp_hash,
+            $idAdresse
+        ]);
+    }catch(PDOException $e){
+        echo "Adresse Mail invalide " . $e->getMessage();
+        redirect_to('connexion.php');
+    }
     redirect_to(location_connexion());  // todo: passer en GET le pseudo pour l'afficher dans le formulaire connexion, pour que l'utilisateur n'ait pas à le retaper.
 } else {
 ?>
