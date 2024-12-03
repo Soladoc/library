@@ -180,7 +180,7 @@ if ($membre !== false) {
                         <?php if (DB\exists_pro_prive($id)) { ?>
                             <div>
                                 <div id="siren">
-                                    <label>Siren : </label>
+                                    <label>SIREN : </label>
                                 </div>
                                 <input type="text" id="new_siren" name="new_siren" value="<?= htmlspecialchars($siren) ?>" placeholder="231 654 988" oninput="formatInput(this)" maxlength="12">
                             </div>
@@ -241,7 +241,7 @@ if ($membre !== false) {
                             <input id="new_mdp" name="new_mdp" type="password" placeholder="**********">
                         </div>
                         <div class="champ">
-                            <label for="confirmation_mdp">Confirmation mot de passe *</label>
+                            <label for="confirmation_mdp">Confirmation du mot de passe *</label>
                             <input id="confirmation_mdp" name="confirmation_mdp" type="password" placeholder="**********">
                         </div>
                         <?php if ($error_mdp !== null) { ?>
@@ -250,10 +250,9 @@ if ($membre !== false) {
                         
                     </div>
                     <button type="submit">Valider</button>
-                    <a href="<?= location_detail_compte($id) ?>">retour</a> 
+                    <a href="<?= location_detail_compte($id) ?>">Retour</a> 
                 </form>
             </section>
-
         </main>
         <?php $page->put_footer() ?>
     </body>

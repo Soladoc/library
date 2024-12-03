@@ -107,7 +107,7 @@ if ($_POST) {
                 <p>Attention! Une fois l'option choisie vous ne pourrez plus la modifier.</p>
             </aside>
             <?php } else { ?>
-                <p>Comme vous êtes un professionnel public, l'offre créée sera gratuite (pas de facturation)</p>
+                <p>Comme vous êtes un professionnel du secteur public, l'offre créée sera gratuite (pas de facturation).</p>
                 <p><a href="https://example.com">Plus d'informations&hellip;</a></p>
             <?php } ?>
         </section>
@@ -161,7 +161,7 @@ if ($_POST) {
                     <td><input form="f" name="tarifs[montant][]" type="number" min="0" placeholder="Prix" required> €</td>
                 </tr></template>
             <?php } else { ?>
-                <p>En tant que professionnel public, vous ne pouvez pas ajouter de grillle tarifaire à votre offre gratuite.</p>
+                <p>En tant que professionnel du secteur public, vous ne pouvez pas ajouter de grillle tarifaire à votre offre gratuite.</p>
             <?php } ?>
         </section>
 

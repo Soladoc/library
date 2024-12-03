@@ -45,7 +45,7 @@ if($_POST){
                 <h3>Catégories</h3>
                 <div class="category-dropdown">
                     <select id="main-category" onchange="showSubcategories()">
-                        <option value="">-- Sélectionnez une catégorie --</option>
+                        <option value="">-- Toutes les catégories --</option>
                         <option value="restaurant">Restauration</option>
                         <option value="activité">Activité</option>
                         <option value="visite">Visite</option>
