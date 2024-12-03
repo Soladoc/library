@@ -24,3 +24,14 @@ execute function visite_insert ();
 -- Update
 create trigger tg_visite_after_update after update on _visite for each row
 execute function _offre_after_update ();
+
+-- Delete
+create function visite_delete () returns trigger as $$
+begin
+    call delete_offre(old);
+    delete from _image where id = old.id_image_plan;
+end
+$$ language plpgsql;
+
+create trigger tg_visite_delete instead of delete on visite for each row
+execute function visite_delete ();

@@ -44,3 +44,14 @@ execute function restaurant_insert ();
 create trigger tg_restaurant_after_update after update on _restaurant for each row
 execute function _offre_after_update ();
 
+-- Delete
+create function restaurant_delete () returns trigger as $$
+begin
+    call delete_offre(old);
+    delete from _image where id = old.id_image_plan;
+end
+$$ language plpgsql;
+
+create trigger tg_restaurant_delete instead of delete on restaurant for each row
+execute function restaurant_delete ();
+

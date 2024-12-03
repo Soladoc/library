@@ -28,3 +28,14 @@ execute function parc_attractions_insert ();
 -- Update
 create trigger tg_parc_attractions_after_update after update on _parc_attractions for each row
 execute function _offre_after_update ();
+
+-- Delete
+create function parc_attractions_delete () returns trigger as $$
+begin
+    call delete_offre(old);
+    delete from _image where id = old.id_image_plan;
+end
+$$ language plpgsql;
+
+create trigger tg_parc_attractions_delete instead of delete on parc_attractions for each row
+execute function parc_attractions_delete ();
