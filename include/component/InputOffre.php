@@ -267,7 +267,7 @@ final class InputOffre extends Input
             <h2>Horaires hebdomadaires</h2>
             <div>
                 <?php foreach (JOURS_SEMAINE as $dow => $jour) { ?>
-                    <article id="<?= $this->id('<?= $jour ?>') ?>">
+                    <article id="<?= $this->id($jour) ?>">
                         <h3><?= ucfirst($jour) ?></h3>
                         <button id="<?= $this->id("button-add-horaire-$dow") ?>" type="button">+</button>
                         <table id="<?= $this->id("table-horaires-$dow") ?>">
@@ -314,7 +314,7 @@ final class InputOffre extends Input
             </ul>
         </section>
 
-        <section id="<?= $this->id('description_detaillee') ?>">
+        <section>
             <label for="<?= $this->id('description_detaillee') ?>">
                 <h2>Description détaillée</h2>
             </label>

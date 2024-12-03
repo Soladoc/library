@@ -1,4 +1,5 @@
 <?php
+require_once '../vendor/autoload.php';
 require_once 'testing.php';
 require_once 'component/InputOffre.php';
 
@@ -18,7 +19,7 @@ notfalse(ob_start());
 $input_offre->put();
 $create_offre_html = notfalse(ob_get_clean());
 
-$doc = new DOMDocument();
-notfalse($doc->loadHTML($create_offre_html));
+$dom = new IvoPetkov\HTML5DOMDocument();
+notfalse($dom->loadHTML($create_offre_html));
 
-dbg_print($doc);
+dbg_print($dom);
