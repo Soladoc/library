@@ -72,8 +72,12 @@ header {
 header #header_pro{
     display: flex;
     flex-direction: row;
+    gap: 1em;
 
 }
+
+
+
 
 
 .logo {

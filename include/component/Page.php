@@ -107,12 +107,12 @@ final class Page
                 </div>
             </a>
             <?php if (Auth\est_connecte_pro()) { ?>
-            <a href="facturation.php">
+            <!-- <a href="facturation.php">
                 <div class="acces-facturation">
                     <img src="/images/facturation.png" alt="Profil">
                     <span>Facturation</span>
                 </div>
-            </a>
+            </a> -->
         </div>
     <?php
         }
