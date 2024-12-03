@@ -212,10 +212,22 @@ final class InputOffre extends Input
             <?php if ($est_prive) { ?>
                 <ul id="<?= $this->id('liste-choix-abonnement') ?>">
                     <li>
-                        <label><input <?= $form_attr ?> name="<?= $this->name('libelle_abonnement') ?>" value="standard" type="radio" <?= $current?->abonnement?->libelle === 'standard' ? 'checked' : '' ?>> Standard</label>
+                        <label><input <?= $form_attr ?>
+                            id="<?= $this->id('libelle_abonnement_standard') ?>"
+                            name="<?= $this->name('libelle_abonnement') ?>"
+                            type="radio"
+                            value="standard"
+                            <?= $current?->abonnement?->libelle === 'standard' ? 'checked' : '' ?>>
+                            Standard</label>
                     </li>
                     <li>
-                        <label><input <?= $form_attr ?> name="<?= $this->name('libelle_abonnement') ?>" value="premium" type="radio" <?= $current?->abonnement?->libelle === 'premium' ? 'checked' : '' ?>> Premium</label>
+                        <label><input <?= $form_attr ?>
+                            id="<?= $this->id('libelle_abonnement_premium') ?>"
+                            name="<?= $this->name('libelle_abonnement') ?>"
+                            value="premium"
+                            type="radio"
+                            <?= $current?->abonnement?->libelle === 'premium' ? 'checked' : '' ?>>
+                            Premium</label>
                     </li>
                 </ul>
                 <aside>
@@ -235,17 +247,31 @@ final class InputOffre extends Input
             <div>
                 <label for="<?= $this->id('titre') ?>">Titre*</label>
                 <p>
-                    <input <?= $form_attr ?> id="<?= $this->id('titre') ?>" name="<?= $this->name('titre') ?>" type="text" required value="<?= $current?->titre ?>">
+                    <input <?= $form_attr ?>
+                        id="<?= $this->id('titre') ?>"
+                        name="<?= $this->name('titre') ?>"
+                        type="text"
+                        required
+                        value="<?= $current?->titre ?>">
                 </p>
                 <label for="<?= $this->id('resume') ?>">Resumé*</label>
                 <p>
-                    <input <?= $form_attr ?> id="<?= $this->id('resume') ?>" name="<?= $this->name('resume') ?>" type="text" required value="<?= $current?->resume ?>">
+                    <input <?= $form_attr ?>
+                        id="<?= $this->id('resume') ?>"
+                        name="<?= $this->name('resume') ?>"
+                        type="text"
+                        required
+                        value="<?= $current?->resume ?>">
                 </p>
                 <label for="<?= $this->input_adresse->id ?>">Adresse*</label>
                 <?php $this->input_adresse->put($current?->adresse) ?>
                 <label for="<?= $this->id('site') ?>">Site Web</label>
                 <p>
-                    <input <?= $form_attr ?> id="<?= $this->id('url_site_web') ?>" name="<?= $this->name('url_site_web') ?>" type="url" value="<?= $current?->url_site_web ?>">
+                    <input <?= $form_attr ?>
+                        id="<?= $this->id('url_site_web') ?>"
+                        name="<?= $this->name('url_site_web') ?>"
+                        type="url"
+                        value="<?= $current?->url_site_web ?>">
                 </p>
             </div>
         </section>
@@ -280,16 +306,30 @@ final class InputOffre extends Input
                             <tbody>
                                 <?php foreach ($current?->ouverture_hebdomadaire[$dow] ?? [] as $horaire) { ?>
                                     <tr>
-                                        <td><input <?= $form_attr ?> name="<?= $this->name('horaires') ?>[<?= $dow ?>][debut][]" type="time" required value="<?= $horaire->lower ?>"></td>
-                                        <td><input <?= $form_attr ?> name="<?= $this->name('horaires') ?>[<?= $dow ?>][fin][]" type="time" required value="<?= $horaire->upper ?>"></td>
+                                        <td><input <?= $form_attr ?>
+                                            name="<?= $this->name('horaires') ?>[<?= $dow ?>][debut][]"
+                                            type="time"
+                                            required
+                                            value="<?= $horaire->lower ?>"></td>
+                                        <td><input <?= $form_attr ?>
+                                            name="<?= $this->name('horaires') ?>[<?= $dow ?>][fin][]"
+                                            type="time"
+                                            required
+                                            value="<?= $horaire->upper ?>"></td>
                                         <td><button type="button">-</button></td>
                                     </tr><?php } ?>
                             </tbody>
                         </table>
                         <template id="<?= $this->id("template-horaire-tr-$dow") ?>">
                             <tr>
-                                <td><input <?= $form_attr ?> name="<?= $this->name('horaires') ?>[<?= $dow ?>][debut][]" type="time" required></td>
-                                <td><input <?= $form_attr ?> name="<?= $this->name('horaires') ?>[<?= $dow ?>][fin][]" type="time" required></td>
+                                <td><input <?= $form_attr ?>
+                                    name="<?= $this->name('horaires') ?>[<?= $dow ?>][debut][]"
+                                    type="time"
+                                    required></td>
+                                <td><input <?= $form_attr ?>
+                                    name="<?= $this->name('horaires') ?>[<?= $dow ?>][fin][]"
+                                    type="time"
+                                    required></td>
                                 <td><button type="button">-</button></td>
                             </tr>
                         </template>
@@ -309,7 +349,10 @@ final class InputOffre extends Input
                 <?php
                 foreach ($this->categorie === Restaurant::CATEGORIE ? TAGS_RESTAURANT : DEFAULT_TAGS as $tag) {
                     ?>
-                    <li><label><input <?= $form_attr ?> name="<?= $this->name('tags') ?>[<?= $tag ?>]" type="checkbox"><?= $tag ?></label></li>
+                    <li><label><input <?= $form_attr ?>
+                        id="<?= $this->id("tag-$tag") ?>"
+                        name="<?= $this->name('tags') ?>[<?= $tag ?>]"
+                        type="checkbox"><?= $tag ?></label></li>
                 <?php } ?>
             </ul>
         </section>
@@ -318,14 +361,23 @@ final class InputOffre extends Input
             <label for="<?= $this->id('description_detaillee') ?>">
                 <h2>Description détaillée</h2>
             </label>
-            <textarea <?= $form_attr ?> id="<?= $this->id('description_detaillee') ?>" name="<?= $this->name('description_detaillee') ?>" required value="<?= $current?->description_detaillee ?>"></textarea>
+            <textarea <?= $form_attr ?>
+                    id="<?= $this->id('description_detaillee') ?>"
+                    name="<?= $this->name('description_detaillee') ?>"
+                    required
+                    value="<?= $current?->description_detaillee ?>"></textarea>
         </section>
 
         <section id="<?= $this->id('image-creation-offre') ?>">
             <label for="<?= $this->id('galerie') ?>">
                 <h2>Galerie</h2>
             </label>
-            <input <?= $form_attr ?> id="<?= $this->id('galerie') ?>" name="<?= $this->name('galerie') ?>[]" type="file" accept="image/*" multiple>
+            <input <?= $form_attr ?>
+                id="<?= $this->id('galerie') ?>"
+                name="<?= $this->name('galerie') ?>[]"
+                type="file"
+                accept="image/*"
+                multiple>
             <div id="<?= $this->id('galerie-preview') ?>"></div>
             <!-- todo: modif galerie with legende -->
         </section>
@@ -338,11 +390,23 @@ final class InputOffre extends Input
                     /** @var ?Activite */
                     $activite = $current;
                     ?>
-                    <p><label>Âge requis&nbsp;: <input <?= $form_attr ?> name="<?= $this->name('age_requis') ?>" type="number" min="1" value="<?= $activite?->age_requis ?>"> an</label></p>
+                    <p><label>Âge requis&nbsp;: <input <?= $form_attr ?>
+                        id="<?= $this->id('age_requis') ?>"
+                        name="<?= $this->name('age_requis') ?>"
+                        type="number"
+                        min="1"
+                        value="<?= $activite?->age_requis ?>"> an</label></p>
                     <p>Prestations incluses*</p>
-                    <textarea <?= $form_attr ?> name="<?= $this->name('prestations_incluses') ?>" required value="<?= $activite?->prestations_incluses ?>"></textarea>
-                    <p>Prestations non incluses</p>
-                    <textarea <?= $form_attr ?> name="<?= $this->name('prestations_non_incluses') ?>" value="<?= $activite?->prestations_non_incluses ?>"></textarea>
+                    <textarea <?= $form_attr ?>
+                        id="<?= $this->id('prestations_incluses') ?>"
+                        name="<?= $this->name('prestations_incluses') ?>"
+                        required
+                        value="<?= $activite?->prestations_incluses ?>"></textarea>
+                        <p>Prestations non incluses</p>
+                        <textarea <?= $form_attr ?>
+                        id="<?= $this->id('prestations_non_incluses') ?>"
+                        name="<?= $this->name('prestations_non_incluses') ?>"
+                        value="<?= $activite?->prestations_non_incluses ?>"></textarea>
                     <?php
                     $this->put_input_indication_duree($activite?->indication_duree);
                     break;
@@ -351,9 +415,19 @@ final class InputOffre extends Input
                     $parc_attractions = $current;
                     ?>
                     ?>
-                    <p><label>Âge requis&nbsp;: <input <?= $form_attr ?> name="<?= $this->name('age_requis') ?>" type="number" min="1" value="<?= $parc_attractions?->age_requis ?>"> an</label></p>
+                    <p><label>Âge requis&nbsp;: <input <?= $form_attr ?>
+                        id="<?= $this->id('age_requis') ?>"
+                        name="<?= $this->name('age_requis') ?>"
+                        type="number"
+                        min="1"
+                        value="<?= $parc_attractions?->age_requis ?>"> an</label></p>
                     <fieldset>
-                        <p><label>Plan* &nbsp;: <input <?= $form_attr ?> id="<?= $this->id('image_plan') ?>" name="<?= $this->name('image_plan') ?>" type="file" accept="image/*" required></label></p>
+                        <p><label>Plan* &nbsp;: <input <?= $form_attr ?>
+                            id="<?= $this->id('image_plan') ?>"
+                            name="<?= $this->name('image_plan') ?>"
+                            type="file"
+                            accept="image/*"
+                            required></label></p>
                         <div id="<?= $this->id('image_plan-preview') ?>"></div>
                     </fieldset>
                     <?php
@@ -365,33 +439,75 @@ final class InputOffre extends Input
                     ?>
                     <fieldset>
                         <legend>Niveau de richesse</legend>
-                        <p><label><input <?= $form_attr ?> type="radio" name="<?= $this->name('richesse') ?>" value="1" <?= $restaurant?->richesse === 1 ? 'checked' : '' ?>> €</label></p>
-                        <p><label><input <?= $form_attr ?> type="radio" name="<?= $this->name('richesse') ?>" value="2" <?= $restaurant?->richesse === 2 ? 'checked' : '' ?>> €€</label></p>
-                        <p><label><input <?= $form_attr ?> type="radio" name="<?= $this->name('richesse') ?>" value="3" <?= $restaurant?->richesse === 3 ? 'checked' : '' ?>> €€€</label></p>
+                        <p><label><input <?= $form_attr ?>
+                            id="<?= $this->id('richesse-1') ?>"
+                            name="<?= $this->name('richesse') ?>"
+                            type="radio"
+                            value="1" <?= $restaurant?->richesse === 1 ? 'checked' : '' ?>>
+                            €</label></p>
+                        <p><label><input <?= $form_attr ?>
+                            id="<?= $this->id('richesse-2') ?>"
+                            name="<?= $this->name('richesse') ?>"
+                            type="radio"
+                            value="2" <?= $restaurant?->richesse === 2 ? 'checked' : '' ?>> 
+                            €</label></p>
+                        <p><label><input <?= $form_attr ?>
+                            id="<?= $this->id('richesse-3') ?>"
+                            name="<?= $this->name('richesse') ?>"
+                            type="radio"
+                            value="3" <?= $restaurant?->richesse === 3 ? 'checked' : '' ?>> €
+                            €</label></p>
                     </fieldset>
                     <fieldset>
                         <legend>Repas servis</legend>
-                        <p><label><input <?= $form_attr ?> type="checkbox" name="<?= $this->name('sert_petit_dejeuner') ?>" <?= $restaurant?->sert_petit_dejeuner ? 'checked' : '' ?>>
-                                Petit déjeuner</label></p>
-                        <p><label><input <?= $form_attr ?> type="checkbox" name="<?= $this->name('sert_brunch') ?>" <?= $restaurant?->sert_brunch ? 'checked' : '' ?>>
-                                Brunch</label></p>
-                        <p><label><input <?= $form_attr ?> type="checkbox" name="<?= $this->name('sert_dejeuner') ?>" <?= $restaurant?->sert_dejeuner ? 'checked' : '' ?>>
-                                Déjeuner</label></p>
-                        <p><label><input <?= $form_attr ?> type="checkbox" name="<?= $this->name('sert_diner') ?>" <?= $restaurant?->sert_diner ? 'checked' : '' ?>>
-                                Dîner</label></p>
-                        <p><label><input <?= $form_attr ?> type="checkbox" name="<?= $this->name('sert_boissons') ?>" <?= $restaurant?->sert_boissons ? 'checked' : '' ?>>
-                                Boissons</label></p>
+                        <p><label><input <?= $form_attr ?>
+                            id="<?= $this->id('sert_petit_dejeuner') ?>"
+                            type="checkbox"
+                            name="<?= $this->name('sert_petit_dejeuner') ?>"
+                            <?= $restaurant?->sert_petit_dejeuner ? 'checked' : '' ?>>
+                            Petit déjeuner</label></p>
+                        <p><label><input <?= $form_attr ?>
+                            id="<?= $this->id('sert_brunch') ?>"
+                            type="checkbox"
+                            name="<?= $this->name('sert_brunch') ?>"
+                            <?= $restaurant?->sert_brunch ? 'checked' : '' ?>>
+                            Brunch</label></p>
+                        <p><label><input <?= $form_attr ?>
+                            id="<?= $this->id('sert_dejeuner') ?>"
+                            type="checkbox"
+                            name="<?= $this->name('sert_dejeuner') ?>"
+                            <?= $restaurant?->sert_dejeuner ? 'checked' : '' ?>>
+                            Déjeuner</label></p>
+                        <p><label><input <?= $form_attr ?>
+                            id="<?= $this->id('sert_diner') ?>"
+                            type="checkbox"
+                            name="<?= $this->name('sert_diner') ?>"
+                            <?= $restaurant?->sert_diner ? 'checked' : '' ?>>
+                            Dîner</label></p>
+                        <p><label><input <?= $form_attr ?>
+                            id="<?= $this->id('sert_boissons') ?>"
+                            type="checkbox"
+                            name="<?= $this->name('sert_boissons') ?>"
+                            <?= $restaurant?->sert_boissons ? 'checked' : '' ?>>
+                            Boissons</label></p>
                     </fieldset>
                     <p>Carte</p>
-                    <textarea <?= $form_attr ?> name="<?= $this->name('carte') ?>">
-                                                <?= $restaurant?->carte ?></textarea>
+                    <textarea <?= $form_attr ?>
+                        name="<?= $this->name('carte') ?>"><?= $restaurant?->carte ?></textarea>
                     <?php
                     break;
                 case Spectacle::CATEGORIE:
                     /** @var ?Spectacle */
                     $spectacle = $current;
                     ?>
-                    <p><label>Capacité d'accueil&nbsp;: <input <?= $form_attr ?> name="<?= $this->name('capacite_accueil') ?>" type="number" min="0" required value="<?= $spectacle?->capacite_accueil ?>"></label> pers.</p>
+                    <p><label>Capacité d'accueil&nbsp;: <input <?= $form_attr ?>
+                        id="<?= $this->id('capacite_accueil') ?>"
+                        name="<?= $this->name('capacite_accueil') ?>"
+                        type="number"
+                        min="0"
+                        required
+                        value="<?= $spectacle?->capacite_accueil ?>">
+                        pers.</label></p>
                     <?php
                     $this->put_input_indication_duree($spectacle?->indication_duree);
                     break;
