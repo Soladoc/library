@@ -55,6 +55,7 @@ begin
     end if;
 
     new.modifiee_le = coalesce(new.modifiee_le, localtimestamp);
+    new.periodes_ouverture = coalesce(new.periodes_ouverture, '{}');
 
     insert into pact._signalable default values returning id into new.id;
     insert into pact._offre (
@@ -80,7 +81,7 @@ begin
         new.description_detaillee,
         new.url_site_web,
         new.modifiee_le,
-        coalesce(new.periodes_ouverture, '{}')
+        new.periodes_ouverture
     );
     insert into pact._changement_etat (id_offre, fait_le) values (new.id, new.modifiee_le);
 end
