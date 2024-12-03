@@ -5,7 +5,7 @@ set schema 'pact';
 
 set plpgsql.extra_errors to 'all';
 
-create function insert_avis (new record, p_id_offre int) returns int as $$
+create function insert_avis (inout new record, p_id_offre int) returns int as $$
 declare
     id_avis int;
     -- On ne prend pas en compte les heures pour cette vérification.
@@ -45,7 +45,7 @@ comment on function insert_avis (record, int) is
 @param p_id_offre l''ID de l''offre commentée (new n''est pas utilisé pour remplir cette colonne)
 @returns L''ID de l''avis inséré.';
 
-create function insert_offre (new record) returns int as $$
+create function insert_offre (inout new record) returns int as $$
 declare
     id_signalable int;
 begin
@@ -91,7 +91,7 @@ comment on function insert_offre (record) is
 `new` contient les valeurs de l''offre.
 @returns L''ID de l''offre insérée.';
 
-create function insert_compte (new record) returns int as $$
+create function insert_compte (inout new record) returns int as $$
 declare
     id_identite int;
     id_signalable int;
