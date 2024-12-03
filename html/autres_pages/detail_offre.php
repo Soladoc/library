@@ -19,17 +19,16 @@ if ($_POST) {
     if (($id_membre_co = Auth\id_membre_connecte()) === null) {
         $error_message = 'Veuillez vous connecter pour publier un avis.';
     } else {
-        dbg_print($_POST);
         $querry = 'INSERT INTO pact.avis (id_membre_auteur,id_offre,commentaire,date_experience,note,contexte) VALUES (?,?,?,?,?,?);';
-        $stmt   = notfalse(DB\connect()->prepare($querry));
-        notfalse($stmt->execute([
+        $stmt   = DB\connect()->prepare($querry);
+        $stmt->execute([
             $id_membre_co,
             $args['id'],
             $args['commentaire'],
             $args['date_avis'],
             $args['note'],
             $args['contexte']
-        ]));
+        ]);
         $success_message = 'Avis ajouté avec succès !';
     }
 }
@@ -149,7 +148,7 @@ $page = new Page($titre,
                     <input type="date" id="date" name="date" required>
                     </br>
                     <label for="consent">Je certifie que l'avis reflète mes propres expérience et opinion sur cette offre.</label>
-                    <input type="checkbox" id="consent" required>
+                    <input type="checkbox" name="consent" required>
                     <button type="submit" class="btn-publish">Publier</button>
                 </form>
             </div>

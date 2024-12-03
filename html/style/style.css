@@ -767,18 +767,13 @@ a:not(:hover, :focus, :focus-within) {
 
 .carousel-prev,
 .carousel-next {
-    position: absolute;
     top: 50%;
     transform: translateY(-50%);
-    background-color: rgba(0, 0, 0, 0.5);
+    background-color: rgba(0, 0, 0, 0.7);
     color: white;
-    border: 2px solid white;
-    padding: 10px;
-    cursor: pointer;
-    z-index: 10;
-    border-radius: 50%;
-    width: 40px;
-    height: 40px;
+    border: none;
+    width: 50px;
+    height: 50px;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -951,5 +946,3 @@ section#info_compte div span {
     margin-top: 10px;
     display: block;
 }
-
-
