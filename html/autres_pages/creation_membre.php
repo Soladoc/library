@@ -83,7 +83,7 @@ if (isset($_POST['motdepasse'])) {
                     </div>
 
                     <div class="champ">
-                        <label for="prenom">Prenom&nbsp;:</label>
+                        <label for="prenom">Prénom&nbsp;:</label>
                         <input type="text" id="prenom" name="prenom" autocomplete="given-name" required>
                     </div>
 

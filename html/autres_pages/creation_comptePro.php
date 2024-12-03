@@ -109,7 +109,7 @@ if ($_POST) {
                     </p>
                     <p class="champ">
                         <!-- Texte avec label -->
-                        <label>Prenom * <input type="text" id="prenom" name="prenom" placeholder="Louis" required ></label>
+                        <label>Prénom * <input type="text" id="prenom" name="prenom" placeholder="Louis" required ></label>
                     </p>
                     <p class="champ">
                         <!-- Texte avec label -->
