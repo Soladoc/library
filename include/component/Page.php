@@ -95,12 +95,13 @@ final class Page
         ?>
         <a href="/connexion/logout.php">
             <div class="auth-button">
-                <img src="../../html/images/profile-icon.png" alt="Profil">
+                <img src="/images/profile-icon.png" alt="Profil">
                 <span>Déconnexion</span>
             </div>
         </a>
         <div id="header_pro">
-            <a href="/autres_pages/detail_compte.php?id=<?= Auth\id_compte_connecte()?>">
+            <!-- <a href="/autres_pages/detail_compte.php?id=<?//= Auth\id_compte_connecte()?>"> -->
+            <a href="/html/images/profile-icon.png">
                 <div class="auth-button">
                     <img src="" alt="Profil">
                     <span>Compte</span>
