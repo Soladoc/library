@@ -30,3 +30,14 @@ execute function activite_insert ();
 -- Update
 create trigger tg_activite_after_update after update on _activite for each row
 execute function _offre_after_update ();
+
+-- Delete
+create function activite_delete () returns trigger as $$
+begin
+    call delete_offre(old);
+    return old;
+end
+$$ language plpgsql;
+
+create trigger tg_activite_delete instead of delete on activite for each row
+execute function activite_delete ();

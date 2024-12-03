@@ -26,3 +26,14 @@ execute function spectacle_insert ();
 -- Update
 create trigger tg_spectacle_after_update after update on _spectacle for each row
 execute function _offre_after_update ();
+
+-- Delete
+create function spectacle_delete () returns trigger as $$
+begin
+    call delete_offre(old);
+    delete from _image where id = old.id_image_plan;
+end
+$$ language plpgsql;
+
+create trigger tg_spectacle_delete instead of delete on spectacle for each row
+execute function spectacle_delete ();

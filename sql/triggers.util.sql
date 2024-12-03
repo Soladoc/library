@@ -47,6 +47,14 @@ comment on function insert_avis (record, int) is
 'Insère un avis.
 @param new contient les valeurs de l''avis.';
 
+create procedure delete_offre(old record) as $$
+begin
+    delete from _signalable where id = old.id;
+    delete from _image where id = old.id_image_principale;
+    delete from _adresse where id = old.id_adresse;
+end
+$$ language plpgsql;
+
 create function insert_offre (inout new record) as $$
 begin
     if (new.libelle_abonnement = 'gratuit') = new.id_professionnel in (select id from _prive) then
@@ -149,3 +157,12 @@ end
 $$ language plpgsql;
 comment on function _offre_after_update () is
 'Fonction trigger pour les sous classes de offre qui met à jour l''attribut modifiee_le';
+
+create function _compte_delete() returns trigger as $$
+begin
+    delete from _signalable where id = old.id;
+    delete from _identite where id = old.id;
+    delete from _adresse where id = old.id_adresse;
+    return old;
+end
+$$ language plpgsql;

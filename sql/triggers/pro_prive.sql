@@ -27,3 +27,6 @@ $$ language plpgsql;
 
 create trigger tg_pro_prive_insert instead of insert on pro_prive for each row
 execute function pro_prive_insert ();
+
+-- Delete
+create trigger tg_pro_prive_delete instead of delete on pro_prive for each row execute function _compte_delete();
