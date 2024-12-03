@@ -16,7 +16,7 @@ $error = getarg($_GET, 'error', required: false);
 <body>
 <?php $page->put_header() ?>
 <main>
-    <h1>Reinitialiser le mot de passe</h1>
+    <h1>Réinitialiser le mot de passe</h1>
     <section class="connexion">
         <div class="champ-connexion">
             <br>
