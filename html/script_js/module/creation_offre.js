@@ -41,7 +41,7 @@ if (table_tarifs !== null) {
 
     const periodes = new DynamicTable(
         document.getElementById('table-periodes'),
-        document.getElementById('table-periode-tr-template'),
+        document.getElementById('table-periodes-tr-template'),
         tr => {
             fin(tr).min = debut(tr).value;
             return true;
