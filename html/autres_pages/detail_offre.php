@@ -16,6 +16,7 @@ if ($_POST) {
         'note'        => getarg($_POST, 'rating', arg_int()),
         'contexte'    => getarg($_POST, 'contexte'),
     ];
+    echo "ytrdrdddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd";
     if (($id_membre_co = Auth\id_membre_connecte()) === null) {
         $error_message = 'Veuillez vous connecter pour publier un avis.';
     } else {
