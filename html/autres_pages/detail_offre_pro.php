@@ -32,6 +32,11 @@ if ($offre) {
     $site_web = $offre['url_site_web'];
     $image_pricipale = notfalse(Image::from_db($offre['id_image_principale']));
     $en_ligne = $offre['en_ligne'];
+    if (!isset($en_ligne)) {
+        $en_ligne = 0;
+    }
+    echo $offre['en_ligne'];
+    echo $en_ligne;
     $info_adresse = DB\query_adresse($adresse);
     $avis = DB\query_avis();
     $galerie = DB\query_galerie($args['id']);
@@ -70,7 +75,7 @@ if ($offre) {
             <form id="toggleForm" method="POST">
                 <div class='online'>
                     <div>
-                        <?php if (isset($en_ligne)==true) { ?>
+                        <?php if (isset($en_ligne)==1) { ?>
                             <p>Offre en ligne</p>
                             <button type="button" class="hors_ligne" onclick="enableValidate()">Mettre hors ligne</button>
                         <?php } else { ?>
