@@ -1,5 +1,5 @@
 <?php
-require_once 'Offre.php';
+require_once 'model/Offre.php';
 
 /**
  * @inheritDoc

@@ -1,13 +1,16 @@
 <?php
-namespace Auth;
 
-require_once 'util.php';
-require_once 'redirect.php';
 /**
  * auth.php
  * Fonctions relatives à l'authentification
  */
+
+namespace Auth;
+
 notfalse(session_start());
+
+require_once 'util.php';
+require_once 'redirect.php';
 
 function location_home(): string
 {
@@ -57,7 +60,7 @@ function exiger_connecte_pro(): int
     if (($id = id_pro_connecte()) !== null) {
         return $id;
     }
-    redirect_to(location_connexion(return_url: $_SERVER['REQUEST_URI']));
+    redirect_to(location_connexion(return_url: $_SERVER['REQUEST_URI'] ?? null));
     exit;
 }
 

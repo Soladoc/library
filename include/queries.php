@@ -241,20 +241,6 @@ function insert_uploaded_image(array $img, ?string $legende = null): array
 }
 
 /**
- * Détermine si un professionnel privé existe dans la BDD.
- * @param int $id_pro_prive L'ID du professionnel privé.
- * @return bool `true` si un professionnel privé d'id $id_pro_prive existe, `false` sinon.
- */
-function exists_pro_prive(int $id_pro_prive): bool
-
-{
-    $stmt = notfalse(connect()->prepare('select ? in (select id from pro_prive)'));
-    bind_values($stmt, [1 => [$id_pro_prive, PDO::PARAM_INT]]);
-    notfalse($stmt->execute());
-    return $stmt->fetchColumn();
-}
-
-/**
  * Détermine si une offre existe dans la bdd
  * @param int $id_offre l'id de l'offre que l'on recherche
  * @return bool `true` si une offre privé d'id $id_offre existe, `false` sinon.

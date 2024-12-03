@@ -1,5 +1,6 @@
 <?php
 
+require_once 'auth.php';
 require_once 'const.php';
 require_once 'model/Activite.php';
 require_once 'model/ParcAttractions.php';
@@ -11,6 +12,7 @@ require_once 'model/FiniteTimestamp.php';
 require_once 'component/InputDuree.php';
 require_once 'component/InputImage.php';
 require_once 'component/DynamicTable.php';
+require_once 'model/ProfessionnelPrive.php';
 require_once 'component/InputAdresse.php';
 
 /**
@@ -199,7 +201,7 @@ final class InputOffre extends Input
     function put(mixed $current = null): void
     {
         $id_professionnel = Auth\exiger_connecte_pro();
-        $est_prive = DB\exists_pro_prive($id_professionnel);
+        $est_prive = ProfessionnelPrive::exists($id_professionnel);
 
         $form_attr = $this->form_id ? "form=\"$this->form_id\"" : '';
         ?>
