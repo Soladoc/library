@@ -61,6 +61,7 @@ create function offre_categorie (p_id_offre int) returns categorie_offre as $$
         when p_id_offre in (select id from _restaurant) then categorie_offre 'restaurant'
         when p_id_offre in (select id from _spectacle) then categorie_offre 'spectacle'
         when p_id_offre in (select id from _visite) then categorie_offre 'visite'
+        else null
     end
 $$ language sql strict stable;
 comment on function offre_categorie (int) is

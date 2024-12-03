@@ -27,4 +27,12 @@ final class Lazy
     {
         $this->get_value = $get_value;
     }
+
+    /**
+     * @param T $value
+     * @return Lazy
+     */
+    static function of(mixed $value): self {
+        return new self(fn() => $value);
+    }
 }

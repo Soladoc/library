@@ -4,19 +4,24 @@ require_once 'testing.php';
 require_once 'model/Activite.php';
 
 DB\transaction(function () {
+    echo 'creating image' . PHP_EOL;
     $image = new Image(null, 1, 'nonexistent', 'i don\'t exist');
-    echo 'created image' . PHP_EOL;
+    echo 'inserting image' . PHP_EOL;
+    $image->insert();
+    echo 'creating adresse' . PHP_EOL;
     $adresse = new Adresse(
         null,
         commune: Commune::from_db_by_nom('Lannion'),
         numero_voie: 14,
         nom_voie: 'Rue Édouard Branly',
     );
-    echo 'created adresse' . PHP_EOL;
+    echo 'inserting adresse' . PHP_EOL;
+    $adresse->insert();
+    echo 'getting pro' . PHP_EOL;
     $pro = Professionnel::from_db(1);
-    echo 'got pro' . PHP_EOL;
+    echo 'getting abo' . PHP_EOL;
     $abo = Abonnement::from_db('standard');
-    echo 'got abo' . PHP_EOL;
+    echo 'creating offre' . PHP_EOL;
     $offre = new Activite(
         null,
         $adresse,
@@ -44,13 +49,11 @@ L’IUT en quelques chiffres :
         'Éducation',
         'Non-éducation',
     );
-    echo 'created offre' . PHP_EOL;
+    echo 'inserting offre' . PHP_EOL;
     $offre->insert();
-    echo 'inserted offre' . PHP_EOL;
-
+    echo 'retrieving offre' . PHP_EOL;
     $db_offre = Offre::from_db($offre->id);
-    echo 'retrieved offre' . PHP_EOL;
-
+    echo 'asserting offre' . PHP_EOL;
     assert_strictly_equal($offre->id, $db_offre->id);
     assert_equal($offre->adresse, $db_offre->adresse);
     assert_equal($offre->image_principale, $db_offre->image_principale);
@@ -74,10 +77,9 @@ L’IUT en quelques chiffres :
     assert($offre->tarifs->equals($db_offre->tarifs));
     assert($offre->ouverture_hebdomadaire->equals($db_offre->ouverture_hebdomadaire));
     assert($offre->galerie->equals($db_offre->galerie));
-
+    echo 'deleting offre' . PHP_EOL;
     $id = $offre->id;
     $offre->delete();
-
     assert_strictly_equal(null, $offre->id);
     assert_strictly_equal(false, Offre::from_db($id));
 });

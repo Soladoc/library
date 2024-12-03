@@ -35,7 +35,7 @@ function connect(): PDO
     $port = notfalse(getenv('PGDB_PORT'), 'PGDB_PORT not set');
     $dbname = 'postgres';
 
-    $_pdo = new PDO(
+    $_pdo = new LogPDO(
         "$driver:host=$host;port=$port;dbname=$dbname",
         notfalse(getenv('DB_USER'), 'DB_USER not set'),
         notfalse(getenv('DB_ROOT_PASSWORD'), 'DB_ROOT_PASSWORD not set'),
@@ -65,9 +65,10 @@ function transaction(callable $body, ?callable $cleanup = null)
 
     try {
         $body();
+        error_log('Transaction successful, committing...' . PHP_EOL);
         $pdo->commit();
     } catch (\Throwable $e) {
-        echo 'An error occured, cleaning up and rolling back...' . PHP_EOL;
+        error_log('An error occured, cleaning up and rolling back...' . PHP_EOL);
         if ($cleanup !== null)
             $cleanup();
         notfalse($pdo->rollBack(), '$pdo->rollBack() failed');
@@ -191,4 +192,20 @@ function bind_values(PDOStatement $stmt, array $args)
 function filter_null_args(array $array): array
 {
     return array_filter($array, fn($e) => $e[0] !== null);
+}
+
+final class LogPDO extends PDO
+{
+    private int $query_no = 1;
+    function query(string $query, ?int $fetchMode = null, mixed ...$fetchModeArgs): PDOStatement|false {
+        error_log("LogPDO ({$this->query_no}) query: '$query'");
+        ++$this->query_no;
+        return parent::query($query, $fetchMode, $fetchModeArgs);
+    }
+
+    function prepare(string $query, array $options = []): PDOStatement|false {
+        error_log("LogPDO ({$this->query_no}) prepare: '$query'");
+        ++$this->query_no;
+        return parent::prepare($query, $options);
+    }
 }

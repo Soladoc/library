@@ -158,6 +158,7 @@ abstract class Offre extends Model implements Signalable
         DB\bind_values($stmt, [1 => [$id_offre, PDO::PARAM_INT]]);
         notfalse($stmt->execute());
         return match (notfalse($stmt->fetchColumn())) {
+            null => false,
             Activite::CATEGORIE        => Activite::from_db($id_offre),
             ParcAttractions::CATEGORIE => ParcAttractions::from_db($id_offre),
             Restaurant::CATEGORIE      => Restaurant::from_db($id_offre),

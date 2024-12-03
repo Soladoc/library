@@ -50,9 +50,6 @@ abstract class Model
 
     function __get(string $name): mixed
     {
-        if (isset(static::key_fields()[$name]) && $this->$name === null) {
-            $this->insert();
-        }
         return $this->$name;
     }
 
