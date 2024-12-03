@@ -19,17 +19,16 @@ if ($_POST) {
     if (($id_membre_co = Auth\id_membre_connecte()) === null) {
         $error_message = 'Veuillez vous connecter pour publier un avis.';
     } else {
-        dbg_print($_POST);
         $querry = 'INSERT INTO pact.avis (id_membre_auteur,id_offre,commentaire,date_experience,note,contexte) VALUES (?,?,?,?,?,?);';
-        $stmt   = notfalse(DB\connect()->prepare($querry));
-        notfalse($stmt->execute([
+        $stmt   = DB\connect()->prepare($querry);
+        $stmt->execute([
             $id_membre_co,
             $args['id'],
             $args['commentaire'],
             $args['date_avis'],
             $args['note'],
             $args['contexte']
-        ]));
+        ]);
         $success_message = 'Avis ajouté avec succès !';
     }
 }
@@ -70,41 +69,26 @@ $page = new Page($titre,
 
     $page->put_header();
     ?>
-    <!-- Offer Details -->
     <main>
-        <section class="offer-details">
-            <section class="offer-main-photo">
-                <div class="carousel-container">
-                    <div class="carousel">
-                        <!-- Image principale -->
-                        <div class="carousel-slide">
-                                <?php (new ImageView($image_pricipale))->put_img() ?>
-                            </div>
-
-                            <!-- Galerie d'images -->
-                            <?php foreach ($galerie as $id_image): ?>
-                                <div class="carousel-slide">
-                                    <?php (new ImageView(Image::from_db($id_image)))->put_img() ?>
-                                </div>
-                            <?php endforeach ?>
-                    </div>
-
-                    <!-- Boutons de navigation -->
-                    <button class="carousel-prev" aria-label="Image précédente">❮</button>
-                    <button class="carousel-next" aria-label="Image suivante">❯</button>
+    <section class="offer-details">
+        <h1 class="offer-title"><?= htmlspecialchars($titre) ?></h1>
+        <div class="carousel-container">
+            <div class="carousel">
+                <div class="carousel-slide">
+                    <?php (new ImageView($image_pricipale))->put_img() ?>
                 </div>
-            </section>
-
-
-
-            <div class="offer-info">
-                <h2><?= htmlspecialchars($titre) ?></h2>
-                <p class="description"><?= nl2br(htmlspecialchars($description)) ?></p>
+                <?php foreach ($galerie as $id_image): ?>
+                    <div class="carousel-slide">
+                        <?php (new ImageView(Image::from_db($id_image)))->put_img() ?>
+                    </div>
+                <?php endforeach ?>
             </div>
+            <button class="carousel-prev" aria-label="Image précédente">❮</button>
+            <button class="carousel-next" aria-label="Image suivante">❯</button>
+        </div>
 
-        </section>
-
-        <!-- Location -->
+        <p class="offer-description"><?= nl2br(htmlspecialchars($description)) ?></p>
+    </section>
         <section class="offer-location">
             <h3>Emplacement et coordonnées</h3>
             <!-- <div id="map" class="map"></div> -->
@@ -149,7 +133,7 @@ $page = new Page($titre,
                     <input type="date" id="date" name="date" required>
                     </br>
                     <label for="consent">Je certifie que l'avis reflète mes propres expérience et opinion sur cette offre.</label>
-                    <input type="checkbox" id="consent" required>
+                    <input type="checkbox" name="consent" required>
                     <button type="submit" class="btn-publish">Publier</button>
                 </form>
             </div>
