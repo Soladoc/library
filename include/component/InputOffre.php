@@ -37,65 +37,76 @@ final class InputOffre extends Input
         $this->categorie = $categorie;
         $this->professionnel = $professionnel;
         $this->input_indication_duree = new InputDuree(
-            $this->id('indication_duree'),
-            $this->name('indication_duree'),
-            $form_id,
+            id: $this->id('indication_duree'),
+            name: $this->name('indication_duree'),
+            form_id: $form_id,
         );
         $this->input_adresse = new InputAdresse(
-            $this->id('adresse'),
-            $this->name('adresse'),
-            $form_id,
+            id: $this->id('adresse'),
+            name: $this->name('adresse'),
+            form_id: $form_id,
         );
         $this->input_image_principale = new InputImage(
-            'Photo principale',
-            $this->id('image_principale'),
-            $this->name('image_principale'),
-            $form_id,
+            fieldset_legend: 'Photo principale',
+            id: $this->id('image_principale'),
+            name: $this->name('image_principale'),
+            form_id: $form_id,
         );
         $this->input_image_plan = new InputImage(
-            'Photo du plan',
-            $this->id('input_image_plan'),
-            $this->name('input_image_plan'),
-            $form_id,
+            fieldset_legend: 'Photo du plan',
+            id: $this->id('input_image_plan'),
+            name: $this->name('input_image_plan'),
+            form_id: $form_id,
         );
         $this->tarifs = new DynamicTable(
-            ['Nom', 'Montant'],
-            function (DynamicTable $dt, ?array $row) {
+            columns: ['Nom', 'Montant'],
+            put_row: function (DynamicTable $dt, ?array $row) {
                 $form_attr = $dt->form_id ? "form=\"$dt->form_id\"" : '';
                 ?>
-            <td><input <?= $form_attr ?> name="<?= $this->name('tarifs') ?>[nom][]" type="text" placeholder="Enfant, Sénior&hellip;" required readonly value="<?= $row === null ? null : $row['nom'] ?>"></td>
-            <td><input <?= $form_attr ?> name="<?= $this->name('tarifs') ?>[montant][]" type="number" min="0" placeholder="Prix" required value="<?= $row === null ? null : $row['montant'] ?>"> €</td>
+            <td><input <?= $form_attr ?>
+                name="<?= $this->name('tarifs') ?>[nom][]"
+                type="text"
+                placeholder="Enfant, Sénior&hellip;"
+                required
+                readonly
+                value="<?= $row === null ? null : $row['nom'] ?>"></td>
+            <td><input <?= $form_attr ?> name="<?= $this->name('tarifs') ?>[montant][]"
+                type="number"
+                min="0"
+                placeholder="Prix"
+                required
+                value="<?= $row === null ? null : $row['montant'] ?>"> €</td>
             <?php
             },
-            function (DynamicTable $dt) {
+            put_prompt: function (DynamicTable $dt) {
                 ?>
             <td><input type="text" placeholder="Enfant, Sénior&hellip;" required></td>
             <td><input type="number" min="0" placeholder="Prix" required> €</td>
             <?php
             },
-            $this->id('table-tarifs'),
-            $this->name('tarifs'),
-            $form_id,
-            [['nom' => 'Adulte', 'montant' => 10]],
+            id: $this->id('table-tarifs'),
+            name: $this->name('tarifs'),
+            initial_rows: [['nom' => 'Adulte', 'montant' => 10]],
+            form_id: $form_id,
         );
         $this->periodes = new DynamicTable(
-            ['Début', 'Fin'],
-            function (DynamicTable $dt, ?array $horaire) {
+            columns: ['Début', 'Fin'],
+            put_row: function (DynamicTable $dt, ?array $horaire) {
                 $form_attr = $dt->form_id ? "form=\"$dt->form_id\"" : '';
                 ?>
             <td><input <?= $form_attr ?> name="<?= $this->name('periodes') ?>[debut][]" type="datetime-local" value="<?= $horaire === null ? null : $horaire[0] ?>)"></td>
             <td><input <?= $form_attr ?> name="<?= $this->name('periodes') ?>[fin][]" type="datetime-local" value="<?= $horaire === null ? null : $horaire[1] ?>"></td>
             <?php
             },
-            function (DynamicTable $dt) {
+            put_prompt: function (DynamicTable $dt) {
                 ?>
-            <td><input type="datetime-local" placeholder="Début" required></td>
-            <td><input type="datetime-local" placeholder="Fin" required></td>
+            <td><input type="datetime-local" required></td>
+            <td><input type="datetime-local" required></td>
             <?php
             },
-            $this->id('table-periodes'),
-            $this->name('periodes'),
-            $form_id
+            id: $this->id('table-periodes'),
+            name: $this->name('periodes'),
+            form_id: $form_id
         );
     }
 
@@ -263,9 +274,9 @@ final class InputOffre extends Input
                         required
                         value="<?= $current?->resume ?>">
                 </p>
-                <label for="<?= $this->input_adresse->id ?>">Adresse*</label>
+                <label for="<?= $this->input_adresse->for_id() ?>">Adresse*</label>
                 <?php $this->input_adresse->put($current?->adresse) ?>
-                <label for="<?= $this->id('site') ?>">Site Web</label>
+                <label for="<?= $this->id('url_site_web') ?>">Site Web</label>
                 <p>
                     <input <?= $form_attr ?>
                         id="<?= $this->id('url_site_web') ?>"
@@ -350,7 +361,7 @@ final class InputOffre extends Input
                 foreach ($this->categorie === Restaurant::CATEGORIE ? TAGS_RESTAURANT : DEFAULT_TAGS as $tag) {
                     ?>
                     <li><label><input <?= $form_attr ?>
-                        id="<?= $this->id("tag-$tag") ?>"
+                        id="<?= $this->id("tag_$tag") ?>"
                         name="<?= $this->name('tags') ?>[<?= $tag ?>]"
                         type="checkbox"><?= $tag ?></label></li>
                 <?php } ?>
@@ -358,20 +369,16 @@ final class InputOffre extends Input
         </section>
 
         <section>
-            <label for="<?= $this->id('description_detaillee') ?>">
-                <h2>Description détaillée</h2>
-            </label>
+            <h2>Description détaillée</h2>
             <textarea <?= $form_attr ?>
-                    id="<?= $this->id('description_detaillee') ?>"
-                    name="<?= $this->name('description_detaillee') ?>"
-                    required
-                    value="<?= $current?->description_detaillee ?>"></textarea>
+                id="<?= $this->id('description_detaillee') ?>"
+                name="<?= $this->name('description_detaillee') ?>"
+                required
+                ><?= $current?->description_detaillee ?></textarea>
         </section>
 
         <section id="<?= $this->id('image-creation-offre') ?>">
-            <label for="<?= $this->id('galerie') ?>">
-                <h2>Galerie</h2>
-            </label>
+            <h2>Galerie</h2>
             <input <?= $form_attr ?>
                 id="<?= $this->id('galerie') ?>"
                 name="<?= $this->name('galerie') ?>[]"
@@ -401,12 +408,12 @@ final class InputOffre extends Input
                         id="<?= $this->id('prestations_incluses') ?>"
                         name="<?= $this->name('prestations_incluses') ?>"
                         required
-                        value="<?= $activite?->prestations_incluses ?>"></textarea>
-                        <p>Prestations non incluses</p>
-                        <textarea <?= $form_attr ?>
+                        ><?= $activite?->prestations_incluses ?></textarea>
+                    <p>Prestations non incluses</p>
+                    <textarea <?= $form_attr ?>
                         id="<?= $this->id('prestations_non_incluses') ?>"
                         name="<?= $this->name('prestations_non_incluses') ?>"
-                        value="<?= $activite?->prestations_non_incluses ?>"></textarea>
+                        ><?= $activite?->prestations_non_incluses ?></textarea>
                     <?php
                     $this->put_input_indication_duree($activite?->indication_duree);
                     break;
@@ -493,7 +500,8 @@ final class InputOffre extends Input
                     </fieldset>
                     <p>Carte</p>
                     <textarea <?= $form_attr ?>
-                        name="<?= $this->name('carte') ?>"><?= $restaurant?->carte ?></textarea>
+                        name="<?= $this->name('carte') ?>"
+                        ><?= $restaurant?->carte ?></textarea>
                     <?php
                     break;
                 case Spectacle::CATEGORIE:
@@ -525,7 +533,8 @@ final class InputOffre extends Input
     function put_input_indication_duree(?Duree $current)
     {
         ?>
-        <label>Durée estimée&nbsp;: <?php $this->input_indication_duree->put($current) ?></label>
+        <label for="<?= $this->input_indication_duree->for_id() ?>">Durée estimée&nbsp;: </label>
+        <?php $this->input_indication_duree->put($current) ?>
         <?php
     }
 }

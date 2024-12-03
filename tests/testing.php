@@ -14,9 +14,27 @@ function assert_strictly_equal(mixed $a, mixed $b): void
     assert($a === $b, var_export($a, true) . ' === ' . var_export($b, true));
 }
 
+function assert_strictly_unequal(mixed $a, mixed $b): void
+{
+    assert($a !== $b, var_export($a, true) . ' !== ' . var_export($b, true));
+}
+
 function assert_equal(mixed $a, mixed $b): void
 {
     assert($a == $b, var_export($a, true) . ' == ' . var_export($b, true));
+}
+
+function assert_unequal(mixed $a, mixed $b): void
+{
+    assert($a != $b, var_export($a, true) . ' != ' . var_export($b, true));
+}
+
+function assert_is_in(mixed $x, array $C): void
+{
+    assert(
+        array_search($x, $C) !== false,
+        var_export($x, true) . ' ∈ {' . implode(', ', array_map(fn($c) => var_export($c, true), $C)) . '}',
+    );
 }
 
 /**
@@ -38,14 +56,21 @@ function submit_form(HTML5DOMDocument $dom, string $form_id): array
 {
     $result = [];
 
-    $form_elements = $dom->querySelectorAll(":is(input, textarea)[form=$form_id], #$form_id :is(input, textarea)");
+    $form_elements = $dom->querySelectorAll("
+        input[form=$form_id],
+        textarea[form=$form_id],
+        #$form_id input,
+        #$form_id textarea
+    ");
     foreach ($form_elements as /** @var IvoPetkov\HTML5DOMElement */ $e) {
         if (!_is_form_element_relevant($e)) {
             continue;
         }
 
+        // echo "{$e->getLineNo()}: $e->outerHTML" . PHP_EOL;
+
         $name = $e->getAttribute('name');
-        assert($name !== '');
+        assert_strictly_unequal($name, '');
 
         $path = _get_path($name);
         $dest = &$result;
@@ -71,9 +96,19 @@ function submit_form(HTML5DOMDocument $dom, string $form_id): array
 function _is_form_element_relevant(HTML5DOMElement $e): bool
 {
     $type = $e->getAttribute('type');
-    return !$e->hasAttribute('name')
-        || $e->hasAttribute('disabled')
-        || ($type === 'radio' || $type === 'checkbox') && !$e->hasAttribute('checked');
+    return $e->hasAttribute('name')
+        && !$e->hasAttribute('disabled')
+        && ($type !== 'radio' && $type !== 'checkbox' || !$e->hasAttribute('checked'))
+        && !_element_has_parent($e, 'template');
+}
+
+function _element_has_parent(DOMElement $e, string $parent_tagName): bool
+{
+    assert_php_version('8.3.0');
+    $parent = $e->parentElement;
+    return $parent !== null
+        && ($parent->tagName === $parent_tagName
+            || _element_has_parent($parent, $parent_tagName));
 }
 
 /**
@@ -83,18 +118,18 @@ function _is_form_element_relevant(HTML5DOMElement $e): bool
 function _get_path(string $name): array
 {
     $matches = [];
-    assert(preg_match('/^[^[]+/', $name, $matches) === 1);
+    assert_strictly_equal(preg_match('/^[^[]+/', $name, $matches), 1);
     $first_key = $matches[0];
-    assert(preg_match_all('/\G\[([^[\]]*)\]/', $name, $matches, offset: strlen($first_key)) === 1);
+    assert_strictly_unequal(preg_match_all('/\G\[([^[\]]*)\]/', $name, $matches, offset: strlen($first_key)), false);
     return [$first_key, ...$matches[1]];
 }
 
 function fill_input(HTML5DOMDocument &$dom, string $id, string $value)
 {
     $e = $dom->getElementById($id);
-    assert($e?->tagName === 'input');
+    assert_strictly_equal($e?->tagName, 'input');
     $type = $e->getAttribute('type');
-    assert($e->type !== 'image');
+    assert_strictly_unequal($type, 'image');
 
     notfalse($e->setAttribute('value', $value));
 }
@@ -110,9 +145,8 @@ function fill_textarea(HTML5DOMDocument &$dom, string $id, string $content)
 function check_input(HTML5DOMDocument &$dom, string $id)
 {
     $e = $dom->getElementById($id);
-    assert($e?->tagName === 'input');
-    $type = $e->getAttribute('type');
-    assert($type === 'checkbox' || $type === 'radio');
+    assert_strictly_equal($e?->tagName, 'input');
+    assert_is_in($e->getAttribute('type'), ['checkbox', 'radio']);
 
     notfalse($e->setAttribute('checked', ''));
 }
@@ -120,9 +154,18 @@ function check_input(HTML5DOMDocument &$dom, string $id)
 function uncheck_input(HTML5DOMDocument &$dom, string $id)
 {
     $e = $dom->getElementById($id);
-    assert($e?->tagName === 'input');
-    $type = $e->getAttribute('type');
-    assert($type === 'checkbox' || $type === 'radio');
+    assert_strictly_equal($e?->tagName, 'input');
+    assert_is_in($e->getAttribute('type'), ['checkbox', 'radio']);
 
     notfalse($e->removeAttribute('checked'));
+}
+
+function assert_php_version(string $min_version) {
+    static $first = true;
+    if ($first) {
+        $phpversion = notfalse(phpversion());
+        assert(version_compare($phpversion, $min_version, '>='), "$phpversion >= $min_version");
+        $first = false;
+    }
+
 }

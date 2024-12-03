@@ -37,6 +37,10 @@ final class InputAdresse extends Input
         );
     }
 
+    function for_id(): string {
+        return $this->id('commune');
+    }
+
     /**
      * Affiche l'HTML du composant.
      * @param ?Adresse $current L'adresse à modifier ou `null` pour une création.
@@ -121,7 +125,7 @@ final class InputAdresse extends Input
             return;
         }
         self::$datalist_put = true;
-        $communes = DB\connect()->query('select nom from _commune limit 100')->fetchAll();
+        $communes           = DB\connect()->query('select nom from _commune limit 100')->fetchAll();
 ?>
 <datalist id="datalist-input-address-communes">
 <?php foreach ($communes as $c) { ?>

@@ -18,6 +18,23 @@ function notfalse(mixed $valeur, string $message = 'was false'): mixed
 }
 
 /**
+ * Cause une erreur si la valeur fournie est strictement égale à `null`.
+ *
+ * @template T
+ * @param ?T $valeur La valeur à comparer à `null` avec l'opérateur `===`
+ * @param  $message Le message d'erreur à afficher si $valeur était `null`
+ * @return T $valeur si elle n'était pas strictement égale à `null`.
+ * @throws DomainException Si $valeur est `null`.
+ */
+function notnull(mixed $valeur, string $message = 'was null'): mixed
+{
+    if ($valeur === null) {
+        throw new DomainException($message);
+    }
+    return $valeur;
+}
+
+/**
  * Supprime une clé d'un tableu et retourne la valeur associée.
  * @template T
  * @param T[] $array Le tableau à modifier.
@@ -42,7 +59,8 @@ function array_pop_key(array &$array, bool|float|int|string|null $key): mixed
  * @param callable(T): TResult|false $map
  * @return TResult|false
  */
-function iterator_first_notfalse(iterable $array, callable $map): mixed {
+function iterator_first_notfalse(iterable $array, callable $map): mixed
+{
     foreach ($array as $item) {
         $r = $map($item);
         if ($r !== false) {
@@ -147,7 +165,8 @@ function parse_int(?string $output, ?int $min_range = null): int|null|false
 {
     // remove trailing zeros before filtering
     return $output === null ? null : filter_var(
-        notfalse(preg_replace('/^\s*0+(?=\d)/', '', $output)), FILTER_VALIDATE_INT,
+        notnull(preg_replace('/^\s*0+(?=\d)/', '', $output)),
+        FILTER_VALIDATE_INT,
         $min_range === null ? 0 : ['min_range' => $min_range],
     );
 }

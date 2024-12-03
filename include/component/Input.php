@@ -11,6 +11,13 @@ abstract class Input
     readonly string $name;
 
     /**
+     * @return string L'ID à utiliser comme valeur de l'attribut `for` sur un élement `label` pointant vers ce contrôle.
+     */
+    function for_id(): string {
+        return $this->id;
+    }
+
+    /**
      * Summary of __construct
      * @param string $form_id l'ID du formulaire auquel appartient le contrôle. Pas nécéssaire de le spécifier si l'élément est déjà dans un `<form>`.
      * @param string $id L'ID de l'élément à ajouter. Optionnel, ne pas spécifier pour pas d'ID.
@@ -19,8 +26,8 @@ abstract class Input
     function __construct(string $id, string $name, string $form_id)
     {
         $this->form_id = $form_id;
-        $this->id = $id;
-        $this->name = $name;
+        $this->id      = $id;
+        $this->name    = $name;
     }
 
     /**
@@ -35,16 +42,19 @@ abstract class Input
      * @param string $name The inner name.
      * @return string
      */
-    protected function name(string $name): string {
+    protected function name(string $name): string
+    {
         return $this->name ? "$this->name[$name]" : $name;
     }
 
     /**
      * Gets a field "id" attribute.
-     * @param string $id The inner id.
+     * @param string $id The inner id. Whitespace characters are replaced by underscores.
      * @return string
      */
-    protected function id(string $id): string {
+    protected function id(string $id): string
+    {
+        $id = notnull(preg_replace('/\s/', '_', $id));
         return $this->id ? "{$this->id}_$id" : $id;
     }
 }

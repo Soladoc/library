@@ -30,6 +30,10 @@ final class InputDuree extends Input
         );
     }
 
+    function for_id(): string {
+        return $this->id('jours');
+    }
+
     /**
      * Affiche l'HTML du composant.
      * @param ?Duree $current La duréee à modifier ou `null` pour une création.
@@ -39,29 +43,29 @@ final class InputDuree extends Input
         $form_attr = $this->form_id ? "form=\"$this->form_id\"" : '';
 ?>
 <p <?= $this->id ? "id=\"$this->id\"" : '' ?> class="input-duration">
-    <input <?= $form_attr ?>
-        id="<?= $this->id('jours') ?>"
-        name="<?= $this->name('jours') ?>"
-        type="number"
-        min="0"
-        required
-        value="<?= $current?->days ?? 0 ?>"> jour(s)
-    <input <?= $form_attr ?>
+    <label><input <?= $form_attr ?>
+            id="<?= $this->id('jours') ?>"
+            name="<?= $this->name('jours') ?>"
+            type="number"
+            min="0"
+            required
+            value="<?= $current?->days ?? 0 ?>"> jour(s)</label>
+    <label><input <?= $form_attr ?>
         id="<?= $this->id('heures') ?>"
         name="<?= $this->name('heures') ?>"
         type="number"
         min="0"
         max="24"
         required
-        value="<?= $current?->hours ?? 0 ?>"> heure(s)
-    <input <?= $form_attr ?>
+        value="<?= $current?->hours ?? 0 ?>"> heure(s)</label>
+    <label><input <?= $form_attr ?>
         id="<?= $this->id('minutes') ?>"
         name="<?= $this->name('minutes') ?>"
         type="number"
         min="0"
         max="60"
         required
-        value="<?= $current?->minutes ?? 0 ?>" > minute(s)
+        value="<?= $current?->minutes ?? 0 ?>" > minute(s)</label>
 </p>
 <?php
     }

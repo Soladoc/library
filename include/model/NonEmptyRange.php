@@ -32,7 +32,7 @@ final class NonEmptyRange
 
     private static function unescape_bound(string $parsed_bound): string
     {
-        return preg_replace(['/\\\\(.)/s', '/""/'], ['$1', '"'], $parsed_bound);
+        return notnull(preg_replace(['/\\\\(.)/s', '/""/'], ['$1', '"'], $parsed_bound));
     }
 
     /**

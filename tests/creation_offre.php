@@ -41,7 +41,7 @@ fill_input($dom, 'titre', 'IUT de Lannion');
 fill_input($dom, 'resume', 'L\'Institut universitaire de technologie de Lannion est une composante de formation de l\'Université de Rennes.');
 fill_input($dom, 'adresse_commune', 'Lannion');
 fill_input($dom, 'adresse_nom_voie', 'Rue Édouard Branly');
-fill_input($dom, 'numero_voie', 14);
+fill_input($dom, 'adresse_numero_voie', 14);
 fill_input($dom, 'url_site_web', 'https://iut-lannion.univ-rennes.fr');
 check_input($dom, 'tag_humour');
 fill_textarea($dom, 'description_detaillee', "Bienvenue à l’IUT Lannion !
@@ -57,13 +57,22 @@ L’IUT en quelques chiffres :
 
 Étudier à Lannion, c’est profiter d’un environnement exceptionnel. L’IUT s’engage dans cette dynamique et veille au bien-être de ses occupants (espace vie étudiante, cafétéria, bibliothèque, restaurant universitaire, etc…)… jusqu’à la rénovation thermique des bâtiments débutée en 2019.");
 fill_input($dom, 'age_requis', 17);
-fill_input($dom, 'prestations_incluses', 'Éducation');
-fill_input($dom, 'prestations_non_incluses', 'Non-éducation');
+fill_textarea($dom, 'prestations_incluses', 'Éducation');
+fill_textarea($dom, 'prestations_non_incluses', 'Non-éducation');
 fill_input($dom, 'indication_duree_jours', 3);
 fill_input($dom, 'indication_duree_heures', 4);
 fill_input($dom, 'indication_duree_minutes', 5);
 
-
-// Handle images separately
-
 $request = submit_form($dom, FORM_ID);
+
+// Tarifs
+
+// Photo princpale
+
+// Gallerie
+
+// Periodes
+
+// Horaires
+
+dbg_print($request);
