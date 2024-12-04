@@ -74,7 +74,6 @@ final class Galerie implements Equatable
     private function insert_galerie(Image $image): void
     {
         if (null !== $args = $this->args($image)) {
-            $image->push_to_db();
             notfalse(DB\insert_into(self::TABLE, $args));
         }
     }

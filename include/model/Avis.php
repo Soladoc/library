@@ -55,13 +55,6 @@ class Avis extends Model
         protected ?FiniteTimestamp $publie_le = null,
     ) {}
 
-    function push_to_db(): void
-    {
-        $this->offre->push_to_db();
-        $this->membre_auteur->push_to_db();
-        parent::push_to_db();
-    }
-
     static function from_db(int $id_avis): self|false
     {
         $stmt = notfalse(DB\connect()->prepare(self::make_select() . ' where a.id = ?'));

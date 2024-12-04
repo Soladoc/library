@@ -40,7 +40,7 @@ final class Tarifs implements IteratorAggregate, Equatable
         ];
     }
 
-    function insert(): void
+    function push_to_db(): void
     {
         foreach ($this->tarifs as $nom => $montant) {
             $this->insert_tarif($nom, $montant);
