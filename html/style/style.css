@@ -477,12 +477,6 @@ h1 {
     cursor: pointer;
 }
 
-/* Bloc 2 : Carte et contact */
-.offer-location {
-    background-color: white;
-    padding: 20px;
-    margin-bottom: 20px;
-}
 
 .map {
     height: 300px;
@@ -557,6 +551,9 @@ textarea {
     margin: 20px auto;
     max-width: 80%;
     text-align: center;
+    background-color: white;
+    padding: 20px;
+    margin-bottom: 20px;
 }
 
 .contact-info {
