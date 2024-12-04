@@ -15,7 +15,7 @@ $page = new Page("offre : {$offre->id}",
     ['https://unpkg.com/leaflet@1.7.1/dist/leaflet.js' => 'async']);
 
 
-$categorie = $offre['categorie'];
+$categorie = $offre->categorie;
 $input_offre = new InputOffre(
     $categorie,
     Professionnel::from_db(Auth\exiger_connecte_pro()),
