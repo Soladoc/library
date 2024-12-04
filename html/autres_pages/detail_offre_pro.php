@@ -14,6 +14,13 @@ $page = new Page("offre : {$offre->id}",
     ['https://unpkg.com/leaflet@1.7.1/dist/leaflet.js' => 'async']);
 
 
+$input_offre = new InputOffre(
+    $categorie,
+    Professionnel::from_db(Auth\exiger_connecte_pro()),
+    form_id: 'f',
+);
+
+
 if ($_POST) {
     $offre->alterner_etat();
     redirect_to($_SERVER['REQUEST_URI']);
@@ -88,6 +95,8 @@ if ($_POST) {
                 <p><strong>Site web&nbsp;:</strong> <a href="<?= $offre->url_site_web ?>"><?= $offre->url_site_web ?></a></p>
             </div>
         </section>
+
+        <?php $input_offre->put($offre) ?>
 
         <div class="review-list">
             <h4>Avis de la communauté</h4>
