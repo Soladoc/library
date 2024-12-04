@@ -415,11 +415,16 @@ h1 {
 /*----------offre détaillée*/
 /* Bloc 1 : Informations de l'offre */
 .offer-details {
-    display: flex;
-    justify-content: space-around;
+    border: 2px solid black;
+    border-radius: 8px;
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
+    padding: 30px;
+    margin: 20px auto;
+    max-width: 80%;
+    text-align: center;
     background-color: white;
     padding: 20px;
-    margin: 40px 0;
+    margin-bottom: 20px;
 }
 
 .offer-main-photo {
