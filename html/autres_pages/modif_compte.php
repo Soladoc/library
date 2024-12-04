@@ -10,6 +10,7 @@ $page        = new Page('Modification compte (todo)');
 $error_mdp   = null;
 $error_tel   = null;
 $error_email = null;
+$error_siren = null;
 
 $compte = notfalse(Compte::from_db(Auth\id_compte_connecte()));
 
@@ -33,7 +34,12 @@ if ($_POST) {
     // modif siren
     $new_siren = getarg($_POST, 'new_siren', null, false);
     if ($new_siren) {
-        DB\query_update_siren($compte->id, $new_siren);
+        if(!preg_match('#^[0-9]{9}$#', $new_siren)){
+            $error_siren =  'siren incorrect, doit être composé de 9 chiffres';
+        }
+        else {
+            DB\query_update_siren($compte->id, $new_siren);
+        }
     }
 
     // modif Nom
@@ -123,6 +129,9 @@ if ($_POST) {
                                 <div id="siren">
                                     <label>SIREN : </label>
                                 </div>
+                                <?php if ($error_email !== null) { ?>
+                            <p class="error"><?= htmlspecialchars($error_siren) ?></p>
+                        <?php } ?>
                                 <input type="text" id="new_siren" name="new_siren" value="<?= htmlspecialchars($compte->siren) ?>" placeholder="231 654 988" oninput="formatInput(this)" maxlength="12">
                             </div>
                         </br>
@@ -147,20 +156,22 @@ if ($_POST) {
                         <div id="email">
                             <label>Email : </label>
                         </div>
-                        <input id="new_email" name="new_email" type="email" value="<?= htmlspecialchars($compte->email) ?>" placeholder="votre nouvel email">
                         <?php if ($error_email !== null) { ?>
                             <p class="error"><?= htmlspecialchars($error_email) ?></p>
                         <?php } ?>
+                        <input id="new_email" name="new_email" type="email" value="<?= htmlspecialchars($compte->email) ?>" placeholder="votre nouvel email">
+                        
                     </div>
                     </br>
                     <div>
                         <div id="telephone">
                             <label>Numéro de téléphone : </label>
                         </div>
-                        <input id="new_telephone" name="new_telephone" type="tel" value="<?= htmlspecialchars($compte->telephone) ?>" placeholder="votre nouveau numéro de téléphone">
                         <?php if ($error_tel !== null) { ?>
                             <p class="error"><?= htmlspecialchars($error_tel) ?></p>
                         <?php } ?>
+                        <input id="new_telephone" name="new_telephone" type="tel" value="<?= htmlspecialchars($compte->telephone) ?>" placeholder="votre nouveau numéro de téléphone">
+                        
                     </div>
                     </br>
                     <div id="adresse">
