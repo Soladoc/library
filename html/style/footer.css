@@ -49,7 +49,7 @@ footer > div:nth-child(2) {
     padding: 1em 2em;
     display: flex;
     justify-content: space-between;
-    background-color: var(#4051FD);
+    background-color: #4051FD;
 }
 
 @media (max-width: 576px) {
