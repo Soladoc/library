@@ -1,4 +1,3 @@
 <?php
 
-interface Signalable {
-}
+interface Signalable {}

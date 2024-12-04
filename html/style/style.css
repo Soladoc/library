@@ -108,6 +108,10 @@ header #header_pro{
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
 }
 
+.auth-button:hover {
+    text-decoration: none;
+}
+
 .auth-button img {
     height: 30px;
     margin-right: 10px;
@@ -230,10 +234,10 @@ h1 {
     display: block;
     width: 100%;
     padding: 10px;
-    background-color: #4A90E2;
+    background-color: #4051FD;
     color: white;
     border: none;
-    border-radius: 8px;
+    border-radius: 0.5em;
     text-align: center;
     margin-top: 10px;
     cursor: pointer;
@@ -241,7 +245,8 @@ h1 {
 }
 
 .btn-more-info:is(:hover, :focus, :focus-within) {
-    background-color: #357ABD;
+    background-color: #1927c2;
+    text-decoration: none;
 }
 
 /* Sections des rubriques */
@@ -972,4 +977,9 @@ section#info_compte div span {
     color: gray;
     margin-top: 10px;
     display: block;
+}
+
+.nb-offres {
+    align-self: flex-start;
+    margin-left: 40px; /* Ajustez si nécessaire pour un bon alignement */
 }

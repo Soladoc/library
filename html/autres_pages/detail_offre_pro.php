@@ -41,7 +41,7 @@ $id_membre_co = Auth\id_membre_connecte();
                 <form id="toggleForm" method="post" style="display: inline;">
                     <button type="submit" name="valider" class="bouton" id="validateButton" disabled>Valider</button>
                 </form>
-                <a class="bouton modifier" href="modif_offre.php?id=<?= $offre->id ?>&categorie=<?= $offre::CATEGORIE ?>">Modifier</a>
+                <a class="bouton modifier" href="modif_offre.php?id=<?= $offre->id ?>&categorie=<?= $offre->categorie ?>">Modifier</a>
             </div>
         </section>
             

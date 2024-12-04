@@ -71,5 +71,6 @@ final class Tarifs implements IteratorAggregate, Equatable
     {
         return $other->tarifs === $this->tarifs;
     }
+
     const TABLE = '_tarif';
 }
