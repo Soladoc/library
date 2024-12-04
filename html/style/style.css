@@ -230,10 +230,10 @@ h1 {
     display: block;
     width: 100%;
     padding: 10px;
-    background-color: #4A90E2;
+    background-color: #4051FD;
     color: white;
     border: none;
-    border-radius: 8px;
+    border-radius: 0.5em;
     text-align: center;
     margin-top: 10px;
     cursor: pointer;
@@ -241,7 +241,7 @@ h1 {
 }
 
 .btn-more-info:is(:hover, :focus, :focus-within) {
-    background-color: #357ABD;
+    background-color: #1927c2;
 }
 
 /* Sections des rubriques */
