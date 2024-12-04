@@ -52,7 +52,7 @@ $id_membre_co = Auth\id_membre_connecte();
     ?>
     <!-- Offer Details -->
     <main>
-        <section class="offer-info">
+        <section class="offer-details">
             <h2><?= htmlspecialchars($offre->titre) ?></h2>
             <section class="offer-main-photo">
                 <div class="carousel-container">
