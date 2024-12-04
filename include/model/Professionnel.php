@@ -3,15 +3,23 @@ require_once 'model/Compte.php';
 
 /**
  * @inheritDoc
+ * @property-read ?string $secteur `null` si ce professionnel n'existe pas dans la BDD.
  */
 
-// todo make this abstract
+/* abstract */
 class Professionnel extends Compte
 {
     protected static function fields()
     {
         return parent::fields() + [
             'denomination' => [null, 'denomination', PDO::PARAM_STR],
+        ];
+    }
+
+    protected static function computed_fields()
+    {
+        return parent::computed_fields() + [
+            'secteur' => [null, 'secteur', PDO::PARAM_STR],
         ];
     }
 
@@ -24,6 +32,7 @@ class Professionnel extends Compte
         string $telephone,
         Adresse $adresse,
         readonly string $denomination,
+        protected ?string $secteur = null,
     ) {
         parent::__construct(
             $id,

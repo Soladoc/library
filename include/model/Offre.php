@@ -209,12 +209,37 @@ abstract class Offre extends Model implements Signalable
 
     private static function make_select(): string
     {
-        return 'select * from ' . self::TABLE  // todo: faire des jointures pour gagner en performance
-            . ' left join _activite using (id)'
-            . ' left join _parc_attractions using (id)'
-            . ' left join _restaurant using (id)'
-            . ' left join _spectacle using (id)'
-            . ' left join _visite using (id)';
+        return 'select
+            id,id_adresse,id_image_principale,id_professionnel,libelle_abonnement,titre,resume,description_detaillee,modifiee_le,url_site_web,periodes_ouverture,en_ligne,note_moyenne,prix_min,nb_avis,creee_le,categorie,en_ligne_ce_mois_pendant,changement_ouverture_suivant_le,est_ouverte
+            
+            _activite.indication_duree activite_indication_duree,
+            _activite.age_requis activite_age_requis,
+            _activite.prestations_incluses activite_prestations_incluses,
+            _activite.prestations_non_incluses activite_prestations_non_incluses,
+
+            _parc_attractions.id_image_plan parc_attractions_id_image_plan,
+            _parc_attractions.nb_attractions parc_attractions_nb_attractions,
+            _parc_attractions.age_requis parc_attractions_age_requis,
+
+            _restaurant.carte restaurant_carte,
+            _restaurant.richesse restaurant_richesse,
+            _restaurant.sert_petit_dejeuner restaurant_sert_petit_dejeuner,
+            _restaurant.sert_brunch restaurant_sert_brunch,
+            _restaurant.sert_dejeuner restaurant_sert_dejeuner,
+            _restaurant.sert_diner restaurant_sert_diner,
+            _restaurant.sert_boissons restaurant_sert_boissons,
+
+            _spectacle.indication_duree spectacle_indication_duree,
+            _spectacle.capacite_accueil spectacle_capacite_accueil,
+            
+            _visite.indication_duree visite_indication_duree
+
+            from ' . self::TABLE . '
+                left join _activite using (id)
+                left join _parc_attractions using (id)
+                left join _restaurant using (id)
+                left join _spectacle using (id)
+                left join _visite using (id)';
     }
 
     protected static function from_db_row(array $row): Offre
@@ -245,35 +270,35 @@ abstract class Offre extends Model implements Signalable
         return match ($row['categorie']) {
             Activite::CATEGORIE => new Activite(
                 $args,
-                Duree::parse($row['indication_duree']),
-                $row['age_requis'] ?? null,
-                $row['prestations_incluses'],
-                $row['prestations_non_incluses'] ?? null,
+                Duree::parse($row['activite_indication_duree']),
+                $row['activite_age_requis'] ?? null,
+                $row['activite_prestations_incluses'],
+                $row['activite_prestations_non_incluses'] ?? null,
             ),
             ParcAttractions::CATEGORIE => new ParcAttractions(
                 $args,
-                $row['age_requis'],
-                $row['nb_attractions'],
-                Image::from_db($row['id_image_plan']),
+                $row['parc_attractions_age_requis'],
+                $row['parc_attractions_nb_attractions'],
+                Image::from_db($row['parc_attractions_id_image_plan']),
             ),
             Restaurant::CATEGORIE => new Restaurant(
                 $args,
-                $row['carte'],
-                $row['richesse'],
-                $row['sert_petit_dejeuner'],
-                $row['sert_brunch'],
-                $row['sert_dejeuner'],
-                $row['sert_diner'],
-                $row['sert_boissons'],
+                $row['restaurant_carte'],
+                $row['restaurant_richesse'],
+                $row['restaurant_sert_petit_dejeuner'],
+                $row['restaurant_sert_brunch'],
+                $row['restaurant_sert_dejeuner'],
+                $row['restaurant_sert_diner'],
+                $row['restaurant_sert_boissons'],
             ),
             Spectacle::CATEGORIE => new Spectacle(
                 $args,
-                Duree::parse($row['indication_duree']),
-                $row['capacite_accueil'],
+                Duree::parse($row['spectacle_indication_duree']),
+                $row['spectacle_capacite_accueil'],
             ),
             Visite::CATEGORIE => new Visite(
                 $args,
-                Duree::parse($row['indication_duree']),
+                Duree::parse($row['visite_indication_duree']),
             ),
         };
     }
