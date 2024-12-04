@@ -33,23 +33,22 @@ if ($_POST) {
     <!-- Offer Details -->
     <main>
         <section class="modif">
-            <div class="bandeau-etat <?= $bandeau_class ?>">
-                <p class="etat"><?= $offre->en_ligne ? 'Offre en ligne' : 'Offre hors ligne' ?></p>
-                
-                <!-- Bouton pour activer la validation -->
-                <button type="button" class="bouton" onclick="enableValidate()">
-                    <?= $offre->en_ligne ? 'Mettre hors ligne' : 'Mettre en ligne' ?>
-                </button>
-                
-                <!-- Formulaire pour valider l'action -->
-                <form id="toggleForm" method="post" style="display: inline;">
-                    <button type="submit" name="valider" class="bouton" id="validateButton" disabled>Valider</button>
-                </form>
-                
-                <!-- Lien pour modifier l'offre -->
-                <a class="bouton modifier" href="modif_offre.php?id=<?= $offre->id ?>&categorie=<?= $offre::CATEGORIE ?>">Modifier</a>
-            </div>
-
+            <form id="toggleForm" method="post">
+                <?php
+                $bandeau_class = $offre->en_ligne ? 'vert' : 'rouge';
+                ?>
+                <div class="bandeau-etat <?= $bandeau_class ?>">
+                    <p class="etat"><?= $offre->en_ligne ? 'Offre en ligne' : 'Offre hors ligne' ?></p>
+                    <button type="button" class="bouton" onclick="enableValidate()">
+                        <?= $offre->en_ligne ? 'Mettre hors ligne' : 'Mettre en ligne' ?>
+                    </button>
+                    <form id="toggleForm" method="post" style="display: inline;">
+                        <button type="submit" name="valider" class="bouton" id="validateButton" disabled>Valider</button>
+                    </form>
+                    <a class="bouton modifier" href="modif_offre.php?id=<?= $offre->id ?>&categorie=<?= $offre::CATEGORIE ?>">Modifier</a>
+                </div>
+            </form>
+            
             <section class="offer-details">
                 <section class="offer-main-photo">
                     <div class="carousel-container">
