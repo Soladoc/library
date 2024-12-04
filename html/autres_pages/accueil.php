@@ -20,7 +20,7 @@ $page = new Page('Accueil');
             <br>
             <form action="recherche.php" name="bare_de_recherche" method="post" class="search-bar">
 
-                <input type="text" name="mot_cle" placeholder=">Mots-clés">
+                <input type="text" name="mot_cle" placeholder="Entrez des mots-clés de recherche ici (ex: restaurant)">
                 <input type="submit" name="valider" value="Recherche">
             </form>
         </section>
