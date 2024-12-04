@@ -30,6 +30,7 @@ function connect(): PDO
 
     // Connect to the database
     $driver = 'pgsql';
+    dbg_print(_is_localhost());
     [$host, $port, $dbname, $username, $password] = _is_localhost()
         ? ['localhost',
             5432,
