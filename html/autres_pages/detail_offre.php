@@ -54,6 +54,7 @@ $id_membre_co = Auth\id_membre_connecte();
     <main>
         <section class="offer-details">
             <section class="offer-main-photo">
+                <h2><?= htmlspecialchars($offre->titre) ?></h2>
                 <div class="carousel-container">
                     <div class="carousel">
                         <!-- Image principale -->
@@ -78,7 +79,6 @@ $id_membre_co = Auth\id_membre_connecte();
 
 
             <div class="offer-info">
-                <h2><?= htmlspecialchars($offre->titre) ?></h2>
                 <p class="description"><?= nl2br(htmlspecialchars($offre->description_detaillee)) ?></p>
             </div>
 
