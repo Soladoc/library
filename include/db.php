@@ -86,7 +86,7 @@ function transaction(callable $body, ?callable $cleanup = null)
 
 function _is_localhost(): bool
 {
-    return str_starts_with($SERVER['REQUEST_URI'], 'localhost:');
+    return str_starts_with($_SERVER['REQUEST_URI'], 'localhost:');
     /*    $server_ip = null;
 
     if (defined('INPUT_SERVER') && filter_has_var(INPUT_SERVER, 'REMOTE_ADDR')) {
