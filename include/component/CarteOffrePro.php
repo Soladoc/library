@@ -26,7 +26,7 @@ final class CarteOffrePro
     <p class="location"><?= $this->offre->adresse->format() ?></p>
     <p class="category"><?= $this->offre::CATEGORIE ?></p>
     <p class="rating">
-        <?php if ($this->offre->nb_avis === 0) { ?>
+        <?php if ($this->offre->note_moyenne === 0) { ?>
             Aucun avis
         <?php } else { ?>
             Note&nbsp;: <?= $this->offre->note_moyenne ?> /5 ★ (<?= $this->offre->nb_avis ?> avis)

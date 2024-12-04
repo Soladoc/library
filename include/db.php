@@ -35,7 +35,7 @@ function connect(): PDO
     $port   = notfalse(getenv('PGDB_PORT'), 'PGDB_PORT not set');
     $dbname = 'postgres';
 
-    $_pdo = new PDO(
+    $_pdo = new LogPDO(
         "$driver:host=$host;port=$port;dbname=$dbname",
         notfalse(getenv('DB_USER'), 'DB_USER not set'),
         notfalse(getenv('DB_ROOT_PASSWORD'), 'DB_ROOT_PASSWORD not set'),
