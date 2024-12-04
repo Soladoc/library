@@ -5,6 +5,7 @@ require_once 'component/Page.php';
 require_once 'db.php';
 require_once 'model/Avis.php';
 require_once 'model/Offre.php';
+require_once 'model/Membre.php';
 require_once 'queries.php';
 
 $offre = notfalse(Offre::from_db(getarg($_GET, 'id', arg_int())));
