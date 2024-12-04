@@ -36,7 +36,7 @@ final class InputImage extends Input
             explode('/', $file['type'], 2)[1],
             getarg($get_or_post, "{$this->name}_legende", required: false),
             $file['tmp_name'],
-        ), $files, $current_id_images ?? []) : null;
+        ), $files, $current_id_images ?? []) : [];
     }
 
     /**
