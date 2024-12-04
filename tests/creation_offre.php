@@ -74,6 +74,7 @@ $_FILES['image_principale'] = [
     'size' => 100,
     'type' => 'image/jpeg',
     'tmp_name' => 'myass',
+    'error' => 0,
 ];
 
 // Gallerie
@@ -87,6 +88,9 @@ $_FILES['galerie'] = [
     'tmp_name' => [
         'assmy',
     ],
+    'error' => [
+        0
+    ]
 ];
 
 // Periodes

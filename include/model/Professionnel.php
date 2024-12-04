@@ -65,6 +65,7 @@ class Professionnel extends Compte
             $row['telephone'],
             Adresse::from_db($row['id_adresse']),
             $row['denomination'],
+            $row['secteur'],
         );
     }
 
