@@ -234,6 +234,7 @@ final class InputOffre extends Input
                             name="<?= $this->name('libelle_abonnement') ?>"
                             type="radio"
                             value="standard"
+                            required
                             <?= $current?->abonnement->libelle === 'standard' ? 'checked' : '' ?>>
                             Standard</label>
                     </li>
@@ -241,8 +242,9 @@ final class InputOffre extends Input
                         <label><input <?= $form_attr ?>
                             id="<?= $this->id('libelle_abonnement_premium') ?>"
                             name="<?= $this->name('libelle_abonnement') ?>"
-                            value="premium"
                             type="radio"
+                            value="premium"
+                            required
                             <?= $current?->abonnement->libelle === 'premium' ? 'checked' : '' ?>>
                             Premium</label>
                     </li>
