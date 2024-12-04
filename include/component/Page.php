@@ -98,7 +98,7 @@ final class Page
         </a>
         <div id="header_pro">
             <a href="/autres_pages/detail_compte.php">
-                <div class="account-button">
+                <div class="auth-button">
                     <img src="/images/profile-icon.png" alt="Compte">
                     <span>Compte</span>
                 </div>
