@@ -1,5 +1,6 @@
 <?php
 require_once 'util.php';
+require_once 'component/Input.php';
 
 /**
  * @extends Input<int>
