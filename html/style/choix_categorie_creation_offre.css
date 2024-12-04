@@ -40,6 +40,5 @@ form button:is(:hover, :focus-within, :active) {
         font-size: 1.5em;
         padding: 0.4em;
         width: 85%;
-        margin: 10px;
     }
 }
