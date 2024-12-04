@@ -422,6 +422,8 @@ h1 {
     box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
     max-width: 80%;
     padding: 20px;
+    justify-content: center;
+    flex-direction: column;
     margin: 20px auto;
     background-color: white;
     overflow: hidden;
