@@ -111,7 +111,27 @@ class Avis extends Model
     private static function make_select(): string
     {
         self::require_subclasses();
-        return 'select a.* from ' . self::TABLE . ' a left join ' . AvisRestaurant::TABLE . ' using (a.id)';  // todo: faire des jointures pour gagner en performance
+        // todo: faire des jointures pour gagner en performance
+        return 'select
+            a.id,
+            a.commentaire,
+            a.note,
+            a.date_experience,
+            a.contexte,
+            a.id_membre_auteur,
+            a.id_offre,
+            a.lu,
+            a.blackliste,
+            a.pseudo_auteur,
+            a.publie_le
+
+            v.id_restaurant,
+            v.note_cuisine,
+            v.note_service,
+            v.note_ambiance,
+            v.note_qualite_prix
+         from ' . self::TABLE . ' a
+            left join ' . AvisRestaurant::TABLE . ' v using (id)';
     }
 
     private static function require_subclasses(): void
