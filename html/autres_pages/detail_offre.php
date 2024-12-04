@@ -39,6 +39,7 @@ $page = new Page($offre->titre,
         'https://unpkg.com/leaflet@1.7.1/dist/leaflet.js' => 'async',
         'carrousel.js'                                    => 'defer',
     ]);
+$id_membre_co = Auth\id_membre_connecte();
 ?>
 
 <!DOCTYPE html>
@@ -155,7 +156,7 @@ $page = new Page($offre->titre,
                             <p class="review-contexte">Contexte&nbsp;: <?= htmlspecialchars($avis_temp['contexte']) ?></p>
                             <p><?= htmlspecialchars($avis_temp['commentaire']) ?></p>
                             <p class="review-date"><?= htmlspecialchars($avis_temp['date_experience']) ?></p>
-                            <?php if (($id_membre_co == Auth\id_membre_connecte()) != null && $avis_temp['id_membre_auteur'] === $id_membre_co) { ?>
+                            <?php if ($id_membre_co!== null && $avis_temp['id_membre_auteur'] === $id_membre_co) { ?>
                             <form method="post" action="/avis/modifier.php?avis_id=<?= $avis_temp['id'] ?>&offre=<?= $offre->id ?>">
                                 <button type="submit" class="btn-modif">Modifier</button>
                                 <button type="submit" name="action" value="supprimer">Supprimer</button>

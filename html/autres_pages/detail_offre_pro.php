@@ -20,7 +20,7 @@ if ($_POST) {
     redirect_to($_SERVER['REQUEST_URI']);
     exit;
 }
-
+$id_membre_co = Auth\id_membre_connecte();
 ?>
 
 <!DOCTYPE html>
@@ -103,18 +103,18 @@ if ($_POST) {
                 </div>
                 <?php if (!empty($avis)) {
                     foreach ($avis as $avis_temp) { ?>
-                <div class="review">
-                    <p><strong><?= htmlspecialchars($avis_temp['pseudo_auteur']) ?></strong> - <?= htmlspecialchars($avis_temp['note']) ?>/5</p>
-                    <p class="review-contexte">Contexte&nbsp;: <?= htmlspecialchars($avis_temp['contexte']) ?></p>
-                    <p><?= htmlspecialchars($avis_temp['commentaire']) ?></p>
-                    <p class="review-date"><?= htmlspecialchars($avis_temp['date_experience']) ?></p>
-                    <?php if (($id_membre_co == Auth\id_membre_connecte()) != null && $avis_temp['id_membre_auteur'] = $id_membre_co) { ?>
-                    <form method="post" action="modifier.php?id=<?= $offre->id ?>&avis_id=<?= $avis_temp['id'] ?>">
-                        <button type="submit" class="btn-modif">Modifier</button>
-                    </form>
-                    <?php } ?>
-                </div>
-                <?php }
+                        <div class="review">
+                            <p><strong><?= htmlspecialchars($avis_temp['pseudo_auteur']) ?></strong> - <?= htmlspecialchars($avis_temp['note']) ?>/5</p>
+                            <p class="review-contexte">Contexte&nbsp;: <?= htmlspecialchars($avis_temp['contexte']) ?></p>
+                            <p><?= htmlspecialchars($avis_temp['commentaire']) ?></p>
+                            <p class="review-date"><?= htmlspecialchars($avis_temp['date_experience']) ?></p>
+                            <?php if ($id_membre_co!= null && $avis_temp['id_membre_auteur'] = $id_membre_co) { ?>
+                                <form method="post" action="modifier.php?id=<?= $offre->id ?>&avis_id=<?= $avis_temp['id'] ?>">
+                                    <button type="submit" class="btn-modif">Modifier</button>
+                                </form>
+                            <?php } ?>
+                        </div>
+                    <?php }
                 } else { ?>
                 <p>Aucun avis pour le moment.&nbsp;</p>
                 <?php } ?>
