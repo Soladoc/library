@@ -540,17 +540,14 @@ textarea {
     margin-top: 10px;
 }
 
-.review-list {
-    background-color: #f9f9f9;
-    padding: 15px;
-    border-radius: 8px;
-}
-
 .offer-location {
-    background-color: #f9f9f9;
-    padding: 15px;
+    border: 2px solid black;
     border-radius: 8px;
-    text-align: left;
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
+    padding: 20px;
+    margin: 20px auto;
+    max-width: 80%;
+    text-align: center;
 }
 
 .contact-info {
