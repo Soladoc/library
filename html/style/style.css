@@ -546,6 +546,23 @@ textarea {
     border-radius: 8px;
 }
 
+.offer-location {
+    background-color: #f9f9f9;
+    padding: 15px;
+    border-radius: 8px;
+    text-align: left;
+}
+
+.contact-info {
+    padding: 15px;
+    border-radius: 8px;
+    text-align: left;
+}
+
+.offer-location p {
+    margin: 5px 0;
+}
+
 .review {
     margin-bottom: 15px;
 }
@@ -658,7 +675,7 @@ a:not(:hover, :focus, :focus-within) {
     display: flex;
     align-items: center;
     gap: 8px;
-    background-color: var(--color-secondary);
+    background-color: var(--color-accent);
     color: #fff;
     padding: 8px 12px;
     border-radius: 5px;
@@ -667,7 +684,7 @@ a:not(:hover, :focus, :focus-within) {
 }
 
 .subcategory-list div:hover {
-    background-color: var(--color-accent);
+    background-color: var(--color-secondary);
 }
 
 .subcategory-list input[type=checkbox] {
@@ -708,7 +725,7 @@ a:not(:hover, :focus, :focus-within) {
 }
 
 .btn-sort {
-    background-color: #007bff;
+    background-color: #4051FD;
     color: #fff;
     border: none;
     border-radius: 5px;
@@ -721,12 +738,12 @@ a:not(:hover, :focus, :focus-within) {
 }
 
 .btn-sort:hover {
-    background-color: #0056b3;
+    background-color: #2e3abd;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
 }
 
 .btn-sort:active {
-    background-color: #003f7f;
+    background-color: rgb(4, 34, 65);
     transform: scale(0.98);
 }
 
