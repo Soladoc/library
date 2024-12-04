@@ -53,7 +53,7 @@ if ($table = $_GET['table'] ?? null) {
                         <p>donne le nom de la table *</p>
                         <input type="text" placeholder="" id="table" name="table" required>
                         <p>et un schema</p>
-                        <input type="text" placeholder="pact" id="schema" name="schema">
+                        <input type="text" value="pact" id="schema" name="schema">
                     </div>
 
                     <button type="submit" class="btn-connexion">regarde</button>

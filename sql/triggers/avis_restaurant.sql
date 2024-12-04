@@ -43,6 +43,7 @@ begin
         note_qualite_prix = new.note_qualite_prix
     where
         id = new.id;
+    return new;
 end
 $$ language plpgsql;
 
