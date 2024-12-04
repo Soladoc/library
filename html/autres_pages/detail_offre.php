@@ -116,7 +116,7 @@ $id_membre_co = Auth\id_membre_connecte();
                 <h3>Laisser un avis</h3><br>
                 <div class="message">
                     <?php if (isset($error_message)): ?>
-                        <p class="error-message"><?= htmlspecialchars($error_message) ?></p>
+                        <p class="error"><?= htmlspecialchars($error_message) ?></p>
                     <?php elseif (isset($success_message)): ?>
                         <p class="success-message"><?= htmlspecialchars($success_message) ?></p>
                     <?php endif ?>
