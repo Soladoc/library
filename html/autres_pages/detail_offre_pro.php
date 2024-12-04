@@ -3,14 +3,16 @@ require_once 'db.php';
 require_once 'util.php';
 require_once 'queries.php';
 require_once 'redirect.php';
+require_once 'model/Offre.php';
 require_once 'component/Page.php';
 require_once 'component/ImageView.php';
+
+$offre = notfalse(Offre::from_db(getarg($_GET, 'id', arg_int())));
 
 $page = new Page("offre : {$offre->id}",
     ['https://unpkg.com/leaflet@1.7.1/dist/leaflet.css'],
     ['https://unpkg.com/leaflet@1.7.1/dist/leaflet.js' => 'async']);
 
-$offre = notfalse(Offre::from_db(getarg($_GET, 'id', arg_int())));
 
 if ($_POST) {
     DB\offre_alterner_etat($offre->id);
