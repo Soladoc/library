@@ -1,14 +1,15 @@
 <?php
 require_once 'util.php';
 require_once 'queries.php';
+require_once 'model/Compte.php';
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+if ($_POST) {
     $email = trim($_POST['login']);
-    $user = DB\query_membre($email) ?: DB\query_professionnel($email);
+    $user = Compte::from_db_by_email($email);
 
     if ($user) {
-        $user_id = $user['id'];
-        $user_type = isset($user['pseudo']) ? 'membre' : 'professionnel';
+        $user_id = $user->id;
+        $user_type = isset($user->pseudo) ? 'membre' : 'professionnel';
 
         // Création du token signé
         $payload = [
@@ -27,7 +28,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $message = "Bonjour,\n\nCliquez sur ce lien pour réinitialiser votre mot de passe : $reset_link\n\nCe lien expirera dans une heure.";
         $headers = "From: no-reply@ventsdouest.dev";
 
-        mail($user['email'], $subject, $message, $headers);
+        mail($user->email, $subject, $message, $headers);
 
         header('Location: ../autres_pages/reset_mdp.php?success=1');
         exit;

@@ -36,7 +36,7 @@ abstract class Compte extends Identite implements Signalable
 
     static function from_db(int $id_compte): Compte|false
     {
-        $stmt = notfalse(DB\connect()->prepare(self::make_select() . ' where id = ?'));
+        $stmt = notfalse(DB\connect()->prepare(self::make_select() . ' where c.id = ?'));
         DB\bind_values($stmt, [1 => [$id_compte, PDO::PARAM_INT]]);
         notfalse($stmt->execute());
         $row = $stmt->fetch();
@@ -45,7 +45,7 @@ abstract class Compte extends Identite implements Signalable
 
     static function from_db_by_email(string $email): Membre|false
     {
-        $stmt = notfalse(DB\connect()->prepare(self::make_select() . ' where email = ?'));
+        $stmt = notfalse(DB\connect()->prepare(self::make_select() . ' where c.email = ?'));
         notfalse($stmt->execute([$email]));
         $row = $stmt->fetch();
         return $row === false ? false : self::from_db_row($row);
@@ -54,7 +54,14 @@ abstract class Compte extends Identite implements Signalable
     private static function make_select(): string
     {
         return 'select
-        id,id_signalable,email,mdp_hash,nom,prenom,telephone,id_adresse,
+        c.id,
+        c.id_signalable,
+        c.email,
+        c.mdp_hash,
+        c.nom,
+        c.prenom,
+        c.telephone,
+        c.id_adresse,
 
         professionnel.denomination professionnel_denomination,
         professionnel.secteur professionnel_secteur,
@@ -65,7 +72,7 @@ abstract class Compte extends Identite implements Signalable
 
         a.code_commune adresse_code_commune,
         a.numero_departement adresse_numero_departement,
-        c.nom adresse_commune_nom,
+        o.nom adresse_commune_nom,
         a.numero_voie adresse_numero_voie,
         a.complement_numero adresse_complement_numero,
         a.nom_voie adresse_nom_voie,
@@ -75,16 +82,17 @@ abstract class Compte extends Identite implements Signalable
         a.latitude adresse_latitude,
         a.longitude adresse_longitude
 
-        from ' . self::TABLE . '
+        from ' . self::TABLE . ' c
             left join professionnel using (id)
             left join _prive using (id)
             left join _membre using (id)
-            join _adresse a on a.id = id_adresse
-            join _commune c on c.code = a.code_commune and c.numero_departement = a.numero_departement';
+            join _adresse a on a.id = c.id_adresse
+            join _commune o on o.code = a.code_commune and o.numero_departement = a.numero_departement';
     }
 
     private static function from_db_row(array $row): Compte
     {
+        self::require_subclasses();
         $args_compte = [
             $row['id'],
             $row['id_signalable'],
@@ -121,7 +129,7 @@ abstract class Compte extends Identite implements Signalable
                     $args_compte,
                     $args_profesionnel,
                 ),
-                'prive' => new ProfessionnelPrive(
+                'privé' => new ProfessionnelPrive(
                     $args_compte,
                     $args_profesionnel,
                     $row['prive_siren'],

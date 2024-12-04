@@ -217,16 +217,13 @@ final class InputOffre extends Input
      */
     function put(mixed $current = null): void
     {
-        $id_professionnel = Auth\exiger_connecte_pro();
-        $est_prive = ProfessionnelPrive::exists($id_professionnel);
-
         $form_attr = $this->form_id ? "form=\"$this->form_id\"" : '';
         ?>
         <h1><?= $current === null ? 'Créer' : 'Modifier' ?> <?= CATEGORIES_OFFRE[$this->categorie] ?></h1>
 
         <section id="<?= $this->id('type-abonnement') ?>">
             <h2>Abonnement</h2>
-            <?php if ($est_prive) { ?>
+            <?php if ($this->professionnel instanceof ProfessionnelPrive) { ?>
                 <ul id="<?= $this->id('liste-choix-abonnement') ?>">
                     <li>
                         <label><input <?= $form_attr ?>
@@ -306,7 +303,7 @@ final class InputOffre extends Input
         </section>
         <section id="<?= $this->id('tarifs') ?>">
             <h2>Tarifs</h2>
-            <?php if ($est_prive) { ?>
+            <?php if ($this->professionnel instanceof ProfessionnelPrive) { ?>
                 <?php $this->tarifs->put($current?->tarifs) ?>
             <?php } else { ?>
                 <p>En tant que professionnel public, vous ne pouvez pas ajouter de grillle tarifaire à votre offre gratuite.</p>

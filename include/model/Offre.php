@@ -151,7 +151,7 @@ abstract class Offre extends Model implements Signalable
 
     static function from_db(int $id_offre): Offre|false
     {
-        $stmt = notfalse(DB\connect()->prepare(self::make_select() . ' where id = ?'));
+        $stmt = notfalse(DB\connect()->prepare(self::make_select() . ' where o.id = ?'));
         DB\bind_values($stmt, [1 => [$id_offre, PDO::PARAM_INT]]);
         notfalse($stmt->execute());
         $row = $stmt->fetch();
@@ -165,7 +165,7 @@ abstract class Offre extends Model implements Signalable
      */
     static function from_db_a_la_une(): Iterator
     {
-        $stmt = notfalse(DB\connect()->prepare(self::make_select() . " where libelle_abonnement = 'premium' AND en_ligne = TRUE order by random() limit 3"));
+        $stmt = notfalse(DB\connect()->prepare(self::make_select() . " where o.libelle_abonnement = 'premium' and o.en_ligne order by random() limit 6"));
         notfalse($stmt->execute());
         while (false !== $row = $stmt->fetch()) {
             yield $row['id'] => self::from_db_row($row);
@@ -181,7 +181,7 @@ abstract class Offre extends Model implements Signalable
     static function from_db_all(?int $id_professionnel = null, ?bool $en_ligne = null): Iterator
     {
         $args = DB\filter_null_args(['id_professionnel' => [$id_professionnel, PDO::PARAM_INT], 'en_ligne' => [$en_ligne, PDO::PARAM_BOOL]]);
-        $stmt = notfalse(DB\connect()->prepare(self::make_select() . DB\where_clause(DB\BoolOperator::AND, array_keys($args))));
+        $stmt = notfalse(DB\connect()->prepare(self::make_select() . DB\where_clause(DB\BoolOperator::AND, array_keys($args), 'o')));
         DB\bind_values($stmt, $args);
         notfalse($stmt->execute());
         while (false !== $row = $stmt->fetch()) {
@@ -198,7 +198,7 @@ abstract class Offre extends Model implements Signalable
     {
         $stmt = notfalse(DB\connect()->prepare(self::make_select() . ' where '
             . implode(' and ', array_map(
-                fn($mot) => 'titre ilike ' . DB\quote_string("%$mot%"),
+                fn($mot) => 'o.titre ilike ' . DB\quote_string("%$mot%"),
                 explode(' ', trim($motcle)),
             ))));
         notfalse($stmt->execute());
@@ -211,7 +211,26 @@ abstract class Offre extends Model implements Signalable
     {
         // Todo: this is just a proof of concept for single-query inheritance.
         return 'select
-            id,id_adresse,id_image_principale,id_professionnel,libelle_abonnement,titre,resume,description_detaillee,modifiee_le,url_site_web,periodes_ouverture,en_ligne,note_moyenne,prix_min,nb_avis,creee_le,categorie,en_ligne_ce_mois_pendant,changement_ouverture_suivant_le,est_ouverte,
+            o.id,
+            o.id_adresse,
+            o.id_image_principale,
+            o.id_professionnel,
+            o.libelle_abonnement,
+            o.titre,
+            o.resume,
+            o.description_detaillee,
+            o.modifiee_le,
+            o.url_site_web,
+            o.periodes_ouverture,
+            o.en_ligne,
+            o.note_moyenne,
+            o.prix_min,
+            o.nb_avis,
+            o.creee_le,
+            o.categorie,
+            o.en_ligne_ce_mois_pendant,
+            o.changement_ouverture_suivant_le,
+            o.est_ouverte,
 
             _activite.indication_duree activite_indication_duree,
             _activite.age_requis activite_age_requis,
@@ -235,7 +254,7 @@ abstract class Offre extends Model implements Signalable
             
             _visite.indication_duree visite_indication_duree
 
-            from ' . self::TABLE . '
+            from ' . self::TABLE . ' o
                 left join _activite using (id)
                 left join _parc_attractions using (id)
                 left join _restaurant using (id)

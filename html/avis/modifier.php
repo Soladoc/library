@@ -17,7 +17,7 @@ $stmt = DB\connect()->prepare('SELECT * FROM pact._avis WHERE id = ?');
 $stmt->execute([$id_avis]);
 $avis = $stmt->fetch(PDO::FETCH_ASSOC);
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
+if ($_POST && isset($_POST['action'])) {
     $stmt = DB\query_supprime_avis($id_avis);
     if ($stmt==true) {
         redirect_to(location_detail_offre($id_offre));

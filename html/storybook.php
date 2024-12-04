@@ -25,7 +25,7 @@ $page = new Page('Storybook');
 <?php
 {
     $input_adresse = new InputAdresse('adresse', 'adresse');
-    $adresse = $input_adresse->get($_GET, required: false);
+    $adresse = $input_adresse->get($_GET);
 ?>
 
 <h3>Entrée</h3>
@@ -74,12 +74,12 @@ $page = new Page('Storybook');
 <?php
 {
     $input_image = new InputImage("Image d'exemple", 'image', 'image');
-    $image = $input_image->get($_GET, required: false);
+    $image = $input_image->get($_GET)[0];
 ?>
 <h3>Entrée</h3>
 
 <form method="post" enctype="multipart/form-data">
-    <?php $input_image->put($image) ?>
+    <?php $input_image->put([$image]) ?>
     <button type="submit">Envoyer</button>
 </form>
 

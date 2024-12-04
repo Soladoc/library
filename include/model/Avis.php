@@ -64,7 +64,7 @@ class Avis extends Model
 
     static function from_db(int $id_avis): Avis|false
     {
-        $stmt = notfalse(DB\connect()->prepare(self::make_select() . ' where id = ?'));
+        $stmt = notfalse(DB\connect()->prepare(self::make_select() . ' where a.id = ?'));
         DB\bind_values($stmt, [1 => [$id_avis, PDO::PARAM_INT]]);
         notfalse($stmt->execute());
         $row = $stmt->fetch();
@@ -104,7 +104,7 @@ class Avis extends Model
 
     private static function make_select(): string
     {
-        return 'select * from ' . static::TABLE;  // todo: faire des jointures pour gagner en performance
+        return 'select a.* from avis a';  // todo: faire des jointures pour gagner en performance
     }
 
     const TABLE = 'avis';

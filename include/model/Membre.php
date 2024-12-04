@@ -28,7 +28,7 @@ final class Membre extends Compte
      */
     static function from_db(int $id_membre): Membre|false
     {
-        $stmt = DB\connect()->prepare(self::make_select() . ' where id = ?');
+        $stmt = DB\connect()->prepare(self::make_select() . ' where m.id = ?');
         DB\bind_values($stmt, [1 => [$id_membre, PDO::PARAM_INT]]);
         notfalse($stmt->execute());
         $row = $stmt->fetch();
@@ -42,7 +42,7 @@ final class Membre extends Compte
      */
     static function from_db_by_pseudo(string $pseudo): Membre|false
     {
-        $stmt = DB\connect()->prepare(self::make_select() . ' where pseudo = ?');
+        $stmt = DB\connect()->prepare(self::make_select() . ' where m.pseudo = ?');
         DB\bind_values($stmt, [1 => [$pseudo, PDO::PARAM_STR]]);
         notfalse($stmt->execute());
         $row = $stmt->fetch();
@@ -52,15 +52,15 @@ final class Membre extends Compte
     private static function make_select(): string
     {
         return 'select
-        id,
-        id_signalable,
-        email,
-        mdp_hash,
-        nom,
-        prenom,
-        telephone,
-        id_adresse,
-        pseudo
+        m.id,
+        m.id_signalable,
+        m.email,
+        m.mdp_hash,
+        m.nom,
+        m.prenom,
+        m.telephone,
+        m.id_adresse,
+        m.pseudo
 
         a.code_commune adresse_code_commune,
         a.numero_departement adresse_numero_departement,
@@ -74,8 +74,8 @@ final class Membre extends Compte
         a.latitude adresse_latitude,
         a.longitude adresse_longitude
 
-        from membre
-            join _adresse a on a.id = id_adresse
+        from membre m
+            join _adresse a on a.id = m.id_adresse
             join _commune c on c.code = a.code_commune and c.numero_departement = a.numero_departement';
     }
 

@@ -140,10 +140,10 @@ function quote_string(string $string): string
  * @param string[] $clauses An array containing the conditions for the WHERE clause.
  * @return string The generated WHERE clause, or an empty string if no clauses are provided.
  */
-function where_clause(BoolOperator $operator, array $clauses): string
+function where_clause(BoolOperator $operator, array $clauses, string $prefix = ''): string
 {
     return $clauses
-        ? ' where ' . implode(" $operator->value ", array_map(fn($attr) => "$attr = :$attr", $clauses)) . ' '
+        ? ' where ' . implode(" $operator->value ", array_map(fn($attr) => elvis($prefix, '.') . "$attr = :$attr", $clauses)) . ' '
         : ' ';
 }
 

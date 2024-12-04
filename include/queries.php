@@ -7,41 +7,11 @@ require_once 'queries/offre.php';
 
 // Selections
 
-// Function selections
-
-function make_interval(int $days, int $hours, int $mins): string
-{
-    $stmt = notfalse(connect()->prepare('select make_interval(days => ?, hours => ?, mins => ?)'));
-    bind_values($stmt, [1 => [$days, PDO::PARAM_INT], 2 => [$hours, PDO::PARAM_INT], 3 => [$mins, PDO::PARAM_INT]]);
-    notfalse($stmt->execute());
-    return notfalse($stmt->fetchColumn());
-}
-
 function query_images(): \Iterator
 {
     $stmt = notfalse(connect()->prepare('select * from _image'));
     notfalse($stmt->execute());
     return $stmt->getIterator();
-}
-
-function query_image(int $id_image): array
-{
-    $stmt = notfalse(connect()->prepare('select * from _image where id = ?'));
-    bind_values($stmt, [1 => [$id_image, PDO::PARAM_INT]]);
-    notfalse($stmt->execute());
-    return notfalse($stmt->fetch());
-}
-
-/**
- * Récupère les images de la galerie d'une offre.
- * @return array<int> Un tableau d'ID d'images. Utiliser `query_image` pour retrouver les infos sur l'image.
- */
-function query_galerie(int $id_offre): array
-{
-    $stmt = notfalse(connect()->prepare('select id_image from _galerie where id_offre = ?'));
-    bind_values($stmt, [1 => [$id_offre, PDO::PARAM_INT]]);
-    notfalse($stmt->execute());
-    return array_map(fn($row) => $row['id_image'], $stmt->fetchAll());
 }
 
 function query_adresse(int $id_adresse): array|false
@@ -68,14 +38,6 @@ function query_codes_postaux(int $code_commune, string $numero_departement): arr
     return array_map(fn($row) => $row['code_postal'], $stmt->fetchAll());
 }
 
-function query_membre(string $email_or_pseudo): array|false
-{
-    // We know at symbols are not allowed in pseudonyms so if there is one, the user meant to connact with their email.
-    $stmt = notfalse(connect()->prepare('select * from membre where ' . (str_contains($email_or_pseudo, '@') ? 'email' : 'pseudo') . ' = ? limit 1'));
-    notfalse($stmt->execute([$email_or_pseudo]));
-    return $stmt->fetch();
-}
-
 function query_tags(int $id): array|false
 {
     $stmt = notfalse(connect()->prepare('select tag from _tags where id_offre = ?'));
@@ -86,15 +48,6 @@ function query_tags(int $id): array|false
 
 
 // Parameterized selections
-
-function query_communes(?string $nom = null): array
-{
-    $args = filter_null_args(['nom' => [$nom, PDO::PARAM_STR]]);
-    $stmt = notfalse(connect()->prepare('select * from _commune' . where_clause(BoolOperator::AND, array_keys($args))));
-    bind_values($stmt, $args);
-    notfalse($stmt->execute());
-    return notfalse($stmt->fetchAll());
-}
 
 function query_avis(?int $id_membre_auteur = null, ?int $id_offre = null): array
 {
@@ -174,43 +127,4 @@ function query_update_siren(int $id_compte, $new_siren): void
     $stmt = notfalse(connect()->prepare('UPDATE _prive SET siren = ? WHERE id = ?;'));
     bind_values($stmt, [1 => [$new_siren, PDO::PARAM_STR], 2 => [$id_compte, PDO::PARAM_INT]]);
     notfalse($stmt->execute());
-}
-
-// Insertions---------------------------------------------------------------------------------------------------------
-
-/**
- * Insère une image dans la BDD et retourne le tuple du nom de fichier et de l'ID de l'image insérée .
- *
- * @param array $img Un tableau associatif contenant les attributs de l'image, avec les clés `'size'`, `'type'` et `'tmp_name'`.
- * @param ?string $legende La légende de l'image (optionnel).
- * @return array Une tableau indexé numériquement contenant le nom de fichier et l'ID de l'image insérée.
- */
-function insert_uploaded_image(array $img, ?string $legende = null): array
-{
-    $mime_subtype = explode('/', $img['type'], 2)[1];
-    $args = filter_null_args([
-        'taille' => [$img['size'], PDO::PARAM_INT],
-        'mime_subtype' => [$mime_subtype, PDO::PARAM_STR],
-        'legende' => [$legende, PDO::PARAM_STR],
-    ]);
-    $stmt = insert_into('_image', $args, ['id']);
-    notfalse($stmt->execute());
-    $id_image = notfalse($stmt->fetchColumn());
-
-    $filename = __DIR__ . "/../html/images_utilisateur/$id_image.$mime_subtype";
-    notfalse(move_uploaded_file($img['tmp_name'], $filename));
-    return [$filename, $id_image];
-}
-
-/**
- * Détermine si une offre existe dans la bdd
- * @param int $id_offre l'id de l'offre que l'on recherche
- * @return bool `true` si une offre privé d'id $id_offre existe, `false` sinon.
- */
-function exists_offre(int $id_offre): bool
-{
-    $stmt = notfalse(connect()->prepare('select ? in (select id from offres)'));
-    bind_values($stmt, [1 => [$id_offre, PDO::PARAM_INT]]);
-    notfalse($stmt->execute());
-    return $stmt->fetchColumn();
 }

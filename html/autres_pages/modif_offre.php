@@ -10,9 +10,6 @@ $page = new Page('Modifier offre',
     ['input-offre.css'],
     ['module/input-offre.js' => 'defer type="module"']);
 
-$id_professionnel = Auth\exiger_connecte_pro();
-$est_prive        = ProfessionnelPrive::exists($id_professionnel);
-
 $categorie = getarg($_GET, 'categorie', arg_check(f_is_in(array_keys(CATEGORIES_OFFRE))));
 $offre = notfalse(Offre::from_db($id_offre  = getarg($_GET, 'id', arg_int())));
 
