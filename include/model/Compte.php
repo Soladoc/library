@@ -37,22 +37,22 @@ abstract class Compte extends Identite implements Signalable
 
     static function from_db(int $id_compte): self|false
     {
-        $stmt = notfalse(DB\connect()->prepare(self::make_select() . ' where c.id = ?'));
+        $stmt = notfalse(DB\connect()->prepare(static::make_select() . ' where c.id = ?'));
         DB\bind_values($stmt, [1 => [$id_compte, PDO::PARAM_INT]]);
         notfalse($stmt->execute());
         $row = $stmt->fetch();
-        return $row === false ? false : self::from_db_row($row);
+        return $row === false ? false : static::from_db_row($row);
     }
 
     static function from_db_by_email(string $email): self|false
     {
-        $stmt = notfalse(DB\connect()->prepare(self::make_select() . ' where c.email = ?'));
+        $stmt = notfalse(DB\connect()->prepare(static::make_select() . ' where c.email = ?'));
         notfalse($stmt->execute([$email]));
         $row = $stmt->fetch();
-        return $row === false ? false : self::from_db_row($row);
+        return $row === false ? false : static::from_db_row($row);
     }
 
-    private static function make_select(): string
+    protected static function make_select(): string
     {
         return 'select
         c.id,
@@ -91,7 +91,7 @@ abstract class Compte extends Identite implements Signalable
             join _commune o on o.code = a.code_commune and o.numero_departement = a.numero_departement';
     }
 
-    private static function from_db_row(array $row): self
+    protected static function from_db_row(array $row): self
     {
         self::require_subclasses();
         $args_compte = [

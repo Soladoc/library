@@ -22,34 +22,20 @@ final class Membre extends Compte
     }
 
     /**
-     * Récupère un membre de la BDD.
-     * @param int $id_membre
-     * @return self|false
-     */
-    static function from_db(int $id_membre): self|false
-    {
-        $stmt = DB\connect()->prepare(self::make_select() . ' where m.id = ?');
-        DB\bind_values($stmt, [1 => [$id_membre, PDO::PARAM_INT]]);
-        notfalse($stmt->execute());
-        $row = $stmt->fetch();
-        return $row === false ? false : self::from_db_row($row);
-    }
-
-    /**
      * Récupère un membre de la BDD par son pseudo.
      * @param string $pseudo
      * @return self|false
      */
     static function from_db_by_pseudo(string $pseudo): self|false
     {
-        $stmt = DB\connect()->prepare(self::make_select() . ' where m.pseudo = ?');
+        $stmt = notfalse(DB\connect()->prepare(self::make_select() . ' where m.pseudo = ?'));
         DB\bind_values($stmt, [1 => [$pseudo, PDO::PARAM_STR]]);
         notfalse($stmt->execute());
         $row = $stmt->fetch();
         return $row === false ? false : self::from_db_row($row);
     }
 
-    private static function make_select(): string
+    protected static function make_select(): string
     {
         return 'select
         m.id,
@@ -79,7 +65,7 @@ final class Membre extends Compte
             join _commune c on c.code = a.code_commune and c.numero_departement = a.numero_departement';
     }
 
-    private static function from_db_row(array $row): self
+    protected static function from_db_row(array $row): self
     {
         return new self([
             $row['id'],
