@@ -47,7 +47,7 @@ abstract class Model
                 static::TABLE,
                 $this->args(),
                 $this->key_args(),
-                $returning_fields,
+                array_keys($returning_fields),
             );
         } else {
             $returning_fields = static::key_fields() + static::computed_fields();
