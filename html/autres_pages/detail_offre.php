@@ -16,7 +16,8 @@ if ($_POST) {
     if (($id_membre_co = Auth\id_membre_connecte()) === null) {
         $error_message = 'Veuillez vous connecter pour publier un avis.';
     } else {
-        $stmt = DB\connect()->prepare('insert into pact._avis (id_membre_auteur,id_offre,commentaire,date_experience,note,contexte) values (?,?,?,?,?,?)');
+        $stmt = DB\connect()->prepare('INSERT INTO pact._avis(id_membre_auteur, id_offre, commentaire, date_experience, note, contexte) VALUES (?, ?, ?, ?, ?, ?) ON CONFLICT (id_membre_auteur, id_offre) DO NOTHING');
+
         DB\bind_values($stmt, [
             1 => [$id_membre_co, PDO::PARAM_INT],
             2 => [$offre->id, PDO::PARAM_INT],
