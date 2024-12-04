@@ -157,7 +157,7 @@ begin
         titre = new.titre,
         resume = new.resume,
         description_detaillee = new.description_detaillee,
-        modifiee_le = new.modifiee_le,
+        modifiee_le = coalesce(new.modifiee_le, old.modifiee_le),
         url_site_web = new.url_site_web,
         periodes_ouverture = new.periodes_ouverture
     where
