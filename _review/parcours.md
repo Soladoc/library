@@ -2,41 +2,44 @@
 
 ## Professionnel
 
-1. Creer un compte pro
+1. Creer un compte pro (optionnel)
 
-2. Deconnection / Connection 
+2. Deconnection / Connection (optionnel)
 
 3. Information du compte
 
 4. Modifier les informations du compte 
     + (montrer les messages d'erreurs)
 
-5. Creer une offre
+5. Creer une offre 
     + monter les options
 
 6. Modifier une offre
     + mettre hors-ligne 
 
+7. Montrer detail offre
+    + montrer avis coté pro
+
 
 ## Membre
      
-7. Creer un compte membre
+8. Creer un compte membre (optionnel)
 
-8. Deconnection / Connection 
+9. Deconnection / Connection (optionnel)
 
-9. Information du compte
+10. Information du compte
 
-10. Modifier les informations du compte 
+11. Modifier les informations du compte 
     + (montrer les messages d'erreurs)
 
-11. Mettre un avis 
+12. Mettre un avis 
 
-12. Modifier / supprimer un avis 
+13. Modifier / supprimer un avis 
 
 
 
 ## non-connecter
 
-13. Utiliser la recherche
+14. Utiliser la recherche
 
-14. Utiliser les filtres et les tris
+15. Utiliser les filtres et les tris
