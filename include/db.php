@@ -30,7 +30,7 @@ function connect(): PDO
 
     // Connect to the database
     $driver = 'pgsql';
-    [$host, $port, $dbname, $username, $password] = _is_localhost() 
+    [$host, $port, $dbname, $username, $password] = is_localhost() 
         ? ['localhost',
             5432,
             'raphael',
@@ -83,10 +83,12 @@ function transaction(callable $body, ?callable $cleanup = null)
     }
 }
 
-function _is_localhost(): bool
+function is_localhost(): bool
 {
-    return str_starts_with($_SERVER['HTTP_HOST'], 'localhost:');
-    /*    $server_ip = null;
+    $http_host = $_SERVER['HTTP_HOST'] ?? null;
+    return $http_host === null || str_starts_with($http_host, 'localhost:');
+    /*
+    $server_ip = null;
 
     if (defined('INPUT_SERVER') && filter_has_var(INPUT_SERVER, 'REMOTE_ADDR')) {
         $server_ip = filter_input(INPUT_SERVER, 'REMOTE_ADDR', FILTER_VALIDATE_IP);
@@ -100,7 +102,8 @@ function _is_localhost(): bool
         $server_ip = '127.0.0.1';
     }
 
-    return empty(filter_var($server_ip, FILTER_VALIDATE_IP, FILTER_FLAG_NO_RES_RANGE | FILTER_FLAG_NO_PRIV_RANGE));*/
+    return empty(filter_var($server_ip, FILTER_VALIDATE_IP, FILTER_FLAG_NO_RES_RANGE | FILTER_FLAG_NO_PRIV_RANGE));
+    */
 }
 
 /**
@@ -109,7 +112,7 @@ function _is_localhost(): bool
  */
 function document_root(): string
 {
-    return _is_localhost() ? __DIR__ . '/../html' : '/var/www/html';
+    return is_localhost() ? __DIR__ . '/../html' : '/var/www/html';
 }
 
 // Query construction functions
@@ -226,15 +229,19 @@ final class LogPDO extends PDO
 
     function query(string $query, ?int $fetchMode = null, mixed ...$fetchModeArgs): PDOStatement|false
     {
-        error_log("LogPDO ({$this->query_no}) query: '$query'");
-        ++$this->query_no;
+        if (is_localhost()) {
+            error_log("LogPDO ({$this->query_no}) query: '$query'");
+            ++$this->query_no;
+        }
         return parent::query($query, $fetchMode, $fetchModeArgs);
     }
 
     function prepare(string $query, array $options = []): PDOStatement|false
     {
-        error_log("LogPDO ({$this->query_no}) prepare: '$query'");
-        ++$this->query_no;
+        if (is_localhost()) {
+            error_log("LogPDO ({$this->query_no}) prepare: '$query'");
+            ++$this->query_no;
+        }
         return parent::prepare($query, $options);
     }
 }

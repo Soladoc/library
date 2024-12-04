@@ -31,8 +31,6 @@ final class InputImage extends Input
 
         $files = $this->multiple ? soa_to_aos($files) : [$files];
 
-        dbg_print($files);
-
         if ($this->multiple && !isset($files[0]['tmp_name'])) return [];
 
         return array_map(fn($file, $current_id_image) => new Image(

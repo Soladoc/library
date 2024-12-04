@@ -5,7 +5,7 @@ require_once 'model/Activite.php';
 
 DB\transaction(function () {
     echo 'creating image' . PHP_EOL;
-    $image = new Image(null, 1, 'nonexistent', 'i don\'t exist');
+    $image = new Image(null, 1, 'nonexistent', "i don't exist");
     echo 'creating adresse' . PHP_EOL;
     $adresse = new Adresse(
         null,
@@ -19,14 +19,15 @@ DB\transaction(function () {
     $abo = Abonnement::from_db('standard');
     echo 'creating offre' . PHP_EOL;
     $offre = new Activite(
-        null,
-        $adresse,
-        $image,
-        $pro,
-        $abo,
-        'IUT de Lannion',
-        "L'Institut universitaire de technologie de Lannion est une composante de formation de l'Université de Rennes.",
-        "Bienvenue à l’IUT Lannion !
+        [
+            null,
+            $adresse,
+            $image,
+            $pro,
+            $abo,
+            'IUT de Lannion',
+            "L'Institut universitaire de technologie de Lannion est une composante de formation de l'Université de Rennes.",
+            "Bienvenue à l’IUT Lannion !
 
 L’IUT Lannion, 50 ans d’expérience, est un établissement majeur de l’enseignement supérieur et de la recherche des Côtes d’Armor qui forme environ 1000 étudiants.
 
@@ -38,8 +39,9 @@ L’IUT en quelques chiffres :
     6 BUT
 
 Étudier à Lannion, c’est profiter d’un environnement exceptionnel. L’IUT s’engage dans cette dynamique et veille au bien-être de ses occupants (espace vie étudiante, cafétéria, bibliothèque, restaurant universitaire, etc…)… jusqu’à la rénovation thermique des bâtiments débutée en 2019.",
-        'https://iut-lannion.univ-rennes.fr',
-        MultiRange::parse('{[2024-12-02 22:07:28,2024-12-17 12:04:14),(2024-12-18 12:04:14,2024-12-24 00:00:00]}', FiniteTimestamp::parse(...)),
+            'https://iut-lannion.univ-rennes.fr',
+            MultiRange::parse('{[2024-12-02 22:07:28,2024-12-17 12:04:14),(2024-12-18 12:04:14,2024-12-24 00:00:00]}', FiniteTimestamp::parse(...)),
+        ],
         Duree::parse('3 year'),
         17,
         'Éducation',
@@ -47,8 +49,9 @@ L’IUT en quelques chiffres :
     );
     echo 'inserting offre' . PHP_EOL;
     $offre->push_to_db();
+    echo 'inserted offre id ' . notnull($offre->id) . PHP_EOL;
     echo 'retrieving offre' . PHP_EOL;
-    $db_offre = Offre::from_db($offre->id);
+    $db_offre = notfalse(Offre::from_db($offre->id));
     echo 'asserting offre' . PHP_EOL;
     assert_strictly_equal($offre->id, $db_offre->id);
     assert_equal($offre->adresse, $db_offre->adresse);

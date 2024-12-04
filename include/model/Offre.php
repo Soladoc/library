@@ -32,7 +32,7 @@ require_once 'model/Tarifs.php';
  *
  * @property-read ?int $nb_avis Le nombre d'avis ce cette offre. Calculé. `null` si cette offre n'existe pas dans la BDD.
  */
-class Offre extends Model implements Signalable
+abstract class Offre extends Model implements Signalable
 {
     protected static function key_fields()
     {
@@ -156,7 +156,7 @@ class Offre extends Model implements Signalable
         notfalse($stmt->execute());
         $row = $stmt->fetch();
         if ($row === false) return false;
-        return static::from_db_row($row);
+        return self::from_db_row($row);
     }
 
     /**
@@ -168,7 +168,7 @@ class Offre extends Model implements Signalable
         $stmt = notfalse(DB\connect()->prepare(self::make_select() . " where libelle_abonnement = 'premium' AND en_ligne = TRUE order by random() limit 3"));
         notfalse($stmt->execute());
         while (false !== $row = $stmt->fetch()) {
-            yield $row['id'] => static::from_db_row($row);
+            yield $row['id'] => self::from_db_row($row);
         }
     }
 
@@ -185,7 +185,7 @@ class Offre extends Model implements Signalable
         DB\bind_values($stmt, $args);
         notfalse($stmt->execute());
         while (false !== $row = $stmt->fetch()) {
-            yield $row['id'] => static::from_db_row($row);
+            yield $row['id'] => self::from_db_row($row);
         }
     }
 
@@ -203,18 +203,25 @@ class Offre extends Model implements Signalable
             ))));
         notfalse($stmt->execute());
         while (false !== $row = $stmt->fetch()) {
-            yield $row['id'] => static::from_db_row($row);
+            yield $row['id'] => self::from_db_row($row);
         }
     }
 
     private static function make_select(): string
     {
-        return 'select * from ' . static::TABLE;  // todo: faire des jointures pour gagner en performance
+        self::require_subclasses();
+        return 'select * from ' . self::TABLE  // todo: faire des jointures pour gagner en performance
+            . ' join ' . Activite::TABLE . ' using (id)'
+            . ' join ' . ParcAttractions::TABLE . ' using (id)'
+            . ' join ' . Restaurant::TABLE . ' using (id)'
+            . ' join ' . Spectacle::TABLE . ' using (id)'
+            . ' join ' . Visite::TABLE . ' using (id)';
     }
 
     protected static function from_db_row(array $row): Offre
     {
-        return new Offre(
+        self::require_subclasses();
+        $args = [
             $row['id'],
             Adresse::from_db($row['id_adresse']),
             Image::from_db($row['id_image_principale']),
@@ -235,7 +242,50 @@ class Offre extends Model implements Signalable
             $row['est_ouverte'],
             $row['nb_avis'],
             $row['categorie'],
-        );
+        ];
+        return match ($row['categorie']) {
+            Activite::CATEGORIE => new Activite(
+                $args,
+                Duree::parse($row['indication_duree']),
+                $row['age_requis'] ?? null,
+                $row['prestations_incluses'],
+                $row['prestations_non_incluses'] ?? null,
+            ),
+            ParcAttractions::CATEGORIE => new ParcAttractions(
+                $args,
+                $row['age_requis'],
+                $row['nb_attractions'],
+                Image::from_db($row['id_image_plan']),
+            ),
+            Restaurant::CATEGORIE => new Restaurant(
+                $args,
+                $row['carte'],
+                $row['richesse'],
+                $row['sert_petit_dejeuner'],
+                $row['sert_brunch'],
+                $row['sert_dejeuner'],
+                $row['sert_diner'],
+                $row['sert_boissons'],
+            ),
+            Spectacle::CATEGORIE => new Spectacle(
+                $args,
+                Duree::parse($row['indication_duree']),
+                $row['capacite_accueil'],
+            ),
+            Visite::CATEGORIE => new Visite(
+                $args,
+                Duree::parse($row['indication_duree']),
+            ),
+        };
+    }
+
+    private static function require_subclasses(): void
+    {
+        require_once 'model/Activite.php';
+        require_once 'model/ParcAttractions.php';
+        require_once 'model/Restaurant.php';
+        require_once 'model/Spectacle.php';
+        require_once 'model/Visite.php';
     }
 
     const TABLE = 'offres';
