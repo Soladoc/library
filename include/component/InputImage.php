@@ -44,6 +44,7 @@ final class InputImage extends Input
      */
     function put(mixed $current = null): void
     {
+        $current ??= [];
         $form_attr = $this->form_id ? "form=\"$this->form_id\"" : '';
 ?>
 <fieldset id="<?= $this->id ?>" class="input-image">
@@ -61,10 +62,11 @@ final class InputImage extends Input
             id="<?= $this->id ?>_legende"
             name="<?= $this->name ?>_legende"
             type="text"
-            placeholder="Légende">
+            placeholder="Légende"
+            value="<?= ($current[0] ?? null)?->legende ?>">
     </p>
     <div id="<?= $this->id ?>-preview">
-        <?php foreach ($current ?? [] as $image) {
+        <?php foreach ($current as $image) {
             (new ImageView($image))->put_img();
         } ?>
     </div>
