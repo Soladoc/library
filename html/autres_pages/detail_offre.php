@@ -116,7 +116,7 @@ if ($_POST) {
                     <?php if (isset($error_message)): ?>
                         <p class="error"><?= htmlspecialchars($error_message) ?></p>
                     <?php elseif (isset($success_message)): ?>
-                        <p class="success-message"><?= htmlspecialchars($success_message) ?></p>
+                        <p class="success"><?= htmlspecialchars($success_message) ?></p>
                     <?php endif ?>
                 </div>
                 <form method="post">

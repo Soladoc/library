@@ -96,6 +96,11 @@ header #header_pro{
     color: #ca2200;
 }
 
+.success {
+    margin: 0;
+    color: #d4f4dd;
+}
+
 .auth-button {
     display: flex;
     align-items: center;
