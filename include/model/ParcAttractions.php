@@ -13,10 +13,6 @@ final class ParcAttractions extends Offre
         'image_plan'     => [['id', 'id_image_plan',  PDO::PARAM_INT]],
     ];
 
-    protected ?int $age_requis;
-    protected int $nb_attractions;
-    protected Image $image_plan;
-
     /**
      * Construit une nouvelle activité.
      * @param ?int $id
@@ -51,7 +47,9 @@ final class ParcAttractions extends Offre
         ?string $url_site_web,
         MultiRange $periodes_ouverture,
         //
-        Image $image_plan,
+        protected ?int $age_requis,
+        protected int $nb_attractions,
+        protected Image $image_plan,
         //
         ?FiniteTimestamp $modifiee_le                     = null,
         ?bool $en_ligne                                   = null,
@@ -82,7 +80,6 @@ final class ParcAttractions extends Offre
             $changement_ouverture_suivant_le,
             $est_ouverte,
         );
-        $this->image_plan = $image_plan;
     }
 
     protected static function from_db_row(array $row): self
@@ -99,6 +96,8 @@ final class ParcAttractions extends Offre
             $row['url_site_web'] ?? null,
             MultiRange::parse($row['periodes_ouverture'], FiniteTimestamp::parse(...)),
             //
+            $row['age_requis'],
+            $row['nb_attractions'],
             Image::from_db($row['id_image_plan']),
             //
             FiniteTimestamp::parse($row['modifiee_le']),
