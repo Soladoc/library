@@ -550,7 +550,13 @@ textarea {
     background-color: #f9f9f9;
     padding: 15px;
     border-radius: 8px;
-    text-align: left; /* Enlève la centration */
+    text-align: left;
+}
+
+.contact-info {
+    padding: 15px;
+    border-radius: 8px;
+    text-align: left;
 }
 
 .offer-location p {
