@@ -507,7 +507,7 @@ h1 {
 }
 
 textarea {
-    resize: none;
+    resize: vertical;
 }
 
 .review-form {
