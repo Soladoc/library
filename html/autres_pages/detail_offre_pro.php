@@ -6,12 +6,20 @@ require_once 'redirect.php';
 require_once 'model/Offre.php';
 require_once 'component/Page.php';
 require_once 'component/ImageView.php';
+require_once 'component/InputOffre.php';
 
 $offre = notfalse(Offre::from_db(getarg($_GET, 'id', arg_int())));
 
 $page = new Page("offre : {$offre->id}",
     ['https://unpkg.com/leaflet@1.7.1/dist/leaflet.css'],
     ['https://unpkg.com/leaflet@1.7.1/dist/leaflet.js' => 'async']);
+
+
+$input_offre = new InputOffre(
+    $offre->categorie,
+    Professionnel::from_db(Auth\exiger_connecte_pro()),
+    form_id: 'f',
+);
 
 
 if ($_POST) {
@@ -88,6 +96,8 @@ if ($_POST) {
                 <p><strong>Site web&nbsp;:</strong> <a href="<?= $offre->url_site_web ?>"><?= $offre->url_site_web ?></a></p>
             </div>
         </section>
+
+        <?php $input_offre->put($offre) ?>
 
         <div class="review-list">
             <h4>Avis de la communauté</h4>
