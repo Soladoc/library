@@ -480,6 +480,14 @@ h1 {
     word-wrap: break-word;
 }
 
+.offer-info h2 {
+    text-align: center;
+    font-size: 2rem;
+    margin-bottom: 20px;
+    color: #333;
+}
+
+
 .description {
     font-size: 1.2em;
     margin-bottom: 10px;
@@ -811,7 +819,9 @@ a:not(:hover, :focus, :focus-within) {
 }
 
 .carousel-container {
+    margin: 0 auto;
     width: 100%;
+    max-width: 800px;
     height: auto;
     display: flex;
     align-items: center;
