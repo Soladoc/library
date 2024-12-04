@@ -1,6 +1,7 @@
 <?php
 require_once 'util.php';
 require_once 'component/Input.php';
+require_once 'component/ImageView.php';
 require_once 'model/Image.php';
 
 /**
