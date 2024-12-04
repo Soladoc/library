@@ -91,7 +91,7 @@ $id_membre_co = Auth\id_membre_connecte();
             <div class="contact-info">
                 <p><strong>Adresse&nbsp;:</strong> <?= $offre->adresse->format() ?></p>
                 <p><strong>Site web&nbsp;:</strong> <a href="<?= $offre->url_site_web ?>"><?= $offre->url_site_web ?></a></p>
-                <!-- <p><strong>Téléphone&nbsp;:</strong> 02 96 46 63 80</p> -->
+                <p><strong>Téléphone&nbsp;:</strong> 02 96 46 63 80</p>
             </div>
         </section>
 
