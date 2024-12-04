@@ -100,7 +100,7 @@ $offre = $input_offre->get($request);
 
 DB\transaction(function() use ($offre) {
     error_log('inserting offre');
-    $offre->insert();
+    $offre->push_to_db();
     error_log('deleting offre');
     $offre->delete();
 });

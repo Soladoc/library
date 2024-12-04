@@ -222,7 +222,7 @@ final class InputOffre extends Input
 
         $form_attr = $this->form_id ? "form=\"$this->form_id\"" : '';
         ?>
-        <h1>Créer <?= CATEGORIES_OFFRE[$this->categorie] ?></h1>
+        <h1><?= $current === null ? 'Créer' : 'Modifier' ?> <?= CATEGORIES_OFFRE[$this->categorie] ?></h1>
 
         <section id="<?= $this->id('type-abonnement') ?>">
             <h2>Abonnement</h2>

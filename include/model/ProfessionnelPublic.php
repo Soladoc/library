@@ -23,4 +23,6 @@ final class ProfessionnelPublic extends Professionnel
             $denomination,
         );
     }
+
+    const TABLE = 'pro_public';
 }

@@ -14,7 +14,7 @@ abstract class Model
      * Table name.
      * @var string
      */
-    const TABLE = null;  // abstract constant
+    const TABLE = self::TABLE;  // abstract constant
 
     /**
      * Key fields that uniquely identify a row in the DB table.
@@ -28,38 +28,39 @@ abstract class Model
      * attribute name => [column name, PDO param type]
      * @return array<string, array{string, int, ?callable(string): mixed}>
      */
-    protected static function insert_fields() { return []; }
+    protected static function computed_fields() { return []; }
 
-    function insert(): void
+    function __get(string $name): mixed
+    {
+        if (isset($this->key_fields()[$name]) || isset($this->computed_fields()[$name])) {
+            return $this->$name;
+        }
+        throw new Exception('Undefined property: ' . static::class . "::$$name");
+    }
+
+    function push_to_db(): void
     {
         if ($this->exists_in_db()) {
-            return;
+            $returning_fields = static::computed_fields();
+            $stmt = DB\update(
+                static::TABLE,
+                $this->args(),
+                $this->key_args(),
+                $returning_fields,
+            );
+        } else {
+            $returning_fields = static::key_fields() + static::computed_fields();
+            $stmt = DB\insert_into(
+                static::TABLE,
+                $this->args(),
+                array_column($returning_fields, 0),
+            );
         }
-        $returning_fields = static::key_fields() + static::insert_fields();
-        $stmt = DB\insert_into(
-            static::TABLE,
-            $this->insert_args(),
-            array_column($returning_fields, 0),
-        );
         notfalse($stmt->execute());
         $row = notfalse($stmt->fetch());
         foreach ($returning_fields as $attr => [$column, $type, $db_to_php]) {
             $this->$attr = $db_to_php === null ? $row[$column] : $db_to_php($row[$column]);
         }
-    }
-
-    function __get(string $name): mixed
-    {
-        return $this->$name;
-    }
-
-    function __set(string $name, mixed $value): void
-    {
-        if ($this->exists_in_db()) {
-            $stmt = DB\update(static::TABLE, $this->update_args($name, $value), $this->key_args());
-            notfalse($stmt->execute());
-        }
-        $this->$name = $value;
     }
 
     function delete(): void
@@ -94,26 +95,13 @@ abstract class Model
     /**
      * @return array<string, array{mixed, int}>
      */
-    private function insert_args(): array
+    private function args(): array
     {
         $args = [];
         foreach (static::FIELDS as $attr => $fields) {
             foreach ($fields as [$sub_attr, $column, $type]) {
-                $args[$column] = [$this->get_value($this->__get($attr), $sub_attr), $type];
+                $args[$column] = [$this->get_value($this->$attr, $sub_attr), $type];
             }
-        }
-        return $args;
-    }
-
-    /**
-     * Summary of update_arg
-     * @return array<string, array{mixed, int}>
-     */
-    private function update_args(string $attr, mixed $value): array
-    {
-        $args = [];
-        foreach (static::FIELDS[$attr] as [$sub_attr, $column, $type]) {
-            $args[] = [$column => [$this->get_value($value, $sub_attr), $type]];
         }
         return $args;
     }
@@ -122,8 +110,6 @@ abstract class Model
     {
         return $sub_attr === null
             ? $value
-            : ($value instanceof Model
-                ? $value->__get($sub_attr)
-                : $value->$sub_attr);
+            : $value->$sub_attr;
     }
 }

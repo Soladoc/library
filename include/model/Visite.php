@@ -3,7 +3,6 @@ require_once 'model/Offre.php';
 
 /**
  * @inheritDoc
- * @property Duree $indication_duree
  */
 final class Visite extends Offre
 {
@@ -11,32 +10,8 @@ final class Visite extends Offre
         'indication_duree' => [[null, 'indication_duree', PDO::PARAM_STR]],
     ];
 
-    protected Duree $indication_duree;
-
     // todo: langues
 
-    /**
-     * Construit une nouvelle activité.
-     * @param ?int $id
-     * @param Adresse $adresse
-     * @param Image $image_principale
-     * @param Professionnel $professionnel
-     * @param Abonnement $abonnement
-     * @param string $titre
-     * @param string $resume
-     * @param string $description_detaillee
-     * @param ?string $url_site_web
-     * @param MultiRange<FiniteTimestamp> $periodes_ouverture
-     * @param ?FiniteTimestamp $modifiee_le
-     * @param ?bool $en_ligne
-     * @param ?float $note_moyenne
-     * @param ?float $prix_min
-     * @param ?FiniteTimestamp $creee_le
-     * @param ?Duree $en_ligne_ce_mois_pendant
-     * @param ?FiniteTimestamp $changement_ouverture_suivant_le
-     * @param ?bool $est_ouverte
-     * @param Duree $indication_duree
-     */
     function __construct(
         ?int $id,
         Adresse $adresse,
@@ -49,7 +24,7 @@ final class Visite extends Offre
         ?string $url_site_web,
         MultiRange $periodes_ouverture,
         //
-        Duree $indication_duree,
+        readonly Duree $indication_duree,
         //
         ?FiniteTimestamp $modifiee_le                     = null,
         ?bool $en_ligne                                   = null,
@@ -80,7 +55,6 @@ final class Visite extends Offre
             $changement_ouverture_suivant_le,
             $est_ouverte,
         );
-        $this->indication_duree = $indication_duree;
     }
 
     protected static function from_db_row(array $row): self

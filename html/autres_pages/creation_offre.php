@@ -1,7 +1,5 @@
 <?php
 
-use function Auth\exiger_connecte_pro;
-
 require_once 'queries.php';
 require_once 'auth.php';
 require_once 'util.php';
@@ -18,14 +16,14 @@ $categorie = getarg($_GET, 'categorie', arg_check(f_is_in(array_keys(CATEGORIES_
 
 $input_offre = new InputOffre(
     $categorie,
-    Professionnel::from_db(exiger_connecte_pro()),
+    Professionnel::from_db(Auth\exiger_connecte_pro()),
     form_id: 'f',
 );
 
 if ($_POST) {
     $offre = $input_offre->get($_POST);
 
-    DB\transaction(fn() => $offre->insert());
+    DB\transaction(fn() => $offre->push_to_db());
 
     $offre->image_principale->move_uploaded_image();
     foreach ($offre->galerie as $img) {

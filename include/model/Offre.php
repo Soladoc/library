@@ -20,18 +20,7 @@ require_once 'model/Tarifs.php';
  * Une offre touristique.
  * @property-read ?int $id L'ID. `null` si cette offre n'existe pas dans la BDD.
  *
- * @property string $titre
- * @property string $resume
- * @property string $description_detaillee
- * @property ?string $url_site_web
- * @property MultiRange<FiniteTimestamp> $periodes_ouverture
- * @property ?FiniteTimestamp $modifiee_le Jamais null si cette offre existe dans la BDD.
- * @property Adresse $adresse
- * @property Image $image_principale
- * @property Professionnel $professionnel
- * @property Abonnement $abonnement
- *
- * @property-read ?int $nb_avis Le nombre d'avis ce cette offre. Calculé. `null` si cette offre n'existe pas dans la BDD.
+ * @property-read ?FiniteTimestamp $modifiee_le Calculé mais avec un possibilité de valeur initiale.
  * @property-read ?bool $en_ligne Calculé. `null` si cette offre n'existe pas dans la BDD.
  * @property-read ?float $note_moyenne Calculé. `null` si cette offre n'existe pas dans la BDD.
  * @property-read ?float $prix_min Calculé. `null` si cette offre n'existe pas dans la BDD.
@@ -39,22 +28,11 @@ require_once 'model/Tarifs.php';
  * @property-read ?Duree $en_ligne_ce_mois_pendant Calculé. `null` si cette offre n'existe pas dans la BDD.
  * @property-read ?FiniteTimestamp $changement_ouverture_suivant_le Calculé. `null` si cette offre n'existe pas dans la BDD.
  * @property-read ?bool $est_ouverte Calculé. `null` si cette offre n'existe pas dans la BDD.
+ *
+ * @property-read ?int $nb_avis Le nombre d'avis ce cette offre. Calculé. `null` si cette offre n'existe pas dans la BDD.
  */
 abstract class Offre extends Model implements Signalable
 {
-    protected const FIELDS = [
-        'titre'                 => [[null,      'titre',                 PDO::PARAM_STR]],
-        'resume'                => [[null,      'resume',                PDO::PARAM_STR]],
-        'description_detaillee' => [[null,      'description_detaillee', PDO::PARAM_STR]],
-        'modifiee_le'           => [[null,      'modifiee_le',           PDO::PARAM_STR]],
-        'url_site_web'          => [[null,      'url_site_web',          PDO::PARAM_STR]],
-        'periodes_ouverture'    => [[null,      'periodes_ouverture',    PDO::PARAM_STR]],
-        'adresse'               => [['id',      'id_adresse',            PDO::PARAM_INT]],
-        'image_principale'      => [['id',      'id_image_principale',   PDO::PARAM_INT]],
-        'professionnel'         => [['id',      'id_professionnel',      PDO::PARAM_INT]],
-        'abonnement'            => [['libelle', 'libelle_abonnement',    PDO::PARAM_STR]],
-    ];
-
     protected static function key_fields()
     {
         return [
@@ -62,7 +40,7 @@ abstract class Offre extends Model implements Signalable
         ];
     }
 
-    protected static function insert_fields()
+    protected static function computed_fields()
     {
         return [
             'modifiee_le'                     => ['modifiee_le', PDO::PARAM_STR, FiniteTimestamp::parse(...)],
@@ -83,6 +61,19 @@ abstract class Offre extends Model implements Signalable
             default   => parent::__get($name),
         };
     }
+
+    protected const FIELDS = [
+        'titre'                 => [[null,      'titre',                 PDO::PARAM_STR]],
+        'resume'                => [[null,      'resume',                PDO::PARAM_STR]],
+        'description_detaillee' => [[null,      'description_detaillee', PDO::PARAM_STR]],
+        'modifiee_le'           => [[null,      'modifiee_le',           PDO::PARAM_STR]],
+        'url_site_web'          => [[null,      'url_site_web',          PDO::PARAM_STR]],
+        'periodes_ouverture'    => [[null,      'periodes_ouverture',    PDO::PARAM_STR]],
+        'adresse'               => [['id',      'id_adresse',            PDO::PARAM_INT]],
+        'image_principale'      => [['id',      'id_image_principale',   PDO::PARAM_INT]],
+        'professionnel'         => [['id',      'id_professionnel',      PDO::PARAM_INT]],
+        'abonnement'            => [['libelle', 'libelle_abonnement',    PDO::PARAM_STR]],
+    ];
 
     protected ?int $nb_avis;
 
@@ -114,16 +105,16 @@ abstract class Offre extends Model implements Signalable
      */
     function __construct(
         protected ?int $id,
-        protected Adresse $adresse,
-        protected Image $image_principale,
-        protected Professionnel $professionnel,
-        protected Abonnement $abonnement,
-        protected string $titre,
-        protected string $resume,
-        protected string $description_detaillee,
-        protected ?string $url_site_web,
-        protected MultiRange $periodes_ouverture,
-        protected ?FiniteTimestamp $modifiee_le,
+        readonly Adresse $adresse,
+        readonly Image $image_principale,
+        readonly Professionnel $professionnel,
+        readonly Abonnement $abonnement,
+        readonly string $titre,
+        readonly string $resume,
+        readonly string $description_detaillee,
+        readonly ?string $url_site_web,
+        readonly MultiRange $periodes_ouverture,
+        protected ?FiniteTimestamp $modifiee_le                     = null,
         protected ?bool $en_ligne                                   = null,
         protected ?float $note_moyenne                              = null,
         protected ?float $prix_min                                  = null,
@@ -138,15 +129,16 @@ abstract class Offre extends Model implements Signalable
         $this->galerie                = new Galerie($this);
     }
 
-    function insert(): void {
-        $this->professionnel->insert();
-        $this->adresse->insert();
-        $this->image_principale->insert();
-        parent::insert();
+    function push_to_db(): void
+    {
+        $this->professionnel->push_to_db();
+        $this->adresse->push_to_db();
+        $this->image_principale->push_to_db();
+        parent::push_to_db();
         $this->tarifs->insert();
         $this->tags->insert();
-        $this->ouverture_hebdomadaire->insert();
-        $this->galerie->insert();
+        $this->ouverture_hebdomadaire->push_to_db();
+        $this->galerie->push_to_db();
     }
 
     static function from_db(int $id_offre): Offre|false
@@ -169,7 +161,7 @@ abstract class Offre extends Model implements Signalable
         DB\bind_values($stmt, [1 => [$id_offre, PDO::PARAM_INT]]);
         notfalse($stmt->execute());
         return match (notfalse($stmt->fetchColumn())) {
-            null => false,
+            null                       => false,
             Activite::CATEGORIE        => Activite::from_db($id_offre),
             ParcAttractions::CATEGORIE => ParcAttractions::from_db($id_offre),
             Restaurant::CATEGORIE      => Restaurant::from_db($id_offre),
@@ -295,8 +287,9 @@ abstract class Offre extends Model implements Signalable
         }
     }
 
-    private static function make_select(): string {
-        return 'select * from ' . static::TABLE; // todo: faire des jointures pour gagner en performance
+    private static function make_select(): string
+    {
+        return 'select * from ' . static::TABLE;  // todo: faire des jointures pour gagner en performance
     }
 
     /**

@@ -46,7 +46,7 @@ L’IUT en quelques chiffres :
         'Non-éducation',
     );
     echo 'inserting offre' . PHP_EOL;
-    $offre->insert();
+    $offre->push_to_db();
     echo 'retrieving offre' . PHP_EOL;
     $db_offre = Offre::from_db($offre->id);
     echo 'asserting offre' . PHP_EOL;

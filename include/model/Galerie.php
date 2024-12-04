@@ -36,7 +36,7 @@ final class Galerie implements Equatable
         }
     }
 
-    function insert(): void
+    function push_to_db(): void
     {
         foreach ($this->images as $image) {
             $this->insert_galerie($image);
@@ -54,7 +54,7 @@ final class Galerie implements Equatable
     private function args(Image $image): ?array
     {
         if ($this->offre->id === null) return null;
-        $image->insert();
+        $image->push_to_db();
         return [
             'id_offre' => [$this->offre->id, PDO::PARAM_INT],
             'id_image' => [$image->id, PDO::PARAM_INT],
@@ -72,7 +72,7 @@ final class Galerie implements Equatable
     private function insert_galerie(Image $image): void
     {
         if (null !== $args = $this->args($image)) {
-            $image->insert();
+            $image->push_to_db();
             notfalse(DB\insert_into(self::TABLE, $args));
         }
     }

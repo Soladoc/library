@@ -5,18 +5,9 @@ require_once 'model/Model.php';
 
 /**
  * @property-read ?int $id L'ID. `null` si cette image n'existe pas dans la BDD.
- * @property int $taille
- * @property string $mime_subtype
- * @property string $legende
  */
 final class Image extends Model
 {
-    protected const FIELDS = [
-        'taille'       => [[null, 'taille',       PDO::PARAM_INT]],
-        'mime_subtype' => [[null, 'mime_subtype', PDO::PARAM_STR]],
-        'legende'      => [[null, 'legende',      PDO::PARAM_STR]],
-    ];
-
     protected static function key_fields()
     {
         return [
@@ -24,28 +15,19 @@ final class Image extends Model
         ];
     }
 
-    protected ?int $id;
-    protected int $taille;
-    protected string $mime_subtype;
-    protected ?string $legende;
-    protected ?string $tmp_name;
+    protected const FIELDS = [
+        'taille'       => [[null, 'taille',       PDO::PARAM_INT]],
+        'mime_subtype' => [[null, 'mime_subtype', PDO::PARAM_STR]],
+        'legende'      => [[null, 'legende',      PDO::PARAM_STR]],
+    ];
 
     function __construct(
-        ?int $id,
-        int $taille,
-        string $mime_subtype,
-        ?string $legende,
-        ?string $tmp_name = null,
+        protected ?int $id,
+        readonly int $taille,
+        readonly string $mime_subtype,
+        readonly ?string $legende,
+        private ?string $tmp_name = null, // Not even a field - used internally
     ) {
-        $this->taille       = $taille;
-        $this->mime_subtype = $mime_subtype;
-        $this->legende      = $legende;
-        $this->id           = $id;
-        $this->tmp_name     = $tmp_name;
-    }
-
-    function insert(): void {
-        parent::insert();
     }
 
     static function from_db(int $id_image): Image|false

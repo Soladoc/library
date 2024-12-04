@@ -6,19 +6,16 @@ require_once 'model/Model.php';
 
 /**
  * @property-read ?int $id L'ID. `null` si cette adresse n'existe pas dans la BDD.
- * @property Commune $commune
- * @property ?int $numero_voie
- * @property ?string $complement_numero
- * @property ?string $nom_voie
- * @property ?string $localite
- * @property ?string $precision_int
- * @property ?string $precision_ext
- * @property ?float $latitude
- * @property ?float $longitude
- * @property ?int $id
  */
 final class Adresse extends Model
 {
+    protected static function key_fields()
+    {
+        return [
+            'id' => ['id', PDO::PARAM_INT, null],
+        ];
+    }
+
     protected const FIELDS = [
         'commune' => [
             ['code',               'code_commune',       PDO::PARAM_INT],
@@ -34,26 +31,18 @@ final class Adresse extends Model
         'longitude' => [[null,         'longitude',         PDO::PARAM_STR]],
     ];
 
-    protected static function key_fields()
-    {
-        return [
-            'id' => ['id', PDO::PARAM_INT, null],
-        ];
-    }
-
     function __construct(
         protected ?int $id,
-        protected Commune $commune,
-        protected ?int $numero_voie          = null,
-        protected ?string $complement_numero = null,
-        protected ?string $nom_voie          = null,
-        protected ?string $localite          = null,
-        protected ?string $precision_int     = null,
-        protected ?string $precision_ext     = null,
-        protected ?float $latitude           = null,
-        protected ?float $longitude          = null,
-    ) {
-    }
+        readonly Commune $commune,
+        readonly ?int $numero_voie          = null,
+        readonly ?string $complement_numero = null,
+        readonly ?string $nom_voie          = null,
+        readonly ?string $localite          = null,
+        readonly ?string $precision_int     = null,
+        readonly ?string $precision_ext     = null,
+        readonly ?float $latitude           = null,
+        readonly ?float $longitude          = null,
+    ) {}
 
     /**
      * Récupère une adresse depuis la base de données.

@@ -126,20 +126,20 @@ function quote_string(string $string): string
  * Generates a WHERE clause for a SQL query based on an array of key-value pairs.
  *
  * @param BoolOperator $operator The logical operator to use between clauses.
- * @param array $clauses An array containing the conditions for the WHERE clause.
+ * @param string[] $clauses An array containing the conditions for the WHERE clause.
  * @return string The generated WHERE clause, or an empty string if no clauses are provided.
  */
 function where_clause(BoolOperator $operator, array $clauses): string
 {
     return $clauses
-        ? ' where ' . implode(" $operator->value ", array_map(fn($attr) => "$attr = :$attr", $clauses))
-        : '';
+        ? ' where ' . implode(" $operator->value ", array_map(fn($attr) => "$attr = :$attr", $clauses)) . ' '
+        : ' ';
 }
 
 /**
  * Prépare un *statement* INSERT INTO pour 1 ligne retournant des colonnes.
  * @param string $table La table dans laquelle insérer
- * @param array $args Les noms de colonne => leur valeur.
+ * @param array<string, array{mixed, int}> $args Les noms de colonne => leur valeur.
  * @param string[] $returning Les colonnes a mettre dans la clause RETURNING.
  * @return PDOStatement Une *statement* prêt à l'exécution, retournant un table 1x1, la valeur de la colonne ID.
  */
@@ -148,10 +148,12 @@ function insert_into(string $table, array $args, array $returning = []): PDOStat
     if (!$args) {
         return notfalse(connect()->prepare("insert into $table default values"));
     }
+
     $column_names = implode(',', array_keys($args));
     $arg_names    = implode(',', array_map(fn($col) => ":$col", array_keys($args)));
-    $returning    = $returning ? 'returning ' . implode(',', array_map(quote_identifier(...), $returning)) : '';
-    $stmt         = notfalse(connect()->prepare("insert into $table ($column_names) values ($arg_names) $returning"));
+    $stmt         = notfalse(connect()->prepare("insert into $table ($column_names) values ($arg_names)"
+                . ($returning ? 'returning ' . implode(',', array_map(quote_identifier(...), $returning)) : '')));
+
     bind_values($stmt, $args);
     return $stmt;
 }
@@ -159,18 +161,24 @@ function insert_into(string $table, array $args, array $returning = []): PDOStat
 /**
  * Prépare un *statement* UPDATE.
  * @param string $table La table dans la quelle mettre à jour.
- * @param array $args Les colonnes à modifier => leurs valeurs pour la clause SET du UPDATE.
- * @param array $key_args Les colonnes clés => leurs valeurs pour la clause WHERE du UPDATE.
+ * @param array<string, array{mixed, int}> $args Les colonnes à modifier => leurs valeurs pour la clause SET du UPDATE.
+ * @param array<string, array{mixed, int}> $key_args Les colonnes clés => leurs valeurs pour la clause WHERE du UPDATE.
+ * @param string[] $returning Les colonnes a mettre dans la clause RETURNING.
  * @return PDOStatement Un *statement* prêt à l'exécution, ne retournant rien.
  */
-function update(string $table, array $args, array $key_args): PDOStatement
+function update(string $table, array $args, array $key_args, array $returning = []): PDOStatement
 {
     if (!$args) {
         return notfalse(connect()->prepare('select null'));  // todo: does a empty string work as a noop? test it when we get a working thing.
     }
-    $sets = implode(',', array_map(fn($col) => "$col = :$col", array_keys($args)));
-    $stmt = notfalse(connect()->prepare("update $table set $sets" . where_clause(BoolOperator::AND, array_keys($key_args))));
+
+    $stmt = notfalse(connect()->prepare("update $table set "
+        . implode(',', array_map(fn($col) => "$col = :$col", array_keys($args)))
+        . where_clause(BoolOperator::AND, array_keys($key_args))
+        . ($returning ? 'returning ' . implode(',', array_map(quote_identifier(...), $returning)) : '')));
+
     bind_values($stmt, $args);
+    bind_values($stmt, $key_args);
     return $stmt;
 }
 

@@ -4,7 +4,6 @@ require_once 'model/Compte.php';
 
 /**
  * @inheritDoc
- * @property string $denomination
  */
 // todo make this abstract 
 class Professionnel extends Compte
@@ -12,9 +11,6 @@ class Professionnel extends Compte
     protected const FIELDS = parent::FIELDS + [
         'denomination' => [[null, 'denomination', PDO::PARAM_STR]],
     ];
-
-    protected ?int $id;
-    protected string $denomination;
 
     function __construct(
         ?int $id,
@@ -24,7 +20,7 @@ class Professionnel extends Compte
         string $prenom,
         string $telephone,
         Adresse $adresse,
-        string $denomination,
+        readonly string $denomination,
     ) {
         parent::__construct(
             $id,
@@ -35,7 +31,6 @@ class Professionnel extends Compte
             $telephone,
             $adresse,
         );
-        $this->denomination = $denomination;
     }
 
     /**

@@ -75,7 +75,7 @@ final class OuvertureHebdomadaire implements ArrayAccess, Equatable
         }
     }
 
-    function insert(): void
+    function push_to_db(): void
     {
         foreach ($this->ouvertures_hebdomadaires as $dow => $horaires) {
             $this->insert_ouverture_hebdomadaire($dow, $horaires);
