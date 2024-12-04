@@ -97,7 +97,7 @@ final class Page
             </div>
         </a>
         <div id="header_pro">
-            <a href="/autres_pages/detail_compte.php?>">
+            <a href="/autres_pages/detail_compte.php>">
                 <div class="auth-button">
                     <!-- <img src="" alt="Profil"> -->
                     <span>Compte</span>

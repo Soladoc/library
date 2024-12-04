@@ -116,7 +116,7 @@ if ($_POST) {
 }
 
 $membre = DB\query_compte_membre($id);
-$pro = DB\query_compte_professionnel($args['id']);
+$pro = DB\query_compte_professionnel($id);
 
 
 
