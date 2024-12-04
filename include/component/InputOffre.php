@@ -121,14 +121,14 @@ final class InputOffre extends Input
     /**
      * Récupère l'offre saisie.
      * @param array $get_or_post `$_GET` ou `$_POST` (selon la méthode du formulaire)
-     * @param ?int $current_id_offre L'ID de l'offre à modifier ou `null` pour une création.
+     * @param ?Offre $current_offre L'offre à modifier ou `null` pour une création. Doit exister dans la BDD.
      */
-    function get(array $get_or_post, ?int $current_id_offre = null): Offre
+    function get(array $get_or_post, ?Offre $current_offre = null): Offre
     {
         $args = [
-            $current_id_offre,
+            $current_offre?->id,
             $this->input_adresse->get($get_or_post),
-            $this->input_image_principale->get($get_or_post)[0] ?? null,
+            $this->input_image_principale->get($get_or_post)[0] ?? $current_offre?->image_principale,
             $this->professionnel,
             Abonnement::from_db(getarg($get_or_post, $this->name('libelle_abonnement'), required: false) ?? 'gratuit'),
             getarg($get_or_post, $this->name('titre')),
@@ -158,7 +158,7 @@ final class InputOffre extends Input
                 ...$args,
                 age_requis: getarg($get_or_post, 'age_requis', arg_int(1), required: false),
                 nb_attractions: getarg($get_or_post, 'nb_attractions', arg_int(0)),
-                image_plan: $this->input_image_plan->get($get_or_post)[0],
+                image_plan: $this->input_image_plan->get($get_or_post)[0] ?? $current_offre?->image_principale,
             ),
             Spectacle::CATEGORIE => new Spectacle(
                 ...$args,
@@ -299,7 +299,10 @@ final class InputOffre extends Input
 
         <section>
             <h2>Photo principale</h2>
-            <?php $this->input_image_principale->put($current === null ? null : [$current->image_principale]) ?>
+            <?php $this->input_image_principale->put(
+                $current === null ? null : [$current->image_principale],
+                $current === null,
+            ) ?>
         </section>
         <section id="<?= $this->id('tarifs') ?>">
             <h2>Tarifs</h2>
@@ -389,7 +392,10 @@ final class InputOffre extends Input
 
         <section id="<?= $this->id('image-creation-offre') ?>">
             <h2>Galerie</h2>
-            <?php $this->galerie->put($current?->galerie->images) ?>
+            <?php $this->galerie->put(
+                $current?->galerie->images,
+                $current === null,
+            ) ?>
         </section>
 
         <section id="<?= $this->id('infos-detaillees') ?>">
@@ -438,7 +444,10 @@ final class InputOffre extends Input
                         min="1"
                         value="<?= $parc_attractions?->age_requis ?>"> an</label></p>
                     <?php
-                    $this->input_image_plan->put($parc_attractions === null ? null : [$parc_attractions->image_plan]);
+                    $this->input_image_plan->put(
+                        $parc_attractions === null ? null : [$parc_attractions->image_plan],
+                        $parc_attractions === null,
+                    );
                     break;
                 case Restaurant::CATEGORIE:
                     /** @var ?Restaurant */

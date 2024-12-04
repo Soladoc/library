@@ -42,7 +42,7 @@ final class InputImage extends Input
     /**
      * @inheritDoc
      */
-    function put(mixed $current = null): void
+    function put(mixed $current = null, bool $required = true): void
     {
         $current ??= [];
         $form_attr = $this->form_id ? "form=\"$this->form_id\"" : '';
@@ -54,7 +54,7 @@ final class InputImage extends Input
             name="<?= $this->name . ($this->multiple ? '[]' : '') ?>"
             type="file"
             accept="image/*"
-            required
+            <?= $required ? 'required' : '' ?>
             <?= $this->multiple ? 'multiple' : '' ?>>
     </p>
     <p>
