@@ -129,7 +129,7 @@ if ($_POST) {
                                 <div id="siren">
                                     <label>SIREN : </label>
                                 </div>
-                                <?php if ($error_SIREN !== null) { ?>
+                                <?php if ($error_siren !== null) { ?>
                                     <p class="error"><?= htmlspecialchars($error_siren) ?></p>
                                 <?php } ?>
                                 <input type="text" id="new_siren" name="new_siren" value="<?= htmlspecialchars($compte->siren) ?>" placeholder="231 654 988" oninput="formatInput(this)" maxlength="12">
