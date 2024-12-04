@@ -28,6 +28,7 @@ require_once 'model/Tarifs.php';
  * @property-read ?FiniteTimestamp $creee_le Calculé. `null` si cette offre n'existe pas dans la BDD.
  * @property-read ?FiniteTimestamp $modifiee_le Calculé mais avec un possibilité de valeur initiale.
  * @property-read ?FiniteTimestamp $changement_ouverture_suivant_le Calculé. `null` si cette offre n'existe pas dans la BDD.
+ * @property-read string $categorie Calculé. `null` si cette offre n'existe pas dans la BDD.
  *
  * @property-read ?int $nb_avis Le nombre d'avis ce cette offre. Calculé. `null` si cette offre n'existe pas dans la BDD.
  */
@@ -48,6 +49,7 @@ class Offre extends Model implements Signalable
             'note_moyenne'                    => [null, 'note_moyenne', PDO_PARAM_FLOAT],
             'prix_min'                        => [null, 'prix_min',     PDO_PARAM_FLOAT],
             'est_ouverte'                     => [null, 'est_ouverte', PDO::PARAM_BOOL],
+            'categorie'                       => [null, 'categorie',   PDO::PARAM_STR],
             'en_ligne_ce_mois_pendant'        => [Duree::parse(...),           'en_ligne_ce_mois_pendant',        PDO::PARAM_STR],
             'creee_le'                        => [FiniteTimestamp::parse(...), 'creee_le',                        PDO::PARAM_STR],
             'modifiee_le'                     => [FiniteTimestamp::parse(...), 'modifiee_le',                     PDO::PARAM_STR],
@@ -116,7 +118,8 @@ class Offre extends Model implements Signalable
         protected ?Duree $en_ligne_ce_mois_pendant                  = null,
         protected ?FiniteTimestamp $changement_ouverture_suivant_le = null,
         protected ?bool $est_ouverte                                = null,
-        protected ?int $nb_avis                                     = null
+        protected ?int $nb_avis                                     = null,
+        protected ?string $categorie                                = null,
     ) {
         $this->tags                   = new Tags($this);
         $this->tarifs                 = new Tarifs($this);
@@ -229,7 +232,8 @@ class Offre extends Model implements Signalable
             FiniteTimestamp::parse($row['creee_le']),
             Duree::parse($row['en_ligne_ce_mois_pendant']),
             FiniteTimestamp::parse($row['changement_ouverture_suivant_le'] ?? null),
-            $row['est_ouverte'], $row['nb_avis'],
+            $row['est_ouverte'],
+            $row['nb_avis'],
         );
     }
 

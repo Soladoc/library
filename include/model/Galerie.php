@@ -8,11 +8,13 @@ require_once 'Equatable.php';
  */
 final class Galerie implements Equatable
 {
-    function __get(string $name): mixed {
+    function __get(string $name): mixed
+    {
         return match ($name) {
             'images' => $this->images,
         };
     }
+
     /**
      * @var Image[]
      */

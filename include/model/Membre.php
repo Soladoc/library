@@ -31,7 +31,8 @@ final class Membre extends Compte
             $adresse);
     }
 
-    static function from_db(int $id_membre): Membre|false {
+    static function from_db(int $id_membre): Membre|false
+    {
         $stmt = notfalse(DB\connect()->prepare(self::make_select() . ' where id = ?'));
         DB\bind_values($stmt, [1 => [$id_membre, PDO::PARAM_INT]]);
         notfalse($stmt->execute());
@@ -40,7 +41,8 @@ final class Membre extends Compte
         return static::from_db_row($row);
     }
 
-    protected static function from_db_row(array $row): Membre {
+    protected static function from_db_row(array $row): Membre
+    {
         return new Membre(
             $row['id'],
             $row['email'],

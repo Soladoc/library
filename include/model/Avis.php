@@ -22,9 +22,9 @@ class Avis extends Model
     {
         return [
             'pseudo_auteur' => [null, 'pseudo_auteur', PDO::PARAM_STR],
-            'publie_le'     => [FiniteTimestamp::parse(...), 'publie_le',     PDO::PARAM_STR],
-            'lu'               => [null, 'lu',              PDO::PARAM_BOOL],
-            'blackliste'       => [null, 'blackliste',      PDO::PARAM_BOOL],
+            'publie_le'     => [FiniteTimestamp::parse(...), 'publie_le', PDO::PARAM_STR],
+            'lu'            => [null, 'lu',         PDO::PARAM_BOOL],
+            'blackliste'    => [null, 'blackliste', PDO::PARAM_BOOL],
         ];
     }
 
@@ -49,9 +49,9 @@ class Avis extends Model
         readonly Membre $membre_auteur,
         readonly Offre $offre,
         //
-        protected ?bool $blackliste = null,
-        protected ?bool $lu = null,
-        protected ?string $pseudo_auteur = null,
+        protected ?bool $blackliste           = null,
+        protected ?bool $lu                   = null,
+        protected ?string $pseudo_auteur      = null,
         protected ?FiniteTimestamp $publie_le = null,
     ) {}
 
@@ -72,7 +72,8 @@ class Avis extends Model
         return static::from_db_row($row);
     }
 
-    protected static function from_db_row(array $row): Avis {
+    protected static function from_db_row(array $row): Avis
+    {
         return new Avis(
             $row['id'],
             $row['commentaire'],

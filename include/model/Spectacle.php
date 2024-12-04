@@ -37,6 +37,8 @@ final class Spectacle extends Offre
         ?Duree $en_ligne_ce_mois_pendant                  = null,
         ?FiniteTimestamp $changement_ouverture_suivant_le = null,
         ?bool $est_ouverte                                = null,
+        protected ?int $nb_avis                           = null,
+        protected ?string $categorie                      = null,
     ) {
         parent::__construct(
             $id,
@@ -84,7 +86,7 @@ final class Spectacle extends Offre
             FiniteTimestamp::parse($row['creee_le']),
             Duree::parse($row['en_ligne_ce_mois_pendant']),
             FiniteTimestamp::parse($row['changement_ouverture_suivant_le'] ?? null),
-            $row['est_ouverte'], $row['nb_avis'],
+            $row['est_ouverte'], $row['nb_avis'], $row['categorie']
         );
     }
 
