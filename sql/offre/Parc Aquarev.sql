@@ -148,7 +148,7 @@ Camping et snack sur le site.',
                 '2024-11-28',
                 'Personnel très accueillant.Parc adapté a tous public'
             )
-    )
+    ),
     s4 as ( -- Cette CTE a besoin des valeurs des précédentes, mais elle ne retourne pas de valeur. On doit quand même la nommer, on utilsera la convention de nomamge s1, s2, s3...
         insert into _changement_etat (id_offre, fait_le)
         values
