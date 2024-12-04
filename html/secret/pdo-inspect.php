@@ -1,7 +1,7 @@
 <?php
 require_once 'db.php';
 
-$stmt = notfalse(DB\connect()->query('select * from offres'));
+$stmt = notfalse(DB\connect()->query('select offre_get_concrete(11);'));
 ?>
 
 <!DOCTYPE html>
