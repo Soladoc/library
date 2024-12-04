@@ -92,14 +92,14 @@ final class Page
         ?>
         <a href="/connexion/logout.php">
             <div class="auth-button">
-                <img src="/images/profile-icon.png" alt="Profil">
+                <img src="/images/logout-icon.png" alt="Profil">
                 <span>Déconnexion</span>
             </div>
         </a>
         <div id="header_pro">
             <a href="/autres_pages/detail_compte.php">
-                <div class="auth-button">
-                    <!-- <img src="" alt="Profil"> -->
+                <div class="account-button">
+                    <img src="/images/profile-icon.png" alt="Compte">
                     <span>Compte</span>
                 </div>
             </a>
@@ -117,7 +117,7 @@ final class Page
         ?>
         <a href="connexion.php">
             <div class="auth-button">
-                <img src="/images/profile-icon.png" alt="Profil">
+                <img src="/images/login-icon.png" alt="Profil">
                 <span>Connexion</span>
             </div>
         </a>
