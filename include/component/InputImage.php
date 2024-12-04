@@ -28,9 +28,10 @@ final class InputImage extends Input
     function get(array $get_or_post, ?int $current_id_images = null): array
     {
         $files = getarg($_FILES, $this->name, required: false);
-        if (empty($files)) return [];
 
         $files = $this->multiple ? soa_to_aos($files) : [$files];
+
+        if ($this->multiple && !isset($files[0]['tmp_name'])) return [];
 
         return array_map(fn($file, $current_id_image) => new Image(
             $current_id_image,
