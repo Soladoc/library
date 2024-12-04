@@ -88,6 +88,23 @@ function array_every(array $arr, callable $predicate): bool
 }
 
 /**
+ * Détermine si un élément d'un tableau satisfait un prédicat.
+ * @template T
+ * @param T[] $arr Le tableau à tester.
+ * @param callable(T): bool $predicate La fonction prédicat à appeler avec chaque élément de $arr.
+ * @return bool `true` si $predicate a retourné une valeur *truthy* pour un élément de $arr, false sinon.
+ */
+function array_some(array $arr, callable $predicate): bool
+{
+    foreach ($arr as $e) {
+        if ($predicate($e)) {
+            return true;
+        }
+    }
+    return false;
+}
+
+/**
  * Valide et récupère un argument d'un tableau source.
  * @template T
  * @param T[] $source Le tableau source d'où récupérer l'argument (tel que `$_GET`, `$_POST` ou `$_FILES$`).

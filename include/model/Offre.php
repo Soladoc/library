@@ -20,14 +20,14 @@ require_once 'model/Tarifs.php';
  * Une offre touristique.
  * @property-read ?int $id L'ID. `null` si cette offre n'existe pas dans la BDD.
  *
- * @property-read ?FiniteTimestamp $modifiee_le Calculé mais avec un possibilité de valeur initiale.
  * @property-read ?bool $en_ligne Calculé. `null` si cette offre n'existe pas dans la BDD.
  * @property-read ?float $note_moyenne Calculé. `null` si cette offre n'existe pas dans la BDD.
  * @property-read ?float $prix_min Calculé. `null` si cette offre n'existe pas dans la BDD.
- * @property-read ?FiniteTimestamp $creee_le Calculé. `null` si cette offre n'existe pas dans la BDD.
- * @property-read ?Duree $en_ligne_ce_mois_pendant Calculé. `null` si cette offre n'existe pas dans la BDD.
- * @property-read ?FiniteTimestamp $changement_ouverture_suivant_le Calculé. `null` si cette offre n'existe pas dans la BDD.
  * @property-read ?bool $est_ouverte Calculé. `null` si cette offre n'existe pas dans la BDD.
+ * @property-read ?Duree $en_ligne_ce_mois_pendant Calculé. `null` si cette offre n'existe pas dans la BDD.
+ * @property-read ?FiniteTimestamp $creee_le Calculé. `null` si cette offre n'existe pas dans la BDD.
+ * @property-read ?FiniteTimestamp $modifiee_le Calculé mais avec un possibilité de valeur initiale.
+ * @property-read ?FiniteTimestamp $changement_ouverture_suivant_le Calculé. `null` si cette offre n'existe pas dans la BDD.
  *
  * @property-read ?int $nb_avis Le nombre d'avis ce cette offre. Calculé. `null` si cette offre n'existe pas dans la BDD.
  */
@@ -36,21 +36,21 @@ abstract class Offre extends Model implements Signalable
     protected static function key_fields()
     {
         return [
-            'id' => ['id', PDO::PARAM_INT, null],
+            'id' => [null, 'id', PDO::PARAM_INT],
         ];
     }
 
     protected static function computed_fields()
     {
         return [
-            'modifiee_le'                     => ['modifiee_le', PDO::PARAM_STR, FiniteTimestamp::parse(...)],
-            'en_ligne'                        => ['en_ligne',    PDO::PARAM_BOOL, null],
-            'note_moyenne'                    => ['note_moyenne', PDO_PARAM_FLOAT, null],
-            'prix_min'                        => ['prix_min',     PDO_PARAM_FLOAT, null],
-            'creee_le'                        => ['creee_le',                        PDO::PARAM_STR, FiniteTimestamp::parse(...)],
-            'en_ligne_ce_mois_pendant'        => ['en_ligne_ce_mois_pendant',        PDO::PARAM_STR, Duree::parse(...)],
-            'changement_ouverture_suivant_le' => ['changement_ouverture_suivant_le', PDO::PARAM_STR, FiniteTimestamp::parse(...)],
-            'est_ouverte'                     => ['est_ouverte',                     PDO::PARAM_BOOL, null],
+            'en_ligne'                        => [null, 'en_ligne', PDO::PARAM_BOOL],
+            'note_moyenne'                    => [null, 'note_moyenne', PDO_PARAM_FLOAT],
+            'prix_min'                        => [null, 'prix_min',     PDO_PARAM_FLOAT],
+            'est_ouverte'                     => [null, 'est_ouverte', PDO::PARAM_BOOL],
+            'en_ligne_ce_mois_pendant'        => [Duree::parse(...),           'en_ligne_ce_mois_pendant',        PDO::PARAM_STR],
+            'creee_le'                        => [FiniteTimestamp::parse(...), 'creee_le',                        PDO::PARAM_STR],
+            'modifiee_le'                     => [FiniteTimestamp::parse(...), 'modifiee_le',                     PDO::PARAM_STR],
+            'changement_ouverture_suivant_le' => [FiniteTimestamp::parse(...), 'changement_ouverture_suivant_le', PDO::PARAM_STR],
         ];
     }
 

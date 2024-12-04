@@ -4,35 +4,36 @@ require_once 'db.php';
 abstract class Model
 {
     /**
+     * Table name.
+     * @var string
+     */
+    const TABLE = self::TABLE;  // abstract constant
+
+    /**
      * Stuff that you can set.
-     * column name => [Attribute name on attribute to get the column value, or `null` for identity, attribute name, PDO param type]
+     * column name => [sub-attribute name that gets the column value, or `null` for identity, attribute name, PDO param type]
      * @var array<string, array{?string, string, int}>
      */
     protected const FIELDS = [];
 
     /**
-     * Table name.
-     * @var string
-     */
-    const TABLE = self::TABLE; // abstract constant
-
-    /**
      * Key fields that uniquely identify a row in the DB table.
-     * attribute name => [column name, PDO param type]
-     * @return array<string, array{string, int, ?callable(string): mixed}>
+     * column name => [map from DB column to PHP attribute value or null for identity, attribute name, PDO param type]
+     * @return array<string, array{?callable(mixed): mixed, string, int}>
      */
     protected static function key_fields() { return []; }
 
     /**
      * Additional fields to set with the insertion RETURNING clause.
-     * attribute name => [column name, PDO param type]
-     * @return array<string, array{string, int, ?callable(string): mixed}>
+     * column name => [map from DB column to PHP attribute value, attribute name, PDO param type]
+     * @return array<string, array{?callable(mixed): mixed, string, int, }>
      */
     protected static function computed_fields() { return []; }
 
     function __get(string $name): mixed
     {
-        if (isset($this->key_fields()[$name]) || isset($this->computed_fields()[$name])) {
+        if (array_some($this->key_fields(), fn($f) => $f[1] === $name)
+                || array_some($this->computed_fields(), fn($f) => $f[1] === $name)) {
             return $this->$name;
         }
         throw new Exception('Undefined property: ' . static::class . "::\$$name");
@@ -53,12 +54,12 @@ abstract class Model
             $stmt = DB\insert_into(
                 static::TABLE,
                 $this->args(),
-                array_column($returning_fields, 0),
+                array_keys($returning_fields),
             );
         }
         notfalse($stmt->execute());
         $row = notfalse($stmt->fetch());
-        foreach ($returning_fields as $attr => [$column, $type, $db_to_php]) {
+        foreach ($returning_fields as $column => [$db_to_php, $attr, $type]) {
             $this->$attr = $db_to_php === null ? $row[$column] : $db_to_php($row[$column]);
         }
     }
@@ -86,7 +87,7 @@ abstract class Model
     private function key_args(): array
     {
         $args = [];
-        foreach (static::key_fields() as $attr => [$column, $type, $db_to_php]) {
+        foreach (static::key_fields() as $column => [$db_to_php, $attr, $type]) {
             $args[$column] = [$this->$attr, $type];
         }
         return $args;

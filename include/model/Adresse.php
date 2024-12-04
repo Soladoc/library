@@ -12,7 +12,7 @@ final class Adresse extends Model
     protected static function key_fields()
     {
         return [
-            'id' => ['id', PDO::PARAM_INT, null],
+            'id' => [null, 'id', PDO::PARAM_INT],
         ];
     }
 
