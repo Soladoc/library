@@ -156,7 +156,7 @@ final class InputOffre extends Input
             ),
             ParcAttractions::CATEGORIE => new ParcAttractions(
                 ...$args,
-                image_plan: $this->input_image_plan->get($get_or_post),
+                image_plan: $this->input_image_plan->get($get_or_post)[0],
             ),
             Spectacle::CATEGORIE => new Spectacle(
                 ...$args,
