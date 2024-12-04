@@ -43,6 +43,7 @@ class Offre extends Model implements Signalable
     protected static function computed_fields()
     {
         return [
+            'nb_avis'                         => [null, 'nb_avis',  PDO::PARAM_INT],
             'en_ligne'                        => [null, 'en_ligne', PDO::PARAM_BOOL],
             'note_moyenne'                    => [null, 'note_moyenne', PDO_PARAM_FLOAT],
             'prix_min'                        => [null, 'prix_min',     PDO_PARAM_FLOAT],
@@ -52,14 +53,6 @@ class Offre extends Model implements Signalable
             'modifiee_le'                     => [FiniteTimestamp::parse(...), 'modifiee_le',                     PDO::PARAM_STR],
             'changement_ouverture_suivant_le' => [FiniteTimestamp::parse(...), 'changement_ouverture_suivant_le', PDO::PARAM_STR],
         ];
-    }
-
-    function __get(string $name): mixed
-    {
-        return match ($name) {
-            'nb_avis' => $this->nb_avis ??= Avis::get_count($this->id),
-            default   => parent::__get($name),
-        };
     }
 
     protected static function fields()
@@ -77,8 +70,6 @@ class Offre extends Model implements Signalable
             'libelle_abonnement'    => [fn($x) => $x->libelle, 'abonnement',       PDO::PARAM_STR],
         ];
     }
-
-    protected ?int $nb_avis;
 
     readonly Tags $tags;
     readonly Tarifs $tarifs;
@@ -125,6 +116,7 @@ class Offre extends Model implements Signalable
         protected ?Duree $en_ligne_ce_mois_pendant                  = null,
         protected ?FiniteTimestamp $changement_ouverture_suivant_le = null,
         protected ?bool $est_ouverte                                = null,
+        protected ?int $nb_avis                                     = null
     ) {
         $this->tags                   = new Tags($this);
         $this->tarifs                 = new Tarifs($this);
@@ -237,7 +229,7 @@ class Offre extends Model implements Signalable
             FiniteTimestamp::parse($row['creee_le']),
             Duree::parse($row['en_ligne_ce_mois_pendant']),
             FiniteTimestamp::parse($row['changement_ouverture_suivant_le'] ?? null),
-            $row['est_ouverte'],
+            $row['est_ouverte'], $row['nb_avis'],
         );
     }
 

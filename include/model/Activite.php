@@ -91,7 +91,7 @@ final class Activite extends Offre
             FiniteTimestamp::parse($row['creee_le']),
             Duree::parse($row['en_ligne_ce_mois_pendant']),
             FiniteTimestamp::parse($row['changement_ouverture_suivant_le'] ?? null),
-            $row['est_ouverte'],
+            $row['est_ouverte'], $row['nb_avis'],
         );
     }
 
