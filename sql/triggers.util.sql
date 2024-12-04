@@ -11,7 +11,7 @@ declare
     -- Cela signifie qu'on autorise la publication d'un avis le même jour que la création de l'offre mais à une heure antérieure.
     -- C'est soit ça soit interdire la publication à heure postérieure car date_experience n'a pas d'heure.
     -- Mieut vaut autoriser un cas potentiellement invalide plutôt qu'interdire un cas potentiellement valide.
-    date_creation_offre constant date not null = offre_creee_le(id_offre)::date;
+    date_creation_offre constant date not null = offre_creee_le(p_id_offre)::date;
 begin
     if new.date_experience < date_creation_offre then
         raise 'La date d''expérience de l''avis (%) ne peut pas être antérieure à la date création de de l''offre (%)', new.date_experience, date_creation_offre;
@@ -20,7 +20,7 @@ begin
     insert into _signalable default values returning id into new.id;
     insert into _avis (
         id,
-        id_offre,
+        p_id_offre,
         id_membre_auteur,
         commentaire,
         date_experience,
@@ -28,7 +28,7 @@ begin
         note
     ) values (
         new.id,
-        id_offre,
+        p_id_offre,
         new.id_membre_auteur,
         new.commentaire,
         new.date_experience,
