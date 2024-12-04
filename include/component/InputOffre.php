@@ -425,16 +425,8 @@ final class InputOffre extends Input
                         type="number"
                         min="1"
                         value="<?= $parc_attractions?->age_requis ?>"> an</label></p>
-                    <fieldset>
-                        <p><label>Plan* &nbsp;: <input <?= $form_attr ?>
-                            id="<?= $this->id('image_plan') ?>"
-                            name="<?= $this->name('image_plan') ?>"
-                            type="file"
-                            accept="image/*"
-                            required></label></p>
-                        <div id="<?= $this->id('image_plan-preview') ?>"></div>
-                    </fieldset>
                     <?php
+                    $this->input_image_plan->put($parc_attractions?->image_plan);
                     break;
                 case Restaurant::CATEGORIE:
                     /** @var ?Restaurant */

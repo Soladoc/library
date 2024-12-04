@@ -52,7 +52,8 @@ final class InputImage extends Input
             name="<?= $this->name . ($this->multiple ? '[]' : '') ?>"
             type="file"
             accept="image/*"
-            required>
+            required
+            <?= $this->multiple ? 'multiple' : '' ?>>
     </p>
     <p>
         <input <?= $form_attr ?>
