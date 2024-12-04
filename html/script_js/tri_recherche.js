@@ -120,15 +120,28 @@ function filterOffers() {
                 return false;
             }
         }
+        // Filtrage par mot-clé (souple)
+        if (keywordParts.length > 0) {
+            const lowerCaseCategory = offer.categorie.toLowerCase();
+            const lowerCaseTags = (offer.tags || []).map(tag => tag.toLowerCase());
 
-        // Filtrage par mot-clé
-        if (keywordInput.length > 0) {
-            const matchesCategory = offer.categorie && offer.categorie.toLowerCase().includes(keywordInput);
-            const matchesTitre = offer.titre && offer.titre.toLowerCase().includes(keywordInput);
-            if (!matchesCategory && !matchesTitre) {
+            // Vérifier si un mot-clé est présent dans la catégorie ou les tags
+            const matchesKeyword = keywordParts.some(part =>
+                lowerCaseCategory.includes(part) || lowerCaseTags.some(tag => tag.includes(part))
+            );
+
+            if (!matchesKeyword) {
                 return false;
             }
         }
+        // // Filtrage par mot-clé
+        // if (keywordInput.length > 0) {
+        //     const matchesCategory = offer.categorie && offer.categorie.toLowerCase().includes(keywordInput);
+        //     const matchesTitre = offer.titre && offer.titre.toLowerCase().includes(keywordInput);
+        //     if (!matchesCategory && !matchesTitre) {
+        //         return false;
+        //     }
+        // }
 
         // Si tout est valide, inclure cette offre
         return true;
