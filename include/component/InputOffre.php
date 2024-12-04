@@ -235,6 +235,7 @@ final class InputOffre extends Input
                             type="radio"
                             value="standard"
                             required
+                            <?= $current === null ? '' : 'disabled' ?>
                             <?= $current?->abonnement->libelle === 'standard' ? 'checked' : '' ?>>
                             Standard</label>
                     </li>
@@ -245,6 +246,7 @@ final class InputOffre extends Input
                             type="radio"
                             value="premium"
                             required
+                            <?= $current === null ? '' : 'disabled' ?>
                             <?= $current?->abonnement->libelle === 'premium' ? 'checked' : '' ?>>
                             Premium</label>
                     </li>
