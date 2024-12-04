@@ -32,13 +32,13 @@ final class Image extends Model
         private ?string $tmp_name = null,  // Not even a field - used internally
     ) {}
 
-    static function from_db(int $id_image): Image|false
+    static function from_db(int $id_image): self|false
     {
         $stmt = notfalse(DB\connect()->prepare('select taille, mime_subtype, legende from ' . self::TABLE . ' where id = ?'));
         DB\bind_values($stmt, [1 => [$id_image, PDO::PARAM_INT]]);
         notfalse($stmt->execute());
         $row = $stmt->fetch();
-        return $row === false ? false : new Image(
+        return $row === false ? false : new self(
             $id_image,
             $row['taille'],
             $row['mime_subtype'],

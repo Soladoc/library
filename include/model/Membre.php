@@ -24,9 +24,9 @@ final class Membre extends Compte
     /**
      * Récupère un membre de la BDD.
      * @param int $id_membre
-     * @return Membre|false
+     * @return self|false
      */
-    static function from_db(int $id_membre): Membre|false
+    static function from_db(int $id_membre): self|false
     {
         $stmt = DB\connect()->prepare(self::make_select() . ' where m.id = ?');
         DB\bind_values($stmt, [1 => [$id_membre, PDO::PARAM_INT]]);
@@ -38,9 +38,9 @@ final class Membre extends Compte
     /**
      * Récupère un membre de la BDD par son pseudo.
      * @param string $pseudo
-     * @return Membre|false
+     * @return self|false
      */
-    static function from_db_by_pseudo(string $pseudo): Membre|false
+    static function from_db_by_pseudo(string $pseudo): self|false
     {
         $stmt = DB\connect()->prepare(self::make_select() . ' where m.pseudo = ?');
         DB\bind_values($stmt, [1 => [$pseudo, PDO::PARAM_STR]]);
@@ -60,7 +60,7 @@ final class Membre extends Compte
         m.prenom,
         m.telephone,
         m.id_adresse,
-        m.pseudo
+        m.pseudo,
 
         a.code_commune adresse_code_commune,
         a.numero_departement adresse_numero_departement,
@@ -79,9 +79,9 @@ final class Membre extends Compte
             join _commune c on c.code = a.code_commune and c.numero_departement = a.numero_departement';
     }
 
-    private static function from_db_row(array $row): Membre
+    private static function from_db_row(array $row): self
     {
-        return new Membre([
+        return new self([
             $row['id'],
             $row['id_signalable'],
             $row['email'],

@@ -62,7 +62,7 @@ class Avis extends Model
         parent::push_to_db();
     }
 
-    static function from_db(int $id_avis): Avis|false
+    static function from_db(int $id_avis): self|false
     {
         $stmt = notfalse(DB\connect()->prepare(self::make_select() . ' where a.id = ?'));
         DB\bind_values($stmt, [1 => [$id_avis, PDO::PARAM_INT]]);
@@ -72,9 +72,9 @@ class Avis extends Model
         return static::from_db_row($row);
     }
 
-    protected static function from_db_row(array $row): Avis
+    protected static function from_db_row(array $row): self
     {
-        return new Avis(
+        return new self(
             $row['id'],
             $row['commentaire'],
             $row['note'],

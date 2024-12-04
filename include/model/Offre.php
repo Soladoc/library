@@ -149,7 +149,7 @@ abstract class Offre extends Model implements Signalable
         notfalse($stmt->execute());
     }
 
-    static function from_db(int $id_offre): Offre|false
+    static function from_db(int $id_offre): self|false
     {
         $stmt = notfalse(DB\connect()->prepare(self::make_select() . ' where o.id = ?'));
         DB\bind_values($stmt, [1 => [$id_offre, PDO::PARAM_INT]]);
@@ -161,7 +161,7 @@ abstract class Offre extends Model implements Signalable
 
     /**
      * Récupère les offres "À la Une" de la BDD.
-     * @return Iterator<int, Offre> Les offres "À la Une" de la BDD, indexés par ID.
+     * @return Iterator<int, self> Les offres "À la Une" de la BDD, indexés par ID.
      */
     static function from_db_a_la_une(): Iterator
     {
@@ -176,7 +176,7 @@ abstract class Offre extends Model implements Signalable
      * Récupère des offres de la BDD.
      * @param mixed $id_professionnel L'ID du professionnel dont on veut récupérer les offres, ou `null` pour récupérer les offres de tous les professionnels.
      * @param mixed $en_ligne Si on veut les offres actuellement en ligne ou hors ligne, ou `null` pour les deux.
-     * @return Iterator<int, Offre> Les offres de la BDD répondant au critères passés en paramètre.
+     * @return Iterator<int, self> Les offres de la BDD répondant au critères passés en paramètre.
      */
     static function from_db_all(?int $id_professionnel = null, ?bool $en_ligne = null): Iterator
     {
@@ -192,7 +192,7 @@ abstract class Offre extends Model implements Signalable
     /**
      * Récupère les offres de la BDD dont le titre correspond à une recherche.
      * @param string $motcle La chaîne recherchée
-     * @return Iterator<int, Offre>
+     * @return Iterator<int, self>
      */
     static function from_db_by_motcle(string $motcle): Iterator
     {
@@ -262,7 +262,7 @@ abstract class Offre extends Model implements Signalable
                 left join _visite using (id)';
     }
 
-    protected static function from_db_row(array $row): Offre
+    protected static function from_db_row(array $row): self
     {
         self::require_subclasses();
         $args_offre = [

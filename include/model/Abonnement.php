@@ -10,10 +10,10 @@ final class Abonnement
 
     private static ?array $instances;
 
-    static function from_db(string $libelle_abonnement): Abonnement
+    static function from_db(string $libelle_abonnement): self
     {
         self::$instances ??= array_map(
-            fn($row) => new Abonnement(
+            fn($row) => new self(
                 $row['libelle'],
                 parse_float($row['prix_journalier']),
             ),

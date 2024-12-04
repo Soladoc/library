@@ -48,9 +48,9 @@ final class Adresse extends Model
     /**
      * Récupère une adresse depuis la base de données.
      * @param int $id_adresse L'ID de l'adresse à récupérer.
-     * @return Adresse Une adresse existante dans la base de donneées, ou `false` si il n'existe pas d'adresse d'ID $id_adresse.
+     * @return self Une adresse existante dans la base de donneées, ou `false` si il n'existe pas d'adresse d'ID $id_adresse.
      */
-    static function from_db(int $id_adresse): Adresse|false
+    static function from_db(int $id_adresse): self|false
     {
         $stmt = notfalse(DB\connect()->prepare('select
             a.numero_voie,
@@ -70,7 +70,7 @@ final class Adresse extends Model
         DB\bind_values($stmt, [1 => [$id_adresse, PDO::PARAM_INT]]);
         notfalse($stmt->execute());
         $row = $stmt->fetch();
-        return $row === false ? false : new Adresse(
+        return $row === false ? false : new self(
             $id_adresse,
             new Commune($row['code_commune'], $row['numero_departement'], $row['nom']),
             $row['numero_voie'],

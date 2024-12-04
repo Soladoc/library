@@ -33,12 +33,12 @@ abstract class Professionnel extends Compte
     /**
      * Récupère un professionnel de la BDD.
      * @param int $id_professionnel
-     * @return Professionnel|false
+     * @return self|false
      */
-    static function from_db(int $id_professionnel): Professionnel|false
+    static function from_db(int $id_professionnel): self|false
     {
         $compte = parent::from_db($id_professionnel);
-        if ($compte === false or ! $compte instanceof Professionnel) return false;
+        if ($compte === false or ! $compte instanceof self) return false;
         return $compte;
     }
 

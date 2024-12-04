@@ -3,6 +3,7 @@ require_once 'util.php';
 require_once 'model/Commune.php';
 require_once 'model/Signalable.php';
 require_once 'model/Identite.php';
+require_once 'model/Adresse.php';
 
 /**
  * @inheritDoc
@@ -34,7 +35,7 @@ abstract class Compte extends Identite implements Signalable
         parent::__construct($id);
     }
 
-    static function from_db(int $id_compte): Compte|false
+    static function from_db(int $id_compte): self|false
     {
         $stmt = notfalse(DB\connect()->prepare(self::make_select() . ' where c.id = ?'));
         DB\bind_values($stmt, [1 => [$id_compte, PDO::PARAM_INT]]);
@@ -43,7 +44,7 @@ abstract class Compte extends Identite implements Signalable
         return $row === false ? false : self::from_db_row($row);
     }
 
-    static function from_db_by_email(string $email): Membre|false
+    static function from_db_by_email(string $email): self|false
     {
         $stmt = notfalse(DB\connect()->prepare(self::make_select() . ' where c.email = ?'));
         notfalse($stmt->execute([$email]));
@@ -90,7 +91,7 @@ abstract class Compte extends Identite implements Signalable
             join _commune o on o.code = a.code_commune and o.numero_departement = a.numero_departement';
     }
 
-    private static function from_db_row(array $row): Compte
+    private static function from_db_row(array $row): self
     {
         self::require_subclasses();
         $args_compte = [
