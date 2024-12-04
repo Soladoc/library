@@ -37,7 +37,7 @@ abstract class Compte extends Identite implements Signalable
 
     static function from_db(int $id_compte): self|false
     {
-        $stmt = notfalse(DB\connect()->prepare(static::make_select() . ' where c.id = ?'));
+        $stmt = notfalse(DB\connect()->prepare(static::make_select() . ' where '.static::TABLE.'.id = ?'));
         DB\bind_values($stmt, [1 => [$id_compte, PDO::PARAM_INT]]);
         notfalse($stmt->execute());
         $row = $stmt->fetch();
@@ -46,7 +46,7 @@ abstract class Compte extends Identite implements Signalable
 
     static function from_db_by_email(string $email): self|false
     {
-        $stmt = notfalse(DB\connect()->prepare(static::make_select() . ' where c.email = ?'));
+        $stmt = notfalse(DB\connect()->prepare(static::make_select() . ' where '.static::TABLE.'.email = ?'));
         notfalse($stmt->execute([$email]));
         $row = $stmt->fetch();
         return $row === false ? false : static::from_db_row($row);
@@ -55,14 +55,14 @@ abstract class Compte extends Identite implements Signalable
     protected static function make_select(): string
     {
         return 'select
-        c.id,
-        c.id_signalable,
-        c.email,
-        c.mdp_hash,
-        c.nom,
-        c.prenom,
-        c.telephone,
-        c.id_adresse,
+        '.static::TABLE.'.id,
+        '.static::TABLE.'.id_signalable,
+        '.static::TABLE.'.email,
+        '.static::TABLE.'.mdp_hash,
+        '.static::TABLE.'.nom,
+        '.static::TABLE.'.prenom,
+        '.static::TABLE.'.telephone,
+        '.static::TABLE.'.id_adresse,
 
         professionnel.denomination professionnel_denomination,
         professionnel.secteur professionnel_secteur,
@@ -83,7 +83,7 @@ abstract class Compte extends Identite implements Signalable
         a.latitude adresse_latitude,
         a.longitude adresse_longitude
 
-        from ' . self::TABLE . ' c
+        from ' . self::TABLE . '
             left join professionnel using (id)
             left join _prive using (id)
             left join _membre using (id)

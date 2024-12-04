@@ -150,7 +150,7 @@ abstract class Offre extends Model implements Signalable
 
     static function from_db(int $id_offre): self|false
     {
-        $stmt = notfalse(DB\connect()->prepare(self::make_select() . ' where o.id = ?'));
+        $stmt = notfalse(DB\connect()->prepare(self::make_select() . ' where '.static::TABLE.'.id = ?'));
         DB\bind_values($stmt, [1 => [$id_offre, PDO::PARAM_INT]]);
         notfalse($stmt->execute());
         $row = $stmt->fetch();
@@ -164,7 +164,7 @@ abstract class Offre extends Model implements Signalable
      */
     static function from_db_a_la_une(): Iterator
     {
-        $stmt = notfalse(DB\connect()->prepare(self::make_select() . " where o.libelle_abonnement = 'premium' and o.en_ligne order by random() limit 6"));
+        $stmt = notfalse(DB\connect()->prepare(self::make_select() . ' where ' . static::TABLE . ".libelle_abonnement = 'premium' and " . static::TABLE . '.en_ligne order by random() limit 6'));
         notfalse($stmt->execute());
         while (false !== $row = $stmt->fetch()) {
             yield $row['id'] => self::from_db_row($row);
@@ -180,7 +180,7 @@ abstract class Offre extends Model implements Signalable
     static function from_db_all(?int $id_professionnel = null, ?bool $en_ligne = null): Iterator
     {
         $args = DB\filter_null_args(['id_professionnel' => [$id_professionnel, PDO::PARAM_INT], 'en_ligne' => [$en_ligne, PDO::PARAM_BOOL]]);
-        $stmt = notfalse(DB\connect()->prepare(self::make_select() . DB\where_clause(DB\BoolOperator::AND, array_keys($args), 'o')));
+        $stmt = notfalse(DB\connect()->prepare(self::make_select() . DB\where_clause(DB\BoolOperator::AND, array_keys($args), static::TABLE)));
         DB\bind_values($stmt, $args);
         notfalse($stmt->execute());
         while (false !== $row = $stmt->fetch()) {
@@ -197,7 +197,7 @@ abstract class Offre extends Model implements Signalable
     {
         $stmt = notfalse(DB\connect()->prepare(self::make_select() . ' where '
             . implode(' and ', array_map(
-                fn($mot) => 'o.titre ilike ' . DB\quote_string("%$mot%"),
+                fn($mot) => static::TABLE . '.titre ilike ' . DB\quote_string("%$mot%"),
                 explode(' ', trim($motcle)),
             ))));
         notfalse($stmt->execute());
@@ -210,26 +210,26 @@ abstract class Offre extends Model implements Signalable
     {
         // Todo: this is just a proof of concept for single-query inheritance.
         return 'select
-            o.id,
-            o.id_adresse,
-            o.id_image_principale,
-            o.id_professionnel,
-            o.libelle_abonnement,
-            o.titre,
-            o.resume,
-            o.description_detaillee,
-            o.modifiee_le,
-            o.url_site_web,
-            o.periodes_ouverture,
-            o.en_ligne,
-            o.note_moyenne,
-            o.prix_min,
-            o.nb_avis,
-            o.creee_le,
-            o.categorie,
-            o.en_ligne_ce_mois_pendant,
-            o.changement_ouverture_suivant_le,
-            o.est_ouverte,
+            ' . static::TABLE . '.id,
+            ' . static::TABLE . '.id_adresse,
+            ' . static::TABLE . '.id_image_principale,
+            ' . static::TABLE . '.id_professionnel,
+            ' . static::TABLE . '.libelle_abonnement,
+            ' . static::TABLE . '.titre,
+            ' . static::TABLE . '.resume,
+            ' . static::TABLE . '.description_detaillee,
+            ' . static::TABLE . '.modifiee_le,
+            ' . static::TABLE . '.url_site_web,
+            ' . static::TABLE . '.periodes_ouverture,
+            ' . static::TABLE . '.en_ligne,
+            ' . static::TABLE . '.note_moyenne,
+            ' . static::TABLE . '.prix_min,
+            ' . static::TABLE . '.nb_avis,
+            ' . static::TABLE . '.creee_le,
+            ' . static::TABLE . '.categorie,
+            ' . static::TABLE . '.en_ligne_ce_mois_pendant,
+            ' . static::TABLE . '.changement_ouverture_suivant_le,
+            ' . static::TABLE . '.est_ouverte,
 
             _activite.indication_duree activite_indication_duree,
             _activite.age_requis activite_age_requis,
@@ -253,7 +253,7 @@ abstract class Offre extends Model implements Signalable
             
             _visite.indication_duree visite_indication_duree
 
-            from ' . self::TABLE . ' o
+            from ' . self::TABLE . ' 
                 left join _activite using (id)
                 left join _parc_attractions using (id)
                 left join _restaurant using (id)

@@ -53,19 +53,19 @@ final class Adresse extends Model
     static function from_db(int $id_adresse): self|false
     {
         $stmt = notfalse(DB\connect()->prepare('select
-            a.numero_voie,
-            a.complement_numero,
-            a.nom_voie,
-            a.localite,
-            a.precision_int,
-            a.precision_ext,
-            a.latitude,
-            a.longitude,
-            a.numero_departement,
-            a.code_commune,
+            '.static::TABLE.'.numero_voie,
+            '.static::TABLE.'.complement_numero,
+            '.static::TABLE.'.nom_voie,
+            '.static::TABLE.'.localite,
+            '.static::TABLE.'.precision_int,
+            '.static::TABLE.'.precision_ext,
+            '.static::TABLE.'.latitude,
+            '.static::TABLE.'.longitude,
+            '.static::TABLE.'.numero_departement,
+            '.static::TABLE.'.code_commune,
             c.nom from '
-            . self::TABLE . ' a inner join ' . Commune::TABLE
-            . ' c on c.numero_departement = a.numero_departement and c.code = a.code_commune'
+            . self::TABLE . '  inner join ' . Commune::TABLE
+            . ' c on c.numero_departement = '.static::TABLE.'.numero_departement and c.code = '.static::TABLE.'.code_commune'
             . ' where id = ?'));
         DB\bind_values($stmt, [1 => [$id_adresse, PDO::PARAM_INT]]);
         notfalse($stmt->execute());
