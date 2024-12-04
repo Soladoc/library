@@ -170,7 +170,7 @@ class Offre extends Model implements Signalable
      */
     static function from_db_a_la_une(): Iterator
     {
-        $stmt = notfalse(DB\connect()->prepare(self::make_select() . " where libelle_abonnement = 'premium' order by random() limit 5"));
+        $stmt = notfalse(DB\connect()->prepare(self::make_select() . " where libelle_abonnement = 'premium' AND en_ligne = TRUE order by random() limit 3"));
         notfalse($stmt->execute());
         while (false !== $row = $stmt->fetch()) {
             yield $row['id'] => static::from_db_row($row);

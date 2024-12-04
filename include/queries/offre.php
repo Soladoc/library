@@ -41,16 +41,6 @@ function query_offres(?int $id_professionnel = null, ?bool $en_ligne = null): It
     return $stmt->getIterator();
 }
 
-function query_offres_a_une(): Iterator
-{
-    $stmt = notfalse(connect()->prepare("SELECT * FROM offres WHERE libelle_abonnement = 'premium' ORDER BY RANDOM() LIMIT 3"));
-    notfalse($stmt->execute());
-    return $stmt->getIterator();
-}
-
-// Insertions
-
-
 function offre_insert_galerie_image(int $id_offre, int $id_image)
 {
     $stmt = notfalse(connect()->prepare('insert into _galerie (id_offre, id_image) values (?,?)'));
