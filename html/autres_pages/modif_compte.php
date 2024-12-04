@@ -35,7 +35,7 @@ if ($_POST) {
     $new_siren = getarg($_POST, 'new_siren', null, false);
     if ($new_siren) {
         if(!preg_match('#^[0-9]{9}$#', $new_siren)){
-            $error_siren =  'siren incorrect, doit être composé de 9 chiffres'
+            $error_siren =  'siren incorrect, doit être composé de 9 chiffres';
         }
         else {
             DB\query_update_siren($compte->id, $new_siren);
