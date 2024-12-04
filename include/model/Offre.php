@@ -31,7 +31,7 @@ require_once 'model/Tarifs.php';
  *
  * @property-read ?int $nb_avis Le nombre d'avis ce cette offre. Calculé. `null` si cette offre n'existe pas dans la BDD.
  */
-abstract class Offre extends Model implements Signalable
+class Offre extends Model implements Signalable
 {
     protected static function key_fields()
     {
@@ -144,7 +144,8 @@ abstract class Offre extends Model implements Signalable
         $this->galerie->push_to_db();
     }
 
-    function alterner_etat() {
+    function alterner_etat()
+    {
         if ($this->id === null) {
             throw new LogicException('cette offre doit exister dans la bdd');
         }
@@ -155,31 +156,12 @@ abstract class Offre extends Model implements Signalable
 
     static function from_db(int $id_offre): Offre|false
     {
-        if (static::TABLE !== self::TABLE) {
-            $stmt = notfalse(DB\connect()->prepare(self::make_select() . ' where id = ?'));
-            DB\bind_values($stmt, [1 => [$id_offre, PDO::PARAM_INT]]);
-            notfalse($stmt->execute());
-            $row = $stmt->fetch();
-            if ($row === false) return false;
-            return static::from_db_row($row);
-        }
-
-        require_once 'model/Activite.php';
-        require_once 'model/ParcAttractions.php';
-        require_once 'model/Restaurant.php';
-        require_once 'model/Spectacle.php';
-        require_once 'model/Visite.php';
-        $stmt = notfalse(DB\connect()->prepare('select offre_categorie(?)'));
+        $stmt = notfalse(DB\connect()->prepare(self::make_select() . ' where id = ?'));
         DB\bind_values($stmt, [1 => [$id_offre, PDO::PARAM_INT]]);
         notfalse($stmt->execute());
-        return match (notfalse($stmt->fetchColumn())) {
-            null                       => false,
-            Activite::CATEGORIE        => Activite::from_db($id_offre),
-            ParcAttractions::CATEGORIE => ParcAttractions::from_db($id_offre),
-            Restaurant::CATEGORIE      => Restaurant::from_db($id_offre),
-            Spectacle::CATEGORIE       => Spectacle::from_db($id_offre),
-            Visite::CATEGORIE          => Visite::from_db($id_offre),
-        };
+        $row = $stmt->fetch();
+        if ($row === false) return false;
+        return static::from_db_row($row);
     }
 
     /**
@@ -188,29 +170,6 @@ abstract class Offre extends Model implements Signalable
      */
     static function from_db_a_la_une(): Iterator
     {
-        if (static::TABLE === self::TABLE) {
-            require_once 'model/Activite.php';
-            require_once 'model/ParcAttractions.php';
-            require_once 'model/Restaurant.php';
-            require_once 'model/Spectacle.php';
-            require_once 'model/Visite.php';
-            foreach (Activite::from_db_a_la_une() as $id => $row) {
-                yield $id => $row;
-            }
-            foreach (ParcAttractions::from_db_a_la_une() as $id => $row) {
-                yield $id => $row;
-            }
-            foreach (Restaurant::from_db_a_la_une() as $id => $row) {
-                yield $id => $row;
-            }
-            foreach (Spectacle::from_db_a_la_une() as $id => $row) {
-                yield $id => $row;
-            }
-            foreach (Visite::from_db_a_la_une() as $id => $row) {
-                yield $id => $row;
-            }
-            return;
-        }
         $stmt = notfalse(DB\connect()->prepare(self::make_select() . " where libelle_abonnement = 'premium' order by random() limit 5"));
         notfalse($stmt->execute());
         while (false !== $row = $stmt->fetch()) {
@@ -226,29 +185,6 @@ abstract class Offre extends Model implements Signalable
      */
     static function from_db_all(?int $id_professionnel = null, ?bool $en_ligne = null): Iterator
     {
-        if (static::TABLE === self::TABLE) {
-            require_once 'model/Activite.php';
-            require_once 'model/ParcAttractions.php';
-            require_once 'model/Restaurant.php';
-            require_once 'model/Spectacle.php';
-            require_once 'model/Visite.php';
-            foreach (Activite::from_db_all($id_professionnel, $en_ligne) as $id => $row) {
-                yield $id => $row;
-            }
-            foreach (ParcAttractions::from_db_all($id_professionnel, $en_ligne) as $id => $row) {
-                yield $id => $row;
-            }
-            foreach (Restaurant::from_db_all($id_professionnel, $en_ligne) as $id => $row) {
-                yield $id => $row;
-            }
-            foreach (Spectacle::from_db_all($id_professionnel, $en_ligne) as $id => $row) {
-                yield $id => $row;
-            }
-            foreach (Visite::from_db_all($id_professionnel, $en_ligne) as $id => $row) {
-                yield $id => $row;
-            }
-            return;
-        }
         $args = DB\filter_null_args(['id_professionnel' => [$id_professionnel, PDO::PARAM_INT], 'en_ligne' => [$en_ligne, PDO::PARAM_BOOL]]);
         $stmt = notfalse(DB\connect()->prepare(self::make_select() . DB\where_clause(DB\BoolOperator::AND, array_keys($args))));
         DB\bind_values($stmt, $args);
@@ -265,29 +201,6 @@ abstract class Offre extends Model implements Signalable
      */
     static function from_db_by_motcle(string $motcle): Iterator
     {
-        if (static::TABLE === self::TABLE) {
-            require_once 'model/ParcAttractions.php';
-            require_once 'model/Activite.php';
-            require_once 'model/Visite.php';
-            require_once 'model/Spectacle.php';
-            require_once 'model/Restaurant.php';
-            foreach (Activite::from_db_by_motcle($motcle) as $id => $row) {
-                yield $id => $row;
-            }
-            foreach (ParcAttractions::from_db_by_motcle($motcle) as $id => $row) {
-                yield $id => $row;
-            }
-            foreach (Restaurant::from_db_by_motcle($motcle) as $id => $row) {
-                yield $id => $row;
-            }
-            foreach (Spectacle::from_db_by_motcle($motcle) as $id => $row) {
-                yield $id => $row;
-            }
-            foreach (Visite::from_db_by_motcle($motcle) as $id => $row) {
-                yield $id => $row;
-            }
-            return;
-        }
         $stmt = notfalse(DB\connect()->prepare(self::make_select() . ' where '
             . implode(' and ', array_map(
                 fn($mot) => 'titre ilike ' . DB\quote_string("%$mot%"),
@@ -304,11 +217,29 @@ abstract class Offre extends Model implements Signalable
         return 'select * from ' . static::TABLE;  // todo: faire des jointures pour gagner en performance
     }
 
-    /**
-     * @param (string|int|bool)[] $row
-     * @return Offre
-     */
-    protected static abstract function from_db_row(array $row): Offre;
+    protected static function from_db_row(array $row): Offre
+    {
+        return new Offre(
+            $row['id'],
+            Adresse::from_db($row['id_adresse']),
+            Image::from_db($row['id_image_principale']),
+            Professionnel::from_db($row['id_professionnel']),
+            Abonnement::from_db($row['libelle_abonnement']),
+            $row['titre'],
+            $row['resume'],
+            $row['description_detaillee'],
+            $row['url_site_web'] ?? null,
+            MultiRange::parse($row['periodes_ouverture'], FiniteTimestamp::parse(...)),
+            FiniteTimestamp::parse($row['modifiee_le']),
+            $row['en_ligne'],
+            notfalse(parse_float($row['note_moyenne'] ?? null)),
+            notfalse(parse_float($row['prix_min'] ?? null)),
+            FiniteTimestamp::parse($row['creee_le']),
+            Duree::parse($row['en_ligne_ce_mois_pendant']),
+            FiniteTimestamp::parse($row['changement_ouverture_suivant_le'] ?? null),
+            $row['est_ouverte'],
+        );
+    }
 
     const TABLE = 'offres';
 
