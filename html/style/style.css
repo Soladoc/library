@@ -416,6 +416,7 @@ h1 {
 /* Bloc 1 : Informations de l'offre */
 .offer-details {
     display: flex;
+    flex-wrap: wrap;
     border: 2px solid black;
     border-radius: 8px;
     box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
@@ -433,6 +434,9 @@ h1 {
     justify-content: center;
     overflow: hidden;
     position: relative;
+    flex: 1 1 90%;
+    max-width: 90%;
+    text-align: center;
 }
 
 .offer-main-photo img {
@@ -466,12 +470,14 @@ h1 {
 }
 
 .offer-info {
-    flex: 1;
     padding: 20px;
     text-align: justify;
     display: flex;
     flex-direction: column;
     justify-content: center;
+    flex: 1 1 90%;
+    margin-top: 20px;
+    word-wrap: break-word;
 }
 
 .description {
