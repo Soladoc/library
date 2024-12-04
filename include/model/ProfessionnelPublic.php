@@ -1,4 +1,5 @@
 <?php
+require_once 'model/Professionnel.php';
 
 final class ProfessionnelPublic extends Professionnel
 {

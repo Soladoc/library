@@ -1,5 +1,6 @@
 <?php
 require_once 'db.php';
+require_once 'model/Professionnel.php';
 
 final class ProfessionnelPrive extends Professionnel
 {
