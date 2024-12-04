@@ -423,7 +423,7 @@ final class InputOffre extends Input
                     ?>
                     <p><label>Nombre d'attractions&nbsp;: <input <?= $form_attr ?>
                         id="<?= $this->id('nb_attractions') ?>"
-                        name="<?= $this->name('age_requis') ?>"
+                        name="<?= $this->name('nb_attractions') ?>"
                         type="number"
                         min="0"
                         value="<?= $parc_attractions?->nb_attractions ?>"></label></p>
