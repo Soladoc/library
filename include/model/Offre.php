@@ -209,6 +209,7 @@ abstract class Offre extends Model implements Signalable
 
     private static function make_select(): string
     {
+        // Todo: this is just a proof of concept for single-query inheritance.
         return 'select
             id,id_adresse,id_image_principale,id_professionnel,libelle_abonnement,titre,resume,description_detaillee,modifiee_le,url_site_web,periodes_ouverture,en_ligne,note_moyenne,prix_min,nb_avis,creee_le,categorie,en_ligne_ce_mois_pendant,changement_ouverture_suivant_le,est_ouverte,
             

@@ -148,7 +148,7 @@ comment on function insert_compte (record) is
 'Insère un compte.
 `new` contient les valeurs du compte.';
 
-create procedure update_offre (old record, inout new record) as $$
+create function update_offre (old record, inout new record) as $$
 begin
     if old.id <> new.id then
         raise 'Ne peut pas update id.';
@@ -182,7 +182,7 @@ begin
 end
 $$ language plpgsql;
 
-create procedure update_avis(old record, inout new record) as $$
+create function update_avis(old record, inout new record) as $$
 begin
     if old.id <> new.id or old.id_offre <> new.id_offre or old.id_membre_auteur <> new.id_membre_auteur then
         raise 'Ne peut pas update id ou id_offre ou id_membre_auteur';
