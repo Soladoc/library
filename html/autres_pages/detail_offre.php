@@ -99,7 +99,7 @@ $id_membre_co = Auth\id_membre_connecte();
 
             <!-- Formulaire d'avis -->
             <div class="review-form">
-                <h3>Laisser un avis</h3>
+                <h3>Laisser un avis</h3><br>
                 <div class="message">
                     <?php if (isset($error_message)): ?>
                     <p class="error-message"><?= htmlspecialchars($error_message) ?></p>
