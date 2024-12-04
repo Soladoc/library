@@ -507,7 +507,13 @@ h1 {
 }
 
 .review-form {
-    margin-bottom: 20px;
+    border: 2px solid black;
+    border-radius: 8px;
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
+    padding: 20px;
+    margin: 20px auto;
+    max-width: 80%;
+    text-align: center;
 }
 
 textarea {
