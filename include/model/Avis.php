@@ -123,7 +123,7 @@ class Avis extends Model
             a.lu,
             a.blackliste,
             a.pseudo_auteur,
-            a.publie_le
+            a.publie_le,
 
             v.id_restaurant,
             v.note_cuisine,
