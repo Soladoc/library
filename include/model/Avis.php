@@ -57,7 +57,7 @@ class Avis extends Model
 
     static function from_db(int $id_avis): self|false
     {
-        $stmt = notfalse(DB\connect()->prepare(self::make_select() . ' where a.id = ?'));
+        $stmt = notfalse(DB\connect()->prepare(self::make_select() . ' where '.static::TABLE.'.id = ?'));
         DB\bind_values($stmt, [1 => [$id_avis, PDO::PARAM_INT]]);
         notfalse($stmt->execute());
         $row = $stmt->fetch();
@@ -72,7 +72,7 @@ class Avis extends Model
      */
     static function from_db_single(int $id_membre_auteur, int $id_offre): self|false
     {
-        $stmt = notfalse(DB\connect()->prepare(self::make_select() . ' where id_membre_auteur = ? and id_offre = ?'));
+        $stmt = notfalse(DB\connect()->prepare(self::make_select() . ' where '.static::TABLE.'.id_membre_auteur = ? and '.static::TABLE.'.id_offre = ?'));
         DB\bind_values($stmt, [1 => [$id_membre_auteur, PDO::PARAM_INT], 2 => [$id_offre, PDO::PARAM_INT]]);
         notfalse($stmt->execute());
         $row = $stmt->fetch();
@@ -113,24 +113,24 @@ class Avis extends Model
         self::require_subclasses();
         // todo: faire des jointures pour gagner en performance
         return 'select
-            a.id,
-            a.commentaire,
-            a.note,
-            a.date_experience,
-            a.contexte,
-            a.id_membre_auteur,
-            a.id_offre,
-            a.lu,
-            a.blackliste,
-            a.pseudo_auteur,
-            a.publie_le,
+            '.static::TABLE.'.id,
+            '.static::TABLE.'.commentaire,
+            '.static::TABLE.'.note,
+            '.static::TABLE.'.date_experience,
+            '.static::TABLE.'.contexte,
+            '.static::TABLE.'.id_membre_auteur,
+            '.static::TABLE.'.id_offre,
+            '.static::TABLE.'.lu,
+            '.static::TABLE.'.blackliste,
+            '.static::TABLE.'.pseudo_auteur,
+            '.static::TABLE.'.publie_le,
 
             v.id_restaurant,
             v.note_cuisine,
             v.note_service,
             v.note_ambiance,
             v.note_qualite_prix
-         from ' . self::TABLE . ' a
+         from ' . self::TABLE . '
             left join ' . AvisRestaurant::TABLE . ' v using (id)';
     }
 
