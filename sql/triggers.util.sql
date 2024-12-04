@@ -20,7 +20,7 @@ begin
     insert into _signalable default values returning id into new.id;
     insert into _avis (
         id,
-        p_id_offre,
+        id_offre,
         id_membre_auteur,
         commentaire,
         date_experience,
