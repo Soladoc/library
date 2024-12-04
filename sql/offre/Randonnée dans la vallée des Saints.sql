@@ -92,7 +92,7 @@ Rejoignez-nous pour une journée mémorable où nature, histoire et gastronomie 
         insert into
             tarif (nom, id_offre, montant)
         values
-            ('adulte', (table id_offre), 0)
+            ('adulte', (table id_offre), 1.2)
     )
 insert into
     _ouverture_hebdomadaire (id_offre, dow, horaires)

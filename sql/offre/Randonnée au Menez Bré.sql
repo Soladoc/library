@@ -82,7 +82,7 @@ Rejoignez-nous pour une aventure inoubliable au cœur de la Bretagne et découvr
             tarif (nom, id_offre, montant)
         values
             ('adulte', (table id_offre), 5),
-            ('enfant', (table id_offre), 0)
+            ('enfant', (table id_offre), 1.3)
     )
 insert into
     _changement_etat (id_offre, fait_le)
