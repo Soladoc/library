@@ -94,9 +94,9 @@ if ($offre) {
                             </div>
 
                             <!-- Galerie d'images -->
-                            <?php foreach ($galerie as $id_image): ?>
+                            <?php foreach ($galerie as $image): ?>
                                 <div class="carousel-slide">
-                                    <?php (new ImageView(Image::from_db($id_image)))->put_img() ?>
+                                    <?php (new ImageView(Image::from_db($image)))->put_img() ?>
                                 </div>
                             <?php endforeach ?>
                         </div>

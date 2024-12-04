@@ -5,17 +5,13 @@ require_once 'component/Page.php';
 require_once 'component/ImageView.php';
 require_once 'queries.php';
 
-$args = [
-    'id' => getarg($_GET, 'id', arg_int()),
-];
+$offre = notfalse(Offre::from_db(getarg($_GET, 'id', arg_int())));
 
 if ($_POST) {
-    $args += [
-        'commentaire' => getarg($_POST, 'commentaire'),
-        'date_avis'   => getarg($_POST, 'date'),
-        'note'        => getarg($_POST, 'rating', arg_int()),
-        'contexte'    => getarg($_POST, 'contexte'),
-    ];
+    $commentaire = getarg($_POST, 'commentaire');
+    $date_avis   = getarg($_POST, 'date');
+    $note        = getarg($_POST, 'rating', arg_int());
+    $contexte    = getarg($_POST, 'contexte');
     if (($id_membre_co = Auth\id_membre_connecte()) === null) {
         $error_message = 'Veuillez vous connecter pour publier un avis.';
     } else {
@@ -23,32 +19,17 @@ if ($_POST) {
         $stmt   = DB\connect()->prepare($querry);
         $stmt->execute([
             $id_membre_co,
-            $args['id'],
-            $args['commentaire'],
-            $args['date_avis'],
-            $args['note'],
-            $args['contexte']
+            $offre->id,
+            $commentaire,
+            $date_avis,
+            $note,
+            $context,
         ]);
         $success_message = 'Avis ajouté avec succès !';
     }
 }
 
-$offre = Offre::from_db($args['id']);
-if ($offre === false) {
-    html_error("Pas d'offre n°{$args['id']}");
-}
-assert($offre->id === $args['id']);
-
-$titre           = $offre->titre;
-$description     = $offre->description_detaillee;
-$site_web        = $offre->url_site_web;
-$image_pricipale = $offre->image_principale;
-$adresse         = $offre->adresse;
-
-$galerie = DB\query_galerie($args['id']);
-$avis    = DB\query_avis();
-
-$page = new Page($titre,
+$page = new Page($offre->titre,
     ['https://unpkg.com/leaflet@1.7.1/dist/leaflet.css'],
     [
         'https://unpkg.com/leaflet@1.7.1/dist/leaflet.js' => 'async',
@@ -62,11 +43,6 @@ $page = new Page($titre,
 <?php $page->put_head() ?>
 <body>
     <?php
-    // TODO suprimmer ca quand romain aura sort that out
-    // echo '<pre>';
-    // print_r($galerie);
-    // echo '</pre>';
-
     $page->put_header();
     ?>
     <!-- Offer Details -->
@@ -77,13 +53,13 @@ $page = new Page($titre,
                     <div class="carousel">
                         <!-- Image principale -->
                         <div class="carousel-slide">
-                                <?php (new ImageView($image_pricipale))->put_img() ?>
+                                <?php (new ImageView($offre->image_principale))->put_img() ?>
                             </div>
 
                             <!-- Galerie d'images -->
-                            <?php foreach ($galerie as $id_image): ?>
+                            <?php foreach ($offre->galerie as $image): ?>
                                 <div class="carousel-slide">
-                                    <?php (new ImageView(Image::from_db($id_image)))->put_img() ?>
+                                    <?php (new ImageView($image))->put_img() ?>
                                 </div>
                             <?php endforeach ?>
                     </div>
@@ -97,8 +73,8 @@ $page = new Page($titre,
 
 
             <div class="offer-info">
-                <h2><?= htmlspecialchars($titre) ?></h2>
-                <p class="description"><?= nl2br(htmlspecialchars($description)) ?></p>
+                <h2><?= htmlspecialchars($offre->titre) ?></h2>
+                <p class="description"><?= nl2br(htmlspecialchars($offre->description_detaillee)) ?></p>
             </div>
 
         </section>
@@ -108,8 +84,8 @@ $page = new Page($titre,
             <h3>Emplacement et coordonnées</h3>
             <!-- <div id="map" class="map"></div> -->
             <div class="contact-info">
-                <p><strong>Adresse&nbsp;:</strong> <?= $adresse->format() ?></p>
-                <p><strong>Site web&nbsp;:</strong> <a href="<?= $site_web ?>"><?= $site_web ?></a></p>
+                <p><strong>Adresse&nbsp;:</strong> <?= $offre->adresse->format() ?></p>
+                <p><strong>Site web&nbsp;:</strong> <a href="<?= $offre->url_site_web ?>"><?= $offre->url_site_web ?></a></p>
                 <!-- <p><strong>Téléphone&nbsp;:</strong> 02 96 46 63 80</p> -->
             </div>
         </section>
@@ -126,7 +102,7 @@ $page = new Page($titre,
                     <p class="success-message"><?= htmlspecialchars($success_message) ?></p>
                     <?php endif ?>
                 </div>
-                <form method="post" action="detail_offre.php?id=<?= $args['id'] ?>">
+                <form method="post" action="detail_offre.php?id=<?= $offre->id ?>">
                     <textarea name="commentaire" placeholder="Votre avis..." required></textarea>
                     <label for="rating">Note&nbsp;:</label>
                     <select name="rating" id="rating" required>
@@ -158,7 +134,7 @@ $page = new Page($titre,
                 <h4>Avis de la communauté</h4>
                 <div class="review-summary">
                 <h4>Résumé des notes</h4>
-                <p>Nombre d'avis : <?= DB\query_avis_count($args['id']) ?></p>
+                <p>Nombre d'avis : <?= $offre->nb_avis ?></p>
                 <p>Moyenne&nbsp;: <?php if ($offre->note_moyenne !== null) { echo round($offre->note_moyenne, 2); } else { echo 0; } ?>/5 ★</p>
                 <div class="rating-distribution">
                     <?php $avis = DB\query_avis(id_offre: $offre->id) ?>
@@ -176,7 +152,7 @@ $page = new Page($titre,
                             <p><?= htmlspecialchars($avis_temp['commentaire']) ?></p>
                             <p class="review-date"><?= htmlspecialchars($avis_temp['date_experience']) ?></p>
                             <?php if (($id_membre_co = Auth\id_membre_connecte()) !== null && $avis_temp['id_membre_auteur'] === $id_membre_co) { ?>
-                            <form method="post" action="/avis/modifier.php?avis_id=<?= $avis_temp['id'] ?>&offre=<?= $args['id'] ?>">
+                            <form method="post" action="/avis/modifier.php?avis_id=<?= $avis_temp['id'] ?>&offre=<?= $offre->id ?>">
                                 <button type="submit" class="btn-modif">Modifier</button>
                                 <button type="submit" name="action" value="supprimer">Supprimer</button>
                             </form>
