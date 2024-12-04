@@ -156,6 +156,8 @@ final class InputOffre extends Input
             ),
             ParcAttractions::CATEGORIE => new ParcAttractions(
                 ...$args,
+                getarg($get_or_post, 'age_requis', arg_int(1), required: false),
+                getarg($get_or_post, 'nb_attractions', arg_int(0)),
                 image_plan: $this->input_image_plan->get($get_or_post)[0],
             ),
             Spectacle::CATEGORIE => new Spectacle(
@@ -419,6 +421,12 @@ final class InputOffre extends Input
                     $parc_attractions = $current;
                     ?>
                     ?>
+                    <p><label>Nombre d'attractions&nbsp;: <input <?= $form_attr ?>
+                        id="<?= $this->id('nb_attractions') ?>"
+                        name="<?= $this->name('age_requis') ?>"
+                        type="number"
+                        min="0"
+                        value="<?= $parc_attractions?->nb_attractions ?>"></label></p>
                     <p><label>Âge requis&nbsp;: <input <?= $form_attr ?>
                         id="<?= $this->id('age_requis') ?>"
                         name="<?= $this->name('age_requis') ?>"
