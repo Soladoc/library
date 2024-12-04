@@ -16,7 +16,7 @@ $page = new Page("offre : {$offre->id}",
 
 
 $input_offre = new InputOffre(
-    $categorie,
+    $offre['categorie'],
     Professionnel::from_db(Auth\exiger_connecte_pro()),
     form_id: 'f',
 );
