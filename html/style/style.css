@@ -423,7 +423,7 @@ h1 {
     max-width: 80%;
     padding: 20px;
     justify-content: center;
-    flex-direction: column;
+    align-items: center;
     margin: 20px auto;
     background-color: white;
     overflow: hidden;
