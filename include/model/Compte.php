@@ -87,7 +87,7 @@ abstract class Compte extends Identite implements Signalable
             left join professionnel using (id)
             left join _prive using (id)
             left join _membre using (id)
-            join _adresse a on a.id = c.id_adresse
+            join _adresse a on a.id = '.static::TABLE.'.id_adresse
             join _commune o on o.code = a.code_commune and o.numero_departement = a.numero_departement';
     }
 

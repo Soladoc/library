@@ -28,7 +28,7 @@ final class Membre extends Compte
      */
     static function from_db_by_pseudo(string $pseudo): self|false
     {
-        $stmt = notfalse(DB\connect()->prepare(self::make_select() . ' where m.pseudo = ?'));
+        $stmt = notfalse(DB\connect()->prepare(self::make_select() . ' where ' . static::TABLE . '.pseudo = ?'));
         DB\bind_values($stmt, [1 => [$pseudo, PDO::PARAM_STR]]);
         notfalse($stmt->execute());
         $row = $stmt->fetch();
@@ -38,15 +38,15 @@ final class Membre extends Compte
     protected static function make_select(): string
     {
         return 'select
-        m.id,
-        m.id_signalable,
-        m.email,
-        m.mdp_hash,
-        m.nom,
-        m.prenom,
-        m.telephone,
-        m.id_adresse,
-        m.pseudo,
+        ' . static::TABLE . '.id,
+        ' . static::TABLE . '.id_signalable,
+        ' . static::TABLE . '.email,
+        ' . static::TABLE . '.mdp_hash,
+        ' . static::TABLE . '.nom,
+        ' . static::TABLE . '.prenom,
+        ' . static::TABLE . '.telephone,
+        ' . static::TABLE . '.id_adresse,
+        ' . static::TABLE . '.pseudo,
 
         a.code_commune adresse_code_commune,
         a.numero_departement adresse_numero_departement,
@@ -60,8 +60,8 @@ final class Membre extends Compte
         a.latitude adresse_latitude,
         a.longitude adresse_longitude
 
-        from membre m
-            join _adresse a on a.id = m.id_adresse
+        from membre
+            join _adresse a on a.id = ' . static::TABLE . '.id_adresse
             join _commune c on c.code = a.code_commune and c.numero_departement = a.numero_departement';
     }
 
