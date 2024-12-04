@@ -33,48 +33,44 @@ if ($_POST) {
     <!-- Offer Details -->
     <main>
         <section class="modif">
-            <form id="toggleForm" method="post">
-                <?php
-                $bandeau_class = $offre->en_ligne ? 'vert' : 'rouge';
-                ?>
-                <div class="bandeau-etat <?= $bandeau_class ?>">
-                    <p class="etat"><?= $offre->en_ligne ? 'Offre en ligne' : 'Offre hors ligne' ?></p>
-                    <button type="button" class="bouton" onclick="enableValidate()">
-                        <?= $offre->en_ligne ? 'Mettre hors ligne' : 'Mettre en ligne' ?>
-                    </button>
-                    <form id="toggleForm" method="post" style="display: inline;">
-                        <button type="submit" name="valider" class="bouton" id="validateButton" disabled>Valider</button>
-                    </form>
-                    <a class="bouton modifier" href="modif_offre.php?id=<?= $offre->id ?>&categorie=<?= $offre::CATEGORIE ?>">Modifier</a>
-                </div>
-            </form>
+            <div class="bandeau-etat <?= $offre->en_ligne ? 'vert' : 'rouge' ?>">
+                <p class="etat"><?= $offre->en_ligne ? 'Offre en ligne' : 'Offre hors ligne' ?></p>
+                <button type="button" class="bouton" onclick="enableValidate()">
+                    <?= $offre->en_ligne ? 'Mettre hors ligne' : 'Mettre en ligne' ?>
+                </button>
+                <form id="toggleForm" method="post" style="display: inline;">
+                    <button type="submit" name="valider" class="bouton" id="validateButton" disabled>Valider</button>
+                </form>
+                <a class="bouton modifier" href="modif_offre.php?id=<?= $offre->id ?>&categorie=<?= $offre::CATEGORIE ?>">Modifier</a>
+            </div>
+        </section>
             
-            <section class="offer-details">
-                <section class="offer-main-photo">
-                    <div class="carousel-container">
-                        <div class="carousel">
-                            <div class="carousel-slide">
-                                <?php (new ImageView($offre->image_principale))->put_img() ?>
-                            </div>
-                            <div class="carousel-slide">
-                                <?php (new ImageView($offre->image_principale))->put_img() ?>
-                            </div>
-
-                            <!-- Galerie d'images -->
-                            <?php foreach ($offre->galerie as $image): ?>
-                                <div class="carousel-slide">
-                                    <?php (new ImageView($image))->put_img() ?>
-                                </div>
-                            <?php endforeach ?>
+        <section class="offer-details">
+            <section class="offer-main-photo">
+                <div class="carousel-container">
+                    <div class="carousel">
+                        <div class="carousel-slide">
+                            <?php (new ImageView($offre->image_principale))->put_img() ?>
+                        </div>
+                        <div class="carousel-slide">
+                            <?php (new ImageView($offre->image_principale))->put_img() ?>
                         </div>
 
-                        <!-- Boutons de navigation -->
-                        <button class="carousel-prev" aria-label="Image précédente">❮</button>
-                        <button class="carousel-next" aria-label="Image suivante">❯</button>
+                            <!-- Galerie d'images -->
+                        <?php foreach ($offre->galerie as $image): ?>
+                            <div class="carousel-slide">
+                                <?php (new ImageView($image))->put_img() ?>
+                            </div>
+                        <?php endforeach ?>
                     </div>
-                </section>
 
-                <div class="offer-info">
+                    <!-- Boutons de navigation -->
+                    <button class="carousel-prev" aria-label="Image précédente">❮</button>
+                    <button class="carousel-next" aria-label="Image suivante">❯</button>
+                </div>
+            </section>
+
+            <div class="offer-info">
                 <h2><?= htmlspecialchars($offre->titre) ?></h2>
                 <p class="description"><?= nl2br(htmlspecialchars($offre->description_detaillee)) ?></p>
             </div>
@@ -145,13 +141,12 @@ if ($_POST) {
     function enableValidate() {
         document.getElementById('validateButton').disabled = false;
     }
+
     document.getElementById('validateButton').addEventListener('click', function(e) {
-        e.preventDefault();
-        if (!this.disabled) {
-            document.getElementById('toggleForm').submit();
+        if (this.disabled) {
+            e.preventDefault();
         }
     });
     </script>
 </body>
-
 </html>
