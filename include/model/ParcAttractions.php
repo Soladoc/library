@@ -13,6 +13,11 @@ final class ParcAttractions extends Offre
         'image_plan'     => [['id', 'id_image_plan',  PDO::PARAM_INT]],
     ];
 
+    function insert(): void {
+        $this->image_plan->insert();
+        parent::insert();
+    }
+
     /**
      * Construit une nouvelle activité.
      * @param ?int $id
