@@ -14,6 +14,14 @@ require_once 'queries.php';
 
 $offre = notfalse(Offre::from_db(getarg($_GET, 'id', arg_int())));
 
+$input_rating = new InputNote(name: 'rating');
+if ($offre instanceof Restaurant) {
+    $input_note_cuisine      = new InputNote(name: 'note_cuisine');
+    $input_note_service      = new InputNote(name: 'note_service');
+    $input_note_ambiance     = new InputNote(name: 'note_ambiance');
+    $input_note_qualite_prix = new InputNote(name: 'note_qualite_prix');
+}
+
 if ($_POST) {
     if (null === $id_membre_co = Auth\id_membre_connecte()) {
         $error_message = 'Veuillez vous connecter pour publier un avis.';
@@ -21,7 +29,7 @@ if ($_POST) {
         $args_avis = [
             null,
             getarg($_POST, 'commentaire'),
-            getarg($_POST, 'rating', arg_int()),
+            $input_rating->get($_POST),
             Date::parse(getarg($_POST, 'date')),
             getarg($_POST, 'contexte'),
             Membre::from_db($id_membre_co),
@@ -30,10 +38,10 @@ if ($_POST) {
         $avis = $offre instanceof Restaurant
             ? new AvisRestaurant(
                 $args_avis,
-                getarg($_POST, 'note_cuisine', arg_int()),
-                getarg($_POST, 'note_service', arg_int()),
-                getarg($_POST, 'note_ambiance', arg_int()),
-                getarg($_POST, 'note_qualite_prix', arg_int()),
+                $input_note_cuisine->get($_POST),
+                $input_note_service->get($_POST),
+                $input_note_ambiance->get($_POST),
+                $input_note_qualite_prix->get($_POST),
             )
             : new Avis(...$args_avis);
         $avis->push_to_db();
@@ -115,12 +123,12 @@ $id_membre_co = Auth\id_membre_connecte();
                 </div>
                 <form method="post">
                     <textarea name="commentaire" placeholder="Votre avis..." required></textarea>
-                    <label>Note&nbsp;: <?php (new InputNote(name: 'rating'))->put() ?></label>
+                    <label>Note&nbsp;: <?php $input_rating->put() ?></label>
                     <?php if ($offre instanceof Restaurant) { ?>
-                        <label>Note cuisine&nbsp;: <?php (new InputNote(name: 'note_cuisine'))->put() ?></label>
-                        <label>Note service&nbsp;: <?php (new InputNote(name: 'note_service'))->put() ?></label>
-                        <label>Note ambiance&nbsp;: <?php (new InputNote(name: 'note_ambiance'))->put() ?></label>
-                        <label>Note qualité prix&nbsp;: <?php (new InputNote(name: 'note_qualite_prix'))->put() ?></label>
+                        <label>Note cuisine&nbsp;: <?php $input_note_cuisine->put() ?></label>
+                        <label>Note service&nbsp;: <?php $input_note_service->put() ?></label>
+                        <label>Note ambiance&nbsp;: <?php $input_note_ambiance->put() ?></label>
+                        <label>Note qualité prix&nbsp;: <?php $input_note_qualite_prix->put() ?></label>
                     <?php } ?>
                     <label for="contexte">Contexte&nbsp;:</label>
                     <select name="contexte" id="contexte" required>
@@ -146,10 +154,10 @@ $id_membre_co = Auth\id_membre_connecte();
                     <h4>Résumé des notes</h4>
                     <p>Nombre d'avis : <?= $offre->nb_avis ?></p>
                     <p>Moyenne&nbsp;: <?php if ($offre->note_moyenne !== null) {
-                        echo round($offre->note_moyenne, 2);
-                    } else {
-                        echo 0;
-                    } ?>/5 ★</p>
+    echo round($offre->note_moyenne, 2);
+} else {
+    echo 0;
+} ?>/5 ★</p>
                     <div class="rating-distribution">
                         <?php $avis = DB\query_avis(id_offre: $offre->id) ?>
                         <p>5 étoiles&nbsp;: <?= count(array_filter($avis, fn($a) => $a['note'] === 5)) ?> avis.</p>

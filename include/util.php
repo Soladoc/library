@@ -144,13 +144,14 @@ function arg_check(callable $check): callable
 /**
  * Crée un filtre `getarg` pour un entier.
  * @param ?int $min_range La valeur minimale de l'entier ou `null` pour pas de minimum.
+ * @param ?int $max_range La valeur maximale de l'entier ou `null` pour pas de maximum.
  * @return callable(string, mixed): ?int Un filter utilisable par la fonction `getarg`.
  * @throws DomainException En cas de mauvaise syntaxe.
  */
-function arg_int(?int $min_range = null): callable
+function arg_int(?int $min_range = null, ?int $max_range = null): callable
 {
-    return function (string $name, mixed $value) use ($min_range) {
-        if (false === ($val = parse_int($value, $min_range))) {
+    return function (string $name, mixed $value) use ($min_range, $max_range) {
+        if (false === ($val = parse_int($value, $min_range, $max_range))) {
             html_error("argument $name invalide: " . var_export($value, true));
         }
         return $val;
@@ -176,15 +177,16 @@ function arg_float(?int $min_range = null)
  * Parse un entier.
  * @param ?string $output Un entier sous forme de chaîne.
  * @param ?int $min_range La valeur minimale de l'entier ou `null` pour pas de minimum.
+ * @param ?int $max_range La valeur maximale de l'entier ou `null` pour pas de maximum.
  * @return int|null|false L'entier parsé ou `false` en cas de mauvaise syntaxe, ou `null` si `$value` était `null` (à l'instar de PostgreSQL, cette fonction propage `null`).
  */
-function parse_int(?string $output, ?int $min_range = null): int|null|false
+function parse_int(?string $output, ?int $min_range = null, ?int $max_range): int|null|false
 {
     // remove trailing zeros before filtering
     return $output === null ? null : filter_var(
         notnull(preg_replace('/^\s*0+(?=\d)/', '', $output)),
         FILTER_VALIDATE_INT,
-        $min_range === null ? 0 : ['min_range' => $min_range],
+        array_filter(['min_range' => $min_range, 'max_range' => $max_range], fn($x) => $x !== null),
     );
 }
 

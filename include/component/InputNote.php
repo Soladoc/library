@@ -1,14 +1,20 @@
 <?php
+require_once 'util.php';
 
 /**
  * @extends Input<int>
  */
-final class InputNote extends Input {
+final class InputNote extends Input
+{
+    public function get(array $get_or_post, bool $required = true): int {
+        return getarg($get_or_post, $this->name, arg_int(1, 5), $required);
+    }
 
     /**
      * @inheritDoc
      */
-    public function put(mixed $current = null): void {
+    public function put(mixed $current = null): void
+    {
         $form_attr = $this->form_id ? "form=\"$this->form_id\"" : '';
 ?>
 <select <?= $form_attr ?>
