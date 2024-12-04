@@ -92,6 +92,7 @@ header #header_pro{
 }
 
 .error {
+    margin: 0;
     color: #ca2200;
 }
 
