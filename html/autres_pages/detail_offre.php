@@ -22,7 +22,7 @@ if ($_POST) {
             null,
             $commentaire,
             $note,
-            FiniteTimestamp::parse($date_avis),
+            Date::parse($date_avis),
             $contexte,
             false,
             false,

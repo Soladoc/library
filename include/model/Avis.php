@@ -41,7 +41,7 @@ class Avis extends Model
         protected ?int $id,
         readonly string $commentaire,
         readonly int $note,
-        readonly FiniteTimestamp $date_experience,
+        readonly Date $date_experience,
         readonly string $contexte,
         readonly bool $lu,
         readonly bool $blackliste,
