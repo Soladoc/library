@@ -103,7 +103,7 @@ $page = new Page($offre->titre,
                     <p class="success-message"><?= htmlspecialchars($success_message) ?></p>
                     <?php endif ?>
                 </div>
-                <form method="post" action="detail_offre.php?id=<?= $offre->id ?>">
+                <form method="post">
                     <textarea name="commentaire" placeholder="Votre avis..." required></textarea>
                     <label for="rating">Note&nbsp;:</label>
                     <select name="rating" id="rating" required>
