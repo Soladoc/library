@@ -123,30 +123,30 @@ function filterOffers() {
         }
         // Filtrage par mot-clé (souple)
         
-        if (keywordParts.length > 0) {
-            const lowerCaseTitle = (offer.title /*|| ''*/).toLowerCase(); // Assure que le titre est en minuscule
-            // const lowerCaseCategory = (offer.categorie || '').toLowerCase();
-            // const lowerCaseTags = (offer.tags || []).map(tag => tag.toLowerCase());
+        // if (keywordParts.length > 0) {
+        //     const lowerCaseTitle = (offer.title || '').toLowerCase(); // Assure que le titre est en minuscule
+        //     const lowerCaseCategory = (offer.categorie || '').toLowerCase();
+        //     const lowerCaseTags = (offer.tags || []).map(tag => tag.toLowerCase());
 
-            // Vérifier si un mot-clé est présent dans le titre, la catégorie ou les tags
-            const matchesKeyword = keywordParts.some(part =>
-                lowerCaseTitle.includes(part) //||
-                // lowerCaseCategory.includes(part) ||
-                // lowerCaseTags.some(tag => tag.includes(part))
-            );
+        //     // Vérifier si un mot-clé est présent dans le titre, la catégorie ou les tags
+        //     const matchesKeyword = keywordParts.some(part =>
+        //         lowerCaseTitle.includes(part) //||
+        //         // lowerCaseCategory.includes(part) ||
+        //         // lowerCaseTags.some(tag => tag.includes(part))
+        //     );
 
-            if (!matchesKeyword) {
-                return false;
-            }
-        }
-        // // Filtrage par mot-clé
-        // if (keywordInput.length > 0) {
-        //     const matchesCategory = offer.categorie && offer.categorie.toLowerCase().includes(keywordInput);
-        //     const matchesTitre = offer.titre && offer.titre.toLowerCase().includes(keywordInput);
-        //     if (!matchesCategory && !matchesTitre) {
+        //     if (!matchesKeyword) {
         //         return false;
         //     }
         // }
+        // Filtrage par mot-clé
+        if (keywordParts.length > 0) {
+            const matchesCategory = offer.categorie && offer.categorie.toLowerCase().includes(keywordInput);
+            const matchesTitre = offer.titre && offer.titre.toLowerCase().includes(keywordInput);
+            if (!matchesCategory && !matchesTitre) {
+                return false;
+            }
+        }
 
         // Si tout est valide, inclure cette offre
         return true;
