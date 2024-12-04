@@ -30,22 +30,23 @@ final class InputImage extends Input
         $files = getarg($_FILES, $this->name);
         $files = $this->multiple ? soa_to_aos($files) : [$files];
 
-        return  array_map(fn($file, $current_id_image) => new Image(
+        return $files[0]['name'] ? array_map(fn($file, $current_id_image) => new Image(
             $current_id_image,
             getarg($file, 'size', arg_int()),
             explode('/', $file['type'], 2)[1],
             getarg($get_or_post, "{$this->name}_legende", required: false),
             $file['tmp_name'],
-        ), $files, $current_id_images ?? []);
+        ), $files, $current_id_images ?? []) : [];
     }
 
     /**
      * @inheritDoc
      */
-    function put(mixed $current = null): void
+    function put(mixed $current = null, bool $required = true): void
     {
+        $current ??= [];
         $form_attr = $this->form_id ? "form=\"$this->form_id\"" : '';
-?>
+        ?>
 <fieldset id="<?= $this->id ?>" class="input-image">
     <legend><?= $this->fieldset_legend ?></legend>
     <p>
@@ -53,7 +54,7 @@ final class InputImage extends Input
             name="<?= $this->name . ($this->multiple ? '[]' : '') ?>"
             type="file"
             accept="image/*"
-            required
+            <?= $required ? 'required' : '' ?>
             <?= $this->multiple ? 'multiple' : '' ?>>
     </p>
     <p>
@@ -61,10 +62,11 @@ final class InputImage extends Input
             id="<?= $this->id ?>_legende"
             name="<?= $this->name ?>_legende"
             type="text"
-            placeholder="Légende">
+            placeholder="Légende"
+            value="<?= ($current[0] ?? null)?->legende ?>">
     </p>
     <div id="<?= $this->id ?>-preview">
-        <?php foreach ($current ?? [] as $image) {
+        <?php foreach ($current as $image) {
             (new ImageView($image))->put_img();
         } ?>
     </div>

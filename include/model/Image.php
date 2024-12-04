@@ -69,8 +69,6 @@ final class Image extends Model
         return "/images_utilisateur/$this->id.$this->mime_subtype";
     }
 
-    const TABLE = '_image';
-
     /**
      * Retourne la représentation data-uri du fichier image spécifié.
      * @param string $path Chemin du fichier
@@ -124,4 +122,6 @@ final class Image extends Model
         $result .= base64_encode($data);
         return $result;
     }
+
+    const TABLE = '_image';
 }

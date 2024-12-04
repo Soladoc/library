@@ -14,7 +14,7 @@ $id_professionnel = Auth\exiger_connecte_pro();
 $est_prive        = ProfessionnelPrive::exists($id_professionnel);
 
 $categorie = getarg($_GET, 'categorie', arg_check(f_is_in(array_keys(CATEGORIES_OFFRE))));
-$id_offre  = getarg($_GET, 'id', arg_int());
+$offre = notfalse(Offre::from_db($id_offre  = getarg($_GET, 'id', arg_int())));
 
 $input_offre = new InputOffre(
     $categorie,
@@ -23,7 +23,7 @@ $input_offre = new InputOffre(
 );
 
 if ($_POST) {
-    $offre = $input_offre->get($_POST, $id_offre);
+    $offre = $input_offre->get($_POST, $offre);
     $offre->push_to_db();
 }
 ?>
@@ -35,7 +35,7 @@ if ($_POST) {
 <body>
     <?php $page->put_header() ?>
     <main>
-        <?php $input_offre->put(notfalse(Offre::from_db($id_offre))) ?>
+        <?php $input_offre->put($offre) ?>
         
         <form id="f" method="post" enctype="multipart/form-data">
             <button type="submit">Valider</button>
