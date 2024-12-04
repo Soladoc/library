@@ -24,7 +24,7 @@ execute function visite_insert ();
 -- Update
 create function visite_update () returns trigger as $$
 begin
-    call update_offre(old, new);
+    new = update_offre(old, new);
 
     update _visite
     set

@@ -26,7 +26,7 @@ execute function spectacle_insert ();
 -- Update
 create function spectacle_update () returns trigger as $$
 begin
-    call update_offre(old, new);
+    new = update_offre(old, new);
 
     update _spectacle
     set
