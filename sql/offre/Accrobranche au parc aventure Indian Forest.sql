@@ -73,3 +73,9 @@ values
     ((table id_offre), 'nature'),
     ((table id_offre), 'plein air'),
     ((table id_offre), 'aventure');
+
+insert into
+    _changement_etat (id_offre, fait_le)
+values
+    ((table id_offre), '2024-11-15 12:00:00') -- mise en ligne
+;

@@ -133,3 +133,8 @@ values
                 timemultirange (timerange ('12:', '15:30'), timerange ('18:30', '23:59:59'))
         )
     );
+insert into
+    _changement_etat (id_offre, fait_le)
+values
+    ((table id_offre), '2024-10-15 12:00:00') -- mise en ligne
+;
