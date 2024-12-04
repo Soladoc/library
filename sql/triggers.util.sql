@@ -5,25 +5,20 @@ set schema 'pact';
 
 set plpgsql.extra_errors to 'all';
 
-create function insert_avis (inout new record, p_id_offre int = null) as $$
+create function insert_avis (inout new record, p_id_offre int) as $$
 declare
-    id_offre int = p_id_offre;
     -- On ne prend pas en compte les heures pour cette vérification.
     -- Cela signifie qu'on autorise la publication d'un avis le même jour que la création de l'offre mais à une heure antérieure.
     -- C'est soit ça soit interdire la publication à heure postérieure car date_experience n'a pas d'heure.
     -- Mieut vaut autoriser un cas potentiellement invalide plutôt qu'interdire un cas potentiellement valide.
     date_creation_offre constant date not null = offre_creee_le(id_offre)::date;
 begin
-    -- Cannot use a coalesce as it evaluated both arguments. If p_id_offre is suppleid, it's because new doesn't have an id_offre column.
-    if id_offre is null then
-        id_offre = new.id_offre;
-    end if;
-
     if new.date_experience < date_creation_offre then
         raise 'La date d''expérience de l''avis (%) ne peut pas être antérieure à la date création de de l''offre (%)', new.date_experience, date_creation_offre;
     end if;
+
     insert into _signalable default values returning id into new.id;
-    insert into pact._avis (
+    insert into _avis (
         id,
         id_offre,
         id_membre_auteur,
@@ -47,6 +42,8 @@ begin
         new.publie_le,
         new.lu,
         new.blackliste;
+
+    new.pseudo_auteur = (select pseudo from membre where id = new.id_membre_auteur);
 end
 $$ language plpgsql strict;
 

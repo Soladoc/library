@@ -25,8 +25,6 @@ if ($_POST) {
             $note,
             Date::parse($date_avis),
             $contexte,
-            false,
-            false,
             Membre::from_db($id_membre_co),
             $offre,
         );

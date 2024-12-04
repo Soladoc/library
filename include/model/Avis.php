@@ -5,6 +5,9 @@ require_once 'db.php';
 /**
  * @property-read ?int $id L'ID. `null` si cet avis n'existe pas dans la BDD.
  * @property-read ?string $pseudo_auteur Calculé. `null` si cet avis n'existe pas dans la BDD.
+ * @property-read ?FiniteTimestamp $publie_le Calculé. `null` si cet avis n'existe pas dans la BDD.
+ * @property-read ?bool $lu Calculé. `null` si cet avis n'existe pas dans la BDD.
+ * @property-read ?bool $blackliste Calculé. `null` si cet avis n'existe pas dans la BDD.
  */
 class Avis extends Model
 {
@@ -20,6 +23,8 @@ class Avis extends Model
         return [
             'pseudo_auteur' => [null, 'pseudo_auteur', PDO::PARAM_STR],
             'publie_le'     => [null, 'publie_le',     PDO::PARAM_STR],
+            'lu'               => [null, 'lu',              PDO::PARAM_BOOL],
+            'blackliste'       => [null, 'blackliste',      PDO::PARAM_BOOL],
         ];
     }
 
@@ -30,8 +35,6 @@ class Avis extends Model
             'note'             => [null, 'note',            PDO::PARAM_INT],
             'date_experience'  => [null, 'date_experience', PDO::PARAM_STR],
             'contexte'         => [null, 'contexte',        PDO::PARAM_STR],
-            'lu'               => [null, 'lu',              PDO::PARAM_BOOL],
-            'blackliste'       => [null, 'blackliste',      PDO::PARAM_BOOL],
             'id_membre_auteur' => [fn($x) => $x->id, 'membre_auteur', PDO::PARAM_INT],
             'id_offre'         => [fn($x) => $x->id, 'offre',         PDO::PARAM_INT],
         ];
@@ -43,11 +46,11 @@ class Avis extends Model
         readonly int $note,
         readonly Date $date_experience,
         readonly string $contexte,
-        readonly bool $lu,
-        readonly bool $blackliste,
         readonly Membre $membre_auteur,
         readonly Offre $offre,
         //
+        protected ?bool $blackliste,
+        protected ?bool $lu,
         protected ?string $pseudo_auteur = null,
         protected ?FiniteTimestamp $publie_le = null,
     ) {}
@@ -76,10 +79,10 @@ class Avis extends Model
             $row['note'],
             $row['date_experience'],
             $row['contexte'],
-            $row['lu'],
-            $row['blackliste'],
             Membre::from_db($row['id_membre_auteur']),
             Offre::from_db($row['id_offre']),
+            $row['lu'],
+            $row['blackliste'],
             $row['pseudo_auteur'],
             $row['publie_le'],
         );

@@ -10,7 +10,7 @@ begin
     if offre_categorie(new.id_offre) = 'restaurant' then
         raise 'insérer dans avis_restaurant pour les avis sur les restaurants';
     end if;
-    new = insert_avis(new);
+    new = insert_avis(new, new.id_offre);
     return new;
 end
 $$ language plpgsql;
