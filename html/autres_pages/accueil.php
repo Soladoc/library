@@ -4,17 +4,6 @@ require_once 'component/CarteOffre.php';
 require_once 'model/Offre.php';
 
 $page = new Page('Accueil');
-
-
-
-$valider = getarg($_GET,"valider",required: false);
-$mot_cle= getarg($_GET,"mot_cle",required: false);
-$modif_affichage = false;
-
-if ($valider && !empty($mot_cle)) {
-    $modif_affichage = true;
-    $mot_cle= getarg( $_GET,"mot_cle");
-}
 ?>
 
 <!DOCTYPE html>
@@ -42,7 +31,7 @@ if ($valider && !empty($mot_cle)) {
             <div class="offer-list">
                 <?php
 
-                $offres = $modif_affichage ? Offre::from_db_by_motcle($mot_cle) : Offre::from_db_a_la_une();
+                $offres =  Offre::from_db_a_la_une();
                 
                 // Préparer et exécuter la requête SQL pour récupérer toutes les offres
 
