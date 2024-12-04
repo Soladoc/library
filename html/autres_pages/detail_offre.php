@@ -30,7 +30,7 @@ if ($_POST) {
     if (null === $id_membre_co) {
         $error_message = 'Veuillez vous connecter pour publier un avis.';
     } else if (Avis::from_db_single($id_membre_co, $offre->id)) {
-        $error_message = 'Vous pouvez ne publier qu\'un avis.';
+        $error_message = "Vous pouvez ne publier qu'un avis.";
     } else {
         $args_avis = [
             null,
@@ -139,7 +139,7 @@ if ($_POST) {
                         <option value="amis">Amis</option>
                     </select>
                     <label for="date">Date de votre visite</label>
-                    <input type="date" id="date" name="date" required>
+                    <input type="date" id="date" name="date" min="<?= $offre->creee_le->format_date() ?>" value="<?= date('Y-m-d') ?>" required>
                     </br>
                     <label for="consent">Je certifie que l'avis reflète mes propres expérience et opinion sur cette offre.</label>
                     <input type="checkbox" name="consent" required>

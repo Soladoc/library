@@ -7,6 +7,7 @@ require_once 'util.php';
  */
 final class FiniteTimestamp
 {
+    private const FORMAT_DATE = 'Y-m-d';
     private const FORMATS = ['Y-m-d H:i:s.u', 'Y-m-d H:i:s'];
 
     private function __construct(
@@ -30,5 +31,9 @@ final class FiniteTimestamp
     function __toString(): string
     {
         return $this->datetime->format(self::FORMATS[0]);
+    }
+
+    function format_date(): string {
+        return $this->datetime->format(self::FORMAT_DATE);
     }
 }
