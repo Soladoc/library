@@ -7,8 +7,8 @@ require_once 'component/InputOffre.php';
 require_once 'model/ProfessionnelPrive.php';
 
 $page = new Page('Modifier offre',
-    ['creation_offre.css'],
-    ['module/creation_offre.js' => 'defer type="module"']);
+    ['input-offre.css'],
+    ['module/input-offre.js' => 'defer type="module"']);
 
 $id_professionnel = Auth\exiger_connecte_pro();
 $est_prive        = ProfessionnelPrive::exists($id_professionnel);

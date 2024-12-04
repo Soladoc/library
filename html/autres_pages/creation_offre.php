@@ -6,8 +6,8 @@ require_once 'component/Page.php';
 require_once 'component/InputOffre.php';
 
 $page = new Page("Création d'une offre",
-    ['creation_offre.css'],
-    ['module/creation_offre.js' => 'defer type="module"']);
+    ['input-offre.css'],
+    ['module/input-offre.js' => 'defer type="module"']);
 
 $categorie = getarg($_GET, 'categorie', arg_check(f_is_in(array_keys(CATEGORIES_OFFRE))));
 

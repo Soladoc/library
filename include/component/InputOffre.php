@@ -297,7 +297,7 @@ final class InputOffre extends Input
 
         <section>
             <h2>Photo principale</h2>
-            <?php $this->input_image_principale->put($current?->image_principale) ?>
+            <?php $this->input_image_principale->put($current === null ? null : [$current->image_principale]) ?>
         </section>
         <section id="<?= $this->id('tarifs') ?>">
             <h2>Tarifs</h2>
@@ -436,7 +436,7 @@ final class InputOffre extends Input
                         min="1"
                         value="<?= $parc_attractions?->age_requis ?>"> an</label></p>
                     <?php
-                    $this->input_image_plan->put($parc_attractions?->image_plan);
+                    $this->input_image_plan->put($parc_attractions === null ? null : [$parc_attractions->image_plan]);
                     break;
                 case Restaurant::CATEGORIE:
                     /** @var ?Restaurant */
