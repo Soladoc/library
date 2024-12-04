@@ -14,6 +14,8 @@ require_once 'queries.php';
 
 $offre = notfalse(Offre::from_db(getarg($_GET, 'id', arg_int())));
 
+$page = new Page($offre->titre, scripts: ['carrousel.js' => 'defer']);
+
 $input_rating = new InputNote(name: 'rating');
 if ($offre instanceof Restaurant) {
     $input_note_cuisine      = new InputNote(name: 'note_cuisine');
@@ -48,12 +50,6 @@ if ($_POST) {
         $success_message = 'Avis ajouté avec succès !';
     }
 }
-
-$page = new Page(
-    $offre->titre,
-    scripts: ['carrousel.js' => 'defer']
-);
-$id_membre_co = Auth\id_membre_connecte();
 ?>
 
 <!DOCTYPE html>
