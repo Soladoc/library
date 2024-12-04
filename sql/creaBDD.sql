@@ -12,7 +12,7 @@ set schema 'pact';
 create table _departement (
     numero num_departement
         constraint departement_pk primary key,
-    nom mot not null unique
+    nom ligne not null unique
 );
 
 create table _commune (
@@ -21,7 +21,7 @@ create table _commune (
         constraint commune_fk_departement references _departement,
     constraint commune_pk primary key (code, numero_departement),
         
-    nom mot not null
+    nom ligne not null
 );
 
 create table _adresse (
@@ -81,8 +81,8 @@ create table _compte (
         constraint compte_inherits_signalable references _signalable on delete cascade,
     email adresse_email not null unique,
     mdp_hash varchar(255) not null,
-    nom mot not null,
-    prenom mot not null,
+    nom ligne not null,
+    prenom ligne not null,
     telephone numero_telephone not null,
     id_adresse int not null
         constraint compte_fk_adresse references _adresse
@@ -92,7 +92,7 @@ create table _professionnel (
     id int
         constraint professionnel_pk primary key
         constraint professionnel_inherits_compte references _compte on delete cascade,
-    denomination mot not null
+    denomination ligne not null
 );
 
 create table _offre (
@@ -107,7 +107,7 @@ create table _offre (
         constraint offre_fk_professionnel references _professionnel,
     libelle_abonnement mot_minuscule not null
         constraint offre_fk_abonnement references _abonnement,
-    titre mot not null,
+    titre ligne not null,
     resume ligne not null,
     description_detaillee paragraphe not null,
     modifiee_le timestamp not null,
@@ -227,7 +227,7 @@ create table _prestation (
 );
 
 create table _tarif (
-    nom mot not null,
+    nom ligne not null,
     id_offre int
         constraint tarif_fk_offre references _offre on delete cascade,
     constraint tarif_pk primary key (nom, id_offre),
