@@ -28,7 +28,7 @@ execute function parc_attractions_insert ();
 -- Update
 create function parc_attractions_update () returns trigger as $$
 begin
-    call update_offre(old, new);
+    new = update_offre(old, new);
 
     update _parc_attractions
     set

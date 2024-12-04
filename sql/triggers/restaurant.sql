@@ -43,7 +43,7 @@ execute function restaurant_insert ();
 -- Update
 create function restaurant_update () returns trigger as $$
 begin
-    call update_offre(old, new);
+    new = update_offre(old, new);
 
     update _restaurant
     set

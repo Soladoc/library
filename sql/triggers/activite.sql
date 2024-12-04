@@ -30,7 +30,7 @@ execute function activite_insert ();
 -- Update
 create function activite_update () returns trigger as $$
 begin
-    call update_offre(old, new);
+    new = update_offre(old, new);
 
     update _activite
     set

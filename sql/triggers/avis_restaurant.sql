@@ -33,7 +33,7 @@ execute function avis_restaurant_insert ();
 -- Update
 create function avis_restaurant_update () returns trigger as $$
 begin
-    call update_avis(old, new);
+    new = update_avis(old, new);
 
     update _avis_restaurant
     set
