@@ -26,16 +26,10 @@ final class DynamicTable extends Input
         parent::__construct($id, $name, $form_id);
     }
 
-    /**
-     * @param array $get_or_post
-     * @param bool $required
-     * @return ?array
-     */
-    function get(array $get_or_post, bool $required = true): ?array
+    function get(array $get_or_post): array
     {
-        $rows = getarg($get_or_post, $this->name, required: $required);
-        if ($rows === null) return null;
-        return soa_to_aos($rows);
+        $rows = getarg($get_or_post, $this->name, required: false);
+        return $rows === null ? [] : soa_to_aos($rows);
     }
 
     /**

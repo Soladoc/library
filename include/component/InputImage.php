@@ -21,21 +21,21 @@ final class InputImage extends Input
     /**
      * Récupère l'image saisie.
      * @param array $get_or_post `$_GET` ou `$_POST` (selon la méthode du formulaire)
-     * @param ?Image[] $current_images L'ID de l'image à modifier ou `null` pour une création.
+     * @param ?Image[] $current_id_images L'ID des images à modifier ou `null` pour une création.
      * @return Image[]
      */
-    function get(array $get_or_post, ?int $current_images = null): array
+    function get(array $get_or_post, ?int $current_id_images = null): array
     {
         $files = getarg($_FILES, $this->name);
         $files = $this->multiple ? soa_to_aos($files) : [$files];
 
-        return  array_map(fn($file, $current_image) => new Image(
-            $current_image,
+        return  array_map(fn($file, $current_id_image) => new Image(
+            $current_id_image,
             getarg($file, 'size', arg_int()),
             explode('/', $file['type'], 2)[1],
             getarg($get_or_post, "{$this->name}_legende", required: false),
             $file['tmp_name'],
-        ), $files, $current_images ?? []);
+        ), $files, $current_id_images ?? []);
     }
 
     /**

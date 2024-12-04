@@ -13,12 +13,11 @@ final class InputAdresse extends Input
      * Récupère l'adresse saisie.
      * @param array $get_or_post `$_GET` ou `$_POST` (selon la méthode du formulaire)
      * @param ?int $current_id_adresse L'ID de l'adresse à modifier ou `null` pour une création.
-     * @param bool $required Si l'adresse est requise. Quand l'adresse est manquante, si `false` a été passé, la fonction retourne `null`. Sinon, déclenche une erreur.
      */
-    function get(array $get_or_post, ?int $current_id_adresse = null, bool $required = true): ?Adresse
+    function get(array $get_or_post, ?int $current_id_adresse = null): Adresse
     {
-        $data = getarg($get_or_post, $this->name, required: $required);
-        return $data === null ? null : new Adresse(
+        $data = getarg($get_or_post, $this->name);
+        return new Adresse(
             $current_id_adresse,
             notfalse(Commune::from_db_by_nom($data['commune'])),
             getarg($data, 'numero_voie', arg_int(1), required: false),
@@ -32,7 +31,8 @@ final class InputAdresse extends Input
         );
     }
 
-    function for_id(): string {
+    function for_id(): string
+    {
         return $this->id('commune');
     }
 

@@ -142,7 +142,7 @@ final class InputOffre extends Input
                     FiniteTimestamp::parse($row[1]),
                     false,
                 ),
-                $this->periodes->get($get_or_post, required: false) ?? [],
+                $this->periodes->get($get_or_post) ?? [],
             )),
         ];
 
@@ -205,7 +205,7 @@ final class InputOffre extends Input
         }
 
         // Tarifs
-        foreach ($this->tarifs->get($get_or_post, required: false) ?? [] as $tarif_row) {
+        foreach ($this->tarifs->get($get_or_post) ?? [] as $tarif_row) {
             $offre->tarifs->add($tarif_row['nom'], $tarif_row['montant']);
         }
 
