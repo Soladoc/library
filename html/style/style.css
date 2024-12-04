@@ -215,6 +215,24 @@ h1 {
     box-shadow: 0 6px 8px rgba(0, 0, 0, 0.1);
 }
 
+.searchbutton {
+    width: 50%;
+    padding: 10px;
+    border-radius: 10px;
+    border: 1px solid #4051FD;
+    background-color: transparent;
+    box-shadow: 0px 6px 8px rgba(0, 0, 0, 0.2);
+    color: #4051FD;
+}
+
+.searchbutton:is(:hover, :focus-within, :active) {
+    background-color: #4051FD;
+    color: white;
+    box-shadow: 0px 8px 10px rgba(0, 0, 0, 0.3);
+    transform: translateY(-2px);
+    text-decoration: none;
+}
+
 .btn-search {
     background-color: #3366cc;
     color: white;
