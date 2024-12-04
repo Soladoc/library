@@ -31,7 +31,7 @@ function connect(): PDO
     // Connect to the database
     $driver = 'pgsql';
     dbg_print(_is_localhost());
-    [$host, $port, $dbname, $username, $password] = _is_localhost()
+    [$host, $port, $dbname, $username, $password] = _is_localhost() 
         ? ['localhost',
             5432,
             'raphael',
@@ -86,7 +86,8 @@ function transaction(callable $body, ?callable $cleanup = null)
 
 function _is_localhost(): bool
 {
-    $server_ip = null;
+    return str_starts_with($SERVER['REQUEST_URI'], 'localhost:');
+    /*    $server_ip = null;
 
     if (defined('INPUT_SERVER') && filter_has_var(INPUT_SERVER, 'REMOTE_ADDR')) {
         $server_ip = filter_input(INPUT_SERVER, 'REMOTE_ADDR', FILTER_VALIDATE_IP);
@@ -100,7 +101,7 @@ function _is_localhost(): bool
         $server_ip = '127.0.0.1';
     }
 
-    return empty(filter_var($server_ip, FILTER_VALIDATE_IP, FILTER_FLAG_NO_RES_RANGE | FILTER_FLAG_NO_PRIV_RANGE));
+    return empty(filter_var($server_ip, FILTER_VALIDATE_IP, FILTER_FLAG_NO_RES_RANGE | FILTER_FLAG_NO_PRIV_RANGE));*/
 }
 
 /**
