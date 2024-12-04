@@ -1,9 +1,11 @@
 <?php
-require_once 'db.php';
 require_once 'auth.php';
-require_once 'model/Offre.php';
-require_once 'component/Page.php';
 require_once 'component/ImageView.php';
+require_once 'component/Page.php';
+require_once 'db.php';
+require_once 'model/Avis.php';
+require_once 'model/Offre.php';
+require_once 'model/Membre.php';
 require_once 'queries.php';
 
 $offre = notfalse(Offre::from_db(getarg($_GET, 'id', arg_int())));
@@ -16,17 +18,18 @@ if ($_POST) {
     if (($id_membre_co = Auth\id_membre_connecte()) === null) {
         $error_message = 'Veuillez vous connecter pour publier un avis.';
     } else {
-        $stmt = DB\connect()->prepare('INSERT INTO pact._avis(id_membre_auteur, id_offre, commentaire, date_experience, note, contexte) VALUES (?, ?, ?, ?, ?, ?) ON CONFLICT (id_membre_auteur, id_offre) DO NOTHING');
-
-        DB\bind_values($stmt, [
-            1 => [$id_membre_co, PDO::PARAM_INT],
-            2 => [$offre->id, PDO::PARAM_INT],
-            3 => [$commentaire, PDO::PARAM_STR],
-            4 => [$date_avis, PDO::PARAM_STR],
-            5 => [$note, PDO::PARAM_INT],
-            6 => [$contexte, PDO::PARAM_STR],
-        ]);
-        notfalse($stmt->execute());
+        $avis = new Avis(
+            null,
+            $commentaire,
+            $note,
+            FiniteTimestamp::parse($date_avis),
+            $contexte,
+            false,
+            false,
+            Membre::from_db($id_membre_co),
+            $offre,
+        );
+        $avis->push_to_db();
         $success_message = 'Avis ajouté avec succès !';
     }
 }

@@ -41,7 +41,7 @@ final class Membre extends Compte
     }
 
     protected static function from_db_row(array $row): Membre {
-        new Membre(
+        return new Membre(
             $row['id'],
             $row['email'],
             $row['mdp_hash'],
