@@ -47,7 +47,7 @@ comment on domain numero_telephone is
 create domain numero_siren as char(9) check (value ~ '^[0-9]+$');
 comment on domain numero_siren is '9 chiffres';
 
-create domain mot as varchar(255) check (value ~ '^[[:graph:]]+$');
+create domain mot as varchar(255) check (value ~ '^[[:graph:] ]+$');
 comment on domain mot is 
 'Texte:
 - 255 car. max

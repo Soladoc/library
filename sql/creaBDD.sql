@@ -150,7 +150,7 @@ create table _visite (
 create table _langue (
     code iso639_1
         constraint langue_pk primary key,
-    libelle mot not null
+    libelle ligne not null
 );
 
 create table _spectacle (
