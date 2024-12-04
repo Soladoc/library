@@ -95,4 +95,12 @@ $_FILES['galerie'] = [
 
 $request = submit_form($dom, FORM_ID);
 
+error_log('getting offre');
 $offre = $input_offre->get($request);
+
+DB\transaction(function() use ($offre) {
+    error_log('inserting offre');
+    $offre->insert();
+    error_log('deleting offre');
+    $offre->delete();
+});
