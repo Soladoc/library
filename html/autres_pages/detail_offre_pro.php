@@ -1,4 +1,4 @@
-<?php
+<?php 
 require_once 'db.php';
 require_once 'util.php';
 require_once 'queries.php';
@@ -13,13 +13,6 @@ $offre = notfalse(Offre::from_db(getarg($_GET, 'id', arg_int())));
 $page = new Page("offre : {$offre->id}",
     ['https://unpkg.com/leaflet@1.7.1/dist/leaflet.css'],
     ['https://unpkg.com/leaflet@1.7.1/dist/leaflet.js' => 'async']);
-
-
-$input_offre = new InputOffre(
-    $offre->categorie,
-    Professionnel::from_db(Auth\exiger_connecte_pro()),
-    form_id: 'f',
-);
 
 
 if ($_POST) {
@@ -55,6 +48,7 @@ if ($_POST) {
                     <a class="bouton modifier" href="modif_offre.php?id=<?= $offre->id ?>&categorie=<?= $offre::CATEGORIE ?>">Modifier</a>
                 </div>
             </form>
+            
             <section class="offer-details">
                 <section class="offer-main-photo">
                     <div class="carousel-container">
@@ -97,8 +91,6 @@ if ($_POST) {
             </div>
         </section>
 
-        <?php $input_offre->put($offre) ?>
-
         <div class="review-list">
             <h4>Avis de la communauté</h4>
             <div class="review-summary">
@@ -120,8 +112,8 @@ if ($_POST) {
                     <p class="review-contexte">Contexte&nbsp;: <?= htmlspecialchars($avis_temp['contexte']) ?></p>
                     <p><?= htmlspecialchars($avis_temp['commentaire']) ?></p>
                     <p class="review-date"><?= htmlspecialchars($avis_temp['date_experience']) ?></p>
-                    <?php if (($id_membre_co = Auth\id_membre_connecte()) !== null && $avis_temp['id_membre_auteur'] = $id_membre_co) { ?>
-                    <form method="post" action="modifier.php?id=<?= $offre->id ?>&avis_id=<?= $avis_id ?>">
+                    <?php if (($id_membre_co == Auth\id_membre_connecte()) != null && $avis_temp['id_membre_auteur'] = $id_membre_co) { ?>
+                    <form method="post" action="modifier.php?id=<?= $offre->id ?>&avis_id=<?= $avis_temp['id'] ?>">
                         <button type="submit" class="btn-modif">Modifier</button>
                     </form>
                     <?php } ?>
