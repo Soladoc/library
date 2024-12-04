@@ -187,7 +187,7 @@ begin
         commentaire = new.commentaire,
         note = new.note,
         publie = new.publie,
-        date = new.date,
+        "date" = new.date,
         contexte = new.contexte,
         lu = new.lu,
         blackliste = new.blackliste
