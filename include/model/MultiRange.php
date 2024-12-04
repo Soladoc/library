@@ -6,24 +6,17 @@ require_once 'model/NonEmptyRange.php';
 /**
  * @template T Type du multirange.
  * Abstraction du type PostgreSQL `<type>multirange`
- * 
+ *
  * N'effectue pas de normalisation.
  */
 final class MultiRange
 {
     /**
-     * The ranges nested in this multirange.
-     * @var NonEmptyRange[]
+     * @param NonEmptyRange[] $ranges The ranges nested in this multirange.
      */
-    readonly array $ranges;
-
-    /**
-     * @param NonEmptyRange[] $ranges
-     */
-    function __construct(array $ranges)
-    {
-        $this->ranges = $ranges;
-    }
+    function __construct(
+        readonly array $ranges
+    ) {}
 
     function __toString(): string
     {
@@ -63,7 +56,7 @@ final class MultiRange
                 }
 
                 [$ranges[], $rl] = notfalse(NonEmptyRange::read(substr($output, $read_length), $parse_bound));
-                $read_length += $rl;
+                $read_length    += $rl;
             }
         }
 

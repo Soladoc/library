@@ -10,19 +10,14 @@ require_once 'Equatable.php';
  */
 final class OuvertureHebdomadaire implements ArrayAccess, Equatable
 {
-    const TABLE = '_ouverture_hebdomadaire';
-
-    private Offre $offre;
-
     /**
      * @var array<int, MultiRange<Time>>
      */
     private array $ouvertures_hebdomadaires = [];
 
-    function __construct(Offre $offre)
-    {
-        $this->offre = $offre;
-    }
+    function __construct(
+        private readonly Offre $offre,
+    ) {}
 
     private function args(int $dow): ?array
     {
@@ -90,4 +85,6 @@ final class OuvertureHebdomadaire implements ArrayAccess, Equatable
             ])->execute());
         }
     }
+
+    const TABLE = '_ouverture_hebdomadaire';
 }

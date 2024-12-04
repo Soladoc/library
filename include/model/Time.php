@@ -9,12 +9,9 @@ final class Time
 {
     private const FORMAT = 'H:i:s';
 
-    private readonly DateTimeImmutable $datetime;
-
-    private function __construct(DateTimeImmutable $datetime)
-    {
-        $this->datetime = $datetime;
-    }
+    private function __construct(
+        private readonly DateTimeImmutable $datetime
+    ) {}
 
     /**
      * Parse une heure depuis la sortie PostgreSQL.

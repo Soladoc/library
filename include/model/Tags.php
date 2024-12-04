@@ -8,16 +8,12 @@ require_once 'Equatable.php';
  */
 final class Tags implements IteratorAggregate, Equatable
 {
-    const TABLE = '_tags';
-
     /** @var array<string, true> */
     private array $tags = [];
-    private readonly Offre $offre;
 
-    function __construct(Offre $offre)
-    {
-        $this->offre = $offre;
-    }
+    function __construct(
+        private readonly Offre $offre
+    ) {}
 
     function add(string $tag): void
     {
@@ -33,13 +29,15 @@ final class Tags implements IteratorAggregate, Equatable
         }
     }
 
-    function insert(): void {
+    function insert(): void
+    {
         foreach (array_keys($this->tags) as $tag) {
             $this->insert_tag($tag);
         }
     }
 
-    private function insert_tag(string $tag): void {
+    private function insert_tag(string $tag): void
+    {
         if (null !== $args = $this->args($tag)) {
             notfalse(DB\insert_into(self::TABLE, $args)->execute());
         }
@@ -68,4 +66,6 @@ final class Tags implements IteratorAggregate, Equatable
     {
         return $other->tags === $this->tags;
     }
+
+    const TABLE = '_tags';
 }

@@ -9,19 +9,14 @@ require_once 'Equatable.php';
  */
 final class Tarifs implements IteratorAggregate, Equatable
 {
-    const TABLE = '_tarif';
-
-    private Offre $offre;
-
     /**
      * @var array<string, float>
      */
     private array $tarifs = [];
 
-    function __construct(Offre $offre)
-    {
-        $this->offre = $offre;
-    }
+    function __construct(
+        private readonly Offre $offre,
+    ) {}
 
     function add(string $nom, float $montant): void
     {
@@ -76,4 +71,5 @@ final class Tarifs implements IteratorAggregate, Equatable
     {
         return $other->tarifs === $this->tarifs;
     }
+    const TABLE = '_tarif';
 }

@@ -5,12 +5,11 @@ require_once 'redirect.php';
 
 final class CarteOffrePro
 {
-    readonly Offre $offre;
     readonly ImageView $image_principale;
 
-    function __construct(Offre $offre)
-    {
-        $this->offre = $offre;
+    function __construct(
+        readonly Offre $offre,
+    ) {
         $this->image_principale = new ImageView($offre->image_principale);
     }
 

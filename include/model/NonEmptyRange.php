@@ -7,8 +7,6 @@ require_once 'util.php';
  */
 final class NonEmptyRange
 {
-    
-
     /*
      * From the PostgresQL doc :
      * > Each bound value can be quoted using " (double quote) characters. This is necessary if the bound value contains parentheses, brackets, commas, double quotes, or backslashes, since these characters would otherwise be taken as part of the range syntax. To put a double quote or backslash in a quoted bound value, precede it with a backslash. (Also, a pair of double quotes within a double-quoted bound value is taken to represent a double quote character, analogously to the rules for single quotes in SQL literal strings.) Alternatively, you can avoid quoting and use backslash-escaping to protect all data characters that would otherwise be taken as range syntax. Also, to write a bound value that is an empty string, write "", since writing nothing means an infinite bound.
@@ -19,16 +17,16 @@ final class NonEmptyRange
      */
 
     private const READ_PATTERN = <<<'REGEX'
-    /^\s*([[(])(?|([^()[\],"\'\\]*)|"((?:[^"\\]|\\.|"")*)"),(?|([^()[\],"\'\\]*)|"((?:[^"\\]|\\.|"")*)")([])])/s
-    REGEX;
+/^\s*([[(])(?|([^()[\],"\'\\]*)|"((?:[^"\\]|\\.|"")*)"),(?|([^()[\],"\'\\]*)|"((?:[^"\\]|\\.|"")*)")([])])/s
+REGEX;
 
     private const PARSE_PATTERN = <<<'REGEX'
-    /^\s*([[(])(?|([^()[\],"\'\\]*)|"((?:[^"\\]|\\.|"")*)"),(?|([^()[\],"\'\\]*)|"((?:[^"\\]|\\.|"")*)")([])])\s*$/s
-    REGEX;
+/^\s*([[(])(?|([^()[\],"\'\\]*)|"((?:[^"\\]|\\.|"")*)"),(?|([^()[\],"\'\\]*)|"((?:[^"\\]|\\.|"")*)")([])])\s*$/s
+REGEX;
 
     private const RESERVED_CHAR_PATTERN = <<<'REGEX'
-    /[()[\],"\'\\]/
-    REGEX;
+/[()[\],"\'\\]/
+REGEX;
 
     private static function unescape_bound(string $parsed_bound): string
     {
@@ -47,26 +45,28 @@ final class NonEmptyRange
      */
     readonly bool $upper_inc;
 
-    /**
-     * La borne inférieure ou `null` si elle est n'existe pas.
-     * @var ?T
-     */
-    readonly mixed $lower;
+    function __construct(
+        bool $lower_inc,
 
-    /**
-     * La borne supérieure ou `null` si elle est n'existe pas.
-     * @var ?T
-     */
-    readonly mixed $upper;
+        /**
+         * La borne inférieure ou `null` si elle est n'existe pas.
+         * @var ?T
+         */
+        readonly mixed $lower,
 
-    function __construct(bool $lower_inc, mixed $lower, mixed $upper, bool $upper_inc)
-    {
+        /**
+         * La borne supérieure ou `null` si elle est n'existe pas.
+         * @var ?T
+         */
+        readonly mixed $upper,
+        bool $upper_inc
+    ) {
         if ($upper !== null && $lower !== null && $upper <= $lower) {
             throw new RangeException('Borne supérieure inférieure à la borne inférieure.');
         }
 
-        $this->lower = $lower;
-        $this->upper = $upper;
+        $this->lower     = $lower;
+        $this->upper     = $upper;
         $this->lower_inc = $lower !== null && $lower_inc;
         $this->upper_inc = $upper !== null && $upper_inc;
     }
@@ -151,8 +151,8 @@ final class NonEmptyRange
         $parse_bound ??= fn($x) => $x;
 
         [, $lower_delim, $lower, $upper, $upper_delim] = $match;
-        $lower = $lower === '' ? null : $parse_bound(self::unescape_bound($lower));
-        $upper = $upper === '' ? null : $parse_bound(self::unescape_bound($upper));
+        $lower                                         = $lower === '' ? null : $parse_bound(self::unescape_bound($lower));
+        $upper                                         = $upper === '' ? null : $parse_bound(self::unescape_bound($upper));
         if ($lower === false || $upper === false) {
             return false;
         }

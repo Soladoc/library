@@ -26,9 +26,8 @@ final class Image extends Model
         readonly int $taille,
         readonly string $mime_subtype,
         readonly ?string $legende,
-        private ?string $tmp_name = null, // Not even a field - used internally
-    ) {
-    }
+        private ?string $tmp_name = null,  // Not even a field - used internally
+    ) {}
 
     static function from_db(int $id_image): Image|false
     {
