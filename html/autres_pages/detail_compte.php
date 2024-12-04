@@ -5,18 +5,16 @@ require_once 'redirect.php';
 require_once 'component/Page.php';
 require_once 'model/ProfessionnelPrive.php';
 
-$args = [
-    'id' => getarg($_GET, 'id', arg_int())
-];
 
-$page = new Page("detail_compte_membre : {$args['id']}",
+$id = Auth\id_compte_connecte();
+$page = new Page("detail_compte_membre : {$id}",
     ['https://unpkg.com/leaflet@1.7.1/dist/leaflet.css'],
     ['https://unpkg.com/leaflet@1.7.1/dist/leaflet.js' => 'async']);
 
 
-$id = $args['id'];
-$membre = DB\query_compte_membre($args['id']);
-$pro = DB\query_compte_professionnel($args['id']);
+
+$membre = DB\query_compte_membre($id);
+$pro = DB\query_compte_professionnel($id);
 $est_prive = ProfessionnelPrive::exists($id);
 
 if ($membre !== false) {
@@ -48,7 +46,7 @@ if ($membre !== false) {
         $siren = DB\query_get_siren($id);
     }
 } else {
-    html_error("le compte d'ID {$args['id']} n'existe pas");
+    html_error("le compte d'ID {$id} n'existe pas");
 }
 
 ?>
