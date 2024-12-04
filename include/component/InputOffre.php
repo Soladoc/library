@@ -156,8 +156,8 @@ final class InputOffre extends Input
             ),
             ParcAttractions::CATEGORIE => new ParcAttractions(
                 ...$args,
-                getarg($get_or_post, 'age_requis', arg_int(1), required: false),
-                getarg($get_or_post, 'nb_attractions', arg_int(0)),
+                age_requis: getarg($get_or_post, 'age_requis', arg_int(1), required: false),
+                nb_attractions: getarg($get_or_post, 'nb_attractions', arg_int(0)),
                 image_plan: $this->input_image_plan->get($get_or_post)[0],
             ),
             Spectacle::CATEGORIE => new Spectacle(
