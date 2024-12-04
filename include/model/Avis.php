@@ -61,14 +61,28 @@ class Avis extends Model
         DB\bind_values($stmt, [1 => [$id_avis, PDO::PARAM_INT]]);
         notfalse($stmt->execute());
         $row = $stmt->fetch();
-        if ($row === false) return false;
-        return self::from_db_row($row);
+        return $row === false ? false : self::from_db_row($row);
+    }
+
+    /**
+     * Retourne le seul avis qu'un membre est autorisé à publier sur une offre, ou `false` si le membre n'a pas encore déposé d'avis.
+     * @param int $id_membre_auteur
+     * @param int $id_offre
+     * @return Avis|false
+     */
+    static function from_db_single(int $id_membre_auteur, int $id_offre): self|false
+    {
+        $stmt = notfalse(DB\connect()->prepare(self::make_select() . ' where id_membre_auteur = ? and id_offre = ?'));
+        DB\bind_values($stmt, [1 => [$id_membre_auteur, PDO::PARAM_INT], 2 => [$id_offre, PDO::PARAM_INT]]);
+        notfalse($stmt->execute());
+        $row = $stmt->fetch();
+        return $row === false ? false : self::from_db_row($row);
     }
 
     private static function from_db_row(array $row): self
     {
-        require_once 'model/AvisRestaurant.php';
-        return new self(
+        self::require_subclasses();
+        $args_avis = [
             $row['id'],
             $row['commentaire'],
             $row['note'],
@@ -80,12 +94,29 @@ class Avis extends Model
             $row['blackliste'],
             $row['pseudo_auteur'],
             $row['publie_le'],
-        );
+        ];
+
+        $id_restaurant = $row['id_restaurant'] ?? null;
+        return $id_restaurant
+            ? new AvisRestaurant(
+                $args_avis,
+                $row['note_cuisine'],
+                $row['note_service'],
+                $row['note_ambiance'],
+                $row['note_qualite_prix'],
+            )
+            : new self(...$args_avis);
     }
 
     private static function make_select(): string
     {
-        return 'select a.* from ' . self::TABLE . ' a';  // todo: faire des jointures pour gagner en performance
+        self::require_subclasses();
+        return 'select a.* from ' . self::TABLE . ' a left join ' . AvisRestaurant::TABLE;  // todo: faire des jointures pour gagner en performance
+    }
+
+    private static function require_subclasses(): void
+    {
+        require_once 'model/AvisRestaurant.php';
     }
 
     const TABLE = 'avis';

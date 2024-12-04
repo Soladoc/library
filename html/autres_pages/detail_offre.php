@@ -29,6 +29,8 @@ $id_membre_co = Auth\id_membre_connecte();
 if ($_POST) {
     if (null === $id_membre_co) {
         $error_message = 'Veuillez vous connecter pour publier un avis.';
+    } else if (Avis::from_db_single($id_membre_co, $offre->id)) {
+        $error_message = 'Vous pouvez ne publier qu\'un avis.';
     } else {
         $args_avis = [
             null,
