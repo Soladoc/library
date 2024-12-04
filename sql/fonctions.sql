@@ -72,7 +72,7 @@ comment on function offre_categorie (int) is
 create function professionnel_secteur (p_id_professionnel int) returns secteur as $$
     select case
         when p_id_professionnel in (select id from _prive) then secteur 'privé'
-        when p_id_professionnel in (select id from _public) then secteur 'public ou associatif'
+        when p_id_professionnel in (select id from _public) then secteur 'public'
     end
 $$ language sql strict stable;
 comment on function professionnel_secteur (int) is

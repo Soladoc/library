@@ -5,6 +5,8 @@ require_once 'auth.php';
 require_once 'util.php';
 require_once 'queries.php';
 require_once 'redirect.php';
+require_once 'model/Professionnel.php';
+require_once 'model/Membre.php';
 
 
 if (!isset($_POST['login'])) {
@@ -22,26 +24,22 @@ $args = [
 ];
 
 // Connection membre
-$user = DB\query_membre($args['login']);
-
-if (!empty($user)) {
-    if (!password_verify($args['mdp'], $user['mdp_hash'])) {
+if (false !== $user = Membre::from_db_by_pseudo($args['login'])) {
+    if (!password_verify($args['mdp'], $user->mdp_hash)) {
         fail();
     }
     session_regenerate_id(true);
-    Auth\se_connecter_membre($user['id']);
+    Auth\se_connecter_membre($user->id);
     succeed();
 }
 
 // Connection professionnel
-$user = DB\query_professionnel($args['login']);
-
-if (!empty($user)) {
-    if (!password_verify($args['mdp'], $user['mdp_hash'])) {
+if (false !== $user = Professionnel::from_db_by_email($args['login'])) {
+    if (!password_verify($args['mdp'], $user->mdp_hash)) {
         fail();
     }
     session_regenerate_id(true);
-    Auth\se_connecter_pro($user['id']);
+    Auth\se_connecter_pro($user->id);
     succeed();
 }
 

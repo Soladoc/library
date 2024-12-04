@@ -22,7 +22,7 @@ final class Restaurant extends Offre
     // todo: langues
 
     function __construct(
-        array $args,
+        array $args_offre,
         readonly string $carte,
         readonly int $richesse,
         readonly bool $sert_petit_dejeuner,
@@ -31,7 +31,7 @@ final class Restaurant extends Offre
         readonly bool $sert_diner,
         readonly bool $sert_boissons,
     ) {
-        parent::__construct(...$args);
+        parent::__construct(...$args_offre);
     }
 
     const CATEGORIE = 'restaurant';

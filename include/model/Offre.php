@@ -212,7 +212,7 @@ abstract class Offre extends Model implements Signalable
         // Todo: this is just a proof of concept for single-query inheritance.
         return 'select
             id,id_adresse,id_image_principale,id_professionnel,libelle_abonnement,titre,resume,description_detaillee,modifiee_le,url_site_web,periodes_ouverture,en_ligne,note_moyenne,prix_min,nb_avis,creee_le,categorie,en_ligne_ce_mois_pendant,changement_ouverture_suivant_le,est_ouverte,
-            
+
             _activite.indication_duree activite_indication_duree,
             _activite.age_requis activite_age_requis,
             _activite.prestations_incluses activite_prestations_incluses,
@@ -246,7 +246,7 @@ abstract class Offre extends Model implements Signalable
     protected static function from_db_row(array $row): Offre
     {
         self::require_subclasses();
-        $args = [
+        $args_offre = [
             $row['id'],
             Adresse::from_db($row['id_adresse']),
             Image::from_db($row['id_image_principale']),
@@ -270,20 +270,20 @@ abstract class Offre extends Model implements Signalable
         ];
         return match ($row['categorie']) {
             Activite::CATEGORIE => new Activite(
-                $args,
+                $args_offre,
                 Duree::parse($row['activite_indication_duree']),
                 $row['activite_age_requis'] ?? null,
                 $row['activite_prestations_incluses'],
                 $row['activite_prestations_non_incluses'] ?? null,
             ),
             ParcAttractions::CATEGORIE => new ParcAttractions(
-                $args,
+                $args_offre,
                 $row['parc_attractions_age_requis'],
                 $row['parc_attractions_nb_attractions'],
                 Image::from_db($row['parc_attractions_id_image_plan']),
             ),
             Restaurant::CATEGORIE => new Restaurant(
-                $args,
+                $args_offre,
                 $row['restaurant_carte'],
                 $row['restaurant_richesse'],
                 $row['restaurant_sert_petit_dejeuner'],
@@ -293,12 +293,12 @@ abstract class Offre extends Model implements Signalable
                 $row['restaurant_sert_boissons'],
             ),
             Spectacle::CATEGORIE => new Spectacle(
-                $args,
+                $args_offre,
                 Duree::parse($row['spectacle_indication_duree']),
                 $row['spectacle_capacite_accueil'],
             ),
             Visite::CATEGORIE => new Visite(
-                $args,
+                $args_offre,
                 Duree::parse($row['visite_indication_duree']),
             ),
         };

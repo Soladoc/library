@@ -15,11 +15,11 @@ final class Spectacle extends Offre
     }
 
     function __construct(
-        array $args,
+        array $args_offre,
         readonly Duree $indication_duree,
         readonly int $capacite_accueil,
     ) {
-        parent::__construct(...$args);
+        parent::__construct(...$args_offre);
     }
 
     const CATEGORIE = 'spectacle';

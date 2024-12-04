@@ -16,10 +16,10 @@ final class Visite extends Offre
     // todo: langues
 
     function __construct(
-        array $args,
+        array $args_offre,
         readonly Duree $indication_duree,
     ) {
-        parent::__construct(...$args);
+        parent::__construct(...$args_offre);
     }
 
     const CATEGORIE = 'visite';

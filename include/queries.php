@@ -76,29 +76,6 @@ function query_membre(string $email_or_pseudo): array|false
     return $stmt->fetch();
 }
 
-function query_professionnel(string $email): array|false
-{
-    $stmt = notfalse(connect()->prepare('select * from professionnel where email = ?'));
-    notfalse($stmt->execute([$email]));
-    return $stmt->fetch();
-}
-
-function query_compte_membre(int $id): array|false
-{
-    $stmt = notfalse(connect()->prepare('select * from membre where id = ?'));
-    bind_values($stmt, [1 => [$id, PDO::PARAM_INT]]);
-    notfalse($stmt->execute());
-    return $stmt->fetch();
-}
-
-function query_compte_professionnel(int $id): array|false
-{
-    $stmt = notfalse(connect()->prepare('select * from professionnel where id = ?'));
-    bind_values($stmt, [1 => [$id, PDO::PARAM_INT]]);
-    notfalse($stmt->execute());
-    return $stmt->fetch();
-}
-
 function query_tags(int $id): array|false
 {
     $stmt = notfalse(connect()->prepare('select tag from _tags where id_offre = ?'));
@@ -107,13 +84,6 @@ function query_tags(int $id): array|false
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
 
-function query_get_siren(int $id_compte): int
-{
-    $stmt = notfalse(connect()->prepare('select siren from pro_prive where id = ?'));
-    bind_values($stmt, [1 => [$id_compte, PDO::PARAM_INT]]);
-    notfalse($stmt->execute());
-    return notfalse($stmt->fetchColumn());
-}
 
 // Parameterized selections
 
@@ -149,7 +119,7 @@ function query_select_offre_motcle(string $motcle):array{
 
 // Update-----------------------------------------------------------------------------------------------------------
 
-function query_uptate_mdp(int $id_compte, string $new_mdp): void
+function query_update_mdp(int $id_compte, string $new_mdp): void
 {
     $stmt = notfalse(connect()->prepare('UPDATE _compte SET mdp_hash = ? WHERE id = ?;'));
     bind_values($stmt, [1 => [$new_mdp, PDO::PARAM_STR], 2 => [$id_compte, PDO::PARAM_INT]]);
@@ -185,14 +155,14 @@ function query_update_telephone(int $id_compte, $new_telephone): void
 }
 
 // membre
-function query_uptate_pseudo(int $id_compte, $new_pseudo): void
+function query_update_pseudo(int $id_compte, $new_pseudo): void
 {
     $stmt = notfalse(connect()->prepare('UPDATE membre SET pseudo = ? WHERE id = ?;'));
     bind_values($stmt, [1 => [$new_pseudo, PDO::PARAM_STR], 2 => [$id_compte, PDO::PARAM_INT]]);
 }
 
 // professionnel
-function query_uptate_denomination(int $id_compte, $new_denomination): void
+function query_update_denomination(int $id_compte, $new_denomination): void
 {
     $stmt = notfalse(connect()->prepare('UPDATE professionnel SET denomination = ? WHERE id = ?;'));
     bind_values($stmt, [1 => [$new_denomination, PDO::PARAM_STR], 2 => [$id_compte, PDO::PARAM_INT]]);

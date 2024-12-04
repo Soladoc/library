@@ -1,5 +1,7 @@
 <?php
 
+require_once 'model/Compte.php';
+
 /**
  * @inheritDoc
  */
@@ -13,51 +15,97 @@ final class Membre extends Compte
     }
 
     function __construct(
-        ?int $id,
-        string $email,
-        string $mdp_hash,
-        string $nom,
-        string $prenom,
-        string $telephone,
-        Adresse $adresse,
+        array $args_offre,
         readonly string $pseudo,
     ) {
-        parent::__construct($id,
-            $email,
-            $mdp_hash,
-            $nom,
-            $prenom,
-            $telephone,
-            $adresse);
+        parent::__construct(...$args_offre);
     }
 
+    /**
+     * Récupère un membre de la BDD.
+     * @param int $id_membre
+     * @return Membre|false
+     */
     static function from_db(int $id_membre): Membre|false
     {
-        $stmt = notfalse(DB\connect()->prepare(self::make_select() . ' where id = ?'));
+        $stmt = DB\connect()->prepare(self::make_select() . ' where id = ?');
         DB\bind_values($stmt, [1 => [$id_membre, PDO::PARAM_INT]]);
         notfalse($stmt->execute());
         $row = $stmt->fetch();
-        if ($row === false) return false;
-        return static::from_db_row($row);
+        return $row === false ? false : self::from_db_row($row);
     }
 
-    protected static function from_db_row(array $row): Membre
+    /**
+     * Récupère un membre de la BDD par son pseudo.
+     * @param string $pseudo
+     * @return Membre|false
+     */
+    static function from_db_by_pseudo(string $pseudo): Membre|false
     {
-        return new Membre(
+        $stmt = DB\connect()->prepare(self::make_select() . ' where pseudo = ?');
+        DB\bind_values($stmt, [1 => [$pseudo, PDO::PARAM_STR]]);
+        notfalse($stmt->execute());
+        $row = $stmt->fetch();
+        return $row === false ? false : self::from_db_row($row);
+    }
+
+    private static function make_select(): string
+    {
+        return 'select
+        id,
+        id_signalable,
+        email,
+        mdp_hash,
+        nom,
+        prenom,
+        telephone,
+        id_adresse,
+        pseudo
+
+        a.code_commune adresse_code_commune,
+        a.numero_departement adresse_numero_departement,
+        c.nom adresse_commune_nom,
+        a.numero_voie adresse_numero_voie,
+        a.complement_numero adresse_complement_numero,
+        a.nom_voie adresse_nom_voie,
+        a.localite adresse_localite,
+        a.precision_int adresse_precision_int,
+        a.precision_ext adresse_precision_ext,
+        a.latitude adresse_latitude,
+        a.longitude adresse_longitude
+
+        from membre
+            join _adresse a on a.id = id_adresse
+            join _commune c on c.code = a.code_commune and c.numero_departement = a.numero_departement';
+    }
+
+    private static function from_db_row(array $row): Membre
+    {
+        return new Membre([
             $row['id'],
+            $row['id_signalable'],
             $row['email'],
             $row['mdp_hash'],
             $row['nom'],
             $row['prenom'],
             $row['telephone'],
-            Adresse::from_db($row['id_adresse']),
-            $row['pseudo'],
-        );
-    }
-
-    private static function make_select(): string
-    {
-        return 'select * from ' . static::TABLE;  // todo: faire des jointures pour gagner en performance
+            new Adresse(
+                $row['id_adresse'],
+                new Commune(
+                    $row['adresse_code_commune'],
+                    $row['adresse_numero_departement'],
+                    $row['adresse_commune_nom'],
+                ),
+                $row['adresse_numero_voie'],
+                $row['adresse_complement_numero'],
+                $row['adresse_nom_voie'],
+                $row['adresse_localite'],
+                $row['adresse_precision_int'],
+                $row['adresse_precision_ext'],
+                $row['adresse_latitude'],
+                $row['adresse_longitude'],
+            ),
+        ], $row['pseudo']);
     }
 
     const TABLE = 'membre';

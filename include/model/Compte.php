@@ -23,6 +23,7 @@ abstract class Compte extends Identite implements Signalable
 
     function __construct(
         ?int $id,
+        protected readonly int $id_signalable,
         readonly string $email,
         readonly string $mdp_hash,
         readonly string $nom,
@@ -31,6 +32,116 @@ abstract class Compte extends Identite implements Signalable
         readonly Adresse $adresse,
     ) {
         parent::__construct($id);
+    }
+
+    static function from_db(int $id_compte): Compte|false
+    {
+        $stmt = notfalse(DB\connect()->prepare(self::make_select() . ' where id = ?'));
+        DB\bind_values($stmt, [1 => [$id_compte, PDO::PARAM_INT]]);
+        notfalse($stmt->execute());
+        $row = $stmt->fetch();
+        return $row === false ? false : self::from_db_row($row);
+    }
+
+    static function from_db_by_email(string $email): Membre|false
+    {
+        $stmt = notfalse(DB\connect()->prepare(self::make_select() . ' where email = ?'));
+        notfalse($stmt->execute([$email]));
+        $row = $stmt->fetch();
+        return $row === false ? false : self::from_db_row($row);
+    }
+
+    private static function make_select(): string
+    {
+        return 'select
+        id,id_signalable,email,mdp_hash,nom,prenom,telephone,id_adresse,
+
+        professionnel.denomination professionnel_denomination,
+        professionnel.secteur professionnel_secteur,
+        
+        _prive.siren prive_siren,
+
+        _membre.pseudo membre_pseudo,
+
+        a.code_commune adresse_code_commune,
+        a.numero_departement adresse_numero_departement,
+        c.nom adresse_commune_nom,
+        a.numero_voie adresse_numero_voie,
+        a.complement_numero adresse_complement_numero,
+        a.nom_voie adresse_nom_voie,
+        a.localite adresse_localite,
+        a.precision_int adresse_precision_int,
+        a.precision_ext adresse_precision_ext,
+        a.latitude adresse_latitude,
+        a.longitude adresse_longitude
+
+        from ' . self::TABLE . '
+            left join professionnel using (id)
+            left join _prive using (id)
+            left join _membre using (id)
+            join _adresse a on a.id = id_adresse
+            join _commune c on c.code = a.code_commune and c.numero_departement = a.numero_departement';
+    }
+
+    private static function from_db_row(array $row): Compte
+    {
+        $args_compte = [
+            $row['id'],
+            $row['id_signalable'],
+            $row['email'],
+            $row['mdp_hash'],
+            $row['nom'],
+            $row['prenom'],
+            $row['telephone'],
+            new Adresse(
+                $row['id_adresse'],
+                new Commune(
+                    $row['adresse_code_commune'],
+                    $row['adresse_numero_departement'],
+                    $row['adresse_commune_nom'],
+                ),
+                $row['adresse_numero_voie'],
+                $row['adresse_complement_numero'],
+                $row['adresse_nom_voie'],
+                $row['adresse_localite'],
+                $row['adresse_precision_int'],
+                $row['adresse_precision_ext'],
+                $row['adresse_latitude'],
+                $row['adresse_longitude'],
+            ),
+        ];
+        if ($denomination = $row['professionnel_denomination'] ?? null) {
+            $secteur = $row['professionnel_secteur'];
+            $args_profesionnel = [
+                $denomination,
+                $secteur,
+            ];
+            return match ($secteur) {
+                'public' => new ProfessionnelPublic(
+                    $args_compte,
+                    $args_profesionnel,
+                ),
+                'prive' => new ProfessionnelPrive(
+                    $args_compte,
+                    $args_profesionnel,
+                    $row['prive_siren'],
+                ),
+            };
+        } else if ($pseudo = $row['membre_pseudo'] ?? null) {
+            return new Membre(
+                $args_compte,
+                $pseudo,
+            );
+        }
+        throw new LogicException('pas de sous-classe correspondante');
+    }
+
+    private static function require_subclasses(): void
+    {
+        require_once 'model/Professionnel.php';
+        require_once 'model/ProfessionnelPrive.php';
+        require_once 'model/ProfessionnelPublic.php';
+        require_once 'model/Membre.php';
     }
 
     const TABLE = '_compte';

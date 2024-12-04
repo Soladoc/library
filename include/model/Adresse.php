@@ -65,8 +65,7 @@ final class Adresse extends Model
             a.code_commune,
             c.nom from '
             . self::TABLE . ' a inner join ' . Commune::TABLE
-            . ' c on a.numero_departement = c.numero_departement'
-            . ' and code_commune = code'
+            . ' c on c.numero_departement = a.numero_departement and c.code = a.code_commune'
             . ' where id = ?'));
         DB\bind_values($stmt, [1 => [$id_adresse, PDO::PARAM_INT]]);
         notfalse($stmt->execute());
@@ -74,14 +73,14 @@ final class Adresse extends Model
         return $row === false ? false : new Adresse(
             $id_adresse,
             new Commune($row['code_commune'], $row['numero_departement'], $row['nom']),
-            $row['numero_voie'] ?? null,
-            $row['complement_numero'] ?? null,
-            $row['nom_voie'] ?? null,
-            $row['localite'] ?? null,
-            $row['precision_int'] ?? null,
-            $row['precision_ext'] ?? null,
-            $row['latitude'] ?? null,
-            $row['longitude'] ?? null,
+            $row['numero_voie'],
+            $row['complement_numero'],
+            $row['nom_voie'],
+            $row['localite'],
+            $row['precision_int'],
+            $row['precision_ext'],
+            $row['latitude'],
+            $row['longitude'],
         );
     }
 

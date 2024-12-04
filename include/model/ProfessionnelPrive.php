@@ -12,34 +12,11 @@ final class ProfessionnelPrive extends Professionnel
     }
 
     function __construct(
-        string $email,
-        ?int $id,
-        string $mdp_hash,
-        string $nom,
-        string $prenom,
-        string $telephone,
-        Adresse $adresse,
-        string $denomination,
+        array $args_compte,
+        array $args_professionnel,
         readonly string $siren,
     ) {
-        parent::__construct(
-            $id,
-            $email,
-            $mdp_hash,
-            $nom,
-            $prenom,
-            $telephone,
-            $adresse,
-            $denomination,
-        );
-    }
-
-    static function exists(int $id_pro_prive): bool
-    {
-        $stmt = notfalse(DB\connect()->prepare('select ? in (select id from ' . self::TABLE . ')'));
-        DB\bind_values($stmt, [1 => [$id_pro_prive, PDO::PARAM_INT]]);
-        notfalse($stmt->execute());
-        return $stmt->fetchColumn();
+        parent::__construct($args_compte, ...$args_professionnel);
     }
 
     const TABLE = 'pro_prive';

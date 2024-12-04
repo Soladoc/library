@@ -20,7 +20,7 @@ create type categorie_offre as enum (
 );
 
 create type secteur as enum (
-    'public ou associatif',
+    'public',
     'privé'
 );
 

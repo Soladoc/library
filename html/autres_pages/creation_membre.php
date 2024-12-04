@@ -4,6 +4,9 @@ require_once 'queries.php';
 require_once 'redirect.php';
 require_once 'component/Page.php';
 require_once 'component/inputs.php';
+require_once 'model/Compte.php';
+require_once 'model/Membre.php';
+require_once 'model/Professionnel.php';
 
 $page = new Page('Création de compte membre');
 
@@ -14,12 +17,12 @@ function fail(string $error): never
 
 if (isset($_POST['motdepasse'])) {
     $pseudo = $_POST['pseudo'];
-    if (DB\query_membre($pseudo)) {
+    if (Membre::from_db_by_pseudo($pseudo) !== false) {
         fail('Ce pseudo est déjà utilisé.');
     }
 
     $email = $_POST['email'];
-    if (DB\query_membre($email) or DB\query_professionnel($email)) {
+    if (Compte::from_db_by_email($email) !== false) {
         fail('Cette adresse e-mail est déjà utilisée.');
     }
 

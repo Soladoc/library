@@ -13,9 +13,9 @@ abstract class Input
      * @param string $name L'attribut "name" à utiliser. En PHP, ce sera un tableau avec les différents champs du composants.
      */
     function __construct(
-        readonly string $id,
-        readonly string $name,
-        readonly string $form_id,
+        readonly string $id = '',
+        readonly string $name = '',
+        readonly string $form_id = '',
     ) {}
 
     /**

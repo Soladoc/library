@@ -10,9 +10,7 @@ require_once 'component/InputOffre.php';
 
 $offre = notfalse(Offre::from_db(getarg($_GET, 'id', arg_int())));
 
-$page = new Page("offre : {$offre->id}",
-    ['https://unpkg.com/leaflet@1.7.1/dist/leaflet.css'],
-    ['https://unpkg.com/leaflet@1.7.1/dist/leaflet.js' => 'async']);
+$page = new Page("offre : {$offre->id}");
 
 
 if ($_POST) {

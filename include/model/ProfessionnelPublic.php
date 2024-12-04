@@ -4,25 +4,10 @@ require_once 'model/Professionnel.php';
 final class ProfessionnelPublic extends Professionnel
 {
     function __construct(
-        string $email,
-        ?int $id,
-        string $mdp_hash,
-        string $nom,
-        string $prenom,
-        string $telephone,
-        Adresse $adresse,
-        string $denomination,
+        array $args_compte,
+        array $args_professionnel,
     ) {
-        parent::__construct(
-            $id,
-            $email,
-            $mdp_hash,
-            $nom,
-            $prenom,
-            $telephone,
-            $adresse,
-            $denomination,
-        );
+        parent::__construct($args_compte, ...$args_professionnel);
     }
 
     const TABLE = 'pro_public';
