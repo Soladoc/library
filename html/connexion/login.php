@@ -1,6 +1,5 @@
 <?php
 
-use function Auth\location_home;
 require_once 'auth.php';
 require_once 'util.php';
 require_once 'queries.php';
@@ -8,23 +7,17 @@ require_once 'redirect.php';
 require_once 'model/Professionnel.php';
 require_once 'model/Membre.php';
 
-
-if (!isset($_POST['login'])) {
-    echo "Le champ 'login' est manquant.";
-}
-if (!isset($_POST['mdp'])) {
-    echo "Le champ 'mdp' est manquant .";
-}
-
 // Récupérer les données du formulaire
 $args = [
-    'login' => getarg($_POST, 'login'),
-    'mdp' => getarg($_POST, 'mdp'),
+    'login'      => getarg($_POST, 'login'),
+    'mdp'        => getarg($_POST, 'mdp'),
     'return_url' => getarg($_POST, 'return_url', required: false),
 ];
 
 // Connection membre
-if (false !== $user = Membre::from_db_by_pseudo($args['login'])) {
+if (false !== $user = str_contains($args['login'], '@')
+        ? Membre::from_db_by_email($args['login'])
+        : Membre::from_db_by_pseudo($args['login'])) {
     if (!password_verify($args['mdp'], $user->mdp_hash)) {
         fail();
     }
@@ -54,6 +47,6 @@ function fail(): never
 function succeed(): never
 {
     global $args;
-    redirect_to($args['return_url'] ?? location_home());
+    redirect_to($args['return_url'] ?? Auth\location_home());
     exit;
 }
