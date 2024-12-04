@@ -98,6 +98,7 @@ if ($_POST) {
     <body id='detail_compte'>
     <?php $page->put_header() ?>
         <main>
+        <h1>Modifier les informations de votre compte</h1>
 
             <section id="info_compte">  
                 <form action="modif_compte.php" method="post">
