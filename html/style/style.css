@@ -415,20 +415,29 @@ h1 {
 /*----------offre détaillée*/
 /* Bloc 1 : Informations de l'offre */
 .offer-details {
+    display: flex;
     border: 2px solid black;
     border-radius: 8px;
     box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
-    padding: 30px;
-    margin: 20px auto;
     max-width: 80%;
-    text-align: center;
+    margin: 20px auto;
     background-color: white;
-    padding: 20px;
-    margin-bottom: 20px;
+    overflow: hidden;
 }
 
 .offer-main-photo {
-    width: 30%;
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.offer-main-photo .carousel-container {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .offer-photo-large {
@@ -448,7 +457,12 @@ h1 {
 }
 
 .offer-info {
-    width: 40%;
+    flex: 1;
+    padding: 20px;
+    text-align: justify;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
 }
 
 .description {
