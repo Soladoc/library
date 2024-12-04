@@ -79,7 +79,7 @@ if ($offre) {
                     <form id="toggleForm" method="POST" style="display: inline;">
                         <button type="submit" name="valider" class="bouton" id="validateButton" disabled>Valider</button>
                     </form>
-                    <a class="bouton modifier" href="modif_offre.php?id=<?= $args['id'] ?>&type_offre=<?= $offre['categorie'] ?>">Modifier</a>
+                    <a class="bouton modifier" href="modif_offre.php?id=<?= $args['id'] ?>&categorie=<?= $offre['categorie'] ?>">Modifier</a>
                 </div>
             </form>
             <section class="offer-details">

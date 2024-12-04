@@ -5,44 +5,29 @@ require_once 'model/Model.php';
 
 /**
  * @property-read ?int $id L'ID. `null` si cette image n'existe pas dans la BDD.
- * @property int $taille
- * @property string $mime_subtype
- * @property string $legende
  */
 final class Image extends Model
 {
-    protected const FIELDS = [
-        'taille'       => [[null, 'taille',       PDO::PARAM_INT]],
-        'mime_subtype' => [[null, 'mime_subtype', PDO::PARAM_STR]],
-        'legende'      => [[null, 'legende',      PDO::PARAM_STR]],
-    ];
-
     protected static function key_fields()
     {
         return [
-            'id' => ['id', PDO::PARAM_INT, null],
+            'id' => [null, 'id', PDO::PARAM_INT],
         ];
     }
 
-    protected ?int $id;
-    protected int $taille;
-    protected string $mime_subtype;
-    protected ?string $legende;
-    protected ?string $tmp_name;
+    protected const FIELDS = [
+        'taille'       => [null, 'taille',       PDO::PARAM_INT],
+        'mime_subtype' => [null, 'mime_subtype', PDO::PARAM_STR],
+        'legende'      => [null, 'legende',      PDO::PARAM_STR],
+    ];
 
     function __construct(
-        ?int $id,
-        int $taille,
-        string $mime_subtype,
-        ?string $legende,
-        ?string $tmp_name = null,
-    ) {
-        $this->taille       = $taille;
-        $this->mime_subtype = $mime_subtype;
-        $this->legende      = $legende;
-        $this->id           = $id;
-        $this->tmp_name     = $tmp_name;
-    }
+        protected ?int $id,
+        readonly int $taille,
+        readonly string $mime_subtype,
+        readonly ?string $legende,
+        private ?string $tmp_name = null,  // Not even a field - used internally
+    ) {}
 
     static function from_db(int $id_image): Image|false
     {
@@ -60,19 +45,19 @@ final class Image extends Model
 
     /**
      * Déplace cette image téléversée vers le dossier des images utilisateur.
-     * @throws LogicException
-     * @return void
      */
     function move_uploaded_image(): void
     {
         if ($this->tmp_name === null) {
-            throw new LogicException("Impossible de déplacer l'image. Soit l'image a déjà été déplacée, soit elle provient de la BDD");
+            return;
         }
-        notfalse(move_uploaded_file($this->tmp_name, DOCUMENT_ROOT . $this->upload_location()));
+        $dest = DB\document_root() . $this->upload_location();
+        error_log("Moving uploaded image '$this->tmp_name' to '$dest'.");
+        notfalse(move_uploaded_file($this->tmp_name, $dest));
         $this->tmp_name = null;
     }
 
-    function display_location(): string
+    function src(): string
     {
         return $this->tmp_name === null
             ? $this->upload_location()
@@ -83,8 +68,6 @@ final class Image extends Model
     {
         return "/images_utilisateur/$this->id.$this->mime_subtype";
     }
-
-    const TABLE = '_image';
 
     /**
      * Retourne la représentation data-uri du fichier image spécifié.
@@ -139,4 +122,6 @@ final class Image extends Model
         $result .= base64_encode($data);
         return $result;
     }
+
+    const TABLE = '_image';
 }

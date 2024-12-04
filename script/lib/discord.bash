@@ -1,5 +1,5 @@
 # Discord message flag: do not include any embeds when serializing this message
-readonly DMF_SUPPRESS_EMBEDS=4
+#readonly DMF_SUPPRESS_EMBEDS=4
 
 # Send a message to the Discord webhook.
 # $1: integer: message flags bitfield (default 0)

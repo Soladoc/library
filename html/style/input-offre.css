@@ -16,25 +16,6 @@ section {
     margin: 1em 0;
 }
 
-#table-tarifs {
-    margin: 0 auto;
-
-    td {
-        padding: .5em;
-    }
-
-    button {
-        font-size: 1.25em;
-        width: 1.25em;
-        height: 1.25em;
-        padding: 0;
-    }
-
-    input[type=number] {
-        width: 6em;
-    }
-}
-
 #form-offre {
     display: flex;
     flex-direction: row-reverse;

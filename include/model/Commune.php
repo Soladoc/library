@@ -2,18 +2,11 @@
 
 final class Commune
 {
-    const TABLE = '_commune';
-
-    readonly int $code;
-    readonly string $nom;
-    readonly string $numero_departement;
-
-    function __construct(int $code, string $numero_departement, string $nom)
-    {
-        $this->code = $code;
-        $this->nom = $nom;
-        $this->numero_departement = $numero_departement;
-    }
+    function __construct(
+        readonly int $code,
+        readonly string $numero_departement,
+        readonly string $nom,
+    ) {}
 
     static function from_db_by_nom(string $nom): Commune|false
     {
@@ -32,6 +25,7 @@ final class Commune
         $nom = $stmt->fetchColumn();
         return $nom === false ? false : new Commune($code, $numero_departement, $nom);
     }
+
     /**
      * Retourne les code postaux de cette commune.
      * @return string[] Les codes postaux de cette commune.
@@ -44,4 +38,6 @@ final class Commune
         notfalse($stmt->execute());
         return array_column($stmt->fetchAll(), 'code_postal');
     }
+
+    const TABLE = '_commune';
 }

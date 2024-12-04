@@ -6,12 +6,11 @@ require_once 'component/ImageView.php';
 
 final class CarteOffre
 {
-    readonly Offre $offre;
     readonly ImageView $image_principale;
 
-    function __construct(Offre $offre)
-    {
-        $this->offre = $offre;
+    function __construct(
+        readonly Offre $offre,
+    ) {
         $this->image_principale = new ImageView($offre->image_principale);
     }
 

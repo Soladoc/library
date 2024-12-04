@@ -6,58 +6,85 @@ require_once 'Equatable.php';
 
 /**
  * @implements Equatable<OuvertureHebdomadaire>
+ * @implements ArrayAccess<int, MultiRange<Time>>
  */
-final class OuvertureHebdomadaire implements IteratorAggregate, Equatable
+final class OuvertureHebdomadaire implements ArrayAccess, Equatable
 {
-    const TABLE = '_ouverture_hebdomadaire';
-
-    private Offre $offre;
-
     /**
      * @var array<int, MultiRange<Time>>
      */
     private array $ouvertures_hebdomadaires = [];
 
-    function __construct(Offre $offre)
-    {
-        $this->offre = $offre;
-    }
+    function __construct(
+        private readonly Offre $offre,
+    ) {}
 
-    /**
-     * @param int $dow
-     * @param MultiRange<Time> $horaires
-     * @return void
-     */
-    function add(int $dow, MultiRange $horaires): void
+    private function args(int $dow): ?array
     {
-        $this->ouvertures_hebdomadaires[$dow] = $horaires;
-        notfalse(DB\insert_into(self::TABLE, $this->args($dow) + ['horaires' => $horaires])->execute());
-    }
-
-    function remove(string $nom)
-    {
-        unset($this->ouvertures_hebdomadaires[$nom]);
-        notfalse(DB\delete_from(self::TABLE, $this->args($nom))->execute());
-    }
-
-    private function args(int $dow): array
-    {
-        return [
+        return $this->offre->id === null ? null : [
             'id_offre' => $this->offre->id,
-            'dow' => $dow,
+            'dow'      => $dow,
         ];
     }
 
     /**
      * @inheritDoc
      */
-    public function getIterator(): Traversable {
-        return new ArrayIterator($this->ouvertures_hebdomadaires);
+    function equals(mixed $other): bool
+    {
+        return $other->ouvertures_hebdomadaires === $this->ouvertures_hebdomadaires;
     }
+
     /**
      * @inheritDoc
      */
-    public function equals(mixed $other): bool {
-        return $other->ouvertures_hebdomadaires === $this->ouvertures_hebdomadaires;
+    function offsetExists(mixed $dow): bool
+    {
+        return isset($this->ouvertures_hebdomadaires[$dow]);
     }
+
+    /**
+     * @inheritDoc
+     */
+    function offsetGet(mixed $dow): MultiRange
+    {
+        return $this->ouvertures_hebdomadaires[$dow];
+    }
+
+    /**
+     * @inheritDoc
+     */
+    function offsetSet(mixed $dow, mixed $horaires): void
+    {
+        $this->ouvertures_hebdomadaires[$dow] = $horaires;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    function offsetUnset(mixed $dow): void
+    {
+        unset($this->ouvertures_hebdomadaires[$dow]);
+        if (null !== $args = $this->args($dow)) {
+            notfalse(DB\delete_from(self::TABLE, $args)->execute());
+        }
+    }
+
+    function push_to_db(): void
+    {
+        foreach ($this->ouvertures_hebdomadaires as $dow => $horaires) {
+            $this->insert_ouverture_hebdomadaire($dow, $horaires);
+        }
+    }
+
+    private function insert_ouverture_hebdomadaire(int $dow, MultiRange $horaires): void
+    {
+        if (null !== $args = $this->args($dow)) {
+            notfalse(DB\insert_into(self::TABLE, $args + [
+                'horaires' => [$horaires, PDO::PARAM_STR],
+            ])->execute());
+        }
+    }
+
+    const TABLE = '_ouverture_hebdomadaire';
 }

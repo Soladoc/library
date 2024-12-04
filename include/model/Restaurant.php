@@ -3,67 +3,21 @@ require_once 'model/Offre.php';
 
 /**
  * @inheritDoc
- * @property string $carte
- * @property int $richesse
- * @property bool $sert_petit_dejeuner
- * @property bool $sert_brunch
- * @property bool $sert_dejeuner
- * @property bool $sert_diner
- * @property bool $sert_boissons
  */
 final class Restaurant extends Offre
 {
     protected const FIELDS = parent::FIELDS + [
-        'carte'               => [[null, 'carte',               PDO::PARAM_STR]],
-        'richesse'            => [[null, 'richesse',            PDO::PARAM_INT]],
-        'sert_petit_dejeuner' => [[null, 'sert_petit_dejeuner', PDO::PARAM_BOOL]],
-        'sert_brunch'         => [[null, 'sert_brunch',         PDO::PARAM_BOOL]],
-        'sert_dejeuner'       => [[null, 'sert_dejeuner',       PDO::PARAM_BOOL]],
-        'sert_diner'          => [[null, 'sert_diner',          PDO::PARAM_BOOL]],
-        'sert_boissons'       => [[null, 'sert_boissons',       PDO::PARAM_BOOL]],
+        'carte'               => [null, 'carte',               PDO::PARAM_STR],
+        'richesse'            => [null, 'richesse',            PDO::PARAM_INT],
+        'sert_petit_dejeuner' => [null, 'sert_petit_dejeuner', PDO::PARAM_BOOL],
+        'sert_brunch'         => [null, 'sert_brunch',         PDO::PARAM_BOOL],
+        'sert_dejeuner'       => [null, 'sert_dejeuner',       PDO::PARAM_BOOL],
+        'sert_diner'          => [null, 'sert_diner',          PDO::PARAM_BOOL],
+        'sert_boissons'       => [null, 'sert_boissons',       PDO::PARAM_BOOL],
     ];
-
-    const CATEGORIE = 'restaurant';
-    const TABLE     = 'restaurant';
-
-    protected string $carte;
-    protected int $richesse;
-    protected bool $sert_petit_dejeuner;
-    protected bool $sert_brunch;
-    protected bool $sert_dejeuner;
-    protected bool $sert_diner;
-    protected bool $sert_boissons;
 
     // todo: langues
 
-    /**
-     * Construit une nouvelle activité.
-     * @param ?int $id
-     * @param Adresse $adresse
-     * @param Image $image_principale
-     * @param Professionnel $professionnel
-     * @param Abonnement $abonnement
-     * @param string $titre
-     * @param string $resume
-     * @param string $description_detaillee
-     * @param ?string $url_site_web
-     * @param MultiRange<FiniteTimestamp> $periodes_ouverture
-     * @param ?FiniteTimestamp $modifiee_le
-     * @param ?bool $en_ligne
-     * @param ?float $note_moyenne
-     * @param ?float $prix_min
-     * @param ?FiniteTimestamp $creee_le
-     * @param ?Duree $en_ligne_ce_mois_pendant
-     * @param ?FiniteTimestamp $changement_ouverture_suivant_le
-     * @param ?bool $est_ouverte
-     * @param string $carte
-     * @param int $richesse
-     * @param bool $sert_petit_dejeuner
-     * @param bool $sert_brunch
-     * @param bool $sert_dejeuner
-     * @param bool $sert_diner
-     * @param bool $sert_boissons
-     */
     function __construct(
         ?int $id,
         Adresse $adresse,
@@ -76,13 +30,13 @@ final class Restaurant extends Offre
         ?string $url_site_web,
         MultiRange $periodes_ouverture,
         //
-        string $carte,
-        int $richesse,
-        bool $sert_petit_dejeuner,
-        bool $sert_brunch,
-        bool $sert_dejeuner,
-        bool $sert_diner,
-        bool $sert_boissons,
+        readonly string $carte,
+        readonly int $richesse,
+        readonly bool $sert_petit_dejeuner,
+        readonly bool $sert_brunch,
+        readonly bool $sert_dejeuner,
+        readonly bool $sert_diner,
+        readonly bool $sert_boissons,
         //
         ?FiniteTimestamp $modifiee_le                     = null,
         ?bool $en_ligne                                   = null,
@@ -113,13 +67,6 @@ final class Restaurant extends Offre
             $changement_ouverture_suivant_le,
             $est_ouverte,
         );
-        $this->carte               = $carte;
-        $this->richesse            = $richesse;
-        $this->sert_petit_dejeuner = $sert_petit_dejeuner;
-        $this->sert_brunch         = $sert_brunch;
-        $this->sert_dejeuner       = $sert_dejeuner;
-        $this->sert_diner          = $sert_diner;
-        $this->sert_boissons       = $sert_boissons;
     }
 
     protected static function from_db_row(array $row): self
@@ -154,4 +101,7 @@ final class Restaurant extends Offre
             $row['est_ouverte'],
         );
     }
+
+    const CATEGORIE = 'restaurant';
+    const TABLE     = 'restaurant';
 }

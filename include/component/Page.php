@@ -1,7 +1,7 @@
 <?php
 
 // Comme toutes les pages appellent ce script, on peut considérer ici comme l'endroit ou exécuter le code qui doit affecter TOUT
-error_reporting(E_ALL & ~E_NOTICE); // Notamment confiurer PHP pour afficher + d'erreurs
+error_reporting(E_ALL & ~E_NOTICE);  // Notamment confiurer PHP pour afficher + d'erreurs
 
 require_once 'auth.php';
 
@@ -11,26 +11,23 @@ final class Page
         'style.css',
         'offer-list.css',
         'footer.css',
+        'dynamic-table.css',
     ];
+
     private const BASE_SCRIPTS = [
         'base.js' => 'defer',
     ];
-
-    readonly string $title;
-    readonly array $stylesheets;
-    readonly array $scripts;
 
     /**
      * @param string $title Le titre du document.
      * @param array<string> $stylesheets Un liste de chemins relatifs dans au dossier `/style` des feuilles de style CSS à inclure.
      * @param array<string, string> $scripts Un tableau associatif mappant des chemins relatifs au dossier `/script_js` des script JS à inclure vers leurs paramètres qui correspond au reste de l'attribut.
      */
-    function __construct(string $title, array $stylesheets = [], array $scripts = [])
-    {
-        $this->title = $title;
-        $this->stylesheets = $stylesheets;
-        $this->scripts = $scripts;
-    }
+    function __construct(
+        readonly string $title,
+        readonly array $stylesheets = [],
+        readonly array $scripts     = [],
+    ) {}
 
     /**
      * Affiche l'élement `<head>` HTML avec le titre, feuilles de style CSS et les scripts JS fournis.
@@ -100,7 +97,7 @@ final class Page
             </div>
         </a>
         <div id="header_pro">
-            <a href="/autres_pages/detail_compte.php?id=<?= Auth\id_compte_connecte()?>">
+            <a href="/autres_pages/detail_compte.php?id=<?= Auth\id_compte_connecte() ?>">
                 <div class="auth-button">
                     <!-- <img src="" alt="Profil"> -->
                     <span>Compte</span>

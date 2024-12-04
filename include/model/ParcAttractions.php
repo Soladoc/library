@@ -3,42 +3,15 @@ require_once 'model/Offre.php';
 
 /**
  * @inheritDoc
- * @property Image $image_plan
  */
 final class ParcAttractions extends Offre
 {
     protected const FIELDS = parent::FIELDS + [
-        'age_requis'     => [[null, 'age_requis',     PDO::PARAM_INT]],
-        'nb_attractions' => [[null, 'nb_attractions', PDO::PARAM_INT]],
-        'image_plan'     => [['id', 'id_image_plan',  PDO::PARAM_INT]],
+        'age_requis'     => [null, 'age_requis',     PDO::PARAM_INT],
+        'nb_attractions' => [null, 'nb_attractions', PDO::PARAM_INT],
+        'id_image_plan'  => ['id', 'image_plan',     PDO::PARAM_INT],
     ];
 
-    protected ?int $age_requis;
-    protected int $nb_attractions;
-    protected Image $image_plan;
-
-    /**
-     * Construit une nouvelle activité.
-     * @param ?int $id
-     * @param Adresse $adresse
-     * @param Image $image_principale
-     * @param Professionnel $professionnel
-     * @param Abonnement $abonnement
-     * @param string $titre
-     * @param string $resume
-     * @param string $description_detaillee
-     * @param ?string $url_site_web
-     * @param MultiRange<FiniteTimestamp> $periodes_ouverture
-     * @param ?FiniteTimestamp $modifiee_le
-     * @param ?bool $en_ligne
-     * @param ?float $note_moyenne
-     * @param ?float $prix_min
-     * @param ?FiniteTimestamp $creee_le
-     * @param ?Duree $en_ligne_ce_mois_pendant
-     * @param ?FiniteTimestamp $changement_ouverture_suivant_le
-     * @param ?bool $est_ouverte
-     * @param Image $image_plan
-     */
     function __construct(
         ?int $id,
         Adresse $adresse,
@@ -51,7 +24,9 @@ final class ParcAttractions extends Offre
         ?string $url_site_web,
         MultiRange $periodes_ouverture,
         //
-        Image $image_plan,
+        readonly ?int $age_requis,
+        readonly int $nb_attractions,
+        readonly Image $image_plan,
         //
         ?FiniteTimestamp $modifiee_le                     = null,
         ?bool $en_ligne                                   = null,
@@ -82,7 +57,12 @@ final class ParcAttractions extends Offre
             $changement_ouverture_suivant_le,
             $est_ouverte,
         );
-        $this->image_plan = $image_plan;
+    }
+
+    function push_to_db(): void
+    {
+        $this->image_plan->push_to_db();
+        parent::push_to_db();
     }
 
     protected static function from_db_row(array $row): self
@@ -99,6 +79,8 @@ final class ParcAttractions extends Offre
             $row['url_site_web'] ?? null,
             MultiRange::parse($row['periodes_ouverture'], FiniteTimestamp::parse(...)),
             //
+            $row['age_requis'],
+            $row['nb_attractions'],
             Image::from_db($row['id_image_plan']),
             //
             FiniteTimestamp::parse($row['modifiee_le']),

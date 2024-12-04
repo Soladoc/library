@@ -1,4 +1,5 @@
 <?php
+require_once 'model/Professionnel.php';
 
 final class ProfessionnelPublic extends Professionnel
 {
@@ -23,4 +24,6 @@ final class ProfessionnelPublic extends Professionnel
             $denomination,
         );
     }
+
+    const TABLE = 'pro_public';
 }

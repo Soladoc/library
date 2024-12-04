@@ -3,6 +3,7 @@ require_once 'util.php';
 require_once 'queries.php';
 require_once 'redirect.php';
 require_once 'component/Page.php';
+require_once 'model/ProfessionnelPrive.php';
 
 $args = [
     'id' => getarg($_GET, 'id', arg_int())
@@ -16,6 +17,7 @@ $page = new Page("detail_compte_membre : {$args['id']}",
 $id = $args['id'];
 $membre = DB\query_compte_membre($args['id']);
 $pro = DB\query_compte_professionnel($args['id']);
+$est_prive = ProfessionnelPrive::exists($id);
 
 if ($membre !== false) {
     // echo '<pre>';
@@ -42,7 +44,7 @@ if ($membre !== false) {
     $id_adresse = $pro['id_adresse'];
     $adresse = DB\query_adresse($id_adresse);
 
-    if (DB\exists_pro_prive($id)) {
+    if ($est_prive) {
         $siren = DB\query_get_siren($id);
     }
 } else {
@@ -71,7 +73,7 @@ if ($membre !== false) {
                     <p>Dénomination :</p>
                     <span><?= $denomination ?></span>
                 </div>
-                <?php if (DB\exists_pro_prive($id)): ?>
+                <?php if ($est_prive): ?>
                     <div id="siren">
                         <p>Siren :</p>
                         <span><?= $siren ?></span>

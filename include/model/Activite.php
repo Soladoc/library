@@ -3,50 +3,16 @@ require_once 'model/Offre.php';
 
 /**
  * @inheritDoc
- * @property Duree $indication_duree
- * @property ?int $age_requis
- * @property string $prestations_incluses
- * @property ?string $prestations_non_incluses
  */
 final class Activite extends Offre
 {
     protected const FIELDS = parent::FIELDS + [
-        'indication_duree'         => [[null, 'indication_duree',         PDO::PARAM_STR]],
-        'age_requis'               => [[null, 'age_requis',               PDO::PARAM_INT]],
-        'prestations_incluses'     => [[null, 'prestations_incluses',     PDO::PARAM_STR]],
-        'prestations_non_incluses' => [[null, 'prestations_non_incluses', PDO::PARAM_STR]],
+        'indication_duree'         => [null, 'indication_duree',         PDO::PARAM_STR],
+        'age_requis'               => [null, 'age_requis',               PDO::PARAM_INT],
+        'prestations_incluses'     => [null, 'prestations_incluses',     PDO::PARAM_STR],
+        'prestations_non_incluses' => [null, 'prestations_non_incluses', PDO::PARAM_STR],
     ];
 
-    protected Duree $indication_duree;
-    protected ?int $age_requis;
-    protected string $prestations_incluses;
-    protected ?string $prestations_non_incluses;
-
-    /**
-     * Construit une nouvelle activité.
-     * @param ?int $id
-     * @param Adresse $adresse
-     * @param Image $image_principale
-     * @param Professionnel $professionnel
-     * @param Abonnement $abonnement
-     * @param string $titre
-     * @param string $resume
-     * @param string $description_detaillee
-     * @param ?string $url_site_web
-     * @param MultiRange<FiniteTimestamp> $periodes_ouverture
-     * @param ?FiniteTimestamp $modifiee_le
-     * @param ?bool $en_ligne
-     * @param ?float $note_moyenne
-     * @param ?float $prix_min
-     * @param ?FiniteTimestamp $creee_le
-     * @param ?Duree $en_ligne_ce_mois_pendant
-     * @param ?FiniteTimestamp $changement_ouverture_suivant_le
-     * @param ?bool $est_ouverte
-     * @param Duree $indication_duree
-     * @param ?int $age_requis
-     * @param string $prestations_incluses
-     * @param ?string $prestations_non_incluses
-     */
     function __construct(
         ?int $id,
         Adresse $adresse,
@@ -59,10 +25,10 @@ final class Activite extends Offre
         ?string $url_site_web,
         MultiRange $periodes_ouverture,
         //
-        Duree $indication_duree,
-        ?int $age_requis,
-        string $prestations_incluses,
-        ?string $prestations_non_incluses,
+        readonly Duree $indication_duree,
+        readonly ?int $age_requis,
+        readonly string $prestations_incluses,
+        readonly ?string $prestations_non_incluses,
         //
         ?FiniteTimestamp $modifiee_le                     = null,
         ?bool $en_ligne                                   = null,
@@ -93,10 +59,6 @@ final class Activite extends Offre
             $changement_ouverture_suivant_le,
             $est_ouverte,
         );
-        $this->indication_duree         = $indication_duree;
-        $this->age_requis               = $age_requis;
-        $this->prestations_incluses     = $prestations_incluses;
-        $this->prestations_non_incluses = $prestations_non_incluses;
     }
 
     protected static function from_db_row(array $row): self

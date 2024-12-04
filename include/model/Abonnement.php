@@ -3,18 +3,10 @@ require_once 'db.php';
 
 final class Abonnement
 {
-    const TABLE = '_abonnement';
-
-    readonly string $libelle;
-    readonly float $prix_journalier;
-
     private function __construct(
-        string $libelle,
-        float $prix_journalier,
-    ) {
-        $this->libelle = $libelle;
-        $this->prix_journalier = $prix_journalier;
-    }
+        readonly string $libelle,
+        readonly float $prix_journalier,
+    ) {}
 
     private static ?array $instances;
 
@@ -29,4 +21,6 @@ final class Abonnement
         );
         return self::$instances[$libelle_abonnement];
     }
+
+    const TABLE = '_abonnement';
 }

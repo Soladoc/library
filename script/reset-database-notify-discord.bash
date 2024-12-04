@@ -5,6 +5,8 @@ cd "$(dirname "${BASH_SOURCE[0]}")"
 
 . lib/discord.bash
 
+env
+
 # Functions
 
 # Call GitHub api with pagination, explicit JSON accept and API version headers.
@@ -37,9 +39,10 @@ fmt_hms() {
 }
 
 # The last lines of the step log.
-# $1: integer: the step number
-# $2: string: the step name
-# $3: integer: tail -n argument
+# $1: string: the job name
+# $2: integer: the step number
+# $3: string: the step name
+# $4: integer: tail -n argument
 # stdout: the last $log_lines lines of the step log.
 gh_job_logs() {
     # Get logs for all jobs
@@ -48,9 +51,9 @@ gh_job_logs() {
     gh-api "repos/$REPOSITORY/actions/runs/$RUN_ID/logs" >"$logs_zip"
 
     # Unzip logs
-    unzip -p "$logs_zip" "$JOB_ID/${1}_$2" |
+    unzip -p "$logs_zip" "$1/${2}_$3.txt" |
         sort |         # sort by timestamp
-        tail -n "$3" | # take last entries
+        tail -n "$4" | # take last entries
         colrm 1 29     # remove timestamp
 }
 
@@ -85,7 +88,7 @@ readonly success_cheers=(
 
 readonly log_lines=20
 
-readonly relevant_job='Reset Database'
+readonly relevant_step='Reset Database'
 
 # Main logic
 
@@ -111,14 +114,15 @@ fi
 # Get failed job info
 mapfile -t job < <(
     gh-api "repos/$REPOSITORY/actions/runs/$RUN_ID/jobs" --jq "
-    .jobs[0] | .html_url, (.steps | map(select(.conclusion == \"failure\" or .name == \"$relevant_job\")) | .[0] | .name, .number)"
+    .jobs[0] | .name, .html_url, (.steps | map(select(.conclusion == \"failure\" or .name == \"$relevant_step\")) | .[0] | .name, .number)"
 )
-readonly failed_job_url="${job[0]}" failed_step_name="${job[1]}" failed_step_number="${job[2]}"
+readonly failed_job_name="${job[0]}" failed_job_url="${job[1]}" failed_step_name="${job[2]}" failed_step_number="${job[3]}"
 
 link_part="\`$DISPLAY_TITLE\` > \`$failed_step_name\` (step $failed_step_number) ([job]($failed_job_url))"
 
 if [[ "$CONCLUSION" == failure ]]; then
-    discord_send_msg "$DMF_SUPPRESS_EMBEDS" <<EOF
+    # shellcheck disable=SC2119
+    discord_send_msg <<EOF
 @here $ACTOR a cassé la BDD :skull:
 $link_part
 
@@ -127,12 +131,13 @@ $(array_pick_random "${failure_jokes[@]}")
 Dernières $log_lines lignes du log :
 
 \`\`\`log
-$(gh_job_logs "$failed_step_number" "$failed_step_name" $log_lines)
+$(gh_job_logs "$failed_job_name" "$failed_step_number" "$failed_step_name" $log_lines)
 \`\`\`
 EOF
 elif [[ "$CONCLUSION" == success ]]; then
     repair_duration="$(fmt_hms "$(date_diff "$TIMESTAMP" "$prev_timestamp")")"
-    discord_send_msg "$DMF_SUPPRESS_EMBEDS" <<EOF
+    # shellcheck disable=SC2119
+    discord_send_msg <<EOF
 @here Bravo à $ACTOR pour avoir réparé la BDD en $repair_duration :+1:
 $link_part
 

@@ -6,12 +6,9 @@ require_once 'model/Image.php';
 
 final class ImageView
 {
-    readonly Image $image;
-
-    function __construct(Image $image)
-    {
-        $this->image = $image;
-    }
+    function __construct(
+        readonly Image $image,
+    ) {}
 
     /**
      * Affiche le composant d'image utilisateur dans une figure.
@@ -36,7 +33,7 @@ final class ImageView
     function put_img(): void
     {
 ?>
-<img src="<?= $this->image->display_location() ?>"
+<img src="<?= $this->image->src() ?>"
     alt="<?= $this->image->legende ?: 'image' ?>"
     title="<?= $this->image->legende ?>">
 <?php

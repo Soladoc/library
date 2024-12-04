@@ -31,8 +31,8 @@ function connect(): PDO
     // Connect to the database
     $driver = 'pgsql';
     // Pour le dév. en localhost: on n'a pas accès au conteneur postgresdb, on utilise donc le FQDN.
-    $host = _is_localhost() ? '413.ventsdouest.dev' : 'postgresdb';
-    $port = notfalse(getenv('PGDB_PORT'), 'PGDB_PORT not set');
+    $host   = _is_localhost() ? '413.ventsdouest.dev' : 'postgresdb';
+    $port   = notfalse(getenv('PGDB_PORT'), 'PGDB_PORT not set');
     $dbname = 'postgres';
 
     $_pdo = new PDO(
@@ -95,12 +95,21 @@ function _is_localhost(): bool
     return empty(filter_var($server_ip, FILTER_VALIDATE_IP, FILTER_FLAG_NO_RES_RANGE | FILTER_FLAG_NO_PRIV_RANGE));
 }
 
+/**
+ * Le chemin absolu de du dossier racine du serveur.
+ * @return string
+ */
+function document_root(): string
+{
+    return _is_localhost() ? __DIR__ . '/../html' : '/var/www/html';
+}
+
 // Query construction functions
 
 enum BoolOperator: string
 {
     case AND = 'and';
-    case OR = 'or';
+    case OR  = 'or';
 }
 
 function quote_identifier(string $identifier): string
@@ -117,20 +126,20 @@ function quote_string(string $string): string
  * Generates a WHERE clause for a SQL query based on an array of key-value pairs.
  *
  * @param BoolOperator $operator The logical operator to use between clauses.
- * @param array $clauses An array containing the conditions for the WHERE clause.
+ * @param string[] $clauses An array containing the conditions for the WHERE clause.
  * @return string The generated WHERE clause, or an empty string if no clauses are provided.
  */
 function where_clause(BoolOperator $operator, array $clauses): string
 {
     return $clauses
-        ? ' where ' . implode(" $operator->value ", array_map(fn($attr) => "$attr = :$attr", $clauses))
-        : '';
+        ? ' where ' . implode(" $operator->value ", array_map(fn($attr) => "$attr = :$attr", $clauses)) . ' '
+        : ' ';
 }
 
 /**
  * Prépare un *statement* INSERT INTO pour 1 ligne retournant des colonnes.
  * @param string $table La table dans laquelle insérer
- * @param array $args Les noms de colonne => leur valeur.
+ * @param array<string, array{mixed, int}> $args Les noms de colonne => leur valeur.
  * @param string[] $returning Les colonnes a mettre dans la clause RETURNING.
  * @return PDOStatement Une *statement* prêt à l'exécution, retournant un table 1x1, la valeur de la colonne ID.
  */
@@ -139,10 +148,12 @@ function insert_into(string $table, array $args, array $returning = []): PDOStat
     if (!$args) {
         return notfalse(connect()->prepare("insert into $table default values"));
     }
+
     $column_names = implode(',', array_keys($args));
-    $arg_names = implode(',', array_map(fn($col) => ":$col", array_keys($args)));
-    $returning = $returning ? 'returning ' . implode(',', array_map(quote_identifier(...), $returning)) : '';
-    $stmt = notfalse(connect()->prepare("insert into $table ($column_names) values ($arg_names) $returning"));
+    $arg_names    = implode(',', array_map(fn($col) => ":$col", array_keys($args)));
+    $stmt         = notfalse(connect()->prepare("insert into $table ($column_names) values ($arg_names)"
+                . ($returning ? 'returning ' . implode(',', array_map(quote_identifier(...), $returning)) : '')));
+
     bind_values($stmt, $args);
     return $stmt;
 }
@@ -150,22 +161,29 @@ function insert_into(string $table, array $args, array $returning = []): PDOStat
 /**
  * Prépare un *statement* UPDATE.
  * @param string $table La table dans la quelle mettre à jour.
- * @param array $args Les colonnes à modifier => leurs valeurs pour la clause SET du UPDATE.
- * @param array $key_args Les colonnes clés => leurs valeurs pour la clause WHERE du UPDATE.
+ * @param array<string, array{mixed, int}> $args Les colonnes à modifier => leurs valeurs pour la clause SET du UPDATE.
+ * @param array<string, array{mixed, int}> $key_args Les colonnes clés => leurs valeurs pour la clause WHERE du UPDATE.
+ * @param string[] $returning Les colonnes a mettre dans la clause RETURNING.
  * @return PDOStatement Un *statement* prêt à l'exécution, ne retournant rien.
  */
-function update(string $table, array $args, array $key_args): PDOStatement
+function update(string $table, array $args, array $key_args, array $returning = []): PDOStatement
 {
     if (!$args) {
         return notfalse(connect()->prepare('select null'));  // todo: does a empty string work as a noop? test it when we get a working thing.
     }
-    $sets = implode(',', array_map(fn($col) => "$col = :$col", array_keys($args)));
-    $stmt = notfalse(connect()->prepare("update $table set $sets" . where_clause(BoolOperator::AND, array_keys($key_args))));
+
+    $stmt = notfalse(connect()->prepare("update $table set "
+        . implode(',', array_map(fn($col) => "$col = :$col", array_keys($args)))
+        . where_clause(BoolOperator::AND, array_keys($key_args))
+        . ($returning ? 'returning ' . implode(',', array_map(quote_identifier(...), $returning)) : '')));
+
     bind_values($stmt, $args);
+    bind_values($stmt, $key_args);
     return $stmt;
 }
 
-function delete_from(string $table, array $key_args): PDOStatement {
+function delete_from(string $table, array $key_args): PDOStatement
+{
     $stmt = notfalse(connect()->prepare("delete from $table " . where_clause(BoolOperator::AND, array_keys($key_args))));
     bind_values($stmt, $key_args);
     return $stmt;
@@ -197,13 +215,16 @@ function filter_null_args(array $array): array
 final class LogPDO extends PDO
 {
     private int $query_no = 1;
-    function query(string $query, ?int $fetchMode = null, mixed ...$fetchModeArgs): PDOStatement|false {
+
+    function query(string $query, ?int $fetchMode = null, mixed ...$fetchModeArgs): PDOStatement|false
+    {
         error_log("LogPDO ({$this->query_no}) query: '$query'");
         ++$this->query_no;
         return parent::query($query, $fetchMode, $fetchModeArgs);
     }
 
-    function prepare(string $query, array $options = []): PDOStatement|false {
+    function prepare(string $query, array $options = []): PDOStatement|false
+    {
         error_log("LogPDO ({$this->query_no}) prepare: '$query'");
         ++$this->query_no;
         return parent::prepare($query, $options);

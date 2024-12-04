@@ -2,28 +2,14 @@
 
 final class Duree
 {
-    readonly int $years;
-    readonly int $months;
-    readonly int $days;
-    readonly int $hours;
-    readonly int $minutes;
-    readonly float $seconds;
-
     function __construct(
-        int $years = 0,
-        int $months = 0,
-        int $days = 0,
-        int $hours = 0,
-        int $minutes = 0,
-        float $seconds = 0,
-    ) {
-        $this->years = $years;
-        $this->months = $months;
-        $this->days = $days;
-        $this->hours = $hours;
-        $this->minutes = $minutes;
-        $this->seconds = $seconds;
-    }
+        readonly int $years     = 0,
+        readonly int $months    = 0,
+        readonly int $days      = 0,
+        readonly int $hours     = 0,
+        readonly int $minutes   = 0,
+        readonly float $seconds = 0,
+    ) {}
 
     function __toString(): string
     {
@@ -41,10 +27,10 @@ final class Duree
         if ($output === null) return null;
 
         $matches = [];
-        $years = 0;
-        $months = 0;
-        $days = 0;
-        $hours = 0;
+        $years   = 0;
+        $months  = 0;
+        $days    = 0;
+        $hours   = 0;
         $minutes = 0;
         $seconds = 0;
         if (notfalse(preg_match('/(\d+) years/', $output, $matches)) === 1

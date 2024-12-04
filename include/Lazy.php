@@ -16,23 +16,18 @@ final class Lazy
     }
 
     /**
-     * @var callable(): T
+     * @param Closure(): T $get_value
      */
-    private $get_value;
-
-    /**
-     * @param callable(): T $get_value
-     */
-    function __construct(callable $get_value)
-    {
-        $this->get_value = $get_value;
-    }
+    function __construct(
+        private readonly Closure $get_value,
+    ) {}
 
     /**
      * @param T $value
      * @return Lazy
      */
-    static function of(mixed $value): self {
+    static function of(mixed $value): self
+    {
         return new self(fn() => $value);
     }
 }

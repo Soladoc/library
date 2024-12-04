@@ -4,6 +4,7 @@ require_once 'queries.php';
 require_once 'redirect.php';
 require_once 'component/Page.php';
 require_once 'component/inputs.php';
+require_once 'model/ProfessionnelPrive.php';
 
 $page = new Page('Modification compte (todo)');
 $error_mdp = null;
@@ -17,6 +18,8 @@ $id = $args['id'];
 
 $membre = DB\query_compte_membre($id);
 $pro = DB\query_compte_professionnel($id);
+$est_prive = ProfessionnelPrive::exists($id);
+
 if ($membre !== false) {
     $mdp_hash =$membre['mdp_hash'];
 } else if ($pro !== false) {
@@ -144,7 +147,7 @@ if ($membre !== false) {
     $telephone = $pro['telephone'];
     $id_adresse = $pro['id_adresse'];
     $adresse = DB\query_adresse($id_adresse);
-    if (DB\exists_pro_prive($id)) {
+    if ($est_prive) {
         $siren = DB\query_get_siren($id);
     }
 } else {
@@ -177,7 +180,7 @@ if ($membre !== false) {
                             <input id="new_denomination" name="new_denomination" type="text" value="<?= htmlspecialchars($denomination) ?>" placeholder="votre nouvelle dénomination">
                         </div>
                         </br>
-                        <?php if (DB\exists_pro_prive($id)) { ?>
+                        <?php if ($est_prive) { ?>
                             <div>
                                 <div id="siren">
                                     <label>SIREN : </label>

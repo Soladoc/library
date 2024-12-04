@@ -6,75 +6,41 @@ require_once 'model/Model.php';
 
 /**
  * @property-read ?int $id L'ID. `null` si cette adresse n'existe pas dans la BDD.
- * @property Commune $commune
- * @property ?int $numero_voie
- * @property ?string $complement_numero
- * @property ?string $nom_voie
- * @property ?string $localite
- * @property ?string $precision_int
- * @property ?string $precision_ext
- * @property ?float $latitude
- * @property ?float $longitude
- * @property ?int $id
  */
 final class Adresse extends Model
 {
-    protected const FIELDS = [
-        'commune' => [
-            ['code',               'code_commune',       PDO::PARAM_INT],
-            ['numero_departement', 'numero_departement', PDO::PARAM_STR]
-        ],
-        'numero_voie' => [[null,       'numero_voie',       PDO::PARAM_STR]],
-        'complement_numero' => [[null, 'complement_numero', PDO::PARAM_STR]],
-        'nom_voie' => [[null,          'nom_voie',          PDO::PARAM_STR]],
-        'localite' => [[null,          'localite',          PDO::PARAM_STR]],
-        'precision_int' => [[null,     'precision_int',     PDO::PARAM_STR]],
-        'precision_ext' => [[null,     'precision_ext',     PDO::PARAM_STR]],
-        'latitude' => [[null,          'latitude',          PDO::PARAM_STR]],
-        'longitude' => [[null,         'longitude',         PDO::PARAM_STR]],
-    ];
-
     protected static function key_fields()
     {
         return [
-            'id' => ['id', PDO::PARAM_INT, null],
+            'id' => [null, 'id', PDO::PARAM_INT],
         ];
     }
 
-    protected Commune $commune;
-    protected ?int $numero_voie;
-    protected ?string $complement_numero;
-    protected ?string $nom_voie;
-    protected ?string $localite;
-    protected ?string $precision_int;
-    protected ?string $precision_ext;
-    protected ?float $latitude;
-    protected ?float $longitude;
-    protected ?int $id;
+    protected const FIELDS = [
+        'code_commune'       => ['code',               'commune',           PDO::PARAM_INT],
+        'numero_departement' => ['numero_departement', 'commune',           PDO::PARAM_STR],
+        'numero_voie'        => [null,                 'numero_voie',       PDO::PARAM_STR],
+        'complement_numero'  => [null,                 'complement_numero', PDO::PARAM_STR],
+        'nom_voie'           => [null,                 'nom_voie',          PDO::PARAM_STR],
+        'localite'           => [null,                 'localite',          PDO::PARAM_STR],
+        'precision_int'      => [null,                 'precision_int',     PDO::PARAM_STR],
+        'precision_ext'      => [null,                 'precision_ext',     PDO::PARAM_STR],
+        'latitude'           => [null,                 'latitude',          PDO::PARAM_STR],
+        'longitude'          => [null,                 'longitude',         PDO::PARAM_STR],
+    ];
 
     function __construct(
-        ?int $id,
-        Commune $commune,
-        ?int $numero_voie          = null,
-        ?string $complement_numero = null,
-        ?string $nom_voie          = null,
-        ?string $localite          = null,
-        ?string $precision_int     = null,
-        ?string $precision_ext     = null,
-        ?float $latitude           = null,
-        ?float $longitude          = null,
-    ) {
-        $this->id                = $id;
-        $this->commune           = $commune;
-        $this->numero_voie       = $numero_voie;
-        $this->complement_numero = $complement_numero;
-        $this->nom_voie          = $nom_voie;
-        $this->localite          = $localite;
-        $this->precision_int     = $precision_int;
-        $this->precision_ext     = $precision_ext;
-        $this->latitude          = $latitude;
-        $this->longitude         = $longitude;
-    }
+        protected ?int $id,
+        readonly Commune $commune,
+        readonly ?int $numero_voie          = null,
+        readonly ?string $complement_numero = null,
+        readonly ?string $nom_voie          = null,
+        readonly ?string $localite          = null,
+        readonly ?string $precision_int     = null,
+        readonly ?string $precision_ext     = null,
+        readonly ?float $latitude           = null,
+        readonly ?float $longitude          = null,
+    ) {}
 
     /**
      * Récupère une adresse depuis la base de données.

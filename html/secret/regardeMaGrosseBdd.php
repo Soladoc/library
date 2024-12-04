@@ -1,16 +1,14 @@
 <?php
+require_once 'db.php';
 require_once 'component/Page.php';
 
 $page = new Page('regarde dans la bdd');
 
-function quote(string $name): string
-{
-    return '"' . str_replace('"', '""', $name) . '"';
-}
-
 require_once 'db.php';
 if ($table = $_GET['table'] ?? null) {
-    $results = DB\connect()->query('table ' . quote($_GET['schema'] ?: 'pact') . '.' . quote($table))->fetchAll();
+    $results = DB\connect()->query('table '
+        . DB\quote_identifier($_GET['schema'] ?? 'pact')
+        . '.' . DB\quote_identifier($table))->fetchAll();
     // Vérifier s'il y a des résultats
     if ($results) {
         echo "<table border='1'>";

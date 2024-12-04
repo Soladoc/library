@@ -1,11 +1,12 @@
 <?php
+require_once 'db.php';
+require_once 'model/Professionnel.php';
 
 final class ProfessionnelPrive extends Professionnel
 {
     protected const FIELDS = parent::FIELDS + [
-        'siren' => [[null, 'siren', PDO::PARAM_STR]],
+        'siren' => [null, 'siren', PDO::PARAM_STR],
     ];
-    protected string $siren;
 
     function __construct(
         string $email,
@@ -16,7 +17,7 @@ final class ProfessionnelPrive extends Professionnel
         string $telephone,
         Adresse $adresse,
         string $denomination,
-        string $siren,
+        readonly string $siren,
     ) {
         parent::__construct(
             $id,
@@ -28,6 +29,15 @@ final class ProfessionnelPrive extends Professionnel
             $adresse,
             $denomination,
         );
-        $this->siren = $siren;
     }
+
+    static function exists(int $id_pro_prive): bool
+    {
+        $stmt = notfalse(DB\connect()->prepare('select ? in (select id from ' . self::TABLE . ')'));
+        DB\bind_values($stmt, [1 => [$id_pro_prive, PDO::PARAM_INT]]);
+        notfalse($stmt->execute());
+        return $stmt->fetchColumn();
+    }
+
+    const TABLE = 'pro_prive';
 }

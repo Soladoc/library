@@ -76,10 +76,4 @@ const CONTEXTES_VISITE = [
     'amis',
 ];
 
-/**
- * Le chemin absolu de du dossier racine du serveur.
- * @var string
- */
-const DOCUMENT_ROOT = '/var/www/html';
-
 const PDO_PARAM_FLOAT = PDO::PARAM_STR;

@@ -920,12 +920,29 @@ section#info_compte div span {
     margin: 2rem auto;
 }
 
+.review-list {
+    border: 2px solid black;
+    border-radius: 8px;
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
+    padding: 20px;
+    margin: 20px auto;
+    max-width: 80%;
+    text-align: center;
+}
+
+.review-summary {
+    margin-bottom: 30px;
+}
+
 .review {
     border: 2px solid black;
     border-radius: 8px;
     box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
     padding: 15px;
-    margin-bottom: 20px;
+    margin: 20px auto;
+    display: inline-block;
+    max-width: 80%;
+    text-align: left;
 }
 
 .review-date {
@@ -934,4 +951,3 @@ section#info_compte div span {
     margin-top: 10px;
     display: block;
 }
-
