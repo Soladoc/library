@@ -11,7 +11,7 @@ $page = new Page('Modifier offre',
     ['module/input-offre.js' => 'defer type="module"']);
 
 $categorie = getarg($_GET, 'categorie', arg_check(f_is_in(array_keys(CATEGORIES_OFFRE))));
-$offre = notfalse(Offre::from_db($id_offre  = getarg($_GET, 'id', arg_int())));
+$offre     = notfalse(Offre::from_db($id_offre = getarg($_GET, 'id', arg_int())));
 
 $input_offre = new InputOffre(
     $categorie,

@@ -1,10 +1,13 @@
 <?php
 require_once 'auth.php';
 require_once 'component/ImageView.php';
+require_once 'component/InputNote.php';
 require_once 'component/Page.php';
 require_once 'db.php';
 require_once 'model/Avis.php';
+require_once 'model/AvisRestaurant.php';
 require_once 'model/Offre.php';
+require_once 'model/Restaurant.php';
 require_once 'model/Date.php';
 require_once 'model/Membre.php';
 require_once 'queries.php';
@@ -12,29 +15,36 @@ require_once 'queries.php';
 $offre = notfalse(Offre::from_db(getarg($_GET, 'id', arg_int())));
 
 if ($_POST) {
-    $commentaire = getarg($_POST, 'commentaire');
-    $date_avis   = getarg($_POST, 'date');
-    $note        = getarg($_POST, 'rating', arg_int());
-    $contexte    = getarg($_POST, 'contexte');
-    if (($id_membre_co = Auth\id_membre_connecte()) === null) {
+    if (null === $id_membre_co = Auth\id_membre_connecte()) {
         $error_message = 'Veuillez vous connecter pour publier un avis.';
     } else {
-        $avis = new Avis(
+        $args_avis = [
             null,
-            $commentaire,
-            $note,
-            Date::parse($date_avis),
-            $contexte,
+            getarg($_POST, 'commentaire'),
+            getarg($_POST, 'rating', arg_int()),
+            Date::parse(getarg($_POST, 'date')),
+            getarg($_POST, 'contexte'),
             Membre::from_db($id_membre_co),
             $offre,
-        );
+        ];
+        $avis = $offre instanceof Restaurant
+            ? new AvisRestaurant(
+                $args_avis,
+                getarg($_POST, 'note_cuisine', arg_int()),
+                getarg($_POST, 'note_service', arg_int()),
+                getarg($_POST, 'note_ambiance', arg_int()),
+                getarg($_POST, 'note_qualite_prix', arg_int()),
+            )
+            : new Avis(...$args_avis);
         $avis->push_to_db();
         $success_message = 'Avis ajouté avec succès !';
     }
 }
 
-$page = new Page($offre->titre,
-    scripts: ['carrousel.js' => 'defer']);
+$page = new Page(
+    $offre->titre,
+    scripts: ['carrousel.js' => 'defer']
+);
 $id_membre_co = Auth\id_membre_connecte();
 ?>
 
@@ -42,6 +52,7 @@ $id_membre_co = Auth\id_membre_connecte();
 <html lang="fr">
 
 <?php $page->put_head() ?>
+
 <body>
     <?php
     $page->put_header();
@@ -54,15 +65,15 @@ $id_membre_co = Auth\id_membre_connecte();
                     <div class="carousel">
                         <!-- Image principale -->
                         <div class="carousel-slide">
-                                <?php (new ImageView($offre->image_principale))->put_img() ?>
-                            </div>
+                            <?php (new ImageView($offre->image_principale))->put_img() ?>
+                        </div>
 
-                            <!-- Galerie d'images -->
-                            <?php foreach ($offre->galerie as $image): ?>
-                                <div class="carousel-slide">
-                                    <?php (new ImageView($image))->put_img() ?>
-                                </div>
-                            <?php endforeach ?>
+                        <!-- Galerie d'images -->
+                        <?php foreach ($offre->galerie as $image): ?>
+                            <div class="carousel-slide">
+                                <?php (new ImageView($image))->put_img() ?>
+                            </div>
+                        <?php endforeach ?>
                     </div>
 
                     <!-- Boutons de navigation -->
@@ -70,8 +81,6 @@ $id_membre_co = Auth\id_membre_connecte();
                     <button class="carousel-next" aria-label="Image suivante">❯</button>
                 </div>
             </section>
-
-
 
             <div class="offer-info">
                 <h2><?= htmlspecialchars($offre->titre) ?></h2>
@@ -83,7 +92,7 @@ $id_membre_co = Auth\id_membre_connecte();
         <!-- Location -->
 
         <section class="offer-reviews">
-            
+
             <section class="offer-location">
                 <h3>Emplacement et coordonnées</h3>
                 <!-- <div id="map" class="map"></div> -->
@@ -93,27 +102,26 @@ $id_membre_co = Auth\id_membre_connecte();
                     <p><strong>Téléphone&nbsp;:</strong> 02 96 46 63 80</p>
                 </div>
             </section>
-                                
+
             <!-- Formulaire d'avis -->
             <div class="review-form">
                 <h3>Laisser un avis</h3><br>
                 <div class="message">
                     <?php if (isset($error_message)): ?>
-                    <p class="error-message"><?= htmlspecialchars($error_message) ?></p>
+                        <p class="error-message"><?= htmlspecialchars($error_message) ?></p>
                     <?php elseif (isset($success_message)): ?>
-                    <p class="success-message"><?= htmlspecialchars($success_message) ?></p>
+                        <p class="success-message"><?= htmlspecialchars($success_message) ?></p>
                     <?php endif ?>
                 </div>
                 <form method="post">
                     <textarea name="commentaire" placeholder="Votre avis..." required></textarea>
-                    <label for="rating">Note&nbsp;:</label>
-                    <select name="rating" id="rating" required>
-                        <option value="5">5 étoiles</option>
-                        <option value="4">4 étoiles</option>
-                        <option value="3">3 étoiles</option>
-                        <option value="2">2 étoiles</option>
-                        <option value="1">1 étoile</option>
-                    </select>
+                    <label>Note&nbsp;: <?php (new InputNote(name: 'rating'))->put() ?></label>
+                    <?php if ($offre instanceof Restaurant) { ?>
+                        <label>Note cuisine&nbsp;: <?php (new InputNote(name: 'note_cuisine'))->put() ?></label>
+                        <label>Note service&nbsp;: <?php (new InputNote(name: 'note_service'))->put() ?></label>
+                        <label>Note ambiance&nbsp;: <?php (new InputNote(name: 'note_ambiance'))->put() ?></label>
+                        <label>Note qualité prix&nbsp;: <?php (new InputNote(name: 'note_qualite_prix'))->put() ?></label>
+                    <?php } ?>
                     <label for="contexte">Contexte&nbsp;:</label>
                     <select name="contexte" id="contexte" required>
                         <option value="affaires">Affaires</option>
@@ -135,36 +143,40 @@ $id_membre_co = Auth\id_membre_connecte();
             <div class="review-list">
                 <h4>Avis de la communauté</h4>
                 <div class="review-summary">
-                <h4>Résumé des notes</h4>
-                <p>Nombre d'avis : <?= $offre->nb_avis ?></p>
-                <p>Moyenne&nbsp;: <?php if ($offre->note_moyenne !== null) { echo round($offre->note_moyenne, 2); } else { echo 0; } ?>/5 ★</p>
-                <div class="rating-distribution">
-                    <?php $avis = DB\query_avis(id_offre: $offre->id) ?>
-                    <p>5 étoiles&nbsp;: <?= count(array_filter($avis, fn($a) => $a['note'] === 5)) ?> avis.</p>
-                    <p>4 étoiles&nbsp;: <?= count(array_filter($avis, fn($a) => $a['note'] === 4)) ?> avis.</p>
-                    <p>3 étoiles&nbsp;: <?= count(array_filter($avis, fn($a) => $a['note'] === 3)) ?> avis.</p>
-                    <p>2 étoiles&nbsp;: <?= count(array_filter($avis, fn($a) => $a['note'] === 2)) ?> avis.</p>
-                    <p>1 étoile&nbsp;: <?= count(array_filter($avis, fn($a) => $a['note'] === 1)) ?> avis.</p>
+                    <h4>Résumé des notes</h4>
+                    <p>Nombre d'avis : <?= $offre->nb_avis ?></p>
+                    <p>Moyenne&nbsp;: <?php if ($offre->note_moyenne !== null) {
+                        echo round($offre->note_moyenne, 2);
+                    } else {
+                        echo 0;
+                    } ?>/5 ★</p>
+                    <div class="rating-distribution">
+                        <?php $avis = DB\query_avis(id_offre: $offre->id) ?>
+                        <p>5 étoiles&nbsp;: <?= count(array_filter($avis, fn($a) => $a['note'] === 5)) ?> avis.</p>
+                        <p>4 étoiles&nbsp;: <?= count(array_filter($avis, fn($a) => $a['note'] === 4)) ?> avis.</p>
+                        <p>3 étoiles&nbsp;: <?= count(array_filter($avis, fn($a) => $a['note'] === 3)) ?> avis.</p>
+                        <p>2 étoiles&nbsp;: <?= count(array_filter($avis, fn($a) => $a['note'] === 2)) ?> avis.</p>
+                        <p>1 étoile&nbsp;: <?= count(array_filter($avis, fn($a) => $a['note'] === 1)) ?> avis.</p>
+                    </div>
+                    <?php if (!empty($avis)) {
+                        foreach ($avis as $avis_temp) { ?>
+                            <div class="review">
+                                <p><strong><?= htmlspecialchars($avis_temp['pseudo_auteur']) ?></strong> - <?= htmlspecialchars($avis_temp['note']) ?>/5</p>
+                                <p class="review-contexte">Contexte&nbsp;: <?= htmlspecialchars($avis_temp['contexte']) ?></p>
+                                <p><?= htmlspecialchars($avis_temp['commentaire']) ?></p>
+                                <p class="review-date"><?= htmlspecialchars($avis_temp['date_experience']) ?></p>
+                                <?php if ($id_membre_co !== null && $avis_temp['id_membre_auteur'] === $id_membre_co) { ?>
+                                    <form method="post" action="/avis/modifier.php?avis_id=<?= $avis_temp['id'] ?>&offre=<?= $offre->id ?>">
+                                        <button type="submit" class="btn-modif">Modifier</button>
+                                        <button type="submit" name="action" value="supprimer">Supprimer</button>
+                                    </form>
+                                <?php } ?>
+                            </div>
+                        <?php }
+                    } else { ?>
+                        <p>Aucun avis pour le moment. Soyez le premier à en écrire un&nbsp;!</p>
+                    <?php } ?>
                 </div>
-                <?php if (!empty($avis)) {
-                    foreach ($avis as $avis_temp) { ?>
-                        <div class="review">
-                            <p><strong><?= htmlspecialchars($avis_temp['pseudo_auteur']) ?></strong> - <?= htmlspecialchars($avis_temp['note']) ?>/5</p>
-                            <p class="review-contexte">Contexte&nbsp;: <?= htmlspecialchars($avis_temp['contexte']) ?></p>
-                            <p><?= htmlspecialchars($avis_temp['commentaire']) ?></p>
-                            <p class="review-date"><?= htmlspecialchars($avis_temp['date_experience']) ?></p>
-                            <?php if ($id_membre_co !== null && $avis_temp['id_membre_auteur'] === $id_membre_co) { ?>
-                            <form method="post" action="/avis/modifier.php?avis_id=<?= $avis_temp['id'] ?>&offre=<?= $offre->id ?>">
-                                <button type="submit" class="btn-modif">Modifier</button>
-                                <button type="submit" name="action" value="supprimer">Supprimer</button>
-                            </form>
-                            <?php } ?> 
-                        </div>
-                    <?php }
-                } else { ?>
-                    <p>Aucun avis pour le moment. Soyez le premier à en écrire un&nbsp;!</p>
-                <?php } ?>
-            </div>
         </section>
     </main>
     <?php $page->put_footer() ?>
