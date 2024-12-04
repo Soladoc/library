@@ -108,6 +108,10 @@ header #header_pro{
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
 }
 
+.auth-button:hover {
+    text-decoration: none;
+}
+
 .auth-button img {
     height: 30px;
     margin-right: 10px;
