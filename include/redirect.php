@@ -48,9 +48,9 @@ function location_creation_offre(): string
     return "/autres_pages/choix_categorie_creation_offre.php";
 }
 
-function location_detail_compte(int $id_compte): string
+function location_detail_compte(): string
 {
-    return "/autres_pages/detail_compte.php?id=$id_compte";
+    return "/autres_pages/detail_compte.php";
 }
 
 function location_modifier_offre(int $id_offre): string

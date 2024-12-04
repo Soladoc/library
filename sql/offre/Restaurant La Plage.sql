@@ -81,6 +81,11 @@ with
                 4,
                 5
             )
+    ),
+    s2 as ( -- Cette CTE a besoin des valeurs des précédentes, mais elle ne retourne pas de valeur. On doit quand même la nommer, on utilsera la convention de nomamge s1, s2, s3...
+        insert into _changement_etat (id_offre, fait_le)
+        values
+        ((table id_offre), '2024-11-15 12:00:00') -- mise en ligne
     )
 insert into
     _ouverture_hebdomadaire (id_offre, dow, horaires)
@@ -133,8 +138,3 @@ values
                 timemultirange (timerange ('12:', '15:30'), timerange ('18:30', '23:59:59'))
         )
     );
-insert into
-    _changement_etat (id_offre, fait_le)
-values
-    ((table id_offre), '2024-10-15 12:00:00') -- mise en ligne
-;
