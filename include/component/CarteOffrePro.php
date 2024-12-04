@@ -24,7 +24,7 @@ final class CarteOffrePro
     <?php $this->image_principale->put_img() ?>
     <h3><a href="<?= location_detail_offre_pro($this->offre->id) ?>"><?= $this->offre->titre ?></a></h3>
     <p class="location"><?= $this->offre->adresse->format() ?></p>
-    <p class="category"><?= $this->offre->categorie ?></p>
+    <p class="category"><?= ucfirst($this->offre->categorie) ?></p>
     <p class="rating">
         <?php if ($this->offre->note_moyenne === 0) { ?>
             Aucun avis

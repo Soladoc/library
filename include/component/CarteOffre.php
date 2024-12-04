@@ -26,7 +26,7 @@ final class CarteOffre
     <h3><a href="<?= location_detail_offre($this->offre->id) ?>"><?= $this->offre->titre ?></a></h3>
     <p class="location"><?= $this->offre->adresse->format() ?></p>
     <p><?= $this->offre->resume ?></p>
-    <p class="category"><?= $this->offre->categorie ?></p>
+    <p class="category"><?= ucfirst($this->offre->categorie) ?></p>
 </div>
 <?php
     }
