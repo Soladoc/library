@@ -4,12 +4,14 @@ final class AvisRestaurant extends Avis
 {
     protected static function fields()
     {
-        return parent::fields() + [
+        $fields = parent::fields() + [
             'note_cuisine'      => [null, 'note_cuisine',      PDO::PARAM_INT],
             'note_service'      => [null, 'note_service',      PDO::PARAM_INT],
             'note_ambiance'     => [null, 'note_ambiance',     PDO::PARAM_INT],
             'note_qualite_prix' => [null, 'note_qualite_prix', PDO::PARAM_INT],
         ];
+        $fields['id_restaurant'] = array_pop_key($fields, 'id_offre');
+        return $fields;
     }
 
     function __construct(

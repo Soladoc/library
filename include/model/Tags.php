@@ -29,7 +29,7 @@ final class Tags implements IteratorAggregate, Equatable
         }
     }
 
-    function insert(): void
+    function push_to_db(): void
     {
         foreach (array_keys($this->tags) as $tag) {
             $this->insert_tag($tag);

@@ -129,12 +129,11 @@ abstract class Offre extends Model implements Signalable
 
     function push_to_db(): void
     {
-        $this->professionnel->push_to_db();
         $this->adresse->push_to_db();
         $this->image_principale->push_to_db();
         parent::push_to_db();
-        $this->tarifs->insert();
-        $this->tags->insert();
+        $this->tarifs->push_to_db();
+        $this->tags->push_to_db();
         $this->ouverture_hebdomadaire->push_to_db();
         $this->galerie->push_to_db();
     }
