@@ -1,4 +1,4 @@
-<?php
+<?php 
 require_once 'db.php';
 require_once 'util.php';
 require_once 'queries.php';
@@ -112,8 +112,8 @@ if ($_POST) {
                     <p class="review-contexte">Contexte&nbsp;: <?= htmlspecialchars($avis_temp['contexte']) ?></p>
                     <p><?= htmlspecialchars($avis_temp['commentaire']) ?></p>
                     <p class="review-date"><?= htmlspecialchars($avis_temp['date_experience']) ?></p>
-                    <?php if (($id_membre_co = Auth\id_membre_connecte()) !== null && $avis_temp['id_membre_auteur'] = $id_membre_co) { ?>
-                    <form method="post" action="modifier.php?id=<?= $offre->id ?>&avis_id=<?= $avis_id ?>">
+                    <?php if (($id_membre_co == Auth\id_membre_connecte()) != null && $avis_temp['id_membre_auteur'] = $id_membre_co) { ?>
+                    <form method="post" action="modifier.php?id=<?= $offre->id ?>&avis_id=<?= $avis_temp['id'] ?>">
                         <button type="submit" class="btn-modif">Modifier</button>
                     </form>
                     <?php } ?>
