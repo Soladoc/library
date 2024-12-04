@@ -58,9 +58,11 @@ abstract class Model
             );
         }
         notfalse($stmt->execute());
-        $row = notfalse($stmt->fetch());
-        foreach ($returning_fields as $column => [$db_to_php, $attr, $type]) {
-            $this->$attr = $db_to_php === null ? $row[$column] : $db_to_php($row[$column]);
+        if ($returning_fields) {
+            $row = notfalse($stmt->fetch());
+            foreach ($returning_fields as $column => [$db_to_php, $attr, $type]) {
+                $this->$attr = $db_to_php === null ? $row[$column] : $db_to_php($row[$column]);
+            }
         }
     }
 

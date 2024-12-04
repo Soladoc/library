@@ -5,6 +5,7 @@ require_once 'component/Page.php';
 require_once 'db.php';
 require_once 'model/Avis.php';
 require_once 'model/Offre.php';
+require_once 'model/Date.php';
 require_once 'model/Membre.php';
 require_once 'queries.php';
 
@@ -22,7 +23,7 @@ if ($_POST) {
             null,
             $commentaire,
             $note,
-            FiniteTimestamp::parse($date_avis),
+            Date::parse($date_avis),
             $contexte,
             false,
             false,

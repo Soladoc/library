@@ -101,7 +101,7 @@ function filterOffers() {
     const mainCategory = document.getElementById('main-category').value.trim().toLowerCase();
     const subcategoryCheckboxes = document.querySelectorAll('input[name="subcategory"]:checked');
     const selectedSubcategories = Array.from(subcategoryCheckboxes).map(cb => cb.id.toLowerCase());
-    const keywordInput = document.getElementById('keyword-search').value.trim().toLowerCase();
+    const keywordParts = document.getElementById('keyword-search').value.trim().toLowerCase();
     // Filtrage des offres
     const filteredOffers = offers.filter(offer => {
         // Filtrage par catégorie principale
