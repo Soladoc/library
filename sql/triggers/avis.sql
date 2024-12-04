@@ -21,7 +21,7 @@ execute function avis_insert ();
 -- Update
 create function avis_update () returns trigger as $$
 begin
-    update_avis(old, new);
+    call update_avis(old, new);
 end
 $$ language plpgsql;
 
