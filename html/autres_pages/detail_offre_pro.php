@@ -1,4 +1,4 @@
-<?php 
+<?php
 require_once 'db.php';
 require_once 'util.php';
 require_once 'queries.php';
@@ -10,8 +10,7 @@ require_once 'component/InputOffre.php';
 
 $offre = notfalse(Offre::from_db(getarg($_GET, 'id', arg_int())));
 
-$page = new Page("offre : {$offre->id}");
-
+$page = new Page($offre->titre, scripts: ['carrousel.js' => 'defer']);
 
 if ($_POST) {
     $offre->alterner_etat();
@@ -106,7 +105,7 @@ $id_membre_co = Auth\exiger_connecte_pro();
                             <p class="review-contexte">Contexte&nbsp;: <?= htmlspecialchars($avis_temp['contexte']) ?></p>
                             <p><?= htmlspecialchars($avis_temp['commentaire']) ?></p>
                             <p class="review-date"><?= htmlspecialchars($avis_temp['date_experience']) ?></p>
-                            <?php if ($id_membre_co!= null && $avis_temp['id_membre_auteur'] = $id_membre_co) { ?>
+                            <?php if ($id_membre_co !== null && $avis_temp['id_membre_auteur'] === $id_membre_co) { ?>
                                 <form method="post" action="modifier.php?id=<?= $offre->id ?>&avis_id=<?= $avis_temp['id'] ?>">
                                     <button type="submit" class="btn-modif">Modifier</button>
                                 </form>
