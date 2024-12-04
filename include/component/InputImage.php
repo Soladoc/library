@@ -30,15 +30,13 @@ final class InputImage extends Input
         $files = getarg($_FILES, $this->name);
         $files = $this->multiple ? soa_to_aos($files) : [$files];
 
-        dbg_print($files);
-
-        return array_map(fn($file, $current_id_image) => new Image(
+        return $files[0]['name'] ? array_map(fn($file, $current_id_image) => new Image(
             $current_id_image,
             getarg($file, 'size', arg_int()),
             explode('/', $file['type'], 2)[1],
             getarg($get_or_post, "{$this->name}_legende", required: false),
             $file['tmp_name'],
-        ), $files, $current_id_images ?? []);
+        ), $files, $current_id_images ?? []) : null;
     }
 
     /**
