@@ -10,6 +10,7 @@ $page        = new Page('Modification compte (todo)');
 $error_mdp   = null;
 $error_tel   = null;
 $error_email = null;
+$error_siren = null;
 
 $compte = notfalse(Compte::from_db(Auth\id_compte_connecte()));
 
@@ -33,7 +34,12 @@ if ($_POST) {
     // modif siren
     $new_siren = getarg($_POST, 'new_siren', null, false);
     if ($new_siren) {
-        DB\query_update_siren($compte->id, $new_siren);
+        if(!preg_match('#^[0-9]{9}$#', $new_siren)){
+            $error_siren =  'siren incorrect, doit être composé de 9 chiffres'
+        }
+        else {
+            DB\query_update_siren($compte->id, $new_siren);
+        }
     }
 
     // modif Nom
