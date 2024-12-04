@@ -658,7 +658,7 @@ a:not(:hover, :focus, :focus-within) {
     display: flex;
     align-items: center;
     gap: 8px;
-    background-color: var(--color-secondary);
+    background-color: var(--color-accent);
     color: #fff;
     padding: 8px 12px;
     border-radius: 5px;
@@ -667,7 +667,7 @@ a:not(:hover, :focus, :focus-within) {
 }
 
 .subcategory-list div:hover {
-    background-color: var(--color-accent);
+    background-color: var(--color-secondary);
 }
 
 .subcategory-list input[type=checkbox] {
