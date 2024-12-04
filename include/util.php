@@ -180,7 +180,7 @@ function arg_float(?int $min_range = null)
  * @param ?int $max_range La valeur maximale de l'entier ou `null` pour pas de maximum.
  * @return int|null|false L'entier parsé ou `false` en cas de mauvaise syntaxe, ou `null` si `$value` était `null` (à l'instar de PostgreSQL, cette fonction propage `null`).
  */
-function parse_int(?string $output, ?int $min_range = null, ?int $max_range): int|null|false
+function parse_int(?string $output, ?int $min_range = null, ?int $max_range = null): int|null|false
 {
     // remove trailing zeros before filtering
     return $output === null ? null : filter_var(
