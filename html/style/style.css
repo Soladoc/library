@@ -950,7 +950,7 @@ section#info_compte div {
     padding-bottom: 0.5rem;
 }
 
-section#info_compte div p {
+section#info_compte div p :not(.error){
     margin: 0;
     font-weight: bold;
     color: #555;
