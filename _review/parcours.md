@@ -100,5 +100,5 @@
 
 19. Modifier / supprimer un avis 
 
-200. Montrer detail offre
+20. Montrer detail offre
     + montrer avis coté pro
