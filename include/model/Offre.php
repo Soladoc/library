@@ -144,6 +144,15 @@ abstract class Offre extends Model implements Signalable
         $this->galerie->push_to_db();
     }
 
+    function alterner_etat() {
+        if ($this->id === null) {
+            throw new LogicException('cette offre doit exister dans la bdd');
+        }
+        $stmt = notfalse(DB\connect()->prepare('insert into _changement_etat (id_offre) values (?)'));
+        DB\bind_values($stmt, [1 => [$this->id, PDO::PARAM_INT]]);
+        notfalse($stmt->execute());
+    }
+
     static function from_db(int $id_offre): Offre|false
     {
         if (static::TABLE !== self::TABLE) {

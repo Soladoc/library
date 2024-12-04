@@ -50,17 +50,6 @@ function query_offres_a_une(): Iterator
 
 // Insertions
 
-/**
- * Toggles the state (en ligne/hors ligne) of an offer by adding a row in the _changement_etat table.
- *
- * @param int $id_offre The ID of the offer to toggle the state for.
- */
-function offre_alterner_etat(int $id_offre): void
-{
-    $stmt = notfalse(connect()->prepare('insert into _changement_etat (id_offre) values (?)'));
-    bind_values($stmt, [1 => [$id_offre, PDO::PARAM_INT]]);
-    notfalse($stmt->execute());
-}
 
 function offre_insert_galerie_image(int $id_offre, int $id_image)
 {
