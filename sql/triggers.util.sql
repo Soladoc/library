@@ -119,6 +119,8 @@ create function insert_compte (inout new record) as $$
 declare
     id_identite int;
 begin
+    new.email = lower(new.email);
+
     insert into pact._identite default values returning id into new.id;
     insert into pact._signalable default values returning id into new.id_signalable;
     insert into pact._compte (

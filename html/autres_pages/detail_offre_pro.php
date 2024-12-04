@@ -20,7 +20,7 @@ if ($_POST) {
     redirect_to($_SERVER['REQUEST_URI']);
     exit;
 }
-$id_membre_co = Auth\id_membre_connecte();
+$id_membre_co = Auth\exiger_connecte_pro();
 ?>
 
 <!DOCTYPE html>
