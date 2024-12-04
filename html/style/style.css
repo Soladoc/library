@@ -973,3 +973,8 @@ section#info_compte div span {
     margin-top: 10px;
     display: block;
 }
+
+.nb-offres {
+    align-self: flex-start;
+    margin-left: 20px; /* Ajustez si nécessaire pour un bon alignement */
+}
