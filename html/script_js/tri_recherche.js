@@ -125,12 +125,12 @@ function filterOffers() {
         
         if (keywordParts.length > 0) {
             // const lowerCaseTitle = (offer.title || '').toLowerCase(); // Assure que le titre est en minuscule
-            const lowerCaseCategory = (offer.categorie || '').toLowerCase();
+            const lowerCaseCategory = (offer.categorie .toLowerCase();
 
             // Vérifier si un mot-clé est présent dans le titre, la catégorie ou les tags
             const matchesKeyword = keywordParts.some(part =>
                 // lowerCaseTitle.includes(part) ||
-                lowerCaseCategory.includes(part) ||
+                lowerCaseCategory.includes(part) 
             );
 
             if (!matchesKeyword) {
