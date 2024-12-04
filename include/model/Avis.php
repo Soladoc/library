@@ -93,7 +93,7 @@ class Avis extends Model
             $row['lu'],
             $row['blackliste'],
             $row['pseudo_auteur'],
-            $row['publie_le'],
+            FiniteTimestamp::parse($row['publie_le']),
         ];
 
         $id_restaurant = $row['id_restaurant'] ?? null;
