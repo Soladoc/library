@@ -64,9 +64,6 @@ REGEX;
         if ($upper !== null && $lower !== null && $upper <= $lower) {
             throw new RangeException('Borne supérieure inférieure à la borne inférieure.');
         }
-
-        $this->lower     = $lower;
-        $this->upper     = $upper;
         $this->lower_inc = $lower !== null && $lower_inc;
         $this->upper_inc = $upper !== null && $upper_inc;
     }
