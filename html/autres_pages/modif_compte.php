@@ -11,10 +11,7 @@ $error_mdp = null;
 $error_tel = null;
 $error_email = null;
 
-$args = [
-    'id' => getarg($_GET, 'id', arg_int())
-];
-$id = $args['id'];
+$id = Auth\id_compte_connecte();
 
 $membre = DB\query_compte_membre($id);
 $pro = DB\query_compte_professionnel($id);
@@ -25,7 +22,7 @@ if ($membre !== false) {
 } else if ($pro !== false) {
     $mdp_hash = $pro['mdp_hash'];
 } else {
-    html_error("le compte d'ID {$args['id']} n'existe pas");
+    html_error("le compte d'ID {$id} n'existe pas");
 }
 
 
@@ -118,8 +115,8 @@ if ($_POST) {
     }
 }
 
-$membre = DB\query_compte_membre($args['id']);
-$pro = DB\query_compte_professionnel($args['id']);
+$membre = DB\query_compte_membre($id);
+$pro = DB\query_compte_professionnel($id);
 
 
 
@@ -151,7 +148,7 @@ if ($membre !== false) {
         $siren = DB\query_get_siren($id);
     }
 } else {
-    html_error("le compte d'ID {$args['id']} n'existe pas");
+    html_error("le compte d'ID {$id} n'existe pas");
 }
 
 ?>
@@ -163,7 +160,7 @@ if ($membre !== false) {
         <main>
 
             <section id="info_compte">  
-                <form action="modif_compte.php?id=<?= $id ?>" method="post">
+                <form action="modif_compte.php" method="post">
                     <?php if ($membre !== false) { ?>
                         <div>
                             <div id="pseudo">
