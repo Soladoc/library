@@ -24,8 +24,10 @@ if ($offre instanceof Restaurant) {
     $input_note_qualite_prix = new InputNote(name: 'note_qualite_prix');
 }
 
+$id_membre_co = Auth\id_membre_connecte();
+
 if ($_POST) {
-    if (null === $id_membre_co = Auth\id_membre_connecte()) {
+    if (null === $id_membre_co) {
         $error_message = 'Veuillez vous connecter pour publier un avis.';
     } else {
         $args_avis = [
