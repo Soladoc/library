@@ -81,7 +81,7 @@ with
                 4,
                 5
             )
-    )
+    ),
     s2 as ( -- Cette CTE a besoin des valeurs des précédentes, mais elle ne retourne pas de valeur. On doit quand même la nommer, on utilsera la convention de nomamge s1, s2, s3...
         insert into _changement_etat (id_offre, fait_le)
         values
