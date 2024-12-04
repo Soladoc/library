@@ -4,35 +4,40 @@ require_once 'Equatable.php';
 
 /**
  * @implements Equatable<Galerie>
- * @implements IteratorAggregate<int, Image>
+ * @property-read Image[] $galerie
  */
-final class Galerie implements IteratorAggregate, Equatable {
-    const TABLE = '_galerie';
-
-    private readonly Offre $offre;
-
+final class Galerie implements Equatable
+{
+    function __get(string $name): mixed {
+        return match ($name) {
+            'images' => $this->images,
+        };
+    }
     /**
      * @var Image[]
      */
     private array $images = [];
 
-    function __construct(Offre $offre) {
-        $this->offre = $offre;
-    }
+    function __construct(
+        private readonly Offre $offre,
+    ) {}
 
-    function add(Image $image): void {
+    function add(Image $image): void
+    {
         $this->images[] = $image;
         $this->insert_galerie($image);
     }
 
-    function remove(Image $image): void {
+    function remove(Image $image): void
+    {
         $this->images = array_diff($this->images, [$image]);
-        if (null !== $args = $this->args($image->id)) {
+        if (null !== $args = $this->args($image)) {
             notfalse(DB\delete_from(self::TABLE, $args));
         }
     }
 
-    function insert(): void {
+    function insert(): void
+    {
         foreach ($this->images as $image) {
             $this->insert_galerie($image);
         }
@@ -41,28 +46,36 @@ final class Galerie implements IteratorAggregate, Equatable {
     /**
      * @inheritDoc
      */
-    function getIterator(): Traversable {
+    function getIterator(): Traversable
+    {
         return new ArrayIterator($this->images);
     }
 
-    private function args(int $id_image): ?array
+    private function args(Image $image): ?array
     {
-        return $this->offre->id === null ? null : [
+        if ($this->offre->id === null) return null;
+        $image->insert();
+        return [
             'id_offre' => [$this->offre->id, PDO::PARAM_INT],
-            'id_image' => [$id_image, PDO::PARAM_INT],
+            'id_image' => [$image->id, PDO::PARAM_INT],
         ];
     }
+
     /**
      * @inheritDoc
      */
-    function equals(mixed $other): bool {
+    function equals(mixed $other): bool
+    {
         return $other->images === $this->images;
     }
 
-    private function insert_galerie(Image $image): void {
-        if (null !== $args = $this->args($image->id)) {
+    private function insert_galerie(Image $image): void
+    {
+        if (null !== $args = $this->args($image)) {
             $image->insert();
             notfalse(DB\insert_into(self::TABLE, $args));
         }
     }
+
+    const TABLE = '_galerie';
 }

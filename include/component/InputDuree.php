@@ -10,11 +10,6 @@ require_once 'model/Duree.php';
  */
 final class InputDuree extends Input
 {
-    function __construct(string $id = '', string $name = '', string $form_id = '')
-    {
-        parent::__construct($id, $name, $form_id);
-    }
-
     /**
      * Récupère l'adresse saisie.
      * @param array $get_or_post `$_GET` ou `$_POST` (selon la méthode du formulaire)

@@ -7,47 +7,23 @@ require_once 'util.php';
 final class DynamicTable extends Input
 {
     /**
-     * @var callable(DynamicTable, ?array): void
-     */
-    private readonly Closure $put_row;
-
-    /**
-     * @var callable(DynamicTable): void
-     */
-    private readonly Closure $put_prompt;
-
-    /**
-     * @var array
-     */
-    private readonly array $columns;
-
-    /**
-     * @var array[]
-     */
-    private readonly array $initial_rows;
-
-    /**
-     * @param callable(DynamicTable, ?array): void $put_row
-     * @param callable(DynamicTable): void $put_prompt
+     * @param Closure(DynamicTable, ?array): void $put_row
+     * @param Closure(DynamicTable): void $put_prompt
      * @param array $columns
      * @param string $id
      * @param string $name
      * @param string $form_id
      */
     function __construct(
-        array $columns,
-        callable $put_row,
-        callable $put_prompt,
+        private readonly array $columns,
+        private readonly Closure $put_row,
+        private readonly Closure $put_prompt,
         string $id,
         string $name        = '',
         string $form_id     = '',
-        array $initial_rows = []
+        private readonly array $initial_rows = [],
     ) {
         parent::__construct($id, $name, $form_id);
-        $this->put_row      = Closure::fromCallable($put_row);
-        $this->put_prompt   = Closure::fromCallable($put_prompt);
-        $this->columns      = $columns;
-        $this->initial_rows = $initial_rows;
     }
 
     /**

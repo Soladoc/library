@@ -9,11 +9,6 @@ require_once 'model/Adresse.php';
  */
 final class InputAdresse extends Input
 {
-    function __construct(string $id = '', string $name = '', string $form_id = '')
-    {
-        parent::__construct($id, $name, $form_id);
-    }
-
     /**
      * Récupère l'adresse saisie.
      * @param array $get_or_post `$_GET` ou `$_POST` (selon la méthode du formulaire)
@@ -32,8 +27,8 @@ final class InputAdresse extends Input
             $data['localite'] ?: null,
             $data['precision_int'] ?: null,
             $data['precision_ext'] ?: null,
-            $data['latitude'] ?: null,
-            $data['longitude'] ?: null,
+            $data['latitude'] ?? null ?: null,
+            $data['longitude'] ?? null ?: null,
         );
     }
 

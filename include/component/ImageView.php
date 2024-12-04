@@ -36,7 +36,7 @@ final class ImageView
     function put_img(): void
     {
 ?>
-<img src="<?= $this->image->display_location() ?>"
+<img src="<?= $this->image->src() ?>"
     alt="<?= $this->image->legende ?: 'image' ?>"
     title="<?= $this->image->legende ?>">
 <?php

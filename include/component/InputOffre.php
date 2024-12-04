@@ -20,22 +20,22 @@ require_once 'component/InputAdresse.php';
  */
 final class InputOffre extends Input
 {
-    private readonly string $categorie;
-    private readonly Professionnel $professionnel;
     private readonly InputDuree $input_indication_duree;
     private readonly InputAdresse $input_adresse;
     private readonly InputImage $input_image_principale;
     private readonly InputImage $input_image_plan;
-    /** @var DynamicTable<Tarifs> */
     private readonly DynamicTable $tarifs;
-    /** @var DynamicTable<NonEmptyRange<FiniteTimestamp>> */
     private readonly DynamicTable $periodes;
+    private readonly InputImage $galerie;
 
-    function __construct(string $categorie, Professionnel $professionnel, string $id = '', string $name = '', string $form_id = '')
-    {
+    function __construct(
+        private readonly string $categorie,
+        private readonly Professionnel $professionnel,
+        string $id = '',
+        string $name = '',
+        string $form_id = ''
+    ) {
         parent::__construct($id, $name, $form_id);
-        $this->categorie = $categorie;
-        $this->professionnel = $professionnel;
         $this->input_indication_duree = new InputDuree(
             id: $this->id('indication_duree'),
             name: $this->name('indication_duree'),
@@ -63,26 +63,26 @@ final class InputOffre extends Input
             put_row: function (DynamicTable $dt, ?array $row) {
                 $form_attr = $dt->form_id ? "form=\"$dt->form_id\"" : '';
                 ?>
-            <td><input <?= $form_attr ?>
-                name="<?= $this->name('tarifs') ?>[nom][]"
-                type="text"
-                placeholder="Enfant, Sénior&hellip;"
-                required
-                readonly
-                value="<?= $row === null ? null : $row['nom'] ?>"></td>
-            <td><input <?= $form_attr ?> name="<?= $this->name('tarifs') ?>[montant][]"
-                type="number"
-                min="0"
-                placeholder="Prix"
-                required
-                value="<?= $row === null ? null : $row['montant'] ?>"> €</td>
-            <?php
+                <td><input <?= $form_attr ?>
+                    name="<?= $this->name('tarifs') ?>[nom][]"
+                    type="text"
+                    placeholder="Enfant, Sénior&hellip;"
+                    required
+                    readonly
+                    value="<?= $row === null ? null : $row['nom'] ?>"></td>
+                <td><input <?= $form_attr ?> name="<?= $this->name('tarifs') ?>[montant][]"
+                    type="number"
+                    min="0"
+                    placeholder="Prix"
+                    required
+                    value="<?= $row === null ? null : $row['montant'] ?>"> €</td>
+                <?php
             },
             put_prompt: function (DynamicTable $dt) {
                 ?>
-            <td><input type="text" placeholder="Enfant, Sénior&hellip;" required></td>
-            <td><input type="number" min="0" placeholder="Prix" required> €</td>
-            <?php
+                <td><input type="text" placeholder="Enfant, Sénior&hellip;" required></td>
+                <td><input type="number" min="0" placeholder="Prix" required> €</td>
+                <?php
             },
             id: $this->id('table-tarifs'),
             name: $this->name('tarifs'),
@@ -94,39 +94,46 @@ final class InputOffre extends Input
             put_row: function (DynamicTable $dt, ?array $horaire) {
                 $form_attr = $dt->form_id ? "form=\"$dt->form_id\"" : '';
                 ?>
-            <td><input <?= $form_attr ?> name="<?= $this->name('periodes') ?>[debut][]" type="datetime-local" value="<?= $horaire === null ? null : $horaire[0] ?>)"></td>
-            <td><input <?= $form_attr ?> name="<?= $this->name('periodes') ?>[fin][]" type="datetime-local" value="<?= $horaire === null ? null : $horaire[1] ?>"></td>
-            <?php
+                <td><input <?= $form_attr ?> name="<?= $this->name('periodes') ?>[debut][]" type="datetime-local" value="<?= $horaire === null ? null : $horaire[0] ?>)"></td>
+                <td><input <?= $form_attr ?> name="<?= $this->name('periodes') ?>[fin][]" type="datetime-local" value="<?= $horaire === null ? null : $horaire[1] ?>"></td>
+                <?php
             },
             put_prompt: function (DynamicTable $dt) {
                 ?>
-            <td><input type="datetime-local" required></td>
-            <td><input type="datetime-local" required></td>
-            <?php
+                <td><input type="datetime-local" required></td>
+                <td><input type="datetime-local" required></td>
+                <?php
             },
             id: $this->id('table-periodes'),
             name: $this->name('periodes'),
             form_id: $form_id
         );
+        // todo: dynamic list
+        $this->galerie = new InputImage(
+            fieldset_legend: 'Galerie',
+            id: 'galerie',
+            name: 'galerie',
+            form_id: $form_id,
+            multiple: true,
+        );
     }
 
     /**
      * Récupère l'offre saisie.
-     * @param array $get_or_post `$_GET` ou `$get_or_post` (selon la méthode du formulaire)
+     * @param array $get_or_post `$_GET` ou `$_POST` (selon la méthode du formulaire)
      * @param ?int $current_id_offre L'ID de l'offre à modifier ou `null` pour une création.
-     * @param bool $required Si l'offre est requise. Quand l'offre est manquante, si `false` a été passé, la fonction retourne `null`. Sinon, déclenche une erreur.
      */
-    function get(array $get_or_post, ?int $current_id_offre = null, bool $required = true): ?Offre
+    function get(array $get_or_post, ?int $current_id_offre = null): Offre
     {
         $args = [
             $current_id_offre,
-            $this->input_adresse->get($_POST, required: $required),
-            $this->input_image_principale->get($_POST, required: $required),
+            $this->input_adresse->get($get_or_post),
+            $this->input_image_principale->get($get_or_post)[0] ?? null,
             $this->professionnel,
             Abonnement::from_db(getarg($get_or_post, $this->name('libelle_abonnement'), required: false) ?? 'gratuit'),
-            getarg($get_or_post, $this->name('titre'), required: $required),
-            getarg($get_or_post, $this->name('resume'), required: $required),
-            getarg($get_or_post, $this->name('description_detaillee'), required: $required),
+            getarg($get_or_post, $this->name('titre')),
+            getarg($get_or_post, $this->name('resume')),
+            getarg($get_or_post, $this->name('description_detaillee')),
             getarg($get_or_post, $this->name('url_site_web'), required: false),
             new MultiRange(array_map(
                 fn($row) => new NonEmptyRange(
@@ -139,9 +146,6 @@ final class InputOffre extends Input
             )),
         ];
 
-        if ($args[1] === null)
-            return null;
-
         $offre = match ($this->categorie) {
             Activite::CATEGORIE => new Activite(
                 ...$args,
@@ -152,7 +156,7 @@ final class InputOffre extends Input
             ),
             ParcAttractions::CATEGORIE => new ParcAttractions(
                 ...$args,
-                image_plan: $this->input_image_plan->get($_POST),
+                image_plan: $this->input_image_plan->get($get_or_post),
             ),
             Spectacle::CATEGORIE => new Spectacle(
                 ...$args,
@@ -189,7 +193,7 @@ final class InputOffre extends Input
         }
 
         // Galerie
-        foreach (getarg($get_or_post, $this->name('galerie'), required: false) ?? [] as $image) {
+        foreach ($this->galerie->get($get_or_post) as $image) {
             $offre->galerie->add($image);
         }
 
@@ -228,7 +232,7 @@ final class InputOffre extends Input
                             name="<?= $this->name('libelle_abonnement') ?>"
                             type="radio"
                             value="standard"
-                            <?= $current?->abonnement?->libelle === 'standard' ? 'checked' : '' ?>>
+                            <?= $current?->abonnement->libelle === 'standard' ? 'checked' : '' ?>>
                             Standard</label>
                     </li>
                     <li>
@@ -237,7 +241,7 @@ final class InputOffre extends Input
                             name="<?= $this->name('libelle_abonnement') ?>"
                             value="premium"
                             type="radio"
-                            <?= $current?->abonnement?->libelle === 'premium' ? 'checked' : '' ?>>
+                            <?= $current?->abonnement->libelle === 'premium' ? 'checked' : '' ?>>
                             Premium</label>
                     </li>
                 </ul>
@@ -379,14 +383,7 @@ final class InputOffre extends Input
 
         <section id="<?= $this->id('image-creation-offre') ?>">
             <h2>Galerie</h2>
-            <input <?= $form_attr ?>
-                id="<?= $this->id('galerie') ?>"
-                name="<?= $this->name('galerie') ?>[]"
-                type="file"
-                accept="image/*"
-                multiple>
-            <div id="<?= $this->id('galerie-preview') ?>"></div>
-            <!-- todo: modif galerie with legende -->
+            <?php $this->galerie->put($current?->galerie->images) ?>
         </section>
 
         <section id="<?= $this->id('infos-detaillees') ?>">

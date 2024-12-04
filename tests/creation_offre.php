@@ -33,6 +33,8 @@ notfalse(ob_start());
 <?php
 $create_offre_html = notfalse(ob_get_clean());
 
+// echo $create_offre_html; exit;
+
 $dom = new IvoPetkov\HTML5DOMDocument();
 notfalse($dom->loadHTML($create_offre_html));
 
@@ -63,16 +65,34 @@ fill_input($dom, 'indication_duree_jours', 3);
 fill_input($dom, 'indication_duree_heures', 4);
 fill_input($dom, 'indication_duree_minutes', 5);
 
-$request = submit_form($dom, FORM_ID);
 
 // Tarifs
 
-// Photo princpale
+// Image princpale
+fill_input($dom, 'image_principale_legende', 'Ceci est une légende');
+$_FILES['image_principale'] = [
+    'size' => 100,
+    'type' => 'image/jpeg',
+    'tmp_name' => 'myass',
+];
 
 // Gallerie
+$_FILES['galerie'] = [
+    'size' => [
+        200,
+    ],
+    'type' => [
+        'image/png',
+    ],
+    'tmp_name' => [
+        'assmy',
+    ],
+];
 
 // Periodes
 
 // Horaires
 
-dbg_print($request);
+$request = submit_form($dom, FORM_ID);
+
+$offre = $input_offre->get($request);

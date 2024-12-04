@@ -76,7 +76,7 @@ final class Image extends Model
         $this->tmp_name = null;
     }
 
-    function display_location(): string
+    function src(): string
     {
         return $this->tmp_name === null
             ? $this->upload_location()
