@@ -546,6 +546,17 @@ textarea {
     border-radius: 8px;
 }
 
+.offer-location {
+    background-color: #f9f9f9;
+    padding: 15px;
+    border-radius: 8px;
+    text-align: left; /* Enlève la centration */
+}
+
+.offer-location p {
+    margin: 5px 0;
+}
+
 .review {
     margin-bottom: 15px;
 }
