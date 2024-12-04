@@ -307,7 +307,7 @@ h1 {
 .offer-carousel {
     display: flex;
     flex-wrap: wrap;
-    justify-content: space-between;
+    justify-content: flex-start;
     padding: 20px;
     background-color: white;
 }
