@@ -4,9 +4,12 @@ require_once 'model/Professionnel.php';
 
 final class ProfessionnelPrive extends Professionnel
 {
-    protected const FIELDS = parent::FIELDS + [
-        'siren' => [null, 'siren', PDO::PARAM_STR],
-    ];
+    protected static function fields()
+    {
+        return parent::fields() + [
+            'siren' => [null, 'siren', PDO::PARAM_STR],
+        ];
+    }
 
     function __construct(
         string $email,

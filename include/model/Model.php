@@ -11,10 +11,10 @@ abstract class Model
 
     /**
      * Stuff that you can set.
-     * column name => [sub-attribute name that gets the column value, or `null` for identity, attribute name, PDO param type]
-     * @var array<string, array{?string, string, int}>
+     * column name => [map from PHP attribute value to DB column or `null` for identity, attribute name, PDO param type]
+     * @return array<string, array{?callable(mixed): mixed, string, int}>
      */
-    protected const FIELDS = [];
+    protected static function fields() { return []; }
 
     /**
      * Key fields that uniquely identify a row in the DB table.
@@ -99,16 +99,9 @@ abstract class Model
     private function args(): array
     {
         $args = [];
-        foreach (static::FIELDS as $column => [$sub_attr, $attr, $type]) {
-            $args[$column] = [$this->get_value($this->$attr, $sub_attr), $type];
+        foreach (static::fields() as $column => [$php_to_db, $attr, $type]) {
+            $args[$column] = [$php_to_db === null ? $this->$attr : $php_to_db($this->$attr), $type];
         }
         return $args;
-    }
-
-    private function get_value(mixed $value, ?string $sub_attr)
-    {
-        return $sub_attr === null
-            ? $value
-            : $value->$sub_attr;
     }
 }

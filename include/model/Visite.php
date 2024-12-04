@@ -6,9 +6,12 @@ require_once 'model/Offre.php';
  */
 final class Visite extends Offre
 {
-    protected const FIELDS = parent::FIELDS + [
-        'indication_duree' => [null, 'indication_duree', PDO::PARAM_STR],
-    ];
+    protected static function fields()
+    {
+        return parent::fields() + [
+            'indication_duree' => [null, 'indication_duree', PDO::PARAM_STR],
+        ];
+    }
 
     // todo: langues
 

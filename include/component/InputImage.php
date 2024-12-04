@@ -27,16 +27,18 @@ final class InputImage extends Input
      */
     function get(array $get_or_post, ?int $current_id_images = null): array
     {
-        $files = getarg($_FILES, $this->name);
+        $files = getarg($_FILES, $this->name, required: false);
+        if (empty($files)) return [];
+
         $files = $this->multiple ? soa_to_aos($files) : [$files];
 
-        return $files[0]['name'] ? array_map(fn($file, $current_id_image) => new Image(
+        return array_map(fn($file, $current_id_image) => new Image(
             $current_id_image,
             getarg($file, 'size', arg_int()),
             explode('/', $file['type'], 2)[1],
             getarg($get_or_post, "{$this->name}_legende", required: false),
             $file['tmp_name'],
-        ), $files, $current_id_images ?? []) : [];
+        ), $files, $current_id_images ?? []);
     }
 
     /**

@@ -8,9 +8,12 @@ require_once 'model/Compte.php';
 // todo make this abstract
 class Professionnel extends Compte
 {
-    protected const FIELDS = parent::FIELDS + [
-        'denomination' => [null, 'denomination', PDO::PARAM_STR],
-    ];
+    protected static function fields()
+    {
+        return parent::fields() + [
+            'denomination' => [null, 'denomination', PDO::PARAM_STR],
+        ];
+    }
 
     function __construct(
         ?int $id,

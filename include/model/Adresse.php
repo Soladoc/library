@@ -16,18 +16,21 @@ final class Adresse extends Model
         ];
     }
 
-    protected const FIELDS = [
-        'code_commune'       => ['code',               'commune',           PDO::PARAM_INT],
-        'numero_departement' => ['numero_departement', 'commune',           PDO::PARAM_STR],
-        'numero_voie'        => [null,                 'numero_voie',       PDO::PARAM_STR],
-        'complement_numero'  => [null,                 'complement_numero', PDO::PARAM_STR],
-        'nom_voie'           => [null,                 'nom_voie',          PDO::PARAM_STR],
-        'localite'           => [null,                 'localite',          PDO::PARAM_STR],
-        'precision_int'      => [null,                 'precision_int',     PDO::PARAM_STR],
-        'precision_ext'      => [null,                 'precision_ext',     PDO::PARAM_STR],
-        'latitude'           => [null,                 'latitude',          PDO::PARAM_STR],
-        'longitude'          => [null,                 'longitude',         PDO::PARAM_STR],
-    ];
+    protected static function fields()
+    {
+        return [
+            'code_commune'       => [fn($x) => $x->code,               'commune', PDO::PARAM_INT],
+            'numero_departement' => [fn($x) => $x->numero_departement, 'commune', PDO::PARAM_STR],
+            'numero_voie'        => [null, 'numero_voie',       PDO::PARAM_STR],
+            'complement_numero'  => [null, 'complement_numero', PDO::PARAM_STR],
+            'nom_voie'           => [null, 'nom_voie',          PDO::PARAM_STR],
+            'localite'           => [null, 'localite',          PDO::PARAM_STR],
+            'precision_int'      => [null, 'precision_int',     PDO::PARAM_STR],
+            'precision_ext'      => [null, 'precision_ext',     PDO::PARAM_STR],
+            'latitude'           => [null, 'latitude',          PDO::PARAM_STR],
+            'longitude'          => [null, 'longitude',         PDO::PARAM_STR],
+        ];
+    }
 
     function __construct(
         protected ?int $id,

@@ -6,11 +6,14 @@ require_once 'model/Offre.php';
  */
 final class ParcAttractions extends Offre
 {
-    protected const FIELDS = parent::FIELDS + [
-        'age_requis'     => [null, 'age_requis',     PDO::PARAM_INT],
-        'nb_attractions' => [null, 'nb_attractions', PDO::PARAM_INT],
-        'id_image_plan'  => ['id', 'image_plan',     PDO::PARAM_INT],
-    ];
+    protected static function fields()
+    {
+        return parent::fields() + [
+            'age_requis'     => [null, 'age_requis',     PDO::PARAM_INT],
+            'nb_attractions' => [null, 'nb_attractions', PDO::PARAM_INT],
+            'id_image_plan'  => [fn($x) => $x->id, 'image_plan', PDO::PARAM_INT],
+        ];
+    }
 
     function __construct(
         ?int $id,
