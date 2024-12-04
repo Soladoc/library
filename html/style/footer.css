@@ -12,7 +12,7 @@ footer > div:first-child {
     padding: 1em;
     display: flex;
     justify-content: space-between;
-    background-color: #4051FD;
+    background-color: var(--color-secondary);
     border-top-left-radius: 1.5em;
     border-top-right-radius: 1.5em;
 }
@@ -49,7 +49,7 @@ footer > div:nth-child(2) {
     padding: 1em 2em;
     display: flex;
     justify-content: space-between;
-    background-color: var(--color-primary);
+    background-color: var(#4051FD);
 }
 
 @media (max-width: 576px) {
