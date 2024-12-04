@@ -3,7 +3,6 @@ require_once 'db.php';
 require_once 'util.php';
 require_once 'redirect.php';
 require_once 'component/Page.php';
-require_once 'component/inputs.php';
 
 $page = new Page('CoCréer un compte pronnexion');
 

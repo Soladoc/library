@@ -961,7 +961,7 @@ section#info_compte div span {
     color: #333;
 }
 
-#info_compte a {
+#info_compte :is(a, button[type=submit]) {
     display: inline-block;
     text-decoration: none;
     background-color: #3498db;

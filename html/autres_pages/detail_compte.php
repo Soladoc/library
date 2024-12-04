@@ -29,7 +29,7 @@ $page = new Page("detail_compte_membre : {$compte->id}");
             <?php elseif ($compte instanceof Professionnel): ?>
                 <div id="denomination">
                     <p>Dénomination :</p>
-                    <span><?= $pro->denomination ?></span>
+                    <span><?= $compte->denomination ?></span>
                 </div>
                 <?php if ($compte instanceof ProfessionnelPrive): ?>
                     <div id="siren">

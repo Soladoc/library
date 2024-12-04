@@ -3,7 +3,7 @@ require_once 'util.php';
 require_once 'queries.php';
 require_once 'redirect.php';
 require_once 'component/Page.php';
-require_once 'component/inputs.php';
+require_once 'component/InputAdresse.php';
 require_once 'model/Compte.php';
 
 $page        = new Page('Modification compte (todo)');
