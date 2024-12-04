@@ -499,14 +499,11 @@ h1 {
     margin: 5px 0;
 }
 
+/* Bloc 3 : Avis */
 .offer-reviews {
-    border: 2px solid black;
-    border-radius: 8px;
-    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
+    background-color: white;
     padding: 20px;
-    margin: 20px auto;
-    max-width: 80%;
-    text-align: center;
+    margin-bottom: 20px;
 }
 
 .review-form {
