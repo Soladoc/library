@@ -174,17 +174,17 @@ comment on function offre_en_ligne_pendant (int, timestamp, interval) is
 
 -- get concrete tables
 
-create function offre_get_concrete (p_id_offre int) returns record as $$
+create function offre_get_concrete_json (p_id_offre int) returns json as $$
 declare
-    result record;
+    result json;
 begin
-    execute 'select * from ' || case offre_categorie(p_id_offre)
+    execute 'select row_to_json(t) from (select * from ' || case offre_categorie(p_id_offre)
         when categorie_offre 'restaurant' then 'restaurant'
         when categorie_offre 'activité' then 'activite'
         when categorie_offre 'visite' then 'visite'
         when categorie_offre 'spectacle' then 'spectacle'
         when categorie_offre 'parc d''attractions' then 'parc_attractions'
-    end || ' where id = ' || p_id_offre into result;
+    end || ' where id = ' || p_id_offre || ') t' into result;
     return result;
 end
 $$ language plpgsql strict stable;
