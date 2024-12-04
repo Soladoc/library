@@ -22,7 +22,7 @@ class Avis extends Model
     {
         return [
             'pseudo_auteur' => [null, 'pseudo_auteur', PDO::PARAM_STR],
-            'publie_le'     => [null, 'publie_le',     PDO::PARAM_STR],
+            'publie_le'     => [FiniteTimestamp::parse(...), 'publie_le',     PDO::PARAM_STR],
             'lu'               => [null, 'lu',              PDO::PARAM_BOOL],
             'blackliste'       => [null, 'blackliste',      PDO::PARAM_BOOL],
         ];
