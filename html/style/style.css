@@ -420,6 +420,7 @@ h1 {
     border-radius: 8px;
     box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
     max-width: 80%;
+    padding: 20px;
     margin: 20px auto;
     background-color: white;
     overflow: hidden;
