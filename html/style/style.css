@@ -415,11 +415,16 @@ h1 {
 /*----------offre détaillée*/
 /* Bloc 1 : Informations de l'offre */
 .offer-details {
-    display: flex;
-    justify-content: space-around;
+    border: 2px solid black;
+    border-radius: 8px;
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
+    padding: 30px;
+    margin: 20px auto;
+    max-width: 80%;
+    text-align: center;
     background-color: white;
     padding: 20px;
-    margin: 20px 0;
+    margin-bottom: 20px;
 }
 
 .offer-main-photo {
@@ -477,12 +482,6 @@ h1 {
     cursor: pointer;
 }
 
-/* Bloc 2 : Carte et contact */
-.offer-location {
-    background-color: white;
-    padding: 20px;
-    margin-bottom: 20px;
-}
 
 .map {
     height: 300px;
@@ -502,12 +501,21 @@ h1 {
 /* Bloc 3 : Avis */
 .offer-reviews {
     background-color: white;
-    padding: 20px;
     margin-bottom: 20px;
 }
 
+textarea {
+    resize: vertical;
+}
+
 .review-form {
-    margin-bottom: 20px;
+    border: 2px solid black;
+    border-radius: 8px;
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
+    padding: 20px;
+    margin: 20px auto;
+    max-width: 80%;
+    text-align: center;
 }
 
 textarea {
@@ -540,23 +548,21 @@ textarea {
     margin-top: 10px;
 }
 
-.review-list {
-    background-color: #f9f9f9;
-    padding: 15px;
-    border-radius: 8px;
-}
-
 .offer-location {
-    background-color: #f9f9f9;
-    padding: 15px;
+    border: 2px solid black;
     border-radius: 8px;
-    text-align: left;
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
+    padding: 30px;
+    margin: 20px auto;
+    max-width: 80%;
+    text-align: center;
+    background-color: white;
+    padding: 20px;
+    margin-bottom: 20px;
 }
 
 .contact-info {
-    padding: 15px;
-    border-radius: 8px;
-    text-align: left;
+    text-align: center;
 }
 
 .offer-location p {
