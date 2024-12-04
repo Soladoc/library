@@ -33,6 +33,9 @@ form button:is(:hover, :focus-within, :active) {
 
 @media (max-width: 768px) {
     form {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
         width: 85%;
     }
 
