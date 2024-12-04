@@ -38,7 +38,7 @@ if ($_POST) {
 <body>
     <?php $page->put_header() ?>
     <main>
-        <?php $input_offre->put(Offre::from_db($id_offre)) ?>
+        <?php $input_offre->put(notfalse(Offre::from_db($id_offre))) ?>
         
         <form id="f" method="post" enctype="multipart/form-data">
             <button type="submit">Valider</button>
