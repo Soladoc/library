@@ -30,7 +30,9 @@ final class InputImage extends Input
         $files = getarg($_FILES, $this->name);
         $files = $this->multiple ? soa_to_aos($files) : [$files];
 
-        return  array_map(fn($file, $current_id_image) => new Image(
+        dbg_print($files);
+
+        return array_map(fn($file, $current_id_image) => new Image(
             $current_id_image,
             getarg($file, 'size', arg_int()),
             explode('/', $file['type'], 2)[1],
@@ -46,7 +48,7 @@ final class InputImage extends Input
     {
         $current ??= [];
         $form_attr = $this->form_id ? "form=\"$this->form_id\"" : '';
-?>
+        ?>
 <fieldset id="<?= $this->id ?>" class="input-image">
     <legend><?= $this->fieldset_legend ?></legend>
     <p>
