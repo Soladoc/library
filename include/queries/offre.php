@@ -43,7 +43,7 @@ function query_offres(?int $id_professionnel = null, ?bool $en_ligne = null): It
 
 function query_offres_a_une(): Iterator
 {
-    $stmt = notfalse(connect()->prepare("SELECT * FROM offres WHERE libelle_abonnement = 'premium' AND en_ligne = TRUE ORDER BY RANDOM() LIMIT 3"));
+    $stmt = notfalse(connect()->prepare("SELECT * FROM offres WHERE libelle_abonnement = 'premium' ORDER BY RANDOM() LIMIT 3"));
     notfalse($stmt->execute());
     return $stmt->getIterator();
 }
