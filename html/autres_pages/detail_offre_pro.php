@@ -15,8 +15,7 @@ $page = new Page("offre : {$offre->id}",
 
 
 if ($_POST) {
-    DB\offre_alterner_etat($offre->id);
-    $offre = DB\query_offre($offre->id);
+    $offre->alterner_etat();
     redirect_to($_SERVER['REQUEST_URI']);
     exit;
 }
