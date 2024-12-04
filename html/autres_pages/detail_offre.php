@@ -24,7 +24,7 @@ if ($_POST) {
             $commentaire,
             $date_avis,
             $note,
-            $context,
+            $contexte,
         ]);
         $success_message = 'Avis ajouté avec succès !';
     }
