@@ -242,6 +242,7 @@ h1 {
 
 .btn-more-info:is(:hover, :focus, :focus-within) {
     background-color: #1927c2;
+    text-decoration: none;
 }
 
 /* Sections des rubriques */
