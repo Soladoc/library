@@ -22,8 +22,22 @@ create trigger tg_visite_insert instead of insert on visite for each row
 execute function visite_insert ();
 
 -- Update
-create trigger tg_visite_after_update after update on _visite for each row
-execute function _offre_after_update ();
+create function visite_update () returns trigger as $$
+begin
+    call update_offre(old, new);
+
+    update _visite
+    set
+        indication_duree = new.indication_duree
+    where
+        id = new.id;
+
+    return new;
+end
+$$ language plpgsql;
+
+create trigger tg_visite_update instead of update on visite for each row
+execute function visite_update ();
 
 -- Delete
 create function visite_delete () returns trigger as $$

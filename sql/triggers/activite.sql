@@ -28,8 +28,25 @@ create trigger tg_activite_insert instead of insert on activite for each row
 execute function activite_insert ();
 
 -- Update
-create trigger tg_activite_after_update after update on _activite for each row
-execute function _offre_after_update ();
+create function activite_update () returns trigger as $$
+begin
+    call update_offre(old, new);
+
+    update _activite
+    set
+        indication_duree = new.indication_duree,
+        age_requis = new.age_requis,
+        prestations_incluses = new.prestations_incluses,
+        prestations_non_incluses = new.prestations_non_incluses
+    where
+        id = new.id;
+
+    return new;
+end
+$$ language plpgsql;
+
+create trigger tg_activite_update instead of update on activite for each row
+execute function activite_update ();
 
 -- Delete
 create function activite_delete () returns trigger as $$

@@ -26,8 +26,24 @@ create trigger tg_parc_attractions_insert instead of insert on parc_attractions 
 execute function parc_attractions_insert ();
 
 -- Update
-create trigger tg_parc_attractions_after_update after update on _parc_attractions for each row
-execute function _offre_after_update ();
+create function parc_attractions_update () returns trigger as $$
+begin
+    call update_offre(old, new);
+
+    update _parc_attractions
+    set
+        id_image_plan = new.id_image_plan,
+        nb_attractions = new.nb_attractions,
+        age_requis = new.age_requis
+    where
+        id = new.id;
+
+    return new;
+end
+$$ language plpgsql;
+
+create trigger tg_parc_attractions_update instead of update on parc_attractions for each row
+execute function parc_attractions_update ();
 
 -- Delete
 create function parc_attractions_delete () returns trigger as $$

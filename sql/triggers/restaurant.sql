@@ -41,8 +41,28 @@ create trigger tg_restaurant_insert instead of insert on restaurant for each row
 execute function restaurant_insert ();
 
 -- Update
-create trigger tg_restaurant_after_update after update on _restaurant for each row
-execute function _offre_after_update ();
+create function restaurant_update () returns trigger as $$
+begin
+    call update_offre(old, new);
+
+    update _restaurant
+    set
+        carte = new.carte,
+        richesse = new.richesse,
+        sert_petit_dejeuner = new.sert_petit_dejeuner,
+        sert_brunch = new.sert_brunch,
+        sert_dejeuner = new.sert_dejeuner,
+        sert_diner = new.sert_diner,
+        sert_boisson = new.sert_boissons
+    where
+        id = new.id;
+
+    return new;
+end
+$$ language plpgsql;
+
+create trigger tg_restaurant_update instead of update on restaurant for each row
+execute function restaurant_update ();
 
 -- Delete
 create function restaurant_delete () returns trigger as $$

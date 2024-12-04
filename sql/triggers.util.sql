@@ -142,13 +142,29 @@ comment on function insert_compte (record) is
 'Insère un compte.
 `new` contient les valeurs du compte.';
 
-create function _offre_after_update () returns trigger as $$
+create procedure update_offre (old record, new record) as $$
 begin
+    if old.id <> new.id then
+        raise 'Ne peut pas changer l''ID de l''offre.';
+    end if;
+
+    update _offre
+    set
+        id_adresse = new.id_adresse,
+        id_image_principale = new.id_image_principale,
+        id_professionnel = new.id_professionnel,
+        libelle_abonnement = new.libelle_abonnement,
+        titre = new.titre,
+        resume = new.resume,
+        description_detaillee = new.description_detaillee,
+        modifiee_le = new.modifiee_le,
+        url_site_web = new.url_site_web,
+        periodes_ouverture = new.periodes_ouverture
+    where
+        id = new.id;
     new.modifiee_le = localtimestamp;
 end
 $$ language plpgsql;
-comment on function _offre_after_update () is
-'Fonction trigger pour les sous classes de offre qui met à jour l''attribut modifiee_le';
 
 create function _compte_delete() returns trigger as $$
 begin
