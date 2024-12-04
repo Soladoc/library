@@ -22,11 +22,11 @@ final class InputNote extends Input
     id="<?= $this->id ?>"
     name="<?= $this->name ?>"
     required>
-    <option value="5">5 étoiles</option>
-    <option value="4">4 étoiles</option>
-    <option value="3">3 étoiles</option>
-    <option value="2">2 étoiles</option>
-    <option value="1">1 étoile</option>
+    <option value="5" <?= $current === 5 ? 'checked' : '' ?>>5 étoiles</option>
+    <option value="4" <?= $current === 4 ? 'checked' : '' ?>>4 étoiles</option>
+    <option value="3" <?= $current === 3 ? 'checked' : '' ?>>3 étoiles</option>
+    <option value="2" <?= $current === 2 ? 'checked' : '' ?>>2 étoiles</option>
+    <option value="1" <?= $current === 1 ? 'checked' : '' ?>>1 étoile</option>
 </select>
 <?php
     }
