@@ -179,7 +179,7 @@ $$ language plpgsql;
 create procedure update_avis(old record, new record) as $$
 begin
     if old.id <> new.id or old.id_offre <> new.id_offre or old.id_membre_auteur <> new.id_membre_auteur then
-        raise 'Ne peut pas update id ou id_offre ou id_membre_auteur'
+        raise 'Ne peut pas update id ou id_offre ou id_membre_auteur';
     end if;
 
     update _avis
@@ -187,7 +187,7 @@ begin
         commentaire = new.commentaire,
         note = new.note,
         publie = new.publie,
-        "date" = new.date,
+        date = new.date,
         contexte = new.contexte,
         lu = new.lu,
         blackliste = new.blackliste
