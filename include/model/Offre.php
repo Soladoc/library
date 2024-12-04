@@ -28,7 +28,7 @@ require_once 'model/Tarifs.php';
  * @property-read ?FiniteTimestamp $creee_le Calculé. `null` si cette offre n'existe pas dans la BDD.
  * @property-read ?FiniteTimestamp $modifiee_le Calculé mais avec un possibilité de valeur initiale.
  * @property-read ?FiniteTimestamp $changement_ouverture_suivant_le Calculé. `null` si cette offre n'existe pas dans la BDD.
- * @property-read string $categorie Calculé. `null` si cette offre n'existe pas dans la BDD.
+ * @property-read ?string $categorie Calculé. `null` si cette offre n'existe pas dans la BDD.
  *
  * @property-read ?int $nb_avis Le nombre d'avis ce cette offre. Calculé. `null` si cette offre n'existe pas dans la BDD.
  */
@@ -234,6 +234,7 @@ class Offre extends Model implements Signalable
             FiniteTimestamp::parse($row['changement_ouverture_suivant_le'] ?? null),
             $row['est_ouverte'],
             $row['nb_avis'],
+            $row['categorie'],
         );
     }
 
