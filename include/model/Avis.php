@@ -86,7 +86,7 @@ class Avis extends Model
             $row['id'],
             $row['commentaire'],
             $row['note'],
-            $row['date_experience'],
+            Date::parse($row['date_experience']),
             $row['contexte'],
             Membre::from_db($row['id_membre_auteur']),
             Offre::from_db($row['id_offre']),
