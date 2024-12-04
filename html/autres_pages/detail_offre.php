@@ -1,4 +1,5 @@
 <?php
+require_once 'db.php';
 require_once 'auth.php';
 require_once 'model/Offre.php';
 require_once 'component/Page.php';

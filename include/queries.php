@@ -17,14 +17,6 @@ function make_interval(int $days, int $hours, int $mins): string
     return notfalse($stmt->fetchColumn());
 }
 
-function query_avis_count(int $id_offre): int
-{
-    $stmt = notfalse(connect()->prepare('select count(*) from avis where id_offre = ?'));
-    bind_values($stmt, [1 => [$id_offre, PDO::PARAM_INT]]);
-    notfalse($stmt->execute());
-    return notfalse($stmt->fetchColumn());
-}
-
 function query_images(): \Iterator
 {
     $stmt = notfalse(connect()->prepare('select * from _image'));

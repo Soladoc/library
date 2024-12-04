@@ -163,7 +163,7 @@ if ($membre !== false) {
         <main>
 
             <section id="info_compte">  
-                <form action="modif_compte.php?id=<?= $id ?>" method="POST">
+                <form action="modif_compte.php?id=<?= $id ?>" method="post">
                     <?php if ($membre !== false) { ?>
                         <div>
                             <div id="pseudo">

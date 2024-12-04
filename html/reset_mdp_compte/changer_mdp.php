@@ -16,7 +16,7 @@ if (isset($_GET['token'])) {
         $user_type = $payload['user_type'];
 
         // Afficher le formulaire pour changer le mot de passe
-        echo '<form action="update_password.php" method="POST">
+        echo '<form action="update_password.php" method="post">
                 <input type="hidden" name="user_id" value="' . htmlspecialchars($user_id) . '">
                 <input type="hidden" name="user_type" value="' . htmlspecialchars($user_type) . '">
                 <label for="password">Nouveau mot de passe :</label>
