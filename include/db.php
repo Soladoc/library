@@ -172,6 +172,8 @@ function update(string $table, array $args, array $key_args, array $returning = 
         return notfalse(connect()->prepare('select null'));  // todo: does a empty string work as a noop? test it when we get a working thing.
     }
 
+    dbg_print($returning);
+
     $stmt = notfalse(connect()->prepare("update $table set "
         . implode(',', array_map(fn($col) => "$col = :$col", array_keys($args)))
         . where_clause(BoolOperator::AND, array_keys($key_args))

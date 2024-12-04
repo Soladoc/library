@@ -7,7 +7,7 @@ abstract class Model
      * Table name.
      * @var string
      */
-    const TABLE = self::TABLE;  // abstract constant
+    const TABLE = null;  // abstract constant
 
     /**
      * Stuff that you can set.
