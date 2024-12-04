@@ -96,10 +96,10 @@ $id_membre_co = Auth\id_membre_connecte();
         </section>
 
         <section class="offer-reviews">
-            <h3>Avis des utilisateurs</h3>
 
             <!-- Formulaire d'avis -->
             <div class="review-form">
+                <h3>Avis des utilisateurs</h3>
                 <div class="message">
                     <?php if (isset($error_message)): ?>
                     <p class="error-message"><?= htmlspecialchars($error_message) ?></p>
