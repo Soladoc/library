@@ -145,8 +145,10 @@ comment on function insert_compte (record) is
 create procedure update_offre (old record, new record) as $$
 begin
     if old.id <> new.id then
-        raise 'Ne peut pas changer l''ID de l''offre.';
+        raise 'Ne peut pas update id.';
     end if;
+
+    new.modifiee_le = localtimestamp;
 
     update _offre
     set
@@ -157,12 +159,11 @@ begin
         titre = new.titre,
         resume = new.resume,
         description_detaillee = new.description_detaillee,
-        modifiee_le = coalesce(new.modifiee_le, old.modifiee_le),
+        modifiee_le = new.modifiee_le,
         url_site_web = new.url_site_web,
         periodes_ouverture = new.periodes_ouverture
     where
         id = new.id;
-    new.modifiee_le = localtimestamp;
 end
 $$ language plpgsql;
 
@@ -172,5 +173,25 @@ begin
     delete from _identite where id = old.id;
     delete from _adresse where id = old.id_adresse;
     return old;
+end
+$$ language plpgsql;
+
+create procedure update_avis(old record, new record) as $$
+begin
+    if old.id <> new.id or old.id_offre <> new.id_offre or old.id_membre_auteur <> new.id_membre_auteur then
+        raise 'Ne peut pas update id ou id_offre ou id_membre_auteur'
+    end if;
+
+    update _avis
+    set
+        commentaire = new.commentaire,
+        note = new.note,
+        publie = new.publie,
+        date = new.date,
+        contexte = new.contexte,
+        lu = new.lu,
+        blackliste = new.blackliste
+    where
+        id = new.id;
 end
 $$ language plpgsql;

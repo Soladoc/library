@@ -29,3 +29,22 @@ $$ language plpgsql;
 
 create trigger tg_avis_restaurant_insert instead of insert on avis_restaurant for each row
 execute function avis_restaurant_insert ();
+
+-- Update
+create function avis_restaurant_update () returns trigger as $$
+begin
+    update_avis(old, new);
+
+    update _avis_restaurant
+    set
+        note_cuisine = new.note_cuisine,
+        note_service = new.note_service,
+        note_ambiance = new.note_ambiance,
+        note_qualite_prix = new.note_qualite_prix
+    where
+        id = new.id;
+end
+$$ language plpgsql;
+
+create trigger tg_avis_restaurant_update instead of update on avis_restaurant for each row
+execute function avis_restaurant_update ();

@@ -17,3 +17,13 @@ $$ language plpgsql;
 
 create trigger tg_avis_insert instead of insert on avis for each row
 execute function avis_insert ();
+
+-- Update
+create function avis_update () returns trigger as $$
+begin
+    update_avis(old, new);
+end
+$$ language plpgsql;
+
+create trigger tg_avis_update instead of update on avis for each row
+execute function avis_update ();
