@@ -6,6 +6,7 @@ require_once 'redirect.php';
 require_once 'model/Offre.php';
 require_once 'component/Page.php';
 require_once 'component/ImageView.php';
+require_once 'component/InputOffre.php';
 
 $offre = notfalse(Offre::from_db(getarg($_GET, 'id', arg_int())));
 
