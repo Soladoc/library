@@ -7,13 +7,13 @@ require_once 'model/Offre.php';
 final class Restaurant extends Offre
 {
     protected const FIELDS = parent::FIELDS + [
-        'carte'               => [[null, 'carte',               PDO::PARAM_STR]],
-        'richesse'            => [[null, 'richesse',            PDO::PARAM_INT]],
-        'sert_petit_dejeuner' => [[null, 'sert_petit_dejeuner', PDO::PARAM_BOOL]],
-        'sert_brunch'         => [[null, 'sert_brunch',         PDO::PARAM_BOOL]],
-        'sert_dejeuner'       => [[null, 'sert_dejeuner',       PDO::PARAM_BOOL]],
-        'sert_diner'          => [[null, 'sert_diner',          PDO::PARAM_BOOL]],
-        'sert_boissons'       => [[null, 'sert_boissons',       PDO::PARAM_BOOL]],
+        'carte'               => [null, 'carte',               PDO::PARAM_STR],
+        'richesse'            => [null, 'richesse',            PDO::PARAM_INT],
+        'sert_petit_dejeuner' => [null, 'sert_petit_dejeuner', PDO::PARAM_BOOL],
+        'sert_brunch'         => [null, 'sert_brunch',         PDO::PARAM_BOOL],
+        'sert_dejeuner'       => [null, 'sert_dejeuner',       PDO::PARAM_BOOL],
+        'sert_diner'          => [null, 'sert_diner',          PDO::PARAM_BOOL],
+        'sert_boissons'       => [null, 'sert_boissons',       PDO::PARAM_BOOL],
     ];
 
     // todo: langues

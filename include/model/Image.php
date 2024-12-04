@@ -16,9 +16,9 @@ final class Image extends Model
     }
 
     protected const FIELDS = [
-        'taille'       => [[null, 'taille',       PDO::PARAM_INT]],
-        'mime_subtype' => [[null, 'mime_subtype', PDO::PARAM_STR]],
-        'legende'      => [[null, 'legende',      PDO::PARAM_STR]],
+        'taille'       => [null, 'taille',       PDO::PARAM_INT],
+        'mime_subtype' => [null, 'mime_subtype', PDO::PARAM_STR],
+        'legende'      => [null, 'legende',      PDO::PARAM_STR],
     ];
 
     function __construct(

@@ -7,9 +7,9 @@ require_once 'model/Offre.php';
 final class ParcAttractions extends Offre
 {
     protected const FIELDS = parent::FIELDS + [
-        'age_requis'     => [[null, 'age_requis',     PDO::PARAM_INT]],
-        'nb_attractions' => [[null, 'nb_attractions', PDO::PARAM_INT]],
-        'image_plan'     => [['id', 'id_image_plan',  PDO::PARAM_INT]],
+        'age_requis'     => [null, 'age_requis',     PDO::PARAM_INT],
+        'nb_attractions' => [null, 'nb_attractions', PDO::PARAM_INT],
+        'id_image_plan'  => ['id', 'image_plan',     PDO::PARAM_INT],
     ];
 
     function __construct(
@@ -59,7 +59,8 @@ final class ParcAttractions extends Offre
         );
     }
 
-    function push_to_db(): void {
+    function push_to_db(): void
+    {
         $this->image_plan->push_to_db();
         parent::push_to_db();
     }

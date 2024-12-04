@@ -1,15 +1,15 @@
 <?php
 require_once 'model/Compte.php';
 
-
 /**
  * @inheritDoc
  */
-// todo make this abstract 
+
+// todo make this abstract
 class Professionnel extends Compte
 {
     protected const FIELDS = parent::FIELDS + [
-        'denomination' => [[null, 'denomination', PDO::PARAM_STR]],
+        'denomination' => [null, 'denomination', PDO::PARAM_STR],
     ];
 
     function __construct(

@@ -4,7 +4,7 @@ require_once 'db.php';
 final class ProfessionnelPrive extends Professionnel
 {
     protected const FIELDS = parent::FIELDS + [
-        'siren' => [[null, 'siren', PDO::PARAM_STR]],
+        'siren' => [null, 'siren', PDO::PARAM_STR],
     ];
 
     function __construct(

@@ -63,16 +63,16 @@ abstract class Offre extends Model implements Signalable
     }
 
     protected const FIELDS = [
-        'titre'                 => [[null,      'titre',                 PDO::PARAM_STR]],
-        'resume'                => [[null,      'resume',                PDO::PARAM_STR]],
-        'description_detaillee' => [[null,      'description_detaillee', PDO::PARAM_STR]],
-        'modifiee_le'           => [[null,      'modifiee_le',           PDO::PARAM_STR]],
-        'url_site_web'          => [[null,      'url_site_web',          PDO::PARAM_STR]],
-        'periodes_ouverture'    => [[null,      'periodes_ouverture',    PDO::PARAM_STR]],
-        'adresse'               => [['id',      'id_adresse',            PDO::PARAM_INT]],
-        'image_principale'      => [['id',      'id_image_principale',   PDO::PARAM_INT]],
-        'professionnel'         => [['id',      'id_professionnel',      PDO::PARAM_INT]],
-        'abonnement'            => [['libelle', 'libelle_abonnement',    PDO::PARAM_STR]],
+        'titre'                 => [null,      'titre',                 PDO::PARAM_STR],
+        'resume'                => [null,      'resume',                PDO::PARAM_STR],
+        'description_detaillee' => [null,      'description_detaillee', PDO::PARAM_STR],
+        'modifiee_le'           => [null,      'modifiee_le',           PDO::PARAM_STR],
+        'url_site_web'          => [null,      'url_site_web',          PDO::PARAM_STR],
+        'periodes_ouverture'    => [null,      'periodes_ouverture',    PDO::PARAM_STR],
+        'id_adresse'            => ['id',      'adresse',               PDO::PARAM_INT],
+        'id_image_principale'   => ['id',      'image_principale',      PDO::PARAM_INT],
+        'id_professionnel'      => ['id',      'professionnel',         PDO::PARAM_INT],
+        'libelle_abonnement'    => ['libelle', 'abonnement',            PDO::PARAM_STR],
     ];
 
     protected ?int $nb_avis;

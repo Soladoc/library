@@ -5,16 +5,16 @@ abstract class Model
 {
     /**
      * Stuff that you can set.
-     * attribute name => [Attribute name on attribute to get the column value, or null for identity, column name, PDO param type]
-     * @var array<string, array{?string, string, int}[]>
+     * column name => [Attribute name on attribute to get the column value, or `null` for identity, attribute name, PDO param type]
+     * @var array<string, array{?string, string, int}>
      */
-    protected const FIELDS = [];  // abstract constant
+    protected const FIELDS = [];
 
     /**
      * Table name.
      * @var string
      */
-    const TABLE = self::TABLE;  // abstract constant
+    const TABLE = self::TABLE; // abstract constant
 
     /**
      * Key fields that uniquely identify a row in the DB table.
@@ -35,7 +35,7 @@ abstract class Model
         if (isset($this->key_fields()[$name]) || isset($this->computed_fields()[$name])) {
             return $this->$name;
         }
-        throw new Exception('Undefined property: ' . static::class . "::$$name");
+        throw new Exception('Undefined property: ' . static::class . "::\$$name");
     }
 
     function push_to_db(): void
@@ -98,10 +98,8 @@ abstract class Model
     private function args(): array
     {
         $args = [];
-        foreach (static::FIELDS as $attr => $fields) {
-            foreach ($fields as [$sub_attr, $column, $type]) {
-                $args[$column] = [$this->get_value($this->$attr, $sub_attr), $type];
-            }
+        foreach (static::FIELDS as $column => [$sub_attr, $attr, $type]) {
+            $args[$column] = [$this->get_value($this->$attr, $sub_attr), $type];
         }
         return $args;
     }

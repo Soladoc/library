@@ -7,8 +7,8 @@ require_once 'model/Offre.php';
 final class Spectacle extends Offre
 {
     protected const FIELDS = parent::FIELDS + [
-        'indication_duree' => [[null, 'indication_duree', PDO::PARAM_STR]],
-        'capacite_accueil' => [[null, 'capacite_accueil', PDO::PARAM_INT]],
+        'indication_duree' => [null, 'indication_duree', PDO::PARAM_STR],
+        'capacite_accueil' => [null, 'capacite_accueil', PDO::PARAM_INT],
     ];
 
     function __construct(
