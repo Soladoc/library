@@ -170,21 +170,3 @@ comment on function offre_en_ligne_pendant (int, timestamp, interval) is
 @param p_debut début de la période d''observation
 @param p_duree durée de la période d''observation
 @returns La valeur de retour est inférieure ou égale à @p p_duree';
-
-
--- get concrete tables
-
-create function offre_get_concrete_json (p_id_offre int) returns json as $$
-declare
-    result json;
-begin
-    execute 'select row_to_json(t) from (select * from ' || case offre_categorie(p_id_offre)
-        when categorie_offre 'restaurant' then 'restaurant'
-        when categorie_offre 'activité' then 'activite'
-        when categorie_offre 'visite' then 'visite'
-        when categorie_offre 'spectacle' then 'spectacle'
-        when categorie_offre 'parc d''attractions' then 'parc_attractions'
-    end || ' where id = ' || p_id_offre || ') t' into result;
-    return result;
-end
-$$ language plpgsql strict stable;

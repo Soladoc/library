@@ -209,13 +209,12 @@ abstract class Offre extends Model implements Signalable
 
     private static function make_select(): string
     {
-        self::require_subclasses();
         return 'select * from ' . self::TABLE  // todo: faire des jointures pour gagner en performance
-            . ' join ' . Activite::TABLE . ' using (id)'
-            . ' join ' . ParcAttractions::TABLE . ' using (id)'
-            . ' join ' . Restaurant::TABLE . ' using (id)'
-            . ' join ' . Spectacle::TABLE . ' using (id)'
-            . ' join ' . Visite::TABLE . ' using (id)';
+            . ' left join _activite using (id)'
+            . ' left join _parc_attractions using (id)'
+            . ' left join _restaurant using (id)'
+            . ' left join _spectacle using (id)'
+            . ' left join _visite using (id)';
     }
 
     protected static function from_db_row(array $row): Offre
