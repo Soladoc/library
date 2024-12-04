@@ -25,6 +25,10 @@ $input_offre = new InputOffre(
 if ($_POST) {
     $offre = $input_offre->get($_POST, $offre);
     $offre->push_to_db();
+
+    // todo: modifier images
+
+    redirect_to(location_detail_offre_pro($offre->id));
 }
 ?>
 <!DOCTYPE html>
