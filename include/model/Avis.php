@@ -49,8 +49,8 @@ class Avis extends Model
         readonly Membre $membre_auteur,
         readonly Offre $offre,
         //
-        protected ?bool $blackliste,
-        protected ?bool $lu,
+        protected ?bool $blackliste = null,
+        protected ?bool $lu = null,
         protected ?string $pseudo_auteur = null,
         protected ?FiniteTimestamp $publie_le = null,
     ) {}

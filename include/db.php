@@ -30,15 +30,22 @@ function connect(): PDO
 
     // Connect to the database
     $driver = 'pgsql';
-    // Pour le dév. en localhost: on n'a pas accès au conteneur postgresdb, on utilise donc le FQDN.
-    $host   = _is_localhost() ? '413.ventsdouest.dev' : 'postgresdb';
-    $port   = notfalse(getenv('PGDB_PORT'), 'PGDB_PORT not set');
-    $dbname = 'postgres';
+    [$host, $port, $dbname, $username, $password] = _is_localhost()
+        ? ['localhost',
+            5432,
+            'raphael',
+            'postgres',
+            'postgres']
+        : ['postgresdb',
+            notfalse(getenv('PGDB_PORT'), 'PGDB_PORT not set'),
+            'postgres',
+            notfalse(getenv('DB_USER'), 'DB_USER not set'),
+            notfalse(getenv('DB_ROOT_PASSWORD'), 'DB_ROOT_PASSWORD not set')];
 
     $_pdo = new LogPDO(
         "$driver:host=$host;port=$port;dbname=$dbname",
-        notfalse(getenv('DB_USER'), 'DB_USER not set'),
-        notfalse(getenv('DB_ROOT_PASSWORD'), 'DB_ROOT_PASSWORD not set'),
+        $username,
+        $password,
     );
 
     notfalse($_pdo->exec("set schema 'pact'"));
