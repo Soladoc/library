@@ -72,7 +72,7 @@ class Avis extends Model
      */
     static function from_db_single(int $id_membre_auteur, int $id_offre): self|false
     {
-        $stmt = notfalse(DB\connect()->prepare(self::make_select() . ' where id_membre_auteur = ? and id_offre = ?'));
+        $stmt = notfalse(DB\connect()->prepare(self::make_select() . ' where a.id_membre_auteur = ? and a.id_offre = ?'));
         DB\bind_values($stmt, [1 => [$id_membre_auteur, PDO::PARAM_INT], 2 => [$id_offre, PDO::PARAM_INT]]);
         notfalse($stmt->execute());
         $row = $stmt->fetch();
