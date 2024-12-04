@@ -554,14 +554,13 @@ textarea {
     border: 2px solid black;
     border-radius: 8px;
     box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
-    padding: 20px;
+    padding: 30px;
     margin: 20px auto;
     max-width: 80%;
     text-align: center;
 }
 
 .contact-info {
-    border-radius: 8px;
     text-align: center;
 }
 
