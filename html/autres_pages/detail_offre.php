@@ -16,16 +16,16 @@ if ($_POST) {
     if (($id_membre_co = Auth\id_membre_connecte()) === null) {
         $error_message = 'Veuillez vous connecter pour publier un avis.';
     } else {
-        $querry = 'INSERT INTO pact.avis (id_membre_auteur,id_offre,commentaire,date_experience,note,contexte) VALUES (?,?,?,?,?,?);';
-        $stmt   = DB\connect()->prepare($querry);
-        $stmt->execute([
-            $id_membre_co,
-            $offre->id,
-            $commentaire,
-            $date_avis,
-            $note,
-            $contexte,
+        $stmt = DB\connect()->prepare('insert into pact.avis (id_membre_auteur,id_offre,commentaire,date_experience,note,contexte) values (?,?,?,?,?,?)');
+        DB\bind_values($stmt, [
+            1 => [$id_membre_co, PDO::PARAM_INT],
+            2 => [$offre->id, PDO::PARAM_INT],
+            3 => [$commentaire, PDO::PARAM_STR],
+            4 => [$date_avis, PDO::PARAM_STR],
+            5 => [$note, PDO::PARAM_INT],
+            6 => [$contexte, PDO::PARAM_STR],
         ]);
+        notfalse($stmt->execute());
         $success_message = 'Avis ajouté avec succès !';
     }
 }
