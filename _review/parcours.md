@@ -52,52 +52,33 @@
 
 15. Utiliser les filtres et les tris
 
-### Ordre
+## Ordre
 
-1. Creer un compte pro (optionnel)
-
-2. Deconnection / Connection (optionnel)
-
-3. Information du compte pro
-
-4. Modifier les informations du compte
+1. **Maelan**: Creer un compte pro (optionnel)
+2. **Maelan**: Deconnection / Connection (optionnel)
+3. **Marius**: Information du compte pro
+4. **Marius**: Modifier les informations du compte
     + (montrer les messages d'erreurs)
-
-5. Creer un compte membre (optionnel)
-
-6. Deconnection / Connection (optionnel)
-
-7. Information du compte membre
-
-8. Modifier les informations du compte
+5. **Maelan**: Creer un compte membre (optionnel)
+6. **Maelan**: Deconnection / Connection (optionnel)
+7. **Marius**: Information du compte membre
+8. **Marius**: Modifier les informations du compte
     + (montrer les messages d'erreurs)
-
-9. Creer une offre
+9. **Raphael**: Creer une offre
     + monter les options
-
-10. Utiliser la recherche
-
-11. Utiliser les filtres et les tris
-
-12. Montrer detail offre
+10. **Romain**: Utiliser la recherche
+11. **Romain**: Utiliser les filtres et les tris
+12. **Raphael**: Montrer detail offre
     + montrer avis coté membre
-
-13. Modifier une offre
+13. **Raphael**: Modifier une offre
     + mettre hors-ligne
-
-14. Utiliser la recherche
-
-15. Utiliser les filtres et les tris
-
-16. Montrer detail offre
+14. **Romain**: Utiliser la recherche
+15. **Romain**: Utiliser les filtres et les tris
+16. **Romain**: Montrer detail offre
     + montrer avis coté membre
-
-17. Mettre un avis
-
-18. Montrer detail offre
+17. **Romain**: Mettre un avis
+18. **Romain**: Montrer detail offre
     + montrer avis coté pro
-
-19. Modifier / supprimer un avis
-
-20. Montrer detail offre
+19. **Romain**: Modifier / supprimer un avis
+20. **Romain**: Montrer detail offre
     + montrer avis coté pro
