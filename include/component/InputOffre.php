@@ -122,6 +122,7 @@ final class InputOffre extends Input
      * Récupère l'offre saisie.
      * @param array $get_or_post `$_GET` ou `$_POST` (selon la méthode du formulaire)
      * @param ?Offre $current_offre L'offre à modifier ou `null` pour une création. Doit exister dans la BDD.
+     * @return Offre
      */
     function get(array $get_or_post, ?Offre $current_offre = null): Offre
     {
@@ -138,8 +139,8 @@ final class InputOffre extends Input
             new MultiRange(array_map(
                 fn($row) => new NonEmptyRange(
                     true,
-                    FiniteTimestamp::parse($row[0]),
-                    FiniteTimestamp::parse($row[1]),
+                    FiniteTimestamp::parse($row['debut']),
+                    FiniteTimestamp::parse($row['fin']),
                     false,
                 ),
                 $this->periodes->get($get_or_post) ?? [],

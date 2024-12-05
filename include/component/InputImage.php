@@ -32,7 +32,7 @@ final class InputImage extends Input
         $files = $this->multiple ? soa_to_aos($files) : [$files];
         dbg_print($files);
 
-        $files = array_filter($files, fn($f) => $f['error'] === UPLOAD_ERR_OK);
+        $files = array_filter($files, fn($f) => $f['error'] !== UPLOAD_ERR_NO_FILE);
 
 
         return array_map(fn($file, $current_id_image) => new Image(
