@@ -23,7 +23,7 @@ if ($_POST) {
     $offre = $input_offre->get($_POST, $offre);
 
     if ($offre === null) {
-        redirect_to('?error=' . urlencode('Une erreur a eu lieu. Veuillez réessayer.'));
+        redirect_to("?categorie=$categorie&error=" . urlencode('Une erreur a eu lieu. Veuillez réessayer.'));
     }
 
     $offre->push_to_db();
