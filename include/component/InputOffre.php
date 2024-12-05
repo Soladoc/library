@@ -449,7 +449,6 @@ final class InputOffre extends Input
                     /** @var ?Restaurant */
                     $restaurant = $current;
                     ?>
-                    ?>
                     <fieldset>
                         <legend>Echelle tarifaire</legend>
                         <p><label><input <?= $form_attr ?>
