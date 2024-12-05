@@ -1,5 +1,6 @@
 <?php
 require_once 'component/Page.php';
+require_once 'component/CarteOffre.php';
 
 $page = new Page('Recherche', scripts: [
     'tri_recherche.js' => 'defer',
@@ -82,5 +83,6 @@ if($_POST){
         </section>
     </main>
     <?php $page->put_footer() ?>
+    <template id="template-offre-card"><?php CarteOffre::put_template() ?></template>
 </body>
 </html>

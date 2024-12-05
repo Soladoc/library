@@ -30,4 +30,16 @@ final class CarteOffre
 </div>
 <?php
     }
+
+    static function put_template(): void {
+?>
+<div class="offer-card">
+    <?php ImageView::put_template() ?>
+    <h3><a href="MISSING">MISSING</a></h3>
+    <p class="location">MISSING</p>
+    <p>MISSING</p>
+    <p class="category">MISSING</p>
+</div>
+<?php   
+    }
 }

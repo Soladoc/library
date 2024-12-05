@@ -38,4 +38,12 @@ final class ImageView
     title="<?= $this->image->legende ?>">
 <?php
     }
+
+    static function put_template(): void {
+?>
+<img src="[MISSING]"
+    alt="[MISSING]"
+    title="[MISSING]">
+<?php
+    }
 }
