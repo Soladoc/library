@@ -250,10 +250,10 @@ final class InputOffre extends Input
                 </ul>
                 <aside>
                     <img src="/icon/icons8-haute-importance-100.png" alt="Haute importance" width="25" height="25">
-                    <p>Attention! Une fois l'option choisi vous ne pourrez plus la modifier.</p>
+                    <p>Attention ! Une fois l'option choisie, vous ne pourrez plus la modifier.</p>
                 </aside>
             <?php } else { ?>
-                <p>Comme vous êtres un professionnel public, l'offre crée sera gratuite (pas de facturation)</p>
+                <p>Comme vous êtres un professionnel public, l'offre créée sera gratuite (pas de facturation)</p>
                 <!-- todo: mettre un lien utile ici -->
                 <p><a href="/" target="_blank" rel="noopener noreferrer">Plus d'informations&hellip;</>
                 </p>
