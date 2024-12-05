@@ -306,7 +306,7 @@ final class InputOffre extends Input
             <?php if ($this->professionnel instanceof ProfessionnelPrive) { ?>
                 <?php $this->tarifs->put($current?->tarifs) ?>
             <?php } else { ?>
-                <p>En tant que professionnel public, vous ne pouvez pas ajouter de grillle tarifaire à votre offre gratuite.</p>
+                <p>En tant que professionnel public, vous ne pouvez pas ajouter de grille tarifaire à votre offre gratuite.</p>
             <?php } ?>
         </section>
 
@@ -452,7 +452,7 @@ final class InputOffre extends Input
                     ?>
                     ?>
                     <fieldset>
-                        <legend>Niveau de richesse</legend>
+                        <legend>Echelle tarifaire</legend>
                         <p><label><input <?= $form_attr ?>
                             id="<?= $this->id('richesse-1') ?>"
                             name="<?= $this->name('richesse') ?>"
