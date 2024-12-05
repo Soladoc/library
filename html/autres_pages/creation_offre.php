@@ -23,7 +23,7 @@ if ($_POST) {
     DB\transaction(fn() => $offre->push_to_db());
 
     $offre->image_principale->move_uploaded_image();
-    foreach ($offre->galerie as $img) {
+    foreach ($offre->galerie->images as $img) {
         $img->move_uploaded_image();
     }
 

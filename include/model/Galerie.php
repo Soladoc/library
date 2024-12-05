@@ -4,7 +4,7 @@ require_once 'Equatable.php';
 
 /**
  * @implements Equatable<Galerie>
- * @property-read Image[] $galerie
+ * @property-read Image[] $images
  */
 final class Galerie implements Equatable
 {

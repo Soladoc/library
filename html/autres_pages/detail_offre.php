@@ -77,7 +77,7 @@ if ($_POST) {
                         </div>
 
                         <!-- Galerie d'images -->
-                        <?php foreach ($offre->galerie as $image): ?>
+                        <?php foreach ($offre->galerie->images as $image): ?>
                             <div class="carousel-slide">
                                 <?php (new ImageView($image))->put_img() ?>
                             </div>
