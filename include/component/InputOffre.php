@@ -125,7 +125,7 @@ final class InputOffre extends Input
      */
     function get(array $get_or_post, ?Offre $current_offre = null): Offre
     {
-        $args = [
+        $args_offre = [
             $current_offre?->id,
             $this->input_adresse->get($get_or_post),
             $this->input_image_principale->get($get_or_post)[0] ?? $current_offre?->image_principale,
@@ -148,25 +148,25 @@ final class InputOffre extends Input
 
         $offre = match ($this->categorie) {
             Activite::CATEGORIE => new Activite(
-                $args,
+                $args_offre,
                 $this->input_indication_duree->get($get_or_post),
                 getarg($get_or_post, 'age_requis', arg_int(1), required: false),
                 getarg($get_or_post, 'prestations_incluses'),
                 getarg($get_or_post, 'prestations_non_incluses', required: false),
             ),
             ParcAttractions::CATEGORIE => new ParcAttractions(
-                $args,
+                $args_offre,
                 getarg($get_or_post, 'age_requis', arg_int(1), required: false),
                 getarg($get_or_post, 'nb_attractions', arg_int(0)),
                 $this->input_image_plan->get($get_or_post)[0] ?? $current_offre?->image_principale,
             ),
             Spectacle::CATEGORIE => new Spectacle(
-                $args,
+                $args_offre,
                 $this->input_indication_duree->get($get_or_post),
                 getarg($get_or_post, 'capacite_accueil', arg_int(0)),
             ),
             Restaurant::CATEGORIE => new Restaurant(
-                $args,
+                $args_offre,
                 getarg($get_or_post, 'carte'),
                 getarg($get_or_post, 'richesse'),
                 getarg($get_or_post, 'sert_petit_dejeuner', required: false) ?? false,
@@ -176,7 +176,7 @@ final class InputOffre extends Input
                 getarg($get_or_post, 'sert_boissons', required: false) ?? false,
             ),
             Visite::CATEGORIE => new Visite(
-                $args,
+                $args_offre,
                 $this->input_indication_duree->get($get_or_post),
             ),
         };
