@@ -53,7 +53,7 @@ begin
         sert_brunch = new.sert_brunch,
         sert_dejeuner = new.sert_dejeuner,
         sert_diner = new.sert_diner,
-        sert_boisson = new.sert_boissons
+        sert_boissons = new.sert_boissons
     where
         id = new.id;
 
