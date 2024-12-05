@@ -1,5 +1,6 @@
-document.addEventListener('DOMContentLoaded', function () {
-    const carousel = document.querySelector('.carousel');
+'use strict';
+
+const carousel = document.querySelector('.carousel');
     const slides = document.querySelectorAll('.carousel-slide');
     const nextButton = document.querySelector('.carousel-next');
     const prevButton = document.querySelector('.carousel-prev');
@@ -26,5 +27,3 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // Initialisation
     updateCarousel();
-});
-

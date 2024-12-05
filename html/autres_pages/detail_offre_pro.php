@@ -10,7 +10,7 @@ require_once 'component/InputOffre.php';
 
 $offre = notfalse(Offre::from_db(getarg($_GET, 'id', arg_int())));
 
-$page = new Page($offre->titre, scripts: ['carrousel.js' => 'defer']);
+$page = new Page($offre->titre, scripts: ['carousel.js' => 'defer']);
 
 if ($_POST) {
     $offre->alterner_etat();

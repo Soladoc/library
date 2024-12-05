@@ -14,7 +14,7 @@ require_once 'queries.php';
 
 $offre = notfalse(Offre::from_db(getarg($_GET, 'id', arg_int())));
 
-$page = new Page($offre->titre, scripts: ['carrousel.js' => 'defer']);
+$page = new Page($offre->titre, scripts: ['carousel.js' => 'defer']);
 
 $input_rating = new InputNote(name: 'rating');
 if ($offre instanceof Restaurant) {
