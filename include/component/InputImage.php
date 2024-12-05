@@ -30,7 +30,6 @@ final class InputImage extends Input
         $files = getarg($_FILES, $this->name, required: false);
 
         $files = $this->multiple ? soa_to_aos($files) : [$files];
-        dbg_print($files);
 
         $files = array_filter($files, fn($f) => $f['error'] === UPLOAD_ERR_OK);
 
