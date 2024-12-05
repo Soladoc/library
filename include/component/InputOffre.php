@@ -427,7 +427,6 @@ final class InputOffre extends Input
                     /** @var ?ParcAttractions */
                     $parc_attractions = $current;
                     ?>
-                    ?>
                     <p><label>Nombre d'attractions&nbsp;: <input <?= $form_attr ?>
                         id="<?= $this->id('nb_attractions') ?>"
                         name="<?= $this->name('nb_attractions') ?>"
