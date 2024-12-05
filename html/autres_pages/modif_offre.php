@@ -21,6 +21,11 @@ $input_offre = new InputOffre(
 
 if ($_POST) {
     $offre = $input_offre->get($_POST, $offre);
+
+    if ($offre === null) {
+        redirect_to('?error=' . urlencode('Une erreur a eu lieu. Veuillez réessayer.'));
+    }
+
     $offre->push_to_db();
 
     // todo: modifier images
@@ -36,6 +41,11 @@ if ($_POST) {
 <body>
     <?php $page->put_header() ?>
     <main>
+    <?php
+    if ($error = $_GET['error'] ?? null) {
+        ?><p class="error"><?= $error ?></p><?php
+    }
+    ?>
         <?php $input_offre->put($offre) ?>
         
         <form id="f" method="post" enctype="multipart/form-data">

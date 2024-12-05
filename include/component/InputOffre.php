@@ -122,14 +122,18 @@ final class InputOffre extends Input
      * Récupère l'offre saisie.
      * @param array $get_or_post `$_GET` ou `$_POST` (selon la méthode du formulaire)
      * @param ?Offre $current_offre L'offre à modifier ou `null` pour une création. Doit exister dans la BDD.
-     * @return Offre
+     * @return ?Offre
      */
-    function get(array $get_or_post, ?Offre $current_offre = null): Offre
+    function get(array $get_or_post, ?Offre $current_offre = null): ?Offre
     {
+        $image_princiaple = $this->input_image_principale->get($get_or_post)[0] ?? $current_offre?->image_principale;
+
+        if ($image_princiaple === null) return null;
+
         $args_offre = [
             $current_offre?->id,
             $this->input_adresse->get($get_or_post),
-            $this->input_image_principale->get($get_or_post)[0] ?? $current_offre?->image_principale,
+            $image_princiaple,
             $this->professionnel,
             Abonnement::from_db(getarg($get_or_post, $this->name('libelle_abonnement'), required: false) ?? 'gratuit'),
             getarg($get_or_post, $this->name('titre')),
