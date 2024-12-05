@@ -22,7 +22,21 @@ final class Galerie implements Equatable
 
     function __construct(
         private readonly Offre $offre,
-    ) {}
+    ) {
+        if ($this->offre->id !== null) {
+            $stmt = notfalse(DB\connect()->prepare('select * from ' . self::TABLE . ' join _image i on i.id = id_image where id_offre = ?'));
+            DB\bind_values($stmt, [1 => [$this->offre->id, PDO::PARAM_INT]]);
+            notfalse($stmt->execute());
+            while ($row = $stmt->fetch()) {
+                $this->images[] = new Image(
+                    $row['id_image'],
+                    $row['taille'],
+                    $row['mime_subtype'],
+                    $row['legende']
+                );
+            }
+        }
+    }
 
     function add(Image $image): void
     {
