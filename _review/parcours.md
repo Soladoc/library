@@ -1,5 +1,16 @@
 # Parcours du site pour la review
 
+## Ce qu'il y a a présenter
+
+- Écriture et bon fonctionnement des traitements
+- Ergonomie, Expérience Utilisateur, Navigabilité
+- Mise en oeuvre de la responsivité en CSS (Bootstrap en option)
+- Écriture et fonctionnement des requêtes SQL
+- Qualité des jeux de données, Script de peuplement de la BDD
+- Tenir à jour le Product Backlog (US, histoires, critères d'acceptation)
+- Présenter et valoriser individuellement son travail, tout en contribuant à la cohésion de groupe et au bon déroulement de la Review
+- Qualité de la présentation orale lors de la soutenance de fin
+
 ## Professionnel
 
 1. Creer un compte pro (optionnel)

@@ -1,6 +1,5 @@
 # Repartition du travail
 
-
 | Fonctionnalité | Personne assignée |Contributeur|
 |:-----|:----|:---|
 |Page detail compte|Marius|******|
