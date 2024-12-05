@@ -7,15 +7,15 @@ create view offres as select
     (select count(*) from _changement_etat where _changement_etat.id_offre = _offre.id) % 2 = 0 en_ligne,
     (select round(avg(_avis.note),2) from _avis where _avis.id_offre = _offre.id) note_moyenne,
     (select min(tarif.montant) from tarif where tarif.id_offre = _offre.id) prix_min,
-    (select count(*) from _avis where id_offre = offres.id) nb_avis,
-    offre_creee_le(offres.id) creee_le,
-    offre_categorie(offres.id) categorie,
-    offre_en_ligne_pendant(offres.id, date_trunc('month', localtimestamp), '1 month') en_ligne_ce_mois_pendant,
-    offre_changement_ouverture_suivant_le(offres.id, localtimestamp, periodes_ouverture) changement_ouverture_suivant_le,
+    (select count(*) from _avis where id_offre = _offre.id) nb_avis,
+    offre_creee_le(_offre.id) creee_le,
+    offre_categorie(_offre.id) categorie,
+    offre_en_ligne_pendant(_offre.id, date_trunc('month', localtimestamp), '1 month') en_ligne_ce_mois_pendant,
+    offre_changement_ouverture_suivant_le(_offre.id, localtimestamp, periodes_ouverture) changement_ouverture_suivant_le,
     -- Considérer une offre sans période ou horaire comme ouverte tout le temps
     (with horaire_match as (
         select horaires from _ouverture_hebdomadaire
-         where id_offre = offres.id
+         where id_offre = _offre.id
            and dow = extract(dow from localtimestamp))
      select isempty(periodes_ouverture) and not exists((table horaire_match))
          or localtimestamp <@ periodes_ouverture
