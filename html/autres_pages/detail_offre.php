@@ -93,7 +93,7 @@ if ($_POST) {
 
             <div class="offer-info">
                 <h2><?= htmlspecialchars($offre->titre) ?></h2>
-                <p class="description"><?= nl2br(htmlspecialchars($offre->review-form)) ?></p>
+                <p class="description"><?= nl2br(htmlspecialchars($offre->description_detaillee)) ?></p>
             </div>
 
         </section>
