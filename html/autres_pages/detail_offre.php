@@ -29,6 +29,7 @@ $id_membre_co = Auth\id_membre_connecte();
 if ($_POST) {
     if (null === $id_membre_co) {
         $error_message = 'Veuillez vous connecter pour publier un avis.';
+        header("Location: #form-review");
     } else if (Avis::from_db_single($id_membre_co, $offre->id)) {
         $error_message = "Vous pouvez ne publier qu'un avis.";
     } else {
@@ -174,7 +175,7 @@ if ($_POST) {
                                 <p><?= htmlspecialchars($avis_temp['commentaire']) ?></p>
                                 <p class="review-date"><?= htmlspecialchars($avis_temp['date_experience']) ?></p>
                                 <?php if ($id_membre_co !== null && $avis_temp['id_membre_auteur'] === $id_membre_co) { ?>
-                                    <form method="post" action="/avis/modifier.php#review?avis_id=<?= $avis_temp['id'] ?>&offre=<?= $offre->id ?>">
+                                    <form method="post" action="/avis/modifier.php?avis_id=<?= $avis_temp['id'] ?>&offre=<?= $offre->id ?>">
                                         <button type="submit" class="btn-modif">Modifier</button>
                                         <button type="submit" name="action" value="supprimer">Supprimer</button>
                                     </form>
