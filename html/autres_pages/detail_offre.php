@@ -145,7 +145,7 @@ if ($_POST) {
                     </br>
                     <label for="consent">Je certifie que l'avis reflète mes propres expérience et opinion sur cette offre.</label>
                     <input type="checkbox" name="consent" required>
-                    <button type="submit" class="btn-publish">Publier</button>
+                    <button type="submit" class="btn-publish" onsubmit="scrollToReviewForm()">Publier</button>
                 </form>
             </div>
 
@@ -191,6 +191,14 @@ if ($_POST) {
     </main>
     <?php $page->put_footer() ?>
     <script>
+        function scrollToReviewForm() {
+            const target = document.querySelector(".review-form");
+            if (target) {
+                target.scrollIntoView({ behavior: "smooth" });
+            }else{
+                console.log("pas de target");
+            }
+        }
         // // OpenStreetMap Integration
         // var map = L.map('map').setView([48.779, -3.518], 13);
         // L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -203,6 +211,7 @@ if ($_POST) {
         //     .bindPopup('hihihihihihihihihui')
         // L.marker([45.779, -4.518]).addTo(map)
         //     .bindPopup('hihihihihihihihihui')
+
     </script>
 </body>
 
