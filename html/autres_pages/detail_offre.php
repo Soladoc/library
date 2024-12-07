@@ -113,7 +113,7 @@ if ($_POST) {
             </section>
 
             <!-- Formulaire d'avis -->
-            <div class="review-form">
+            <div class="review-form" id="review-form">
                 <h3>Laisser un avis</h3><br>
                 <div class="message">
                     <?php if (isset($error_message)): ?>
