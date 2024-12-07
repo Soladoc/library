@@ -123,8 +123,12 @@ if ($_POST) {
                         <p class="success"><?= htmlspecialchars($success_message) ?></p>
                     <?php endif ?>
                     <script>
-                        //que l'avis ai été publié ou non pares l'affichage du message d'erreur (ou de succes) je scrolle au formulaire de création d'avis
-                        scrollToReviewForm();
+                        const target = document.querySelector(".review-form");
+                         if (target) {
+                            target.scrollIntoView({ behavior: "smooth" });
+                        }else{
+                            console.log("pas de target");
+                        }
                     </script>
                 </div>
                 <form method="post">
@@ -195,14 +199,6 @@ if ($_POST) {
     </main>
     <?php $page->put_footer() ?>
     <script>
-        function scrollToReviewForm() {
-            const target = document.querySelector(".review-form");
-            if (target) {
-                target.scrollIntoView({ behavior: "smooth" });
-            }else{
-                console.log("pas de target");
-            }
-        }
         // // OpenStreetMap Integration
         // var map = L.map('map').setView([48.779, -3.518], 13);
         // L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
