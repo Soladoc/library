@@ -118,12 +118,12 @@ if ($_POST) {
                 <div class="message">
                     <?php if (isset($error_message)): ?>
                         <p class="error"><?= htmlspecialchars($error_message) ?></p>
-                        
-                    <?php elseif (isset($success_message)): ?>
-                        <p class="success"><?= htmlspecialchars($success_message) ?></p>
                     <?php 
-                        header("Location: #review-form");
-                        endif ?>
+                            elseif (isset($success_message)): ?>
+                        <p class="success"><?= htmlspecialchars($success_message) ?></p>
+                    <?php endif 
+                        header("Location: " . $_SERVER['PHP_SELF'] . "review-form");
+                        ?>
                 </div>
                 <form method="post">
                     <textarea name="commentaire" placeholder="Votre avis..." required></textarea>
