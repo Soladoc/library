@@ -121,7 +121,12 @@ if ($_POST) {
                     <?php 
                             elseif (isset($success_message)): ?>
                         <p class="success"><?= htmlspecialchars($success_message) ?></p>
+                        
                     <?php endif ?>
+                    <script>
+                        //que l'avis ai été publié ou non pares l'affichage du message d'erreur (ou de succes) je scrolle au formulaire de création d'avis
+                        scrollToReviewForm();
+                    </script>
                 </div>
                 <form method="post">
                     <textarea name="commentaire" placeholder="Votre avis..." required></textarea>
@@ -145,7 +150,7 @@ if ($_POST) {
                     </br>
                     <label for="consent">Je certifie que l'avis reflète mes propres expérience et opinion sur cette offre.</label>
                     <input type="checkbox" name="consent" required>
-                    <button type="submit" class="btn-publish" onsubmit="scrollToReviewForm()">Publier</button>
+                    <button type="submit" class="btn-publish" >Publier</button>
                 </form>
             </div>
 
