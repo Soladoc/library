@@ -121,7 +121,6 @@ if ($_POST) {
                     <?php 
                             elseif (isset($success_message)): ?>
                         <p class="success"><?= htmlspecialchars($success_message) ?></p>
-                        
                     <?php endif ?>
                     <script>
                         //que l'avis ai été publié ou non pares l'affichage du message d'erreur (ou de succes) je scrolle au formulaire de création d'avis
