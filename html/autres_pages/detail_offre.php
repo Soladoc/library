@@ -125,7 +125,7 @@ if ($_POST) {
                     <script>
                         const target = document.querySelector(".review-form");
                          if (target) {
-                            target.scrollIntoView({ behavior: "smooth" block: "start" });
+                            target.scrollIntoView({ behavior: "smooth" });
                         }else{
                             console.log("pas de target");
                         }
