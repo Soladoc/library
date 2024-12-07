@@ -123,7 +123,7 @@ if ($_POST) {
                         <p class="success"><?= htmlspecialchars($success_message) ?></p>
                     <?php endif ?>
                     <script>
-                        const target = document.querySelector(".review-form");
+                        const target = document.getElementById("review-form")
                         if (target) {
                             target.scrollIntoView({ behavior: "instant" , block: "start"});
                         }else{
