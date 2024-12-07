@@ -124,8 +124,8 @@ if ($_POST) {
                     <?php endif ?>
                     <script>
                         const target = document.querySelector(".review-form");
-                         if (target) {
-                            target.scrollIntoView({ behavior: "instant" , block: "start"});
+                        if (target) {
+                            target.scrollIntoView({ behavior: "instant" , block: "end"});
                         }else{
                             console.log("pas de target");
                         }
