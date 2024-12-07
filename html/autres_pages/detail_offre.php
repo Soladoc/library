@@ -174,7 +174,7 @@ if ($_POST) {
                                 <p><?= htmlspecialchars($avis_temp['commentaire']) ?></p>
                                 <p class="review-date"><?= htmlspecialchars($avis_temp['date_experience']) ?></p>
                                 <?php if ($id_membre_co !== null && $avis_temp['id_membre_auteur'] === $id_membre_co) { ?>
-                                    <form method="post" action="/avis/modifier.php?avis_id=<?= $avis_temp['id'] ?>&offre=<?= $offre->id ?>">
+                                    <form method="post" action="/avis/modifier.php#rating-distribution?avis_id=<?= $avis_temp['id'] ?>&offre=<?= $offre->id ?>">
                                         <button type="submit" class="btn-modif">Modifier</button>
                                         <button type="submit" name="action" value="supprimer">Supprimer</button>
                                     </form>
