@@ -121,9 +121,7 @@ if ($_POST) {
                     <?php 
                             elseif (isset($success_message)): ?>
                         <p class="success"><?= htmlspecialchars($success_message) ?></p>
-                    <?php endif ;
-                        header("Location: " . $_SERVER['PHP_SELF'] . "review-form");
-                        ?>
+                    <?php endif ?>
                 </div>
                 <form method="post">
                     <textarea name="commentaire" placeholder="Votre avis..." required></textarea>
