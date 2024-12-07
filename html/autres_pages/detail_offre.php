@@ -121,7 +121,7 @@ if ($_POST) {
                     <?php 
                             elseif (isset($success_message)): ?>
                         <p class="success"><?= htmlspecialchars($success_message) ?></p>
-                    <?php endif 
+                    <?php endif ;
                         header("Location: " . $_SERVER['PHP_SELF'] . "review-form");
                         ?>
                 </div>
