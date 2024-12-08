@@ -134,7 +134,7 @@ function preview_image(e_input_image, e_preview) {
 /**
  * @param string chemin : id de la balise html a laquelle on veut scroller
  */
-function scroll(chemin) {
+function scroller(chemin) {
     const target = document.getElementById(chemin);
     if (target) {
         target.scrollIntoView({ behavior: "instant" , block: "start"});
