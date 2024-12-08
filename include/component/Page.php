@@ -68,7 +68,7 @@ final class Page
     <?php
     foreach (array_merge(self::BASE_SCRIPTS, $this->scripts) as $src => $attrs) {
         // Idem.
-        ?><script <?= $attrs ?> src="<?= str_contains($src, ':') ? $src : "/script_js/$src" ?>"></script><?php
+        ?><script <?= $attrs ?> src="<?= str_contains($src, ':') ? $src : "./script_js/$src" ?>"></script><?php
     }
     ?>
 </head>
