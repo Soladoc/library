@@ -142,3 +142,5 @@ function scroller(chemin) {
         console.log("Impossible de scroller");
     }
 }
+
+console.log("test");
