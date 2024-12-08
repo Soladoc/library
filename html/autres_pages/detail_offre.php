@@ -14,13 +14,16 @@ require_once 'queries.php';
 
 $offre = notfalse(Offre::from_db(getarg($_GET, 'id', arg_int())));
 
-$page = new Page($offre->titre, scripts: ['carousel.js' => 'defer']);
+$page = new Page($offre->titre, scripts: [
+    'module/detail_offre.js' => 'type="module"',
+    'carousel.js' => 'defer',
+]);
 
 $input_rating = new InputNote(name: 'rating');
 if ($offre instanceof Restaurant) {
-    $input_note_cuisine      = new InputNote(name: 'note_cuisine');
-    $input_note_service      = new InputNote(name: 'note_service');
-    $input_note_ambiance     = new InputNote(name: 'note_ambiance');
+    $input_note_cuisine = new InputNote(name: 'note_cuisine');
+    $input_note_service = new InputNote(name: 'note_service');
+    $input_note_ambiance = new InputNote(name: 'note_ambiance');
     $input_note_qualite_prix = new InputNote(name: 'note_qualite_prix');
 }
 
@@ -29,7 +32,6 @@ $id_membre_co = Auth\id_membre_connecte();
 if ($_POST) {
     if (null === $id_membre_co) {
         $error_message = 'Veuillez vous connecter pour publier un avis.';
-        
     } else if (Avis::from_db_single($id_membre_co, $offre->id)) {
         $error_message = "Vous pouvez ne publier qu'un avis.";
     } else {
@@ -118,13 +120,11 @@ if ($_POST) {
                 <div class="message">
                     <?php if (isset($error_message)): ?>
                         <p class="error"><?= htmlspecialchars($error_message) ?></p>
-                    <?php 
-                            elseif (isset($success_message)): ?>
+                        <?php
+                    elseif (isset($success_message)):
+                        ?>
                         <p class="success"><?= htmlspecialchars($success_message) ?></p>
                     <?php endif ?>
-                    <script>
-                        scroller("review-form");
-                    </script>
                 </div>
                 <form method="post">
                     <textarea name="commentaire" placeholder="Votre avis..." required></textarea>
@@ -148,7 +148,7 @@ if ($_POST) {
                     </br>
                     <label for="consent">Je certifie que l'avis reflète mes propres expérience et opinion sur cette offre.</label>
                     <input type="checkbox" name="consent" required>
-                    <button type="submit" class="btn-publish" >Publier</button>
+                    <button type="submit" class="btn-publish">Publier</button>
                 </form>
             </div>
 
@@ -159,10 +159,10 @@ if ($_POST) {
                     <h4>Résumé des notes</h4>
                     <p>Nombre d'avis : <?= $offre->nb_avis ?></p>
                     <p>Moyenne&nbsp;: <?php if ($offre->note_moyenne !== null) {
-    echo round($offre->note_moyenne, 2);
-} else {
-    echo 0;
-} ?>/5 ★</p>
+                        echo round($offre->note_moyenne, 2);
+                    } else {
+                        echo 0;
+                    } ?>/5 ★</p>
                     <div class="rating-distribution">
                         <?php $avis = DB\query_avis(id_offre: $offre->id) ?>
                         <p>5 étoiles&nbsp;: <?= count(array_filter($avis, fn($a) => $a['note'] === 5)) ?> avis.</p>
