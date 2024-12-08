@@ -18,17 +18,17 @@ async function initializeOffers() {
             ...offer,
             tags: Array.isArray(offer.tags) ? offer.tags.map(tagObj => tagObj.tag.toLowerCase()) : []
         }))
-    ;
+        ;
     filterOffers();
 }
 initializeOffers();
 
 const subcategories = {
     restaurant: ['Française', 'Fruits de mer', 'Asiatique', 'Indienne', 'Italienne', 'Gastronomique', 'Restauration rapide', 'Crêperie'],
-    activité: ['Atelier','Cinéma','Cirque','Culturel','Famille','Histoire','Humour','Musée','Musique','Nature','Patrimoine','Son et lumière','Urbain','Sport',],
-    spectacle: ['Atelier','Cinéma','Cirque','Culturel','Famille','Histoire','Humour','Musée','Musique','Nature','Patrimoine','Son et lumière','Urbain','Sport',],
-    visite: ['Atelier','Cinéma','Cirque','Culturel','Famille','Histoire','Humour','Musée','Musique','Nature','Patrimoine','Son et lumière','Urbain','Sport',],
-    parc_d_attraction: ['Atelier','Cinéma','Cirque','Culturel','Famille','Histoire','Humour','Musée','Musique','Nature','Patrimoine','Son et lumière','Urbain','Sport',]
+    activité: ['Atelier', 'Cinéma', 'Cirque', 'Culturel', 'Famille', 'Histoire', 'Humour', 'Musée', 'Musique', 'Nature', 'Patrimoine', 'Son et lumière', 'Urbain', 'Sport',],
+    spectacle: ['Atelier', 'Cinéma', 'Cirque', 'Culturel', 'Famille', 'Histoire', 'Humour', 'Musée', 'Musique', 'Nature', 'Patrimoine', 'Son et lumière', 'Urbain', 'Sport',],
+    visite: ['Atelier', 'Cinéma', 'Cirque', 'Culturel', 'Famille', 'Histoire', 'Humour', 'Musée', 'Musique', 'Nature', 'Patrimoine', 'Son et lumière', 'Urbain', 'Sport',],
+    parc_d_attraction: ['Atelier', 'Cinéma', 'Cirque', 'Culturel', 'Famille', 'Histoire', 'Humour', 'Musée', 'Musique', 'Nature', 'Patrimoine', 'Son et lumière', 'Urbain', 'Sport',]
 };
 
 function showSubcategories() {
@@ -75,11 +75,11 @@ function sortOffers(criteria, ascending = true) {
         if (criteria === 'prix_min' || criteria === 'note_moyenne') {
             valueA = parseFloat(valueA) || 0;
             valueB = parseFloat(valueB) || 0;
-        // Sinon on vérifie si ce sont des dates
+            // Sinon on vérifie si ce sont des dates
         } else if (criteria === 'creee_le') {
             valueA = new Date(valueA);
             valueB = new Date(valueB);
-            
+
             // Vérifie que les dates sont valides
             if (isNaN(valueA)) valueA = new Date(0);  // Date invalide, valeur par défaut
             if (isNaN(valueB)) valueB = new Date(0);
@@ -122,7 +122,7 @@ function filterOffers() {
             }
         }
         // Filtrage par mot-clé (souple)
-        
+
         // if (keywordParts.length > 0) {
         //     const lowerCaseTitle = (offer.title || '').toLowerCase(); // Assure que le titre est en minuscule
         //     const lowerCaseCategory = (offer.categorie || '').toLowerCase();
@@ -151,7 +151,7 @@ function filterOffers() {
         // Si tout est valide, inclure cette offre
         return true;
     });
-    
+
     // Affichage des offres filtrées
     displayOffers(filteredOffers);
 }
@@ -166,8 +166,8 @@ function displayOffers(offersToDisplay = offers) {
 
         // Formate la date
         const date = new Date(offer.creee_le);
-        const formattedDate = date instanceof Date && !isNaN(date) 
-            ? date.toLocaleDateString('fr-FR', { day: '2-digit', month: '2-digit', year: 'numeric' }) 
+        const formattedDate = date instanceof Date && !isNaN(date)
+            ? date.toLocaleDateString('fr-FR', { day: '2-digit', month: '2-digit', year: 'numeric' })
             : 'Date inconnue';
 
         // Affichage des offres avec ou sans prix minimum

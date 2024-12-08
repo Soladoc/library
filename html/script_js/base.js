@@ -130,15 +130,3 @@ function preview_image(e_input_image, e_preview) {
         reader.readAsDataURL(file);
     }
 }
-
-/**
- * @param string chemin : id de la balise html a laquelle on veut scroller
- */
-function scroller(chemin) {
-    const target = document.getElementById(chemin);
-    if (target) {
-        target.scrollIntoView({ behavior: "instant" , block: "start"});
-    }else{
-        console.log("Impossible de scroller");
-    }
-}
