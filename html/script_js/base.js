@@ -1,7 +1,5 @@
 'use strict';
 
-console.log("test");
-
 for (const e of document.getElementsByClassName('input-duration')) setup_input_duration(e);
 for (const e of document.getElementsByClassName('input-address')) setup_input_address(e);
 for (const e of document.getElementsByClassName('input-image')) setup_input_image(e);
