@@ -123,9 +123,7 @@ if ($_POST) {
                         <p class="success"><?= htmlspecialchars($success_message) ?></p>
                     <?php endif ?>
                     <script>
-                        document.addEventListener("DOMContentLoaded", () => {
-                            scroller("review-form");
-                        });
+                        scroller("review-form");
                     </script>
                 </div>
                 <form method="post">
