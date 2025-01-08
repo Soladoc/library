@@ -35,7 +35,7 @@ int main(){
     read(cnx, buffer, sizeof(buffer));
     while (strcmp(buffer,"BYE BYE\r\n")!=0){
         if (strcmp(buffer,"1\r\n")==0){
-            snprintf(reponse, sizeof(reponse), "COUCOU LES GENS\r\n");
+            snprintf(reponse, sizeof(reponse), "VOS MESSAGES :\r\n");
             write(cnx, reponse, strlen(reponse));
             memset(reponse, 0, sizeof(reponse));
         }
