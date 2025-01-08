@@ -34,8 +34,38 @@ int main(){
     cnx = accept(sock, (struct sockaddr *)&conn_addr, (socklen_t *)&size);
     read(cnx, buffer, sizeof(buffer));
     while (strcmp(buffer,"BYE BYE\r\n")!=0){
-        if (strcmp(buffer,"HELLO\r\n")==0){
+        if (strcmp(buffer,"1\r\n")==0){
             snprintf(reponse, sizeof(reponse), "COUCOU LES GENS\r\n");
+            write(cnx, reponse, strlen(reponse));
+            memset(reponse, 0, sizeof(reponse));
+        }
+        else if (strcmp(buffer,"2\r\n")==0){
+            snprintf(reponse, sizeof(reponse), "MESSAGE ENVOYE\r\n");
+            write(cnx, reponse, strlen(reponse));
+            memset(reponse, 0, sizeof(reponse));
+        }
+        else if (strcmp(buffer,"3\r\n")==0){
+            snprintf(reponse, sizeof(reponse), "MESSAGE SUPPRIME\r\n");
+            write(cnx, reponse, strlen(reponse));
+            memset(reponse, 0, sizeof(reponse));
+        }
+        else if (strcmp(buffer,"4\r\n")==0){
+            snprintf(reponse, sizeof(reponse), "MESSAGE MODIFIE\r\n");
+            write(cnx, reponse, strlen(reponse));
+            memset(reponse, 0, sizeof(reponse));
+        }
+        else if (strcmp(buffer,"5\r\n")==0){
+            snprintf(reponse, sizeof(reponse), "UTILISATEUR BLOQUE\r\n");
+            write(cnx, reponse, strlen(reponse));
+            memset(reponse, 0, sizeof(reponse));
+        }
+        else if (strcmp(buffer,"6\r\n")==0){
+            snprintf(reponse, sizeof(reponse), "UTILISATEUR DEBLOQUE\r\n");
+            write(cnx, reponse, strlen(reponse));
+            memset(reponse, 0, sizeof(reponse));
+        }
+        else if (strcmp(buffer,"7\r\n")==0){
+            snprintf(reponse, sizeof(reponse), "RECUPERATION MESSAGES\r\n");
             write(cnx, reponse, strlen(reponse));
             memset(reponse, 0, sizeof(reponse));
         }
