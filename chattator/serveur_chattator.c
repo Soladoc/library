@@ -15,10 +15,7 @@ int main(){
     int cnx;
     struct sockaddr_in conn_addr;
     char buffer[1024];
-    int nbr_pong=1;
     char reponse[30];
-    int resultat;
-    int premier, deuxieme;
     sock = socket(AF_INET, SOCK_STREAM, 0);
     if (sock == -1) {
         perror("socket");
@@ -39,18 +36,6 @@ int main(){
     while (strcmp(buffer,"BYE BYE\r\n")!=0){
         if (strcmp(buffer,"HELLO\r\n")==0){
             snprintf(reponse, sizeof(reponse), "COUCOU LES GENS\r\n");
-            write(cnx, reponse, strlen(reponse));
-            memset(reponse, 0, sizeof(reponse));
-        }
-        else if (strcmp(buffer,"PING\r\n")==0){
-            snprintf(reponse, sizeof(reponse), "PONG N°%d\r\n", nbr_pong);
-            write(cnx, reponse, strlen(reponse));
-            nbr_pong++;
-            memset(reponse, 0, sizeof(reponse));
-        }
-        else if (sscanf(buffer, "%d*%d", &premier, &deuxieme) == 2) {
-            resultat = premier * deuxieme;
-            snprintf(reponse, sizeof(reponse), "Resultat de %d * %d = %d\r\n", premier, deuxieme, resultat);
             write(cnx, reponse, strlen(reponse));
             memset(reponse, 0, sizeof(reponse));
         }
