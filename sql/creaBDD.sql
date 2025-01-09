@@ -291,7 +291,7 @@ create table _signalement (
         constraint signalement_fk_compte references _compte on delete cascade,
     id_signalable int
         constraint signalement_fk_signalable references _signalable on delete cascade,
-    constraint signalement_pk primary key (id_membre, id_signalable),
+    constraint signalement_pk primary key (id_compte, id_signalable),
 
     raison paragraphe not null
 );
