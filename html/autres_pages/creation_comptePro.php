@@ -4,7 +4,7 @@ require_once 'util.php';
 require_once 'redirect.php';
 require_once 'component/Page.php';
 
-$page = new Page('CoCréer un compte pronnexion');
+$page = new Page('Créer un compte professionnel');
 
 function fail(string $error)
 {
@@ -81,89 +81,80 @@ if ($_POST) {
         ]);
         redirect_to(location_connexion());
     }
-} else {
-?>
-<!DOCTYPE html>
-<html lang="fr">
+}
 
-<?php $page->put_head() ?>
-
-<body>
-    <?php $page->put_header() ?>
-    <main>
-        <!-- Section des offres à la une -->
-        <h1>Créer un compte professionnel</h1>
-        <section class="connexion">
-            <div class="champ-connexion">
-                <form action="creation_comptePro.php" method="post" enctype="multipart/form-data">
-                    <p class="champ">
-                        <label>E-mail * <input type="mail" placeholder="exemple@mail.fr" id="email" name="email" required></label>
-                    </p>
-                    <p class="champ">
-                        <label>Mot de passe * <input type="password" placeholder="**********" id="mdp" name="mdp" required></label>
-                    </p>
+$page->put(function () {
+    ?>
+    <!-- Section des offres à la une -->
+    <h1>Créer un compte professionnel</h1>
+    <section class="connexion">
+        <div class="champ-connexion">
+            <form action="creation_comptePro.php" method="post" enctype="multipart/form-data">
+                <p class="champ">
+                    <label>E-mail * <input type="mail" placeholder="exemple@mail.fr" id="email" name="email" required></label>
+                </p>
+                <p class="champ">
+                    <label>Mot de passe * <input type="password" placeholder="**********" id="mdp" name="mdp" required></label>
+                </p>
+                <!-- Texte avec label -->
+                <p class="champ">
+                    <label>Nom * <input type="text" id="nom" name="nom" placeholder="Breton" required></label>
+                </p>
+                <p class="champ">
                     <!-- Texte avec label -->
-                    <p class="champ">
-                        <label>Nom * <input type="text" id="nom" name="nom" placeholder="Breton" required ></label>
-                    </p>
-                    <p class="champ">
-                        <!-- Texte avec label -->
-                        <label>Prénom * <input type="text" id="prenom" name="prenom" placeholder="Louis" required ></label>
-                    </p>
-                    <p class="champ">
-                        <!-- Texte avec label -->
-                        <label>Téléphone * <input id="telephone" name="telephone" type="tel" placeholder="Format: 0123456789" pattern="[0-9]{10}" maxlength="10" required></label>
-                    </p>
-                    <p class="champ">
-                        <!-- Texte avec label -->
-                        <label>Dénomination (raison sociale) * <input type="text" id="denomination" name="denomination" placeholder="Amazon" required ></label>
-                    </p>
-                    <p class="champ">
-                        
-                        <label>Adresse * <input type="text" id="adresse" placeholder="22300 1 rue Edouard Branly" name="adresse" ></labe>
-                    </p>
-                    <p class="radio_entr">
-                        <label>Privé <input type="radio" id="prive" name="type" value="prive" onclick="gererAffichage()" checked ></label>
-                        <label>Public <input type="radio" id="public" name="type" value="public" onclick="gererAffichage()" ></label>
-                    </p>
-                    <p class="champ" id="champ-siren">
-                        <label>SIREN <input type="text" id="siren" name="siren" placeholder="231 654 988" oninput="formatInput(this)" maxlength="12"></label>
-                    </p>
-                    <p class="error"><?= $_GET['error'] ?? '' ?></p>
-                    <button type="submit" class="btn-connexion">Créer un compte professionnel</button>
-                </form>
-                <br>
-                <br>
-                <p>Se connecter ?</p>
-                <a href="connexion.php">
-                    <button class="btn-creer">Se connecter</button>
-                </a>
-                <br>
-            </div>
-        </section>
-    </main>
-    <?php $page->put_footer() ?>
+                    <label>Prénom * <input type="text" id="prenom" name="prenom" placeholder="Louis" required></label>
+                </p>
+                <p class="champ">
+                    <!-- Texte avec label -->
+                    <label>Téléphone * <input id="telephone" name="telephone" type="tel" placeholder="Format: 0123456789" pattern="[0-9]{10}" maxlength="10" required></label>
+                </p>
+                <p class="champ">
+                    <!-- Texte avec label -->
+                    <label>Dénomination (raison sociale) * <input type="text" id="denomination" name="denomination" placeholder="Amazon" required></label>
+                </p>
+                <p class="champ">
 
+                    <label>Adresse * <input type="text" id="adresse" placeholder="22300 1 rue Edouard Branly" name="adresse"></labe>
+                </p>
+                <p class="radio_entr">
+                    <label>Privé <input type="radio" id="prive" name="type" value="prive" onclick="gererAffichage()" checked></label>
+                    <label>Public <input type="radio" id="public" name="type" value="public" onclick="gererAffichage()"></label>
+                </p>
+                <p class="champ" id="champ-siren">
+                    <label>SIREN <input type="text" id="siren" name="siren" placeholder="231 654 988" oninput="formatInput(this)" maxlength="12"></label>
+                </p>
+                <p class="error"><?= $_GET['error'] ?? '' ?></p>
+                <button type="submit" class="btn-connexion">Créer un compte professionnel</button>
+            </form>
+            <br>
+            <br>
+            <p>Se connecter ?</p>
+            <a href="connexion.php">
+                <button class="btn-creer">Se connecter</button>
+            </a>
+            <br>
+        </div>
+    </section>
     <script>
-    // Fonction pour afficher ou masquer la ligne supplémentaire
-    function gererAffichage() {
-        // Récupère tous les boutons radio
-        let radios = document.querySelectorAll('input[name="type"]');
-        let ligneSupplementaire = document.getElementById('champ-siren');
-        // Parcourt chaque bouton radio pour voir s'il est sélectionné
-        radios.forEach(radio => {
-            if (radio.checked && radio.value === 'prive') {
-                // Si Option 2 est sélectionnée, on affiche la ligne
-                ligneSupplementaire.style.display = 'block';
-                ligneSupplementaire.querySelector('input').setAttribute('required', 'required');
+        // Fonction pour afficher ou masquer la ligne supplémentaire
+        function gererAffichage() {
+            // Récupère tous les boutons radio
+            let radios = document.querySelectorAll('input[name="type"]');
+            let ligneSupplementaire = document.getElementById('champ-siren');
+            // Parcourt chaque bouton radio pour voir s'il est sélectionné
+            radios.forEach(radio => {
+                if (radio.checked && radio.value === 'prive') {
+                    // Si Option 2 est sélectionnée, on affiche la ligne
+                    ligneSupplementaire.style.display = 'block';
+                    ligneSupplementaire.querySelector('input').setAttribute('required', 'required');
 
-            } else if (radio.checked) {
-                // Si une autre option est sélectionnée, on masque la ligne
-                ligneSupplementaire.style.display = 'none';
-                ligneSupplementaire.querySelector('input').removeAttribute('required');
-            }
-        });
-    }
+                } else if (radio.checked) {
+                    // Si une autre option est sélectionnée, on masque la ligne
+                    ligneSupplementaire.style.display = 'none';
+                    ligneSupplementaire.querySelector('input').removeAttribute('required');
+                }
+            });
+        }
     </script>
     <script>
         // texte siren
@@ -179,9 +170,5 @@ if ($_POST) {
             input.value = formattedValue;
         }
     </script>
-</body>
-
-</html>
-<?php
-}
-?>
+    <?php
+});

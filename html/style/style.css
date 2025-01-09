@@ -931,11 +931,11 @@ a:not(:hover, :focus, :focus-within) {
     width: 300px;
 }
 
-body#detail_compte {
+body:has(#detail_compte) {
     display: block;
-  
 }
-body#detail_compte main{
+
+#detail_compte{
     max-width: 800px;
     margin: 2rem auto;
     background-color: white;

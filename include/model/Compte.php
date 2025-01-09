@@ -2,14 +2,21 @@
 require_once 'util.php';
 require_once 'model/Commune.php';
 require_once 'model/Signalable.php';
-require_once 'model/Identite.php';
 require_once 'model/Adresse.php';
 
 /**
- * @inheritDoc
+ * Un compte
+ * @property-read ?int $id L'ID. `null` si cette offre n'existe pas dans la BDD.
  */
-abstract class Compte extends Identite implements Signalable
+abstract class Compte implements Signalable
 {
+    protected static function key_fields()
+    {
+        return [
+            'id' => [null, 'id', PDO::PARAM_INT],
+        ];
+    }
+
     protected static function fields()
     {
         return [
@@ -23,7 +30,7 @@ abstract class Compte extends Identite implements Signalable
     }
 
     function __construct(
-        ?int $id,
+        protected ?int $id,
         protected readonly int $id_signalable,
         readonly string $email,
         readonly string $mdp_hash,
@@ -31,9 +38,7 @@ abstract class Compte extends Identite implements Signalable
         readonly string $prenom,
         readonly string $telephone,
         readonly Adresse $adresse,
-    ) {
-        parent::__construct($id);
-    }
+    ) { }
 
     static function from_db(int $id_compte): self|false
     {
