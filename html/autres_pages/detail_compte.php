@@ -29,8 +29,8 @@ $page->put(function () use ($compte) {
                     <p>Siren :</p>
                     <span><?= $compte->siren ?></span>
                 </div>
-            <?php endif; ?>
-        <?php endif; ?>
+            <?php endif ?>
+        <?php endif ?>
 
         <div id="nom">
             <p>Nom :</p>

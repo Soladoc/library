@@ -48,14 +48,14 @@ final class DynamicTable extends Input
         <?php foreach ($current ?? $this->initial_rows as $row) {
             ?>
             <tr>
-                <?php ($this->put_row)($this, $row); ?>
+                <?php ($this->put_row)($this, $row) ?>
             </tr>
             <?php
         } ?>
     </tbody>
     <tfoot>
         <tr>
-            <?= ($this->put_prompt)($this); ?>
+            <?= ($this->put_prompt)($this)?>
         </tr>
     </tfoot>
 </table>
