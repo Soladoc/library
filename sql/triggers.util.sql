@@ -136,7 +136,7 @@ begin
         new.prenom,
         new.telephone,
         new.id_adresse
-    );
+    ) returning id into new.id;
 end
 $$ language plpgsql strict;
 comment on function insert_compte (record) is
