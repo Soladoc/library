@@ -86,7 +86,7 @@ readonly success_cheers=(
     'https://tenor.com/view/homer-simpson-spinning-chair-nuclear-gif-10974154'
 )
 
-readonly log_lines=20
+readonly log_lines=32
 
 readonly relevant_step='Reset Database'
 
