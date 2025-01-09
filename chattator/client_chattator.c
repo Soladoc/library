@@ -6,6 +6,7 @@
 #include <string.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <sys/wait.h>
 
 
 int main(){
@@ -16,6 +17,7 @@ int main(){
     char message[1000];
     int option;
     int num_message;
+    int attente;
     sock = socket(AF_INET, SOCK_STREAM, 0);
     addr.sin_addr.s_addr = inet_addr("127.0.0.1");
     addr.sin_family = AF_INET;
@@ -30,10 +32,9 @@ int main(){
         printf("Connexion établie avec le serveur.(Code 200)\n");
         printf("Bienvenue dans votre espace de chat.\n");
     }
-    read(sock, buffer, sizeof(buffer));
     option=0;
+    attente=6;
     while (option!=8){
-        printf("%s\n", buffer);
         printf("Que voulez-vous faire ? \n");
         printf("Tapez 1 pour voir vos messages\n");
         printf("Tapez 2 pour envoyer un message\n");
@@ -45,18 +46,18 @@ int main(){
         printf("Tapez 8 pour quitter\n");
         scanf("%d", &option);
         if (option==1){
-            write(sock, option, strlen(option));
+            write(sock, &option, sizeof(option));
         }
         else if (option==2){
             printf("Entrez votre message :\n");
             scanf("%s", message);
-            write(sock, option, strlen(option));
+            write(sock, &option, sizeof(option));
             write(sock, message, strlen(message));
         }
         else if (option==3){
             printf("Entrez le numéro du message à supprimer :\n");
             scanf("%d", &num_message);
-            write(sock, option, strlen(option));
+            write(sock, &option, sizeof(option));
             write(sock, &num_message, sizeof(num_message));
         }
         else if (option==4){
@@ -64,33 +65,41 @@ int main(){
             scanf("%d", &num_message);
             printf("Entrez votre message :\n");
             scanf("%s", message);
-            write(sock, option, strlen(option));
+            write(sock, &option, sizeof(option));
             write(sock, &num_message, sizeof(num_message));
             write(sock, message, strlen(message));
         }
         else if (option==5){
             printf("Entrez le nom de l'utilisateur à bloquer :\n");
             scanf("%s", message);
-            write(sock, option, strlen(option));
+            write(sock, &option, sizeof(option));
             write(sock, message, strlen(message));
         }
         else if (option==6){
             printf("Entrez le nom de l'utilisateur à débloquer :\n");
             scanf("%s", message);
-            write(sock, option, strlen(option));
+            write(sock, &option, sizeof(option));
             write(sock, message, strlen(message));
         }
         else if (option==7){
-            write(sock, option, strlen(option));
+            write(sock, &option, sizeof(option));
         }
         else if (option==8){
-            printf("Au revoir.\n");
+            snprintf(message, sizeof(message), "BYE BYE\r\n");
+            write(sock, message, strlen(message));
+            wait(&attente);
+            memset(buffer, 0, sizeof(buffer));
+            read(sock, buffer, sizeof(buffer));
+            printf("%s\n", buffer);
+            break;
         }
         else{
             printf("Commande inconnue. Veuillez entrer un nombre entre 1 et 8.\n");
         }
         memset(buffer, 0, sizeof(buffer));
+        wait(&attente);
         read(sock, buffer, sizeof(buffer));
+        printf("%s\n", buffer);
     }
 return EXIT_SUCCESS;
 }
