@@ -4,18 +4,10 @@ require_once 'util.php';
 
 $page = new Page('Connexion');
 
-$return_url = getarg($_GET, 'return_url', required: false);
-$error = getarg($_GET, 'error', required: false);
-?>
-
-<!DOCTYPE html>
-<html lang="fr">
-
-<?php $page->put_head() ?>
-
-<body>
-<?php $page->put_header() ?>
-<main>
+$page->put(function () {
+    $return_url = getarg($_GET, 'return_url', required: false);
+    $error = getarg($_GET, 'error', required: false);
+    ?>
     <h1>Connexion</h1>
     <section class="connexion">
         <div class="champ-connexion">
@@ -49,8 +41,5 @@ $error = getarg($_GET, 'error', required: false);
             <br>-->
         </div>
     </section>
-</main>
-<?php $page->put_footer() ?>
-</body>
-
-</html>
+    <?php
+});

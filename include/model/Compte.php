@@ -5,7 +5,8 @@ require_once 'model/Signalable.php';
 require_once 'model/Adresse.php';
 
 /**
- * @inheritDoc
+ * Un compte
+ * @property-read ?int $id L'ID. `null` si cette offre n'existe pas dans la BDD.
  */
 abstract class Compte implements Signalable
 {

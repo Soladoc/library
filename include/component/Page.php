@@ -30,6 +30,26 @@ final class Page
     ) {}
 
     /**
+     * Summary of put
+     * @param callable(): void|string $main
+     * @return void
+     */
+    function put(callable|string $main)
+    {
+        ?>
+<!DOCTYPE html>
+<html lang="fr">
+<?php $this->put_head(); ?>
+<body>
+    <?php $this->put_header() ?>
+    <main><?php is_string($main) ? (print $main) : $main() ?></main>
+    <?php $this->put_footer() ?>
+</body>
+</html>
+<?php
+    }
+
+    /**
      * Affiche l'élement `<head>` HTML avec le titre, feuilles de style CSS et les scripts JS fournis.
      *
      * Note: la feuille de stile `style.css` et le script `base.js` sont inclus dans tous les documents.
@@ -52,7 +72,7 @@ final class Page
      * ```
      * @return void
      */
-    function put_head(): void
+    private function put_head(): void
     {
         ?>
 <head>
@@ -75,7 +95,7 @@ final class Page
 <?php
     }
 
-    function put_header(): void
+    private function put_header(): void
     {
 ?>
 <header>
@@ -128,7 +148,7 @@ final class Page
 <?php
     }
 
-    function put_footer(): void
+    private function put_footer(): void
     {
 ?>
 <footer>

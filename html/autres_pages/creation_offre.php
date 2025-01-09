@@ -5,9 +5,11 @@ require_once 'util.php';
 require_once 'component/Page.php';
 require_once 'component/InputOffre.php';
 
-$page = new Page("Création d'une offre",
+$page = new Page(
+    "Création d'une offre",
     ['input-offre.css'],
-    ['module/input-offre.js' => 'defer type="module"']);
+    ['module/input-offre.js' => 'defer type="module"']
+);
 
 $categorie = getarg($_GET, 'categorie', arg_check(f_is_in(array_keys(CATEGORIES_OFFRE))));
 
@@ -35,28 +37,17 @@ if ($_POST) {
     // En cas d'échec, l'exception est jetée par DB\transaction(), donc on atteint pas cette ligne.
     redirect_to(location_detail_offre_pro($offre->id));
 }
-?>
-<!DOCTYPE html>
-<html lang="fr">
 
-<?php $page->put_head() ?>
-
-<body>
-    <?php $page->put_header() ?>
-    <main>
-        <?php
-        if ($error = $_GET['error'] ?? null) {
-            ?><p class="error"><?= $error ?></p><?php
-        }
+$page->put(function () use ($input_offre) {
+    if ($error = $_GET['error'] ?? null) {
         ?>
-        <?php $input_offre->put() ?>
+        <p class="error"><?= $error ?></p><?php
+    }
+    ?>
+    <?php $input_offre->put() ?>
 
-        <form id="<?= $input_offre->form_id ?>" method="post" enctype="multipart/form-data">
-            <button type="submit">Valider</button>
-        </form>
-    </main>
-    <?php $page->put_footer() ?>
-</body>
-
-</html>
-<?php
+    <form id="<?= $input_offre->form_id ?>" method="post" enctype="multipart/form-data">
+        <button type="submit">Valider</button>
+    </form>
+    <?php
+});

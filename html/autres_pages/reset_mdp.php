@@ -4,18 +4,12 @@ require_once 'util.php';
 
 $page = new Page('Reinitialiser le mot de passe');
 
-$return_url = getarg($_GET, 'return_url', required: false);
-$error = getarg($_GET, 'error', required: false);
-?>
+$page->put(function () {
 
-<!DOCTYPE html>
-<html lang="fr">
+    $return_url = getarg($_GET, 'return_url', required: false);
+    $error = getarg($_GET, 'error', required: false);
+    ?>
 
-<?php $page->put_head() ?>
-
-<body>
-<?php $page->put_header() ?>
-<main>
     <h1>Réinitialiser le mot de passe</h1>
     <section class="connexion">
         <div class="champ-connexion">
@@ -40,8 +34,5 @@ $error = getarg($_GET, 'error', required: false);
             <br>
         </div>
     </section>
-</main>
-<?php $page->put_footer() ?>
-</body>
-
-</html>
+    <?php
+});

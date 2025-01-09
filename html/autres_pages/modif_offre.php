@@ -6,12 +6,14 @@ require_once 'component/Page.php';
 require_once 'component/InputOffre.php';
 require_once 'model/ProfessionnelPrive.php';
 
-$page = new Page('Modifier offre',
+$page = new Page(
+    'Modifier offre',
     ['input-offre.css'],
-    ['module/input-offre.js' => 'defer type="module"']);
+    ['module/input-offre.js' => 'defer type="module"']
+);
 
 $categorie = getarg($_GET, 'categorie', arg_check(f_is_in(array_keys(CATEGORIES_OFFRE))));
-$offre     = notfalse(Offre::from_db($id_offre = getarg($_GET, 'id', arg_int())));
+$offre = notfalse(Offre::from_db($id_offre = getarg($_GET, 'id', arg_int())));
 
 $input_offre = new InputOffre(
     $categorie,
@@ -32,28 +34,20 @@ if ($_POST) {
 
     redirect_to(location_detail_offre_pro($offre->id));
 }
-?>
-<!DOCTYPE html>
-<html lang="fr">
 
-<?php $page->put_head() ?>
-
-<body>
-    <?php $page->put_header() ?>
-    <main>
-    <?php
+$page->put(function () use (
+    $input_offre,
+    $offre
+) {
     if ($error = $_GET['error'] ?? null) {
-        ?><p class="error"><?= $error ?></p><?php
+        ?>
+        <p class="error"><?= $error ?></p><?php
     }
+    $input_offre->put($offre);
     ?>
-        <?php $input_offre->put($offre) ?>
-        
-        <form id="f" method="post" enctype="multipart/form-data">
-            <button type="submit">Valider</button>
-        </form>
-    </main>
-    <?php $page->put_footer() ?>
-    
-</body>
 
-</html>
+    <form id="f" method="post" enctype="multipart/form-data">
+        <button type="submit">Valider</button>
+    </form>
+    <?php
+});
