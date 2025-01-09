@@ -17,7 +17,6 @@ int main(){
     struct sockaddr_in conn_addr;
     char buffer[1024];
     char reponse[30];
-    int attente;
     int opt = 1;
     sock = socket(AF_INET, SOCK_STREAM, 0);
     if (sock == -1) {
@@ -39,7 +38,8 @@ int main(){
     ret = listen(sock, 1);
     size = sizeof(conn_addr);
     cnx = accept(sock, (struct sockaddr *)&conn_addr, (socklen_t *)&size);
-    read(cnx, buffer, sizeof(buffer));
+    read(cnx, buffer, sizeof(buffer) - 1);
+    buffer[strlen(buffer) - 1] = '\0';
     while (strcmp(buffer,"BYE BYE\r\n")!=0){
         if (strcmp(buffer,"1")==0){
             snprintf(reponse, sizeof(reponse), "VOS MESSAGES :\r\n");
@@ -66,8 +66,8 @@ int main(){
             write(cnx, reponse, strlen(reponse));
         }
         else if (strcmp(buffer,"7\r\n")==0){
-        snprintf(reponse, sizeof(reponse), "RECUPERATION MESSAGES\r\n");
-        write(cnx, reponse, strlen(reponse));
+            snprintf(reponse, sizeof(reponse), "RECUPERATION MESSAGES\r\n");
+            write(cnx, reponse, strlen(reponse));
         }
         else if (strcmp(buffer,"BYE BYE\r\n")==0){
             snprintf(reponse, sizeof(reponse), "Au revoir.\r\n");
@@ -78,9 +78,8 @@ int main(){
             snprintf(reponse, sizeof(reponse), "Commande inconnue\r\n");
             write(cnx, reponse, strlen(reponse));
         }
-        wait(&attente);
         memset(buffer, 0, sizeof(buffer));
-        read(cnx, buffer, sizeof(buffer));
+        read(cnx, buffer, sizeof(buffer)); // Read the next message from the client
     }
     close(cnx);
     close(sock);
