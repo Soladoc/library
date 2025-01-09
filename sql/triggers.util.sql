@@ -116,15 +116,11 @@ comment on function insert_offre (record) is
 @param new contient les valeurs de l''offre.';
 
 create function insert_compte (inout new record) as $$
-declare
-    id_identite int;
 begin
     new.email = lower(new.email);
 
-    insert into pact._identite default values returning id into new.id;
     insert into pact._signalable default values returning id into new.id_signalable;
     insert into pact._compte (
-        id,
         id_signalable,
         email,
         mdp_hash,
@@ -133,7 +129,6 @@ begin
         telephone,
         id_adresse
     ) values (
-        new.id,
         new.id_signalable,
         new.email,
         new.mdp_hash,
@@ -176,8 +171,8 @@ $$ language plpgsql;
 create function _compte_delete() returns trigger as $$
 begin
     delete from _signalable where id = old.id;
-    delete from _identite where id = old.id;
     delete from _adresse where id = old.id_adresse;
+    delete from _compte where id = old.id;
     return old;
 end
 $$ language plpgsql;

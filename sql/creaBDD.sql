@@ -68,15 +68,9 @@ create table _signalable (
         constraint signalable_pk primary key
 );
 
-create table _identite (
-    id serial
-        constraint identite_pk primary key
-);
-
 create table _compte (
-    id int
+    id serial
         constraint compte_pk primary key
-        constraint compte_inherits_identite references _identite on delete cascade,
     id_signalable int not null unique
         constraint compte_inherits_signalable references _signalable on delete cascade,
     email adresse_email not null unique,
@@ -169,13 +163,6 @@ create table _parc_attractions (
         constraint parc_attractions_fk_image_plan_parc references _image,
     nb_attractions int not null check (nb_attractions >= 0),
     age_requis int check (age_requis > 0)
-);
-
-create table _visiteur (
-    id int
-        constraint visiteur_pk primary key
-        constraint visiteur_inherits_identite references _identite on delete cascade,
-    ip int not null unique
 );
 
 create table _prive (
@@ -346,16 +333,6 @@ create table _souscription_option (
     nom_option nom_option not null
         constraint souscription_option_fk_option references _option,
     actif bool default true
-);
-
-create table _juge (
-    id_identite int
-        constraint approuve_fk_identite references _identite on delete cascade,
-    id_avis int
-        constraint approuve_fk_avis references _avis on delete cascade,
-    constraint approuve_pk primary key (id_identite, id_avis),
-
-    aime bool not null
 );
 
 create table _tags (
