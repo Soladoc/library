@@ -239,6 +239,8 @@ create table _avis (
     contexte mot_minuscule not null,
     lu bool not null default false,
     blackliste bool not null default false,
+    likes int not null default 0,
+    dislikes int not null default 0,
 
     id_membre_auteur int
         constraint avis_fk_membre_auteur references _membre on delete set null,
@@ -285,8 +287,8 @@ Vacances, jours fériés et ponts non comptabilisées.';
 comment on column _ouverture_hebdomadaire.dow is 'The day of the week as Sunday (0) to Saturday (6)';
 
 create table _signalement (
-    id_membre int
-        constraint signalement_fk_membre references _membre on delete cascade,
+    id_compte int
+        constraint signalement_fk_compte references _compte on delete cascade,
     id_signalable int
         constraint signalement_fk_signalable references _signalable on delete cascade,
     constraint signalement_pk primary key (id_membre, id_signalable),

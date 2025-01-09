@@ -172,7 +172,6 @@ create function _compte_delete() returns trigger as $$
 begin
     delete from _signalable where id = old.id;
     delete from _adresse where id = old.id_adresse;
-    delete from _compte where id = old.id;
     return old;
 end
 $$ language plpgsql;

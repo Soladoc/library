@@ -39,7 +39,7 @@ final class Page
         ?>
 <!DOCTYPE html>
 <html lang="fr">
-<?php $this->put_head(); ?>
+<?php $this->put_head() ?>
 <body>
     <?php $this->put_header() ?>
     <main><?php is_string($main) ? (print $main) : $main() ?></main>
