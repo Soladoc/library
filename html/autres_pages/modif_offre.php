@@ -5,6 +5,7 @@ require_once 'util.php';
 require_once 'component/Page.php';
 require_once 'component/InputOffre.php';
 require_once 'model/ProfessionnelPrive.php';
+require_once 'model/Offre.php';
 
 $page = new Page(
     'Modifier offre',

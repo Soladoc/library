@@ -4,7 +4,6 @@ require_once 'auth.php';
 require_once 'const.php';
 require_once 'redirect.php';
 require_once 'component/Page.php';
-require_once 'queries/offre.php';
 
 $page = new Page('Modifier un avis');
 
@@ -18,11 +17,8 @@ $stmt->execute([$id_avis]);
 $avis = $stmt->fetch(PDO::FETCH_ASSOC);
 
 if ($_POST && isset($_POST['action'])) {
-    if (DB\query_supprime_avis($id_avis)) {
-        redirect_to(location_detail_offre($id_offre));
-    } else {
-        $error_message = 'Une erreur est survenue lors de la suppression de l\'avis.';
-    }
+    Avis::from_db($id_avis)->delete();
+    redirect_to(location_detail_offre($id_offre));
 }
 
 // Traitement du formulaire si la méthode POST est utilisée

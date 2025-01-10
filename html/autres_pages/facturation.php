@@ -4,7 +4,6 @@ use function DB\query_tarif;
 
 require_once 'component/Page.php';
 require_once 'auth.php';
-require_once 'queries/offre.php';
 require_once 'model/Duree.php';
 require_once 'model/Offre.php';
 require_once 'queries.php';
@@ -44,7 +43,7 @@ $page->put(function () {
         $resO *= 0.2;
         $resG += $resO;
         ?>
-        <td><?= $resO . ' €' ?></td>
+        <td><?= "$resO €" ?></td>
         </tr>
         <?php
     }

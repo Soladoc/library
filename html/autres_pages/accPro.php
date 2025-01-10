@@ -2,16 +2,16 @@
 require_once 'component/Page.php';
 require_once 'auth.php';
 require_once 'redirect.php';
-require_once 'queries/offre.php';
 require_once 'component/CarteOffrePro.php';
+require_once 'model/Offre.php';
 
 $page = new Page('Accueil Professionnel');
 
 $page->put(function () {
     $id_professionnel = Auth\exiger_connecte_pro();
 
-    $nb_offres = DB\query_offres_count($id_professionnel);
-    $nb_offres_en_ligne = DB\query_offres_count($id_professionnel, en_ligne: true);
+    $nb_offres = Offre::count($id_professionnel);
+    $nb_offres_en_ligne = Offre::count($id_professionnel, en_ligne: true);
     ?>
 
     <h1>Accueil Professionnel</h1>

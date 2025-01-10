@@ -3,8 +3,6 @@ namespace DB;
 use PDO;
 require_once 'db.php';
 
-require_once 'queries/offre.php';
-
 // Selections
 
 function query_images(): \Iterator

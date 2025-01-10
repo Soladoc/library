@@ -190,6 +190,15 @@ abstract class Offre extends Model implements Signalable
         }
     }
 
+    static function count(?int $id_professionnel = null, ?bool $en_ligne = null): Iterator
+    {
+        $args = DB\filter_null_args(['id_professionnel' => [$id_professionnel, PDO::PARAM_INT], 'en_ligne' => [$en_ligne, PDO::PARAM_BOOL]]);
+        $stmt = notfalse(DB\connect()->prepare('select count(*) from ' . static::TABLE . DB\where_clause(DB\BoolOperator::AND, array_keys($args), static::TABLE)));
+        DB\bind_values($stmt, $args);
+        notfalse($stmt->execute());
+        return notfalse($stmt->fetchColumn());
+    }
+
     /**
      * Récupère les offres de la BDD dont le titre correspond à une recherche.
      * @param string $motcle La chaîne recherchée
