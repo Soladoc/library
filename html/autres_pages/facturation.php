@@ -37,7 +37,7 @@ $page->put(function () {
         <td><?= $offre->titre; ?></td>
         <td><?= $offre->abonnement->libelle ?></td>
         <td><?= $offre->categorie ?></td>
-        <td><?= $offre->option->nom ?> (test)</td>
+        <td><?= $offre->option?->nom ?> (test)</td>
         <td><?= $offre->en_ligne_ce_mois_pendant->days ?></td>
         <?php
         $resO  = $offre->en_ligne_ce_mois_pendant->days * query_tarif($offre->abonnement->libelle);
