@@ -1,13 +1,13 @@
-#include <sys/types.h>
-#include <sys/socket.h>
 #include <arpa/inet.h>
 #include <netinet/in.h>
-#include <unistd.h>
-#include <string.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <sys/wait.h>
+#include <string.h>
 #include <sys/select.h>
+#include <sys/socket.h>
+#include <sys/types.h>
+#include <sys/wait.h>
+#include <unistd.h>
 
 int main() {
     int sock, cnx, option, ret, size, opt;
@@ -55,7 +55,6 @@ int main() {
     FD_SET(cnx, &readfds);
     timeout.tv_sec = 10;
     timeout.tv_usec = 0;
-
     while (1) {
         ret = select(cnx + 1, &readfds, NULL, NULL, &timeout);
 
@@ -119,3 +118,4 @@ int main() {
     printf("Le serveur s'arrête.\r\n");
     return EXIT_SUCCESS;
 }
+
