@@ -32,10 +32,10 @@ $page->put(function () {
     foreach ($offres as $offre) {
         ?>
         <tr>
-        <td><?php print_r($offre['titre'].' | ' ); ?></td>
-        <td><?php print_r($offre['libelle_abonnement'].' | ' );?></td>
-        <td><?php print_r($offre['categorie'].' | ' );?></td>
-        <td><?php print_r(Duree::parse($offre['en_ligne_ce_mois_pendant'])->days.' | ' );?></td>
+        <td><?php print_r($offre['titre'] ); ?></td>
+        <td><?php print_r($offre['libelle_abonnement'] );?></td>
+        <td><?php print_r($offre['categorie']);?></td>
+        <td><?php print_r(Duree::parse($offre['en_ligne_ce_mois_pendant'])->days );?></td>
         <?php
         $resO = Duree::parse($offre['en_ligne_ce_mois_pendant'])->days * query_tarif($offre['libelle_abonnement']);
         $resO += $resO * 0.20;
