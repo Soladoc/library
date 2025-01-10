@@ -148,9 +148,10 @@ int main() {
                     snprintf(reponse, sizeof(reponse), "RECUPERATION MESSAGES\r\n");
                     break;
                 case 8:  // "Au revoir"
-                    snprintf(reponse, sizeof(reponse), "Au revoir.");
+                    snprintf(reponse, sizeof(reponse), "Au revoir.\n");
                     write(cnx, reponse, strlen(reponse)); // Send goodbye message
                     close(cnx);  // Close the connection
+                    printf("Le serveur s'arrête.\r\n");
                     return 0;  // Exit the server gracefully
                 default:
                     snprintf(reponse, sizeof(reponse), "Commande inconnue\r\n");

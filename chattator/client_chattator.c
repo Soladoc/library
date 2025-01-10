@@ -36,7 +36,7 @@ int connexion(int token, int sock){
         }
         bytes_read = read(sock, &token, sizeof(token));
         if (bytes_read > 0) {
-            printf("token de connexion : %d", token);
+            printf("token de connexion : %d\n", token);
         }
         confirmation=1;
         write(sock, &confirmation, sizeof(confirmation));
@@ -112,7 +112,11 @@ int main() {
         }
 
     }
-
+    bytes_read = read(sock, buffer, sizeof(buffer) - 1);
+    if (bytes_read > 0) {
+        buffer[bytes_read] = '\0';
+        printf("%s", buffer);
+    }
     close(sock);
     return EXIT_SUCCESS;
 }
