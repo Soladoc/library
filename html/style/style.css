@@ -1072,7 +1072,7 @@ section#info_compte div span {
     border-collapse: collapse;
     border: 1px solid;
     letter-spacing: 1px;
-    padding: 10px;
+    margin: 10px;
 }
 
 #facturation td {
