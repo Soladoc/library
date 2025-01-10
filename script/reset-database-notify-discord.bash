@@ -84,7 +84,7 @@ readonly success_cheers=(
     '> Pulvis et umbra sumus.'
     '> Post proelium, praemium.'
     '> Ceterum censeo Carthaginem esse delendam.'
-    "> Barmy Baz's Buttery Nubs Barmy Baz's Buttery Nubs Barmy Baz's Buttery Nubs Barmy Baz's Buttery Nubs"
+    "> Barmy Baz's Buttery Nubs. Barmy Baz's Buttery Nubs. Barmy Baz's Buttery Nubs! Barmy Baz's... Buttery Nubs. "
     'https://tenor.com/view/homer-simpson-spinning-chair-nuclear-gif-10974154'
 )
 
