@@ -12,7 +12,7 @@ $page = new Page('Facturation');
 
 $page->put(function () {
     ?>
-    <table>
+    <table id="facturation">
         <thead>
             <tr>
                 <th scope="col">Titre</th>
