@@ -16,6 +16,7 @@ int main(){
     char message[1000];
     int option;
     int num_message;
+    ssize_t bytes_read;
     sock = socket(AF_INET, SOCK_STREAM, 0);
     addr.sin_addr.s_addr = inet_addr("127.0.0.1");
     addr.sin_family = AF_INET;
@@ -43,21 +44,22 @@ int main(){
         printf("Tapez 8 pour quitter\n");
         scanf("%d", &option);
         getchar();
+        write(sock, &option, sizeof(option));
         if (option == 1) {
-            write(sock, &option, sizeof(option));
+            bytes_read = read(sock, buffer, sizeof(buffer) - 1);
+            buffer[bytes_read] = '\0';
+            printf("%s", buffer);
         }
         else if (option == 2) {
             printf("Entrez votre message :\n");
             fgets(message, sizeof(message), stdin);
             message[strcspn(message, "\n")] = 0;
-            write(sock, &option, sizeof(option));
             write(sock, message, strlen(message));
         }
         else if (option == 3) {
             printf("Entrez le numéro du message à supprimer :\n");
             scanf("%d", &num_message);
             getchar();
-            write(sock, &option, sizeof(option));
             write(sock, &num_message, sizeof(num_message));
         }
         else if (option == 4) {
@@ -67,7 +69,6 @@ int main(){
             printf("Entrez votre message :\n");
             fgets(message, sizeof(message), stdin);
             message[strcspn(message, "\n")] = 0;
-            write(sock, &option, sizeof(option));
             write(sock, &num_message, sizeof(num_message));
             write(sock, message, strlen(message));
         }
@@ -75,34 +76,32 @@ int main(){
             printf("Entrez le nom de l'utilisateur à bloquer :\n");
             fgets(message, sizeof(message), stdin);
             message[strcspn(message, "\n")] = 0;
-            write(sock, &option, sizeof(option));
             write(sock, message, strlen(message));
         }
         else if (option == 6) {
             printf("Entrez le nom de l'utilisateur à débloquer :\n");
             fgets(message, sizeof(message), stdin);
             message[strcspn(message, "\n")] = 0;
-            write(sock, &option, sizeof(option));
             write(sock, message, strlen(message));
         }
         else if (option == 7) {
-            write(sock, &option, sizeof(option));
+            printf("Entrez le nom de l'utilisateur à débloquer :\n");
         }
         else if (option == 8) {
-            snprintf(message, sizeof(message), "BYE BYE\r\n");
-            write(sock, message, strlen(message));
             memset(buffer, 0, sizeof(buffer));
-            read(sock, buffer, sizeof(buffer));
-            printf("%s\n", buffer);
+            bytes_read = read(sock, buffer, sizeof(buffer) - 1);
+            if (bytes_read > 0) {
+                buffer[bytes_read] = '\0';
+                printf("%s\n", buffer);
+            }
             break;
         }
-        else {
-            printf("Commande inconnue. Veuillez entrer un nombre entre 1 et 8.\n");
-        }
-
         memset(buffer, 0, sizeof(buffer));
-        read(sock, buffer, sizeof(buffer));
-        printf("%s\n", buffer);
+        bytes_read = read(sock, buffer, sizeof(buffer) - 1);
+        if (bytes_read > 0) {
+            buffer[bytes_read] = '\0';
+            printf("%s\n", buffer);
+        }
     }
     close(sock);
     return EXIT_SUCCESS;

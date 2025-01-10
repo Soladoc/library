@@ -9,15 +9,13 @@
 #include <sys/wait.h>
 
 int main(){
-    int sock;
-    int ret;
+    int sock,cnx,option,ret,size,opt;
     struct sockaddr_in addr;
-    int size;
-    int cnx;
     struct sockaddr_in conn_addr;
     char buffer[1024];
     char reponse[30];
-    int opt = 1;
+    ssize_t bytes_read;
+    opt = 1;
     sock = socket(AF_INET, SOCK_STREAM, 0);
     if (sock == -1) {
         perror("socket");
@@ -36,53 +34,55 @@ int main(){
         _exit(EXIT_FAILURE);
     }
     ret = listen(sock, 1);
+    if (ret == -1) {
+        perror("listen");
+        _exit(EXIT_FAILURE);
+    }
+    printf("Serveur démarré.\n");
     size = sizeof(conn_addr);
     cnx = accept(sock, (struct sockaddr *)&conn_addr, (socklen_t *)&size);
     read(cnx, buffer, sizeof(buffer) - 1);
     buffer[strlen(buffer) - 1] = '\0';
-    while (strcmp(buffer,"BYE BYE\r\n")!=0){
-        if (strcmp(buffer,"1")==0){
-            snprintf(reponse, sizeof(reponse), "VOS MESSAGES :\r\n");
-            write(cnx, reponse, strlen(reponse));
-        }
-        else if (strcmp(buffer,"2\r\n")==0){
-            snprintf(reponse, sizeof(reponse), "MESSAGE ENVOYE\r\n");
-            write(cnx, reponse, strlen(reponse));
-        }
-        else if (strcmp(buffer,"3\r\n")==0){
-            snprintf(reponse, sizeof(reponse), "MESSAGE SUPPRIME\r\n");
-            write(cnx, reponse, strlen(reponse));
-        }
-        else if (strcmp(buffer,"4\r\n")==0){
-            snprintf(reponse, sizeof(reponse), "MESSAGE MODIFIE\r\n");
-            write(cnx, reponse, strlen(reponse));
-        }
-        else if (strcmp(buffer,"5\r\n")==0){
-            snprintf(reponse, sizeof(reponse), "UTILISATEUR BLOQUE\r\n");
-            write(cnx, reponse, strlen(reponse));
-        }
-        else if (strcmp(buffer,"6\r\n")==0){
-            snprintf(reponse, sizeof(reponse), "UTILISATEUR DEBLOQUE\r\n");
-            write(cnx, reponse, strlen(reponse));
-        }
-        else if (strcmp(buffer,"7\r\n")==0){
-            snprintf(reponse, sizeof(reponse), "RECUPERATION MESSAGES\r\n");
-            write(cnx, reponse, strlen(reponse));
-        }
-        else if (strcmp(buffer,"BYE BYE\r\n")==0){
-            snprintf(reponse, sizeof(reponse), "Au revoir.\r\n");
-            write(cnx, reponse, strlen(reponse));
+    while(1) {
+        bytes_read = read(cnx, &option, sizeof(option));
+        if (bytes_read <= 0) {
+            close(cnx);
             break;
         }
-        else{
-            snprintf(reponse, sizeof(reponse), "Commande inconnue\r\n");
-            write(cnx, reponse, strlen(reponse));
+
+        switch(option) {
+            case 1:
+                snprintf(reponse, sizeof(reponse), "AFFICHAGE MESSAGES\r\n");
+                break;
+            case 2:
+                snprintf(reponse, sizeof(reponse), "MESSAGE ENVOYE\r\n");
+                break;
+            case 3:
+                snprintf(reponse, sizeof(reponse), "MESSAGE SUPPRIME\r\n");
+                break;
+            case 4:
+                snprintf(reponse, sizeof(reponse), "MESSAGE MODIFIE\r\n");
+                break;
+            case 5:
+                snprintf(reponse, sizeof(reponse), "UTILISATEUR BLOQUE\r\n");
+                break;
+            case 6:
+                snprintf(reponse, sizeof(reponse), "UTILISATEUR DEBLOQUE\r\n");
+                break;
+            case 7:
+                snprintf(reponse, sizeof(reponse), "RECUPERATION MESSAGES\r\n");
+                break;
+            case 8:
+                snprintf(reponse, sizeof(reponse), "Au revoir.\r\n");
+                write(cnx, reponse, strlen(reponse));
+                close(cnx);
+                break;
+            default:
+                snprintf(reponse, sizeof(reponse), "Commande inconnue\r\n");
         }
-        memset(buffer, 0, sizeof(buffer));
-        read(cnx, buffer, sizeof(buffer));
+        write(cnx, reponse, strlen(reponse));
     }
-    close(cnx);
     close(sock);
-    printf("Serveur en cours d'arrêt.\n");
+    printf("Le serveur s'arrête.\r\n");
     return EXIT_SUCCESS;
 }
