@@ -17,8 +17,8 @@ if (isset($_GET['token'])) {
 
         // Afficher le formulaire pour changer le mot de passe
         echo '<form action="update_password.php" method="post">
-                <input type="hidden" name="user_id" value="' . htmlspecialchars($user_id) . '">
-                <input type="hidden" name="user_type" value="' . htmlspecialchars($user_type) . '">
+                <input type="hidden" name="user_id" value="' . h14s($user_id) . '">
+                <input type="hidden" name="user_type" value="' . h14s($user_type) . '">
                 <label for="password">Nouveau mot de passe :</label>
                 <input type="password" name="password" required>
                 <button type="submit">Réinitialiser</button>

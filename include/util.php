@@ -1,5 +1,10 @@
 <?php
 
+function h14s(string $s)
+{
+    return htmlspecialchars($s, ENT_QUOTES | ENT_SUBSTITUTE | ENT_HTML5);
+}
+
 /**
  * Cause une erreur si la valeur fournie est strictement égale à `false`.
  *

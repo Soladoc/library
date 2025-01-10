@@ -59,8 +59,8 @@ $page->put(function () use ($offre) {
         </section>
 
         <div class="offer-info">
-            <h2><?= htmlspecialchars($offre->titre) ?></h2>
-            <p class="description"><?= nl2br(htmlspecialchars($offre->description_detaillee)) ?></p>
+            <h2><?= h14s($offre->titre) ?></h2>
+            <p class="description"><?= nl2br(h14s($offre->description_detaillee)) ?></p>
         </div>
 
     </section>
@@ -92,10 +92,10 @@ $page->put(function () use ($offre) {
             <?php if (!empty($avis)) {
                 foreach ($avis as $avis_temp) { ?>
                     <div class="review">
-                        <p><strong><?= htmlspecialchars($avis_temp['pseudo_auteur']) ?></strong> - <?= htmlspecialchars($avis_temp['note']) ?>/5</p>
-                        <p class="review-contexte">Contexte&nbsp;: <?= htmlspecialchars($avis_temp['contexte']) ?></p>
-                        <p><?= htmlspecialchars($avis_temp['commentaire']) ?></p>
-                        <p class="review-date"><?= htmlspecialchars($avis_temp['date_experience']) ?></p>
+                        <p><strong><?= h14s($avis_temp['pseudo_auteur']) ?></strong> - <?= h14s($avis_temp['note']) ?>/5</p>
+                        <p class="review-contexte">Contexte&nbsp;: <?= h14s($avis_temp['contexte']) ?></p>
+                        <p><?= h14s($avis_temp['commentaire']) ?></p>
+                        <p class="review-date"><?= h14s($avis_temp['date_experience']) ?></p>
                         <?php if ($id_membre_co !== null && $avis_temp['id_membre_auteur'] === $id_membre_co) { ?>
                             <form method="post" action="modifier.php?id=<?= $offre->id ?>&avis_id=<?= $avis_temp['id'] ?>">
                                 <button type="submit" class="btn-modif">Modifier</button>

@@ -27,9 +27,9 @@ if ($_POST && isset($_POST['action'])) {
 
 // Traitement du formulaire si la méthode POST est utilisée
 if (isset($_POST['date'])) {
-    $commentaire = htmlspecialchars(trim($_POST['commentaire']));
+    $commentaire = h14s(trim($_POST['commentaire']));
     $note = intval($_POST['rating']);
-    $contexte = htmlspecialchars(trim($_POST['contexte']));
+    $contexte = h14s(trim($_POST['contexte']));
     $date_experience = $_POST['date'];
 
     // Validation des champs du formulaire
@@ -53,14 +53,14 @@ $page->put(function () use ($id_avis, $avis, $id_offre) {
 
     <div class="message">
         <?php if (isset($error_message)): ?>
-            <p class="error-message"><?= htmlspecialchars($error_message) ?></p>
+            <p class="error-message"><?= h14s($error_message) ?></p>
         <?php elseif (isset($success_message)): ?>
-            <p class="success-message"><?= htmlspecialchars($success_message) ?></p>
+            <p class="success-message"><?= h14s($success_message) ?></p>
         <?php endif ?>
     </div>
 
     <form method="post" action="modifier.php?id=<?= $id_offre ?>&avis_id=<?= $id_avis ?>">
-        <textarea name="commentaire" placeholder="Votre avis..." required><?= htmlspecialchars($avis['commentaire']) ?></textarea>
+        <textarea name="commentaire" placeholder="Votre avis..." required><?= h14s($avis['commentaire']) ?></textarea>
 
         <label for="rating">Note&nbsp;:</label>
         <select name="rating" id="rating" required>
@@ -79,7 +79,7 @@ $page->put(function () use ($id_avis, $avis, $id_offre) {
         </select>
 
         <label for="date">Date de votre visite</label>
-        <input type="date" id="date" name="date" value="<?= htmlspecialchars($avis['date_experience']) ?>" required>
+        <input type="date" id="date" name="date" value="<?= h14s($avis['date_experience']) ?>" required>
 
         <br>
         <button type="submit" class="btn-publish">Modifier</button>

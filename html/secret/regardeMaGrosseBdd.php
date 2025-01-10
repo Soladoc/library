@@ -16,7 +16,7 @@ $page->put(function () {
 
             // Afficher les en-têtes du tableau en fonction des colonnes récupérées
             foreach (array_keys($results[0]) as $column) {
-                echo '<th>' . htmlspecialchars($column ?? '') . '</th>';
+                echo '<th>' . h14s($column ?? '') . '</th>';
             }
             echo '</tr>';
 
@@ -24,7 +24,7 @@ $page->put(function () {
             foreach ($results as $row) {
                 echo '<tr>';
                 foreach ($row as $value) {
-                    echo '<td>' . htmlspecialchars($value ?? '') . '</td>';  // Sécuriser l'affichage des données
+                    echo '<td>' . h14s($value ?? '') . '</td>';  // Sécuriser l'affichage des données
                 }
                 echo '</tr>';
             }

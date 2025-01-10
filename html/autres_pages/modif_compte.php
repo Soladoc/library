@@ -113,7 +113,7 @@ $page->put(function () use (
                     <div id="pseudo">
                         <label>Pseudo : </label>
                     </div>
-                    <input id="new_pseudo" name="new_pseudo" type="text" value="<?= htmlspecialchars($compte->pseudo) ?>" placeholder="votre nouveau pseudo">
+                    <input id="new_pseudo" name="new_pseudo" type="text" value="<?= h14s($compte->pseudo) ?>" placeholder="votre nouveau pseudo">
                 </div>
                 </br>
             <?php } else if ($compte instanceof Professionnel) { ?>
@@ -121,7 +121,7 @@ $page->put(function () use (
                         <div id="denomination">
                             <label>Dénomination : </label>
                         </div>
-                        <input id="new_denomination" name="new_denomination" type="text" value="<?= htmlspecialchars($compte->denomination) ?>" placeholder="votre nouvelle dénomination">
+                        <input id="new_denomination" name="new_denomination" type="text" value="<?= h14s($compte->denomination) ?>" placeholder="votre nouvelle dénomination">
                     </div>
                     </br>
                 <?php if ($compte instanceof ProfessionnelPrive) { ?>
@@ -130,9 +130,9 @@ $page->put(function () use (
                                 <label>SIREN : </label>
                             </div>
                         <?php if ($error_siren !== null) { ?>
-                                <p class="error"><?= htmlspecialchars($error_siren) ?></p>
+                                <p class="error"><?= h14s($error_siren) ?></p>
                         <?php } ?>
-                            <input type="text" id="new_siren" name="new_siren" value="<?= htmlspecialchars($compte->siren) ?>" placeholder="231 654 988" oninput="formatInput(this)" maxlength="12">
+                            <input type="text" id="new_siren" name="new_siren" value="<?= h14s($compte->siren) ?>" placeholder="231 654 988" oninput="formatInput(this)" maxlength="12">
                         </div>
                         </br>
                 <?php } ?>
@@ -142,14 +142,14 @@ $page->put(function () use (
                 <div id="nom">
                     <label>Nom : </label>
                 </div>
-                <input id="new_nom" name="new_nom" type="text" value="<?= htmlspecialchars($compte->nom) ?>" placeholder="votre nouveau nom">
+                <input id="new_nom" name="new_nom" type="text" value="<?= h14s($compte->nom) ?>" placeholder="votre nouveau nom">
             </div>
             </br>
             <div>
                 <div id="prenom">
                     <label>Prénom : </label>
                 </div>
-                <input id="new_prenom" name="new_prenom" type="text" value="<?= htmlspecialchars($compte->prenom) ?>" placeholder="votre nouveau prénom">
+                <input id="new_prenom" name="new_prenom" type="text" value="<?= h14s($compte->prenom) ?>" placeholder="votre nouveau prénom">
             </div>
             </br>
             <div>
@@ -157,9 +157,9 @@ $page->put(function () use (
                     <label>Email : </label>
                 </div>
                 <?php if ($error_email !== null) { ?>
-                    <p class="error"><?= htmlspecialchars($error_email) ?></p>
+                    <p class="error"><?= h14s($error_email) ?></p>
                 <?php } ?>
-                <input id="new_email" name="new_email" type="email" value="<?= htmlspecialchars($compte->email) ?>" placeholder="votre nouvel email">
+                <input id="new_email" name="new_email" type="email" value="<?= h14s($compte->email) ?>" placeholder="votre nouvel email">
 
             </div>
             </br>
@@ -168,9 +168,9 @@ $page->put(function () use (
                     <label>Numéro de téléphone : </label>
                 </div>
                 <?php if ($error_tel !== null) { ?>
-                    <p class="error"><?= htmlspecialchars($error_tel) ?></p>
+                    <p class="error"><?= h14s($error_tel) ?></p>
                 <?php } ?>
-                <input id="new_telephone" name="new_telephone" type="tel" value="<?= htmlspecialchars($compte->telephone) ?>" placeholder="votre nouveau numéro de téléphone">
+                <input id="new_telephone" name="new_telephone" type="tel" value="<?= h14s($compte->telephone) ?>" placeholder="votre nouveau numéro de téléphone">
 
             </div>
             </br>
@@ -197,7 +197,7 @@ $page->put(function () use (
                     <input id="confirmation_mdp" name="confirmation_mdp" type="password" placeholder="**********">
                 </div>
                 <?php if ($error_mdp !== null) { ?>
-                    <p class="error"><?= htmlspecialchars($error_mdp) ?></p>
+                    <p class="error"><?= h14s($error_mdp) ?></p>
                 <?php } ?>
 
             </div>

@@ -79,7 +79,8 @@ create table _compte (
     prenom ligne not null,
     telephone numero_telephone not null,
     id_adresse int not null
-        constraint compte_fk_adresse references _adresse
+        constraint compte_fk_adresse references _adresse,
+    api_key uuid unique
 );
 
 create table _professionnel (
