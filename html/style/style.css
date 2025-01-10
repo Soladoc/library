@@ -1073,6 +1073,7 @@ section#info_compte div span {
     border: 1px solid;
     letter-spacing: 1px;
     margin: 10px;
+    justify-content: center;
 }
 
 #facturation td {
