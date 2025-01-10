@@ -50,7 +50,7 @@ $page->put(function () {
     <tfoot>
         <tr>
             <th scope="row" colspan="4">Prix global TTC</th>
-            <td><?php $resG ?> €</td>
+            <td><?php print_r($resG) ?> €</td>
         </tr>
     </tfoot>
     </table>
