@@ -7,13 +7,54 @@
 #include <sys/types.h>
 #include <unistd.h>
 
+int connexion(int token, int sock){
+    char util[256];
+    char mdp[256];
+    char buffer[10000];
+    ssize_t bytes_read;
+    int confirmation;
+    if (token==0){
+
+        write(sock, &token, sizeof(token));
+        printf("Veuillez vous connecter pour continuer : quel est votre nom d'utilisateur ?");
+        fgets(util, sizeof(util), stdin);
+        printf("Quel est votre mot de passe ?");
+        fgets(mdp, sizeof(mdp), stdin);
+        write(sock, util, strlen(util));
+        fflush(stdout);
+        bytes_read = read(sock, buffer, sizeof(buffer) - 1);
+        if (bytes_read > 0) {
+            buffer[bytes_read] = '\0';
+            printf("%s", buffer);
+        }
+        write(sock, mdp, strlen(mdp));
+        fflush(stdout);
+        bytes_read = read(sock, buffer, sizeof(buffer) - 1);
+        if (bytes_read > 0) {
+            buffer[bytes_read] = '\0';
+            printf("%s", buffer);
+        }
+        bytes_read = read(sock, &token, sizeof(token));
+        if (bytes_read > 0) {
+            printf("token de connexion : %d\n", token);
+        }
+        confirmation=1;
+        write(sock, &confirmation, sizeof(confirmation));
+        fflush(stdout);
+        bytes_read = read(sock, buffer, sizeof(buffer) - 1);
+        if (bytes_read > 0) {
+            buffer[bytes_read] = '\0';
+            printf("%s", buffer);
+        }
+    }
+    return token;
+}
+
 int main() {
-    int sock;
-    int ret;
+    int sock,ret,option,token;
     struct sockaddr_in addr;
     char buffer[10000];
     char message[1000];
-    int option;
     ssize_t bytes_read;
 
     sock = socket(AF_INET, SOCK_STREAM, 0);
@@ -32,6 +73,7 @@ int main() {
     }
 
     option = 0;
+    token=0;
     while (option != 8) {
         printf("Que voulez-vous faire ? \n");
         printf("Tapez 1 pour voir vos messages\n");
@@ -44,7 +86,9 @@ int main() {
         printf("Tapez 8 pour quitter\n");
         scanf("%d", &option);
         getchar();
-
+        if (option == 1 || option==2 || option == 3 || option == 4 || option == 5 || option == 6 || option == 7) {
+            token=connexion(token,sock);
+        }
         write(sock, &option, sizeof(option));
         printf("Sent option: %d\n", option);
         fflush(stdout);
@@ -73,7 +117,11 @@ int main() {
         }
 
     }
-
+    bytes_read = read(sock, buffer, sizeof(buffer) - 1);
+    if (bytes_read > 0) {
+        buffer[bytes_read] = '\0';
+        printf("%s", buffer);
+    }
     close(sock);
     return EXIT_SUCCESS;
 }

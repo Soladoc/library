@@ -9,11 +9,13 @@
 #include <unistd.h>
 
 int main() {
-    int sock, cnx, option, ret, size, opt;
+    int sock, cnx, option, ret, size, opt, token;
     struct sockaddr_in addr;
     struct sockaddr_in conn_addr;
     char reponse[1019];
     char message[1000];
+    char utilisateur[256];
+    char mdp[256];
     ssize_t bytes_read;
     fd_set readfds;
     struct timeval timeout;
@@ -78,6 +80,42 @@ int main() {
 
             // Handle options based on client input
             switch (option) {
+                case 0: // connexion
+                    bytes_read = read(cnx, utilisateur, sizeof(utilisateur) - 1);
+                    if (bytes_read > 0) {
+                        utilisateur[bytes_read] = '\0';  // Null-terminate the string
+                        printf("Nom d'utilisateur reçu: %s\n", utilisateur);
+                    } else {
+                        printf("Error reading user, bytes_read: %zd\n", bytes_read);
+                    }
+                    snprintf(reponse, sizeof(reponse), "Nom d'utilisateur reçu\r\n");
+                    write(cnx, reponse, strlen(reponse));
+                    bytes_read = read(cnx, mdp, sizeof(mdp)-1);
+                    if (bytes_read > 0) {
+                        mdp[bytes_read] = '\0';  // Null-terminate the string
+                        printf("Mot de passe reçu: %s\n", mdp);
+                    } else {
+                        printf("Error reading user, bytes_read: %zd\n", bytes_read);
+                    }
+                    snprintf(reponse, sizeof(reponse), "Mot de passe reçu\r\n");
+                    write(cnx, reponse, strlen(reponse));
+
+                    //check utilisateur/mdp
+
+                    token=101;
+                    write(cnx, &token, sizeof(token));
+                    bytes_read = read(cnx, &token, sizeof(token));
+                    if (bytes_read > 0) {
+                        if (token==1){
+                            printf("Connexion établie.\r\n");
+                            snprintf(reponse, sizeof(reponse), "Connexion établie\r\n");
+                        } else {
+                            snprintf(reponse, sizeof(reponse), "Erreur lors de la connexion\r\n");
+                        }
+                    } else {
+                        snprintf(reponse, sizeof(reponse), "Erreur lors de la connexion\r\n");
+                    }
+                    break;
                 case 1:  // "AFFICHAGE MESSAGES"
                     snprintf(reponse, sizeof(reponse), "AFFICHAGE MESSAGES\r\n");
                     break;
@@ -111,9 +149,10 @@ int main() {
                     snprintf(reponse, sizeof(reponse), "RECUPERATION MESSAGES\r\n");
                     break;
                 case 8:  // "Au revoir"
-                    snprintf(reponse, sizeof(reponse), "Au revoir.");
+                    snprintf(reponse, sizeof(reponse), "Au revoir.\n");
                     write(cnx, reponse, strlen(reponse)); // Send goodbye message
                     close(cnx);  // Close the connection
+                    printf("Le serveur s'arrête.\r\n");
                     return 0;  // Exit the server gracefully
                 default:
                     snprintf(reponse, sizeof(reponse), "Commande inconnue\r\n");
