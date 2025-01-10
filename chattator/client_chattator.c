@@ -5,7 +5,6 @@
 #include <string.h>
 #include <sys/socket.h>
 #include <sys/types.h>
-#include <sys/wait.h>
 #include <unistd.h>
 
 int main() {
@@ -46,16 +45,28 @@ int main() {
         write(sock, &option, sizeof(option));
         printf("Sent option: %d\n", option);
         fflush(stdout);
+        
         if (option == 1) {
             bytes_read = read(sock, buffer, sizeof(buffer) - 1);
             buffer[bytes_read] = '\0';
             printf("%s", buffer);
         } else if (option == 2) {
-            printf("Entrez votre message :\n");
+            bytes_read = read(sock, buffer, sizeof(buffer) - 1);
+            if (bytes_read > 0) {
+                buffer[bytes_read] = '\0';  // Null-terminate the response
+                printf("%s", buffer);       // Print server's response (MESSAGE ENVOYE: <message>)
+            }
             fgets(message, sizeof(message), stdin);
             message[strcspn(message, "\n")] = 0;
             write(sock, message, strlen(message));
             fflush(stdout);
+
+            // Wait for the server response (confirmation of message sent)
+            bytes_read = read(sock, buffer, sizeof(buffer) - 1);
+            if (bytes_read > 0) {
+                buffer[bytes_read] = '\0';  // Null-terminate the response
+                printf("%s", buffer);       // Print server's response (MESSAGE ENVOYE: <message>)
+            }
         } else if (option == 3) {
             printf("Entrez le numéro du message à supprimer :\n");
             scanf("%d", &num_message);
@@ -96,6 +107,7 @@ int main() {
             }
             break;
         }
+
         memset(buffer, 0, sizeof(buffer));
         bytes_read = read(sock, buffer, sizeof(buffer) - 1);
         if (bytes_read > 0) {

@@ -18,6 +18,19 @@ function notfalse(mixed $valeur, string $message = 'was false'): mixed
 }
 
 /**
+ * Summary of mapnull
+ * @template T
+ * @template TResult
+ * @param ?T $value
+ * @param callable(T): TResult $map
+ * @return ?TResult
+ */
+function mapnull(mixed $value, callable $map): mixed
+{
+    return $value === null ? null : $map($value);
+}
+
+/**
  * Cause une erreur si la valeur fournie est strictement égale à `null`.
  *
  * @template T

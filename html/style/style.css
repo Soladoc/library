@@ -931,11 +931,11 @@ a:not(:hover, :focus, :focus-within) {
     width: 300px;
 }
 
-body:has(#detail_compte) {
+body#detail_compte {
     display: block;
 }
 
-#detail_compte{
+body#detail_compte main {
     max-width: 800px;
     margin: 2rem auto;
     background-color: white;
@@ -943,6 +943,7 @@ body:has(#detail_compte) {
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     padding: 2rem;
 }
+
 section#info_compte {
     display: flex;
     flex-direction: column;
