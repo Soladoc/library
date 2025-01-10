@@ -232,6 +232,7 @@ abstract class Offre extends Model implements Signalable
             ' . static::TABLE . '.en_ligne_ce_mois_pendant,
             ' . static::TABLE . '.changement_ouverture_suivant_le,
             ' . static::TABLE . '.est_ouverte,
+            ' . static::TABLE . '.option,
 
             _activite.indication_duree activite_indication_duree,
             _activite.age_requis activite_age_requis,
