@@ -103,7 +103,7 @@ int main() {
             bytes_read = read(sock, buffer, sizeof(buffer) - 1);
             if (bytes_read > 0) {
                 buffer[bytes_read] = '\0';
-                printf("%s", buffer);  // Print server's response
+                printf("%s", buffer);
             }
             fgets(message, sizeof(message), stdin);
             message[strcspn(message, "\n")] = 0;
