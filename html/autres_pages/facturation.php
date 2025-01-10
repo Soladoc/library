@@ -22,7 +22,6 @@ $page->put(function () {
         print_r(query_tarif($offre['libelle_abonnement']).' | ');
         print_r($offre['categorie'].' | ' );
         print_r(Duree::parse($offre['en_ligne_ce_mois_pendant'])->days.' | ' );
-
         $resO = Duree::parse($offre['en_ligne_ce_mois_pendantc '])->days * query_tarif($offre['libelle_abonnement']);// le 1 sera le prix de l'abonnement a terme.
         $resO += $resO * 0.20;
         $resG += $resO; 
