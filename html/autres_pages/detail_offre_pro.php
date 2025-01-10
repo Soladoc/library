@@ -10,7 +10,7 @@ require_once 'component/InputOffre.php';
 
 $offre = notfalse(Offre::from_db(getarg($_GET, 'id', arg_int())));
 
-$page = new Page($offre->titre, scripts: ['carousel.js' => 'defer']);
+$page = new Page($offre->titre, scripts: ['carousel.js' => 'defer', 'module/detail_offre_pro.js' => 'type="module"']);
 
 if ($_POST) {
     $offre->alterner_etat();
@@ -24,7 +24,7 @@ $page->put(function () use ($offre, $review_list) {
     <section class="modif">
         <div class="bandeau-etat <?= $offre->en_ligne ? 'vert' : 'rouge' ?>">
             <p class="etat"><?= $offre->en_ligne ? 'Offre en ligne' : 'Offre hors ligne' ?></p>
-            <button type="button" class="bouton" onclick="enableValidate()">
+            <button type="button" class="bouton" id="alternateButton">
                 <?= $offre->en_ligne ? 'Mettre hors ligne' : 'Mettre en ligne' ?>
             </button>
             <form id="toggleForm" method="post" style="display: inline;">
@@ -91,17 +91,6 @@ $page->put(function () use ($offre, $review_list) {
         //     .bindPopup('hihihihihihihihihui')
         // L.marker([45.779, -4.518]).addTo(map)
         //     .bindPopup('hihihihihihihihihui')
-    </script>
-    <script>
-        function enableValidate() {
-            document.getElementById('validateButton').disabled = false;
-        }
-
-        document.getElementById('validateButton').addEventListener('click', function (e) {
-            if (this.disabled) {
-                e.preventDefault();
-            }
-        });
     </script>
     <?php
 });

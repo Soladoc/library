@@ -26,7 +26,6 @@ function setup_input_duration(element) {
         const input_next = inputs.item(i + 1); // smaller unit
         if (input_prev !== null) {
             if (input.valueAsNumber === -1) {
-                //debugger;
                 decrement_input(i);
             } else {
                 const excess = Math.trunc(input.valueAsNumber / input.max);
