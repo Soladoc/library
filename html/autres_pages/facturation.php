@@ -41,15 +41,19 @@ $page->put(function () {
         $resO += $resO * 0.20;
         $resG += $resO; 
         ?>
-        <td><?php print_r($resO.' € TTC');?></td>
+        <td><?php print_r($resO.' €');?></td>
         </tr>
         <?php
     }
     ?>
     </tbody>
+    <tfoot>
+        <tr>
+            <th scope="row" colspan="4">Prix global TTC</th>
+            <td><?php $resG ?> €</td>
+        </tr>
+    </tfoot>
     </table>
     <?php
-    echo '<pre>';
-    print_r('Prix global '.$resG.' € TTC');
-    echo '</pre>';
-});
+}); 
+?>
