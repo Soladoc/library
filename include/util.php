@@ -41,7 +41,7 @@ function notfalse(mixed $valeur, string $message = 'was false'): mixed
 }
 
 /**
- * Summary of mapnull
+ * Map the non-null value or return null.
  * @template T
  * @template TResult
  * @param ?T $value

@@ -31,7 +31,7 @@ final class Page
     ) {}
 
     /**
-     * Summary of put
+     * Affiche la page.
      * @param callable(): void|string $main
      * @return void
      */
