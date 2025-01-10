@@ -41,6 +41,11 @@ int connexion(int token, int sock){
         confirmation=1;
         write(sock, &confirmation, sizeof(confirmation));
         fflush(stdout);
+        bytes_read = read(sock, buffer, sizeof(buffer) - 1);
+        if (bytes_read > 0) {
+            buffer[bytes_read] = '\0';
+            printf("%s", buffer);
+        }
     }
     return token;
 }
