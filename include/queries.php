@@ -22,7 +22,7 @@ function query_adresse(int $id_adresse): array|false
     return $stmt->fetch();
 }
 
-function query_tarif(string $libelle_tarif): int|false
+function query_tarif(string $libelle_tarif): float|false
 {
     $stmt = notfalse(connect()->prepare('select prix_journalier from _abonnement where libelle = ?'));
     bind_values($stmt, [1 => [$libelle_tarif, PDO::PARAM_INT]]);
