@@ -7,14 +7,16 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <sys/wait.h>
+#include <sys/select.h>
 
 int main(){
     int sock,cnx,option,ret,size,opt;
     struct sockaddr_in addr;
     struct sockaddr_in conn_addr;
-    char buffer[1024];
     char reponse[30];
     ssize_t bytes_read;
+    fd_set readfds;
+    struct timeval timeout;
     opt = 1;
     sock = socket(AF_INET, SOCK_STREAM, 0);
     if (sock == -1) {
@@ -41,10 +43,26 @@ int main(){
     printf("Serveur démarré.\n");
     size = sizeof(conn_addr);
     cnx = accept(sock, (struct sockaddr *)&conn_addr, (socklen_t *)&size);
-    read(cnx, buffer, sizeof(buffer) - 1);
-    buffer[strlen(buffer) - 1] = '\0';
+    FD_ZERO(&readfds);
+    FD_SET(cnx, &readfds);
+    timeout.tv_sec = 5;
+    timeout.tv_usec = 0;
     while(1) {
-        bytes_read = read(cnx, &option, sizeof(option));
+        ret = select(cnx + 1, &readfds, NULL, NULL, &timeout);
+        if (ret == -1) {
+    perror("select()");
+} else if (ret == 0) {
+    printf("Timeout waiting for data.\n");
+} else {
+    // The socket is ready to read, proceed with read()
+    bytes_read = read(cnx, &option, sizeof(option));
+    if (bytes_read > 0) {
+        printf("Received option: %d\n", option);
+    } else {
+        printf("Error reading option, bytes_read: %zd\n", bytes_read);
+    }
+}
+
         if (bytes_read <= 0) {
             close(cnx);
             break;
@@ -74,13 +92,15 @@ int main(){
                 break;
             case 8:
                 snprintf(reponse, sizeof(reponse), "Au revoir.\r\n");
-                write(cnx, reponse, strlen(reponse));
-                close(cnx);
-                break;
             default:
                 snprintf(reponse, sizeof(reponse), "Commande inconnue\r\n");
         }
         write(cnx, reponse, strlen(reponse));
+        if (option==8){
+            write(cnx, reponse, strlen(reponse));
+            close(cnx);
+            break;
+        }
     }
     close(sock);
     printf("Le serveur s'arrête.\r\n");

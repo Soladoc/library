@@ -45,6 +45,8 @@ int main(){
         scanf("%d", &option);
         getchar();
         write(sock, &option, sizeof(option));
+        printf("Sent option: %d\n", option);
+        fflush(stdout);
         if (option == 1) {
             bytes_read = read(sock, buffer, sizeof(buffer) - 1);
             buffer[bytes_read] = '\0';
@@ -55,12 +57,14 @@ int main(){
             fgets(message, sizeof(message), stdin);
             message[strcspn(message, "\n")] = 0;
             write(sock, message, strlen(message));
+            fflush(stdout);
         }
         else if (option == 3) {
             printf("Entrez le numéro du message à supprimer :\n");
             scanf("%d", &num_message);
             getchar();
             write(sock, &num_message, sizeof(num_message));
+            fflush(stdout);
         }
         else if (option == 4) {
             printf("Entrez le numéro du message à modifier :\n");
@@ -70,19 +74,23 @@ int main(){
             fgets(message, sizeof(message), stdin);
             message[strcspn(message, "\n")] = 0;
             write(sock, &num_message, sizeof(num_message));
+            fflush(stdout);
             write(sock, message, strlen(message));
+            fflush(stdout);
         }
         else if (option == 5) {
             printf("Entrez le nom de l'utilisateur à bloquer :\n");
             fgets(message, sizeof(message), stdin);
             message[strcspn(message, "\n")] = 0;
             write(sock, message, strlen(message));
+            fflush(stdout);
         }
         else if (option == 6) {
             printf("Entrez le nom de l'utilisateur à débloquer :\n");
             fgets(message, sizeof(message), stdin);
             message[strcspn(message, "\n")] = 0;
             write(sock, message, strlen(message));
+            fflush(stdout);
         }
         else if (option == 7) {
             printf("Entrez le nom de l'utilisateur à débloquer :\n");
