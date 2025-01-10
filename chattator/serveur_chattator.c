@@ -112,7 +112,9 @@ int main() {
                     break;
                 case 8:  // "Au revoir"
                     snprintf(reponse, sizeof(reponse), "Au revoir.");
-                    break;
+                    write(cnx, reponse, strlen(reponse)); // Send goodbye message
+                    close(cnx);  // Close the connection
+                    return 0;  // Exit the server gracefully
                 default:
                     snprintf(reponse, sizeof(reponse), "Commande inconnue\r\n");
                     break;
@@ -120,12 +122,6 @@ int main() {
 
             // Send the response back to the client
             write(cnx, reponse, strlen(reponse));
-
-            // If option 8 (Exit) is selected, break the loop and close the connection
-            if (option == 8) {
-                close(cnx);
-                break;
-            }
         }
     }
 
