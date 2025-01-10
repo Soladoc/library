@@ -26,6 +26,6 @@ $page->put(function () {
         echo '</pre>';
     }
     echo '<pre>';
-    print_r($resG);
+    print_r('Prix global '.$resG.' € TTC');
     echo '</pre>';
 });
