@@ -18,8 +18,6 @@ int connexion(int token, int sock){
         write(sock, &token, sizeof(token));
         printf("Veuillez vous connecter pour continuer : quel est votre nom d'utilisateur ?");
         fgets(util, sizeof(util), stdin);
-        printf("Quel est votre mot de passe ?");
-        fgets(mdp, sizeof(mdp), stdin);
         write(sock, util, strlen(util));
         fflush(stdout);
         bytes_read = read(sock, buffer, sizeof(buffer) - 1);
@@ -27,6 +25,8 @@ int connexion(int token, int sock){
             buffer[bytes_read] = '\0';
             printf("%s", buffer);
         }
+        printf("Quel est votre mot de passe ?");
+        fgets(mdp, sizeof(mdp), stdin);
         write(sock, mdp, strlen(mdp));
         fflush(stdout);
         bytes_read = read(sock, buffer, sizeof(buffer) - 1);
