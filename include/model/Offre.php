@@ -15,6 +15,7 @@ require_once 'model/Professionnel.php';
 require_once 'model/Signalable.php';
 require_once 'model/Tags.php';
 require_once 'model/Tarifs.php';
+require_once 'model/SouscriptionOption.php';
 
 /**
  * Une offre touristique.
@@ -29,8 +30,7 @@ require_once 'model/Tarifs.php';
  * @property-read ?FiniteTimestamp $modifiee_le Calculé mais avec un possibilité de valeur initiale.
  * @property-read ?FiniteTimestamp $changement_ouverture_suivant_le Calculé. `null` si cette offre n'existe pas dans la BDD.
  * @property-read ?string $categorie Calculé. `null` si cette offre n'existe pas dans la BDD.
- *
- * @property-read ?int $nb_avis Le nombre d'avis ce cette offre. Calculé. `null` si cette offre n'existe pas dans la BDD.
+ * @property-read ?SouscriptionOption $option La souscription à l'option de cette offre ou `null` si cette offre n'est pas actuellement souscrite à une opption.
  */
 abstract class Offre extends Model implements Signalable
 {
@@ -54,6 +54,7 @@ abstract class Offre extends Model implements Signalable
             'creee_le'                        => [FiniteTimestamp::parse(...), 'creee_le',                        PDO::PARAM_STR],
             'modifiee_le'                     => [FiniteTimestamp::parse(...), 'modifiee_le',                     PDO::PARAM_STR],
             'changement_ouverture_suivant_le' => [FiniteTimestamp::parse(...), 'changement_ouverture_suivant_le', PDO::PARAM_STR],
+            'option' => [SouscriptionOption::parse_json(...), 'option', PDO::PARAM_STR],
         ];
     }
 

@@ -1067,3 +1067,16 @@ section#info_compte div span {
     align-self: flex-start;
     margin-left: 40px; /* Ajustez si nécessaire pour un bon alignement */
 }
+
+#facturation {
+    border-collapse: collapse;
+    border: 1px solid;
+    letter-spacing: 1px;
+    margin: 10px;
+    justify-content: center;
+}
+
+#facturation td {
+    border: 1px solid;
+    padding: 8px 10px;
+  }

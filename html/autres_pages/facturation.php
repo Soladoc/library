@@ -12,7 +12,7 @@ $page = new Page('Facturation');
 
 $page->put(function () {
     ?>
-    <table>
+    <table id="facturation">
         <thead>
             <tr>
                 <th scope="col">Titre</th>
@@ -38,18 +38,22 @@ $page->put(function () {
         <td><?php print_r(Duree::parse($offre['en_ligne_ce_mois_pendant'])->days );?></td>
         <?php
         $resO = Duree::parse($offre['en_ligne_ce_mois_pendant'])->days * query_tarif($offre['libelle_abonnement']);
-        $resO += $resO * 0.20;
+        $resO *= 0.20;
         $resG += $resO; 
         ?>
-        <td><?php print_r($resO.' € TTC');?></td>
+        <td><?php print_r("$resO €");?></td>
         </tr>
         <?php
     }
     ?>
     </tbody>
+    <tfoot>
+        <tr>
+            <th scope="row" colspan="4">Prix global TTC</th>
+            <td><?php print_r($resG) ?> €</td>
+        </tr>
+    </tfoot>
     </table>
     <?php
-    echo '<pre>';
-    print_r('Prix global '.$resG.' € TTC');
-    echo '</pre>';
-});
+}); 
+?>

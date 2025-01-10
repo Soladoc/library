@@ -85,6 +85,12 @@ Ne manquez pas cette opportunité unique de découvrir l''art et l''histoire de 
                 '2024-06-08',
                 'Pratique pour des événements de détente entre collègues.'
             )
+    ),
+    s4 as (
+        insert into
+            _souscription_option (id_offre, nom_option, lancee_le, nb_semaines)
+        values
+            ((table id_offre), 'En Relief', localtimestamp, 3)
     )
 insert into
     _ouverture_hebdomadaire (id_offre, dow, horaires)

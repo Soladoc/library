@@ -70,6 +70,12 @@ La visite de la Galerie d''Art du Dragon Noir est bien plus qu''une simple expos
             avis (id_offre, id_membre_auteur, note, contexte, date_experience, commentaire)
         values
             ((table id_offre), id_membre ('rstallman'), 3, 'famille', '2024-09-18', 'Nous aurion aprécié une visite guidé')
+    ),
+    s4 as (
+        insert into
+            _souscription_option (id_offre, nom_option, lancee_le, nb_semaines)
+        values
+            ((table id_offre), 'À la Une', localtimestamp, 4)
     )
 insert into
     _ouverture_hebdomadaire (id_offre, dow, horaires)

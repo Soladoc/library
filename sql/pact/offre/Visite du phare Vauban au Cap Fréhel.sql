@@ -129,6 +129,12 @@ Ne manquez pas cette opportunité unique de découvrir l''un des joyaux de la Br
             avis (id_offre, id_membre_auteur, note, contexte, date_experience, commentaire)
         values
             ((table id_offre), id_membre ('ltorvalds'), 5, 'couple', '2024-05-02', 'Le cadre était à couper le souffle.')
+    ),
+    s11 as (
+        insert into
+            _souscription_option (id_offre, nom_option, lancee_le, nb_semaines)
+        values
+            ((table id_offre), 'À la Une', localtimestamp, 3)
     )
 insert into
     _ouverture_hebdomadaire (id_offre, dow, horaires)
