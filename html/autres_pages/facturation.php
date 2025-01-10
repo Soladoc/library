@@ -18,6 +18,7 @@ $page->put(function () {
             <tr>
                 <th scope="col">Titre</th>
                 <th scope="col">Type d'abonnement</th>
+                <th scope="col">nom option (test)</th>
                 <th scope="col">Catégorie</th>
                 <th scope="col">Jours en ligne</th>
                 <th scope="col">Prix TTC</th>
@@ -26,23 +27,24 @@ $page->put(function () {
         <tbody>
     <?php
 
-    $resG = 0;//resultat global
-    $resO = 0;//resultat offre
+    $resG             = 0;  // resultat global
+    $resO             = 0;  // resultat offre
     $id_professionnel = Auth\exiger_connecte_pro();
-    $offres = Offre::from_db_all($id_professionnel);
+    $offres           = Offre::from_db_all($id_professionnel);
     foreach ($offres as $offre) {
         ?>
         <tr>
-        <td><?php print_r($offre->titre); ?></td>
-        <td><?php print_r($offre->abonnement->libelle) ?></td>
-        <td><?php print_r($offre->categorie) ?></td>
-        <td><?php print_r($offre->en_ligne_ce_mois_pendant->days ) ?></td>
+        <td><?= $offre->titre; ?></td>
+        <td><?= $offre->abonnement->libelle ?></td>
+        <td><?= $offre->categorie ?></td>
+        <td><?= $offre->option->nom ?> (test)</td>
+        <td><?= $offre->en_ligne_ce_mois_pendant->days ?></td>
         <?php
-        $resO = $offre->en_ligne_ce_mois_pendant->days * query_tarif($offre->abonnement->libelle);
-        $resO *= 0.20;
-        $resG += $resO; 
+        $resO  = $offre->en_ligne_ce_mois_pendant->days * query_tarif($offre->abonnement->libelle);
+        $resO *= 0.2;
+        $resG += $resO;
         ?>
-        <td><?php print_r($resO. " €") ?></td>
+        <td><?= $resO . ' €' ?></td>
         </tr>
         <?php
     }
@@ -51,10 +53,10 @@ $page->put(function () {
     <tfoot>
         <tr>
             <th scope="row" colspan="4">Prix global TTC</th>
-            <td><?php print_r($resG) ?> €</td>
+            <td><?= $resG ?> €</td>
         </tr>
     </tfoot>
     </table>
     <?php
-}); 
+});
 ?>
