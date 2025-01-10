@@ -2,6 +2,7 @@
 require_once 'component/Page.php';
 require_once 'auth.php';
 require_once 'queries/offre.php';
+require_once 'model/Duree.php';
 
 $page = new Page('Facturation');
 
@@ -15,11 +16,10 @@ $page->put(function () {
         print_r($offre['titre'].' | ' );
         print_r($offre['libelle_abonnement'].' | ' );
         print_r($offre['categorie'].' | ' );
-        print_r($offre['en_ligne_ce_mois_pendant'].' | ' );
-        $resO = $offre['en_ligne_ce_mois_pendant'] * 1;
+        print_r(Duree::parse($offre['en_ligne_ce_mois_pendant'])->days.' | ' );
+        ;
+        //$resO = $offre['en_ligne_ce_mois_pendant']->days * 1;
         print_r($resO);
-        // cc benjamin, j'ai renommé l'attribut prix de abonnement en prix_jouranlier
-        // ce message s'autodétruira dans 5 réinitialisations de BDD
         echo '</br';
         echo '</pre>';
     }
