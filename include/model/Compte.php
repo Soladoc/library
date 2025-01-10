@@ -8,7 +8,7 @@ require_once 'model/Adresse.php';
  * Un compte
  * @property-read ?int $id L'ID. `null` si cette offre n'existe pas dans la BDD.
  */
-abstract class Compte implements Signalable
+abstract class Compte extends Model implements Signalable
 {
     protected static function key_fields()
     {
