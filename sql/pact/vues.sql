@@ -33,7 +33,7 @@ create view offres as select
     case
         when so.actif is null then null
         else json_build_array(so.actif, so.nom_option, so.lancee_le, so.nb_semaines, opt.prix)
-    end option,
+    end option
 from
     _offre o
     left join _souscription_option so on so.id_offre = o.id
