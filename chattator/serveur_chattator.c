@@ -51,44 +51,43 @@ int main() {
     size = sizeof(conn_addr);
     cnx = accept(sock, (struct sockaddr *)&conn_addr, (socklen_t *)&size);
 
+    FD_ZERO(&readfds);
+    FD_SET(cnx, &readfds);
+    timeout.tv_sec = 10;
+    timeout.tv_usec = 0;
+    
     while (1) {
-        FD_ZERO(&readfds);
-        FD_SET(cnx, &readfds);
-        timeout.tv_sec = 10;
-        timeout.tv_usec = 0;
-
+        // Wait for client input (blocking)
         ret = select(cnx + 1, &readfds, NULL, NULL, &timeout);
 
         if (ret == -1) {
             perror("select()");
-            break;
         } else if (ret == 0) {
+            // Timeout - no data from client
             printf("Timeout waiting for data.\n");
+            timeout.tv_sec = 10;
+            timeout.tv_usec = 0;
         } else {
-            // Read the option from the client
+            // Client sent data, process it
             bytes_read = read(cnx, &option, sizeof(option));
 
             if (bytes_read > 0) {
                 printf("Received option: %d\n", option);
             } else {
                 printf("Error reading option, bytes_read: %zd\n", bytes_read);
-            }
-
-            if (bytes_read <= 0) {
-                close(cnx);
                 break;
             }
 
-            // Now handle the option
+            // Handle options based on client input
             switch (option) {
                 case 1:  // "AFFICHAGE MESSAGES"
                     snprintf(reponse, sizeof(reponse), "AFFICHAGE MESSAGES\r\n");
                     break;
                 case 2:  // "MESSAGE ENVOYE"
                     snprintf(reponse, sizeof(reponse), "Entrez votre message :\r\n");
-                    write(cnx, reponse, strlen(reponse));  // Prompt client for the message
-
-                    // Now read the actual message from the client
+                    write(cnx, reponse, strlen(reponse));  // Prompt client for message
+                    
+                    // Wait for the actual message from the client
                     bytes_read = read(cnx, message, sizeof(message) - 1);
                     if (bytes_read > 0) {
                         message[bytes_read] = '\0';  // Null-terminate the message
@@ -114,16 +113,17 @@ int main() {
                     snprintf(reponse, sizeof(reponse), "RECUPERATION MESSAGES\r\n");
                     break;
                 case 8:  // "Au revoir"
-                    snprintf(reponse, sizeof(reponse), "Au revoir.\r\n");
+                    snprintf(reponse, sizeof(reponse), "Au revoir.");
                     break;
                 default:
                     snprintf(reponse, sizeof(reponse), "Commande inconnue\r\n");
                     break;
             }
 
-            // Send the response to the client
+            // Send the response back to the client
             write(cnx, reponse, strlen(reponse));
 
+            // If option 8 (Exit) is selected, break the loop
             if (option == 8) {
                 close(cnx);
                 break;
