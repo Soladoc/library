@@ -83,6 +83,7 @@ readonly success_cheers=(
     '> Pulvis et umbra sumus.'
     '> Post proelium, praemium.'
     '> Ceterum censeo Carthaginem esse delendam.'
+    "> j'aurais tendance à penser que si la seule chose qui t'empêche de te jeter d'une falaise c'est le fait que ça ferait du mal à ta famille, c'est que tu as des problèmes de santé mentale"
     'https://tenor.com/view/homer-simpson-spinning-chair-nuclear-gif-10974154'
 )
 

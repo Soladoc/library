@@ -11,4 +11,5 @@ cd "$(dirname "${BASH_SOURCE[0]}")"
 
 . lib/discord.bash
 
+# shellcheck disable=SC2119
 discord_send_msg <<< "$1"
