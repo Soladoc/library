@@ -59,6 +59,7 @@ if ($_POST) {
 }
 
 $page->put(function () use (
+    $id_membre_co,
     $offre,
     $input_rating,
     $input_note_cuisine,
