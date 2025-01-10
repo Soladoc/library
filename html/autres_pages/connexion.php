@@ -24,11 +24,11 @@ $page->put(function () {
                     <input id="mdp" name="mdp" type="password" placeholder="**********" required>
                 </div>
                 <?php if ($error !== null) { ?>
-                    <p class="error"><?= htmlspecialchars($error) ?></p>
+                    <p class="error"><?= h14s($error) ?></p>
                 <?php } ?>
                 <button type="submit" class="btn-connexion">Se connecter</button>
                 <?php if ($return_url !== null) { ?>
-                    <input type="hidden" name="return_url" value="<?= htmlspecialchars($return_url) ?>">
+                    <input type="hidden" name="return_url" value="<?= h14s($return_url) ?>">
                 <?php } ?>
             </form>
             <br><br>

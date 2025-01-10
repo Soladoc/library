@@ -22,11 +22,11 @@ $page->put(function () {
                 </div>
                 <br>
                 <?php if ($error !== null) { ?>
-                    <p class="error"><?= htmlspecialchars($error) ?></p>
+                    <p class="error"><?= h14s($error) ?></p>
                 <?php } ?>
                 <button type="submit" class="btn-connexion">Envoyer un mail</button>
                 <?php if ($return_url !== null) { ?>
-                    <input type="hidden" name="return_url" value="<?= htmlspecialchars($return_url) ?>">
+                    <input type="hidden" name="return_url" value="<?= h14s($return_url) ?>">
                 <?php } ?>
             </form>
             <br><br>

@@ -79,7 +79,7 @@ final class Page
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><?= htmlspecialchars($this->title) ?></title>
+    <title><?= h14s($this->title) ?></title>
     <?php
     foreach (array_merge(self::BASE_STYLESHEETS, $this->stylesheets) as $href) {
         // Si c'est une URL (contient un ':'), on laisse tel quel. Sinon on préfixe par le dossier des feuilles de style.
