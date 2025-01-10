@@ -14,6 +14,7 @@ int main() {
     struct sockaddr_in addr;
     struct sockaddr_in conn_addr;
     char reponse[30];
+    char message[1000];  // This will be used for storing the actual message
     ssize_t bytes_read;
     fd_set readfds;
     struct timeval timeout;
@@ -50,73 +51,80 @@ int main() {
 
     size = sizeof(conn_addr);
     cnx = accept(sock, (struct sockaddr *)&conn_addr, (socklen_t *)&size);
-    if (cnx == -1) {
-        perror("accept");
-        _exit(EXIT_FAILURE);
-    }
 
     FD_ZERO(&readfds);
     FD_SET(cnx, &readfds);
     timeout.tv_sec = 10;
     timeout.tv_usec = 0;
-
+    
     while (1) {
         ret = select(cnx + 1, &readfds, NULL, NULL, &timeout);
 
         if (ret == -1) {
             perror("select()");
-            close(cnx);
-            break;
         } else if (ret == 0) {
             printf("Timeout waiting for data.\n");
-            // Reset the timeout for the next round of select
-            timeout.tv_sec = 10;
-            timeout.tv_usec = 0;
-            FD_SET(cnx, &readfds);  // Ensure we keep monitoring the connection
         } else {
-            // Socket is ready to read
+            // Read the option from the client
             bytes_read = read(cnx, &option, sizeof(option));
 
             if (bytes_read > 0) {
                 printf("Received option: %d\n", option);
-                switch (option) {
-                    case 1:
-                        snprintf(reponse, sizeof(reponse), "AFFICHAGE MESSAGES\r\n");
-                        break;
-                    case 2:
-                        snprintf(reponse, sizeof(reponse), "MESSAGE ENVOYE\r\n");
-                        break;
-                    case 3:
-                        snprintf(reponse, sizeof(reponse), "MESSAGE SUPPRIME\r\n");
-                        break;
-                    case 4:
-                        snprintf(reponse, sizeof(reponse), "MESSAGE MODIFIE\r\n");
-                        break;
-                    case 5:
-                        snprintf(reponse, sizeof(reponse), "UTILISATEUR BLOQUE\r\n");
-                        break;
-                    case 6:
-                        snprintf(reponse, sizeof(reponse), "UTILISATEUR DEBLOQUE\r\n");
-                        break;
-                    case 7:
-                        snprintf(reponse, sizeof(reponse), "RECUPERATION MESSAGES\r\n");
-                        break;
-                    case 8:
-                        snprintf(reponse, sizeof(reponse), "Au revoir.\r\n");
-                        break;
-                    default:
-                        snprintf(reponse, sizeof(reponse), "Commande inconnue\r\n");
-                        break;
-                }
-
-                write(cnx, reponse, strlen(reponse));
-
-                if (option == 8) {
-                    close(cnx);
-                    break;
-                }
             } else {
                 printf("Error reading option, bytes_read: %zd\n", bytes_read);
+            }
+
+            if (bytes_read <= 0) {
+                close(cnx);
+                break;
+            }
+
+            // Now wait for the actual message based on the option
+            switch (option) {
+                case 1:  // "AFFICHAGE MESSAGES"
+                    snprintf(reponse, sizeof(reponse), "AFFICHAGE MESSAGES\r\n");
+                    break;
+                case 2:  // "MESSAGE ENVOYE"
+                    snprintf(reponse, sizeof(reponse), "Entrez votre message :\r\n");
+                    write(cnx, reponse, strlen(reponse));  // Prompt client for the message
+                    
+                    // Now read the actual message from the client
+                    bytes_read = read(cnx, message, sizeof(message) - 1);
+                    if (bytes_read > 0) {
+                        message[bytes_read] = '\0';  // Null-terminate the message
+                        printf("Message reçu : %s\n", message);
+                        snprintf(reponse, sizeof(reponse), "MESSAGE ENVOYE: %s\r\n", message);
+                    } else {
+                        snprintf(reponse, sizeof(reponse), "Erreur lors de la réception du message\r\n");
+                    }
+                    break;
+                case 3:  // "MESSAGE SUPPRIME"
+                    snprintf(reponse, sizeof(reponse), "MESSAGE SUPPRIME\r\n");
+                    break;
+                case 4:  // "MESSAGE MODIFIE"
+                    snprintf(reponse, sizeof(reponse), "MESSAGE MODIFIE\r\n");
+                    break;
+                case 5:  // "UTILISATEUR BLOQUE"
+                    snprintf(reponse, sizeof(reponse), "UTILISATEUR BLOQUE\r\n");
+                    break;
+                case 6:  // "UTILISATEUR DEBLOQUE"
+                    snprintf(reponse, sizeof(reponse), "UTILISATEUR DEBLOQUE\r\n");
+                    break;
+                case 7:  // "RECUPERATION MESSAGES"
+                    snprintf(reponse, sizeof(reponse), "RECUPERATION MESSAGES\r\n");
+                    break;
+                case 8:  // "Au revoir"
+                    snprintf(reponse, sizeof(reponse), "Au revoir.\r\n");
+                    break;
+                default:
+                    snprintf(reponse, sizeof(reponse), "Commande inconnue\r\n");
+                    break;
+            }
+
+            // Send the response to the client
+            write(cnx, reponse, strlen(reponse));
+
+            if (option == 8) {
                 close(cnx);
                 break;
             }

@@ -70,7 +70,6 @@ int main() {
 
         // Handle the logic for specific options
         if (option == 2) {  // If option 2 is selected (send a message)
-            printf("Entrez votre message :\n");
             fgets(message, sizeof(message), stdin);
             message[strcspn(message, "\n")] = 0;  // Remove newline character
             write(sock, message, strlen(message));
