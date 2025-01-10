@@ -59,56 +59,56 @@ int main() {
         timeout.tv_sec = 10;
         timeout.tv_usec = 0;
 
-        // Wait for client input (blocking)
+        // attend l'option choisie par le client
         ret = select(cnx + 1, &readfds, NULL, NULL, &timeout);
 
         if (ret == -1) {
             perror("select()");
         } else if (ret == 0) {
-            // Timeout - no data from client
-            printf("Timeout waiting for data.\n");
+            // indique que le client n'a rien envoyé et attend de nouveau 
+            printf("En attente du client...\n");
         } else if (FD_ISSET(cnx, &readfds)) {
-            // Client sent data, process it
+            // reçoit ce que le client a envoyé
             bytes_read = read(cnx, &option, sizeof(option));
 
             if (bytes_read > 0) {
-                printf("Received option: %d\n", option);
+                printf("Option reçue: %d\n", option);
             } else {
-                printf("Error reading option, bytes_read: %zd\n", bytes_read);
+                printf("Erreur en tentant de lire l'option choisie, bytes lus : %zd\n", bytes_read);
                 break;
             }
 
-            // Handle options based on client input
+            // choisi la bonne option selon ce qu'a envoyé le client
             switch (option) {
                 case 0: // connexion
                     bytes_read = read(cnx, utilisateur, sizeof(utilisateur) - 1);
                     if (bytes_read > 0) {
-                        utilisateur[bytes_read] = '\0';  // Null-terminate the string
+                        utilisateur[bytes_read] = '\0';
                         printf("Nom d'utilisateur reçu: %s\n", utilisateur);
                     } else {
-                        printf("Error reading user, bytes_read: %zd\n", bytes_read);
+                        printf("Erreur en tentant de lire le nom d'utilisateur, bytes lus : %zd\n", bytes_read);
                     }
                     snprintf(reponse, sizeof(reponse), "Nom d'utilisateur reçu\r\n");
                     write(cnx, reponse, strlen(reponse));
                     bytes_read = read(cnx, mdp, sizeof(mdp)-1);
                     if (bytes_read > 0) {
-                        mdp[bytes_read] = '\0';  // Null-terminate the string
+                        mdp[bytes_read] = '\0';
                         printf("Mot de passe reçu: %s\n", mdp);
                     } else {
-                        printf("Error reading user, bytes_read: %zd\n", bytes_read);
+                        printf("Erreur en tentant de lire le mot de passe, bytes lus : %zd\n", bytes_read);
                     }
                     snprintf(reponse, sizeof(reponse), "Mot de passe reçu\r\n");
                     write(cnx, reponse, strlen(reponse));
 
-                    //check utilisateur/mdp
+                    //check utilisateur/mdp a rajouter
 
-                    token=101;
+                    token=101; // à changer pour générer un token aléatoire
                     write(cnx, &token, sizeof(token));
                     bytes_read = read(cnx, &token, sizeof(token));
                     if (bytes_read > 0) {
                         if (token==1){
-                            printf("Connexion établie.\r\n");
-                            snprintf(reponse, sizeof(reponse), "Connexion établie\r\n");
+                            printf("Connexion au compte établie.\r\n");
+                            snprintf(reponse, sizeof(reponse), "Connexion à votre compte établie\r\n");
                         } else {
                             snprintf(reponse, sizeof(reponse), "Erreur lors de la connexion\r\n");
                         }
@@ -116,55 +116,54 @@ int main() {
                         snprintf(reponse, sizeof(reponse), "Erreur lors de la connexion\r\n");
                     }
                     break;
-                case 1:  // "AFFICHAGE MESSAGES"
-                    snprintf(reponse, sizeof(reponse), "AFFICHAGE MESSAGES\r\n");
+                case 1:  // "Affichage des messages"
+                    snprintf(reponse, sizeof(reponse), "Affichage de vos messages :\r\n");
                     break;
-                case 2:  // "MESSAGE ENVOYE"
+                case 2:  // "Reception du nouveau message (et envoi au destinataire)"
                     snprintf(reponse, sizeof(reponse), "Entrez votre message :\r\n");
-                    write(cnx, reponse, strlen(reponse));  // Prompt client for message
+                    write(cnx, reponse, strlen(reponse));  // Demande au client son message
                     
-                    // Wait for the actual message from the client
                     bytes_read = read(cnx, message, sizeof(message) - 1);
                     if (bytes_read > 0) {
-                        message[bytes_read] = '\0';  // Null-terminate the message
+                        message[bytes_read] = '\0';
                         printf("Message reçu : %s\n", message);
-                        snprintf(reponse, sizeof(reponse), "MESSAGE ENVOYE: %s\r\n", message);
+                        snprintf(reponse, sizeof(reponse), "Message envoyé: %s\r\n", message);
                     } else {
                         snprintf(reponse, sizeof(reponse), "Erreur lors de la réception du message\r\n");
                     }
                     break;
-                case 3:  // "MESSAGE SUPPRIME"
-                    snprintf(reponse, sizeof(reponse), "MESSAGE SUPPRIME\r\n");
+                case 3:  // "Message supprimé"
+                    snprintf(reponse, sizeof(reponse), "Message supprimé\r\n");
                     break;
-                case 4:  // "MESSAGE MODIFIE"
-                    snprintf(reponse, sizeof(reponse), "MESSAGE MODIFIE\r\n");
+                case 4:  // "Message modifié"
+                    snprintf(reponse, sizeof(reponse), "Message modifié\r\n");
                     break;
-                case 5:  // "UTILISATEUR BLOQUE"
-                    snprintf(reponse, sizeof(reponse), "UTILISATEUR BLOQUE\r\n");
+                case 5:  // "Utilisateur bloqué"
+                    snprintf(reponse, sizeof(reponse), "Utilisateur bloqué\r\n");
                     break;
-                case 6:  // "UTILISATEUR DEBLOQUE"
-                    snprintf(reponse, sizeof(reponse), "UTILISATEUR DEBLOQUE\r\n");
+                case 6:  // "Blocage de l'utilisateur annulé
+                    snprintf(reponse, sizeof(reponse), "Blocage de l'utilisateur annulé\r\n");
                     break;
-                case 7:  // "RECUPERATION MESSAGES"
-                    snprintf(reponse, sizeof(reponse), "RECUPERATION MESSAGES\r\n");
+                case 7:  // "Récupération des messages dans un fichier"
+                    snprintf(reponse, sizeof(reponse), "Récupération de vos messages effectuée.\r\n");
                     break;
                 case 8:  // "Au revoir"
                     snprintf(reponse, sizeof(reponse), "Au revoir.\n");
-                    write(cnx, reponse, strlen(reponse)); // Send goodbye message
-                    close(cnx);  // Close the connection
+                    write(cnx, reponse, strlen(reponse));
+                    close(cnx);  // Ferme la connection
                     printf("Le serveur s'arrête.\r\n");
-                    return 0;  // Exit the server gracefully
+                    return EXIT_SUCCESS; //Cas où la connection est fermée normalement par le client
                 default:
                     snprintf(reponse, sizeof(reponse), "Commande inconnue\r\n");
                     break;
             }
 
-            // Send the response back to the client
+            // envoi la réponse du serveur au client
             write(cnx, reponse, strlen(reponse));
         }
     }
 
     close(sock);
-    printf("Le serveur s'arrête.\r\n");
-    return EXIT_SUCCESS;
+    printf("Le serveur s'arrête suite à une déconnexion innatendue.\r\n");
+    return EXIT_FAILURE; //Cas où la connection n'est pas arrêtée en utilisant l'option 8
 }
