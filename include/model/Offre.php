@@ -190,7 +190,7 @@ abstract class Offre extends Model implements Signalable
         }
     }
 
-    static function count(?int $id_professionnel = null, ?bool $en_ligne = null): Iterator
+    static function count(?int $id_professionnel = null, ?bool $en_ligne = null): int
     {
         $args = DB\filter_null_args(['id_professionnel' => [$id_professionnel, PDO::PARAM_INT], 'en_ligne' => [$en_ligne, PDO::PARAM_BOOL]]);
         $stmt = notfalse(DB\connect()->prepare('select count(*) from ' . static::TABLE . DB\where_clause(DB\BoolOperator::AND, array_keys($args), static::TABLE)));
