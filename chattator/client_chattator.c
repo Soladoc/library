@@ -1,14 +1,14 @@
-#include <sys/types.h>
-#include <sys/socket.h>
-#include <netinet/in.h>
 #include <arpa/inet.h>
-#include <unistd.h>
-#include <string.h>
+#include <netinet/in.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
+#include <sys/socket.h>
+#include <sys/types.h>
 #include <sys/wait.h>
+#include <unistd.h>
 
-int main(){
+int main() {
     int sock;
     int ret;
     struct sockaddr_in addr;
@@ -26,8 +26,7 @@ int main(){
         printf("Connexion impossible.(Code 404)\n");
         perror("connect");
         _exit(EXIT_FAILURE);
-    }
-    else {
+    } else {
         printf("Connexion établie avec le serveur.(Code 200)\n");
         printf("Bienvenue dans votre espace de chat.\n");
     }
@@ -51,22 +50,19 @@ int main(){
             bytes_read = read(sock, buffer, sizeof(buffer) - 1);
             buffer[bytes_read] = '\0';
             printf("%s", buffer);
-        }
-        else if (option == 2) {
+        } else if (option == 2) {
             printf("Entrez votre message :\n");
             fgets(message, sizeof(message), stdin);
             message[strcspn(message, "\n")] = 0;
             write(sock, message, strlen(message));
             fflush(stdout);
-        }
-        else if (option == 3) {
+        } else if (option == 3) {
             printf("Entrez le numéro du message à supprimer :\n");
             scanf("%d", &num_message);
             getchar();
             write(sock, &num_message, sizeof(num_message));
             fflush(stdout);
-        }
-        else if (option == 4) {
+        } else if (option == 4) {
             printf("Entrez le numéro du message à modifier :\n");
             scanf("%d", &num_message);
             getchar();
@@ -77,25 +73,21 @@ int main(){
             fflush(stdout);
             write(sock, message, strlen(message));
             fflush(stdout);
-        }
-        else if (option == 5) {
+        } else if (option == 5) {
             printf("Entrez le nom de l'utilisateur à bloquer :\n");
             fgets(message, sizeof(message), stdin);
             message[strcspn(message, "\n")] = 0;
             write(sock, message, strlen(message));
             fflush(stdout);
-        }
-        else if (option == 6) {
+        } else if (option == 6) {
             printf("Entrez le nom de l'utilisateur à débloquer :\n");
             fgets(message, sizeof(message), stdin);
             message[strcspn(message, "\n")] = 0;
             write(sock, message, strlen(message));
             fflush(stdout);
-        }
-        else if (option == 7) {
+        } else if (option == 7) {
             printf("Entrez le nom de l'utilisateur à débloquer :\n");
-        }
-        else if (option == 8) {
+        } else if (option == 8) {
             memset(buffer, 0, sizeof(buffer));
             bytes_read = read(sock, buffer, sizeof(buffer) - 1);
             if (bytes_read > 0) {
