@@ -6,6 +6,7 @@ require_once 'component/Page.php';
 require_once 'auth.php';
 require_once 'queries/offre.php';
 require_once 'model/Duree.php';
+require_once 'model/Offre.php';
 require_once 'queries.php';
 
 $page = new Page('Facturation');
@@ -28,20 +29,20 @@ $page->put(function () {
     $resG = 0;//resultat global
     $resO = 0;//resultat offre
     $id_professionnel = Auth\exiger_connecte_pro();
-    $offres = DB\query_offres($id_professionnel);
+    $offres = Offre::from_db_all($id_professionnel);
     foreach ($offres as $offre) {
         ?>
         <tr>
-        <td><?php print_r($offre['titre'] ); ?></td>
-        <td><?php print_r($offre['libelle_abonnement'] );?></td>
-        <td><?php print_r($offre['categorie']);?></td>
-        <td><?php print_r(Duree::parse($offre['en_ligne_ce_mois_pendant'])->days );?></td>
+        <td><?php print_r($offre->titre); ?></td>
+        <td><?php print_r($offre->abonnement->libelle) ?></td>
+        <td><?php print_r($offre->categorie) ?></td>
+        <td><?php print_r($offre->en_ligne_ce_mois_pendant->days ) ?></td>
         <?php
-        $resO = Duree::parse($offre['en_ligne_ce_mois_pendant'])->days * query_tarif($offre['libelle_abonnement']);
+        $resO = $offre->en_ligne_ce_mois_pendant->days * query_tarif($offre->abonnement->libelle);
         $resO *= 0.20;
         $resG += $resO; 
         ?>
-        <td><?php print_r("$resO €");?></td>
+        <td><?php print_r($resO. " €") ?></td>
         </tr>
         <?php
     }
