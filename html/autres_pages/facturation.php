@@ -2,6 +2,7 @@
 require_once 'component/Page.php';
 require_once 'auth.php';
 require_once 'queries/offre.php';
+require_once 'model/Duree.php';
 
 $page = new Page('Facturation');
 
