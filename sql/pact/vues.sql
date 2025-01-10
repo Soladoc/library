@@ -30,10 +30,10 @@ create view offres as select
      select isempty(o.periodes_ouverture) and not exists((table horaire_match))
          or localtimestamp <@ o.periodes_ouverture
          or coalesce(localtime <@ (table horaire_match), false)) est_ouverte,
-
-    so.actif option_active,
-    so.nom_option nom_option,
-    opt.prix prix_option
+    case
+        when so.actif is null then null
+        else json_build_array(so.actif, so.nom_option, so.lancee_le, so.nb_semaines, opt.prix)
+    end option,
 from
     _offre o
     left join _souscription_option so on so.id_offre = o.id

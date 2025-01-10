@@ -335,7 +335,9 @@ create table _souscription_option (
         constraint souscription_option_fk_offre references _offre on delete cascade,
     nom_option nom_option not null
         constraint souscription_option_fk_option references _option,
-    actif bool default true
+    lancee_le timestamp not null,
+    nb_semaines int not null,
+    actif bool not null default true
 );
 
 create table _tags (

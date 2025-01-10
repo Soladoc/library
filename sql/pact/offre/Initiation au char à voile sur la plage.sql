@@ -53,6 +53,12 @@ L''initiation au char à voile peut être incluse dans le cadre d''une activité
             avis (id_offre, id_membre_auteur, note, contexte, date_experience, commentaire)
         values
             ((table id_offre), id_membre ('SamSepi0l'), 4, 'famille', '2024-09-30', 'Très bon rapport qualité-prix.')
+    ),
+    s2 as (
+        insert into
+            _souscription_option (id_offre, nom_option, lancee_le, nb_semaines)
+        values
+            ((table id_offre), 'En Relief', localtimestamp, 4)
     )
 insert into
     _tags (id_offre, tag)

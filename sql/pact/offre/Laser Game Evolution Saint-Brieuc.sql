@@ -58,6 +58,12 @@ with
             avis (id_offre, id_membre_auteur, note, contexte, date_experience, commentaire)
         values
             ((table id_offre), id_membre ('ltorvalds'), 3, 'amis', '2024-05-02', 'Ambiance sympa mais prix élevés.')
+    ),
+    s3 as (
+        insert into
+            _souscription_option (id_offre, nom_option, lancee_le, nb_semaines)
+        values
+            ((table id_offre), 'À la Une', localtimestamp, 5)
     )
 insert into
     _galerie (id_offre, id_image)
