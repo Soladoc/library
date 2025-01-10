@@ -22,6 +22,7 @@ $page->put(function () {
                 <th scope="col">Prix TTC</th>
             </tr>
         </thead>
+        <tbody>
     <?php
 
     $resG = 0;//resultat global
@@ -29,19 +30,23 @@ $page->put(function () {
     $id_professionnel = Auth\exiger_connecte_pro();
     $offres = DB\query_offres($id_professionnel);
     foreach ($offres as $offre) {
-        echo '<pre>';
-        print_r($offre['titre'].' | ' );
-        print_r($offre['libelle_abonnement'].' | ' );
-        print_r($offre['categorie'].' | ' );
-        print_r(Duree::parse($offre['en_ligne_ce_mois_pendant'])->days.' | ' );
+        ?>
+        <tr>
+        <td><?php print_r($offre['titre'].' | ' ); ?></td>
+        <td><?php print_r($offre['libelle_abonnement'].' | ' );?></td>
+        <td><?php print_r($offre['categorie'].' | ' );?></td>
+        <td><?php print_r(Duree::parse($offre['en_ligne_ce_mois_pendant'])->days.' | ' );?></td>
+        <?php
         $resO = Duree::parse($offre['en_ligne_ce_mois_pendant'])->days * query_tarif($offre['libelle_abonnement']);
         $resO += $resO * 0.20;
         $resG += $resO; 
-        print_r($resO.' € TTC');
-        echo '</br';
-        echo '</pre>';
+        ?>
+        <td><?php print_r($resO.' € TTC');?></td>
+        </tr>
+        <?php
     }
     ?>
+    </tbody>
     </table>
     <?php
     echo '<pre>';
