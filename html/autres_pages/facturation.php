@@ -18,9 +18,14 @@ $page->put(function () {
         print_r($offre['categorie'].' | ' );
         print_r(Duree::parse($offre['en_ligne_ce_mois_pendant'])->days.' | ' );
         ;
-        $resO = Duree::parse($offre['en_ligne_ce_mois_pendant'])->days * 1;
-        print_r($resO);
+        $resO = Duree::parse($offre['en_ligne_ce_mois_pendant'])->days * 1;// le 1 sera le prix de l'abonnement a terme.
+        $resO += $resO * 0.20;
+        $resG += $resO; 
+        print_r($resO.'€ TTC');
         echo '</br';
         echo '</pre>';
     }
+    echo '<pre>';
+    print_r($resG);
+    echo '</pre>';
 });
