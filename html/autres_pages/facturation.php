@@ -18,7 +18,7 @@ $page->put(function () {
         print_r($offre['categorie'].' | ' );
         print_r(Duree::parse($offre['en_ligne_ce_mois_pendant'])->days.' | ' );
         ;
-        //$resO = $offre['en_ligne_ce_mois_pendant']->days * 1;
+        $resO = Duree::parse($offre['en_ligne_ce_mois_pendant'])->days * 1;
         print_r($resO);
         echo '</br';
         echo '</pre>';
