@@ -226,7 +226,7 @@ create table _tarif (
 create table _option (
     nom nom_option
         constraint option_pk primary key,
-    prix decimal not null
+    prix_hebdomadaire decimal not null
 );
 
 create table _avis (

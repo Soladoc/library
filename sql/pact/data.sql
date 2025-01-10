@@ -9,7 +9,7 @@ values
     ('premium', 3.34);
 
 insert into
-    _option (nom, prix)
+    _option (nom, prix_hebdomadaire)
 values
     ('À la Une', 20),
     ('En Relief', 30);

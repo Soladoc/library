@@ -32,7 +32,7 @@ create view offres as select
          or coalesce(localtime <@ (table horaire_match), false)) est_ouverte,
     case
         when so.actif is null then null
-        else json_build_array(so.actif, so.nom_option, so.lancee_le, so.nb_semaines, opt.prix)
+        else json_build_array(so.actif, so.nom_option, so.lancee_le, so.nb_semaines, opt.prix_hebdomadaire)
     end option
 from
     _offre o
