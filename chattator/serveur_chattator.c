@@ -51,12 +51,12 @@ int main() {
     size = sizeof(conn_addr);
     cnx = accept(sock, (struct sockaddr *)&conn_addr, (socklen_t *)&size);
 
-    FD_ZERO(&readfds);
-    FD_SET(cnx, &readfds);
-    timeout.tv_sec = 10;
-    timeout.tv_usec = 0;
-    
     while (1) {
+        FD_ZERO(&readfds);
+        FD_SET(cnx, &readfds);
+        timeout.tv_sec = 10;
+        timeout.tv_usec = 0;
+
         // Wait for client input (blocking)
         ret = select(cnx + 1, &readfds, NULL, NULL, &timeout);
 
@@ -65,9 +65,7 @@ int main() {
         } else if (ret == 0) {
             // Timeout - no data from client
             printf("Timeout waiting for data.\n");
-            timeout.tv_sec = 10;
-            timeout.tv_usec = 0;
-        } else {
+        } else if (FD_ISSET(cnx, &readfds)) {
             // Client sent data, process it
             bytes_read = read(cnx, &option, sizeof(option));
 
@@ -113,7 +111,7 @@ int main() {
                     snprintf(reponse, sizeof(reponse), "RECUPERATION MESSAGES\r\n");
                     break;
                 case 8:  // "Au revoir"
-                    snprintf(reponse, sizeof(reponse), "Au revoir.");
+                    snprintf(reponse, sizeof(reponse), "Au revoir.\r\n");
                     break;
                 default:
                     snprintf(reponse, sizeof(reponse), "Commande inconnue\r\n");
@@ -123,7 +121,7 @@ int main() {
             // Send the response back to the client
             write(cnx, reponse, strlen(reponse));
 
-            // If option 8 (Exit) is selected, break the loop
+            // If option 8 (Exit) is selected, break the loop and close the connection
             if (option == 8) {
                 close(cnx);
                 break;
