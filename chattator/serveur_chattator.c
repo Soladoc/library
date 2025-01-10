@@ -85,20 +85,20 @@ int main() {
                     if (bytes_read > 0) {
                         utilisateur[bytes_read] = '\0';
                         printf("Nom d'utilisateur reçu: %s\n", utilisateur);
+                        snprintf(reponse, sizeof(reponse), "Nom d'utilisateur reçu\r\n");
+                        write(cnx, reponse, strlen(reponse));
+                        bytes_read = read(cnx, mdp, sizeof(mdp)-1);
+                        if (bytes_read > 0) {
+                            mdp[bytes_read] = '\0';
+                            printf("Mot de passe reçu: %s\n", mdp);
+                        } else {
+                            printf("Erreur en tentant de lire le mot de passe, bytes lus : %zd\n", bytes_read);
+                        }
+                        snprintf(reponse, sizeof(reponse), "Mot de passe reçu\r\n");
+                        write(cnx, reponse, strlen(reponse));
                     } else {
                         printf("Erreur en tentant de lire le nom d'utilisateur, bytes lus : %zd\n", bytes_read);
                     }
-                    snprintf(reponse, sizeof(reponse), "Nom d'utilisateur reçu\r\n");
-                    write(cnx, reponse, strlen(reponse));
-                    bytes_read = read(cnx, mdp, sizeof(mdp)-1);
-                    if (bytes_read > 0) {
-                        mdp[bytes_read] = '\0';
-                        printf("Mot de passe reçu: %s\n", mdp);
-                    } else {
-                        printf("Erreur en tentant de lire le mot de passe, bytes lus : %zd\n", bytes_read);
-                    }
-                    snprintf(reponse, sizeof(reponse), "Mot de passe reçu\r\n");
-                    write(cnx, reponse, strlen(reponse));
 
                     //check utilisateur/mdp a rajouter
 
@@ -162,8 +162,8 @@ int main() {
             write(cnx, reponse, strlen(reponse));
         }
     }
-
-    close(sock);
-    printf("Le serveur s'arrête suite à une déconnexion innatendue.\r\n");
-    return EXIT_FAILURE; //Cas où la connection n'est pas arrêtée en utilisant l'option 8
 }
+
+/*close(sock);
+    printf("Le serveur s'arrête suite à une déconnexion innatendue.\r\n");
+    return EXIT_FAILURE; //Cas où la connection n'est pas arrêtée en utilisant l'option 8*/
