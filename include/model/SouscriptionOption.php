@@ -10,7 +10,8 @@ final class SouscriptionOption
     ) {}
 
     static function parse_json(?string $json_output): ?SouscriptionOption {
+        if ($json_output === null) return null;
         [$actif, $nom, $lancee_le, $nb_semaines, $prix] = json_decode($json_output);
-        return $json_output === null ? null : new SouscriptionOption($actif, $nom, FiniteTimestamp::parse($lancee_le), $nb_semaines, $prix);
+        return new SouscriptionOption($actif, $nom, FiniteTimestamp::parse($lancee_le), $nb_semaines, $prix);
     }
 }
