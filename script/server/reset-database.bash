@@ -10,7 +10,9 @@ cd sql
 sudo docker cp . postgresdb:
 
 fargs=()
-for f in schema.sql types.sql creaBDD.sql fonctions.sql vuesBDD.sql triggers.util.sql triggers/*.sql bigdata.sql data.sql images.sql offre/*.sql; do
+for f in schemas.sql \
+    pact/types.sql pact/crea.sql pact/fonctions.sql pact/vues.sql pact/triggers.util.sql pact/triggers/*.sql pact/bigdata.sql pact/data.sql pact/images.sql pact/offre/*.sql \
+    tchattator/crea.sql; do
     fargs+=(-f "$f")
 done
 

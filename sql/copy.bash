@@ -14,10 +14,12 @@ esac
 {
     echo 'begin;'
     if [[ "$cat_struct" = true ]]; then
-        cat schema.sql types.sql creaBDD.sql fonctions.sql vuesBDD.sql triggers.util.sql triggers/*.sql
+        cat schemas.sql \
+            pact/types.sql pact/crea.sql pact/fonctions.sql pact/vues.sql pact/triggers.util.sql pact/triggers/*.sql \
+            tchattator/crea.sql
     fi
     if [[ "$cat_data" = true ]]; then
-        cat bigdata.sql data.sql images.sql offre/*.sql
+        cat pact/bigdata.sql pact/data.sql pact/images.sql pact/offre/*.sql
     fi
     echo 'commit;'
 } | xsel -ib
