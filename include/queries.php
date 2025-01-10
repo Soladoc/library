@@ -27,7 +27,7 @@ function query_tarif(string $libelle_tarif): int|false
     $stmt = notfalse(connect()->prepare('select prix_journalier from _abonnement where libelle = ?'));
     bind_values($stmt, [1 => [$libelle_tarif, PDO::PARAM_INT]]);
     notfalse($stmt->execute());
-    print_r($stmt->fetch());//TODO retirer
+    print_r($stmt->fetch()->prix_journalier);//TODO retirer
     return $stmt->fetch();
 }
 
