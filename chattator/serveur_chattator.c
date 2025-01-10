@@ -6,7 +6,6 @@
 #include <sys/select.h>
 #include <sys/socket.h>
 #include <sys/types.h>
-#include <sys/wait.h>
 #include <unistd.h>
 
 int main() {
@@ -52,20 +51,19 @@ int main() {
     size = sizeof(conn_addr);
     cnx = accept(sock, (struct sockaddr *)&conn_addr, (socklen_t *)&size);
 
-    FD_ZERO(&readfds);
-    FD_SET(cnx, &readfds);
-    timeout.tv_sec = 10;
-    timeout.tv_usec = 0;
-    
     while (1) {
+        FD_ZERO(&readfds);
+        FD_SET(cnx, &readfds);
+        timeout.tv_sec = 10;
+        timeout.tv_usec = 0;
+
         ret = select(cnx + 1, &readfds, NULL, NULL, &timeout);
 
         if (ret == -1) {
             perror("select()");
+            break;
         } else if (ret == 0) {
             printf("Timeout waiting for data.\n");
-            timeout.tv_sec = 10;
-            timeout.tv_usec = 0;
         } else {
             // Read the option from the client
             bytes_read = read(cnx, &option, sizeof(option));
@@ -81,7 +79,7 @@ int main() {
                 break;
             }
 
-            // Now wait for the actual message based on the option
+            // Now handle the option
             switch (option) {
                 case 1:  // "AFFICHAGE MESSAGES"
                     snprintf(reponse, sizeof(reponse), "AFFICHAGE MESSAGES\r\n");
@@ -89,7 +87,7 @@ int main() {
                 case 2:  // "MESSAGE ENVOYE"
                     snprintf(reponse, sizeof(reponse), "Entrez votre message :\r\n");
                     write(cnx, reponse, strlen(reponse));  // Prompt client for the message
-                    
+
                     // Now read the actual message from the client
                     bytes_read = read(cnx, message, sizeof(message) - 1);
                     if (bytes_read > 0) {
@@ -137,3 +135,4 @@ int main() {
     printf("Le serveur s'arrête.\r\n");
     return EXIT_SUCCESS;
 }
+
