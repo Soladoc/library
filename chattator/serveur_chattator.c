@@ -64,6 +64,8 @@ int main() {
             perror("select()");
         } else if (ret == 0) {
             printf("Timeout waiting for data.\n");
+            timeout.tv_sec = 10;
+            timeout.tv_usec = 0;
         } else {
             // Read the option from the client
             bytes_read = read(cnx, &option, sizeof(option));
