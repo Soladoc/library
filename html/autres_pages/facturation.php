@@ -34,11 +34,11 @@ $page->put(function () {
         ?>
         <tr>
         <td><?php print_r($offre->titre); ?></td>
-        <td><?php print_r($offre->libelle_abonnement ) ?></td>
+        <td><?php print_r($offre->abonnement->libelle) ?></td>
         <td><?php print_r($offre->categorie) ?></td>
         <td><?php print_r($offre->en_ligne_ce_mois_pendant->days ) ?></td>
         <?php
-        $resO = $offre->en_ligne_ce_mois_pendant->days * query_tarif($offre['libelle_abonnement']);
+        $resO = $offre->en_ligne_ce_mois_pendant->days * query_tarif($offre->abonnement->libelle);
         $resO *= 0.20;
         $resG += $resO; 
         ?>
