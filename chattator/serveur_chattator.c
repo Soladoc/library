@@ -79,7 +79,7 @@ int main(){
             write(cnx, reponse, strlen(reponse));
         }
         memset(buffer, 0, sizeof(buffer));
-        read(cnx, buffer, sizeof(buffer)); // Read the next message from the client
+        read(cnx, buffer, sizeof(buffer));
     }
     close(cnx);
     close(sock);

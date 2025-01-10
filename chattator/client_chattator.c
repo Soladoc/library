@@ -41,37 +41,32 @@ int main(){
         printf("Tapez 6 pour débloquer un utilisateur\n");
         printf("Tapez 7 pour récupérer vos messages dans un fichier JSON\n");
         printf("Tapez 8 pour quitter\n");
-
-        // Read user option
         scanf("%d", &option);
-        
-        // Flush the newline character left by scanf
-        getchar();  // Read the newline character from input buffer
-        
+        getchar();
         if (option == 1) {
             write(sock, &option, sizeof(option));
         }
         else if (option == 2) {
             printf("Entrez votre message :\n");
             fgets(message, sizeof(message), stdin);
-            message[strcspn(message, "\n")] = 0;  // Remove the newline character from fgets
+            message[strcspn(message, "\n")] = 0;
             write(sock, &option, sizeof(option));
             write(sock, message, strlen(message));
         }
         else if (option == 3) {
             printf("Entrez le numéro du message à supprimer :\n");
             scanf("%d", &num_message);
-            getchar();  // Read the newline character after the number input
+            getchar();
             write(sock, &option, sizeof(option));
             write(sock, &num_message, sizeof(num_message));
         }
         else if (option == 4) {
             printf("Entrez le numéro du message à modifier :\n");
             scanf("%d", &num_message);
-            getchar();  // Read the newline character after the number input
+            getchar();
             printf("Entrez votre message :\n");
             fgets(message, sizeof(message), stdin);
-            message[strcspn(message, "\n")] = 0;  // Remove the newline character from fgets
+            message[strcspn(message, "\n")] = 0;
             write(sock, &option, sizeof(option));
             write(sock, &num_message, sizeof(num_message));
             write(sock, message, strlen(message));
@@ -79,14 +74,14 @@ int main(){
         else if (option == 5) {
             printf("Entrez le nom de l'utilisateur à bloquer :\n");
             fgets(message, sizeof(message), stdin);
-            message[strcspn(message, "\n")] = 0;  // Remove the newline character from fgets
+            message[strcspn(message, "\n")] = 0;
             write(sock, &option, sizeof(option));
             write(sock, message, strlen(message));
         }
         else if (option == 6) {
             printf("Entrez le nom de l'utilisateur à débloquer :\n");
             fgets(message, sizeof(message), stdin);
-            message[strcspn(message, "\n")] = 0;  // Remove the newline character from fgets
+            message[strcspn(message, "\n")] = 0;
             write(sock, &option, sizeof(option));
             write(sock, message, strlen(message));
         }
