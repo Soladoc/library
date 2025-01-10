@@ -111,7 +111,7 @@ int main() {
                     snprintf(reponse, sizeof(reponse), "RECUPERATION MESSAGES\r\n");
                     break;
                 case 8:  // "Au revoir"
-                    snprintf(reponse, sizeof(reponse), "Au revoir.\r\n");
+                    snprintf(reponse, sizeof(reponse), "Au revoir.");
                     break;
                 default:
                     snprintf(reponse, sizeof(reponse), "Commande inconnue\r\n");
