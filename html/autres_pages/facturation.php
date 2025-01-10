@@ -18,8 +18,8 @@ $page->put(function () {
             <tr>
                 <th scope="col">Titre</th>
                 <th scope="col">Type d'abonnement</th>
-                <th scope="col">nom option (test)</th>
                 <th scope="col">Catégorie</th>
+                <th scope="col">nom option (test)</th>
                 <th scope="col">Jours en ligne</th>
                 <th scope="col">Prix TTC</th>
             </tr>

@@ -44,33 +44,33 @@ abstract class Offre extends Model implements Signalable
     protected static function computed_fields()
     {
         return [
-            'nb_avis'                         => [null, 'nb_avis',  PDO::PARAM_INT],
+            'nb_avis'                         => [null, 'nb_avis', PDO::PARAM_INT],
             'en_ligne'                        => [null, 'en_ligne', PDO::PARAM_BOOL],
             'note_moyenne'                    => [null, 'note_moyenne', PDO_PARAM_FLOAT],
-            'prix_min'                        => [null, 'prix_min',     PDO_PARAM_FLOAT],
+            'prix_min'                        => [null, 'prix_min', PDO_PARAM_FLOAT],
             'est_ouverte'                     => [null, 'est_ouverte', PDO::PARAM_BOOL],
-            'categorie'                       => [null, 'categorie',   PDO::PARAM_STR],
-            'en_ligne_ce_mois_pendant'        => [Duree::parse(...),           'en_ligne_ce_mois_pendant',        PDO::PARAM_STR],
-            'creee_le'                        => [FiniteTimestamp::parse(...), 'creee_le',                        PDO::PARAM_STR],
-            'modifiee_le'                     => [FiniteTimestamp::parse(...), 'modifiee_le',                     PDO::PARAM_STR],
+            'categorie'                       => [null, 'categorie', PDO::PARAM_STR],
+            'en_ligne_ce_mois_pendant'        => [Duree::parse(...), 'en_ligne_ce_mois_pendant', PDO::PARAM_STR],
+            'creee_le'                        => [FiniteTimestamp::parse(...), 'creee_le', PDO::PARAM_STR],
+            'modifiee_le'                     => [FiniteTimestamp::parse(...), 'modifiee_le', PDO::PARAM_STR],
             'changement_ouverture_suivant_le' => [FiniteTimestamp::parse(...), 'changement_ouverture_suivant_le', PDO::PARAM_STR],
-            'option' => [SouscriptionOption::parse_json(...), 'option', PDO::PARAM_STR],
+            'option'                          => [SouscriptionOption::parse_json(...), 'option', PDO::PARAM_STR],
         ];
     }
 
     protected static function fields()
     {
         return [
-            'titre'                 => [null, 'titre',                 PDO::PARAM_STR],
-            'resume'                => [null, 'resume',                PDO::PARAM_STR],
+            'titre'                 => [null, 'titre', PDO::PARAM_STR],
+            'resume'                => [null, 'resume', PDO::PARAM_STR],
             'description_detaillee' => [null, 'description_detaillee', PDO::PARAM_STR],
-            'modifiee_le'           => [null, 'modifiee_le',           PDO::PARAM_STR],
-            'url_site_web'          => [null, 'url_site_web',          PDO::PARAM_STR],
-            'periodes_ouverture'    => [null, 'periodes_ouverture',    PDO::PARAM_STR],
-            'id_adresse'            => [fn($x) => $x->id,      'adresse',          PDO::PARAM_INT],
-            'id_image_principale'   => [fn($x) => $x->id,      'image_principale', PDO::PARAM_INT],
-            'id_professionnel'      => [fn($x) => $x->id,      'professionnel',    PDO::PARAM_INT],
-            'libelle_abonnement'    => [fn($x) => $x->libelle, 'abonnement',       PDO::PARAM_STR],
+            'modifiee_le'           => [null, 'modifiee_le', PDO::PARAM_STR],
+            'url_site_web'          => [null, 'url_site_web', PDO::PARAM_STR],
+            'periodes_ouverture'    => [null, 'periodes_ouverture', PDO::PARAM_STR],
+            'id_adresse'            => [fn($x) => $x->id, 'adresse', PDO::PARAM_INT],
+            'id_image_principale'   => [fn($x) => $x->id, 'image_principale', PDO::PARAM_INT],
+            'id_professionnel'      => [fn($x) => $x->id, 'professionnel', PDO::PARAM_INT],
+            'libelle_abonnement'    => [fn($x) => $x->libelle, 'abonnement', PDO::PARAM_STR],
         ];
     }
 
@@ -121,6 +121,7 @@ abstract class Offre extends Model implements Signalable
         protected ?bool $est_ouverte                                = null,
         protected ?int $nb_avis                                     = null,
         protected ?string $categorie                                = null,
+        protected ?string $option                                   = null,
     ) {
         $this->tags                   = new Tags($this);
         $this->tarifs                 = new Tarifs($this);
@@ -151,7 +152,7 @@ abstract class Offre extends Model implements Signalable
 
     static function from_db(int $id_offre): self|false
     {
-        $stmt = notfalse(DB\connect()->prepare(self::make_select() . ' where '.static::TABLE.'.id = ?'));
+        $stmt = notfalse(DB\connect()->prepare(self::make_select() . ' where ' . static::TABLE . '.id = ?'));
         DB\bind_values($stmt, [1 => [$id_offre, PDO::PARAM_INT]]);
         notfalse($stmt->execute());
         $row = $stmt->fetch();
@@ -286,9 +287,10 @@ abstract class Offre extends Model implements Signalable
             $row['est_ouverte'],
             $row['nb_avis'],
             $row['categorie'],
+            $row['option'],
         ];
         return match ($row['categorie']) {
-            Activite::CATEGORIE => new Activite(
+            Activite::CATEGORIE        => new Activite(
                 $args_offre,
                 Duree::parse($row['activite_indication_duree']),
                 $row['activite_age_requis'] ?? null,
@@ -301,7 +303,7 @@ abstract class Offre extends Model implements Signalable
                 $row['parc_attractions_nb_attractions'],
                 Image::from_db($row['parc_attractions_id_image_plan']),
             ),
-            Restaurant::CATEGORIE => new Restaurant(
+            Restaurant::CATEGORIE      => new Restaurant(
                 $args_offre,
                 $row['restaurant_carte'],
                 $row['restaurant_richesse'],
@@ -311,12 +313,12 @@ abstract class Offre extends Model implements Signalable
                 $row['restaurant_sert_diner'],
                 $row['restaurant_sert_boissons'],
             ),
-            Spectacle::CATEGORIE => new Spectacle(
+            Spectacle::CATEGORIE       => new Spectacle(
                 $args_offre,
                 Duree::parse($row['spectacle_indication_duree']),
                 $row['spectacle_capacite_accueil'],
             ),
-            Visite::CATEGORIE => new Visite(
+            Visite::CATEGORIE          => new Visite(
                 $args_offre,
                 Duree::parse($row['visite_indication_duree']),
             ),
