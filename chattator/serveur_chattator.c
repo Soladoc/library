@@ -135,4 +135,3 @@ int main() {
     printf("Le serveur s'arrête.\r\n");
     return EXIT_SUCCESS;
 }
-
