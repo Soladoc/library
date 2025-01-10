@@ -121,7 +121,7 @@ abstract class Offre extends Model implements Signalable
         protected ?bool $est_ouverte                                = null,
         protected ?int $nb_avis                                     = null,
         protected ?string $categorie                                = null,
-        protected ?string $option                                   = null,
+        protected ?SouscriptionOption $option                       = null,
     ) {
         $this->tags                   = new Tags($this);
         $this->tarifs                 = new Tarifs($this);
@@ -288,7 +288,7 @@ abstract class Offre extends Model implements Signalable
             $row['est_ouverte'],
             $row['nb_avis'],
             $row['categorie'],
-            $row['option'],
+            SouscriptionOption::parse_json($row['option']),
         ];
         return match ($row['categorie']) {
             Activite::CATEGORIE        => new Activite(
