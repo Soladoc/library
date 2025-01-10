@@ -13,8 +13,8 @@ int main() {
     int sock, cnx, option, ret, size, opt;
     struct sockaddr_in addr;
     struct sockaddr_in conn_addr;
-    char reponse[30];
-    char message[1000];  // This will be used for storing the actual message
+    char reponse[1000];  // Increased size to accommodate larger strings
+    char message[1000];   // This will be used for storing the actual message
     ssize_t bytes_read;
     fd_set readfds;
     struct timeval timeout;
