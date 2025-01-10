@@ -27,6 +27,7 @@ final class Page
         readonly string $title,
         readonly array $stylesheets = [],
         readonly array $scripts     = [],
+        readonly ?string $body_id = null,
     ) {}
 
     /**
@@ -40,7 +41,7 @@ final class Page
 <!DOCTYPE html>
 <html lang="fr">
 <?php $this->put_head() ?>
-<body>
+<body <?= mapnull($this->body_id, fn(string $id) => "id=\"$id\"") ?>>
     <?php $this->put_header() ?>
     <main><?php is_string($main) ? (print $main) : $main() ?></main>
     <?php $this->put_footer() ?>

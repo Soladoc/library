@@ -7,7 +7,7 @@ require_once 'model/Compte.php';
 
 $compte = notfalse(Compte::from_db(Auth\id_compte_connecte()));
 
-$page = new Page("$compte->prenom $compte->nom");
+$page = new Page("$compte->prenom $compte->nom", body_id: 'detail_compte');
 
 $page->put(function () use ($compte) {
     ?>
