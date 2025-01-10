@@ -1,9 +1,9 @@
 <?php
 require_once 'db.php';
 require_once 'util.php';
-require_once 'queries.php';
 require_once 'redirect.php';
 require_once 'model/Offre.php';
+require_once 'component/ReviewList.php';
 require_once 'component/Page.php';
 require_once 'component/ImageView.php';
 require_once 'component/InputOffre.php';
@@ -17,8 +17,9 @@ if ($_POST) {
     redirect_to($_SERVER['REQUEST_URI']);
 }
 
-$page->put(function () use ($offre) {
-    $id_membre_co = Auth\exiger_connecte_pro();
+$review_list = new ReviewList($offre, Auth\exiger_connecte_pro());
+
+$page->put(function () use ($offre, $review_list) {
     ?>
     <section class="modif">
         <div class="bandeau-etat <?= $offre->en_ligne ? 'vert' : 'rouge' ?>">
@@ -75,39 +76,8 @@ $page->put(function () use ($offre) {
         </div>
     </section>
 
-    <div class="review-list">
-        <h4>Avis de la communauté</h4>
-        <div class="review-summary">
-            <h4>Résumé des notes</h4>
-            <p>Nombre d'avis : <?= $offre->nb_avis ?></p>
-            <p>Moyenne&nbsp;: <?= $offre->note_moyenne ?? 0 ?>/5 ★</p>
-            <div class="rating-distribution">
-                <?php $avis = DB\query_avis(id_offre: $offre->id) ?>
-                <p>5 étoiles&nbsp;: <?= count(array_filter($avis, fn($a) => $a['note'] === 5)) ?> avis.</p>
-                <p>4 étoiles&nbsp;: <?= count(array_filter($avis, fn($a) => $a['note'] === 4)) ?> avis.</p>
-                <p>3 étoiles&nbsp;: <?= count(array_filter($avis, fn($a) => $a['note'] === 3)) ?> avis.</p>
-                <p>2 étoiles&nbsp;: <?= count(array_filter($avis, fn($a) => $a['note'] === 2)) ?> avis.</p>
-                <p>1 étoile&nbsp;: <?= count(array_filter($avis, fn($a) => $a['note'] === 1)) ?> avis.</p>
-            </div>
-            <?php if (!empty($avis)) {
-                foreach ($avis as $avis_temp) { ?>
-                    <div class="review">
-                        <p><strong><?= h14s($avis_temp['pseudo_auteur']) ?></strong> - <?= h14s($avis_temp['note']) ?>/5</p>
-                        <p class="review-contexte">Contexte&nbsp;: <?= h14s($avis_temp['contexte']) ?></p>
-                        <p><?= h14s($avis_temp['commentaire']) ?></p>
-                        <p class="review-date"><?= h14s($avis_temp['date_experience']) ?></p>
-                        <?php if ($id_membre_co !== null && $avis_temp['id_membre_auteur'] === $id_membre_co) { ?>
-                            <form method="post" action="modifier.php?id=<?= $offre->id ?>&avis_id=<?= $avis_temp['id'] ?>">
-                                <button type="submit" class="btn-modif">Modifier</button>
-                            </form>
-                        <?php } ?>
-                    </div>
-                <?php }
-            } else { ?>
-                <p>Aucun avis pour le moment.&nbsp;</p>
-            <?php } ?>
-        </div>
-    </div>
+    <?php $review_list->put() ?>
+
     <script>
         // // OpenStreetMap Integration
         // var map = L.map('map').setView([48.779, -3.518], 13);

@@ -1,5 +1,23 @@
 <?php
 
+/**
+ * Apply a function, mutating the argument. Think of it like a generalized assignment operator (e.g. "+=") that can work on any function. Used to avoid specifying the argument twice.
+ * @template T
+ * @template TResult
+ * @param T $arg
+ * @param-out TResult $arg
+ * @param callable(T): TResult $fn
+ * @return T
+ */
+function apply(mixed &$arg, callable $fn): mixed {
+    return $arg = $fn($arg);
+}
+
+/**
+ * HTML5 `htmlspecialchars` (name shortened using numeronym)
+ * @param string $s String to encode.
+ * @return string Encoded string.
+ */
 function h14s(string $s)
 {
     return htmlspecialchars($s, ENT_QUOTES | ENT_SUBSTITUTE | ENT_HTML5);
@@ -339,25 +357,6 @@ function soa_to_aos(array $array): array
         }
     }
     return $result;
-}
-
-/**
- * Formate une adresse dans un format humainement lisible.
- * @param array $adresse L'adresse (ligne issue de la BDD, voir `DB\query_adresse`)
- * @return string
- */
-function format_adresse(array $adresse)
-{
-    // Concaténer les informations pour former une adresse complète
-
-    return elvis($adresse['precision_ext'], ', ')
-        . elvis($adresse['precision_int'], ', ')
-        . elvis($adresse['numero_voie'], ' ')
-        . elvis($adresse['complement_numero'], ' ')
-        . elvis($adresse['nom_voie'], ', ')
-        . elvis($adresse['localite'], ', ')
-        . elvis(DB\query_commune($adresse['code_commune'], $adresse['numero_departement'])['nom'], ', ')
-        . DB\query_codes_postaux($adresse['code_commune'], $adresse['numero_departement'])[0];
 }
 
 /**

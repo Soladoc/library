@@ -27,7 +27,7 @@ final class Galerie implements Equatable
             $stmt = notfalse(DB\connect()->prepare('select * from ' . self::TABLE . ' join _image i on i.id = id_image where id_offre = ?'));
             DB\bind_values($stmt, [1 => [$this->offre->id, PDO::PARAM_INT]]);
             notfalse($stmt->execute());
-            while ($row = $stmt->fetch()) {
+            while (false !== $row = $stmt->fetch()) {
                 $this->images[] = new Image(
                     $row['id_image'],
                     $row['taille'],

@@ -5,34 +5,40 @@ require_once 'component/InputNote.php';
 require_once 'component/Page.php';
 require_once 'db.php';
 require_once 'model/Avis.php';
+require_once 'component/ReviewList.php';
 require_once 'model/AvisRestaurant.php';
 require_once 'model/Offre.php';
 require_once 'model/Restaurant.php';
 require_once 'model/Date.php';
 require_once 'model/Membre.php';
-require_once 'queries.php';
 
 $offre = notfalse(Offre::from_db(getarg($_GET, 'id', arg_int())));
 
 $page = new Page($offre->titre, scripts: [
     'module/detail_offre.js' => 'type="module"',
-    'carousel.js' => 'defer',
+    'carousel.js'            => 'defer',
 ]);
 
 $input_rating = new InputNote(name: 'rating');
 if ($offre instanceof Restaurant) {
-    $input_note_cuisine = new InputNote(name: 'note_cuisine');
-    $input_note_service = new InputNote(name: 'note_service');
-    $input_note_ambiance = new InputNote(name: 'note_ambiance');
+    $input_note_cuisine      = new InputNote(name: 'note_cuisine');
+    $input_note_service      = new InputNote(name: 'note_service');
+    $input_note_ambiance     = new InputNote(name: 'note_ambiance');
     $input_note_qualite_prix = new InputNote(name: 'note_qualite_prix');
+} else {
+    $input_note_cuisine      = null;
+    $input_note_service      = null;
+    $input_note_ambiance     = null;
+    $input_note_qualite_prix = null;
 }
 
 $id_membre_co = Auth\id_membre_connecte();
+$review_list  = new ReviewList($offre, $id_membre_co);
 
 if ($_POST) {
     if (null === $id_membre_co) {
         $error_message = 'Veuillez vous connecter pour publier un avis.';
-    } else if (Avis::from_db_single($id_membre_co, $offre->id)) {
+    } else if (Avis::from_db_one($id_membre_co, $offre->id)) {
         $error_message = "Vous pouvez ne publier qu'un avis.";
     } else {
         $args_avis = [
@@ -44,7 +50,7 @@ if ($_POST) {
             Membre::from_db($id_membre_co),
             $offre,
         ];
-        $avis = $offre instanceof Restaurant
+        $avis      = $offre instanceof Restaurant
             ? new AvisRestaurant(
                 $args_avis,
                 $input_note_cuisine->get($_POST),
@@ -59,13 +65,13 @@ if ($_POST) {
 }
 
 $page->put(function () use (
-    $id_membre_co,
     $offre,
     $input_rating,
     $input_note_cuisine,
     $input_note_service,
     $input_note_ambiance,
     $input_note_qualite_prix,
+    $review_list,
 ) {
     ?>
     <section class="offer-details">
@@ -119,8 +125,8 @@ $page->put(function () use (
                 <?php if (isset($error_message)): ?>
                     <p class="error"><?= h14s($error_message) ?></p>
                     <?php
-                elseif (isset($success_message)):
-                    ?>
+    elseif (isset($success_message)):
+        ?>
                     <p class="success"><?= h14s($success_message) ?></p>
                 <?php endif ?>
             </div>
@@ -150,44 +156,8 @@ $page->put(function () use (
             </form>
         </div>
 
-        <!-- Liste des avis -->
-        <div class="review-list">
-            <h4>Avis de la communauté</h4>
-            <div class="review-summary">
-                <h4>Résumé des notes</h4>
-                <p>Nombre d'avis : <?= $offre->nb_avis ?></p>
-                <p>Moyenne&nbsp;: <?php if ($offre->note_moyenne !== null) {
-                    echo round($offre->note_moyenne, 2);
-                } else {
-                    echo 0;
-                } ?>/5 ★</p>
-                <div class="rating-distribution">
-                    <?php $avis = DB\query_avis(id_offre: $offre->id) ?>
-                    <p>5 étoiles&nbsp;: <?= count(array_filter($avis, fn($a) => $a['note'] === 5)) ?> avis.</p>
-                    <p>4 étoiles&nbsp;: <?= count(array_filter($avis, fn($a) => $a['note'] === 4)) ?> avis.</p>
-                    <p>3 étoiles&nbsp;: <?= count(array_filter($avis, fn($a) => $a['note'] === 3)) ?> avis.</p>
-                    <p>2 étoiles&nbsp;: <?= count(array_filter($avis, fn($a) => $a['note'] === 2)) ?> avis.</p>
-                    <p>1 étoile&nbsp;: <?= count(array_filter($avis, fn($a) => $a['note'] === 1)) ?> avis.</p>
-                </div>
-                <?php if (!empty($avis)) {
-                    foreach ($avis as $avis_temp) { ?>
-                        <div class="review">
-                            <p><strong><?= h14s($avis_temp['pseudo_auteur']) ?></strong> - <?= h14s($avis_temp['note']) ?>/5</p>
-                            <p class="review-contexte">Contexte&nbsp;: <?= h14s($avis_temp['contexte']) ?></p>
-                            <p><?= h14s($avis_temp['commentaire']) ?></p>
-                            <p class="review-date"><?= h14s($avis_temp['date_experience']) ?></p>
-                            <?php if ($id_membre_co !== null && $avis_temp['id_membre_auteur'] === $id_membre_co) { ?>
-                                <form method="post" action="/avis/modifier.php?avis_id=<?= $avis_temp['id'] ?>&offre=<?= $offre->id ?>">
-                                    <button type="submit" class="btn-modif">Modifier</button>
-                                    <button type="submit" name="action" value="supprimer">Supprimer</button>
-                                </form>
-                            <?php } ?>
-                        </div>
-                    <?php }
-                } else { ?>
-                    <p>Aucun avis pour le moment. Soyez le premier à en écrire un&nbsp;!</p>
-                <?php } ?>
-            </div>
+        <?php $review_list->put() ?>
+
     </section>
     <?php
 });

@@ -1,14 +1,11 @@
-<?php 
-$mot_cle= $_GET["mot_cle"];
-$recherche = $_GET["valider"]; 
+<?php
+$search          = $_GET['search'];
+$recherche       = $_GET['valider'];
 $modif_affichage = false;
 
-
-
-if (isset($valider)&& !empty(trim($mot_cle))) {
-     $tab = DB\query_select_offre_motcle($mot_cle);
+if (isset($valider) && !empty(trim($search))) {
+    $tab             = Offre::from_db_by_search($search);
     $modif_affichage = true;
-
 }
 
 ?>
@@ -22,25 +19,27 @@ if (isset($valider)&& !empty(trim($mot_cle))) {
 
 
 
-<form action="" name="bare_de_recherche" method="get">
+<form action="" name="barre_de_recherche" method="get">
 
-<input type="text" name="mot_cle" value="<?php echo $mot_cle ?>" placeholder=">Mots-clés">
+<input type="text" name="search" value="<?php echo $search ?>" placeholder=">Mots-clés">
 <input type="submit" name="valider" value="Recherche">
 </form>
 
 
 
-<?php 
+<?php
 if ($recherche) {
     ?> 
     <div id="recherche">
         <div id="offre_recherhce">
             <ol>
-                <?php for ($i=0; $i < count($tab); $i++) { 
+                <?php
+                for ($i = 0; $i < count($tab); $i++) {
                     ?>
-                    <li><?php echo $tab[$i]["titre"] ?></li>
+                    <li><?php echo $tab[$i]['titre'] ?></li>
                     <?php
-                }?>
+                }
+                ?>
 
             </ol>
         </div>

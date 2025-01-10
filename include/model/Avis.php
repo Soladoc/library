@@ -5,7 +5,6 @@ require_once 'model/Offre.php';
 
 /**
  * @property-read ?int $id L'ID. `null` si cet avis n'existe pas dans la BDD.
- * @property-read ?string $pseudo_auteur Calculé. `null` si cet avis n'existe pas dans la BDD.
  * @property-read ?FiniteTimestamp $publie_le Calculé. `null` si cet avis n'existe pas dans la BDD.
  * @property-read ?bool $lu Calculé. `null` si cet avis n'existe pas dans la BDD.
  * @property-read ?bool $blackliste Calculé. `null` si cet avis n'existe pas dans la BDD.
@@ -22,9 +21,8 @@ class Avis extends Model
     protected static function computed_fields()
     {
         return [
-            'pseudo_auteur' => [null, 'pseudo_auteur', PDO::PARAM_STR],
             'publie_le'     => [FiniteTimestamp::parse(...), 'publie_le', PDO::PARAM_STR],
-            'lu'            => [null, 'lu',         PDO::PARAM_BOOL],
+            'lu'            => [null, 'lu', PDO::PARAM_BOOL],
             'blackliste'    => [null, 'blackliste', PDO::PARAM_BOOL],
         ];
     }
@@ -32,12 +30,12 @@ class Avis extends Model
     protected static function fields()
     {
         return [
-            'commentaire'      => [null, 'commentaire',     PDO::PARAM_STR],
-            'note'             => [null, 'note',            PDO::PARAM_INT],
+            'commentaire'      => [null, 'commentaire', PDO::PARAM_STR],
+            'note'             => [null, 'note', PDO::PARAM_INT],
             'date_experience'  => [null, 'date_experience', PDO::PARAM_STR],
-            'contexte'         => [null, 'contexte',        PDO::PARAM_STR],
+            'contexte'         => [null, 'contexte', PDO::PARAM_STR],
             'id_membre_auteur' => [fn($x) => $x->id, 'membre_auteur', PDO::PARAM_INT],
-            'id_offre'         => [fn($x) => $x->id, 'offre',         PDO::PARAM_INT],
+            'id_offre'         => [fn($x) => $x->id, 'offre', PDO::PARAM_INT],
         ];
     }
 
@@ -52,7 +50,6 @@ class Avis extends Model
         //
         protected ?bool $blackliste           = null,
         protected ?bool $lu                   = null,
-        protected ?string $pseudo_auteur      = null,
         protected ?FiniteTimestamp $publie_le = null,
     ) {}
 
@@ -71,13 +68,30 @@ class Avis extends Model
      * @param int $id_offre
      * @return Avis|false
      */
-    static function from_db_single(int $id_membre_auteur, int $id_offre): self|false
+    static function from_db_one(int $id_membre_auteur, int $id_offre): self|false
     {
         $stmt = notfalse(DB\connect()->prepare(self::make_select() . ' where ' . static::TABLE . '.id_membre_auteur = ? and ' . static::TABLE . '.id_offre = ?'));
         DB\bind_values($stmt, [1 => [$id_membre_auteur, PDO::PARAM_INT], 2 => [$id_offre, PDO::PARAM_INT]]);
         notfalse($stmt->execute());
         $row = $stmt->fetch();
         return $row === false ? false : self::from_db_row($row);
+    }
+
+    /**
+     * Récupère les avis de la BDD.
+     * @param mixed $id_membre_auteur
+     * @param mixed $id_offre
+     * @return Iterator<int, self>
+     */
+    static function from_db_all(?int $id_membre_auteur = null, ?int $id_offre = null): Iterator
+    {
+        $args = DB\filter_null_args(['id_membre_auteur' => [$id_membre_auteur, PDO::PARAM_INT], 'id_offre' => [$id_offre, PDO::PARAM_INT]]);
+        $stmt = notfalse(DB\connect()->prepare(self::make_select() . DB\where_clause(DB\BoolOperator::AND, array_keys($args), static::TABLE)));
+        DB\bind_values($stmt, $args);
+        notfalse($stmt->execute());
+        while (false !== $row = $stmt->fetch()) {
+            yield $row['id'] => self::from_db_row($row);
+        }
     }
 
     private static function from_db_row(array $row): self
@@ -93,7 +107,6 @@ class Avis extends Model
             Offre::from_db($row['id_offre']),
             $row['lu'],
             $row['blackliste'],
-            $row['pseudo_auteur'],
             FiniteTimestamp::parse($row['publie_le']),
         ];
 
@@ -112,7 +125,6 @@ class Avis extends Model
     private static function make_select(): string
     {
         self::require_subclasses();
-        // todo: faire des jointures pour gagner en performance
         return 'select
             ' . static::TABLE . '.id,
             ' . static::TABLE . '.commentaire,
@@ -123,7 +135,6 @@ class Avis extends Model
             ' . static::TABLE . '.id_offre,
             ' . static::TABLE . '.lu,
             ' . static::TABLE . '.blackliste,
-            ' . static::TABLE . '.pseudo_auteur,
             ' . static::TABLE . '.publie_le,
 
             v.id_restaurant,

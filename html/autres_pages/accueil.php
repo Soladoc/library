@@ -10,8 +10,8 @@ $page->put(function () {
     <section class="search-section">
         <h1>Accueil</h1>
         <br>
-        <form action="recherche.php" name="bare_de_recherche" method="post" class="search-bar">
-            <input type="text" name="mot_cle" placeholder="Entrez des mots-clés de recherche ici (ex: restaurant)">
+        <form action="recherche.php" name="barre_de_recherche" method="post" class="search-bar">
+            <input type="text" name="search" placeholder="Entrez des mots-clés de recherche ici (ex: restaurant)">
             <input class="searchbutton" type="submit" name="valider" value="Recherche">
         </form>
     </section>

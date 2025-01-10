@@ -2,7 +2,6 @@
 
 require_once 'auth.php';
 require_once 'util.php';
-require_once 'queries.php';
 require_once 'redirect.php';
 require_once 'model/Professionnel.php';
 require_once 'model/Membre.php';

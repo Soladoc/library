@@ -1,80 +1,9 @@
 <?php
 namespace DB;
+
 use PDO;
+
 require_once 'db.php';
-
-// Selections
-
-function query_images(): \Iterator
-{
-    $stmt = notfalse(connect()->prepare('select * from _image'));
-    notfalse($stmt->execute());
-    return $stmt->getIterator();
-}
-
-function query_adresse(int $id_adresse): array|false
-{
-    $stmt = notfalse(connect()->prepare('select * from _adresse where id = ?'));
-    bind_values($stmt, [1 => [$id_adresse, PDO::PARAM_INT]]);
-    notfalse($stmt->execute());
-    return $stmt->fetch();
-}
-
-function query_tarif(string $libelle_tarif): float|false
-{
-    $stmt = notfalse(connect()->prepare('select prix_journalier from _abonnement where libelle = ?'));
-    bind_values($stmt, [1 => [$libelle_tarif, PDO::PARAM_INT]]);
-    notfalse($stmt->execute());
-    return $stmt->fetchColumn();
-}
-
-function query_commune(int $code, string $numero_departement): array
-{
-    $stmt = notfalse(connect()->prepare('select * from _commune where code = ? and numero_departement = ?'));
-    bind_values($stmt, [1 => [$code, PDO::PARAM_INT], 2 => [$numero_departement, PDO::PARAM_STR]]);
-    notfalse($stmt->execute());
-    return notfalse($stmt->fetch());
-}
-
-function query_codes_postaux(int $code_commune, string $numero_departement): array
-{
-    $stmt = notfalse(connect()->prepare('select code_postal from _code_postal where code_commune = ? and numero_departement = ?'));
-    bind_values($stmt, [1 => [$code_commune, PDO::PARAM_INT], 2 => [$numero_departement, PDO::PARAM_STR]]);
-    notfalse($stmt->execute());
-    return array_map(fn($row) => $row['code_postal'], $stmt->fetchAll());
-}
-
-function query_tags(int $id): array|false
-{
-    $stmt = notfalse(connect()->prepare('select tag from _tags where id_offre = ?'));
-    bind_values($stmt, [1 => [$id, PDO::PARAM_INT]]);
-    notfalse($stmt->execute());
-    return $stmt->fetchAll(PDO::FETCH_ASSOC);
-}
-
-
-// Parameterized selections
-
-function query_avis(?int $id_membre_auteur = null, ?int $id_offre = null): array
-{
-    $args = filter_null_args(['id_membre_auteur' => [$id_membre_auteur, PDO::PARAM_INT], 'id_offre' => [$id_offre, PDO::PARAM_INT]]);
-    $stmt = notfalse(connect()->prepare('select * from avis ' . where_clause(BoolOperator::AND, clauses: array_keys($args))));
-    bind_values($stmt, $args);
-    notfalse($stmt->execute());
-    return $stmt->fetchAll();
-}
-
-function query_select_offre_motcle(string $motcle):array{
-
-    $mots=explode(" ",trim($motcle));
-    for($i=0; $i<count($mots); $i++) {
-        $mc[$i] = "titre ilike '%".$mots[$i]."%'";
-    }
-    $stmt = notfalse(connect()->prepare('select * from offres where ' .implode(" and ", $mc)));
-    // var_dump($stmt->queryString);
-    notfalse($stmt->execute());
-    return $stmt->fetchAll();
-}
 
 // Update-----------------------------------------------------------------------------------------------------------
 

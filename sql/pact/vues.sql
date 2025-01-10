@@ -82,14 +82,12 @@ create view pro_public as select * from _public
     join professionnel using (id);
 
 create view avis as select
-    membre.pseudo pseudo_auteur,
     _avis.*
 from
     _avis
     join membre on id_membre_auteur = membre.id;
 
 create view avis_restaurant as select
-    membre.pseudo pseudo_auteur,
     commentaire,
     note,
     publie_le,

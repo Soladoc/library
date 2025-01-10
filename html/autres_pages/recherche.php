@@ -8,18 +8,18 @@ $page = new Page('Recherche', scripts: [
 
 $page->put(function () {
     $valider = getarg($_GET, "valider", required: false);
-    $mot_cle = getarg($_GET, "mot_cle", required: false);
+    $search = getarg($_GET, "search", required: false);
     $modif_affichage = false;
 
-    if ($valider && !empty($mot_cle)) {
+    if ($valider && !empty($search)) {
         $modif_affichage = true;
-        $mot_cle = getarg($_GET, "mot_cle");
+        $search = getarg($_GET, "search");
     }
 
     if ($_POST) {
-        $mot_cle = getarg($_POST, 'mot_cle', required: false);
-        if (!$mot_cle) {
-            $mot_cle = null;
+        $search = getarg($_POST, 'search', required: false);
+        if (!$search) {
+            $search = null;
         }
     }
     ?>
@@ -28,7 +28,7 @@ $page->put(function () {
         <br>
         <div class="search-bar">
             <!-- <input id="barre-recherche" type="text" placeholder="Rechercher des activités, restaurants, spectacles..."> -->
-            <input type="text" id="keyword-search" value="<?= $mot_cle ?>" placeholder="Rechercher par mot-clé" oninput="filterOffers()">
+            <input type="text" id="keyword-search" value="<?= $search ?>" placeholder="Rechercher par mot-clé" oninput="filterOffers()">
 
         </div>
     </section>

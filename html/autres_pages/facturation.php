@@ -1,12 +1,9 @@
 <?php
 
-use function DB\query_tarif;
-
 require_once 'component/Page.php';
 require_once 'auth.php';
 require_once 'model/Duree.php';
 require_once 'model/Offre.php';
-require_once 'queries.php';
 
 $page = new Page('Facturation');
 
@@ -39,7 +36,7 @@ $page->put(function () {
         <td><?= $offre->option?->nom ?> (test)</td>
         <td><?= $offre->en_ligne_ce_mois_pendant->days ?></td>
         <?php
-        $resO  = $offre->en_ligne_ce_mois_pendant->days * query_tarif($offre->abonnement->libelle);
+        $resO  = $offre->en_ligne_ce_mois_pendant->days * $offre->abonnement->prix_journalier;
         $resO *= 0.2;
         $resG += $resO;
         ?>

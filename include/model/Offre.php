@@ -201,15 +201,15 @@ abstract class Offre extends Model implements Signalable
 
     /**
      * Récupère les offres de la BDD dont le titre correspond à une recherche.
-     * @param string $motcle La chaîne recherchée
+     * @param string $search La chaîne recherchée
      * @return Iterator<int, self>
      */
-    static function from_db_by_motcle(string $motcle): Iterator
+    static function from_db_by_search(string $search): Iterator
     {
         $stmt = notfalse(DB\connect()->prepare(self::make_select() . ' where '
             . implode(' and ', array_map(
                 fn($mot) => static::TABLE . '.titre ilike ' . DB\quote_string("%$mot%"),
-                explode(' ', trim($motcle)),
+                explode(' ', trim($search)),
             ))));
         notfalse($stmt->execute());
         while (false !== $row = $stmt->fetch()) {

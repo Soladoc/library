@@ -42,8 +42,6 @@ begin
         new.publie_le,
         new.lu,
         new.blackliste;
-
-    new.pseudo_auteur = (select pseudo from membre where id = new.id_membre_auteur);
 end
 $$ language plpgsql strict;
 

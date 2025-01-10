@@ -5,7 +5,7 @@ require_once 'util.php';
 /**
  * Abstraction du type PostgeSQL TIMESTAMP (WITHOUT TIME ZONE) fini.
  */
-final class FiniteTimestamp
+final class FiniteTimestamp implements JsonSerializable
 {
     private const FORMAT_DATE = 'Y-m-d';
     private const FORMATS = ['!Y-m-d H:i:s.u', '!Y-m-d H:i:s', '!Y-m-d\\TH:i:s.u'];
@@ -35,5 +35,12 @@ final class FiniteTimestamp
 
     function format_date(): string {
         return $this->datetime->format(self::FORMAT_DATE);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    function jsonSerialize(): mixed {
+        return $this->datetime->format(DATE_ATOM);
     }
 }
