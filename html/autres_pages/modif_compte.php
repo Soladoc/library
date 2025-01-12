@@ -61,7 +61,7 @@ if ($_POST) {
         } else {
             DB\query_update_email($compte->id, $new_email);
         }
-    }
+    }z
 
     // modif telephone
     $new_telephone = getarg($_POST, 'new_telephone', null, false);

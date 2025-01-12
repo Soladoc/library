@@ -944,31 +944,31 @@ body#detail_compte main {
     padding: 2rem;
 }
 
-section#info_compte {
+section#modif_compte {
     display: flex;
     flex-direction: column;
     gap: 1.5rem;
 }
 
-section#info_compte div {
+section#modif_compte div {
     display: flex;
     justify-content: space-between;
     border-bottom: 1px solid #ddd;
     padding-bottom: 0.5rem;
 }
 
-section#info_compte div p :not(.error){
+section#modif_compte div p :not(.error){
     margin: 0;
     font-weight: bold;
     color: #555;
 }
 
-section#info_compte div span {
+section#modif_compte div span {
     font-weight: normal;
     color: #333;
 }
 
-#info_compte :is(a, button[type=submit]) {
+#modif_compte :is(a, button[type=submit]) {
     display: inline-block;
     text-decoration: none;
     background-color: #3498db;
@@ -980,7 +980,7 @@ section#info_compte div span {
     text-align: center;
 }
 
-#info_compte a:hover {
+#modif_compte a:hover {
     background-color: #2980b9;
 }
 
@@ -1080,3 +1080,69 @@ section#info_compte div span {
     border: 1px solid;
     padding: 8px 10px;
   }
+
+
+
+#modif_compte {
+    background-color: white;
+    padding: 2rem;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    max-width: 600px;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+#modif_compte h1 {
+    text-align: center;
+    color: var(--color-primary);
+    margin-bottom: 1rem;
+    font-size: 1.5rem;
+}
+
+#modif_compte label {
+    font-weight: bold;
+    margin-bottom: 0.5rem;
+    display: block;
+}
+
+#modif_compte input {
+    width: 100%;
+    padding: 0.8rem;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: border-color 0.3s ease;
+}
+
+#modif_compte input:focus {
+    border-color: var(--color-accent);
+    outline: none;
+    box-shadow: 0 0 8px rgba(64, 81, 253, 0.2);
+}
+
+#modif_compte button[type="submit"],
+#modif_compte a {
+    display: inline-block;
+    text-align: center;
+    padding: 0.8rem 1.5rem;
+    background-color: var(--color-primary);
+    color: white;
+    border-radius: 5px;
+    text-decoration: none;
+    transition: background-color 0.3s ease;
+    font-weight: bold;
+}
+
+#modif_compte button[type="submit"]:hover,
+#modif_compte a:hover {
+    background-color: var(--color-secondary);
+}
+
+.error {
+    color: var(--color-accent);
+    font-size: 0.9rem;
+    margin-top: 0.3rem;
+}
