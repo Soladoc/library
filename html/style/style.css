@@ -1081,9 +1081,17 @@ section#info_compte div span {
     padding: 8px 10px;
   }
 
+  .body-center {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background-color: var(--color-background);
+    font-family: var(--font-family, Arial, sans-serif);
+    margin: 0;
+}
 
-
-#modif_compte {
+.form-container {
     background-color: white;
     padding: 2rem;
     border-radius: 10px;
@@ -1095,20 +1103,20 @@ section#info_compte div span {
     gap: 1.5rem;
 }
 
-#modif_compte h1 {
+.form-title {
     text-align: center;
     color: var(--color-primary);
     margin-bottom: 1rem;
     font-size: 1.5rem;
 }
 
-#modif_compte label {
+.label {
     font-weight: bold;
     margin-bottom: 0.5rem;
     display: block;
 }
 
-#modif_compte input {
+.input-field {
     width: 100%;
     padding: 0.8rem;
     border: 1px solid #ccc;
@@ -1117,14 +1125,19 @@ section#info_compte div span {
     transition: border-color 0.3s ease;
 }
 
-#modif_compte input:focus {
+.input-field:focus {
     border-color: var(--color-accent);
     outline: none;
     box-shadow: 0 0 8px rgba(64, 81, 253, 0.2);
 }
 
-#modif_compte button[type="submit"],
-#modif_compte a {
+.error-text {
+    color: var(--color-accent);
+    font-size: 0.9rem;
+    margin-top: 0.3rem;
+}
+
+.button {
     display: inline-block;
     text-align: center;
     padding: 0.8rem 1.5rem;
@@ -1134,15 +1147,10 @@ section#info_compte div span {
     text-decoration: none;
     transition: background-color 0.3s ease;
     font-weight: bold;
+    cursor: pointer;
+    border: none;
 }
 
-#modif_compte button[type="submit"]:hover,
-#modif_compte a:hover {
+.button:hover {
     background-color: var(--color-secondary);
-}
-
-.error {
-    color: var(--color-accent);
-    font-size: 0.9rem;
-    margin-top: 0.3rem;
 }
