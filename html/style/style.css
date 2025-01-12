@@ -944,31 +944,31 @@ body#detail_compte main {
     padding: 2rem;
 }
 
-section#modif_compte {
+section#info_compte {
     display: flex;
     flex-direction: column;
     gap: 1.5rem;
 }
 
-section#modif_compte div {
+section#info_compte div {
     display: flex;
     justify-content: space-between;
     border-bottom: 1px solid #ddd;
     padding-bottom: 0.5rem;
 }
 
-section#modif_compte div p :not(.error){
+section#info_compte div p :not(.error){
     margin: 0;
     font-weight: bold;
     color: #555;
 }
 
-section#modif_compte div span {
+section#info_compte div span {
     font-weight: normal;
     color: #333;
 }
 
-#modif_compte :is(a, button[type=submit]) {
+#info_compte :is(a, button[type=submit]) {
     display: inline-block;
     text-decoration: none;
     background-color: #3498db;
@@ -980,7 +980,7 @@ section#modif_compte div span {
     text-align: center;
 }
 
-#modif_compte a:hover {
+#info_compte a:hover {
     background-color: #2980b9;
 }
 
