@@ -1026,7 +1026,7 @@ section#info_compte div span {
 }
 
 
-#bouton_creer_offre {
+.bouton_principale_pro {
     max-width: 200px;
     margin: 2rem auto;
 }
