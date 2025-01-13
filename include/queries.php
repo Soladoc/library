@@ -49,12 +49,6 @@ function query_update_pseudo(int $id_compte, $new_pseudo): void
     bind_values($stmt, [1 => [$new_pseudo, PDO::PARAM_STR], 2 => [$id_compte, PDO::PARAM_INT]]);
 }
 
-function query_update_suppression_membre(int $id_compte): void
-{
-    $stmt = notfalse(connect()->prepare('DELETE membre WHERE id = ?;'));
-    bind_values($stmt,[$id_compte, PDO::PARAM_STR]);
-}
-
 // professionnel
 function query_update_denomination(int $id_compte, $new_denomination): void
 {
