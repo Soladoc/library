@@ -2,6 +2,7 @@
 
 require_once 'db.php';
 require_once 'model/Offre.php';
+require_once 'model/Date.php';
 
 /**
  * @property-read ?int $id L'ID. `null` si cet avis n'existe pas dans la BDD.
