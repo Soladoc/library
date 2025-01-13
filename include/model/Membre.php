@@ -68,7 +68,6 @@ final class Membre extends Compte
     {
         return new self([
             $row['id'],
-            $row['id_signalable'],
             $row['email'],
             $row['mdp_hash'],
             $row['nom'],
