@@ -25,7 +25,7 @@ class Signalable extends Model
     function get_signalement(int $id_compte): ?string
     {
         $stmt = DB\connect()->prepare('select raison from ' . self::TABLE . ' where id_signalable=? and id_compte=?');
-        DB\bind_values($stmt, [1 => $this->id, 2 => $id_compte]);
+        DB\bind_values($stmt, [1 => [$this->id, PDO::PARAM_INT], 2 => [$id_compte, PDO::PARAM_INT]]);
         notfalse($stmt->execute());
         $r = $stmt->fetchColumn();
         return $r === false ? null : $r;
@@ -34,7 +34,7 @@ class Signalable extends Model
     function signaler(int $id_compte, string $raison)
     {
         $stmt = DB\connect()->prepare('insert into ' . self::TABLE . ' (id_signalable,id_compte,raison) values (?,?,?)');
-        DB\bind_values($stmt, [1 => $this->id, 2 => $id_compte, 3 => $raison]);
+        DB\bind_values($stmt, [1 => [$this->id, PDO::PARAM_INT], 2 => [$id_compte, PDO::PARAM_INT], 3 => [$raison, PDO::PARAM_INT]]);
         notfalse($stmt->execute());
     }
 
