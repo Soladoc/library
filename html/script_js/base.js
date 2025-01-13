@@ -135,10 +135,12 @@ function preview_image(e_input_image, e_preview) {
  * @param {HTMLButtonElement} element
  */
 function setup_button_signaler(element) {
+    let is_signaled = element.children[0].src.endsWith('flag-filled.svg');
     element.addEventListener('click', () => {
-        const raison = prompt('Raison de votre signalement');
-        if (raison) {
+        let raison;
+        if (is_signaled || (raison = prompt('Raison de votre signalement'))) {
             window.location.replace(location_signaler(element.dataset.idcco, element.dataset.avisId, raison));
+            is_signaled = !is_signaled;
         }
     });
 }
@@ -153,6 +155,6 @@ function location_signaler(id_compte, id_signalable, raison) {
         id_compte: id_compte,
         id_signalable: id_signalable,
         raison: raison,
-        return_url: window.location.search
+        return_url: window.location.href
     });
 }
