@@ -37,11 +37,10 @@ final class ReviewList
                     foreach ($avis as $a) { ?>
                         <div class="review">
                             <p><strong><?= h14s($a->membre_auteur->pseudo) ?></strong> - <?= h14s($a->note) ?>/5
-                                <!-- todo: check if déja signalé -->
                                 <?php if (null !== $idcco = Auth\id_compte_connecte()) {
                                     $raison_signalement_actuel = Signalable::from_db($a->id)->get_signalement($idcco);
                                     ?>
-                                    <a href="<?= location_signaler($idcco, $a->id, 'Je signale ce contenu') ?>"><img class="signalement-flag" src="/images/<?= $raison_signalement_actuel === null ? 'flag' : 'flag-filled' ?>.svg" width="24" height="29" alt="Drapeau" title="Signaler"></a>
+                                    <button class="button-signaler" data-idcco="<?= $idcco ?>" data-avis-id="<?= $a->id ?>" type="button"><img class="signalement-flag" src="/images/<?= $raison_signalement_actuel === null ? 'flag' : 'flag-filled' ?>.svg" width="24" height="29" alt="Drapeau" title="Signaler"></button>
                                 </p>
                             <?php } ?>
                             <p class="review-contexte">Contexte&nbsp;: <?= h14s($a->contexte) ?></p>

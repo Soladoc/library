@@ -55,7 +55,8 @@ if ($_POST && isset($_POST['submit_report'])) {
     }
 }
 
-if ($_POST) {
+// Si on a un POST de publication d'avis
+if (null !== $commentaire = getarg($_POST, 'commentaire', required: false)) {
     if (null === $id_membre_co) {
         $error_message = 'Veuillez vous connecter pour publier un avis.';
     } else if (Avis::from_db_one($id_membre_co, $offre->id)) {
@@ -63,7 +64,7 @@ if ($_POST) {
     } else {
         $args_avis = [
             null,
-            getarg($_POST, 'commentaire'),
+            $commentaire,
             $input_rating->get($_POST),
             Date::parse(getarg($_POST, 'date')),
             getarg($_POST, 'contexte'),
