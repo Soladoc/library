@@ -43,8 +43,7 @@ $page->put(function () {
         } else{
         ?>
             <td><?= "$resultat_offre €" ?></td>
-            <?php 
-            print_r($offre->abonnement->libelle);
+        <?php 
         }
         ?>
         </tr>
