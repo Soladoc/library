@@ -53,7 +53,7 @@ int connexion(int token, int sock) {
         } else {
             printf("Erreur en tentant de lire la réponse du serveur pour le nom d'utilisateur\n");
         }
-
+        memset(buffer, 0, sizeof(buffer));
         printf("Quel est votre mot de passe ?");
         fgets(mdp, sizeof(mdp), stdin);  // Read password
         write(sock, mdp, strlen(mdp));  // Send password
@@ -66,7 +66,8 @@ int connexion(int token, int sock) {
         } else {
             printf("Erreur en tentant de lire la réponse du serveur pour le mot de passe\n");
         }
-
+        printf("Buffer content before printing: '%s'\n", buffer);
+        memset(buffer, 0, sizeof(buffer));
         // Receive token from the server
         printf("Attente du token du serveur...\n");  // Debug line
         bytes_read = safe_read(sock, &token, sizeof(token), 5);  // 5-second timeout
@@ -155,6 +156,7 @@ int main() {
                     buffer[bytes_read] = '\0';
                     printf("%s", buffer);
                 }
+                memset(buffer, 0, sizeof(buffer));
                 break;
             case 2:
                 bytes_read = read(sock, buffer, sizeof(buffer) - 1);
@@ -162,6 +164,7 @@ int main() {
                     buffer[bytes_read] = '\0';
                     printf("%s", buffer);
                 }
+                memset(buffer, 0, sizeof(buffer));
                 break;
             case 3:
                 bytes_read = read(sock, buffer, sizeof(buffer) - 1);
@@ -169,6 +172,7 @@ int main() {
                     buffer[bytes_read] = '\0';
                     printf("%s", buffer);
                 }
+                memset(buffer, 0, sizeof(buffer));
                 break;
             case 4:
                 bytes_read = read(sock, buffer, sizeof(buffer) - 1);
@@ -176,6 +180,7 @@ int main() {
                     buffer[bytes_read] = '\0';
                     printf("%s", buffer);
                 }
+                memset(buffer, 0, sizeof(buffer));
                 break;
             case 5:
                 bytes_read = read(sock, buffer, sizeof(buffer) - 1);
@@ -183,6 +188,7 @@ int main() {
                     buffer[bytes_read] = '\0';
                     printf("%s", buffer);
                 }
+                memset(buffer, 0, sizeof(buffer));
                 fgets(message, sizeof(message), stdin);
                 message[strcspn(message, "\n")] = 0;
                 write(sock, message, strlen(message));
@@ -192,6 +198,7 @@ int main() {
                     buffer[bytes_read] = '\0';
                     printf("%s", buffer);
                 }
+                memset(buffer, 0, sizeof(buffer));
                 break;
             case 6:
                 bytes_read = read(sock, buffer, sizeof(buffer) - 1);
@@ -199,6 +206,7 @@ int main() {
                     buffer[bytes_read] = '\0';
                     printf("%s", buffer);
                 }
+                memset(buffer, 0, sizeof(buffer));
                 scanf("%d", &num_message);
                 write(sock, &num_message, sizeof(num_message));
                 bytes_read = read(sock, buffer, sizeof(buffer) - 1);
@@ -206,6 +214,7 @@ int main() {
                     buffer[bytes_read] = '\0';
                     printf("%s", buffer);
                 }
+                memset(buffer, 0, sizeof(buffer));
                 fgets(message, sizeof(message), stdin);
                 message[strcspn(message, "\n")] = 0;
                 write(sock, message, strlen(message));
@@ -215,6 +224,7 @@ int main() {
                     buffer[bytes_read] = '\0';
                     printf("%s", buffer);
                 }
+                memset(buffer, 0, sizeof(buffer));
                 break;
             case 7:
                 bytes_read = read(sock, buffer, sizeof(buffer) - 1);
@@ -222,6 +232,7 @@ int main() {
                     buffer[bytes_read] = '\0';
                     printf("%s", buffer);
                 }
+                memset(buffer, 0, sizeof(buffer));
                 break;
             case 8:
                 bytes_read = read(sock, buffer, sizeof(buffer) - 1);
@@ -229,6 +240,7 @@ int main() {
                     buffer[bytes_read] = '\0';
                     printf("%s", buffer);
                 }
+                memset(buffer, 0, sizeof(buffer));
                 break;
             case 9:
                 bytes_read = read(sock, buffer, sizeof(buffer) - 1);
@@ -236,6 +248,7 @@ int main() {
                     buffer[bytes_read] = '\0';
                     printf("%s", buffer);
                 }
+                memset(buffer, 0, sizeof(buffer));
                 break;
             case 10:
                 bytes_read = read(sock, buffer, sizeof(buffer) - 1);
@@ -243,6 +256,7 @@ int main() {
                     buffer[bytes_read] = '\0';
                     printf("%s", buffer);
                 }
+                memset(buffer, 0, sizeof(buffer));
                 break;
             case 11:
                 bytes_read = read(sock, buffer, sizeof(buffer) - 1);
@@ -250,6 +264,7 @@ int main() {
                     buffer[bytes_read] = '\0';
                     printf("%s", buffer);
                 }
+                memset(buffer, 0, sizeof(buffer));
                 break;
             case 12:
                 bytes_read = read(sock, buffer, sizeof(buffer) - 1);
@@ -257,6 +272,7 @@ int main() {
                     buffer[bytes_read] = '\0';
                     printf("%s", buffer);
                 }
+                memset(buffer, 0, sizeof(buffer));
                 break;
             case 13:
                 bytes_read = read(sock, buffer, sizeof(buffer) - 1);
@@ -264,6 +280,7 @@ int main() {
                     buffer[bytes_read] = '\0';
                     printf("%s", buffer);
                 }
+                memset(buffer, 0, sizeof(buffer));
                 break;
             case 14:
                 bytes_read = read(sock, buffer, sizeof(buffer) - 1);
@@ -271,6 +288,7 @@ int main() {
                     buffer[bytes_read] = '\0';
                     printf("%s", buffer);
                 }
+                memset(buffer, 0, sizeof(buffer));
                 break;
         }
 
@@ -280,6 +298,7 @@ int main() {
         buffer[bytes_read] = '\0';
         printf("%s", buffer);
     }
+    memset(buffer, 0, sizeof(buffer));
     close(sock);
     return EXIT_SUCCESS;
 }
