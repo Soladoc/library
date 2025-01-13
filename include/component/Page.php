@@ -80,7 +80,7 @@ final class Page
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><?= h14s($this->title) ?></title>
-    <link rel="icon" href="html\icon\favicon-32x32.png" type="image/x-icon" alt="test">
+    <link rel="icon" href=".html\icon\favicon-32x32.png" type="image/x-icon" alt="test">
     <?php
     foreach (array_merge(self::BASE_STYLESHEETS, $this->stylesheets) as $href) {
         // Si c'est une URL (contient un ':'), on laisse tel quel. Sinon on préfixe par le dossier des feuilles de style.
