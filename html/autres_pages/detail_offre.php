@@ -149,7 +149,7 @@ $page->put(function () use (
                 </select>
                 <label for="date">Date de votre visite</label>
                 <input type="date" id="date" name="date" min="<?= $offre->creee_le->format_date() ?>" value="<?= date('Y-m-d') ?>" required>
-                </br>
+                <br>
                 <label for="consent">Je certifie que l'avis reflète mes propres expérience et opinion sur cette offre.</label>
                 <input type="checkbox" name="consent" required>
                 <button type="submit" class="btn-publish">Publier</button>
