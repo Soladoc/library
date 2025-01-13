@@ -15,7 +15,6 @@ $page->put(function () {
                 <th scope="col">Titre</th>
                 <th scope="col">Type d'abonnement</th>
                 <th scope="col">Catégorie</th>
-                <th scope="col">nom option (test)</th>
                 <th scope="col">Jours en ligne</th>
                 <th scope="col">Prix TTC</th>
             </tr>
@@ -33,7 +32,6 @@ $page->put(function () {
         <td><?= $offre->titre; ?></td>
         <td><?= $offre->abonnement->libelle ?></td>
         <td><?= $offre->categorie ?></td>
-        <td><?= $offre->option?->nom ?> (test)</td>
         <td><?= $offre->en_ligne_ce_mois_pendant->days ?></td>
         <?php
         $resO  = $offre->en_ligne_ce_mois_pendant->days * $offre->abonnement->prix_journalier;
