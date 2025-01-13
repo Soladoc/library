@@ -51,7 +51,7 @@ int connexion(int token, int sock){
 }
 
 int main() {
-    int sock,ret,option,token;
+    int sock,ret,option,token,num_message;
     struct sockaddr_in addr;
     char buffer[10000];
     char message[1000];
@@ -154,6 +154,22 @@ int main() {
                 }
                 break;
             case 6:
+                bytes_read = read(sock, buffer, sizeof(buffer) - 1);
+                if (bytes_read > 0) {
+                    buffer[bytes_read] = '\0';
+                    printf("%s", buffer);
+                }
+                scanf("%d", &num_message);
+                write(sock, &num_message, sizeof(num_message));
+                bytes_read = read(sock, buffer, sizeof(buffer) - 1);
+                if (bytes_read > 0) {
+                    buffer[bytes_read] = '\0';
+                    printf("%s", buffer);
+                }
+                fgets(message, sizeof(message), stdin);
+                message[strcspn(message, "\n")] = 0;
+                write(sock, message, strlen(message));
+                fflush(stdout);
                 bytes_read = read(sock, buffer, sizeof(buffer) - 1);
                 if (bytes_read > 0) {
                     buffer[bytes_read] = '\0';
