@@ -22,8 +22,8 @@ $page->put(function () {
         <tbody>
     <?php
 
-    $resG             = 0;  // resultat global
-    $resO             = 0;  // resultat offre
+    $resultat_global                = 0;  // resultat global
+    $resultat_offre                 = 0;  // resultat offre
     $id_professionnel = Auth\exiger_connecte_pro();
     $offres           = Offre::from_db_all($id_professionnel);
     foreach ($offres as $offre) {
@@ -34,11 +34,18 @@ $page->put(function () {
         <td><?= $offre->categorie ?></td>
         <td><?= $offre->en_ligne_ce_mois_pendant->days ?></td>
         <?php
-        $resO  = $offre->en_ligne_ce_mois_pendant->days * $offre->abonnement->prix_journalier;
-        $resO += $resO * 0.2;
-        $resG += $resO;
+        $resultat_offre  = $offre->en_ligne_ce_mois_pendant->days * $offre->abonnement->prix_journalier;
+        $resultat_offre += $resultat_offre * 0.2;
+        $resultat_global += $resultat_offre;
+        if ( strcasecmp($offre->categorie,'Gratuit') == 0 ) { ?>
+            <td>N/A</td>
+        <?php 
+        } else{
         ?>
-        <td><?= "$resO €" ?></td>
+            <td><?= "$resultat_offre €" ?></td>
+        <?php 
+        }
+        ?>
         </tr>
         <?php
     }
@@ -47,7 +54,7 @@ $page->put(function () {
     <tfoot>
         <tr>
             <th scope="row" colspan="4">Prix global TTC</th>
-            <td><?= $resG ?> €</td>
+            <td><?= $resultat_global ?> €</td>
         </tr>
     </tfoot>
     </table>
