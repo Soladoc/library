@@ -1,5 +1,6 @@
 <?php
 require_once 'util.php';
+require_once 'model/Signalable.php';
 
 $id_compte = getarg($_GET, 'id_compte', arg_int());
 $id_signalable = getarg($_GET, 'id_signalable', arg_int());
