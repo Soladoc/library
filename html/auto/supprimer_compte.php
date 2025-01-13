@@ -1,7 +1,7 @@
 <?php
 require_once 'util.php';
 
-$id_compte = getarg($_GET, 'id_compte', arg_int(...));
+$id_compte = getarg($_GET, 'id_compte', arg_int());
 
 Compte::from_db($id_compte)->delete();
 
