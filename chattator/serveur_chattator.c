@@ -119,16 +119,16 @@ int main() {
                 case 1:  // "Affichage des messages"
                     snprintf(reponse, sizeof(reponse), "Affichage de vos messages :\r\n");
                     break;
-                case 2:  // "Reception du nouveau message (et envoi au destinataire)"
+                case 2:  // "Affichage des messages reçus"
                     snprintf(reponse, sizeof(reponse), "Affichage des messages reçus :\r\n");
                     break;
-                case 3:  // "Message supprimé"
-                    snprintf(reponse, sizeof(reponse), "Message supprimé\r\n");
+                case 3:  // "Affichage des messages envoyés"
+                    snprintf(reponse, sizeof(reponse), "Affichage des messages envoyés :\r\n");
                     break;
-                case 4:  // "Message modifié"
-                    snprintf(reponse, sizeof(reponse), "Message modifié\r\n");
+                case 4:  // "Affichage des messages reçus non lus"
+                    snprintf(reponse, sizeof(reponse), "Affichage des messages reçus non lus :\r\n");
                     break;
-                case 5:  // "Utilisateur bloqué"
+                case 5:  // "Reception du nouveau message (et envoi au destinataire)"
                     snprintf(reponse, sizeof(reponse), "Entrez votre message :\r\n");
                     write(cnx, reponse, strlen(reponse));  // Demande au client son message
                     
@@ -141,13 +141,31 @@ int main() {
                         snprintf(reponse, sizeof(reponse), "Erreur lors de la réception du message\r\n");
                     }
                     break;
-                case 6:  // "Blocage de l'utilisateur annulé
-                    snprintf(reponse, sizeof(reponse), "Blocage de l'utilisateur annulé\r\n");
+                case 6:  // "Supprimage du message"
+                    snprintf(reponse, sizeof(reponse), "Message supprimé\r\n");
                     break;
-                case 7:  // "Récupération des messages dans un fichier"
+                case 7:  // "Modification du message"
+                    snprintf(reponse, sizeof(reponse), "Message modifié\r\n");
+                    break;
+                case 8:  // "Récupération des messages dans un fichier"
                     snprintf(reponse, sizeof(reponse), "Récupération de vos messages effectuée.\r\n");
                     break;
-                case 8:  // "Au revoir"
+                case 9:  // "Rechercher un utilisateur"
+                    snprintf(reponse, sizeof(reponse), "Données de l'utilisateur :\r\n");
+                    break;
+                case 10:  // "Blocage de l'utilisateur effectué"
+                    snprintf(reponse, sizeof(reponse), "Blocage de l'utilisateur effectué\r\n");
+                    break;
+                case 11:  // "Blocage de l'utilisateur annulé"
+                    snprintf(reponse, sizeof(reponse), "Blocage de l'utilisateur annulé\r\n");
+                    break;
+                case 12:  // "Bannissement de l'utilisateur effectué"
+                    snprintf(reponse, sizeof(reponse), "Bannissement de l'utilisateur effectué\r\n");
+                    break;
+                case 13:  // "Bannissement de l'utilisateur annulé"
+                    snprintf(reponse, sizeof(reponse), "Bannissement de l'utilisateur annulé\r\n");
+                    break;
+                case 15:  // Déconnexion de l'utilisateur
                     snprintf(reponse, sizeof(reponse), "Au revoir.\n");
                     write(cnx, reponse, strlen(reponse));
                     close(cnx);  // Ferme la connection
@@ -162,8 +180,7 @@ int main() {
             write(cnx, reponse, strlen(reponse));
         }
     }
-}
-
-/*close(sock);
+    close(sock);
     printf("Le serveur s'arrête suite à une déconnexion innatendue.\r\n");
-    return EXIT_FAILURE; //Cas où la connection n'est pas arrêtée en utilisant l'option 8*/
+    return EXIT_FAILURE; //Cas où la connection n'est pas arrêtée en utilisant l'option 14 ou 15
+}
