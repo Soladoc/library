@@ -101,6 +101,7 @@ $page->put(function () use ($compte, $input_adresse, $error_email, $error_mdp, $
                     </div>
                     <input id="new_pseudo" name="new_pseudo" type="text" value="<?= h14s($compte->pseudo) ?>" placeholder="votre nouveau pseudo">
                 </div>
+                <br>
             <?php } else if ($compte instanceof Professionnel) { ?>
                     <div>
                         <div id="denomination">
@@ -108,6 +109,7 @@ $page->put(function () use ($compte, $input_adresse, $error_email, $error_mdp, $
                         </div>
                         <input id="new_denomination" name="new_denomination" type="text" value="<?= h14s($compte->denomination) ?>" placeholder="votre nouvelle dénomination">
                     </div>
+                    <br>
                 <?php if ($compte instanceof ProfessionnelPrive) { ?>
                         <div>
                             <div id="siren">
@@ -118,6 +120,7 @@ $page->put(function () use ($compte, $input_adresse, $error_email, $error_mdp, $
                         <?php } ?>
                             <input type="text" id="new_siren" name="new_siren" value="<?= h14s($compte->siren) ?>" placeholder="231 654 988" oninput="formatInput(this)" maxlength="12">
                         </div>
+                        <br>
                 <?php } ?>
             <?php } ?>
 
@@ -127,12 +130,14 @@ $page->put(function () use ($compte, $input_adresse, $error_email, $error_mdp, $
                 </div>
                 <input id="new_nom" name="new_nom" type="text" value="<?= h14s($compte->nom) ?>" placeholder="votre nouveau nom">
             </div>
+            <br>
             <div>
                 <div id="prenom">
                     <label>Prénom : </label>
                 </div>
                 <input id="new_prenom" name="new_prenom" type="text" value="<?= h14s($compte->prenom) ?>" placeholder="votre nouveau prénom">
             </div>
+            <br>
             <div>
                 <div id="email">
                     <label>Email : </label>
@@ -143,6 +148,7 @@ $page->put(function () use ($compte, $input_adresse, $error_email, $error_mdp, $
                 <input id="new_email" name="new_email" type="email" value="<?= h14s($compte->email) ?>" placeholder="votre nouvel email">
 
             </div>
+            <br>
             <div>
                 <div id="telephone">
                     <label>Numéro de téléphone : </label>
@@ -153,11 +159,13 @@ $page->put(function () use ($compte, $input_adresse, $error_email, $error_mdp, $
                 <input id="new_telephone" name="new_telephone" type="tel" value="<?= h14s($compte->telephone) ?>" placeholder="votre nouveau numéro de téléphone">
 
             </div>
+            <br>
             <div>
                 <label>Adresse : </label>
                 <?= $compte->adresse->format() ?>
             </div>
             <?php $input_adresse->put($compte->adresse) ?>
+            <br>
             <div id='changer_mdp'>
                 <label>Modifier son mot de passe</label>
                 <div class="champ">
