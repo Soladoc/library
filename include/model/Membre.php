@@ -39,7 +39,6 @@ final class Membre extends Compte
     {
         return 'select
         ' . static::TABLE . '.id,
-        ' . static::TABLE . '.id_signalable,
         ' . static::TABLE . '.email,
         ' . static::TABLE . '.mdp_hash,
         ' . static::TABLE . '.nom,
