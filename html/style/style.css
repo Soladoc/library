@@ -1188,11 +1188,11 @@ label > input {
 }
 
 
-.btn-report {
+.button-signaler {
     padding: 0.8rem 1.5rem;
     background-color: #e74c3c; /* Rouge pour le bouton */
     color: white;
-    border: none;
+    border: 2px solid #e74c3c;
     border-radius: 10px; /* Arrondir les bords */
     cursor: pointer;
     font-size: 1rem;
