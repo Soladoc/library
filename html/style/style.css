@@ -936,7 +936,7 @@ body#detail_compte {
 }
 
 body#detail_compte main {
-    max-width: 800px;
+    max-width: 900px;
     margin: 2rem auto;
     background-color: white;
     border-radius: 8px;
