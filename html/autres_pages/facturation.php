@@ -35,7 +35,7 @@ $page->put(function () {
         <td><?= $offre->en_ligne_ce_mois_pendant->days ?></td>
         <?php
         $resO  = $offre->en_ligne_ce_mois_pendant->days * $offre->abonnement->prix_journalier;
-        $resO *= 0.2;
+        $resO += $resO * 0.2;
         $resG += $resO;
         ?>
         <td><?= "$resO €" ?></td>
