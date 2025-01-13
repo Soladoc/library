@@ -74,9 +74,9 @@ function location_supprimer_compte(int $id_compte): string
     return '/auto/supprimer_compte.php?' . http_build_query(['id_compte' => $id_compte]);
 }
 
-function location_signaler(int $id_signalable): string
+function location_signaler(int $id_compte, int $id_signalable, string $raison): string
 {
-    return '/auto/signaler.php?' . http_build_query(['id_signalable' => $id_signalable]);
+    return '/auto/signaler.php?' . http_build_query(['id_compte' => $id_compte, 'id_signalable' => $id_signalable, 'raison' => $raison, 'return_url' => $_SERVER['REQUEST_URI']]);
 }
 
 function location_login(): string {

@@ -117,9 +117,9 @@ create function insert_compte (inout new record) as $$
 begin
     new.email = lower(new.email);
 
-    insert into pact._signalable default values returning id into new.id_signalable;
+    insert into pact._signalable default values returning id into new.id;
     insert into pact._compte (
-        id_signalable,
+        id,
         email,
         mdp_hash,
         nom,
@@ -127,7 +127,7 @@ begin
         telephone,
         id_adresse
     ) values (
-        new.id_signalable,
+        new.id,
         new.email,
         new.mdp_hash,
         new.nom,

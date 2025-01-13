@@ -37,7 +37,9 @@ final class ReviewList
                     foreach ($avis as $a) { ?>
                         <div class="review">
                             <p><strong><?= h14s($a->membre_auteur->pseudo) ?></strong> - <?= h14s($a->note) ?>/5
-                            <a href=""><img class="signalement-flag" src="/images/flag.svg" width="24" height="29" alt="Drapeau" title="Signaler"></a></p>
+                            <?php if (null !== $idcco = Auth\id_compte_connecte()) { ?>
+                                <a href="<?= location_signaler($idcco, $a->id, 'Je signale ce contenu')?>"><img class="signalement-flag" src="/images/flag.svg" width="24" height="29" alt="Drapeau" title="Signaler"></a></p>
+                            <?php } ?>
                             <p class="review-contexte">Contexte&nbsp;: <?= h14s($a->contexte) ?></p>
                             <p><?= h14s($a->commentaire) ?></p>
                             <p class="review-date"><?= h14s($a->date_experience) ?></p>
