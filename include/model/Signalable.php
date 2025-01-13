@@ -32,10 +32,15 @@ class Signalable extends Model
         return $r === false ? null : $r;
     }
 
-    function signaler(int $id_compte, string $raison)
+    function toggle_signaler(int $id_compte, string $raison)
     {
-        $stmt = DB\connect()->prepare('insert into ' . self::TABLE . ' (id_signalable,id_compte,raison) values (?,?,?)');
-        DB\bind_values($stmt, [1 => [$this->id, PDO::PARAM_INT], 2 => [$id_compte, PDO::PARAM_INT], 3 => [$raison, PDO::PARAM_STR]]);
+        if ($this->get_signalement($id_compte) === null) {
+            $stmt = DB\connect()->prepare('insert into ' . self::TABLE . ' (id_signalable,id_compte,raison) values (?,?,?)');
+            DB\bind_values($stmt, [1 => [$this->id, PDO::PARAM_INT], 2 => [$id_compte, PDO::PARAM_INT], 3 => [$raison, PDO::PARAM_STR]]);
+        } else {
+            $stmt  = DB\connect()->prepare('delete from ' . self::TABLE . ' where id_signalable=? and id_compte=?');
+            DB\bind_values($stmt, [1 => [$this->id, PDO::PARAM_INT], 2 => [$id_compte, PDO::PARAM_INT]]);
+        }
         notfalse($stmt->execute());
     }
 
