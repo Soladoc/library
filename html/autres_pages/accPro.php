@@ -15,7 +15,7 @@ $page->put(function () {
     ?>
 
     <h1>Accueil Professionnel</h1>
-    <a class="btn-more-info" href="<?= location_creation_offre() ?>" class="bouton_principale_pro">Créer une offre</a>
+    <a class="btn-more-info" href="<?= location_creation_offre() ?>" class="bouton_principale_pro" id='bouton_creer_offre' >Créer une offre</a>
     <a class="btn-more-info" href="<?= location_facturation() ?>" class="bouton_principale_pro">Facturation</a>
 
     <h3 class="nb-offres"><?= $nb_offres ?> offres</h3>

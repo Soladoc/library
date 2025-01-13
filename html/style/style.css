@@ -1031,6 +1031,11 @@ section#info_compte div span {
     margin: 2rem auto;
 }
 
+#bouton_creer_offre {
+    max-width: 200px;
+    margin: 2rem auto;
+}
+
 .review-list {
     border: 2px solid black;
     border-radius: 8px;
