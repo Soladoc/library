@@ -1,4 +1,5 @@
 <?php
+require_once 'model/Model.php';
 require_once 'db.php';
 
 // not abstract so we don't have to figure out which concrete class an id belongs, we don't need to anyway.
