@@ -74,7 +74,7 @@ int main() {
 
     option = 0;
     token=0;
-    while (option != 8) {
+    while (option != 15) {
         printf("Que voulez-vous faire ? \n");
         printf("Tapez 1 pour voir tous vos messages.\n");
         printf("Tapez 2 pour voir vos messages reçus.\n");
@@ -101,31 +101,121 @@ int main() {
         if (option == 1 || option==2 || option == 3 || option == 4 || option == 5 || option == 6 || option == 7 || option == 8 || option == 10 || option == 11 || option == 12 || option == 13) {
             token=connexion(token,sock);
         }
+        if (token ==0 && option ==14){
+            option=15;
+        }
         write(sock, &option, sizeof(option));
-        printf("Sent option: %d\n", option);
+        printf("Option envoyée: %d\n", option);
         fflush(stdout);
 
-        if (option == 1 || option == 3 || option == 4 || option == 2 || option == 6 || option == 7) {
-            bytes_read = read(sock, buffer, sizeof(buffer) - 1);
-            if (bytes_read > 0) {
-                buffer[bytes_read] = '\0';
-                printf("%s", buffer);
-            }
-        } else if (option == 5) {
-            bytes_read = read(sock, buffer, sizeof(buffer) - 1);
-            if (bytes_read > 0) {
-                buffer[bytes_read] = '\0';
-                printf("%s", buffer);
-            }
-            fgets(message, sizeof(message), stdin);
-            message[strcspn(message, "\n")] = 0;
-            write(sock, message, strlen(message));
-            fflush(stdout);
-            bytes_read = read(sock, buffer, sizeof(buffer) - 1);
-            if (bytes_read > 0) {
-                buffer[bytes_read] = '\0';
-                printf("%s", buffer);
-            }
+        switch (option) {
+            case 1:
+                bytes_read = read(sock, buffer, sizeof(buffer) - 1);
+                if (bytes_read > 0) {
+                    buffer[bytes_read] = '\0';
+                    printf("%s", buffer);
+                }
+                break;
+            case 2:
+                bytes_read = read(sock, buffer, sizeof(buffer) - 1);
+                if (bytes_read > 0) {
+                    buffer[bytes_read] = '\0';
+                    printf("%s", buffer);
+                }
+                break;
+            case 3:
+                bytes_read = read(sock, buffer, sizeof(buffer) - 1);
+                if (bytes_read > 0) {
+                    buffer[bytes_read] = '\0';
+                    printf("%s", buffer);
+                }
+                break;
+            case 4:
+                bytes_read = read(sock, buffer, sizeof(buffer) - 1);
+                if (bytes_read > 0) {
+                    buffer[bytes_read] = '\0';
+                    printf("%s", buffer);
+                }
+                break;
+            case 5:
+                bytes_read = read(sock, buffer, sizeof(buffer) - 1);
+                if (bytes_read > 0) {
+                    buffer[bytes_read] = '\0';
+                    printf("%s", buffer);
+                }
+                fgets(message, sizeof(message), stdin);
+                message[strcspn(message, "\n")] = 0;
+                write(sock, message, strlen(message));
+                fflush(stdout);
+                bytes_read = read(sock, buffer, sizeof(buffer) - 1);
+                if (bytes_read > 0) {
+                    buffer[bytes_read] = '\0';
+                    printf("%s", buffer);
+                }
+                break;
+            case 6:
+                bytes_read = read(sock, buffer, sizeof(buffer) - 1);
+                if (bytes_read > 0) {
+                    buffer[bytes_read] = '\0';
+                    printf("%s", buffer);
+                }
+                break;
+            case 7:
+                bytes_read = read(sock, buffer, sizeof(buffer) - 1);
+                if (bytes_read > 0) {
+                    buffer[bytes_read] = '\0';
+                    printf("%s", buffer);
+                }
+                break;
+            case 8:
+                bytes_read = read(sock, buffer, sizeof(buffer) - 1);
+                if (bytes_read > 0) {
+                    buffer[bytes_read] = '\0';
+                    printf("%s", buffer);
+                }
+                break;
+            case 9:
+                bytes_read = read(sock, buffer, sizeof(buffer) - 1);
+                if (bytes_read > 0) {
+                    buffer[bytes_read] = '\0';
+                    printf("%s", buffer);
+                }
+                break;
+            case 10:
+                bytes_read = read(sock, buffer, sizeof(buffer) - 1);
+                if (bytes_read > 0) {
+                    buffer[bytes_read] = '\0';
+                    printf("%s", buffer);
+                }
+                break;
+            case 11:
+                bytes_read = read(sock, buffer, sizeof(buffer) - 1);
+                if (bytes_read > 0) {
+                    buffer[bytes_read] = '\0';
+                    printf("%s", buffer);
+                }
+                break;
+            case 12:
+                bytes_read = read(sock, buffer, sizeof(buffer) - 1);
+                if (bytes_read > 0) {
+                    buffer[bytes_read] = '\0';
+                    printf("%s", buffer);
+                }
+                break;
+            case 13:
+                bytes_read = read(sock, buffer, sizeof(buffer) - 1);
+                if (bytes_read > 0) {
+                    buffer[bytes_read] = '\0';
+                    printf("%s", buffer);
+                }
+                break;
+            case 14:
+                bytes_read = read(sock, buffer, sizeof(buffer) - 1);
+                if (bytes_read > 0) {
+                    buffer[bytes_read] = '\0';
+                    printf("%s", buffer);
+                }
+                break;
         }
 
     }
