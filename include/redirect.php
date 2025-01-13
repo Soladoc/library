@@ -19,7 +19,7 @@ function redirect_to(string $location): never
  */
 function location_connexion(?string $error = null, ?string $return_url = null): string
 {
-    
+
     return '/autres_pages/connexion.php?' . http_build_query(['error' => $error, 'return_url' => $return_url]);
 }
 
@@ -65,7 +65,7 @@ function location_modifier_offre(int $id_offre): string
 
 function location_modifier_compte(int $id, ?string $error = null): string
 {
-    
+
     return '/autres_pages/modif_compte.php?' . http_build_query(['id' => $id, 'return_url' => $_SERVER['REQUEST_URI'], 'error' => $error]);
 }
 
@@ -79,10 +79,12 @@ function location_signaler(int $id_compte, int $id_signalable, string $raison): 
     return '/auto/signaler.php?' . http_build_query(['id_compte' => $id_compte, 'id_signalable' => $id_signalable, 'raison' => $raison, 'return_url' => $_SERVER['REQUEST_URI']]);
 }
 
-function location_login(): string {
+function location_login(): string
+{
     return '/auto/login.php';
 }
 
-function location_logout(): string {
+function location_logout(): string
+{
     return '/auto/logout.php';
 }
