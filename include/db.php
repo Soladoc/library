@@ -46,11 +46,13 @@ function connect(): PDO
             notfalse(getenv('DB_ROOT_PASSWORD'), 'DB_ROOT_PASSWORD not set')
         ];
 
-    $_pdo = is_localhost() ? LogPDO(...) : PDO(...)(
+    $args = [
         "$driver:host=$host;port=$port;dbname=$dbname",
         $username,
         $password,
-    );
+    ];
+
+    $_pdo = is_localhost() ? new LogPDO(...$args) : new PDO(...$args);
 
     notfalse($_pdo->exec("set schema 'pact'"));
 
