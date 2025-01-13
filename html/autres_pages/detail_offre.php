@@ -51,10 +51,7 @@ if ($_POST && isset($_POST['submit_report'])) {
     if (!$report_message) {
         $error_message = "Le message de signalement ne peut pas être vide.";
     } else {
-        // Insérer le signalement dans la base de données
-        //$query = $db->prepare('INSERT INTO reports (offer_id, message, date) VALUES (?, ?, NOW())');
-        //$query->execute([$offer_id, $report_message]);
-        //$success_message = "Votre signalement a été envoyé avec succès.";
+        location_signaler($id_membre_co,$offre->id,$report_message);
     }
 }
 
@@ -185,7 +182,7 @@ $page->put(function () use ($offre, $input_rating, $input_note_cuisine, $input_n
             <div class="report-form">
                 <h3>Signaler un problème</h3>
                 <form method="post">
-                    <textarea name="report_message" placeholder="Décrivez le problème..." required><?= h14s(getarg($_POST, 'report_message')) ?></textarea>
+                    <textarea name="report_message" placeholder="Décrivez le problème..." required><?= h14s(getarg($_POST, 'report_message', '')) ?></textarea>
                     <input type="hidden" name="offer_id" value="<?= $offre->id ?>">
                     <button type="submit" name="submit_report" class="btn-submit">Envoyer</button>
                     <button type="submit" name="cancel_report" class="btn-cancel">Annuler</button>
