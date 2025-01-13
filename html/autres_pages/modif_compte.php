@@ -174,7 +174,7 @@ $page->put(function () use (
 
             </div>
             <br>
-            <div id="adresse">
+            <div>
                 <label>Adresse : </label>
                 <?= $compte->adresse->format() ?>
             </div>
