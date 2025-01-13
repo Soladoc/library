@@ -202,7 +202,9 @@ $page->put(function () use (
             </div>
             <button type="submit">Valider</button>
             <a href="<?= location_detail_compte() ?>">Retour</a>
-            <a href="<?= location_supprimer_compte($compte->id) ?>">Supprimer le compte</a>
+            <?php if ($compte instanceof Membre) { ?>
+                <a href="<?= location_supprimer_compte($compte->id) ?>">Supprimer le compte</a>
+            <?php } ?>
         </form>
     </section>
     <?php
