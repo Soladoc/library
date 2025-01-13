@@ -1169,6 +1169,6 @@ section#info_compte div span {
     transition: .3s;
 }
 
-.info_compte:input {
-    border-radius: 15px;
+.info_compte > input {
+    border-radius: 10px;
 }
