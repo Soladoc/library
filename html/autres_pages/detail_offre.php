@@ -52,9 +52,9 @@ if ($_POST && isset($_POST['submit_report'])) {
         $error_message = "Le message de signalement ne peut pas être vide.";
     } else {
         // Insérer le signalement dans la base de données
-        $query = $db->prepare('INSERT INTO reports (offer_id, message, date) VALUES (?, ?, NOW())');
-        $query->execute([$offer_id, $report_message]);
-        $success_message = "Votre signalement a été envoyé avec succès.";
+        //$query = $db->prepare('INSERT INTO reports (offer_id, message, date) VALUES (?, ?, NOW())');
+        //$query->execute([$offer_id, $report_message]);
+        //$success_message = "Votre signalement a été envoyé avec succès.";
     }
 }
 
@@ -180,6 +180,7 @@ $page->put(function () use ($offre, $input_rating, $input_note_cuisine, $input_n
             </form>
         <?php endif; ?>
 
+        <!-- Formulaire de signalement -->
         <?php if ($is_reporting): ?>
             <div class="report-form">
                 <h3>Signaler un problème</h3>
