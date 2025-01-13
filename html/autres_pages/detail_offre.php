@@ -16,24 +16,24 @@ $offre = notfalse(Offre::from_db(getarg($_GET, 'id', arg_int())));
 
 $page = new Page($offre->titre, scripts: [
     'module/detail_offre.js' => 'type="module"',
-    'carousel.js'            => 'defer',
+    'carousel.js' => 'defer',
 ]);
 
 $input_rating = new InputNote(name: 'rating');
 if ($offre instanceof Restaurant) {
-    $input_note_cuisine      = new InputNote(name: 'note_cuisine');
-    $input_note_service      = new InputNote(name: 'note_service');
-    $input_note_ambiance     = new InputNote(name: 'note_ambiance');
+    $input_note_cuisine = new InputNote(name: 'note_cuisine');
+    $input_note_service = new InputNote(name: 'note_service');
+    $input_note_ambiance = new InputNote(name: 'note_ambiance');
     $input_note_qualite_prix = new InputNote(name: 'note_qualite_prix');
 } else {
-    $input_note_cuisine      = null;
-    $input_note_service      = null;
-    $input_note_ambiance     = null;
+    $input_note_cuisine = null;
+    $input_note_service = null;
+    $input_note_ambiance = null;
     $input_note_qualite_prix = null;
 }
 
 $id_membre_co = Auth\id_membre_connecte();
-$review_list  = new ReviewList($offre, $id_membre_co);
+$review_list = new ReviewList($offre, $id_membre_co);
 
 if ($_POST) {
     if (null === $id_membre_co) {
@@ -50,7 +50,7 @@ if ($_POST) {
             Membre::from_db($id_membre_co),
             $offre,
         ];
-        $avis      = $offre instanceof Restaurant
+        $avis = $offre instanceof Restaurant
             ? new AvisRestaurant(
                 $args_avis,
                 $input_note_cuisine->get($_POST),
@@ -64,15 +64,7 @@ if ($_POST) {
     }
 }
 
-$page->put(function () use (
-    $offre,
-    $input_rating,
-    $input_note_cuisine,
-    $input_note_service,
-    $input_note_ambiance,
-    $input_note_qualite_prix,
-    $review_list,
-) {
+$page->put(function () use ($offre, $input_rating, $input_note_cuisine, $input_note_service, $input_note_ambiance, $input_note_qualite_prix, $review_list, ) {
     ?>
     <section class="offer-details">
         <section class="offer-main-photo">
@@ -125,8 +117,8 @@ $page->put(function () use (
                 <?php if (isset($error_message)): ?>
                     <p class="error"><?= h14s($error_message) ?></p>
                     <?php
-    elseif (isset($success_message)):
-        ?>
+                elseif (isset($success_message)):
+                    ?>
                     <p class="success"><?= h14s($success_message) ?></p>
                 <?php endif ?>
             </div>
