@@ -84,7 +84,7 @@ if ($_POST) {
     }
 }
 
-$page->put(function () use ($offre, $input_rating, $input_note_cuisine, $input_note_service, $input_note_ambiance, $input_note_qualite_prix, $review_list, $is_reporting) {
+$page->put(function () use ($offre, $input_rating, $input_note_cuisine, $input_note_service, $input_note_ambiance, $input_note_qualite_prix, $review_list, $is_reporting,$id_membre_co) {
     ?>
     <section class="offer-details">
         <section class="offer-main-photo">
@@ -178,7 +178,7 @@ $page->put(function () use ($offre, $input_rating, $input_note_cuisine, $input_n
         <?php endif; ?>
 
         <!-- Formulaire de signalement -->
-        <?php if ($is_reporting): ?>
+        <?php if (($is_reporting) && ($id_membre_co !== null)): ?>
             <div class="report-form">
                 <h3>Signaler un problème</h3>
                 <form method="post">
