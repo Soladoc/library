@@ -19,10 +19,10 @@ final class Activite extends Offre
     function __construct(
         array $args_offre,
         //
-        readonly Duree $indication_duree,
-        readonly ?int $age_requis,
-        readonly string $prestations_incluses,
-        readonly ?string $prestations_non_incluses,
+        public Duree $indication_duree,
+        public ?int $age_requis,
+        public string $prestations_incluses,
+        public ?string $prestations_non_incluses,
     ) {
         parent::__construct(...$args_offre);
     }

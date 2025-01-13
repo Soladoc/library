@@ -24,12 +24,12 @@ abstract class Compte extends Signalable
 
     function __construct(
         protected ?int $id,
-        readonly string $email,
-        readonly string $mdp_hash,
-        readonly string $nom,
-        readonly string $prenom,
-        readonly string $telephone,
-        readonly Adresse $adresse,
+        public string $email,
+        public string $mdp_hash,
+        public string $nom,
+        public string $prenom,
+        public string $telephone,
+        public Adresse $adresse,
     ) {
         parent::__construct($id);
     }

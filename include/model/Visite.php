@@ -17,7 +17,7 @@ final class Visite extends Offre
 
     function __construct(
         array $args_offre,
-        readonly Duree $indication_duree,
+        public Duree $indication_duree,
     ) {
         parent::__construct(...$args_offre);
     }

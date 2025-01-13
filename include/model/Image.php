@@ -26,9 +26,9 @@ final class Image extends Model
 
     function __construct(
         protected ?int $id,
-        readonly int $taille,
-        readonly string $mime_subtype,
-        readonly ?string $legende,
+        public int $taille,
+        public string $mime_subtype,
+        public ?string $legende,
         private ?string $tmp_name = null,  // Not even a field - used internally
     ) {}
 
