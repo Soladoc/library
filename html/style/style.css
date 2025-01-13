@@ -953,7 +953,7 @@ section#info_compte {
 section#info_compte div {
     display: flex;
     justify-content: space-between;
-    border-bottom: 1px solid #ddd;
+    /* border-bottom: 1px solid #ddd; */
     padding-bottom: 0.5rem;
 }
 
