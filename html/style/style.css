@@ -1169,14 +1169,14 @@ section#info_compte div span {
     transition: .3s;
 }
 
-div > input {
+input {
     border-radius: 10px;
     border-color: #2980b9;
     box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-.pourquoi {
+/* .pourquoi {
     border-radius: 10px;
     border-color: #2980b9;
     box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
-}
+} */
