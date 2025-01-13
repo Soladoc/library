@@ -76,30 +76,42 @@ int main() {
     token=0;
     while (option != 8) {
         printf("Que voulez-vous faire ? \n");
-        printf("Tapez 1 pour voir vos messages\n");
-        printf("Tapez 2 pour envoyer un message\n");
-        printf("Tapez 3 pour supprimer un message\n");
-        printf("Tapez 4 pour modifier un message\n");
-        printf("Tapez 5 pour bloquer un utilisateur\n");
-        printf("Tapez 6 pour débloquer un utilisateur\n");
-        printf("Tapez 7 pour récupérer vos messages dans un fichier JSON\n");
-        printf("Tapez 8 pour quitter\n");
+        printf("Tapez 1 pour voir tous vos messages.\n");
+        printf("Tapez 2 pour voir vos messages reçus.\n");
+        printf("Tapez 3 pour voir vos messages envoyés.\n");
+        printf("Tapez 4 pour voir vos messages reçus non lus.\n");
+        printf("Tapez 5 pour envoyer un message.\n");
+        printf("Tapez 6 pour supprimer un message.\n");
+        printf("Tapez 7 pour modifier un message.\n");
+        printf("Tapez 8 pour récupérer vos messages dans un fichier JSON.\n");
+        printf("Tapez 9 pour rechercher un utilisateur.\n");
+        printf("Tapez 10 pour bloquer un utilisateur.\n");
+        printf("Tapez 11 pour débloquer un utilisateur.\n");
+        printf("Tapez 12 pour bannir un utilisateur.\n");
+        printf("Tapez 13 pour débannir un utilisateur.\n");
+        if (token!=0){
+            printf("Tapez 14 pour vous déconnecter\n");
+            printf("Tapez 15 pour quitter.\n");
+        }
+        else {
+            printf("Tapez 14 pour quitter.\n");
+        }
         scanf("%d", &option);
         getchar();
-        if (option == 1 || option==2 || option == 3 || option == 4 || option == 5 || option == 6 || option == 7) {
+        if (option == 1 || option==2 || option == 3 || option == 4 || option == 5 || option == 6 || option == 7 || option == 8 || option == 10 || option == 11 || option == 12 || option == 13) {
             token=connexion(token,sock);
         }
         write(sock, &option, sizeof(option));
         printf("Sent option: %d\n", option);
         fflush(stdout);
 
-        if (option == 1 || option == 3 || option == 4 || option == 5 || option == 6 || option == 7) {
+        if (option == 1 || option == 3 || option == 4 || option == 2 || option == 6 || option == 7) {
             bytes_read = read(sock, buffer, sizeof(buffer) - 1);
             if (bytes_read > 0) {
                 buffer[bytes_read] = '\0';
                 printf("%s", buffer);
             }
-        } else if (option == 2) {
+        } else if (option == 5) {
             bytes_read = read(sock, buffer, sizeof(buffer) - 1);
             if (bytes_read > 0) {
                 buffer[bytes_read] = '\0';

@@ -120,6 +120,15 @@ int main() {
                     snprintf(reponse, sizeof(reponse), "Affichage de vos messages :\r\n");
                     break;
                 case 2:  // "Reception du nouveau message (et envoi au destinataire)"
+                    snprintf(reponse, sizeof(reponse), "Affichage des messages reçus :\r\n");
+                    break;
+                case 3:  // "Message supprimé"
+                    snprintf(reponse, sizeof(reponse), "Message supprimé\r\n");
+                    break;
+                case 4:  // "Message modifié"
+                    snprintf(reponse, sizeof(reponse), "Message modifié\r\n");
+                    break;
+                case 5:  // "Utilisateur bloqué"
                     snprintf(reponse, sizeof(reponse), "Entrez votre message :\r\n");
                     write(cnx, reponse, strlen(reponse));  // Demande au client son message
                     
@@ -131,15 +140,6 @@ int main() {
                     } else {
                         snprintf(reponse, sizeof(reponse), "Erreur lors de la réception du message\r\n");
                     }
-                    break;
-                case 3:  // "Message supprimé"
-                    snprintf(reponse, sizeof(reponse), "Message supprimé\r\n");
-                    break;
-                case 4:  // "Message modifié"
-                    snprintf(reponse, sizeof(reponse), "Message modifié\r\n");
-                    break;
-                case 5:  // "Utilisateur bloqué"
-                    snprintf(reponse, sizeof(reponse), "Utilisateur bloqué\r\n");
                     break;
                 case 6:  // "Blocage de l'utilisateur annulé
                     snprintf(reponse, sizeof(reponse), "Blocage de l'utilisateur annulé\r\n");
