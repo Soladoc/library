@@ -54,7 +54,7 @@ final class InputImage extends Input
 <fieldset id="<?= $this->id ?>" class="input-image">
     <legend><?= $this->fieldset_legend ?></legend>
     <p>
-        <input <?= $form_attr ?>
+        <input class="pourquoi"<?= $form_attr ?>
             name="<?= $this->name . ($this->multiple ? '[]' : '') ?>"
             type="file"
             accept="image/*"
