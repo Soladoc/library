@@ -36,7 +36,7 @@ $id_membre_co = Auth\id_membre_connecte();
 $review_list = new ReviewList($offre, $id_membre_co);
 
 
-$$is_reporting = false;
+$is_reporting = false;
 if (isset($_POST['report_open']) || isset($_POST['submit_report'])) {
     $is_reporting = true;
 }
