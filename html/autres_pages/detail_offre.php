@@ -40,7 +40,8 @@ $is_reporting = isset($_POST['report_open']) || isset($_POST['submit_report']);
 
 if ($_POST && isset($_POST['submit_report'])) {
     $offer_id = getarg($_POST, 'offer_id', arg_int());
-    $report_message = trim(getarg($_POST, 'report_message'));
+    $report_message = getarg($_POST, 'report_message');
+    $report_message = trim($report_message);
 
     // Validation du formulaire
     if (!$report_message) {
