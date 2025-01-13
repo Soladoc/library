@@ -63,3 +63,8 @@ function location_modifier_compte(int $id, ?string $error = null): string
     return '/autres_pages/modif_compte.php?id='.$id.'&return_url=' . urlencode($_SERVER['REQUEST_URI'])
         . ($error === null ? null : '&error=' . urlencode($error));
 }
+
+function location_suppression_compte(): string
+{
+    return "/autres_pages/accueil.php";
+}
