@@ -62,7 +62,7 @@ if ($_POST) {
         if (!preg_match('#^[0-9]{10}$#', $new_telephone)) {
             $error_tel = 'Numéro incorrect, doit être composé de 10 chiffres';
         } else {
-            $compte->new_telephone = $new_telephone;
+            $compte->telephone = $new_telephone;
         }
     }
 
