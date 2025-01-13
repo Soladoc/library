@@ -16,7 +16,7 @@ final class Membre extends Compte
 
     function __construct(
         array $args_offre,
-        readonly string $pseudo,
+        public string $pseudo,
     ) {
         parent::__construct(...$args_offre);
     }

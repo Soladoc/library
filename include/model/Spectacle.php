@@ -16,8 +16,8 @@ final class Spectacle extends Offre
 
     function __construct(
         array $args_offre,
-        readonly Duree $indication_duree,
-        readonly int $capacite_accueil,
+        public Duree $indication_duree,
+        public int $capacite_accueil,
     ) {
         parent::__construct(...$args_offre);
     }

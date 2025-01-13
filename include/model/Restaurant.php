@@ -23,13 +23,13 @@ final class Restaurant extends Offre
 
     function __construct(
         array $args_offre,
-        readonly string $carte,
-        readonly int $richesse,
-        readonly bool $sert_petit_dejeuner,
-        readonly bool $sert_brunch,
-        readonly bool $sert_dejeuner,
-        readonly bool $sert_diner,
-        readonly bool $sert_boissons,
+        public string $carte,
+        public int $richesse,
+        public bool $sert_petit_dejeuner,
+        public bool $sert_brunch,
+        public bool $sert_dejeuner,
+        public bool $sert_diner,
+        public bool $sert_boissons,
     ) {
         parent::__construct(...$args_offre);
     }
