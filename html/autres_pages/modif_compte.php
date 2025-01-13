@@ -202,8 +202,7 @@ $page->put(function () use (
             </div>
             <button type="submit">Valider</button>
             <a href="<?= location_detail_compte() ?>">Retour</a>
-            <?php Compte::from_db($compte->id)->delete() ?>
-            <a href="/connexion/logout.php">Supprimer le compte</a>
+            <a href="<?= location_supprimer_compte($compte->id) ?>">Supprimer le compte</a>
         </form>
     </section>
     <?php
