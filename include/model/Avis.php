@@ -35,7 +35,7 @@ class Avis extends Model
             'note'             => [null, 'note', PDO::PARAM_INT],
             'date_experience'  => [null, 'date_experience', PDO::PARAM_STR],
             'contexte'         => [null, 'contexte', PDO::PARAM_STR],
-            'id_membre_auteur' => [fn($x) => $x->id, 'membre_auteur', PDO::PARAM_INT],
+            'id_membre_auteur' => [fn($x) => $x?->id, 'membre_auteur', PDO::PARAM_INT],
             'id_offre'         => [fn($x) => $x->id, 'offre', PDO::PARAM_INT],
         ];
     }
@@ -46,7 +46,7 @@ class Avis extends Model
         readonly int $note,
         readonly Date $date_experience,
         readonly string $contexte,
-        readonly Membre $membre_auteur,
+        readonly ?Membre $membre_auteur,
         readonly Offre $offre,
         //
         protected ?bool $blackliste           = null,
@@ -104,7 +104,7 @@ class Avis extends Model
             $row['note'],
             Date::parse($row['date_experience']),
             $row['contexte'],
-            Membre::from_db($row['id_membre_auteur']),
+            mapnull($row['id_membre_auteur'], Membre::from_db(...)),
             Offre::from_db($row['id_offre']),
             $row['lu'],
             $row['blackliste'],
