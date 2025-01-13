@@ -9,7 +9,7 @@
 #include <unistd.h>
 
 int main() {
-    int sock, cnx, option, ret, size, opt, token;
+    int sock, cnx, option, ret, size, opt, token, num_message;
     struct sockaddr_in addr;
     struct sockaddr_in conn_addr;
     char reponse[1019];
@@ -142,7 +142,23 @@ int main() {
                     }
                     break;
                 case 6:  // "Supprimage du message"
-                    snprintf(reponse, sizeof(reponse), "Message supprimé\r\n");
+                    snprintf(reponse, sizeof(reponse), "Entrez le numéro du message :\r\n");
+                    write(cnx, reponse, strlen(reponse));  // Demande au client quel message il veut modifier
+                    bytes_read = read(cnx, &num_message, sizeof(num_message));
+                    if (bytes_read > 0) {
+                        message[bytes_read] = '\0';
+                        printf("Numéro reçu : %s\n", message);
+                    }
+                    snprintf(reponse, sizeof(reponse), "Entrez la nouvelle version du message :\r\n");
+                    write(cnx, reponse, strlen(reponse));  // Demande au client quelles modifications il veut apporter au message
+                    bytes_read = read(cnx, message, sizeof(message) - 1);
+                    if (bytes_read > 0) {
+                        message[bytes_read] = '\0';
+                        printf("Message reçu : %s\n", message);
+                        snprintf(reponse, sizeof(reponse), "Message envoyé: %s\r\n", message);
+                    } else {
+                        snprintf(reponse, sizeof(reponse), "Erreur lors de la réception du message\r\n");
+                    }
                     break;
                 case 7:  // "Modification du message"
                     snprintf(reponse, sizeof(reponse), "Message modifié\r\n");
