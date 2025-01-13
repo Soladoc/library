@@ -104,6 +104,7 @@ int main() {
                     // Send the connection token (e.g., 101) to the client
                     token = 101;
                     write(cnx, &token, sizeof(token));
+                    fflush(stdout);
                     printf("Token envoyé au client : %d\n", token);
 
                     // Now wait for the confirmation from the client
