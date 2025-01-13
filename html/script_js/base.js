@@ -3,6 +3,7 @@
 for (const e of document.getElementsByClassName('input-duration')) setup_input_duration(e);
 for (const e of document.getElementsByClassName('input-address')) setup_input_address(e);
 for (const e of document.getElementsByClassName('input-image')) setup_input_image(e);
+for (const e of document.getElementsByClassName('button-signaler')) setup_button_signaler(e);
 
 /**
  * @param {HTMLElement} element
@@ -128,4 +129,28 @@ function preview_image(e_input_image, e_preview) {
 
         reader.readAsDataURL(file);
     }
+}
+
+/**
+ * @param {HTMLButtonElement} element
+ */
+function setup_button_signaler(element) {
+    const raison = prompt('Raison de votre signalement');
+    if (raison) {
+        window.location.replace(location_signaler(element.dataset.idcco, element.dataset.avisId, raison));
+    }
+}
+
+/**
+ * @param {any} id_compte
+ * @param {any} id_signalable
+ * @param {any} raison
+ */
+function location_signaler(id_compte, id_signalable, raison) {
+    return '/auto/signaler.php?' + new URLSearchParams({
+        id_compte: id_compte,
+        id_signalable: id_signalable,
+        raison: raison,
+        return_url: window.location.search
+    });
 }
