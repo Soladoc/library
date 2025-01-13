@@ -69,9 +69,8 @@ create table _signalable (
 );
 
 create table _compte (
-    id serial
-        constraint compte_pk primary key,
-    id_signalable int not null unique
+    id int
+        constraint compte_pk primary key
         constraint compte_inherits_signalable references _signalable on delete cascade,
     email adresse_email not null unique,
     mdp_hash varchar(255) not null,

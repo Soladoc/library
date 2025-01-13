@@ -1160,6 +1160,10 @@ section#info_compte div span {
     background-color: var(--color-secondary);
 }
 
+.signalement-flag {
+    height: 1.2em;
+}
+
 .signalement-flag:is(:hover, :focus, :focus-within) {
     scale: 1.2;
     transition: .3s;

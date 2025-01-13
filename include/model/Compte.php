@@ -6,43 +6,37 @@ require_once 'model/Adresse.php';
 
 /**
  * Un compte
- * @property-read ?int $id L'ID. `null` si cette offre n'existe pas dans la BDD.
+ * @inheritDoc
  */
-abstract class Compte extends Model implements Signalable
+abstract class Compte extends Signalable
 {
-    protected static function key_fields()
-    {
-        return [
-            'id' => [null, 'id', PDO::PARAM_INT],
-        ];
-    }
-
     protected static function fields()
     {
         return [
-            'email'      => [null, 'email',     PDO::PARAM_STR],
-            'mdp_hash'   => [null, 'mdp_hash',  PDO::PARAM_STR],
-            'nom'        => [null, 'nom',       PDO::PARAM_STR],
-            'prenom'     => [null, 'prenom',    PDO::PARAM_STR],
-            'telephone'  => [null, 'telephone', PDO::PARAM_STR],
+            'email' => [null, 'email', PDO::PARAM_STR],
+            'mdp_hash' => [null, 'mdp_hash', PDO::PARAM_STR],
+            'nom' => [null, 'nom', PDO::PARAM_STR],
+            'prenom' => [null, 'prenom', PDO::PARAM_STR],
+            'telephone' => [null, 'telephone', PDO::PARAM_STR],
             'id_adresse' => [fn($x) => $x->id, 'adresse', PDO::PARAM_STR],
         ];
     }
 
     function __construct(
         protected ?int $id,
-        protected readonly int $id_signalable,
         readonly string $email,
         readonly string $mdp_hash,
         readonly string $nom,
         readonly string $prenom,
         readonly string $telephone,
         readonly Adresse $adresse,
-    ) { }
+    ) {
+        parent::__construct($id);
+    }
 
     static function from_db(int $id_compte): self|false
     {
-        $stmt = notfalse(DB\connect()->prepare(static::make_select() . ' where '.static::TABLE.'.id = ?'));
+        $stmt = notfalse(DB\connect()->prepare(static::make_select() . ' where ' . static::TABLE . '.id = ?'));
         DB\bind_values($stmt, [1 => [$id_compte, PDO::PARAM_INT]]);
         notfalse($stmt->execute());
         $row = $stmt->fetch();
@@ -51,7 +45,7 @@ abstract class Compte extends Model implements Signalable
 
     static function from_db_by_email(string $email): self|false
     {
-        $stmt = notfalse(DB\connect()->prepare(static::make_select() . ' where '.static::TABLE.'.email = ?'));
+        $stmt = notfalse(DB\connect()->prepare(static::make_select() . ' where ' . static::TABLE . '.email = ?'));
         notfalse($stmt->execute([$email]));
         $row = $stmt->fetch();
         return $row === false ? false : static::from_db_row($row);
@@ -60,14 +54,13 @@ abstract class Compte extends Model implements Signalable
     protected static function make_select(): string
     {
         return 'select
-        '.static::TABLE.'.id,
-        '.static::TABLE.'.id_signalable,
-        '.static::TABLE.'.email,
-        '.static::TABLE.'.mdp_hash,
-        '.static::TABLE.'.nom,
-        '.static::TABLE.'.prenom,
-        '.static::TABLE.'.telephone,
-        '.static::TABLE.'.id_adresse,
+        ' . static::TABLE . '.id,
+        ' . static::TABLE . '.email,
+        ' . static::TABLE . '.mdp_hash,
+        ' . static::TABLE . '.nom,
+        ' . static::TABLE . '.prenom,
+        ' . static::TABLE . '.telephone,
+        ' . static::TABLE . '.id_adresse,
 
         professionnel.denomination professionnel_denomination,
         professionnel.secteur professionnel_secteur,
@@ -92,7 +85,7 @@ abstract class Compte extends Model implements Signalable
             left join professionnel using (id)
             left join _prive using (id)
             left join _membre using (id)
-            join _adresse a on a.id = '.static::TABLE.'.id_adresse
+            join _adresse a on a.id = ' . static::TABLE . '.id_adresse
             join _commune o on o.code = a.code_commune and o.numero_departement = a.numero_departement';
     }
 
@@ -101,7 +94,6 @@ abstract class Compte extends Model implements Signalable
         self::require_subclasses();
         $args_compte = [
             $row['id'],
-            $row['id_signalable'],
             $row['email'],
             $row['mdp_hash'],
             $row['nom'],
