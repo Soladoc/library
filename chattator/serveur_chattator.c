@@ -9,7 +9,7 @@
 #include <unistd.h>
 
 int main() {
-    int sock, cnx, option, ret, size, opt, token, num_message;
+    int sock, cnx, option, ret, size, opt, token, num_message, confirmation;
     struct sockaddr_in addr;
     struct sockaddr_in conn_addr;
     char reponse[1019];
@@ -84,36 +84,39 @@ int main() {
                     bytes_read = read(cnx, utilisateur, sizeof(utilisateur) - 1);
                     if (bytes_read > 0) {
                         utilisateur[bytes_read] = '\0';
-                        printf("Nom d'utilisateur reçu: %s\n", utilisateur);
-                        snprintf(reponse, sizeof(reponse), "Nom d'utilisateur reçu\r\n");
-                        write(cnx, reponse, strlen(reponse));
-                        bytes_read = read(cnx, mdp, sizeof(mdp)-1);
-                        if (bytes_read > 0) {
-                            mdp[bytes_read] = '\0';
-                            printf("Mot de passe reçu: %s\n", mdp);
-                        } else {
-                            printf("Erreur en tentant de lire le mot de passe, bytes lus : %zd\n", bytes_read);
-                        }
-                        snprintf(reponse, sizeof(reponse), "Mot de passe reçu\r\n");
-                        write(cnx, reponse, strlen(reponse));
                     } else {
                         printf("Erreur en tentant de lire le nom d'utilisateur, bytes lus : %zd\n", bytes_read);
                     }
+                    printf("Nom d'utilisateur reçu: %s\n", utilisateur);
+                    snprintf(reponse, sizeof(reponse), "Nom d'utilisateur reçu\r\n");
+                    write(cnx, reponse, strlen(reponse));
 
-                    //check utilisateur/mdp a rajouter
-
-                    token=101; // à changer pour générer un token aléatoire
-                    write(cnx, &token, sizeof(token));
-                    bytes_read = read(cnx, &token, sizeof(token));
+                    bytes_read = read(cnx, mdp, sizeof(mdp) - 1);
                     if (bytes_read > 0) {
-                        if (token==1){
-                            printf("Connexion au compte établie.\r\n");
-                            snprintf(reponse, sizeof(reponse), "Connexion à votre compte établie\r\n");
+                        mdp[bytes_read] = '\0';
+                        printf("Mot de passe reçu: %s\n", mdp);
+                    } else {
+                        printf("Erreur en tentant de lire le mot de passe, bytes lus : %zd\n", bytes_read);
+                    }
+                    snprintf(reponse, sizeof(reponse), "Mot de passe reçu\r\n");
+                    write(cnx, reponse, strlen(reponse));
+
+                    // Send the connection token (e.g., 101) to the client
+                    token = 101;
+                    write(cnx, &token, sizeof(token));
+                    printf("Token envoyé au client : %d\n", token);
+
+                    // Now wait for the confirmation from the client
+                    bytes_read = read(cnx, &confirmation, sizeof(confirmation));
+                    if (bytes_read > 0) {
+                        printf("Confirmation reçue du client: %d\n", confirmation);
+                        if (confirmation == 1) {
+                            printf("Client a confirmé la réception du token.\n");
                         } else {
-                            snprintf(reponse, sizeof(reponse), "Erreur lors de la connexion\r\n");
+                            printf("Erreur: Confirmation non reçue ou incorrecte.\n");
                         }
                     } else {
-                        snprintf(reponse, sizeof(reponse), "Erreur lors de la connexion\r\n");
+                        printf("Erreur en tentant de lire la confirmation du client\n");
                     }
                     break;
                 case 1:  // "Affichage des messages"

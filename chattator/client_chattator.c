@@ -7,48 +7,58 @@
 #include <sys/types.h>
 #include <unistd.h>
 
-int connexion(int token, int sock){
+int connexion(int token, int sock) {
     char util[256];
     char mdp[256];
     char buffer[10000];
     ssize_t bytes_read;
     int confirmation;
-    if (token==0){
 
+    if (token == 0) {
         write(sock, &token, sizeof(token));
         printf("Veuillez vous connecter pour continuer : quel est votre nom d'utilisateur ?");
         fgets(util, sizeof(util), stdin);
         write(sock, util, strlen(util));
         fflush(stdout);
+
         bytes_read = read(sock, buffer, sizeof(buffer) - 1);
         if (bytes_read > 0) {
             buffer[bytes_read] = '\0';
             printf("%s", buffer);
         }
+
         printf("Quel est votre mot de passe ?");
         fgets(mdp, sizeof(mdp), stdin);
         write(sock, mdp, strlen(mdp));
         fflush(stdout);
+
         bytes_read = read(sock, buffer, sizeof(buffer) - 1);
         if (bytes_read > 0) {
             buffer[bytes_read] = '\0';
             printf("%s", buffer);
         }
-        bytes_read = read(sock, &token, sizeof(token));
+
+        // Now receive the token from the server
+        printf("Attente du token du serveur...\n");  // Debug line
+        bytes_read = read(sock, &token, sizeof(token));  // Read token
         if (bytes_read > 0) {
-            printf("token de connexion : %d\n", token);
+            printf("Token reçu du serveur: %d\n", token);
+        } else {
+            printf("Erreur en tentant de recevoir le token. Bytes read: %zd\n", bytes_read);
+            return token; // Exit if token is not received
         }
-        confirmation=1;
+
+        // Set confirmation to 1
+        confirmation = 1;
+        printf("Envoi de la confirmation: %d\n", confirmation);
+        
+        // Send the confirmation value (1) back to the server
         write(sock, &confirmation, sizeof(confirmation));
-        fflush(stdout);
-        bytes_read = read(sock, buffer, sizeof(buffer) - 1);
-        if (bytes_read > 0) {
-            buffer[bytes_read] = '\0';
-            printf("%s", buffer);
-        }
+        printf("Confirmation (1) envoyée au serveur\n");
     }
     return token;
 }
+
 
 int main() {
     int sock,ret,option,token,num_message;
