@@ -182,7 +182,7 @@ $page->put(function () use ($offre, $input_rating, $input_note_cuisine, $input_n
             <div class="report-form">
                 <h3>Signaler un problème</h3>
                 <form method="post">
-                    <textarea name="report_message" placeholder="Décrivez le problème..." required><?= h14s(getarg($_POST, 'report_message', '')) ?></textarea>
+                    <textarea name="report_message" placeholder="Décrivez le problème..." required><?= h14s(getarg($_POST, 'report_message')) ?></textarea>
                     <input type="hidden" name="offer_id" value="<?= $offre->id ?>">
                     <button type="submit" name="submit_report" class="btn-submit">Envoyer</button>
                     <button type="submit" name="cancel_report" class="btn-cancel">Annuler</button>
