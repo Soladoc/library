@@ -7,7 +7,7 @@ require_once 'component/Page.php';
 require_once 'component/InputAdresse.php';
 require_once 'model/Compte.php';
 
-$page = new Page('Modification compte (todo)');
+$page = new Page('Modification compte', body_id: 'detail_compte');
 $error_mdp = null;
 $error_tel = null;
 $error_email = null;
