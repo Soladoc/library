@@ -178,7 +178,6 @@ $page->put(function () use ($offre, $input_rating, $input_note_cuisine, $input_n
             </form>
         <?php endif; ?>
 
-        <!-- Formulaire de signalement -->
         <?php if (($is_reporting) && ($id_membre_co !== null)): ?>
             <div class="report-form">
                 <h3>Signaler un problème</h3>
