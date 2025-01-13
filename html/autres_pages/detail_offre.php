@@ -36,20 +36,25 @@ $id_membre_co = Auth\id_membre_connecte();
 $review_list = new ReviewList($offre, $id_membre_co);
 
 
-$is_reporting = isset($_POST['report_open']) || isset($_POST['submit_report']);
+$is_reporting = false;
+if (isset($_POST['report_open']) || isset($_POST['submit_report'])) {
+    $is_reporting = true;
+}
 
 if ($_POST && isset($_POST['submit_report'])) {
-    $offer_id = getarg($_POST, 'offer_id', arg_int());
-    $report_message = trim(getarg($_POST, 'report_message'));
+    $offer_id = getarg($_POST, 'offer_id');
+    $report_message = getarg($_POST, 'report_message');
+
+    $report_message = trim($report_message);
 
     // Validation du formulaire
     if (!$report_message) {
         $error_message = "Le message de signalement ne peut pas être vide.";
     } else {
         // Insérer le signalement dans la base de données
-        $query = $db->prepare('INSERT INTO reports (offer_id, message, date) VALUES (?, ?, NOW())');
-        $query->execute([$offer_id, $report_message]);
-        $success_message = "Votre signalement a été envoyé avec succès.";
+        //$query = $db->prepare('INSERT INTO reports (offer_id, message, date) VALUES (?, ?, NOW())');
+        //$query->execute([$offer_id, $report_message]);
+        //$success_message = "Votre signalement a été envoyé avec succès.";
     }
 }
 
@@ -168,31 +173,30 @@ $page->put(function () use ($offre, $input_rating, $input_note_cuisine, $input_n
 
         <?php $review_list->put() ?>
         
-        <!-- Bouton de signalement -->
-    <?php if (!$is_reporting): ?>
-        <form method="post">
-            <input type="hidden" name="report_open" value="1">
-            <button type="submit" class="btn-report">Signaler un problème</button>
-        </form>
-    <?php endif; ?>
-
-    <!-- Formulaire de signalement -->
-    <?php if ($is_reporting): ?>
-        <div class="report-form">
-            <h3>Signaler un problème</h3>
+        <?php if (!$is_reporting): ?>
             <form method="post">
-                <textarea name="report_message" placeholder="Décrivez le problème..." required><?= h14s(getarg($_POST, 'report_message', '')) ?></textarea>
-                <input type="hidden" name="offer_id" value="<?= $offre->id ?>">
-                <button type="submit" name="submit_report" class="btn-submit">Envoyer</button>
-                <button type="submit" name="cancel_report" class="btn-cancel">Annuler</button>
+                <input type="hidden" name="report_open" value="1">
+                <button type="submit" class="btn-report">Signaler un problème</button>
             </form>
-            <?php if (isset($error_message)): ?>
-                <p class="error"><?= h14s($error_message) ?></p>
-            <?php elseif (isset($success_message)): ?>
-                <p class="success"><?= h14s($success_message) ?></p>
-            <?php endif; ?>
-        </div>
-    <?php endif; ?>
+        <?php endif; ?>
+
+        <!-- Formulaire de signalement -->
+        <?php if ($is_reporting): ?>
+            <div class="report-form">
+                <h3>Signaler un problème</h3>
+                <form method="post">
+                    <textarea name="report_message" placeholder="Décrivez le problème..." required><?= h14s(getarg($_POST, 'report_message', '')) ?></textarea>
+                    <input type="hidden" name="offer_id" value="<?= $offre->id ?>">
+                    <button type="submit" name="submit_report" class="btn-submit">Envoyer</button>
+                    <button type="submit" name="cancel_report" class="btn-cancel">Annuler</button>
+                </form>
+                <?php if (isset($error_message)): ?>
+                    <p class="error"><?= h14s($error_message) ?></p>
+                <?php elseif (isset($success_message)): ?>
+                    <p class="success"><?= h14s($success_message) ?></p>
+                <?php endif; ?>
+            </div>
+        <?php endif; ?>
 
     </section>
     <?php
