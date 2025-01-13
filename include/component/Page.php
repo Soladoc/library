@@ -4,6 +4,7 @@
 error_reporting(E_ALL & ~E_NOTICE);  // Notamment confiurer PHP pour afficher + d'erreurs
 
 require_once 'auth.php';
+require_once 'redirect.php';
 
 final class Page
 {
@@ -102,17 +103,13 @@ final class Page
 ?>
 <header>
     <div class="logo">
-        <?php if (Auth\est_connecte_pro()) { ?>
-            <a href="accPro.php"><img src="/images/logo.png" alt="Logo pact"></a>
-        <?php } else { ?>
-            <a href="accueil.php"><img src="/images/logo.png" alt="Logo pact"></a>
-        <?php } ?>
+        <a href="<?= Auth\location_home() ?>"><img src="/images/logo.png" alt="Logo pact"></a>
     </div>
     <?php
     if (Auth\est_connecte()) {
         // Vérification du statut de la session
         ?>
-        <a href="/connexion/logout.php">
+        <a href="<?= location_logout() ?>">
             <div class="auth-button">
                 <img src="/images/logout-icon.png" alt="Profil">
                 <span>Déconnexion</span>

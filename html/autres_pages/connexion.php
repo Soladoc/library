@@ -1,5 +1,6 @@
 <?php
 require_once 'component/Page.php';
+require_once 'redirect.php';
 require_once 'util.php';
 
 $page = new Page('Connexion');
@@ -13,7 +14,7 @@ $page->put(function () {
         <div class="champ-connexion">
             <br>
             <!-- Formulaire de connexion -->
-            <form action="/connexion/login.php" method="post">
+            <form action="<?= location_login() ?>" method="post">
                 <div class="champ">
                     <label for="login">Adresse e-mail *</label>
                     <input id="login" name="login" type="text" placeholder="exemple@mail.fr" required>
