@@ -135,10 +135,12 @@ function preview_image(e_input_image, e_preview) {
  * @param {HTMLButtonElement} element
  */
 function setup_button_signaler(element) {
-    const raison = prompt('Raison de votre signalement');
-    if (raison) {
-        window.location.replace(location_signaler(element.dataset.idcco, element.dataset.avisId, raison));
-    }
+    element.addEventListener('click', () => {
+        const raison = prompt('Raison de votre signalement');
+        if (raison) {
+            window.location.replace(location_signaler(element.dataset.idcco, element.dataset.avisId, raison));
+        }
+    });
 }
 
 /**
