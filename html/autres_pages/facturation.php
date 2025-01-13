@@ -37,14 +37,14 @@ $page->put(function () {
         $resultat_offre  = $offre->en_ligne_ce_mois_pendant->days * $offre->abonnement->prix_journalier;
         $resultat_offre += $resultat_offre * 0.2;
         $resultat_global += $resultat_offre;
-        if ( strcasecmp($offre->categorie,'Gratuit') == 0 ) { ?>
+        if ( strcasecmp($offre->abonnement->libelle,'Gratuit') == 0 ) { ?>
             <td>N/A</td>
         <?php 
         } else{
         ?>
             <td><?= "$resultat_offre €" ?></td>
             <?php 
-            print_r($offre->categorie);
+            print_r($offre->abonnement->libelle);
         }
         ?>
         </tr>
