@@ -179,8 +179,6 @@ $page->put(function () use (
                 <?= $compte->adresse->format() ?>
             </div>
             <?php $input_adresse->put($compte->adresse) ?>
-
-            </div>
             <br>
             <div id='changer_mdp'>
                 <label>Modifier son mot de passe</label>
