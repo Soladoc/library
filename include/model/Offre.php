@@ -19,7 +19,7 @@ require_once 'model/SouscriptionOption.php';
 
 /**
  * Une offre touristique.
- * @property-read ?int $id L'ID. `null` si cette offre n'existe pas dans la BDD.
+ * @inheritDoc
  *
  * @property-read ?bool $en_ligne Calculé. `null` si cette offre n'existe pas dans la BDD.
  * @property-read ?float $note_moyenne Calculé. `null` si cette offre n'existe pas dans la BDD.
@@ -32,15 +32,8 @@ require_once 'model/SouscriptionOption.php';
  * @property-read ?string $categorie Calculé. `null` si cette offre n'existe pas dans la BDD.
  * @property-read ?SouscriptionOption $option La souscription à l'option de cette offre ou `null` si cette offre n'est pas actuellement souscrite à une opption.
  */
-abstract class Offre extends Model implements Signalable
+abstract class Offre extends Signalable
 {
-    protected static function key_fields()
-    {
-        return [
-            'id' => [null, 'id', PDO::PARAM_INT],
-        ];
-    }
-
     protected static function computed_fields()
     {
         return [
@@ -123,6 +116,7 @@ abstract class Offre extends Model implements Signalable
         protected ?string $categorie                                = null,
         protected ?SouscriptionOption $option                       = null,
     ) {
+        parent::__construct($id);
         $this->tags                   = new Tags($this);
         $this->tarifs                 = new Tarifs($this);
         $this->ouverture_hebdomadaire = new OuvertureHebdomadaire($this);

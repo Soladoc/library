@@ -19,7 +19,7 @@ function redirect_to(string $location): never
  */
 function location_connexion(?string $error = null, ?string $return_url = null): string
 {
-    
+
     return '/autres_pages/connexion.php?' . http_build_query(['error' => $error, 'return_url' => $return_url]);
 }
 
@@ -30,7 +30,7 @@ function location_connexion(?string $error = null, ?string $return_url = null): 
  */
 function location_detail_offre(int $id_offre): string
 {
-    return "/autres_pages/detail_offre.php?id=$id_offre";
+    return '/autres_pages/detail_offre.php?' . http_build_query(['id' => $id_offre]);
 }
 
 /**
@@ -40,36 +40,51 @@ function location_detail_offre(int $id_offre): string
  */
 function location_detail_offre_pro(int $id_offre): string
 {
-    return "/autres_pages/detail_offre_pro.php?id=$id_offre";
+    return '/autres_pages/detail_offre_pro.php?' . http_build_query(['id' => $id_offre]);
 }
 
 function location_creation_offre(): string
 {
-    return "/autres_pages/choix_categorie_creation_offre.php";
+    return '/autres_pages/choix_categorie_creation_offre.php';
 }
 
 function location_facturation(): string
 {
-    return "/autres_pages/facturation.php";
+    return '/autres_pages/facturation.php';
 }
 
 function location_detail_compte(): string
 {
-    return "/autres_pages/detail_compte.php";
+    return '/autres_pages/detail_compte.php';
 }
 
 function location_modifier_offre(int $id_offre): string
 {
-    return "/autres_pages/modif_offre.php?id_offre=$id_offre";
+    return '/autres_pages/modif_offre.php?' . http_build_query(['id_offre' => $id_offre]);
 }
 
 function location_modifier_compte(int $id, ?string $error = null): string
 {
-    return '/autres_pages/modif_compte.php?id='.$id.'&return_url=' . urlencode($_SERVER['REQUEST_URI'])
-        . ($error === null ? null : '&error=' . urlencode($error));
+
+    return '/autres_pages/modif_compte.php?' . http_build_query(['id' => $id, 'return_url' => $_SERVER['REQUEST_URI'], 'error' => $error]);
 }
 
 function location_supprimer_compte(int $id_compte): string
 {
-    return "/autres_pages/supprimer_compte.php?id_compte=$id_compte";
+    return '/auto/supprimer_compte.php?' . http_build_query(['id_compte' => $id_compte]);
+}
+
+function location_signaler(int $id_compte, int $id_signalable, string $raison): string
+{
+    return '/auto/signaler.php?' . http_build_query(['id_compte' => $id_compte, 'id_signalable' => $id_signalable, 'raison' => $raison, 'return_url' => $_SERVER['REQUEST_URI']]);
+}
+
+function location_login(): string
+{
+    return '/auto/login.php';
+}
+
+function location_logout(): string
+{
+    return '/auto/logout.php';
 }

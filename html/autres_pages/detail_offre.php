@@ -16,24 +16,44 @@ $offre = notfalse(Offre::from_db(getarg($_GET, 'id', arg_int())));
 
 $page = new Page($offre->titre, scripts: [
     'module/detail_offre.js' => 'type="module"',
-    'carousel.js'            => 'defer',
+    'carousel.js' => 'defer',
 ]);
 
 $input_rating = new InputNote(name: 'rating');
 if ($offre instanceof Restaurant) {
-    $input_note_cuisine      = new InputNote(name: 'note_cuisine');
-    $input_note_service      = new InputNote(name: 'note_service');
-    $input_note_ambiance     = new InputNote(name: 'note_ambiance');
+    $input_note_cuisine = new InputNote(name: 'note_cuisine');
+    $input_note_service = new InputNote(name: 'note_service');
+    $input_note_ambiance = new InputNote(name: 'note_ambiance');
     $input_note_qualite_prix = new InputNote(name: 'note_qualite_prix');
 } else {
-    $input_note_cuisine      = null;
-    $input_note_service      = null;
-    $input_note_ambiance     = null;
+    $input_note_cuisine = null;
+    $input_note_service = null;
+    $input_note_ambiance = null;
     $input_note_qualite_prix = null;
 }
 
 $id_membre_co = Auth\id_membre_connecte();
-$review_list  = new ReviewList($offre, $id_membre_co);
+$review_list = new ReviewList($offre, $id_membre_co);
+
+
+$is_reporting = false;
+if (isset($_POST['report_open']) || isset($_POST['submit_report'])) {
+    $is_reporting = true;
+}
+
+if ($_POST && isset($_POST['submit_report'])) {
+    $offer_id = getarg($_POST, 'offer_id');
+    $report_message = getarg($_POST, 'report_message');
+
+    $report_message = trim($report_message);
+
+    // Validation du formulaire
+    if (!$report_message) {
+        $error_message = "Le message de signalement ne peut pas être vide.";
+    } else {
+        location_signaler($id_membre_co,$offre->id,$report_message);
+    }
+}
 
 if ($_POST) {
     if (null === $id_membre_co) {
@@ -50,7 +70,7 @@ if ($_POST) {
             Membre::from_db($id_membre_co),
             $offre,
         ];
-        $avis      = $offre instanceof Restaurant
+        $avis = $offre instanceof Restaurant
             ? new AvisRestaurant(
                 $args_avis,
                 $input_note_cuisine->get($_POST),
@@ -64,15 +84,7 @@ if ($_POST) {
     }
 }
 
-$page->put(function () use (
-    $offre,
-    $input_rating,
-    $input_note_cuisine,
-    $input_note_service,
-    $input_note_ambiance,
-    $input_note_qualite_prix,
-    $review_list,
-) {
+$page->put(function () use ($offre, $input_rating, $input_note_cuisine, $input_note_service, $input_note_ambiance, $input_note_qualite_prix, $review_list, $is_reporting,$id_membre_co) {
     ?>
     <section class="offer-details">
         <section class="offer-main-photo">
@@ -125,8 +137,8 @@ $page->put(function () use (
                 <?php if (isset($error_message)): ?>
                     <p class="error"><?= h14s($error_message) ?></p>
                     <?php
-    elseif (isset($success_message)):
-        ?>
+                elseif (isset($success_message)):
+                    ?>
                     <p class="success"><?= h14s($success_message) ?></p>
                 <?php endif ?>
             </div>
@@ -157,6 +169,31 @@ $page->put(function () use (
         </div>
 
         <?php $review_list->put() ?>
+        
+        <?php if (!$is_reporting): ?>
+            <form method="post">
+                <input type="hidden" name="report_open" value="1">
+                <button type="submit" class="btn-report">Signaler un problème</button>
+            </form>
+        <?php endif; ?>
+
+        <!-- Formulaire de signalement -->
+        <?php if (($is_reporting) && ($id_membre_co !== null)): ?>
+            <div class="report-form">
+                <h3>Signaler un problème</h3>
+                <form method="post">
+                    <textarea name="report_message" placeholder="Décrivez le problème..." required></textarea>
+                    <input type="hidden" name="offer_id" value="<?= $offre->id ?>">
+                    <button type="submit" name="submit_report" class="btn-submit">Envoyer</button>
+                    <button type="submit" name="cancel_report" class="btn-cancel">Annuler</button>
+                </form>
+                <?php if (isset($error_message)): ?>
+                    <p class="error"><?= h14s($error_message) ?></p>
+                <?php elseif (isset($success_message)): ?>
+                    <p class="success"><?= h14s($success_message) ?></p>
+                <?php endif; ?>
+            </div>
+        <?php endif; ?>
 
     </section>
     <?php

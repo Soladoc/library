@@ -15,8 +15,8 @@ $page->put(function () {
     ?>
 
     <h1>Accueil Professionnel</h1>
-    <a class="btn-more-info" class="bouton_principale_pro" href="<?= location_creation_offre() ?>"  id='bouton_creer_offre' >Créer une offre</a>
-    <a class="btn-more-info" class="bouton_principale_pro" href="<?= location_facturation() ?>" >Facturation</a>
+    <a class="btn-more-info bouton_principale_pro" href="<?= location_creation_offre() ?>"  id='bouton_creer_offre' >Créer une offre</a>
+    <a class="btn-more-info bouton_principale_pro" href="<?= location_facturation() ?>" >Facturation</a>
 
     <h3 class="nb-offres"><?= $nb_offres ?> offres</h3>
     <section class="online-offers">
@@ -48,10 +48,7 @@ $page->put(function () {
     </section>
 
     <!-- Bouton pour créer une nouvelle offre -->
-    <a href="choix_categorie_creation_offre.php">
-        <div class="create-offer">
-            <button class="btn-create">Créer une offre</button>
-        </div>
-    </a>
+    <a class="btn-more-info bouton_principale_pro" href="<?= location_creation_offre() ?>"  id='bouton_creer_offre' >Créer une offre</a>
+
     <?php
 });
