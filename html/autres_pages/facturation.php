@@ -43,7 +43,8 @@ $page->put(function () {
         } else{
         ?>
             <td><?= "$resultat_offre €" ?></td>
-        <?php 
+            <?php 
+            print_r($offre->categorie);
         }
         ?>
         </tr>
