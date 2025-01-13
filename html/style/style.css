@@ -1186,3 +1186,24 @@ label > input {
     border-color: #2980b9;
     box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
 }
+
+
+.btn-report {
+    padding: 0.8rem 1.5rem;
+    background-color: #e74c3c; /* Rouge pour le bouton */
+    color: white;
+    border: none;
+    border-radius: 10px; /* Arrondir les bords */
+    cursor: pointer;
+    font-size: 1rem;
+    transition: background-color 0.3s ease;
+}
+
+.btn-report:hover {
+    background-color: #c0392b; /* Couleur plus sombre au survol */
+}
+
+.btn-report:focus {
+    outline: none;
+    box-shadow: 0 0 5px rgba(231, 76, 60, 0.8); /* Lueur rouge au focus */
+}
