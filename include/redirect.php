@@ -48,6 +48,11 @@ function location_creation_offre(): string
     return "/autres_pages/choix_categorie_creation_offre.php";
 }
 
+function location_facturation(): string
+{
+    return "/autres_pages/facturation.php";
+}
+
 function location_detail_compte(): string
 {
     return "/autres_pages/detail_compte.php";
