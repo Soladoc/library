@@ -77,7 +77,7 @@ function Table($header, $data) {
         $this->Cell($w[1], 6, utf8_decode($row[1]), 'LR'); // Type d'abonnement
         $this->Cell($w[2], 6, utf8_decode($row[2]), 'LR'); // Catégorie
         $this->Cell($w[3], 6, $row[3], 'LR', 0, 'C');     // Jours
-        $this->Cell($w[4], 6, number_format($row[4], 2, ',', ' ') . utf8_decode(" €"), 'LR', 0, 'R'); // Prix TTC
+        $this->Cell($w[4], 6, number_format($row[4], 2, ',', ' ') . utf8_decode("€"), 'LR', 0, 'R'); // Prix TTC
         $this->Ln();
     }
 
