@@ -168,7 +168,7 @@ $pdf->Ln(); // Saut de ligne
 
 $pdf->Ln();
 $pdf->SetFont('Arial', '', 12);
-$pdf->Cell(0, 10, "Pacte", 0, 1,"R");
+$pdf->Cell(0, 10, "Entreprise : Pact", 0, 1,"R");
 $pdf->Cell(0, 10, "Adresse : 1 rue Edouard Branly", 0, 1,"R");
 $pdf->Cell(0, 10, "Email : xxxx@.com", 0, 1,"R");
 $pdf->Cell(0, 10, "Tel. : XXXXXXXXXX", 0, 1,"R");
