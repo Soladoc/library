@@ -8,4 +8,4 @@ $page = new Page('Mentions légales');
 
 $pd = new Parsedown();
 
-$page->put($pd->text(file_get_contents('doc/mention-legales.md', use_include_path: true)));
+$page->put($pd->text(file_get_contents('doc/mentions-legales.md', use_include_path: true)));
