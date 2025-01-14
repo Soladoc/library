@@ -21,11 +21,12 @@ echo "error";
 class FacturePDF extends FPDF {
     // En-tête
     function Header() {
-        // Logo
-        $this->Image('../images/logo.jpg', 10, 10); // Chemin du logo, x, y, largeur
         $this->SetFont('Arial', 'B', 14);
         $this->Cell(0, 10, 'Facture', 0, 1, 'C'); // Titre centré
 
+       
+        // Logo
+        $this->Image('../images/logo.jpg', 10, 10); // Chemin du logo, x, y, largeur
         $this->Ln(10); // Saut de ligne
     }
 
@@ -58,32 +59,46 @@ class FacturePDF extends FPDF {
 //     }
 //     // Closing line
 //     $this->Cell(array_sum($w),0,'','T');
-// }
-function Table($header, $data) {
-    // Largeurs des colonnes ajustées pour correspondre à vos données
-    $w = [50, 50, 40, 30, 30]; // Largeur des colonnes pour Titre, Abonnement, Catégorie, Jours, Prix
+// }function Table($header, $data) {
+    // Largeurs des colonnes
+    $w = [50, 50, 40, 30, 30]; // Largeur pour chaque colonne : Titre, Abonnement, Catégorie, Jours, Prix
     $this->SetFont('Arial', 'B', 12); // Police pour les en-têtes
 
     // Afficher les en-têtes
     foreach ($header as $i => $col) {
-        $this->Cell($w[$i], 7, $col, 1, 0, 'C'); // Cellule avec fond et texte centré
+        $this->Cell($w[$i], 7, utf8_decode($col), 1, 0, 'C'); // En-têtes centrées
     }
     $this->Ln();
 
     // Données
-    $this->SetFont('Arial', '', 12); // Police pour les données
+    $this->SetFont('Arial', '', 12); // Police normale pour les données
     foreach ($data as $row) {
-        $this->Cell($w[0], 6, utf8_decode($row[0]), 'LR'); // Titre
-        $this->Cell($w[1], 6, utf8_decode($row[1]), 'LR'); // Type d'abonnement
-        $this->Cell($w[2], 6, utf8_decode($row[2]), 'LR'); // Catégorie
-        $this->Cell($w[3], 6, $row[3], 'LR', 0, 'C');     // Jours
-        $this->Cell($w[4], 6, number_format($row[4], 2, ',', ' ') . utf8_decode("€"), 'LR', 0, 'R'); // Prix TTC
+        // Colonne 1 : Titre avec MultiCell pour gérer les noms longs
+        $x = $this->GetX(); // Position X courante
+        $y = $this->GetY(); // Position Y courante
+        $this->MultiCell($w[0], 6, utf8_decode($row[0]), 'LR'); // MultiCell gère les retours à la ligne
+        $this->SetXY($x + $w[0], $y); // Ajuste la position pour les colonnes suivantes
+
+        // Colonne 2 : Type d'abonnement
+        $this->Cell($w[1], 6, utf8_decode($row[1]), 1, 0, 'C');
+
+        // Colonne 3 : Catégorie
+        $this->Cell($w[2], 6, utf8_decode($row[2]), 1, 0, 'C');
+
+        // Colonne 4 : Jours
+        $this->Cell($w[3], 6, $row[3], 1, 0, 'C');
+
+        // Colonne 5 : Prix TTC
+        $this->Cell($w[4], 6, number_format($row[4], 2, ',', ' ') . ' €', 1, 0, 'R');
+
+        // Déplacement à la ligne suivante
         $this->Ln();
     }
 
     // Ligne de clôture
     $this->Cell(array_sum($w), 0, '', 'T');
 }
+
 }
 
 // Créer une instance de la classe
@@ -95,15 +110,15 @@ $pdf->AddPage(); // Ajouter une page
 $pdf->Ln();
 $pdf->SetFont('Arial', '', 12);
 $pdf->Cell(100, 10, "Pacte", 0, 1,"R");
-$pdf->Cell(100, 10, "Adresse : 1 rue Edouard Branly", 0, 1,"r");
+$pdf->Cell(100, 10, "Adresse : 1 rue Edouard Branly", 0, 1,"R");
 $pdf->Cell(100, 10, "Email : xxxx@.com", 0, 1,"R");
 $pdf->Cell(100, 10, "Tel. : XXXXXXXXXX", 0, 1,"R");
 $pdf->Cell(100, 10, "Site : https://413.ventsdouest.dev", 0, 1,"R");
 // Informations sur le client
 $pdf->SetFont('Arial', '', 12);
-$pdf->Cell(100, 10, "Client : $compte->denomination", 0, 1);
-$pdf->Cell(100, 10, "Adresse : ".$compte->adresse->format(), 0, 1);
-$pdf->Cell(100, 10, "Email : ".$compte->email, 0, 1);
+$pdf->Cell(100, 10, utf8_decode("Client : $compte->denomination"), 0, 1);
+$pdf->Cell(100, 10, utf8_decode("Adresse : ".$compte->adresse->format()), 0, 1);
+$pdf->Cell(100, 10, utf8_decode("Email : ".$compte->email), 0, 1);
 $pdf->Cell(100, 10, "Tel. : $compte->telephone", 0, 1);
 
 
