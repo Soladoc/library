@@ -4,7 +4,6 @@ require_once 'auth.php';
 require_once 'model/Compte.php';
 require('../fpdf186/fpdf.php');
 
-require('../images/logo.jpg');
 
 
 
