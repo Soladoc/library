@@ -1,5 +1,5 @@
 <?php
-require_once 'Page.php';
+require_once 'component/Page.php';
 require_once 'Parsedown.php';
 
 $page = new Page('Mentions légales');
