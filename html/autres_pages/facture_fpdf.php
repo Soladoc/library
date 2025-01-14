@@ -23,7 +23,7 @@ class FacturePDF extends FPDF {
     // En-tête
     function Header() {
         // Logo
-        $this->Image('logo.png', 10, 10, 32,32); // Chemin du logo, x, y, largeur
+        $this->Image('../images/logo.jpg', 10, 10, 32,32); // Chemin du logo, x, y, largeur
         $this->SetFont('Arial', 'B', 14);
         $this->Cell(0, 10, 'Facture', 0, 1, 'C'); // Titre centré
         $this->Ln(10); // Saut de ligne
