@@ -169,6 +169,19 @@ abstract class Offre extends Signalable
     }
 
     /**
+     * Récupère les offres "en ligne" de la BDD.
+     * @return Iterator<int, self> Les offres "À la Une" de la BDD, indexés par ID.
+     */
+    static function from_db_en_ligne(): Iterator
+    {
+        $stmt = notfalse(DB\connect()->prepare(self::make_select() . ' where ' . static::TABLE . '.en_ligne order by random()'));
+        notfalse($stmt->execute());
+        while (false !== $row = $stmt->fetch()) {
+            yield $row['id'] => self::from_db_row($row);
+        }
+    }
+
+    /**
      * Récupère des offres de la BDD.
      * @param mixed $id_professionnel L'ID du professionnel dont on veut récupérer les offres, ou `null` pour récupérer les offres de tous les professionnels.
      * @param mixed $en_ligne Si on veut les offres actuellement en ligne ou hors ligne, ou `null` pour les deux.

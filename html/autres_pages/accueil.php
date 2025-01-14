@@ -33,5 +33,23 @@ $page->put(function () {
             ?>
         </div>
     </section>
+
+    <!-- Section des offres en ligne -->
+    <section class="online-offers">
+        <h2>Offres en ligne</h2>
+        <div class="offer-list">
+            <?php
+
+            $offres = Offre::from_db_en_ligne();
+
+            // Préparer et exécuter la requête SQL pour récupérer toutes les offres
+        
+            // Boucler sur les résultats pour afficher chaque offre
+            foreach ($offres as $offre) {
+                (new CarteOffre($offre))->put();
+            }
+            ?>
+        </div>
+    </section>
     <?php
 });
