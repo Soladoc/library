@@ -1,6 +1,10 @@
 # Mentions Légales
 
-## 1. Éditeur du site
+*Dernière mise à jour&nbsp;: 14/01/2025*
+
+Ce site est un service de TripEnArvor. Association régulièrement déclarée à la préfécture du département. Association à but non lucratif, dont le siège est situé à Rue Édouard Branly, 22300 Lannion.
+
+## Responsable et propriétaire du site
 
 **Nom de l'association&nbsp;:** TripEnArvor
 
@@ -8,47 +12,51 @@
 
 **Adresse&nbsp;:** Rue Édouard Branly, 22300 Lannion
 
-**Numéro de téléphone&nbsp;:** 02 96 46 93 00
+**Tél.&nbsp;:** 02 96 46 93 00
 
 **E-mail&nbsp;:** [bdeville@univ-rennes.fr](mailto:bdeville@univ-rennes.fr)
 
 **Numéro de SIREN&nbsp;:** 362 521 879
 
-## 2. Hébergement
+**Directeur de la publication&nbsp;:** Mael GOGDET ([mael.gogdet@etudiant.univ-rennes.fr](mailto:mael.gogdet@etudiant.univ-rennes.fr))
+
+**Administrateur&nbsp;** Raphaël BARDINI ([raphael.bardini@etudiant.univ-rennes.fr](mailto:raphael.bardini@etudiant.univ-rennes.fr))
+
+## Données personnelles
+
+Le site respecte la législation en vigueur en matière de protection des données personnelles (RGPD). Pour toute question relative à vos données personnelles, veuillez contacter l'administrateur du site.
+
+**Droit d’accès, de rectification et de suppression&nbsp;:** vous pouvez exercer ces droits en contactant l'administrateur.
+
+## Responsabilités
+
+Les informations présentées sur ce site le sont dans un but d'information générale. Elles ne peuvent être utilisées qu'à titre informatif et non commercial. Ceci concerne aussi les images.
+
+Nous avons porté nos efforts et continuons à le faire pour fournir des informations précises,
+complètes et à jour. Cependant nous ne les garantissons directement ou implicitement de quelque façon que ce soit. TripEnArvor ne peut être tenu pour responsable par l'utilisation faite et leurs conséquences.
+
+Ce site présente aussi des liens et informations vers des tierces parties. Non exhaustives, elles sont fournies à titre indicatif et n'engagent pas TripEnArvor sur leur contenu.
+
+TripEnArvor se réserve le droit de modifier ce site.
+
+## Cookies
+
+Ce site utilise des cookies à une finalité strictement limitée à son bon fonctionnement. Les données produites sont exclusivement anonymes. Ce type de cookies sont exemptés de consentement par le RGPD.
+
+## Signalement de contenu
+
+Pour signaler un contenu illicite ou inapproprié, veuillez vous référer au bouton de signalement associé.
+
+## Loi applicable
+
+Le présent site est soumis à la loi française. En cas de litige, les tribunaux français seront seuls compétents.
+
+## Hébergement
 
 **Hébergeur&nbsp;:** Gildas Quiniou &ndash; Vents d'Ouest
 
 **Adresse&nbsp;:** Rue Édouard Branly, 22300 Lannion
 
-**Téléphone&nbsp;:** 02 96 46 93 00
+**Tél.&nbsp;:** 02 96 46 93 00
 
 **Site web&nbsp;:** <https://iut-lannion.univ-rennes.fr/>
-
-## 3. Directeur de la publication
-
-**Responsable&nbsp;:** Mael GOGDET
-
-**Contact&nbsp;:** [mael.gogdet@etudiant.univ-rennes.fr](mailto:mael.gogdet@etudiant.univ-rennes.fr)
-
-## 4. Propriété intellectuelle
-
-L’ensemble des contenus (textes, images, vidéos, etc.) présents sur le site sont protégés par le droit d’auteur et autres lois relatives à la propriété intellectuelle. Toute reproduction, représentation, modification ou adaptation sans autorisation préalable est interdite.
-
-## 5. Données personnelles
-
-Le site respecte la législation en vigueur en matière de protection des données personnelles (RGPD). Pour toute question relative à vos données personnelles, veuillez consulter notre [Politique de Confidentialité](#).
-
-**Droit d’accès, de rectification et de suppression&nbsp;:**
-Vous pouvez exercer ces droits en contactant&nbsp;: [Adresse e-mail ou formulaire dédié].
-
-## 6. Responsabilités
-
-TripEnArvor s’efforce de fournir des informations exactes et à jour, mais ne garantit pas l’exactitude, l’exhaustivité ou la mise à jour des contenus diffusés sur le site. L'association ne peut être tenue responsable des dommages résultant de l’utilisation du site.
-
-## 7. Signalement de contenu
-
-Pour signaler un contenu illicite ou inapproprié, veuillez vous référer au bouton de signalement associé.
-
-## 8. Loi applicable
-
-Le présent site est soumis à la loi française. En cas de litige, les tribunaux français seront seuls compétents.
