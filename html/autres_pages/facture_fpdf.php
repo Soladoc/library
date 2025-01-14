@@ -221,7 +221,7 @@ $pdf->Cell(100, 10, "Date : " . date('d/m/Y'), 0, 1);
 $pdf->Ln(10); // Saut de ligne
 
 // Tableau des offre
-$header = ['Titre', "Type d'abonnement", 'Catégorie', 'Jours en ligne',"Prix TTC"];
+$header = ['Titre', "Type\nd'abonnement", 'Catégorie', 'Jours en ligne',"Prix TTC"];
 $data = [];
 $resultat_global = 0;
 $id_professionnel = Auth\exiger_connecte_pro();
