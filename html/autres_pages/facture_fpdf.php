@@ -22,9 +22,15 @@ class FacturePDF extends FPDF {
     // En-tête
     function Header() {
         // Logo
-        $this->Image('../images/logo.jpg', 10, 10, 32,32); // Chemin du logo, x, y, largeur
+        $this->Image('../images/logo.jpg', 10, 10); // Chemin du logo, x, y, largeur
         $this->SetFont('Arial', 'B', 14);
         $this->Cell(0, 10, 'Facture', 0, 1, 'C'); // Titre centré
+        $this->Cell(100, 10, "Pacte", 0, 1);
+        $this->Cell(100, 10, "Adresse : 1 rue Edouard Branly", 0, 1);
+        $this->Cell(100, 10, "Email : xxxx@.com", 0, 1);
+        $this->Cell(100, 10, "Tel. : XXXXXXXXXX", 0, 1);
+        $this->Cell(100, 10, "Site : https://413.ventsdouest.dev", 0, 1);
+
         $this->Ln(10); // Saut de ligne
     }
 
@@ -65,8 +71,8 @@ $pdf->AddPage(); // Ajouter une page
 $pdf->SetFont('Arial', '', 12);
 $pdf->Cell(100, 10, "Client : $compte->denomination", 0, 1);
 $pdf->Cell(100, 10, "Adresse : ".$compte->adresse->format(), 0, 1);
-$pdf->Cell(100, 10, "Adresse : ".$compte->email, 0, 1);
-$pdf->Cell(100, 10, "Client : $compte->telephone", 0, 1);
+$pdf->Cell(100, 10, "Email : ".$compte->email, 0, 1);
+$pdf->Cell(100, 10, "Tel. : $compte->telephone", 0, 1);
 
 
 $pdf->Cell(100, 10, "Date : " . date('d/m/Y'), 0, 1);
