@@ -50,8 +50,10 @@ class FacturePDF extends FPDF {
     {
         $this->Cell($w[0],6,$row[0],'LR');
         $this->Cell($w[1],6,$row[1],'LR');
-        $this->Cell($w[2],6,number_format($row[2]),'LR',0,'R');
-        $this->Cell($w[3],6,number_format($row[3]),'LR',0,'R');
+        $this->Cell($w[1],6,$row[2],'LR');
+        $this->Cell($w[1],6,$row[3],'LR');
+        $this->Cell($w[2],6,number_format($row[4]),'LR',0,'R');
+        $this->Cell($w[3],6,number_format($row[5]),'LR',0,'R');
         $this->Ln();
     }
     // Closing line
