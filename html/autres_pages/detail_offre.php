@@ -1,5 +1,6 @@
 <?php
 require_once 'auth.php';
+require_once 'Parsedown.php';
 require_once 'component/ImageView.php';
 require_once 'component/InputNote.php';
 require_once 'component/Page.php';
@@ -112,7 +113,7 @@ $page->put(function () use ($offre, $input_rating, $input_note_cuisine, $input_n
 
         <div class="offer-info">
             <h2><?= h14s($offre->titre) ?></h2>
-            <p class="description"><?= nl2br(h14s($offre->description_detaillee)) ?></p>
+            <p class="description"><?= (new Parsedown())->text($offre->description_detaillee) ?></p>
         </div>
 
     </section>

@@ -1,5 +1,6 @@
 <?php
 
+require_once 'Parsedown.php';
 require_once 'auth.php';
 require_once 'const.php';
 require_once 'model/Activite.php';
@@ -389,7 +390,7 @@ final class InputOffre extends Input
                 id="<?= $this->id('description_detaillee') ?>"
                 name="<?= $this->name('description_detaillee') ?>"
                 required
-                ><?= $current?->description_detaillee ?></textarea>
+                ><?= (new Parsedown())->text($current->description_detaillee) ?></textarea>
         </section>
 
         <section id="<?= $this->id('image-creation-offre') ?>">

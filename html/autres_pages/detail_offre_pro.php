@@ -1,4 +1,5 @@
 <?php
+require_once 'Parsedown.php';
 require_once 'db.php';
 require_once 'util.php';
 require_once 'redirect.php';
@@ -61,7 +62,7 @@ $page->put(function () use ($offre, $review_list) {
 
         <div class="offer-info">
             <h2><?= h14s($offre->titre) ?></h2>
-            <p class="description"><?= nl2br(h14s($offre->description_detaillee)) ?></p>
+            <p class="description"><?= (new Parsedown())->text($offre->description_detaillee) ?></p>
         </div>
 
     </section>
