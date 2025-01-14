@@ -189,30 +189,6 @@ int main() {
                         }
                     } else {
                         printf("Erreur en tentant de lire la confirmation du client\n");
-                    }    printf("Mot de passe reçu: %s\n", mdp);
-                    } else {
-                        printf("Erreur en tentant de lire le mot de passe, bytes lus : %zd\n", bytes_read);
-                    }
-                    snprintf(reponse, sizeof(reponse), "Mot de passe reçu\r\n");
-                    write(cnx, reponse, strlen(reponse));
-
-                    // Send the connection token (e.g., 101) to the client
-                    token = 101;
-                    write(cnx, &token, sizeof(token));
-                    fflush(stdout);
-                    printf("Token envoyé au client : %d\n", token);
-
-                    // Now wait for the confirmation from the client
-                    bytes_read = read(cnx, &confirmation, sizeof(confirmation));
-                    if (bytes_read > 0) {
-                        printf("Confirmation reçue du client: %d\n", confirmation);
-                        if (confirmation == 1) {
-                            printf("Client a confirmé la réception du token.\n");
-                        } else {
-                            printf("Erreur: Confirmation non reçue ou incorrecte.\n");
-                        }
-                    } else {
-                        printf("Erreur en tentant de lire la confirmation du client\n");
                     }
                     break;
                 default:

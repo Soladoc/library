@@ -8,45 +8,22 @@
 #include <unistd.h>
 #include <sys/select.h>
 
-ssize_t safe_read(int sock, void *buf, size_t len, int timeout_sec) {
-    fd_set read_fds;
-    struct timeval timeout;
-    int ret;
-
-    FD_ZERO(&read_fds);
-    FD_SET(sock, &read_fds);
-
-    timeout.tv_sec = timeout_sec;  // Set the timeout (e.g., 5 seconds)
-    timeout.tv_usec = 0;
-
-    ret = select(sock + 1, &read_fds, NULL, NULL, &timeout);
-    if (ret == -1) {
-        perror("select() failed");
-        return -1;
-    }
-    if (ret == 0) {
-        printf("Timeout occurred, no data received.\n");
-        return 0;
-    }
-
-    return read(sock, buf, len);  // Proceed with reading if the socket is ready
-}
-
 int connexion(int token, int sock) {
     char util[256];
     char mdp[256];
-    char buffer[10000];
+    char buffer[100];
     ssize_t bytes_read;
-    int confirmation;
+    int confirmation,option_connexion;
+    option_connexion = 16;
 
     if (token == 0) {
-        write(sock, &token, sizeof(token)); // Send token
+        write(sock, &option_connexion, sizeof(option_connexion)); // envoi option connexion
         printf("Veuillez vous connecter pour continuer : quel est votre nom d'utilisateur ?");
         fgets(util, sizeof(util), stdin);  // Read username
         write(sock, util, strlen(util));  // Send username
         fflush(stdout);
 
-        bytes_read = safe_read(sock, buffer, sizeof(buffer) - 1, 5);  // 5-second timeout
+        bytes_read = read(sock, buffer, sizeof(buffer) - 1);  // 5-second timeout
         if (bytes_read > 0) {
             buffer[bytes_read] = '\0';
             printf("Réponse du serveur pour le nom d'utilisateur: %s", buffer);
@@ -59,7 +36,7 @@ int connexion(int token, int sock) {
         write(sock, mdp, strlen(mdp));  // Send password
         fflush(stdout);
 
-        bytes_read = safe_read(sock, buffer, 22, 5);  // 5-second timeout
+        bytes_read = read(sock, buffer, 22);  // 5-second timeout
         if (bytes_read > 0) {
             buffer[bytes_read] = '\0';
             printf("Réponse du serveur pour le mot de passe: %s", buffer);
@@ -70,7 +47,7 @@ int connexion(int token, int sock) {
         memset(buffer, 0, sizeof(buffer));
         // Receive token from the server
         printf("Attente du token du serveur...\n");  // Debug line
-        bytes_read = safe_read(sock, &token, sizeof(token), 5);  // 5-second timeout
+        bytes_read = read(sock, &token, sizeof(token));  // 5-second timeout
         if (bytes_read > 0) {
             printf("Token reçu du serveur: %d\n", token);
         } else {
