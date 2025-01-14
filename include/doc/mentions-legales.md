@@ -29,7 +29,7 @@ TripEnArvor se réserve le droit de modifier ce site.
 
 **Directeur de la publication&nbsp;:** Mael GOGDET ([mael.gogdet@etudiant.univ-rennes.fr](mailto:mael.gogdet@etudiant.univ-rennes.fr))
 
-**Administrateur&nbsp;** Raphaël BARDINI ([raphael.bardini@etudiant.univ-rennes.fr](mailto:raphael.bardini@etudiant.univ-rennes.fr))
+**Administrateur&nbsp;:** Raphaël BARDINI ([raphael.bardini@etudiant.univ-rennes.fr](mailto:raphael.bardini@etudiant.univ-rennes.fr))
 
 ## Données personnelles
 
