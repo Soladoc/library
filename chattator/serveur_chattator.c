@@ -80,46 +80,6 @@ int main() {
 
             // choisi la bonne option selon ce qu'a envoyé le client
             switch (option) {
-                case 0: // connexion
-                    bytes_read = read(cnx, utilisateur, sizeof(utilisateur) - 1);
-                    if (bytes_read > 0) {
-                        utilisateur[bytes_read] = '\0';
-                    } else {
-                        printf("Erreur en tentant de lire le nom d'utilisateur, bytes lus : %zd\n", bytes_read);
-                    }
-                    printf("Nom d'utilisateur reçu: %s\n", utilisateur);
-                    snprintf(reponse, sizeof(reponse), "Nom d'utilisateur reçu\r\n");
-                    write(cnx, reponse, strlen(reponse));
-
-                    bytes_read = read(cnx, mdp, sizeof(mdp) - 1);
-                    if (bytes_read > 0) {
-                        mdp[bytes_read] = '\0';
-                        printf("Mot de passe reçu: %s\n", mdp);
-                    } else {
-                        printf("Erreur en tentant de lire le mot de passe, bytes lus : %zd\n", bytes_read);
-                    }
-                    snprintf(reponse, sizeof(reponse), "Mot de passe reçu\r\n");
-                    write(cnx, reponse, strlen(reponse));
-
-                    // Send the connection token (e.g., 101) to the client
-                    token = 101;
-                    write(cnx, &token, sizeof(token));
-                    fflush(stdout);
-                    printf("Token envoyé au client : %d\n", token);
-
-                    // Now wait for the confirmation from the client
-                    bytes_read = read(cnx, &confirmation, sizeof(confirmation));
-                    if (bytes_read > 0) {
-                        printf("Confirmation reçue du client: %d\n", confirmation);
-                        if (confirmation == 1) {
-                            printf("Client a confirmé la réception du token.\n");
-                        } else {
-                            printf("Erreur: Confirmation non reçue ou incorrecte.\n");
-                        }
-                    } else {
-                        printf("Erreur en tentant de lire la confirmation du client\n");
-                    }
-                    break;
                 case 1:  // "Affichage des messages"
                     snprintf(reponse, sizeof(reponse), "Affichage de vos messages :\r\n");
                     break;
@@ -191,6 +151,70 @@ int main() {
                     close(cnx);  // Ferme la connection
                     printf("Le serveur s'arrête.\r\n");
                     return EXIT_SUCCESS; //Cas où la connection est fermée normalement par le client
+                case 16: // connexion au compte
+                    bytes_read = read(cnx, utilisateur, sizeof(utilisateur) - 1);
+                    if (bytes_read > 0) {
+                        utilisateur[bytes_read] = '\0';
+                    } else {
+                        printf("Erreur en tentant de lire le nom d'utilisateur, bytes lus : %zd\n", bytes_read);
+                    }
+                    printf("Nom d'utilisateur reçu: %s\n", utilisateur);
+                    snprintf(reponse, sizeof(reponse), "Nom d'utilisateur reçu\r\n");
+                    write(cnx, reponse, strlen(reponse));
+
+                    bytes_read = read(cnx, mdp, sizeof(mdp) - 1);
+                    if (bytes_read > 0) {
+                        mdp[bytes_read] = '\0';
+                        printf("Mot de passe reçu: %s\n", mdp);
+                    } else {
+                        printf("Erreur en tentant de lire le mot de passe, bytes lus : %zd\n", bytes_read);
+                    }
+                    snprintf(reponse, sizeof(reponse), "Mot de passe reçu\r\n");
+                    write(cnx, reponse, strlen(reponse));
+
+                    // Send the connection token (e.g., 101) to the client
+                    token = 101;
+                    write(cnx, &token, sizeof(token));
+                    fflush(stdout);
+                    printf("Token envoyé au client : %d\n", token);
+
+                    // Now wait for the confirmation from the client
+                    bytes_read = read(cnx, &confirmation, sizeof(confirmation));
+                    if (bytes_read > 0) {
+                        printf("Confirmation reçue du client: %d\n", confirmation);
+                        if (confirmation == 1) {
+                            printf("Client a confirmé la réception du token.\n");
+                        } else {
+                            printf("Erreur: Confirmation non reçue ou incorrecte.\n");
+                        }
+                    } else {
+                        printf("Erreur en tentant de lire la confirmation du client\n");
+                    }    printf("Mot de passe reçu: %s\n", mdp);
+                    } else {
+                        printf("Erreur en tentant de lire le mot de passe, bytes lus : %zd\n", bytes_read);
+                    }
+                    snprintf(reponse, sizeof(reponse), "Mot de passe reçu\r\n");
+                    write(cnx, reponse, strlen(reponse));
+
+                    // Send the connection token (e.g., 101) to the client
+                    token = 101;
+                    write(cnx, &token, sizeof(token));
+                    fflush(stdout);
+                    printf("Token envoyé au client : %d\n", token);
+
+                    // Now wait for the confirmation from the client
+                    bytes_read = read(cnx, &confirmation, sizeof(confirmation));
+                    if (bytes_read > 0) {
+                        printf("Confirmation reçue du client: %d\n", confirmation);
+                        if (confirmation == 1) {
+                            printf("Client a confirmé la réception du token.\n");
+                        } else {
+                            printf("Erreur: Confirmation non reçue ou incorrecte.\n");
+                        }
+                    } else {
+                        printf("Erreur en tentant de lire la confirmation du client\n");
+                    }
+                    break;
                 default:
                     snprintf(reponse, sizeof(reponse), "Commande inconnue\r\n");
                     break;
