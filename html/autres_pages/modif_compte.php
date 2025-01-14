@@ -189,6 +189,8 @@ $page->put(function () use ($compte, $input_adresse, $error_email, $error_mdp, $
             <a href="<?= location_detail_compte() ?>">Retour</a>
             <?php if ($compte instanceof Membre) { ?>
                 <a href="<?= location_supprimer_compte($compte->id) ?>">Supprimer le compte</a>
+            <?php } else { ?>
+                <p><small>Pour supprimer votre compte professionnel, contactez l'administrateur. Voir les <a href="/legal/mentions-legales.php">mentions légales</a> pour plus d'informations.</small></p>
             <?php } ?>
         </form>
     </section>

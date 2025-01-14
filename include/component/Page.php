@@ -165,8 +165,9 @@ final class Page
             <li><a href="https://www.youtube.com" target="_blank" rel="noopener noreferrer"><img src="/images/social/youtube.png" alt="YouTube" width="90" height="90" loading="lazy" title="YouTube"></a></li>
         </ul>
         <article>
-            <p><a href="/plan-du-site">Plan du site</a></p>
-            <p><a href="/mentions-legales">Mentions légales</a></p>
+            <p><a href="/autres_pages/legal/cgu.php"><abbr title="Conditions Générales d'Utilisation">CGU</abbr></a></p>
+            <p><a href="/autres_pages/legal/cgv.php"><abbr title="Conditions Générales de Vente">CGV</abbr></a></p>
+            <p><a href="/autres_pages/legal/mentions-legales.php">Mentions légales</a></p>
         </article>
     </div>
     <div class="footer-bottom">
