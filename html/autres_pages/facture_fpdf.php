@@ -25,12 +25,7 @@ class FacturePDF extends FPDF {
         $this->Image('../images/logo.jpg', 10, 10); // Chemin du logo, x, y, largeur
         $this->SetFont('Arial', 'B', 14);
         $this->Cell(0, 10, 'Facture', 0, 1, 'C'); // Titre centré
-        $this->SetFont('Arial', '', 12);
-        $this->Cell(100, 10, "Pacte", 0, 1);
-        $this->Cell(100, 10, "Adresse : 1 rue Edouard Branly", 0, 1,"R");
-        $this->Cell(100, 10, "Email : xxxx@.com", 0, 1,"R");
-        $this->Cell(100, 10, "Tel. : XXXXXXXXXX", 0, 1,"R");
-        $this->Cell(100, 10, "Site : https://413.ventsdouest.dev", 0, 1,"R");
+
         $this->Ln(10); // Saut de ligne
     }
 
@@ -42,24 +37,26 @@ class FacturePDF extends FPDF {
     }
 
     // Table des produits/services
-    function Table($header, $data) {
-        // En-têtes
-        $this->SetFont('Arial', 'B', 12);
-        foreach ($header as $col) {
-            $this->Cell(48, 7, $col, 1, 0, 'C');
-        }
+    function Table($header, $data)//ImprovedTable
+{
+    // Column widths
+    $w = array(40, 35, 40, 45);
+    // Header
+    for($i=0;$i<count($header);$i++)
+        $this->Cell($w[$i],7,$header[$i],1,0,'C');
+    $this->Ln();
+    // Data
+    foreach($data as $row)
+    {
+        $this->Cell($w[0],6,$row[0],'LR');
+        $this->Cell($w[1],6,$row[1],'LR');
+        $this->Cell($w[2],6,number_format($row[2]),'LR',0,'R');
+        $this->Cell($w[3],6,number_format($row[3]),'LR',0,'R');
         $this->Ln();
-
-        // Données
-        $this->SetFont('Arial', '', 12);
-        foreach ($data as $row) {
-            foreach ($row as $col) {
-                $this->Cell(48, 7, $col, 1, 0, 'C');
-            }
-            $this->Ln();
-        }
-
     }
+    // Closing line
+    $this->Cell(array_sum($w),0,'','T');
+}
 }
 
 // Créer une instance de la classe
@@ -67,6 +64,13 @@ $pdf = new FacturePDF();
 $pdf->AliasNbPages(); // Pour afficher le nombre total de pages
 $pdf->AddPage(); // Ajouter une page
 
+//information PacteS
+$pdf->SetFont('Arial', '', 12);
+$pdf->Cell(100, 10, "Pacte", 0, 1);
+$pdf->Cell(100, 10, "Adresse : 1 rue Edouard Branly", 0, 1,"R");
+$pdf->Cell(100, 10, "Email : xxxx@.com", 0, 1,"R");
+$pdf->Cell(100, 10, "Tel. : XXXXXXXXXX", 0, 1,"R");
+$pdf->Cell(100, 10, "Site : https://413.ventsdouest.dev", 0, 1,"R");
 // Informations sur le client
 $pdf->SetFont('Arial', '', 12);
 $pdf->Cell(100, 10, "Client : $compte->denomination", 0, 1);
