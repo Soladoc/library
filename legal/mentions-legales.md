@@ -4,6 +4,15 @@
 
 Ce site est un service de TripEnArvor. Association régulièrement déclarée à la préfécture du département. Association à but non lucratif, dont le siège est situé à Rue Édouard Branly, 22300 Lannion.
 
+Les informations présentées sur ce site le sont dans un but d'information générale. Elles ne peuvent être utilisées qu'à titre informatif et non commercial. Ceci concerne aussi les images.
+
+Nous avons porté nos efforts et continuons à le faire pour fournir des informations précises,
+complètes et à jour. Cependant nous ne les garantissons directement ou implicitement de quelque façon que ce soit. TripEnArvor ne peut être tenu pour responsable par l'utilisation faite et leurs conséquences.
+
+Ce site présente aussi des liens et informations vers des tierces parties. Non exhaustives, elles sont fournies à titre indicatif et n'engagent pas TripEnArvor sur leur contenu.
+
+TripEnArvor se réserve le droit de modifier ce site.
+
 ## Responsable et propriétaire du site
 
 **Nom de l'association&nbsp;:** TripEnArvor
@@ -28,16 +37,16 @@ Le site respecte la législation en vigueur en matière de protection des donné
 
 **Droit d’accès, de rectification et de suppression&nbsp;:** vous pouvez exercer ces droits en contactant l'administrateur.
 
-## Responsabilités
+## Responsabilité
 
-Les informations présentées sur ce site le sont dans un but d'information générale. Elles ne peuvent être utilisées qu'à titre informatif et non commercial. Ceci concerne aussi les images.
+TripEnArvor ne saurait être tenue responsable&nbsp;:
 
-Nous avons porté nos efforts et continuons à le faire pour fournir des informations précises,
-complètes et à jour. Cependant nous ne les garantissons directement ou implicitement de quelque façon que ce soit. TripEnArvor ne peut être tenu pour responsable par l'utilisation faite et leurs conséquences.
+- des erreurs ou omissions dans les informations diffusées inclues dans du texte, articles, forums etc&hellip;
+- des problèmes techniques rencontrés sur le site et sur tous les autres sites vers lesquels des liens sont établis.
+- de toute interprétation des informations publiées sur ces sites, ainsi que des conséquences de leur utilisation.
+- en cas de piratage.
 
-Ce site présente aussi des liens et informations vers des tierces parties. Non exhaustives, elles sont fournies à titre indicatif et n'engagent pas TripEnArvor sur leur contenu.
-
-TripEnArvor se réserve le droit de modifier ce site.
+Les informations personnelles ne font l'objet d'aucune utilisation commerciales.
 
 ## Cookies
 
