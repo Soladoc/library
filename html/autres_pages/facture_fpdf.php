@@ -204,11 +204,11 @@ $pdf->Ln(); // Saut de ligne
 
 $pdf->Ln();
 $pdf->SetFont('Arial', '', 12);
-$pdf->Cell(5, 10, "Pacte", 0, 1,"R");
-$pdf->Cell(30, 10, "Adresse : 1 rue Edouard Branly", 0, 1,"R");
-$pdf->Cell(17, 10, "Email : xxxx@.com", 0, 1,"R");
-$pdf->Cell(17, 10, "Tel. : XXXXXXXXXX", 0, 1,"R");
-$pdf->Cell(34, 10, "Site : https://413.ventsdouest.dev", 0, 1,"R");
+$pdf->Cell(0, 10, "Pacte", 0, 1,"R");
+$pdf->Cell(0, 10, "Adresse : 1 rue Edouard Branly", 0, 1,"R");
+$pdf->Cell(0, 10, "Email : xxxx@.com", 0, 1,"R");
+$pdf->Cell(0, 10, "Tel. : XXXXXXXXXX", 0, 1,"R");
+$pdf->Cell(0, 10, "Site : https://413.ventsdouest.dev", 0, 1,"R");
 // Informations sur le client
 $pdf->SetFont('Arial', '', 12);
 $pdf->Cell(100, 10, utf8_decode("Client : $compte->denomination"), 0, 1);
