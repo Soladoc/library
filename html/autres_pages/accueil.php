@@ -33,7 +33,8 @@ $page->put(function () {
             ?>
         </div>
     </section>
-    <!-- Section des offres à la une -->
+
+    <!-- Section des offres en ligne -->
     <section class="online-offers">
         <h2>Offres en ligne</h2>
         <div class="offer-list">
