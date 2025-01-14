@@ -25,12 +25,12 @@ class FacturePDF extends FPDF {
         $this->Image('../images/logo.jpg', 10, 10); // Chemin du logo, x, y, largeur
         $this->SetFont('Arial', 'B', 14);
         $this->Cell(0, 10, 'Facture', 0, 1, 'C'); // Titre centré
+        $this->SetFont('Arial', '', 12);
         $this->Cell(100, 10, "Pacte", 0, 1);
-        $this->Cell(100, 10, "Adresse : 1 rue Edouard Branly", 0, 1);
-        $this->Cell(100, 10, "Email : xxxx@.com", 0, 1);
-        $this->Cell(100, 10, "Tel. : XXXXXXXXXX", 0, 1);
-        $this->Cell(100, 10, "Site : https://413.ventsdouest.dev", 0, 1);
-
+        $this->Cell(100, 10, "Adresse : 1 rue Edouard Branly", 0, 1,"R");
+        $this->Cell(100, 10, "Email : xxxx@.com", 0, 1,"R");
+        $this->Cell(100, 10, "Tel. : XXXXXXXXXX", 0, 1,"R");
+        $this->Cell(100, 10, "Site : https://413.ventsdouest.dev", 0, 1,"R");
         $this->Ln(10); // Saut de ligne
     }
 
