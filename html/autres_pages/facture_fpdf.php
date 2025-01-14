@@ -63,8 +63,12 @@ $pdf->AddPage(); // Ajouter une page
 
 // Informations sur le client
 $pdf->SetFont('Arial', '', 12);
-$pdf->Cell(100, 10, "Client : Jean Dupont", 0, 1);
-$pdf->Cell(100, 10, "Adresse : 123 Rue Exemple, Paris", 0, 1);
+$pdf->Cell(100, 10, "Client : $compte->denomination", 0, 1);
+$pdf->Cell(100, 10, "Adresse : ".$compte->adresse->format(), 0, 1);
+$pdf->Cell(100, 10, "Adresse : ".$compte->email, 0, 1);
+$pdf->Cell(100, 10, "Client : $compte->telephone", 0, 1);
+
+
 $pdf->Cell(100, 10, "Date : " . date('d/m/Y'), 0, 1);
 $pdf->Ln(10); // Saut de ligne
 
