@@ -5,7 +5,7 @@ require_once 'model/Compte.php';
 require('../fpdf186/fpdf.php');
 
 
-
+define('EURO',chr(128));
 
 // Récupérer ls information du compte 
 
@@ -127,7 +127,7 @@ class FacturePDF extends FPDF {
 
     function Table($header, $data) {
         // Largeurs des colonnes
-        $this->widths = [50, 30, 40, 30, 30]; // Largeurs des colonnes
+        $this->widths = [50, 37, 40, 30, 30]; // Largeurs des colonnes
         $this->aligns = ['L', 'L', 'L', 'C', 'R']; // Alignement des colonnes
     
     // Afficher les en-têtes
@@ -242,7 +242,7 @@ foreach ($offres as $offre) {
     $resultat_global += $resultat_offre;
 
 
-    $data[] = [$offre->titre, $offre->abonnement->libelle,$offre->categorie,$offre->en_ligne_ce_mois_pendant->days,$resultat_offre];
+    $data[] = [$offre->titre, $offre->abonnement->libelle,$offre->categorie,$offre->en_ligne_ce_mois_pendant->days,$resultat_offre." ".EURO];
 }
 
 $pdf->Table($header, $data);
@@ -251,7 +251,7 @@ $pdf->Ln(10); // Saut de ligne
 // Total
 $pdf->SetFont('Arial', 'B', 12);
 $pdf->Cell(144, 10, 'Total', 1, 0, 'R');
-$pdf->Cell(48, 10, $resultat_global." €", 1, 1, 'C');
+$pdf->Cell(48, 10, $resultat_global." ".EURO, 1, 1, 'C');
 
 // Générer et afficher le PDF
 $pdf->Output('I', 'facture.pdf'); // I = afficher dans le navigateur, D = télécharger
