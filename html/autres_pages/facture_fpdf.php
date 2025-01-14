@@ -37,27 +37,52 @@ class FacturePDF extends FPDF {
     }
 
     // Table des produits/services
-    function Table($header, $data)//ImprovedTable
-{
-    // Column widths
-    $w = array(40, 35, 40, 45);
-    // Header
-    for($i=0;$i<count($header);$i++)
-        $this->Cell($w[0],7,$header[$i],1,0,'C');
+//     function Table($header, $data)//ImprovedTable
+// {
+//     // Column widths
+//     $w = array(40, 35, 40, 45);
+//     // Header
+//     for($i=0;$i<count($header);$i++)
+//         $this->Cell($w[0],7,$header[$i],1,0,'C');
+//     $this->Ln();
+//     // Data
+//     foreach($data as $row)
+//     {
+//         $this->Cell($w[0],6,$row[0],'LR');
+//         $this->Cell($w[1],6,$row[1],'LR');
+//         $this->Cell($w[1],6,$row[2],'LR');
+//         $this->Cell($w[1],6,$row[3],'LR');
+//         $this->Cell($w[2],6,number_format($row[4]),'LR',0,'R');
+//         // $this->Cell($w[3],6,number_format($row[5]),'LR',0,'R');
+//         $this->Ln();
+//     }
+//     // Closing line
+//     $this->Cell(array_sum($w),0,'','T');
+// }
+function Table($header, $data) {
+    // Largeurs des colonnes ajustées pour correspondre à vos données
+    $w = [50, 50, 40, 30, 30]; // Largeur des colonnes pour Titre, Abonnement, Catégorie, Jours, Prix
+    $this->SetFont('Arial', 'B', 12); // Police pour les en-têtes
+
+    // Afficher les en-têtes
+    foreach ($header as $i => $col) {
+        $this->Cell($w[$i], 7, $col, 1, 0, 'C', true); // Cellule avec fond et texte centré
+    }
     $this->Ln();
-    // Data
-    foreach($data as $row)
-    {
-        $this->Cell($w[0],6,$row[0],'LR');
-        $this->Cell($w[1],6,$row[1],'LR');
-        $this->Cell($w[1],6,$row[2],'LR');
-        $this->Cell($w[1],6,$row[3],'LR');
-        $this->Cell($w[2],6,number_format($row[4]),'LR',0,'R');
-        // $this->Cell($w[3],6,number_format($row[5]),'LR',0,'R');
+
+    // Données
+    $this->SetFont('Arial', '', 12); // Police pour les données
+    foreach ($data as $row) {
+        $this->Cell($w[0], 6, utf8_decode($row[0]), 'LR'); // Titre
+        $this->Cell($w[1], 6, utf8_decode($row[1]), 'LR'); // Type d'abonnement
+        $this->Cell($w[2], 6, utf8_decode($row[2]), 'LR'); // Catégorie
+        $this->Cell($w[3], 6, $row[3], 'LR', 0, 'C');     // Jours
+        $this->Cell($w[4], 6, number_format($row[4], 2, ',', ' ') . " €", 'LR', 0, 'R'); // Prix TTC
         $this->Ln();
     }
-    // Closing line
-    $this->Cell(array_sum($w),0,'','T');
+
+    // Ligne de clôture
+    $this->Cell(array_sum($w), 0, '', 'T');
 }
 }
 
@@ -68,8 +93,8 @@ $pdf->AddPage(); // Ajouter une page
 
 //information PacteS
 $pdf->SetFont('Arial', '', 12);
-$pdf->Cell(100, 10, "Pacte", 0, 1);
-$pdf->Cell(100, 10, "Adresse : 1 rue Edouard Branly", 0, 1,"R");
+$pdf->Cell(100, 10, "Pacte", 0, 1,"R");
+$pdf->Cell(100, 10, "Adresse : 1 rue Edouard Branly", 0, 1,"C");
 $pdf->Cell(100, 10, "Email : xxxx@.com", 0, 1,"R");
 $pdf->Cell(100, 10, "Tel. : XXXXXXXXXX", 0, 1,"R");
 $pdf->Cell(100, 10, "Site : https://413.ventsdouest.dev", 0, 1,"R");
