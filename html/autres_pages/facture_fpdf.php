@@ -66,7 +66,7 @@ function Table($header, $data) {
 
     // Afficher les en-têtes
     foreach ($header as $i => $col) {
-        $this->Cell($w[$i], 7, $col, 1, 0, 'C', true); // Cellule avec fond et texte centré
+        $this->Cell($w[$i], 7, $col, 1, 0, 'C'); // Cellule avec fond et texte centré
     }
     $this->Ln();
 
@@ -77,7 +77,7 @@ function Table($header, $data) {
         $this->Cell($w[1], 6, utf8_decode($row[1]), 'LR'); // Type d'abonnement
         $this->Cell($w[2], 6, utf8_decode($row[2]), 'LR'); // Catégorie
         $this->Cell($w[3], 6, $row[3], 'LR', 0, 'C');     // Jours
-        $this->Cell($w[4], 6, number_format($row[4], 2, ',', ' ') . " €", 'LR', 0, 'R'); // Prix TTC
+        $this->Cell($w[4], 6, number_format($row[4], 2, ',', ' ') . utf8_decode(" €"), 'LR', 0, 'R'); // Prix TTC
         $this->Ln();
     }
 
@@ -92,9 +92,10 @@ $pdf->AliasNbPages(); // Pour afficher le nombre total de pages
 $pdf->AddPage(); // Ajouter une page
 
 //information PacteS
+$pdf->Ln();
 $pdf->SetFont('Arial', '', 12);
 $pdf->Cell(100, 10, "Pacte", 0, 1,"R");
-$pdf->Cell(100, 10, "Adresse : 1 rue Edouard Branly", 0, 1,"C");
+$pdf->Cell(100, 10, "Adresse : 1 rue Edouard Branly", 0, 1,"r");
 $pdf->Cell(100, 10, "Email : xxxx@.com", 0, 1,"R");
 $pdf->Cell(100, 10, "Tel. : XXXXXXXXXX", 0, 1,"R");
 $pdf->Cell(100, 10, "Site : https://413.ventsdouest.dev", 0, 1,"R");
