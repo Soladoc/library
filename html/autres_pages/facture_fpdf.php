@@ -21,13 +21,13 @@ echo "error";
 class FacturePDF extends FPDF {
     // En-tête
     function Header() {
-        $this->SetFont('Arial', 'B', 14);
-        $this->Cell(0, 10, 'Facture', 0, 1, 'C'); // Titre centré
-
+        // $this->SetFont('Arial', 'B', 14);
+        // $this->Cell(0, 10, 'Facture', 0, 1, 'C'); // Titre centré
+        // $this->Ln(10); 
        
-        // Logo
-        $this->Image('../images/logo.jpg', 10, 10); // Chemin du logo, x, y, largeur
-        $this->Ln(10); // Saut de ligne
+        // // Logo
+        // $this->Image('../images/logo_vertical_big.jpg', 10, 10); // Chemin du logo, x, y, largeur
+        // $this->Ln(10); // Saut de ligne
     }
 
     // Pied de page
@@ -190,7 +190,18 @@ $pdf = new FacturePDF();
 $pdf->AliasNbPages(); // Pour afficher le nombre total de pages
 $pdf->AddPage(); // Ajouter une page
 
+
+
+$pdf->SetFont('Arial', 'B', 14);
+$pdf->Cell(0, 10, 'Facture', 0, 1, 'C'); // Titre centré
+$pdf->Ln(10); 
+       
+// Logo
+$pdf->Image('../images/logo_vertical_big.jpg', 10, 10); // Chemin du logo, x, y, largeur
+$pdf->Ln(10); // Saut de ligne
+
 //information PacteS
+
 $pdf->Ln();
 $pdf->SetFont('Arial', '', 12);
 $pdf->Cell(100, 10, "Pacte", 0, 1,"R");
