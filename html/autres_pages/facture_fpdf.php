@@ -146,45 +146,6 @@ class FacturePDF extends FPDF {
             $this->Row(array_map('convertToIso88591', $row));
         }
     }
-// function Table($header, $data) {
-//     // Largeurs des colonnes
-//     $w = [50, 50, 40, 30, 30]; // Largeur pour chaque colonne : Titre, Abonnement, Catégorie, Jours, Prix
-//     $this->SetFont('Arial', 'B', 12); // Police pour les en-têtes
-
-//     // Afficher les en-têtes
-//     foreach ($header as $i => $col) {
-//         $this->Cell($w[$i], 7, convertToIso88591($col), 1, 0, 'C'); // En-têtes centrées
-//     }
-//     $this->Ln();
-
-//     // Données
-//     $this->SetFont('Arial', '', 12); // Police normale pour les données
-//     foreach ($data as $row) {
-//         // Colonne 1 : Titre avec MultiCell pour gérer les noms longs
-//         $x = $this->GetX(); // Position X courante
-//         $y = $this->GetY(); // Position Y courante
-//         $this->MultiCell($w[0], 6, convertToIso88591($row[0]), 'LR'); // MultiCell gère les retours à la ligne
-//         $this->SetXY($x + $w[0], $y); // Ajuste la position pour les colonnes suivantes
-
-//         // Colonne 2 : Type d'abonnement
-//         $this->Cell($w[1], 6, convertToIso88591($row[1]), 1, 0, 'C');
-
-//         // Colonne 3 : Catégorie
-//         $this->Cell($w[2], 6, convertToIso88591($row[2]), 1, 0, 'C');
-
-//         // Colonne 4 : Jours
-//         $this->Cell($w[3], 6, $row[3], 1, 0, 'C');
-
-//         // Colonne 5 : Prix TTC
-//         $this->Cell($w[4], 6, number_format($row[4], 2, ',', ' ') . ' €', 1, 0, 'R');
-
-//         // Déplacement à la ligne suivante
-//         $this->Ln();
-//     }
-
-//     // Ligne de clôture
-//     $this->Cell(array_sum($w), 0, '', 'T');
-// }
 
 }
 
@@ -224,7 +185,7 @@ $pdf->Cell(100, 10, "Date : " . date('d/m/Y'), 0, 1);
 $pdf->Ln(10); // Saut de ligne
 
 // Tableau des offre
-$header = ['Titre', "Type d'abonnement", 'Catégorie', 'Jours en ligne',"Prix TTC   (en ".EURO.")"];
+$header = ['Titre', "Type d'abonnement", 'Catégorie', 'Jours en ligne',"Prix TTC"];
 $data = [];
 $resultat_global = 0;
 $id_professionnel = Auth\exiger_connecte_pro();
