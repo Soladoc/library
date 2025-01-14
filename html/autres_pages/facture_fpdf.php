@@ -130,12 +130,22 @@ class FacturePDF extends FPDF {
         $this->widths = [50, 25, 40, 30, 30]; // Largeurs des colonnes
         $this->aligns = ['L', 'L', 'L', 'C', 'R']; // Alignement des colonnes
     
-        // Afficher les en-têtes
-        $this->SetFont('Arial', 'B', 12); // Police pour les en-têtes
-        foreach ($header as $i => $col) {
-            $this->Cell($this->widths[$i], 7, utf8_decode($col), 1, 0, 'C');
+    // Afficher les en-têtes
+    $this->SetFont('Arial', 'B', 12); // Police pour les en-têtes
+    $yStart = $this->GetY(); // Position Y initiale pour l'en-tête
+
+    foreach ($header as $i => $col) {
+        // Affiche l'en-tête en deux lignes si nécessaire
+        if ($i == 1) { // Gestion particulière pour "Type d'abonnement"
+            $x = $this->GetX();
+            $y = $this->GetY();
+            $this->MultiCell($this->widths[$i], 7, utf8_decode($col), 1, 'C');
+            $this->SetXY($x + $this->widths[$i], $y);
+        } else {
+            $this->Cell($this->widths[$i], 14, utf8_decode($col), 1, 0, 'C'); // En-tête simple
         }
-        $this->Ln();
+    }
+    $this->Ln();
     
         // Afficher les données
         $this->SetFont('Arial', '', 12); // Police normale pour les données
