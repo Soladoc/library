@@ -127,7 +127,7 @@ class FacturePDF extends FPDF {
 
     function Table($header, $data) {
         // Largeurs des colonnes
-        $this->widths = [50, 50, 40, 30, 30]; // Largeurs des colonnes
+        $this->widths = [50, 25, 40, 30, 30]; // Largeurs des colonnes
         $this->aligns = ['L', 'L', 'L', 'C', 'R']; // Alignement des colonnes
     
         // Afficher les en-têtes
@@ -221,7 +221,7 @@ $pdf->Cell(100, 10, "Date : " . date('d/m/Y'), 0, 1);
 $pdf->Ln(10); // Saut de ligne
 
 // Tableau des offre
-$header = ['Titre', "Type\nd'abonnement", 'Catégorie', 'Jours en ligne',"Prix TTC"];
+$header = ['Titre', "Type d'abonnement", 'Catégorie', 'Jours en ligne',"Prix TTC"];
 $data = [];
 $resultat_global = 0;
 $id_professionnel = Auth\exiger_connecte_pro();
@@ -241,7 +241,7 @@ $pdf->Ln(10); // Saut de ligne
 // Total
 $pdf->SetFont('Arial', 'B', 12);
 $pdf->Cell(144, 10, 'Total', 1, 0, 'R');
-$pdf->Cell(48, 10, $resultat_global, 1, 1, 'C');
+$pdf->Cell(48, 10, $resultat_global." €", 1, 1, 'C');
 
 // Générer et afficher le PDF
 $pdf->Output('I', 'facture.pdf'); // I = afficher dans le navigateur, D = télécharger
