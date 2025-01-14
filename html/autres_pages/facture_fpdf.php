@@ -127,7 +127,7 @@ class FacturePDF extends FPDF {
 
     function Table($header, $data) {
         // Largeurs des colonnes
-        $this->widths = [50, 25, 40, 30, 30]; // Largeurs des colonnes
+        $this->widths = [50, 30, 40, 30, 30]; // Largeurs des colonnes
         $this->aligns = ['L', 'L', 'L', 'C', 'R']; // Alignement des colonnes
     
     // Afficher les en-têtes
