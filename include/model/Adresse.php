@@ -34,15 +34,15 @@ final class Adresse extends Model
 
     function __construct(
         protected ?int $id,
-        readonly Commune $commune,
-        readonly ?int $numero_voie          = null,
-        readonly ?string $complement_numero = null,
-        readonly ?string $nom_voie          = null,
-        readonly ?string $localite          = null,
-        readonly ?string $precision_int     = null,
-        readonly ?string $precision_ext     = null,
-        readonly ?float $latitude           = null,
-        readonly ?float $longitude          = null,
+        public Commune $commune,
+        public ?int $numero_voie          = null,
+        public ?string $complement_numero = null,
+        public ?string $nom_voie          = null,
+        public ?string $localite          = null,
+        public ?string $precision_int     = null,
+        public ?string $precision_ext     = null,
+        public ?float $latitude           = null,
+        public ?float $longitude          = null,
     ) {}
 
     /**

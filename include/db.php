@@ -30,23 +30,29 @@ function connect(): PDO
 
     // Connect to the database
     $driver = 'pgsql';
-    [$host, $port, $dbname, $username, $password] = is_localhost() 
-        ? ['localhost',
+    [$host, $port, $dbname, $username, $password] = is_localhost()
+        ? [
+            'localhost',
             5432,
             'raphael',
             'postgres',
-            'postgres']
-        : ['postgresdb',
+            'postgres'
+        ]
+        : [
+            'postgresdb',
             notfalse(getenv('PGDB_PORT'), 'PGDB_PORT not set'),
             'postgres',
             notfalse(getenv('DB_USER'), 'DB_USER not set'),
-            notfalse(getenv('DB_ROOT_PASSWORD'), 'DB_ROOT_PASSWORD not set')];
+            notfalse(getenv('DB_ROOT_PASSWORD'), 'DB_ROOT_PASSWORD not set')
+        ];
 
-    $_pdo = new LogPDO(
+    $args = [
         "$driver:host=$host;port=$port;dbname=$dbname",
         $username,
         $password,
-    );
+    ];
+
+    $_pdo = is_localhost() ? new LogPDO(...$args) : new PDO(...$args);
 
     notfalse($_pdo->exec("set schema 'pact'"));
 
@@ -120,7 +126,7 @@ function document_root(): string
 enum BoolOperator: string
 {
     case AND = 'and';
-    case OR  = 'or';
+    case OR = 'or';
 }
 
 function quote_identifier(string $identifier): string
@@ -161,9 +167,9 @@ function insert_into(string $table, array $args, array $returning = []): PDOStat
     }
 
     $column_names = implode(',', array_keys($args));
-    $arg_names    = implode(',', array_map(fn($col) => ":$col", array_keys($args)));
-    $stmt         = notfalse(connect()->prepare("insert into $table ($column_names) values ($arg_names)"
-                . ($returning ? 'returning ' . implode(',', array_map(quote_identifier(...), $returning)) : '')));
+    $arg_names = implode(',', array_map(fn($col) => ":$col", array_keys($args)));
+    $stmt = notfalse(connect()->prepare("insert into $table ($column_names) values ($arg_names)"
+        . ($returning ? 'returning ' . implode(',', array_map(quote_identifier(...), $returning)) : '')));
 
     bind_values($stmt, $args);
     return $stmt;
@@ -185,7 +191,7 @@ function update(string $table, array $args, array $key_args, array $returning = 
 
     $stmt = notfalse(connect()->prepare("update $table set "
         . implode(',', array_map(fn($col) => "$col = :$col", array_keys($args)))
-        . where_clause(BoolOperator::AND, array_keys($key_args))
+        . where_clause(BoolOperator::AND , array_keys($key_args))
         . ($returning ? 'returning ' . implode(',', array_map(quote_identifier(...), $returning)) : '')));
 
     bind_values($stmt, $args);
@@ -195,7 +201,7 @@ function update(string $table, array $args, array $key_args, array $returning = 
 
 function delete_from(string $table, array $key_args): PDOStatement
 {
-    $stmt = notfalse(connect()->prepare("delete from $table " . where_clause(BoolOperator::AND, array_keys($key_args))));
+    $stmt = notfalse(connect()->prepare("delete from $table " . where_clause(BoolOperator::AND , array_keys($key_args))));
     bind_values($stmt, $key_args);
     return $stmt;
 }
@@ -229,19 +235,16 @@ final class LogPDO extends PDO
 
     function query(string $query, ?int $fetchMode = null, mixed ...$fetchModeArgs): PDOStatement|false
     {
-        if (is_localhost()) {
-            error_log("LogPDO ({$this->query_no}) query: '$query'");
-            ++$this->query_no;
-        }
+
+        error_log("LogPDO ({$this->query_no}) query: '$query'");
+        ++$this->query_no;
         return parent::query($query, $fetchMode, $fetchModeArgs);
     }
 
     function prepare(string $query, array $options = []): PDOStatement|false
     {
-        if (is_localhost()) {
-            error_log("LogPDO ({$this->query_no}) prepare: '$query'");
-            ++$this->query_no;
-        }
+        error_log("LogPDO ({$this->query_no}) prepare: '$query'");
+        ++$this->query_no;
         return parent::prepare($query, $options);
     }
 }

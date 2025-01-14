@@ -1,7 +1,6 @@
 <?php
 require_once 'util.php';
 require_once 'auth.php';
-require_once 'queries.php';
 require_once 'redirect.php';
 require_once 'component/Page.php';
 require_once 'component/InputAdresse.php';
@@ -21,70 +20,61 @@ $input_adresse = new InputAdresse('adresse', 'adresse');
 
 if ($_POST) {
     // modif pseudo
-    $new_pseudo = getarg($_POST, 'new_pseudo', null, required: false);
-    if ($new_pseudo) {
-        DB\query_update_pseudo($compte->id, $new_pseudo);
+    if (null !== $new_pseudo = getarg($_POST, 'new_pseudo', null, required: false)) {
+        $compte->pseudo = $new_pseudo;
     }
 
     // modif denomination
-    $new_denomination = getarg($_POST, 'new_denomination', null, false);
-    if ($new_denomination) {
-        DB\query_update_denomination($compte->id, $new_denomination);
+    if (null !== $new_denomination = getarg($_POST, 'new_denomination', required: false)) {
+        $compte->denomination = $new_denomination;
     }
 
     // modif siren
-    $new_siren = getarg($_POST, 'new_siren', null, false);
-    if ($new_siren) {
+    if (null !== $new_siren = getarg($_POST, 'new_siren', required: false)) {
         if (!preg_match('#^[0-9]{9}$#', $new_siren)) {
             $error_siren = 'siren incorrect, doit être composé de 9 chiffres';
         } else {
-            DB\query_update_siren($compte->id, $new_siren);
+            $compte->siren = $new_siren;
         }
     }
 
     // modif Nom
-    $new_nom = getarg($_POST, 'new_nom', null, false);
-    if ($new_nom) {
-        DB\query_update_Nom($compte->id, $new_nom);
+    if (null !== $new_nom = getarg($_POST, 'new_nom', required: false)) {
+        $compte->nom = $new_nom;
     }
 
     // modif Prenom
-    $new_prenom = getarg($_POST, 'new_prenom', null, required: false);
-    if ($new_prenom) {
-        DB\query_update_prenom($compte->id, $new_prenom);
+    if (null !== $new_prenom = getarg($_POST, 'new_prenom', null, required: false)) {
+        $compte->prenom = $new_prenom;
     }
 
     // modif Email
-    $new_email = getarg($_POST, 'new_email', null, false);
-    if ($new_email) {
+    if (null !== $new_email = getarg($_POST, 'new_email', required: false)) {
         if (!filter_var($new_email, FILTER_VALIDATE_EMAIL)) {
             $error_email = 'Email incorrect';
         } else {
-            DB\query_update_email($compte->id, $new_email);
+            $compte->email = $new_email;
         }
     }
 
     // modif telephone
-    $new_telephone = getarg($_POST, 'new_telephone', null, false);
-
-    if ($new_telephone) {
+    if (null !== $new_telephone = getarg($_POST, 'new_telephone', required: false)) {
         if (!preg_match('#^[0-9]{10}$#', $new_telephone)) {
             $error_tel = 'Numéro incorrect, doit être composé de 10 chiffres';
         } else {
-            DB\query_update_telephone($compte->id, $new_telephone);
+            $compte->telephone = $new_telephone;
         }
     }
 
     // modif mot de passe
 
-    $old_mdp = getarg($_POST, 'old_mdp', null, false);
-    if ($old_mdp) {
-        $new_mdp = getarg($_POST, 'new_mdp', null, false);
+    if (null !== $old_mdp = $old_mdp = getarg($_POST, 'old_mdp', required: false)) {
+        $new_mdp = getarg($_POST, 'new_mdp', required: false);
         $confirmation_mdp = getarg($_POST, 'confirmation_mdp', filter: null, required: false);
         if (password_verify($old_mdp, $compte->mdp_hash)) {
             if ($new_mdp) {
                 if ($confirmation_mdp === $new_mdp) {
-                    DB\query_update_mdp($compte->id, password_hash($new_mdp, algo: PASSWORD_DEFAULT));
+                    $compte->mdp_hash = password_hash($new_mdp, algo: PASSWORD_DEFAULT);
                 } else {
                     $error_mdp = 'Mot de passe de confirmation different.';
                 }
@@ -95,16 +85,11 @@ if ($_POST) {
             $error_mdp = 'Mot de passe incorrect.';
         }
     }
+
+    $compte->push_to_db();
 }
 
-$page->put(function () use (
-    $compte,
-    $input_adresse,
-    $error_email,
-    $error_mdp,
-    $error_siren,
-    $error_tel
-) {
+$page->put(function () use ($compte, $input_adresse, $error_email, $error_mdp, $error_siren, $error_tel) {
     ?>
     <h1>Modifier les informations de votre compte</h1>
     <section id="info_compte">

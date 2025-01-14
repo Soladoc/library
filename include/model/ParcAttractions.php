@@ -17,9 +17,9 @@ final class ParcAttractions extends Offre
 
     function __construct(
         array $args_offre,
-        readonly ?int $age_requis,
-        readonly int $nb_attractions,
-        readonly Image $image_plan,
+        public ?int $age_requis,
+        public int $nb_attractions,
+        public Image $image_plan,
     ) {
         parent::__construct(...$args_offre);
     }

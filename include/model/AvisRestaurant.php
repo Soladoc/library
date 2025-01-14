@@ -16,10 +16,10 @@ final class AvisRestaurant extends Avis
 
     function __construct(
         array $args_avis,
-        readonly int $note_cuisine,
-        readonly int $note_service,
-        readonly int $note_ambiance,
-        readonly int $note_qualite_prix,
+        public int $note_cuisine,
+        public int $note_service,
+        public int $note_ambiance,
+        public int $note_qualite_prix,
     ) {
         parent::__construct(...$args_avis);
     }

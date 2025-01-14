@@ -42,12 +42,12 @@ class Avis extends Model
 
     function __construct(
         protected ?int $id,
-        readonly string $commentaire,
-        readonly int $note,
-        readonly Date $date_experience,
-        readonly string $contexte,
-        readonly ?Membre $membre_auteur,
-        readonly Offre $offre,
+        public string $commentaire,
+        public int $note,
+        public Date $date_experience,
+        public string $contexte,
+        public ?Membre $membre_auteur,
+        public Offre $offre,
         //
         protected ?bool $blackliste           = null,
         protected ?bool $lu                   = null,
