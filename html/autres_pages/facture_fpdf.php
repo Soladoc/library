@@ -59,7 +59,8 @@ class FacturePDF extends FPDF {
 //     }
 //     // Closing line
 //     $this->Cell(array_sum($w),0,'','T');
-// }function Table($header, $data) {
+// }
+function Table($header, $data) {
     // Largeurs des colonnes
     $w = [50, 50, 40, 30, 30]; // Largeur pour chaque colonne : Titre, Abonnement, Catégorie, Jours, Prix
     $this->SetFont('Arial', 'B', 12); // Police pour les en-têtes
