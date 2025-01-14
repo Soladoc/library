@@ -15,20 +15,13 @@ if(!$compte instanceof Professionnel){
 echo "error";
 }
 
-
+function convertToIso88591($string) {
+    return mb_convert_encoding($string, 'ISO-8859-1', 'UTF-8');
+}
 
 // Créer une classe pour la facture (facultatif)
 class FacturePDF extends FPDF {
     // En-tête
-    function Header() {
-        // $this->SetFont('Arial', 'B', 14);
-        // $this->Cell(0, 10, 'Facture', 0, 1, 'C'); // Titre centré
-        // $this->Ln(10); 
-       
-        // // Logo
-        // $this->Image('../images/logo_vertical_big.jpg', 10, 10); // Chemin du logo, x, y, largeur
-        // $this->Ln(10); // Saut de ligne
-    }
 
     // Pied de page
     function Footer() {
@@ -139,10 +132,10 @@ class FacturePDF extends FPDF {
         if ($i == 1) { // Gestion particulière pour "Type d'abonnement"
             $x = $this->GetX();
             $y = $this->GetY();
-            $this->MultiCell($this->widths[$i], 7, utf8_decode($col), 1, 'C');
+            $this->MultiCell($this->widths[$i], 7, convertToIso88591($col), 1, 'C');
             $this->SetXY($x + $this->widths[$i], $y);
         } else {
-            $this->Cell($this->widths[$i], 14, utf8_decode($col), 1, 0, 'C'); // En-tête simple
+            $this->Cell($this->widths[$i], 14, convertToIso88591($col), 1, 0, 'C'); // En-tête simple
         }
     }
     $this->Ln();
@@ -150,7 +143,7 @@ class FacturePDF extends FPDF {
         // Afficher les données
         $this->SetFont('Arial', '', 12); // Police normale pour les données
         foreach ($data as $row) {
-            $this->Row(array_map('utf8_decode', $row));
+            $this->Row(array_map('convertToIso88591', $row));
         }
     }
 // function Table($header, $data) {
@@ -160,7 +153,7 @@ class FacturePDF extends FPDF {
 
 //     // Afficher les en-têtes
 //     foreach ($header as $i => $col) {
-//         $this->Cell($w[$i], 7, utf8_decode($col), 1, 0, 'C'); // En-têtes centrées
+//         $this->Cell($w[$i], 7, convertToIso88591($col), 1, 0, 'C'); // En-têtes centrées
 //     }
 //     $this->Ln();
 
@@ -170,14 +163,14 @@ class FacturePDF extends FPDF {
 //         // Colonne 1 : Titre avec MultiCell pour gérer les noms longs
 //         $x = $this->GetX(); // Position X courante
 //         $y = $this->GetY(); // Position Y courante
-//         $this->MultiCell($w[0], 6, utf8_decode($row[0]), 'LR'); // MultiCell gère les retours à la ligne
+//         $this->MultiCell($w[0], 6, convertToIso88591($row[0]), 'LR'); // MultiCell gère les retours à la ligne
 //         $this->SetXY($x + $w[0], $y); // Ajuste la position pour les colonnes suivantes
 
 //         // Colonne 2 : Type d'abonnement
-//         $this->Cell($w[1], 6, utf8_decode($row[1]), 1, 0, 'C');
+//         $this->Cell($w[1], 6, convertToIso88591($row[1]), 1, 0, 'C');
 
 //         // Colonne 3 : Catégorie
-//         $this->Cell($w[2], 6, utf8_decode($row[2]), 1, 0, 'C');
+//         $this->Cell($w[2], 6, convertToIso88591($row[2]), 1, 0, 'C');
 
 //         // Colonne 4 : Jours
 //         $this->Cell($w[3], 6, $row[3], 1, 0, 'C');
@@ -221,9 +214,9 @@ $pdf->Cell(0, 10, "Tel. : XXXXXXXXXX", 0, 1,"R");
 $pdf->Cell(0, 10, "Site : https://413.ventsdouest.dev", 0, 1,"R");
 // Informations sur le client
 $pdf->SetFont('Arial', '', 12);
-$pdf->Cell(100, 10, utf8_decode("Client : $compte->denomination"), 0, 1);
-$pdf->Cell(100, 10, utf8_decode("Adresse : ".$compte->adresse->format()), 0, 1);
-$pdf->Cell(100, 10, utf8_decode("Email : ".$compte->email), 0, 1);
+$pdf->Cell(100, 10, convertToIso88591("Client : $compte->denomination"), 0, 1);
+$pdf->Cell(100, 10, convertToIso88591("Adresse : ".$compte->adresse->format()), 0, 1);
+$pdf->Cell(100, 10, convertToIso88591("Email : ".$compte->email), 0, 1);
 $pdf->Cell(100, 10, "Tel. : $compte->telephone", 0, 1);
 
 
