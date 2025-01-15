@@ -164,7 +164,6 @@ $page->put(function () use ($offre, $input_rating, $input_note_cuisine, $input_n
                 <form method="post">
                     <textarea name="report_message" placeholder="Décrivez le problème&hellip;" required <?= $signalement_actuel === null ? '' : 'readonly' ?>><?= $signalement_actuel ?></textarea>
                     <button type="submit" name="submit_report" class="btn-submit"><?= $signalement_actuel === null ? 'Envoyer' : 'Supprimer' ?></button>
-                    <button type="submit" name="cancel_report" class="btn-cancel">Annuler</button>
                 </form>
                 <?php if (isset($error_message)) { ?>
                     <p class="error"><?= h14s($error_message) ?></p>
