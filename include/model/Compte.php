@@ -20,7 +20,7 @@ abstract class Compte extends Signalable
             'prenom' => [null, 'prenom', PDO::PARAM_STR],
             'telephone' => [null, 'telephone', PDO::PARAM_STR],
             'id_adresse' => [fn($x) => $x->id, 'adresse', PDO::PARAM_STR],
-            'uuid' => [fn($x) => new Uuid($x), 'uuid', PDO::PARAM_STR],
+            'api_key' => [fn($x) => new Uuid($x), 'api_key', PDO::PARAM_STR],
         ];
     }
 
