@@ -37,15 +37,15 @@ with
                 'Au cœur des Côtes-d''Armor et à mi-chemin entre St-Brieuc et Guingamp, le site de Kerlabo est un incontournable du karting en Bretagne. Sur un site dédié au loisir et au sport automobile, le circuit de Kerlabo vous offre un tracé unique et vallonné sur plus de 800 mètres!',
                 'Ouvert samedi et dimanche (selon météo : horaires à vérifier sur google)+ les apres midi des vacances scolaires du 21 au 31 décembre. 
 
-    Autres jours et horaires possibles sur demande pour groupes de 8 pers. mini.
+Autres jours et horaires possibles sur demande pour groupes de 8 pers. mini.
 
-    Nos horaires sont mis à jour régulièrement sur google en fonction des réservations de groupes. Bien les vérifier avant de se déplacer!
+Nos horaires sont mis à jour régulièrement sur google en fonction des réservations de groupes. Bien les vérifier avant de se déplacer!
 
-    Vous pouvez téléphoner avant de vous déplacer pour connaitre l''affluence mais nous ne faisons PAS DE RESERVATION (sauf groupes + de 8 personnes pour des animations type challenge ou endurance)
+Vous pouvez téléphoner avant de vous déplacer pour connaitre l''affluence mais nous ne faisons PAS DE RESERVATION (sauf groupes + de 8 personnes pour des animations type challenge ou endurance)
 
-    Nous vous demandons de privilégier vos équipements personnels (casque intégral ou cagoule) si vous en avez + prévoir blouson et GANTS en hiver
+Nous vous demandons de privilégier vos équipements personnels (casque intégral ou cagoule) si vous en avez + prévoir blouson et GANTS en hiver
 
-    Une CAGOULE en coton réutilisable et personnelle sera OBLIGATOIRE sous nos casques prêtés. Les cagoules sont en vente sur place au tarif de 3€',
+Une CAGOULE en coton réutilisable et personnelle sera OBLIGATOIRE sous nos casques prêtés. Les cagoules sont en vente sur place au tarif de 3€',
                 'https://kerlabo-kart.com',
                 '0:20:',
                 'Nous vous proposons un circuit de karting'
@@ -64,7 +64,14 @@ with
         insert into
             avis (id_offre, id_membre_auteur, note, contexte, date_experience, commentaire)
         values
-            ((table id_offre), id_membre ('dieu_des_frites'), 2, 'affaires', '2024-06-15', 'Karting bridés trop lents')
+            (
+                (table id_offre),
+                id_membre ('dieu_des_frites'),
+                2,
+                'affaires',
+                '2024-06-15',
+                'Karting bridés trop lents'
+            )
     ),
     s3 as (
         insert into
