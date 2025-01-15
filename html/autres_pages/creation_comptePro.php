@@ -31,12 +31,14 @@ if ($_POST) {
         $args['siren'] = getarg($_POST, 'siren');
     }
 
-    if (false === Compte::from_db_by_email($args['email'])) fail('Cette adresse e-mail est déjà utilisée.');
+    if (false === Compte::from_db_by_email($args['email']))
+        fail('Cette adresse e-mail est déjà utilisée.');
 
     $mdp_hash = password_hash($args['mdp'], PASSWORD_DEFAULT);
 
     $commune = Commune::from_db_by_nom($_POST['adresse']);
-    if (false === $commune) fail("La commune '{$_POST['adresse']}' n'existe pas.");
+    if (false === $commune)
+        fail("La commune '{$_POST['adresse']}' n'existe pas.");
 
     $adresse = new Adresse(null, $commune);
     $adresse->push_to_db();
@@ -55,7 +57,8 @@ if ($_POST) {
     ];
 
     $pro = $args['type'] === 'prive'
-        ? new ProfessionnelPrive($args_compte, $args_pro, str_replace(' ', '', $args['siren'])) : new ProfessionnelPublic($args_compte, $args_pro);
+        ? new ProfessionnelPrive($args_compte, $args_pro, str_replace(' ', '', $args['siren']))
+        : new ProfessionnelPublic($args_compte, $args_pro);
     $pro->push_to_db();
     redirect_to(location_connexion());
 }
