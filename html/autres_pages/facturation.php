@@ -58,6 +58,9 @@ $page->put(function () {
         </tr>
     </tfoot>
     </table>
+       <!-- Bouton pour obtenir le pdf -->
+       <a class="btn-more-info bouton_principale_pro" href="<?="facture_fpdf.php" ?>"  id='obtenir_facture_pdf' >Version PDF</a>
+
     <?php
 });
 ?>

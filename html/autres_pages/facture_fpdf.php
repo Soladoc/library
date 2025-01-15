@@ -208,7 +208,7 @@ $pdf->Cell(144, 10, 'Total', 1, 0, 'R');
 $pdf->Cell(48, 10, $resultat_global." ".EURO, 1, 1, 'C');
 
 // Générer et afficher le PDF
-$pdf->Output('I', 'facture.pdf'); // I = afficher dans le navigateur, D = télécharger
+$pdf->Output('I', "facture_Pact_$compte->denomination.pdf"); // I = afficher dans le navigateur, D = télécharger
 ?>
 
 
