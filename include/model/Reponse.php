@@ -44,5 +44,5 @@ final class Reponse extends Signalable
         );
     }
 
-    const TABLE = '_reponse';
+    const TABLE = 'reponse';
 }

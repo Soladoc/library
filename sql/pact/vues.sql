@@ -102,3 +102,5 @@ from
     _avis_restaurant
     join _avis using (id)
     join membre on id_membre_auteur = membre.id;
+
+create view reponse as select * from _reponse;
