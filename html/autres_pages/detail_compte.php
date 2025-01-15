@@ -57,13 +57,13 @@ $page->put(function () use ($compte) {
         </div>
 
         <div id="api_key">
-            <p>Clé d'API :
+            <p>Clé d'API : </p></span>
             <?php if ($compte->api_key) { ?>
-            <span><code class="spoiler"><?= $compte->api_key ?></code></span>
+            <code class="spoiler"><?= $compte->api_key ?></code>
             <?php } else { ?>
-            <span>&ndash;</span>
+            &ndash;
             <?php } ?>
-            </p>
+            </span>
         </div>
 
         <a href="modif_compte.php?id=<?= $compte->id ?>">Modifier</a>
