@@ -13,7 +13,7 @@
     --color-accent: #4051fd;
     --color-accent-hover: #4051fd80;
     font-size: 1.1em;
-    font-family: Arial, sans-serif;
+    font-family: "Tw Cen MT", Arial, sans-serif;
 }
 
 html,
@@ -55,7 +55,6 @@ blockquote {
 }
 
 button {
-    font-family: "Tw Cen MT", sans-serif;
     cursor: pointer;
     padding: 0.25em;
 }
@@ -66,16 +65,11 @@ input {
 
 p {
     margin: 0.5em;
-    font-family: "Tw Cen MT", sans-serif;
 }
 
 p,
 figcaption {
     line-height: 3.125ex;
-}
-
-label {
-    font-family: "Tw Cen MT";
 }
 
 header {
@@ -88,16 +82,11 @@ header {
     position: relative;
 }
 
-header #header_pro{
+header #header_pro {
     display: flex;
     flex-direction: row;
     gap: 1em;
-
 }
-
-
-
-
 
 .logo {
     position: absolute;
@@ -143,7 +132,6 @@ header #header_pro{
 }
 
 .auth-button span {
-    font-family: "Tw Cen MT", sans-serif;
     font-size: 16px;
 }
 
@@ -168,7 +156,6 @@ header #header_pro{
     }
 }
 
-
 .acces-facturation {
     display: flex;
     align-items: center;
@@ -188,7 +175,6 @@ header #header_pro{
 }
 
 .acces-facturation span {
-    font-family: "Tw Cen MT", sans-serif;
     font-size: 16px;
 }
 
@@ -211,17 +197,49 @@ header #header_pro{
     }
 }
 
-/* Styles globaux */
-h1,
-h2,
-h3 {
-    color: var(--color-text);
-    font-family: "Tw Cen MT", sans-serif;
-}
+/* Titres */
 
 h1 {
-    padding: 1em;
+    color: var(--color-text);
+    font-weight: 500;
+    font-size: 2em;
+    line-height: calc(1ex / .4);
     text-align: center;
+}
+
+h2 {
+    color: var(--color-text);
+    font-weight: 500;
+    font-size: 1.75em;
+    line-height: calc(1ex / .42);
+}
+
+h3 {
+    color: var(--color-text);
+    font-weight: 500;
+    font-size: 1.5em;
+    line-height: calc(1ex / .38);
+}
+
+h4 {
+    color: var(--color-text);
+    font-weight: 500;
+    font-size: 1.25em;
+    line-height: calc(1ex / .37);
+}
+
+h5 {
+    color: var(--color-text);
+    font-weight: 500;
+    font-size: 1.125em;
+    line-height: calc(1ex / .4);
+}
+
+h6 {
+    color: var(--color-text);
+    font-weight: 500;
+    font-size: 1.0625em;
+    line-height: calc(1ex / .5);
 }
 
 /* Section de recherche */
@@ -556,7 +574,6 @@ h1 {
     cursor: pointer;
 }
 
-
 .map {
     height: 300px;
     width: 100%;
@@ -621,7 +638,6 @@ textarea {
     color: #333;
     margin-bottom: 20px;
 }
-
 
 .review-summary {
     margin-bottom: 20px;
@@ -704,7 +720,6 @@ a:not(:hover, :focus, :focus-within) {
 }
 
 .radio_entr label {
-    font-family: "Tw Cen MT", sans-serif;
     font-size: 16px;
     color: #333;
     cursor: pointer;
@@ -732,7 +747,6 @@ a:not(:hover, :focus, :focus-within) {
 
 .categories h3,
 #subcategories h3 {
-    font-family: "Tw Cen MT", sans-serif;
     color: var(--color-text);
     font-size: 1.2em;
     margin-bottom: 10px;
@@ -748,7 +762,6 @@ a:not(:hover, :focus, :focus-within) {
     border: 1px solid #ccc;
     border-radius: 5px;
     background-color: #f9f9f9;
-    font-family: "Tw Cen MT", sans-serif;
     font-size: 1em;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
@@ -782,7 +795,6 @@ a:not(:hover, :focus, :focus-within) {
 
 .subcategory-list label {
     cursor: pointer;
-    font-family: "Tw Cen MT", sans-serif;
 }
 
 .sorting-section {
@@ -976,7 +988,7 @@ section#info_compte div {
     padding-bottom: 0.5rem;
 }
 
-section#info_compte div p :not(.error){
+section#info_compte div p :not(.error) {
     margin: 0;
     font-weight: bold;
     color: #555;
@@ -1006,7 +1018,6 @@ section#info_compte div span {
 #changer_mdp {
     display: flex;
     flex-direction: column;
-
 }
 
 .bandeau-etat {
@@ -1019,11 +1030,13 @@ section#info_compte div span {
 }
 
 .bandeau-etat.vert {
-    background-color: #d4f4dd; /* Vert pastel */
+    background-color: #d4f4dd;
+    /* Vert pastel */
 }
 
 .bandeau-etat.rouge {
-    background-color: #f4d4d4; /* Rouge pastel */
+    background-color: #f4d4d4;
+    /* Rouge pastel */
 }
 
 .bandeau-etat .bouton {
@@ -1043,7 +1056,6 @@ section#info_compte div span {
     background-color: #eee;
     border-color: #999;
 }
-
 
 .bouton_principale_pro {
     max-width: 200px;
@@ -1089,7 +1101,8 @@ section#info_compte div span {
 
 .nb-offres {
     align-self: flex-start;
-    margin-left: 40px; /* Ajustez si nécessaire pour un bon alignement */
+    margin-left: 40px;
+    /* Ajustez si nécessaire pour un bon alignement */
 }
 
 #facturation {
@@ -1103,15 +1116,14 @@ section#info_compte div span {
 #facturation td {
     border: 1px solid;
     padding: 8px 10px;
-  }
+}
 
-  .body-center {
+.body-center {
     display: flex;
     justify-content: center;
     align-items: center;
     min-height: 100vh;
     background-color: var(--color-background);
-    font-family: var(--font-family, Arial, sans-serif);
     margin: 0;
 }
 
@@ -1206,23 +1218,26 @@ label > input {
     box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-
 .button-signaler {
     padding: 0.8rem 1.5rem;
-    background-color: #e74c3c; /* Rouge pour le bouton */
+    background-color: #e74c3c;
+    /* Rouge pour le bouton */
     color: white;
     border: 2px solid #e74c3c;
-    border-radius: 10px; /* Arrondir les bords */
+    border-radius: 10px;
+    /* Arrondir les bords */
     cursor: pointer;
     font-size: 1rem;
     transition: background-color 0.3s ease;
 }
 
 .btn-report:hover {
-    background-color: #c0392b; /* Couleur plus sombre au survol */
+    background-color: #c0392b;
+    /* Couleur plus sombre au survol */
 }
 
 .btn-report:focus {
     outline: none;
-    box-shadow: 0 0 5px rgba(231, 76, 60, 0.8); /* Lueur rouge au focus */
+    box-shadow: 0 0 5px rgba(231, 76, 60, 0.8);
+    /* Lueur rouge au focus */
 }

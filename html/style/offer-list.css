@@ -53,7 +53,6 @@
 .offer-card .offer-card p {
     margin: 5px 0;
     color: #555;
-    font-family: "Tw Cen MT", sans-serif;
 }
 
 .offer-card :is(.location, .category, .price, .rating, .professional) {
@@ -64,7 +63,6 @@
     color: red;
     font-weight: bold;
     font-size: 14px;
-    font-family: "Tw Cen MT", sans-serif;
 }
 
 /* Responsiveness */
