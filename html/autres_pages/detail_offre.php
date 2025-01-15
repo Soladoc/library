@@ -111,9 +111,9 @@ $page->put(function () use ($offre, $input_rating, $input_note_cuisine, $input_n
             </div>
         </section>
 
-        <div class="offer-info">
+        <div class="offer-info text">
             <h2><?= h14s($offre->titre) ?></h2>
-            <p class="description"><?= (new Parsedown())->text($offre->description_detaillee) ?></p>
+            <?= (new Parsedown())->text($offre->description_detaillee) ?>
         </div>
 
     </section>

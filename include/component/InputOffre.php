@@ -386,11 +386,11 @@ final class InputOffre extends Input
 
         <section>
             <h2>Description détaillée</h2>
-            <textarea <?= $form_attr ?>
+            <textarea class="text" <?= $form_attr ?>
                 id="<?= $this->id('description_detaillee') ?>"
                 name="<?= $this->name('description_detaillee') ?>"
                 required
-                ><?= (new Parsedown())->text($current->description_detaillee) ?></textarea>
+                ><?= $current?->description_detaillee ?></textarea>
         </section>
 
         <section id="<?= $this->id('image-creation-offre') ?>">
