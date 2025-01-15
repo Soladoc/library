@@ -1,5 +1,5 @@
 <?php
-require_once 'db.php';
+require_once 'model/Avis.php';
 require_once 'auth.php';
 require_once 'const.php';
 require_once 'redirect.php';
