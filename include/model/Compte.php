@@ -64,7 +64,7 @@ abstract class Compte extends Signalable
         ' . static::TABLE . '.prenom,
         ' . static::TABLE . '.telephone,
         ' . static::TABLE . '.id_adresse,
-        ' . static::TABLE . '.uuid,
+        ' . static::TABLE . '.api_key,
 
         professionnel.denomination professionnel_denomination,
         professionnel.secteur professionnel_secteur,
