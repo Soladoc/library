@@ -35,19 +35,24 @@ with
                 'Itinéraire et Durée :
 Notre randonnée au Menez Bré commence à partir du village pittoresque de Plougonven. La randonnée dure environ 4 heures et couvre une distance de 10 kilomètres. Le parcours est modérément difficile, avec des montées et des descentes qui offrent des vues panoramiques sur les montagnes environnantes et la vallée.
 
-Points d''Intérêt :
+### Points d''Intérêt
+
 Au cours de la randonnée, vous découvrirez plusieurs points d''intérêt historiques et naturels. Le Menez Bré est connu pour ses mégalithes, témoins de l''histoire ancienne de la région. Vous aurez l''occasion de voir des menhirs et des dolmens, ainsi que des vestiges de l''époque celtique. De plus, la randonnée traverse des forêts luxuriantes et des landes, offrant une diversité de paysages qui raviront les amoureux de la nature.
 
-Faune et Flore :
+### Faune et Flore
+
 Le Menez Bré est un véritable sanctuaire pour la faune et la flore. Vous pourrez observer une variété d''oiseaux, dont des rapaces, ainsi que des mammifères comme les renards et les chevreuils. La flore est également riche, avec des espèces rares et protégées. Notre guide vous aidera à identifier les différentes plantes et animaux que vous rencontrerez.
 
-Guide et Équipement :
+### Guide et Équipement
+
 La randonnée est guidée par un expert local qui connaît parfaitement la région. Il vous fournira des informations sur l''histoire, la géologie et la biodiversité du Menez Bré. Tout l''équipement nécessaire, y compris les cartes et les bâtons de randonnée, sera fourni. Nous vous recommandons de porter des chaussures de randonnée confortables et des vêtements adaptés aux conditions météorologiques.
 
-Repas et Rafraîchissements :
+### Repas et Rafraîchissements
+
 Un pique-nique composé de produits locaux sera inclus dans l''offre. Vous pourrez déguster des spécialités bretonnes tout en profitant de la vue imprenable sur les montagnes. Des pauses régulières seront prévues pour vous permettre de vous reposer et de vous hydrater.
 
-Réservation et Informations Pratiques :
+### Réservation et Informations Pratiques
+
 Pour réserver votre place, veuillez nous contacter par téléphone ou par e-mail. Les groupes sont limités à 15 personnes pour garantir une expérience personnalisée et sécurisée. Le point de rendez-vous sera communiqué lors de la réservation. Nous vous recommandons de réserver à l''avance pour garantir votre place.
 
 Rejoignez-nous pour une aventure inoubliable au cœur de la Bretagne et découvrez les trésors cachés du Menez Bré.',
