@@ -119,7 +119,7 @@ abstract class Compte extends Signalable
                 $row['adresse_latitude'],
                 $row['adresse_longitude'],
             ),
-            Uuid::parse($row['uuid']),
+            Uuid::parse($row['api_key'] ?? null),
         ];
         if ($denomination = $row['professionnel_denomination'] ?? null) {
             $secteur = $row['professionnel_secteur'];
