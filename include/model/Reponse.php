@@ -1,6 +1,6 @@
 <?php
 
-require_once 'model/Signalable';
+require_once 'model/Signalable.php';
 
 /**
  * @inheritDoc
