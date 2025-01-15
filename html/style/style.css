@@ -241,9 +241,9 @@ h6 {
     line-height: calc(1ex / .5);
 }
 
-/* Styles de base */
-ul,
-ol {
+/* Styles textuels */
+.text ul,
+.text ol {
     display: flex;
     flex-direction: column;
     gap: .5lh;

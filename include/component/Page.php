@@ -27,9 +27,11 @@ final class Page
     function __construct(
         readonly string $title,
         readonly array $stylesheets = [],
-        readonly array $scripts     = [],
+        readonly array $scripts = [],
         readonly ?string $body_id = null,
-    ) {}
+        readonly ?string $main_class = null,
+    ) {
+    }
 
     /**
      * Affiche la page.
@@ -39,16 +41,18 @@ final class Page
     function put(callable|string $main)
     {
         ?>
-<!DOCTYPE html>
-<html lang="fr">
-<?php $this->put_head() ?>
-<body <?= mapnull($this->body_id, fn(string $id) => "id=\"$id\"") ?>>
-    <?php $this->put_header() ?>
-    <main><?php is_string($main) ? (print $main) : $main() ?></main>
-    <?php $this->put_footer() ?>
-</body>
-</html>
-<?php
+        <!DOCTYPE html>
+        <html lang="fr">
+        <?php $this->put_head() ?>
+
+        <body <?= mapnull($this->body_id, fn(string $id) => "id=\"$id\"") ?>>
+            <?php $this->put_header() ?>
+            <main <?= mapnull($this->main_class, fn(string $class_list) => "class=\"$class_list\"") ?>><?php is_string($main) ? (print $main) : $main() ?></main>
+            <?php $this->put_footer() ?>
+        </body>
+
+        </html>
+        <?php
     }
 
     /**
@@ -77,105 +81,108 @@ final class Page
     private function put_head(): void
     {
         ?>
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><?= h14s($this->title) ?></title>
-    <link rel="icon" href="/icon/favicon-32x32.png" type="image/x-icon" alt="test">
-    <?php
-    foreach (array_merge(self::BASE_STYLESHEETS, $this->stylesheets) as $href) {
-        // Si c'est une URL (contient un ':'), on laisse tel quel. Sinon on préfixe par le dossier des feuilles de style.
-        ?><link rel="stylesheet" href="<?= str_contains($href, ':') ? $href : "/style/$href" ?>"><?php
-    }
-    ?>
-    <?php
-    foreach (array_merge(self::BASE_SCRIPTS, $this->scripts) as $src => $attrs) {
-        // Idem.
-        ?><script <?= $attrs ?> src="<?= str_contains($src, ':') ? $src : "/script_js/$src" ?>"></script><?php
-    }
-    ?>
-</head>
-<?php
+
+        <head>
+            <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <title><?= h14s($this->title) ?></title>
+            <link rel="icon" href="/icon/favicon-32x32.png" type="image/x-icon" alt="test">
+            <?php
+            foreach (array_merge(self::BASE_STYLESHEETS, $this->stylesheets) as $href) {
+                // Si c'est une URL (contient un ':'), on laisse tel quel. Sinon on préfixe par le dossier des feuilles de style.
+                ?>
+                <link rel="stylesheet" href="<?= str_contains($href, ':') ? $href : "/style/$href" ?>"><?php
+            }
+            ?>
+            <?php
+            foreach (array_merge(self::BASE_SCRIPTS, $this->scripts) as $src => $attrs) {
+                // Idem.
+                ?>
+                <script <?= $attrs ?> src="<?= str_contains($src, ':') ? $src : "/script_js/$src" ?>"></script><?php
+            }
+            ?>
+        </head>
+        <?php
     }
 
     private function put_header(): void
     {
-?>
-<header>
-    <div class="logo">
-        <a href="<?= Auth\location_home() ?>"><img src="/images/logo.png" alt="Logo pact"></a>
-    </div>
-    <?php
-    if (Auth\est_connecte()) {
-        // Vérification du statut de la session
         ?>
-        <a href="<?= location_logout() ?>">
-            <div class="auth-button">
-                <img src="/images/logout-icon.png" alt="Profil">
-                <span>Déconnexion</span>
+        <header>
+            <div class="logo">
+                <a href="<?= Auth\location_home() ?>"><img src="/images/logo.png" alt="Logo pact"></a>
             </div>
-        </a>
-        <div id="header_pro">
-            <a href="/autres_pages/detail_compte.php">
-                <div class="auth-button">
-                    <img src="/images/profile-icon.png" alt="Compte">
-                    <span>Compte</span>
-                </div>
-            </a>
-            <?php if (Auth\est_connecte_pro()) { ?>
-            <!-- <a href="facturation.php">
+            <?php
+            if (Auth\est_connecte()) {
+                // Vérification du statut de la session
+                ?>
+                <a href="<?= location_logout() ?>">
+                    <div class="auth-button">
+                        <img src="/images/logout-icon.png" alt="Profil">
+                        <span>Déconnexion</span>
+                    </div>
+                </a>
+                <div id="header_pro">
+                    <a href="/autres_pages/detail_compte.php">
+                        <div class="auth-button">
+                            <img src="/images/profile-icon.png" alt="Compte">
+                            <span>Compte</span>
+                        </div>
+                    </a>
+                    <?php if (Auth\est_connecte_pro()) { ?>
+                        <!-- <a href="facturation.php">
                 <div class="acces-facturation">
                     <img src="/images/facturation.png" alt="Profil">
                     <span>Facturation</span>
                 </div>
             </a> -->
-        </div>
-    <?php
-        }
-    } else {
-        ?>
-        <a href="connexion.php">
-            <div class="auth-button">
-                <img src="/images/login-icon.png" alt="Profil">
-                <span>Connexion</span>
-            </div>
-        </a>
-    <?php
-    }
-    ?>
-</header>
-<?php
+                    </div>
+                    <?php
+                    }
+            } else {
+                ?>
+                <a href="connexion.php">
+                    <div class="auth-button">
+                        <img src="/images/login-icon.png" alt="Profil">
+                        <span>Connexion</span>
+                    </div>
+                </a>
+                <?php
+            }
+            ?>
+        </header>
+        <?php
     }
 
     private function put_footer(): void
     {
-?>
-<footer>
-    <div class="footer-content">
-        <div class="footer-logo">
-            <a href="/"><img src="/images/logo_vertical_big.png" alt="Logo PACT" width="500" height="500" loading="lazy"></a>
-            <article>
-                <p><a href="https://github.com/5cover/413/issues/new" target="_blank" rel="noopener noreferrer">Nous contacter</a></p>
-            </article>
-        </div>
-        <ul class="social-links">
-            <li><a href="https://www.facebook.com" target="_blank" rel="noopener noreferrer"><img src="/images/social/facebook.png" alt="Facebook" width="90" height="90" loading="lazy" title="Facebook"></a></li>
-            <li><a href="https://www.instagram.com" target="_blank" rel="noopener noreferrer"><img src="/images/social/instagram.png" alt="Instagram" width="90" height="90" loading="lazy" title="Instagram"></a></li>
-            <li><a href="https://www.x.com" target="_blank" rel="noopener noreferrer"><img src="/images/social/x.png" alt="X" width="90" height="90" loading="lazy" title="X"></a></li>
-            <li><a href="https://www.youtube.com" target="_blank" rel="noopener noreferrer"><img src="/images/social/youtube.png" alt="YouTube" width="90" height="90" loading="lazy" title="YouTube"></a></li>
-        </ul>
-        <article>
-            <p><a href="/autres_pages/legal/cgu.php"><abbr title="Conditions Générales d'Utilisation">CGU</abbr></a></p>
-            <p><a href="/autres_pages/legal/cgv.php"><abbr title="Conditions Générales de Vente">CGV</abbr></a></p>
-            <p><a href="/autres_pages/legal/mentions-legales.php">Mentions légales</a></p>
-        </article>
-    </div>
-    <div class="footer-bottom">
-        <p>413 &ndash; SAÉ 3.02</p>
-        <p>&copy; 2024 TripEnArvor</p>
-        <p>IUT de Lannion &ndash; BUT Informatique</p>
-    </div>
-</footer>
-<?php
+        ?>
+        <footer>
+            <div class="footer-content">
+                <div class="footer-logo">
+                    <a href="/"><img src="/images/logo_vertical_big.png" alt="Logo PACT" width="500" height="500" loading="lazy"></a>
+                    <article>
+                        <p><a href="https://github.com/5cover/413/issues/new" target="_blank" rel="noopener noreferrer">Nous contacter</a></p>
+                    </article>
+                </div>
+                <ul class="social-links">
+                    <li><a href="https://www.facebook.com" target="_blank" rel="noopener noreferrer"><img src="/images/social/facebook.png" alt="Facebook" width="90" height="90" loading="lazy" title="Facebook"></a></li>
+                    <li><a href="https://www.instagram.com" target="_blank" rel="noopener noreferrer"><img src="/images/social/instagram.png" alt="Instagram" width="90" height="90" loading="lazy" title="Instagram"></a></li>
+                    <li><a href="https://www.x.com" target="_blank" rel="noopener noreferrer"><img src="/images/social/x.png" alt="X" width="90" height="90" loading="lazy" title="X"></a></li>
+                    <li><a href="https://www.youtube.com" target="_blank" rel="noopener noreferrer"><img src="/images/social/youtube.png" alt="YouTube" width="90" height="90" loading="lazy" title="YouTube"></a></li>
+                </ul>
+                <article>
+                    <p><a href="/autres_pages/legal/cgu.php"><abbr title="Conditions Générales d'Utilisation">CGU</abbr></a></p>
+                    <p><a href="/autres_pages/legal/cgv.php"><abbr title="Conditions Générales de Vente">CGV</abbr></a></p>
+                    <p><a href="/autres_pages/legal/mentions-legales.php">Mentions légales</a></p>
+                </article>
+            </div>
+            <div class="footer-bottom">
+                <p>413 &ndash; SAÉ 3.02</p>
+                <p>&copy; 2024 TripEnArvor</p>
+                <p>IUT de Lannion &ndash; BUT Informatique</p>
+            </div>
+        </footer>
+        <?php
     }
 }

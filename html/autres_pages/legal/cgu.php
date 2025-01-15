@@ -2,7 +2,7 @@
 require_once 'component/Page.php';
 require_once 'Parsedown.php';
 
-$page = new Page('Conditions Générales d\'Utilisation');
+$page = new Page('Conditions Générales d\'Utilisation', main_class: 'text');
 
 // 4 pages
 // communes au membre et pro

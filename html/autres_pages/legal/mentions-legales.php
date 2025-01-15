@@ -2,7 +2,7 @@
 require_once 'component/Page.php';
 require_once 'Parsedown.php';
 
-$page = new Page('Mentions légales');
+$page = new Page('Mentions légales', main_class: 'text');
 
 // 1 - 1.5 page
 
