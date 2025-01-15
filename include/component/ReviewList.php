@@ -55,11 +55,10 @@ final class ReviewList
                                 </form>
                             <?php }
                             $h14s_rep_contenu = mapnull(Reponse::from_db_by_avis($a->id)?->contenu, h14s(...));
-                            $id = "{$a->id}contenu";
                             if (notnull($this->offre->professionnel->id) === Auth\id_pro_connecte()) { ?>
                                 <form method="post" action="<?= location_repondre_avis($a->id) ?>">
-                                    <p><label for="<?= $id ?>">Votre réponse&nbsp;:</label></p>
-                                    <textarea id="<?= $id ?>" name="contenu" placeholder="Réponse&hellip;" title="Laisser vide pour supprimer la réponse"><?= $h14s_rep_contenu ?></textarea>
+                                    <p><label for="contenu">Votre réponse&nbsp;:</label></p>
+                                    <textarea name="contenu" placeholder="Réponse&hellip;" title="Laisser vide pour supprimer la réponse"><?= $h14s_rep_contenu ?></textarea>
                                     <button type="submit">Répondre</button>
                                 </form>
                                 <a href="<?= location_avis_supprimer($a->id, location_detail_offre($this->offre->id)) ?>">Supprimer</a>
