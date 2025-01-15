@@ -9,6 +9,8 @@ require_once 'component/Page.php';
 require_once 'component/ImageView.php';
 require_once 'component/InputOffre.php';
 
+Auth\exiger_connecte_pro();
+
 $offre = notfalse(Offre::from_db(getarg($_GET, 'id', arg_int())));
 
 $page = new Page($offre->titre, scripts: ['carousel.js' => 'defer', 'module/detail_offre_pro.js' => 'type="module"']);
@@ -18,7 +20,7 @@ if ($_POST) {
     redirect_to($_SERVER['REQUEST_URI']);
 }
 
-$review_list = new ReviewList($offre, Auth\exiger_connecte_pro());
+$review_list = new ReviewList($offre);
 
 $page->put(function () use ($offre, $review_list) {
     ?>

@@ -62,6 +62,7 @@ final class ReviewList
                                     <textarea id="<?= $id ?>" name="contenu" placeholder="Réponse&hellip;" title="Laisser vide pour supprimer la réponse"><?= $h14s_rep_contenu ?></textarea>
                                     <button type="submit">Répondre</button>
                                 </form>
+                                <a href="<?= location_avis_supprimer($a->id, location_detail_offre($this->offre->id)) ?>">Supprimer</a>
                             <?php } else if ($h14s_rep_contenu !== null) { ?>
                                 <p>Réponse de <?= h14s($this->offre->professionnel->denomination) ?>&nbsp;:</p>
                                 <p><?= $h14s_rep_contenu ?></p>

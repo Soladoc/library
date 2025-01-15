@@ -4,6 +4,7 @@ require_once 'auth.php';
 require_once 'const.php';
 require_once 'redirect.php';
 require_once 'component/Page.php';
+require_once 'util.php';
 
 $page = new Page('Modifier un avis');
 
@@ -14,42 +15,36 @@ $id_offre = getarg($_GET, 'id_offre', arg_int());
 
 $avis = Avis::from_db($id_avis);
 
-if ($_POST && isset($_POST['action'])) {
-    $avis->delete();
-    redirect_to(location_detail_offre($id_offre));
-}
+$error_message = null;
 
-// Traitement du formulaire si la méthode POST est utilisée
-if (isset($_POST['date'])) {
-    $commentaire = h14s(trim($_POST['commentaire']));
-    $note = intval($_POST['rating']);
-    $contexte = h14s(trim($_POST['contexte']));
-    $date_experience = $_POST['date'];
+if (null !== $date_experience = getarg($_POST, 'date', required: false)) {
+    $commentaire = trim(getarg($_POST, 'commentaire'));
+    $note = getarg($_POST, 'rating', arg_int());
+    $contexte = getarg($_POST, 'contexte');
 
     // Validation des champs du formulaire
     if (empty($commentaire) || empty($note) || empty($contexte) || empty($date_experience)) {
         $error_message = 'Tous les champs sont obligatoires.';
     } else {
-        // Mise à jour de l'avis dans la base de données
-        $stmt = DB\connect()->prepare('UPDATE pact._avis SET commentaire = ?, note = ?, contexte = ?, date_experience = ? WHERE id = ?');
-        $stmt->execute([$commentaire, $note, $contexte, $date_experience, $id_avis]);
+        $avis->commentaire = $commentaire;
+        $avis->note = $note;
+        $avis->contexte = $contexte;
+        $avis->date_experience = $date_experience;
+        $avis->push_to_db();
 
-        $success_message = 'Avis modifié avec succès !';
         redirect_to(location_detail_offre($id_offre));
     }
-    exit;
 }
 
-$page->put(function () use ($id_avis, $avis, $id_offre) {
+
+$page->put(function () use ($id_avis, $avis, $id_offre, $error_message) {
     ?>
     <h2>Modifier votre avis</h2>
 
     <div class="message">
-        <?php if (isset($error_message)): ?>
+        <?php if ($error_message) { ?>
             <p class="error-message"><?= h14s($error_message) ?></p>
-        <?php elseif (isset($success_message)): ?>
-            <p class="success-message"><?= h14s($success_message) ?></p>
-        <?php endif ?>
+        <?php } ?>
     </div>
 
     <form method="post" action="<?= location_modifier_avis($id_offre, $id_avis) ?>">
@@ -77,5 +72,6 @@ $page->put(function () use ($id_avis, $avis, $id_offre) {
         <br>
         <button type="submit" class="btn-publish">Modifier</button>
     </form>
+    <a href="<?= location_avis_supprimer($id_avis, location_detail_offre($id_offre)) ?>" class="btn-publish">Supprimer</a>
     <?php
 });

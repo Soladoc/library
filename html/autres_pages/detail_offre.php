@@ -34,7 +34,7 @@ if ($offre instanceof Restaurant) {
 }
 
 $id_membre_co = Auth\id_membre_connecte();
-$review_list = new ReviewList($offre, $id_membre_co);
+$review_list = new ReviewList($offre);
 
 
 $is_reporting = false;
@@ -52,7 +52,7 @@ if ($_POST && isset($_POST['submit_report'])) {
     if (!$report_message) {
         $error_message = "Le message de signalement ne peut pas être vide.";
     } else {
-        location_signaler($id_membre_co,$offre->id,$report_message);
+        location_signaler($id_membre_co, $offre->id, $report_message);
     }
 }
 
@@ -86,7 +86,7 @@ if (null !== $commentaire = getarg($_POST, 'commentaire', required: false)) {
     }
 }
 
-$page->put(function () use ($offre, $input_rating, $input_note_cuisine, $input_note_service, $input_note_ambiance, $input_note_qualite_prix, $review_list, $is_reporting,$id_membre_co) {
+$page->put(function () use ($offre, $input_rating, $input_note_cuisine, $input_note_service, $input_note_ambiance, $input_note_qualite_prix, $review_list, $is_reporting, $id_membre_co) {
     ?>
     <section class="offer-details">
         <section class="offer-main-photo">
@@ -171,7 +171,7 @@ $page->put(function () use ($offre, $input_rating, $input_note_cuisine, $input_n
         </div>
 
         <?php $review_list->put() ?>
-        
+
         <?php if (!$is_reporting): ?>
             <form method="post">
                 <input type="hidden" name="report_open" value="1">

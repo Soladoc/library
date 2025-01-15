@@ -52,7 +52,7 @@ function se_connecter_pro(int $id_pro): void
 
 /**
  * Retourne l'ID du membre actuellement connecté, redirigeant vers la page de connexion sinon.
- * Cette fonction appelle <i>header</i>. Elle doit donc être appelé <b>avant</b> tout envoi de HTML.
+ * Cette fonction appelle <i>header</i>. Elle doit donc être appelée <b>avant</b> tout envoi de HTML.
  * @return int L'ID du professionnel actuellement connecté.
  */
 function exiger_connecte_pro(): int
@@ -105,7 +105,7 @@ function se_connecter_membre(int $id_membre): void
 
 /**
  * Retourne l'ID du professionnel actuellement connecté, redirigeant vers la page de connexion sinon.
- * Cette fonction appelle <i>header</i>. Elle doit donc être appelé <b>avant</b> tout envoi de HTML.
+ * Cette fonction appelle <i>header</i>. Elle doit donc être appelée <b>avant</b> tout envoi de HTML.
  * @return int L'ID du membre actuellement connecté.
  */
 function exiger_connecte_membre(): int
