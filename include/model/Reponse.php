@@ -39,8 +39,8 @@ final class Reponse extends Signalable
     private static function from_db_row(array $row): Reponse {
         return new Reponse(
             $row['id'],
-            $row['contenu'],
             $row['id_avis'],
+            $row['contenu'],
         );
     }
 
