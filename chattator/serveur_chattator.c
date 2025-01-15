@@ -161,7 +161,7 @@ int main() {
                     printf("Nom d'utilisateur reçu: %s\n", utilisateur);
                     snprintf(reponse, sizeof(reponse), "Nom d'utilisateur reçu\r\n");
                     write(cnx, reponse, strlen(reponse));
-
+                    memset(reponse, 0, sizeof(reponse));
                     bytes_read = read(cnx, mdp, sizeof(mdp) - 1);
                     if (bytes_read > 0) {
                         mdp[bytes_read] = '\0';
@@ -171,8 +171,10 @@ int main() {
                     }
                     snprintf(reponse, sizeof(reponse), "Mot de passe reçu\n");
                     write(cnx, reponse, strlen(reponse));
+                    memset(reponse,0,sizeof(reponse));
+                    //rajouter vérif utilisateur-mot de passe
 
-                    // Send the connection token (e.g., 101) to the client
+                    // Envoi du token de connexion
                     token = 101;
                     write(cnx, &token, sizeof(token));
                     fflush(stdout);
@@ -198,6 +200,8 @@ int main() {
 
             // envoi la réponse du serveur au client
             write(cnx, reponse, strlen(reponse));
+            fflush(stdout);
+            memset(reponse, 0, sizeof(reponse));
         }
     }
     close(sock);
