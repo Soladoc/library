@@ -1,8 +1,12 @@
 <?php
-require_once 'Page.php';
+require_once 'component/Page.php';
+require_once 'Parsedown.php';
 
-$page = new Page('CGV');
+$page = new Page('Conditions Générales de Vente');
 
-// cgv
+// 4 pages
+// communes au membre et pro
 
-$page->put('');
+$pd = new Parsedown();
+
+$page->put($pd->text(file_get_contents('doc/cgv.md', use_include_path: true)));
