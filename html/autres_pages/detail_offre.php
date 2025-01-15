@@ -182,7 +182,6 @@ $page->put(function () use ($offre, $input_rating, $input_note_cuisine, $input_n
 
         <?php if ($is_reporting): ?>
             <?php if ($id_membre_co !== null): ?>
-                <!-- Formulaire de signalement -->
                 <div class="report-form">
                     <h3>Signaler un problème</h3>
                     <form method="post">
@@ -198,11 +197,10 @@ $page->put(function () use ($offre, $input_rating, $input_note_cuisine, $input_n
                     <?php endif; ?>
                 </div>
             <?php else: ?>
-                <!-- Message d'encouragement à se connecter -->
                 <div class="report-prompt">
                     <h3>Veuillez vous connecter pour signaler un problème</h3>
                     <p>Connectez-vous pour nous aider à améliorer nos services en signalant les problèmes rencontrés.</p>
-                    <a href="/login.php" class="btn-login">Se connecter</a>
+                    <a href="/connexion.php" class="btn-login">Se connecter</a>
                 </div>
             <?php endif; ?>
         <?php endif; ?>
