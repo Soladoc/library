@@ -71,7 +71,7 @@ $page->put(function () use ($id_avis, $avis, $id_offre, $error_message) {
 
         <br>
         <button type="submit" class="btn-publish">Modifier</button>
+        <a href="<?= location_avis_supprimer($id_avis, location_detail_offre($id_offre)) ?>" class="btn-publish">Supprimer</a>
     </form>
-    <a href="<?= location_avis_supprimer($id_avis, location_detail_offre($id_offre)) ?>" class="btn-publish">Supprimer</a>
     <?php
 });

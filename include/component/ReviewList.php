@@ -52,6 +52,7 @@ final class ReviewList
                             if (notnull($a->membre_auteur->id) === Auth\id_membre_connecte()) { ?>
                                 <form method="post" action="<?= location_modifier_avis($this->offre->id, $a->id) ?>">
                                     <button type="submit" class="btn-modif">Modifier</button>
+                                    <a href="<?= location_avis_supprimer($a->id, location_detail_offre($this->offre->id)) ?>">Supprimer</a>
                                 </form>
                             <?php }
                             $h14s_rep_contenu = mapnull(Reponse::from_db_by_avis($a->id)?->contenu, h14s(...));
@@ -61,7 +62,6 @@ final class ReviewList
                                     <textarea name="contenu" placeholder="Réponse&hellip;" title="Laisser vide pour supprimer la réponse"><?= $h14s_rep_contenu ?></textarea>
                                     <button type="submit">Répondre</button>
                                 </form>
-                                <a href="<?= location_avis_supprimer($a->id, location_detail_offre($this->offre->id)) ?>">Supprimer</a>
                             <?php } else if ($h14s_rep_contenu !== null) { ?>
                                 <p>Réponse de <?= h14s($this->offre->professionnel->denomination) ?>&nbsp;:</p>
                                 <p><?= $h14s_rep_contenu ?></p>
