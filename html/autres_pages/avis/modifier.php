@@ -12,12 +12,10 @@ Auth\exiger_connecte_membre();
 $id_avis = getarg($_GET, 'id_avis', arg_int());
 $id_offre = getarg($_GET, 'id_offre', arg_int());
 
-$stmt = DB\connect()->prepare('SELECT * FROM pact._avis WHERE id = ?');
-$stmt->execute([$id_avis]);
-$avis = $stmt->fetch(PDO::FETCH_ASSOC);
+$avis = Avis::from_db($id_avis);
 
 if ($_POST && isset($_POST['action'])) {
-    Avis::from_db($id_avis)->delete();
+    $avis->delete();
     redirect_to(location_detail_offre($id_offre));
 }
 
@@ -37,8 +35,7 @@ if (isset($_POST['date'])) {
         $stmt->execute([$commentaire, $note, $contexte, $date_experience, $id_avis]);
 
         $success_message = 'Avis modifié avec succès !';
-        $id = $avis['id_offre'];
-        redirect_to(location_detail_offre($id));
+        redirect_to(location_detail_offre($id_offre));
     }
     exit;
 }
@@ -56,26 +53,26 @@ $page->put(function () use ($id_avis, $avis, $id_offre) {
     </div>
 
     <form method="post" action="<?= location_modifier_avis($id_offre, $id_avis) ?>">
-        <textarea name="commentaire" placeholder="Votre avis&hellip;" required><?= h14s($avis['commentaire']) ?></textarea>
+        <textarea name="commentaire" placeholder="Votre avis&hellip;" required><?= h14s($avis->commentaire) ?></textarea>
 
         <label for="rating">Note&nbsp;:</label>
         <select name="rating" id="rating" required>
-            <option value="5" <?= $avis['note'] == 5 ? 'selected' : '' ?>>5 étoiles</option>
-            <option value="4" <?= $avis['note'] == 4 ? 'selected' : '' ?>>4 étoiles</option>
-            <option value="3" <?= $avis['note'] == 3 ? 'selected' : '' ?>>3 étoiles</option>
-            <option value="2" <?= $avis['note'] == 2 ? 'selected' : '' ?>>2 étoiles</option>
-            <option value="1" <?= $avis['note'] == 1 ? 'selected' : '' ?>>1 étoile</option>
+            <option value="5" <?= $avis->note == 5 ? 'selected' : '' ?>>5 étoiles</option>
+            <option value="4" <?= $avis->note == 4 ? 'selected' : '' ?>>4 étoiles</option>
+            <option value="3" <?= $avis->note == 3 ? 'selected' : '' ?>>3 étoiles</option>
+            <option value="2" <?= $avis->note == 2 ? 'selected' : '' ?>>2 étoiles</option>
+            <option value="1" <?= $avis->note == 1 ? 'selected' : '' ?>>1 étoile</option>
         </select>
 
         <label for="contexte">Contexte&nbsp;:</label>
         <select name="contexte" id="contexte" required>
             <?php foreach (CONTEXTES_VISITE as $ctx) { ?>
-                <option value="<?= $ctx ?>" <?= $avis['contexte'] === $ctx ? 'selected' : '' ?>><?= ucfirst($ctx) ?></option>
+                <option value="<?= $ctx ?>" <?= $avis->contexte === $ctx ? 'selected' : '' ?>><?= ucfirst($ctx) ?></option>
             <?php } ?>
         </select>
 
         <label for="date">Date de votre visite</label>
-        <input type="date" id="date" name="date" value="<?= h14s($avis['date_experience']) ?>" required>
+        <input type="date" id="date" name="date" value="<?= h14s($avis->date_experience) ?>" required>
 
         <br>
         <button type="submit" class="btn-publish">Modifier</button>
