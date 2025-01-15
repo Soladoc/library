@@ -172,6 +172,7 @@ int main() {
                     snprintf(reponse, sizeof(reponse), "Mot de passe reçu\n");
                     write(cnx, reponse, strlen(reponse));
                     memset(reponse,0,sizeof(reponse));
+                    
                     //rajouter vérif utilisateur-mot de passe
 
                     // Envoi du token de connexion
