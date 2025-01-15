@@ -1,4 +1,5 @@
 <?php
+require_once 'Model/Uuid.php';
 require_once 'util.php';
 require_once 'auth.php';
 require_once 'redirect.php';
@@ -6,7 +7,7 @@ require_once 'component/Page.php';
 require_once 'component/InputAdresse.php';
 require_once 'model/Compte.php';
 
-$page = new Page('Modification compte', body_id: 'detail_compte');
+$page = new Page('Modification compte', body_id: 'detail_compte', scripts: ['module/modif_compte.js' => 'type="module"']);
 $error_mdp = null;
 $error_tel = null;
 $error_email = null;
@@ -68,7 +69,7 @@ if ($_POST) {
 
     // modif mot de passe
 
-    if (null !== $old_mdp = $old_mdp = getarg($_POST, 'old_mdp', required: false)) {
+    if (null !== $old_mdp = getarg($_POST, 'old_mdp', required: false)) {
         $new_mdp = getarg($_POST, 'new_mdp', required: false);
         $confirmation_mdp = getarg($_POST, 'confirmation_mdp', filter: null, required: false);
         if (password_verify($old_mdp, $compte->mdp_hash)) {
@@ -84,6 +85,11 @@ if ($_POST) {
         } else {
             $error_mdp = 'Mot de passe incorrect.';
         }
+    }
+
+    // modif api_key
+    if (null !== $api_key = getarg($_POST, 'api_key', required: false)) {
+        $compte->api_key = Uuid::parse($api_key);
     }
 
     $compte->push_to_db();
@@ -166,7 +172,7 @@ $page->put(function () use ($compte, $input_adresse, $error_email, $error_mdp, $
             </div>
             <?php $input_adresse->put($compte->adresse) ?>
             <br>
-            <div id='changer_mdp'>
+            <div id="changer_mdp">
                 <label>Modifier son mot de passe</label>
                 <div class="champ">
                     <label for="mdp">Mot de passe actuel *</label>
@@ -184,6 +190,13 @@ $page->put(function () use ($compte, $input_adresse, $error_email, $error_mdp, $
                     <p class="error"><?= h14s($error_mdp) ?></p>
                 <?php } ?>
 
+            </div>
+            <br>
+            <div id="api_key">
+                <label for="uuid">Clé d'API : </label>
+                <input type="text" id="uuid" name="uuid" value="<?= $compte->api_key ?>" readonly></input>
+                <button type="button" id="button-regenerate-uuid">Regénérer</button>
+                <button type="button" id="button-delete-uuid">Supprimer</button>
             </div>
             <button type="submit">Valider</button>
             <a href="<?= location_detail_compte() ?>">Retour</a>

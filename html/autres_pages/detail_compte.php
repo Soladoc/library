@@ -56,6 +56,11 @@ $page->put(function () use ($compte) {
             <span><?= $compte->adresse->format() ?></span>
         </div>
 
+        <div id="api_key">
+            <p>Clé d'API :</p>
+            <code class="spoiler"><?= $compte->api_key ?></code>
+        </div>
+
         <a href="modif_compte.php?id=<?= $compte->id ?>">Modifier</a>
     </section>
     <?php

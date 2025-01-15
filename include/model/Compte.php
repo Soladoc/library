@@ -3,6 +3,7 @@ require_once 'util.php';
 require_once 'model/Commune.php';
 require_once 'model/Signalable.php';
 require_once 'model/Adresse.php';
+require_once 'model/Uuid.php';
 
 /**
  * Un compte
@@ -19,6 +20,7 @@ abstract class Compte extends Signalable
             'prenom' => [null, 'prenom', PDO::PARAM_STR],
             'telephone' => [null, 'telephone', PDO::PARAM_STR],
             'id_adresse' => [fn($x) => $x->id, 'adresse', PDO::PARAM_STR],
+            'uuid' => [fn($x) => new Uuid($x), 'uuid', PDO::PARAM_STR],
         ];
     }
 
@@ -30,6 +32,7 @@ abstract class Compte extends Signalable
         public string $prenom,
         public string $telephone,
         public Adresse $adresse,
+        public ?Uuid $api_key = null,
     ) {
         parent::__construct($id);
     }
@@ -61,6 +64,7 @@ abstract class Compte extends Signalable
         ' . static::TABLE . '.prenom,
         ' . static::TABLE . '.telephone,
         ' . static::TABLE . '.id_adresse,
+        ' . static::TABLE . '.uuid,
 
         professionnel.denomination professionnel_denomination,
         professionnel.secteur professionnel_secteur,
@@ -115,6 +119,7 @@ abstract class Compte extends Signalable
                 $row['adresse_latitude'],
                 $row['adresse_longitude'],
             ),
+            Uuid::parse($row['uuid']),
         ];
         if ($denomination = $row['professionnel_denomination'] ?? null) {
             $secteur = $row['professionnel_secteur'];

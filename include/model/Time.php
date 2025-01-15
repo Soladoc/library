@@ -16,10 +16,10 @@ final class Time
     /**
      * Parse une heure depuis la sortie PostgreSQL.
      * @param ?string $output La sortie PostgreSQL.
-     * @return ?Time Un nouvelle heure, ou `null` si `$output` était `null` (à l'instar de PostgreSQL, cette fonction propage `null`)
+     * @return ?self Un nouvelle heure, ou `null` si `$output` était `null` (à l'instar de PostgreSQL, cette fonction propage `null`)
      * @throws DomainException En cas de mauvaise syntaxe.
      */
-    public static function parse(?string $output): ?Time
+    static function parse(?string $output): ?self
     {
         return $output === null ? null : new self(notfalse(
             DateTimeImmutable::createFromFormat(self::FORMAT, $output)

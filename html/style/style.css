@@ -1248,3 +1248,8 @@ label > input {
     box-shadow: 0 0 5px rgba(231, 76, 60, 0.8);
     /* Lueur rouge au focus */
 }
+
+.spoiler:not(:hover, :focus, :focus-within) {
+    filter: blur(.33em);
+    transition: filter .1s;
+}

@@ -40,6 +40,7 @@ if (isset($_POST['motdepasse'])) {
         $_POST['prenom'],
         $_POST['telephone'],
         $adresse,
+        null,
     ], $pseudo);
     try {
         $membre->push_to_db();
