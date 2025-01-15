@@ -33,22 +33,22 @@ with
                 '4:00:',
                 'Trail dans la réserve naturelle des Sept Îles',
                 'Découvrez la beauté sauvage de la réserve naturelle des Sept Îles à Perros-Guirec avec notre offre de trail unique. Parcourez des sentiers pittoresques, admirez la faune et la flore exceptionnelles, et profitez de vues panoramiques sur la côte bretonne. Une expérience inoubliable pour les amateurs de nature et de sport.',
-                '#### Introduction
+                '### Introduction
 Plongez au cœur de la nature bretonne avec notre offre de trail dans la réserve naturelle des Sept Îles à Perros-Guirec. Cette aventure est idéale pour les amateurs de course à pied et de nature, offrant une expérience unique et enrichissante.
 
-#### Parcours et Paysages
+### Parcours et Paysages
 Le trail commence à Perros-Guirec, une charmante station balnéaire située sur la Côte de Granit Rose. Vous traverserez des sentiers côtiers offrant des vues imprenables sur les Sept Îles, un archipel protégé abritant une faune et une flore exceptionnelles. Les paysages variés incluent des falaises escarpées, des plages de sable fin, et des landes fleuries, créant un cadre idyllique pour votre course.
 
-#### Faune et Flore
+### Faune et Flore
 La réserve naturelle des Sept Îles est un sanctuaire pour de nombreuses espèces d''oiseaux marins, notamment les macareux moines et les fous de Bassan. Vous aurez peut-être la chance d''apercevoir ces oiseaux majestueux depuis les points de vue panoramiques le long du parcours. La flore locale est également remarquable, avec des espèces rares et protégées qui ajoutent à la beauté du paysage.
 
-#### Niveau de Difficulté et Encadrement
+### Niveau de Difficulté et Encadrement
 Le trail est conçu pour être accessible à tous les niveaux de coureurs, avec des options de parcours de différentes longueurs et difficultés. Que vous soyez un débutant ou un coureur expérimenté, vous trouverez un itinéraire adapté à vos capacités. Notre équipe de guides expérimentés vous accompagnera tout au long du parcours, assurant votre sécurité et partageant des anecdotes sur la région.
 
-#### Équipement et Services
+### Équipement et Services
 Pour votre confort, nous fournissons tout l''équipement nécessaire, y compris des chaussures de trail, des sacs à dos, et des bâtons de marche. Des points de ravitaillement sont prévus le long du parcours, offrant des boissons et des collations pour vous maintenir en forme. À la fin de la course, vous pourrez vous détendre et profiter d''un repas local dans un cadre convivial.
 
-#### Conclusion
+### Conclusion
 Notre offre de trail dans la réserve naturelle des Sept Îles à Perros-Guirec est bien plus qu''une simple course. C''est une immersion totale dans la nature bretonne, une occasion de découvrir des paysages époustouflants et une faune exceptionnelle. Rejoignez-nous pour une aventure inoubliable et ressentez la magie de la Côte de Granit Rose.
 
 Réservez dès maintenant votre place et préparez-vous à vivre une expérience unique et enrichissante !',

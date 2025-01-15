@@ -33,22 +33,22 @@ with
                 '4:00:',
                 'Visite du musée d''Art et d''Histoire de Saint-Brieuc',
                 'Découvrez l''histoire et la culture de la Bretagne à travers une visite guidée du musée d''Art et d''Histoire de Saint-Brieuc. Plongez dans des collections riches et variées, allant de l''archéologie à l''art contemporain, en passant par des expositions temporaires fascinantes. Une expérience immersive et enrichissante pour tous les amateurs d''art et d''histoire.',
-                '#### Introduction au musée
+                '### Introduction au musée
 Le musée d''Art et d''Histoire de Saint-Brieuc est un lieu incontournable pour quiconque souhaite explorer le patrimoine culturel et historique de la Bretagne. Situé au cœur de la ville, ce musée offre une vue d''ensemble sur l''évolution artistique et historique de la région, depuis les temps préhistoriques jusqu''à nos jours.
 
-#### Les collections permanentes
+### Les collections permanentes
 La visite commence par les collections permanentes, qui couvrent une large période historique. Les sections d''archéologie présentent des objets fascinants datant de la préhistoire, de l''Antiquité et du Moyen Âge, offrant un aperçu unique de la vie quotidienne et des pratiques culturelles de ces époques. Les amateurs d''art pourront admirer des œuvres de maîtres anciens et modernes, ainsi que des créations contemporaines qui témoignent de la vitalité artistique de la Bretagne.
 
-#### Les expositions temporaires
+### Les expositions temporaires
 En plus des collections permanentes, le musée propose régulièrement des expositions temporaires qui mettent en lumière des thèmes spécifiques ou des artistes locaux et internationaux. Ces expositions sont souvent accompagnées de conférences, d''ateliers et d''autres événements culturels, offrant ainsi une expérience interactive et éducative.
 
-#### La visite guidée
+### La visite guidée
 Pour une expérience encore plus enrichissante, nous proposons une visite guidée par des experts passionnés. Ces guides vous feront découvrir les trésors cachés du musée, partageront des anecdotes historiques et répondront à toutes vos questions. La visite guidée est disponible en plusieurs langues et peut être adaptée aux besoins spécifiques des groupes, qu''ils soient scolaires, familiaux ou professionnels.
 
-#### Les services supplémentaires
+### Les services supplémentaires
 Le musée dispose également d''une boutique où vous pourrez acheter des souvenirs, des livres et des reproductions d''œuvres d''art. Un café-restaurant est également disponible sur place, offrant une pause agréable après la visite. Pour les visiteurs souhaitant approfondir leurs connaissances, une bibliothèque spécialisée est accessible sur demande.
 
-#### Informations pratiques
+### Informations pratiques
 Le musée est ouvert du mardi au dimanche, de 10h à 18h. Les tarifs d''entrée sont abordables et des réductions sont disponibles pour les étudiants, les seniors et les groupes. Pour une visite sans stress, il est recommandé de réserver à l''avance, surtout pour les visites guidées.
 
 Ne manquez pas cette opportunité unique de découvrir l''art et l''histoire de la Bretagne dans un cadre exceptionnel. Réservez dès maintenant votre visite au musée d''Art et d''Histoire de Saint-Brieuc et laissez-vous transporter par la richesse de son patrimoine.',

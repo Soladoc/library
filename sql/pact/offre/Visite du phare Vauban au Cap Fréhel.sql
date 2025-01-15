@@ -33,22 +33,22 @@ with
                 '1:30:',
                 'Visite du phare Vauban au Cap Fréhel',
                 'Découvrez la beauté sauvage de la Bretagne avec notre visite guidée du phare du Cap Fréhel. Cette excursion vous offre une vue imprenable sur la côte bretonne, une immersion dans l''histoire maritime et une expérience inoubliable au cœur de la nature.',
-                '#### Introduction
+                '### Introduction
 La visite du phare du Cap Fréhel est une expérience unique qui vous plonge dans l''histoire et la beauté naturelle de la Bretagne. Situé sur la côte d''Émeraude, ce phare emblématique offre des vues panoramiques à couper le souffle sur la mer et les falaises environnantes.
 
-#### Déroulement de la visite
+### Déroulement de la visite
 La visite commence par une promenade guidée à travers les sentiers côtiers, où vous pourrez admirer la flore et la faune locales. Votre guide vous racontera l''histoire fascinante du phare, construit au XIXe siècle pour guider les marins à travers les eaux tumultueuses de la Manche. Vous découvrirez également les légendes et les mythes qui entourent ce lieu chargé d''histoire.
 
-#### Ascension du phare
+### Ascension du phare
 L''un des moments forts de la visite est l''ascension du phare. Après avoir gravi les marches, vous atteindrez le sommet où une vue à 360 degrés sur la côte bretonne vous attend. Par temps clair, vous pourrez même apercevoir les îles Anglo-Normandes. Votre guide vous expliquera le fonctionnement du phare et son importance stratégique pour la navigation maritime.
 
-#### Exploration des environs
+### Exploration des environs
 Après la visite du phare, vous aurez l''occasion d''explorer les environs. Les falaises de grès rose du Cap Fréhel sont un spectacle à ne pas manquer, offrant un contraste saisissant avec le bleu de la mer. Vous pourrez également vous promener dans le parc naturel qui entoure le phare, où vous pourrez observer une variété d''oiseaux marins et de plantes rares.
 
-#### Conclusion
+### Conclusion
 La visite du phare du Cap Fréhel est une expérience enrichissante qui combine histoire, nature et aventure. Que vous soyez un passionné d''histoire, un amoureux de la nature ou simplement à la recherche d''une journée inoubliable, cette excursion est faite pour vous. Réservez dès maintenant pour vivre une aventure bretonne inoubliable.
 
-#### Informations pratiques
+### Informations pratiques
 - **Durée de la visite** : Environ 3 heures
 - **Point de départ** : Parking du Cap Fréhel
 - **Inclus** : Guide professionnel, accès au phare, promenade guidée
