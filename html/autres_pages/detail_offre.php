@@ -180,22 +180,33 @@ $page->put(function () use ($offre, $input_rating, $input_note_cuisine, $input_n
             </form>
         <?php endif; ?>
 
-        <?php if (($is_reporting) && ($id_membre_co !== null)): ?>
-            <div class="report-form">
-                <h3>Signaler un problème</h3>
-                <form method="post">
-                    <textarea name="report_message" placeholder="Décrivez le problème..." required></textarea>
-                    <input type="hidden" name="offer_id" value="<?= $offre->id ?>">
-                    <button type="submit" name="submit_report" class="btn-submit">Envoyer</button>
-                    <button type="submit" name="cancel_report" class="btn-cancel">Annuler</button>
-                </form>
-                <?php if (isset($error_message)): ?>
-                    <p class="error"><?= h14s($error_message) ?></p>
-                <?php elseif (isset($success_message)): ?>
-                    <p class="success"><?= h14s($success_message) ?></p>
-                <?php endif; ?>
-            </div>
+        <?php if ($is_reporting): ?>
+            <?php if ($id_membre_co !== null): ?>
+                <!-- Formulaire de signalement -->
+                <div class="report-form">
+                    <h3>Signaler un problème</h3>
+                    <form method="post">
+                        <textarea name="report_message" placeholder="Décrivez le problème..." required></textarea>
+                        <input type="hidden" name="offer_id" value="<?= $offre->id ?>">
+                        <button type="submit" name="submit_report" class="btn-submit">Envoyer</button>
+                        <button type="submit" name="cancel_report" class="btn-cancel">Annuler</button>
+                    </form>
+                    <?php if (isset($error_message)): ?>
+                        <p class="error"><?= h14s($error_message) ?></p>
+                    <?php elseif (isset($success_message)): ?>
+                        <p class="success"><?= h14s($success_message) ?></p>
+                    <?php endif; ?>
+                </div>
+            <?php else: ?>
+                <!-- Message d'encouragement à se connecter -->
+                <div class="report-prompt">
+                    <h3>Veuillez vous connecter pour signaler un problème</h3>
+                    <p>Connectez-vous pour nous aider à améliorer nos services en signalant les problèmes rencontrés.</p>
+                    <a href="/login.php" class="btn-login">Se connecter</a>
+                </div>
+            <?php endif; ?>
         <?php endif; ?>
+
 
     </section>
     <?php
