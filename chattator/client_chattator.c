@@ -36,7 +36,7 @@ int connexion(int token, int sock) {
         write(sock, mdp, strlen(mdp));  // Send password
         fflush(stdout);
 
-        bytes_read = read(sock, buffer, 22);  // 5-second timeout
+        bytes_read = read(sock, buffer, sizeof(buffer) - 1);
         if (bytes_read > 0) {
             buffer[bytes_read] = '\0';
             printf("Réponse du serveur pour le mot de passe: %s", buffer);
@@ -116,11 +116,15 @@ int main() {
         }
         scanf("%d", &option);
         getchar();
-        if (option == 1 || option==2 || option == 3 || option == 4 || option == 5 || option == 6 || option == 7 || option == 8 || option == 10 || option == 11 || option == 12 || option == 13) {
-            token=connexion(token,sock);
-        }
-        if (token ==0 && option ==14){
-            option=15;
+        if (token ==0){
+            if (option ==14) {
+                option=15;
+            }
+            else if (option == 1 || option==2 || option == 3 || option == 4 || option == 5 || option == 6 || option == 7 || option == 8 || option == 10 || option == 11 || option == 12 || option == 13) {
+                token=connexion(token,sock);
+            } else if (option != 9) {
+                option=50;
+            }
         }
         write(sock, &option, sizeof(option));
         printf("Option envoyée: %d\n", option);
@@ -260,6 +264,14 @@ int main() {
                 memset(buffer, 0, sizeof(buffer));
                 break;
             case 14:
+                bytes_read = read(sock, buffer, sizeof(buffer) - 1);
+                if (bytes_read > 0) {
+                    buffer[bytes_read] = '\0';
+                    printf("%s", buffer);
+                }
+                memset(buffer, 0, sizeof(buffer));
+                break;
+            default:
                 bytes_read = read(sock, buffer, sizeof(buffer) - 1);
                 if (bytes_read > 0) {
                     buffer[bytes_read] = '\0';
