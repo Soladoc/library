@@ -192,11 +192,11 @@ $page->put(function () use ($compte, $input_adresse, $error_email, $error_mdp, $
 
             </div>
             <br>
-            <div id="api_key">
-                <label for="uuid">Clé d'API : </label>
-                <input type="text" id="uuid" name="uuid" value="<?= $compte->api_key ?>" readonly></input>
-                <button type="button" id="button-regenerate-uuid">Regénérer</button>
-                <button type="button" id="button-delete-uuid">Supprimer</button>
+            <div>
+                <label for="api_key">Clé d'API : </label>
+                <input type="text" id="api_key" name="api_key" value="<?= $compte->api_key ?>" readonly></input>
+                <button type="button" id="button-regenerate-api_key">Regénérer</button>
+                <button type="button" id="button-delete-api_key">Supprimer</button>
             </div>
             <button type="submit">Valider</button>
             <a href="<?= location_detail_compte() ?>">Retour</a>
