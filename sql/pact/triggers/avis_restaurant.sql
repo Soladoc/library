@@ -49,3 +49,15 @@ $$ language plpgsql;
 
 create trigger tg_avis_restaurant_update instead of update on avis_restaurant for each row
 execute function avis_restaurant_update ();
+
+-- Delete
+create function avis_restaurant_delete () returns trigger as $$
+begin
+    delete from _avis where id = old.id;
+    return old;
+end
+$$ language plpgsql;
+
+create trigger tg_avis_restaurant_delete instead of delete on avis_restaurant for each row
+execute function avis_restaurant_delete ();
+

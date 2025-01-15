@@ -2,6 +2,7 @@
 
 /**
  * Redirige l'utilisateur vers une URL, mettant fin au script actuel.
+ * Cette fonction appelle <i>header</i>. Elle doit donc être appelée <b>avant</b> tout envoi de HTML.
  * @param string $location L'URL où rediriger l'utilisateur.
  * @return never
  */
@@ -96,5 +97,10 @@ function location_modifier_avis(int $id_offre, int $id_avis)
 
 function location_repondre_avis(int $id_avis)
 {
-    return '/auto/avis_repondre.php?' . http_build_query(['id_avis' => $id_avis, 'return_url' => $_SERVER['REQUEST_URI']]);
+    return '/auto/avis/repondre.php?' . http_build_query(['id_avis' => $id_avis, 'return_url' => $_SERVER['REQUEST_URI']]);
+}
+
+function location_avis_supprimer(int $id_avis, string $return_url)
+{
+    return '/auto/avis/supprimer.php?' . http_build_query(['id_avis' => $id_avis, 'return_url' => $return_url]);
 }
