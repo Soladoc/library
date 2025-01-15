@@ -75,7 +75,9 @@ $page->put(function () use ($offre, $review_list) {
         <!-- <div id="map" class="map"></div> -->
         <div class="contact-info">
             <p><strong>Adresse&nbsp;:</strong> <?= $offre->adresse->format() ?></p>
-            <p><strong>Site web&nbsp;:</strong> <a href="<?= $offre->url_site_web ?>"><?= $offre->url_site_web ?></a></p>
+            <?php if ($offre->url_site_web) { ?>
+                <p><strong>Site web&nbsp;:</strong> <a href="<?= $offre->url_site_web ?>"><?= $offre->url_site_web ?></a></p>
+            <?php } ?>
         </div>
     </section>
 
