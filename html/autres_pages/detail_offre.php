@@ -38,22 +38,12 @@ $review_list = new ReviewList($offre);
 
 
 $is_reporting = false;
-if (isset($_POST['report_open']) || isset($_POST['submit_report'])) {
+if (isset($_POST['report_open'])) {
     $is_reporting = true;
 }
 
-if ($_POST && isset($_POST['submit_report'])) {
-    $offer_id = getarg($_POST, 'offer_id');
-    $report_message = getarg($_POST, 'report_message');
-
-    $report_message = trim($report_message);
-
-    // Validation du formulaire
-    if (!$report_message) {
-        $error_message = "Le message de signalement ne peut pas être vide.";
-    } else {
-        location_signaler($id_membre_co, $offre->id, $report_message);
-    }
+if (null !== $report_message = getarg($_POST, 'report_message', required: false)) {
+    location_signaler($id_membre_co, $offre->id, $report_message);
 }
 
 // Si on a un POST de publication d'avis
@@ -185,8 +175,7 @@ $page->put(function () use ($offre, $input_rating, $input_note_cuisine, $input_n
                 <div class="report-form">
                     <h3>Signaler un problème</h3>
                     <form method="post">
-                        <textarea name="report_message" placeholder="Décrivez le problème..." required></textarea>
-                        <input type="hidden" name="offer_id" value="<?= $offre->id ?>">
+                        <textarea name="report_message" placeholder="Décrivez le problème&hellip;" required></textarea>
                         <button type="submit" name="submit_report" class="btn-submit">Envoyer</button>
                         <button type="submit" name="cancel_report" class="btn-cancel">Annuler</button>
                     </form>
