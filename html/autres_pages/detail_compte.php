@@ -57,7 +57,7 @@ $page->put(function () use ($compte) {
         </div>
 
         <div id="api_key">
-            <p>Clé d'API : </p></span>
+            <p>Clé d'API :</p></span>
             <?php if ($compte->api_key) { ?>
             <code class="spoiler"><?= $compte->api_key ?></code>
             <?php } else { ?>
