@@ -25,6 +25,7 @@ abstract class Professionnel extends Compte
     function __construct(
         $args_compte,
         public string $denomination,
+        //
         protected ?string $secteur = null,
     ) {
         parent::__construct(...$args_compte);

@@ -5,62 +5,46 @@ require_once 'component/Page.php';
 require_once 'model/Compte.php';
 require_once 'model/Membre.php';
 require_once 'model/Professionnel.php';
+require_once 'model/Adresse.php';
+require_once 'model/Commune.php';
 
 $page = new Page('Création de compte membre');
 
 function fail(string $error): never
 {
-    redirect_to('?error=' . urlencode($error));
+    redirect_to('?' . http_build_query(['error' => $error]));
 }
 
 if (isset($_POST['motdepasse'])) {
+    if (strlen($_POST['motdepasse']) > 72) fail('Mot de passe trop long');
+
     $pseudo = $_POST['pseudo'];
-    if (Membre::from_db_by_pseudo($pseudo) !== false) {
-        fail('Ce pseudo est déjà utilisé.');
-    }
+    if (false !== Membre::from_db_by_pseudo($pseudo)) fail('Ce pseudo est déjà utilisé.');
 
     $email = $_POST['email'];
-    if (Compte::from_db_by_email($email) !== false) {
-        fail('Cette adresse e-mail est déjà utilisée.');
-    }
+    if (false !== Compte::from_db_by_email($email)) fail('Cette adresse e-mail est déjà utilisée.');
 
-    if (strlen($_POST['motdepasse']) > 72) {
-        fail('Mot de passe trop long');
-    }
-    $nomCommune = $_POST['adresse'];
+    $commune = Commune::from_db_by_nom($_POST['adresse']);
+    if (false === $commune) fail("La commune '{$_POST['adresse']}' n'existe pas.");
 
-    $stmt = DB\connect()->prepare('SELECT code, numero_departement FROM pact._commune WHERE nom = ?');
-    $stmt->execute([$nomCommune]);
-    $commune = $stmt->fetch(PDO::FETCH_ASSOC);
-
-    if (!$commune) {
-        fail("La commune '$nomCommune' n'existe pas.");
-    }
-
-    $codeCommune = $commune['code'];
-    $numeroDepartement = $commune['numero_departement'];
-
-    $stmt = DB\connect()->prepare(' INSERT INTO pact._adresse (code_commune, numero_departement) VALUES ( ?, ?) RETURNING id');
-    $stmt->execute([$codeCommune, $numeroDepartement]);
-
-    $idAdresse = $stmt->fetchColumn();
+    $adresse = new Adresse(null, $commune);
+    $adresse->push_to_db();
 
     $mdp_hash = notfalse(password_hash($_POST['motdepasse'], PASSWORD_DEFAULT));
 
-    $stmt = DB\connect()->prepare('insert into pact.membre (pseudo, nom, prenom, telephone, email, mdp_hash, id_adresse) values (?, ?, ?, ?, ?, ?, ?)');
+    $membre = new Membre([
+        null,
+        $email,
+        $mdp_hash,
+        $_POST['nom'],
+        $_POST['prenom'],
+        $_POST['telephone'],
+        $adresse,
+    ], $pseudo);
     try {
-        $stmt->execute([
-            $pseudo,
-            $_POST['nom'],
-            $_POST['prenom'],
-            $_POST['telephone'],
-            $email,
-            $mdp_hash,
-            $idAdresse
-        ]);
+        $membre->push_to_db();
     } catch (PDOException $e) {
-        echo "Adresse Mail invalide " . $e->getMessage();
-        redirect_to('creation_membre.php');
+        fail($e->getMessage());
     }
     redirect_to(location_connexion());  // todo: passer en GET le pseudo pour l'afficher dans le formulaire connexion, pour que l'utilisateur n'ait pas à le retaper.
 }

@@ -3,13 +3,17 @@ require_once 'db.php';
 require_once 'util.php';
 require_once 'redirect.php';
 require_once 'component/Page.php';
+require_once 'model/Compte.php';
+require_once 'model/Adresse.php';
+require_once 'model/ProfessionnelPrive.php';
+require_once 'model/ProfessionnelPublic.php';
+require_once 'model/Commune.php';
 
 $page = new Page('Créer un compte professionnel');
 
-function fail(string $error)
+function fail(string $error): never
 {
-    redirect_to('?error=' . urlencode($error));
-    exit;
+    redirect_to('?' . http_build_query(['error' => $error]));
 }
 
 if ($_POST) {
@@ -27,60 +31,33 @@ if ($_POST) {
         $args['siren'] = getarg($_POST, 'siren');
     }
 
-    $stmt = DB\connect()->prepare('select count(*) from pact._compte where email = ?');
-    $stmt->execute([$args['email']]);
-    $count = $stmt->fetchColumn();
-
-    if ($count > 0) {
-        html_error('cette adresse e-mail est déjà utilisée.');
-    }
+    if (false === Compte::from_db_by_email($args['email'])) fail('Cette adresse e-mail est déjà utilisée.');
 
     $mdp_hash = password_hash($args['mdp'], PASSWORD_DEFAULT);
 
-    $nomCommune = $_POST['adresse'];
+    $commune = Commune::from_db_by_nom($_POST['adresse']);
+    if (false === $commune) fail("La commune '{$_POST['adresse']}' n'existe pas.");
 
-    $stmt = DB\connect()->prepare('SELECT code, numero_departement FROM pact._commune WHERE nom = ?');
-    $stmt->execute([$nomCommune]);
-    $commune = $stmt->fetch(PDO::FETCH_ASSOC);
+    $adresse = new Adresse(null, $commune);
+    $adresse->push_to_db();
 
-    if (!$commune) {
-        fail("La commune '$nomCommune' n'existe pas.");
-    }
+    $args_compte = [
+        null,
+        $args['email'],
+        $mdp_hash,
+        $args['nom'],
+        $args['prenom'],
+        $args['telephone'],
+        $adresse,
+    ];
+    $args_pro = [
+        $args['denomination'],
+    ];
 
-    $codeCommune = $commune['code'];
-    $numeroDepartement = $commune['numero_departement'];
-
-    $stmt = DB\connect()->prepare(' INSERT INTO pact._adresse (code_commune, numero_departement) VALUES ( ?, ?) RETURNING id');
-    $stmt->execute([$codeCommune, $numeroDepartement]);
-
-    $idAdresse = $stmt->fetchColumn();
-
-    if ($args['type'] === 'prive') {
-        $stmt = DB\connect()->prepare('insert into pro_prive (email, mdp_hash, nom, prenom, telephone, id_adresse, denomination, siren) values (?, ?, ?, ?, ?, ?, ?, ?)');
-        $stmt->execute([
-            $args['email'],
-            $mdp_hash,
-            $args['nom'],
-            $args['prenom'],
-            $args['telephone'],
-            $idAdresse,
-            $args['denomination'],
-            str_replace(' ', '', $args['siren']),
-        ]);
-        redirect_to(location_connexion());
-    } else {
-        $stmt = DB\connect()->prepare('insert into pro_public (email, mdp_hash, nom, prenom, telephone, id_adresse, denomination) values (?, ?, ?, ?, ?, ?, ?)');
-        $stmt->execute([
-            $args['email'],
-            $mdp_hash,
-            $args['nom'],
-            $args['prenom'],
-            $args['telephone'],
-            $idAdresse,
-            $args['denomination'],
-        ]);
-        redirect_to(location_connexion());
-    }
+    $pro = $args['type'] === 'prive'
+        ? new ProfessionnelPrive($args_compte, $args_pro, str_replace(' ', '', $args['siren'])) : new ProfessionnelPublic($args_compte, $args_pro);
+    $pro->push_to_db();
+    redirect_to(location_connexion());
 }
 
 $page->put(function () {
