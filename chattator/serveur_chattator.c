@@ -169,7 +169,7 @@ int main() {
                     } else {
                         printf("Erreur en tentant de lire le mot de passe, bytes lus : %zd\n", bytes_read);
                     }
-                    snprintf(reponse, sizeof(reponse), "Mot de passe reçu\r\n");
+                    snprintf(reponse, sizeof(reponse), "Mot de passe reçu\n");
                     write(cnx, reponse, strlen(reponse));
 
                     // Send the connection token (e.g., 101) to the client
