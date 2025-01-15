@@ -7,6 +7,6 @@ $id_signalable = getarg($_GET, 'id_signalable', arg_int());
 $raison = getarg($_GET, 'raison');
 $return_url = getarg($_GET, 'return_url');
 
-Signalable::from_db($id_signalable)->toggle_signaler($id_compte, $raison);
+Signalable::signalable_from_db($id_signalable)->toggle_signaler($id_compte, $raison);
 
 redirect_to($return_url);

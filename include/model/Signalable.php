@@ -18,7 +18,7 @@ class Signalable extends Model
     ) {
     }
 
-    static function from_db(int $id_signalable)
+    static function signalable_from_db(int $id_signalable): self
     {
         return new self($id_signalable);
     }
@@ -32,7 +32,7 @@ class Signalable extends Model
         return $r === false ? null : $r;
     }
 
-    function toggle_signaler(int $id_compte, string $raison)
+    function toggle_signaler(int $id_compte, string $raison): void
     {
         if ($this->get_signalement($id_compte) === null) {
             $stmt = DB\connect()->prepare('insert into ' . self::TABLE . ' (id_signalable,id_compte,raison) values (?,?,?)');
