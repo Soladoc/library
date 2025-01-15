@@ -55,8 +55,8 @@ $page->put(function () use ($id_avis, $avis, $id_offre) {
         <?php endif ?>
     </div>
 
-    <form method="post" action="modifier.php?id=<?= $id_offre ?>&avis_id=<?= $id_avis ?>">
-        <textarea name="commentaire" placeholder="Votre avis..." required><?= h14s($avis['commentaire']) ?></textarea>
+    <form method="post" action="<?= location_modifier_avis($id_offre, $id_avis) ?>">
+        <textarea name="commentaire" placeholder="Votre avis&hellip;" required><?= h14s($avis['commentaire']) ?></textarea>
 
         <label for="rating">Note&nbsp;:</label>
         <select name="rating" id="rating" required>
