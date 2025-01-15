@@ -17,24 +17,24 @@ $offre = notfalse(Offre::from_db(getarg($_GET, 'id', arg_int())));
 
 $page = new Page($offre->titre, scripts: [
     'module/detail_offre.js' => 'type="module"',
-    'carousel.js' => 'defer',
+    'carousel.js'            => 'defer',
 ]);
 
 $input_rating = new InputNote(name: 'rating');
 if ($offre instanceof Restaurant) {
-    $input_note_cuisine = new InputNote(name: 'note_cuisine');
-    $input_note_service = new InputNote(name: 'note_service');
-    $input_note_ambiance = new InputNote(name: 'note_ambiance');
+    $input_note_cuisine      = new InputNote(name: 'note_cuisine');
+    $input_note_service      = new InputNote(name: 'note_service');
+    $input_note_ambiance     = new InputNote(name: 'note_ambiance');
     $input_note_qualite_prix = new InputNote(name: 'note_qualite_prix');
 } else {
-    $input_note_cuisine = null;
-    $input_note_service = null;
-    $input_note_ambiance = null;
+    $input_note_cuisine      = null;
+    $input_note_service      = null;
+    $input_note_ambiance     = null;
     $input_note_qualite_prix = null;
 }
 
 $id_membre_co = Auth\id_membre_connecte();
-$review_list = new ReviewList($offre);
+$review_list  = new ReviewList($offre);
 
 if (null !== $report_message = getarg($_POST, 'report_message', required: false)) {
     redirect_to(location_signaler($id_membre_co, $offre->id, $report_message));
@@ -56,7 +56,7 @@ if (null !== $commentaire = getarg($_POST, 'commentaire', required: false)) {
             Membre::from_db($id_membre_co),
             $offre,
         ];
-        $avis = $offre instanceof Restaurant
+        $avis      = $offre instanceof Restaurant
             ? new AvisRestaurant(
                 $args_avis,
                 $input_note_cuisine->get($_POST),
@@ -124,8 +124,8 @@ $page->put(function () use ($offre, $input_rating, $input_note_cuisine, $input_n
                 <?php if (isset($error_message)): ?>
                     <p class="error"><?= h14s($error_message) ?></p>
                     <?php
-                elseif (isset($success_message)):
-                    ?>
+    elseif (isset($success_message)):
+        ?>
                     <p class="success"><?= h14s($success_message) ?></p>
                 <?php endif ?>
             </div>
@@ -159,10 +159,11 @@ $page->put(function () use ($offre, $input_rating, $input_note_cuisine, $input_n
 
         <details class="report-form">
             <summary>Signaler un problème</summary>
-            <?php if ($id_membre_co !== null) { ?>
+            <?php if ($id_membre_co !== null) {
+                $signalement_actuel = Signalable::signalable_from_db($offre->id)->get_signalement($id_membre_co); ?>
                 <form method="post">
-                    <textarea name="report_message" placeholder="Décrivez le problème&hellip;" required></textarea>
-                    <button type="submit" name="submit_report" class="btn-submit">Envoyer</button>
+                    <textarea name="report_message" placeholder="Décrivez le problème&hellip;" required <?= $signalement_actuel === null ? '' : 'readonly' ?>><?= $signalement_actuel ?></textarea>
+                    <button type="submit" name="submit_report" class="btn-submit"><?= $signalement_actuel === null ? 'Envoyer' : 'Supprimer' ?></button>
                     <button type="submit" name="cancel_report" class="btn-cancel">Annuler</button>
                 </form>
                 <?php if (isset($error_message)) { ?>
