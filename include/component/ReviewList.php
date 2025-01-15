@@ -54,11 +54,15 @@ final class ReviewList
                                     <button type="submit" class="btn-modif">Modifier</button>
                                 </form>
                             <?php }
+                            $h14s_rep_contenu = mapnull(Reponse::from_db_by_avis($a->id)?->contenu, h14s(...));
                             if (notnull($this->offre->professionnel->id) === Auth\id_pro_connecte()) { ?>
                                 <form method="post" action="<?= location_repondre_avis($a->id) ?>">
-                                    <textarea name="reponse" placeholder="Réponse&hellip;"><?= h14s(Reponse::from_db_by_avis($a->id)?->contenu) ?></textarea>
+                                    <textarea name="contenu" placeholder="Réponse&hellip;"><?= $h14s_rep_contenu ?></textarea>
                                     <button type="submit">Envoyer</button>
                                 </form>
+                            <?php } else if ($h14s_rep_contenu !== null) { ?>
+                                <p>Réponse de <?= h14s($this->offre->professionnel->denomination) ?>&nbsp;:</p>
+                                <p><?= $h14s_rep_contenu ?></p>
                             <?php } ?>
                         </div>
                     <?php }

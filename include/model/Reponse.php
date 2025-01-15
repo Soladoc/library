@@ -8,15 +8,15 @@ final class Reponse extends Signalable
     protected static function fields()
     {
         return [
-            'contenu' => [null, 'contenu', PDO::PARAM_STR],
             'id_avis' => [null, 'id_avis', PDO::PARAM_INT],
+            'contenu' => [null, 'contenu', PDO::PARAM_STR],
         ];
     }
 
     function __construct(
         ?int $id,
-        public string $contenu,
         public int $id_avis,
+        public string $contenu,
     ) {
         parent::__construct($id);
     }

@@ -96,5 +96,5 @@ function location_modifier_avis(int $id_offre, int $id_avis)
 
 function location_repondre_avis(int $id_avis)
 {
-    return '/autres_pages/avis/repondre.php?' . http_build_query(['id_avis' => $id_avis]);
+    return '/autres_pages/auto/avis_repondre.php?' . http_build_query(['id_avis' => $id_avis, 'return_url' => $_SERVER['REQUEST_URI']]);
 }
