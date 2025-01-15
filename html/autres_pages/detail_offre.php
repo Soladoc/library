@@ -37,10 +37,7 @@ $id_membre_co = Auth\id_membre_connecte();
 $review_list = new ReviewList($offre);
 
 
-$is_reporting = false;
-if (isset($_POST['report_open'])) {
-    $is_reporting = true;
-}
+$is_reporting = isset($_POST['report_open']);
 
 if (null !== $report_message = getarg($_POST, 'report_message', required: false)) {
     location_signaler($id_membre_co, $offre->id, $report_message);
