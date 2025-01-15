@@ -36,7 +36,7 @@ int connexion(int token, int sock) {
         write(sock, mdp, strlen(mdp));  // Send password
         fflush(stdout);
 
-        bytes_read = read(sock, buffer, 22);  // 5-second timeout
+        bytes_read = read(sock, buffer, sizeof(buffer) - 1);
         if (bytes_read > 0) {
             buffer[bytes_read] = '\0';
             printf("Réponse du serveur pour le mot de passe: %s", buffer);
