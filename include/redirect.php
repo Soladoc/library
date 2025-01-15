@@ -91,7 +91,7 @@ function location_logout(): string
 
 function location_modifier_avis(int $id_offre, int $id_avis)
 {
-    return '/autres_pages/avis/modifier.php?' . http_build_query(['id' => $id_offre, 'avis_id' => $id_avis]);
+    return '/autres_pages/avis/modifier.php?' . http_build_query(['id_offre' => $id_offre, 'id_avis' => $id_avis]);
 }
 
 function location_repondre_avis(int $id_avis)

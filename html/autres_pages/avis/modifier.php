@@ -9,8 +9,8 @@ $page = new Page('Modifier un avis');
 
 Auth\exiger_connecte_membre();
 
-$id_avis = intval($_GET['avis_id']);
-$id_offre = intval($_GET['offre']);
+$id_avis = getarg($_GET, 'id_avis', arg_int());
+$id_offre = getarg($_GET, 'id_offre', arg_int());
 
 $stmt = DB\connect()->prepare('SELECT * FROM pact._avis WHERE id = ?');
 $stmt->execute([$id_avis]);
