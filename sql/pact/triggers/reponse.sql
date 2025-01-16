@@ -26,5 +26,5 @@ begin
 end
 $$ language plpgsql;
 
-create trigger tg_reponse_delete instead of delete on reposne for each row
+create trigger tg_reponse_delete instead of delete on reponse for each row
 execute function reponse_delete ();
