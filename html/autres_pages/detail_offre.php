@@ -171,7 +171,7 @@ $page->put(function () use ($offre, $input_rating, $input_note_cuisine, $input_n
                     <p class="success"><?= h14s($success_message) ?></p>
                 <?php } ?>
             <?php } else { ?>
-                <h3>Veuillez vous connecter pour signaler un problème</h3>
+                <h3>Veuillez vous connecter à un compte membre pour signaler un problème</h3>
                 <p>Connectez-vous pour nous aider à améliorer nos services en signalant les problèmes rencontrés.</p>
                 <a href="<?= location_connexion(return_url: $_SERVER['REQUEST_URI']) ?>" class="btn-login">Se connecter</a>
             <?php } ?>
