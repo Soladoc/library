@@ -184,11 +184,13 @@ begin
     set
         commentaire = new.commentaire,
         note = new.note,
-        publie = new.publie,
-        date = new.date,
+        publie_le = new.publie_le,
+        date_experience = new.date_experience,
         contexte = new.contexte,
         lu = new.lu,
-        blackliste = new.blackliste
+        blackliste = new.blackliste,
+        likes = new.likes,
+        dislikes = new.dislikes
     where
         id = new.id;
 end
