@@ -163,7 +163,7 @@ $page->put(function () use ($offre, $input_rating, $input_note_cuisine, $input_n
                 $signalement_actuel = Signalable::signalable_from_db($offre->id)->get_signalement($id_membre_co); ?>
                 <form method="post">
                     <textarea name="report_message" placeholder="Décrivez le problème&hellip;" required <?= $signalement_actuel === null ? '' : 'readonly' ?>><?= $signalement_actuel ?></textarea>
-                    <button type="submit" name="submit_report" class="btn-submit"><?= $signalement_actuel === null ? 'Envoyer' : 'Supprimer' ?></button>
+                    <button type="submit" name="submit_report" class="btn-publish"><?= $signalement_actuel === null ? 'Envoyer' : 'Supprimer' ?></button>
                 </form>
                 <?php if (isset($error_message)) { ?>
                     <p class="error"><?= h14s($error_message) ?></p>
@@ -173,7 +173,7 @@ $page->put(function () use ($offre, $input_rating, $input_note_cuisine, $input_n
             <?php } else { ?>
                 <h3>Veuillez vous connecter à un compte membre pour signaler un problème</h3>
                 <p>Connectez-vous pour nous aider à améliorer nos services en signalant les problèmes rencontrés.</p>
-                <a href="<?= location_connexion(return_url: $_SERVER['REQUEST_URI']) ?>" class="btn-login">Se connecter</a>
+                <a href="<?= location_connexion(return_url: $_SERVER['REQUEST_URI']) ?>" class="btn-login btn-publish">Se connecter</a>
             <?php } ?>
         </details>
 

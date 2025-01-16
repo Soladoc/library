@@ -631,11 +631,17 @@ textarea {
 
 .btn-publish {
     background-color: #4A90E2;
+    text-decoration: none;
     color: white;
     padding: 10px 20px;
     border: none;
     border-radius: 5px;
     cursor: pointer;
+}
+
+.btn-publish a {
+    text-decoration: none;
+    color: white;
 }
 
 .offer-info h2 {
@@ -1255,5 +1261,16 @@ label > input {
 .report-form{
     margin: 20px auto;
     max-width: 80%;
+    text-align: center;
+}
+
+.centrer-enfants{
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    padding: 5vh;
+}
+
+#mention-legales-section{
     text-align: center;
 }

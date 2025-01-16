@@ -39,39 +39,45 @@ if (null !== $date_experience = getarg($_POST, 'date', required: false)) {
 
 $page->put(function () use ($id_avis, $avis, $id_offre, $error_message) {
     ?>
-    <h2>Modifier votre avis</h2>
+    <section class="centrer-enfants">
+        <div>
+            <h2>Modifier votre avis</h2>
+                
+            <div class="message">
+                <?php if ($error_message) { ?>
+                    <p class="error-message"><?= h14s($error_message) ?></p>
+                <?php } ?>
+            </div>
 
-    <div class="message">
-        <?php if ($error_message) { ?>
-            <p class="error-message"><?= h14s($error_message) ?></p>
-        <?php } ?>
-    </div>
+            <form method="post" action="<?= location_modifier_avis($id_offre, $id_avis) ?>">
+                <textarea name="commentaire" placeholder="Votre avis&hellip;" required><?= h14s($avis->commentaire) ?></textarea>
 
-    <form method="post" action="<?= location_modifier_avis($id_offre, $id_avis) ?>">
-        <textarea name="commentaire" placeholder="Votre avis&hellip;" required><?= h14s($avis->commentaire) ?></textarea>
+                <label for="rating">Note&nbsp;:</label>
+                <select name="rating" id="rating" required>
+                    <option value="5" <?= $avis->note == 5 ? 'selected' : '' ?>>5 étoiles</option>
+                    <option value="4" <?= $avis->note == 4 ? 'selected' : '' ?>>4 étoiles</option>
+                    <option value="3" <?= $avis->note == 3 ? 'selected' : '' ?>>3 étoiles</option>
+                    <option value="2" <?= $avis->note == 2 ? 'selected' : '' ?>>2 étoiles</option>
+                    <option value="1" <?= $avis->note == 1 ? 'selected' : '' ?>>1 étoile</option>
+                </select>
 
-        <label for="rating">Note&nbsp;:</label>
-        <select name="rating" id="rating" required>
-            <option value="5" <?= $avis->note == 5 ? 'selected' : '' ?>>5 étoiles</option>
-            <option value="4" <?= $avis->note == 4 ? 'selected' : '' ?>>4 étoiles</option>
-            <option value="3" <?= $avis->note == 3 ? 'selected' : '' ?>>3 étoiles</option>
-            <option value="2" <?= $avis->note == 2 ? 'selected' : '' ?>>2 étoiles</option>
-            <option value="1" <?= $avis->note == 1 ? 'selected' : '' ?>>1 étoile</option>
-        </select>
-
-        <label for="contexte">Contexte&nbsp;:</label>
-        <select name="contexte" id="contexte" required>
-            <?php foreach (CONTEXTES_VISITE as $ctx) { ?>
-                <option value="<?= $ctx ?>" <?= $avis->contexte === $ctx ? 'selected' : '' ?>><?= ucfirst($ctx) ?></option>
-            <?php } ?>
-        </select>
-
-        <label for="date">Date de votre visite</label>
-        <input type="date" id="date" name="date" value="<?= h14s($avis->date_experience) ?>" required>
-
-        <br>
-        <button type="submit" class="btn-publish">Modifier</button>
-        <a href="<?= location_avis_supprimer($id_avis, location_detail_offre($id_offre)) ?>" class="btn-publish">Supprimer</a>
-    </form>
+                <label for="contexte">Contexte&nbsp;:</label>
+                <select name="contexte" id="contexte" required>
+                    <?php foreach (CONTEXTES_VISITE as $ctx) { ?>
+                        <option value="<?= $ctx ?>" <?= $avis->contexte === $ctx ? 'selected' : '' ?>><?= ucfirst($ctx) ?></option>
+                        <?php } ?>
+                    </select>
+                    
+                    <label for="date">Date de votre visite</label>
+                    <input type="date" id="date" name="date" value="<?= h14s($avis->date_experience) ?>" required>
+                    
+                    <br>
+                <button type="submit" class="btn-publish">Modifier</button>
+                <button class="btn-publish">
+                    <a href="<?= location_avis_supprimer($id_avis, location_detail_offre($id_offre)) ?>">Supprimer</a>
+                </button>
+            </form>
+        </div>
+    </section>
     <?php
 });
