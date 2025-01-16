@@ -167,12 +167,10 @@ end
 $$ language plpgsql;
 
 create function _compte_delete() returns trigger as $$
-begin
     delete from _signalable where id = old.id;
     delete from _adresse where id = old.id_adresse;
-    return old;
-end
-$$ language plpgsql;
+    select old;
+$$ language sql;
 
 create function update_avis(old record, inout new record) as $$
 begin
