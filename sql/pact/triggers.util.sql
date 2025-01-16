@@ -166,7 +166,7 @@ begin
 end
 $$ language plpgsql;
 
-create function update_professionnel(old record, new record) as $$
+create procedure update_professionnel(old record, new record) as $$
 begin
     update_compte(old, new);
     update _professionnel
@@ -177,7 +177,7 @@ begin
 end
 $$ language plpgsql;
 
-create function update_compte(old record, new record) as $$
+create procedure update_compte(old record, new record) as $$
 begin
     if old.id <> new.id then
         raise 'Ne peut pas update id.';
