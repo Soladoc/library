@@ -166,7 +166,7 @@ begin
 end
 $$ language plpgsql;
 
-create function update_professionnel(old, record, new record) as $$
+create function update_professionnel(old record, new record) as $$
 begin
     update_compte(old, new);
     update _professionnel
