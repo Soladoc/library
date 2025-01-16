@@ -51,7 +51,8 @@ comment on constraint adresse_check_numero_voie_complement_numero on _adresse is
 create table _abonnement (
     libelle mot_minuscule
         constraint abonnement_pk primary key,
-    prix_journalier decimal not null
+    prix_journalier decimal not null,
+    description ligne not null,
 );
 
 create table _image (
