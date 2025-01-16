@@ -26,7 +26,7 @@ $page->put(function () {
         $resultat_global                = 0;  // resultat global
         $resultat_offre                 = 0;  // resultat offre
         $id_professionnel = Auth\exiger_connecte_pro();
-        $offres           = Offre::from_db_all(id_professionnel: $id_professionnel);
+        $offres           = Offre::from_db_all_ordered(id_professionnel: $id_professionnel);
         foreach ($offres as $offre) {
             ?>
             <tr>

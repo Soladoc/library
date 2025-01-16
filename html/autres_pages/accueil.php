@@ -22,7 +22,7 @@ $page->put(function () {
         <div class="offer-list">
             <?php
 
-            $offres = Offre::from_db_a_la_une();
+            $offres = Offre::from_db_a_la_une_ordered();
 
             // Préparer et exécuter la requête SQL pour récupérer toutes les offres
         
@@ -40,7 +40,7 @@ $page->put(function () {
         <div class="offer-list">
             <?php
 
-            $offres = Offre::from_db_en_ligne();
+            $offres = Offre::from_db_en_ligne_ordered();
 
             // Préparer et exécuter la requête SQL pour récupérer toutes les offres
         
