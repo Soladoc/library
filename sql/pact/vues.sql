@@ -97,6 +97,8 @@ create view avis_restaurant as select
     blackliste,
     id_membre_auteur,
     id_offre id_restaurant,
+    likes,
+    dislikes,
     _avis_restaurant.*
 from
     _avis_restaurant
