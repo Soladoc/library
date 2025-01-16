@@ -1261,4 +1261,5 @@ label > input {
 .centrer-enfants{
     display: flex;
     justify-content: center;
+    flex-direction: column;
 }
