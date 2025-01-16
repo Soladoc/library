@@ -192,7 +192,7 @@ $page->put(function () use ($compte, $input_adresse, $error_email, $error_mdp, $
                 <label for="api_key">Clé d'API : </label>
                 <input type="text" id="api_key" name="api_key" value="<?= $compte->api_key ?>" readonly></input>
                 <button type="button" id="button-regenerate-api-key" class="btn-publish">Regénérer</button>
-                <button type="button" id="button-delete-api-key" class="btn-publish>Supprimer</button>
+                <button type="button" id="button-delete-api-key" class="btn-publish">Supprimer</button>
             </div>
             <button type="submit">Valider</button>
             <a href="<?= location_detail_compte() ?>">Retour</a>
