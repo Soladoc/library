@@ -235,7 +235,7 @@ final class InputOffre extends Input
                     <?php
                     foreach (Abonnement::all() as $abo) {
                         // skip abo gratuit
-                        if ($abo->prix_journalier === 0)
+                        if ($abo->prix_journalier == 0)
                             continue;
                         ?>
                     <li>
