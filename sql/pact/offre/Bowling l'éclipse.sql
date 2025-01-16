@@ -48,7 +48,7 @@ with
             ((table id_offre), 'sport'),
             ((table id_offre), 'famille')
     ),
-    s2 as ( -- Cette CTE a besoin des valeurs des précédentes, mais elle ne retourne pas de valeur. On doit quand même la nommer, on utilsera la convention de nomamge s1, s2, s3...
+    s2 as (
         insert into
             avis ( --
                 id_offre,
@@ -68,7 +68,7 @@ with
                 'Les employés ont enquillé les erreurs ce qui nous à un peu foutu les boules ' -- Commentaire
             )
     ),
-    s3 as ( -- Cette CTE a besoin des valeurs des précédentes, mais elle ne retourne pas de valeur. On doit quand même la nommer, on utilsera la convention de nomamge s1, s2, s3...
+    s3 as (
         insert into
             avis ( --
                 id_offre,

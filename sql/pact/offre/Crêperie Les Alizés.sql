@@ -43,7 +43,7 @@ with
         returning
             id
     ),
-    s1 as ( -- Cette CTE a besoin des valeurs des précédentes, mais elle ne retourne pas de valeur. On doit quand même la nommer, on utilsera la convention de nomamge s1, s2, s3...
+    s1 as (
         insert into
             avis_restaurant ( --
                 id_restaurant,

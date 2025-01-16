@@ -82,7 +82,7 @@ Ne manquez pas cette opportunité unique de découvrir l''un des châteaux les p
             ('Adulte', (table id_offre), 5),
             ('Enfant', (table id_offre), 1.1)
     ),
-    s5 as ( -- Cette CTE a besoin des valeurs des précédentes, mais elle ne retourne pas de valeur. On doit quand même la nommer, on utilsera la convention de nomamge s1, s2, s3...
+    s5 as (
         insert into _changement_etat (id_offre, fait_le)
         values
         ((table id_offre), '2024-11-15 12:00:00') -- mise en ligne
