@@ -1226,9 +1226,9 @@ label > input {
 }
 
 .button-signaler {
-    padding: 0.8rem 1.5rem;
     /* Rouge pour le bouton */
     background-color: transparent;
+    border: none;
     /* Arrondir les bords */
     color: white;
     cursor: pointer;
