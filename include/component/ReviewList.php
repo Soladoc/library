@@ -52,7 +52,9 @@ final class ReviewList
                             if (notnull($a->membre_auteur->id) === Auth\id_membre_connecte()) { ?>
                                 <form method="post" action="<?= location_modifier_avis($this->offre->id, $a->id) ?>">
                                     <button type="submit" class="btn-publish">Modifier</button>
-                                    <a href="<?= location_avis_supprimer($a->id, location_detail_offre($this->offre->id)) ?>" class="btn-publish">Supprimer</a>
+                                    <button class="btn-publish">
+                                        <a href="<?= location_avis_supprimer($a->id, location_detail_offre($this->offre->id)) ?>" >Supprimer</a>
+                                    </button>
                                 </form>
                             <?php }
                             $h14s_rep_contenu = mapnull(Reponse::from_db_by_avis($a->id)?->contenu, h14s(...));
