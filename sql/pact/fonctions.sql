@@ -49,7 +49,7 @@ create function offre_creee_le (p_id_offre int) returns timestamp as $$
     limit
         1;
 $$ language sql strict stable;
-comment on function offre_creee_le (int) is
+comment on function offre_offre_creee_le (int) is
 'Retourne le timestamp de création d''une offre.
 @param p_id_offre l''ID de l''offre
 @returns le timestamp du premier changement d''état de l''offre.';
