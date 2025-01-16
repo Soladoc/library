@@ -1253,3 +1253,9 @@ label > input {
     filter: blur(.33em);
     transition: filter .1s;
 }
+
+.report-form{
+    margin: 20px auto;
+    max-width: 80%;
+    text-align: center;
+}
