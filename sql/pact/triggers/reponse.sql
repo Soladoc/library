@@ -20,9 +20,11 @@ execute function reponse_insert ();
 
 -- Delete
 create function reponse_delete () returns trigger as $$
+begin
     delete from _signalable where id = old.id;
-    select old;
-$$ language sql;
+    return old;
+end
+$$ language plpgsql;
 
 create trigger tg_reponse_delete instead of delete on reposne for each row
 execute function reponse_delete ();

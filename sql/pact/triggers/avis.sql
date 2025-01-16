@@ -32,9 +32,11 @@ execute function avis_update ();
 -- Delete
 
 create function avis_delete () returns trigger as $$
+begin
     delete from _signalable where id = old.id;
-    select old;
-$$ language sql;
+    return old;
+end
+$$ language plpgsql;
 
 create trigger tg_avis_delete instead of delete on avis fro each row
 execute function avis_delete ();
