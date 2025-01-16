@@ -28,3 +28,12 @@ $$ language plpgsql;
 
 create trigger tg_avis_update instead of update on avis for each row
 execute function avis_update ();
+
+-- Delete
+
+create function avis_delete () returns trigger as $$
+    delete from _avis where id = old.id;
+$$ language sql;
+
+create trigger tg_avis_delete instead of delete on avis fro each row
+execute function avis_delete ();
