@@ -159,8 +159,8 @@ final class Page
                     <li><a href="https://www.youtube.com" target="_blank" rel="noopener noreferrer"><img src="/images/social/youtube.png" alt="YouTube" width="90" height="90" loading="lazy" title="YouTube"></a></li>
                 </ul>
                 <article>
-                    <p><a href="/autres_pages/legal/cgu.php"><abbr title="Conditions Générales d'Utilisation">CGU</abbr></a></p>
-                    <p><a href="/autres_pages/legal/cgv.php"><abbr title="Conditions Générales de Vente">CGV</abbr></a></p>
+                    <p><a href="<?= location_cgu() ?>">CGU</a></p>
+                    <p><a href="<?= location_cgv() ?>">CGV</a></p>
                     <p><a href="<?= location_mentions_legales() ?>">Mentions légales</a></p>
                 </article>
             </div>

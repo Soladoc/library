@@ -109,3 +109,11 @@ function location_mentions_legales()
 {
     return '/autres_pages/legal/mentions-legales.php';
 }
+function location_cgu()
+{
+    return '/autres_pages/legal/cgu.php';
+}
+function location_cgv()
+{
+    return '/autres_pages/legal/cgv.php';
+}
