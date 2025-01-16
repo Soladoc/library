@@ -6,9 +6,9 @@ $page = new Page('Mentions légales', main_class: 'text');
 
 // 1 - 1.5 page
 
-$pd = new Parsedown();
 
-$page->put( function(Parsedown $pd ){
+$page->put( function(){
+    $pd = new Parsedown();
     ?>
     <section class="centrer-enfants" style="text-align: center;">
     <?=
@@ -18,3 +18,4 @@ $page->put( function(Parsedown $pd ){
     <?php
     }
 );
+?>
