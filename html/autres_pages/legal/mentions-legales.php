@@ -10,7 +10,7 @@ $page = new Page('Mentions légales', main_class: 'text');
 $page->put( function(){
     $pd = new Parsedown();
     ?>
-    <section class="centrer-enfants" id="mention-legales-section">
+    <section class="centrer-enfants mention-legales-sections">
         <div>
             <?=
                 $pd->text(file_get_contents('doc/mentions-legales.md', use_include_path: true));
