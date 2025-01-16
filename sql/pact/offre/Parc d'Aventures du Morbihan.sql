@@ -50,9 +50,10 @@ with
             ((table id_offre), id_membre ('jdupont'), 5, 'famille', '2034-12-02', 'Activités variées et cadre magnifique.')
     ),
     s2 as (
-        insert into _changement_etat (id_offre, fait_le)
+        insert into
+            _changement_etat (id_offre, fait_le)
         values
-        ((table id_offre), '2024-01-03 12:37:43') -- mise en ligne
+            ((table id_offre), '2024-01-03 12:37:43') -- mise en ligne
     )
 insert into
     _tags (id_offre, tag)

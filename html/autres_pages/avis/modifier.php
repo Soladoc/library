@@ -29,7 +29,7 @@ if (null !== $date_experience = getarg($_POST, 'date', required: false)) {
         $avis->commentaire = $commentaire;
         $avis->note = $note;
         $avis->contexte = $contexte;
-        $avis->date_experience = $date_experience;
+        $avis->date_experience = Date::parse($date_experience);
         $avis->push_to_db();
 
         redirect_to(location_detail_offre($id_offre));
