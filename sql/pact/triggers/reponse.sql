@@ -6,9 +6,9 @@ set
 -- Create
 create function reponse_insert () returns trigger as $$
 begin
-    insert into pact._signalable default values returning id into new.id;
+    insert into _signalable default values returning id into new.id;
     insert into
-        pact._reponse (id, id_avis, contenu)
+        _reponse (id, id_avis, contenu)
     values
         (new.id, new.id_avis, new.contenu);
     return new;
@@ -17,3 +17,12 @@ $$ language plpgsql;
 
 create trigger tg_reponse_insert instead of insert on reponse for each row
 execute function reponse_insert ();
+
+-- Delete
+create function reponse_delete () returns trigger as $$
+    delete from _signalable where id = old.id;
+    select old;
+$$ language sql;
+
+create trigger tg_reponse_delete instead of delete on reposne for each row
+execute function reponse_delete ();
