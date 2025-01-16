@@ -26,12 +26,11 @@ final class Page
      */
     function __construct(
         readonly string $title,
-        readonly array $stylesheets = [],
-        readonly array $scripts = [],
-        readonly ?string $body_id = null,
+        readonly array $stylesheets  = [],
+        readonly array $scripts      = [],
+        readonly ?string $body_id    = null,
         readonly ?string $main_class = null,
-    ) {
-    }
+    ) {}
 
     /**
      * Affiche la page.
@@ -129,27 +128,15 @@ final class Page
                             <span>Compte</span>
                         </div>
                     </a>
-                    <?php if (Auth\est_connecte_pro()) { ?>
-                        <!-- <a href="facturation.php">
-                <div class="acces-facturation">
-                    <img src="/images/facturation.png" alt="Profil">
-                    <span>Facturation</span>
                 </div>
-            </a> -->
-                    </div>
-                    <?php
-                    }
-            } else {
-                ?>
+            <?php } else { ?>
                 <a href="connexion.php">
                     <div class="auth-button">
                         <img src="/images/login-icon.png" alt="Profil">
                         <span>Connexion</span>
                     </div>
                 </a>
-                <?php
-            }
-            ?>
+            <?php } ?>
         </header>
         <?php
     }

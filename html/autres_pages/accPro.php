@@ -3,6 +3,7 @@ require_once 'component/Page.php';
 require_once 'auth.php';
 require_once 'redirect.php';
 require_once 'component/CarteOffrePro.php';
+require_once 'component/ProfessionnelPrive.php';
 require_once 'model/Offre.php';
 
 $page = new Page('Accueil Professionnel');
@@ -16,7 +17,9 @@ $page->put(function () {
 
     <h1>Accueil Professionnel</h1>
     <a class="btn-more-info bouton_principale_pro" href="<?= location_creation_offre() ?>"  id='bouton_creer_offre' >Créer une offre</a>
-    <a class="btn-more-info bouton_principale_pro" href="<?= location_facturation() ?>" >Facturation</a>
+    <?php if (false !== ProfessionnelPrive::from_db($id_professionnel)) { ?>
+        <a class="btn-more-info bouton_principale_pro" href="<?= location_facturation() ?>">Facturation</a>
+    <?php } ?>
 
     <h3 class="nb-offres"><?= $nb_offres ?> offres</h3>
     <section class="online-offers">
