@@ -30,6 +30,7 @@ begin
         pseudo = new.pseudo
     where
         id = new.id;
+    return new;
 end
 $$ language plpgsql;
 

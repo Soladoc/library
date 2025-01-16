@@ -37,6 +37,7 @@ begin
         siren = new.siren
     where
         id = new.id;
+    return new;
 end
 $$ language plpgsql;
 

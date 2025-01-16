@@ -50,6 +50,7 @@ create function parc_attractions_delete () returns trigger as $$
 begin
     delete from _signalable where id = old.id;
     delete from _image where id = old.id_image_plan;
+    return old;
 end
 $$ language plpgsql;
 

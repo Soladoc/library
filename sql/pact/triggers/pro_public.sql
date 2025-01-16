@@ -30,6 +30,7 @@ execute function pro_public_insert ();
 create function pro_public_update () returns trigger as $$
 begin
     call update_professionnel(old, new);
+    return old;
 end
 $$ language plpgsql;
 

@@ -46,6 +46,7 @@ execute function spectacle_update ();
 create function spectacle_delete () returns trigger as $$
 begin
     delete from _signalable where id = old.id;
+    return old;
 end
 $$ language plpgsql;
 
