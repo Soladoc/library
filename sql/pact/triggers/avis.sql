@@ -38,5 +38,5 @@ begin
 end
 $$ language plpgsql;
 
-create trigger tg_avis_delete instead of delete on avis fro each row
+create trigger tg_avis_delete instead of delete on avis for each row
 execute function avis_delete ();
