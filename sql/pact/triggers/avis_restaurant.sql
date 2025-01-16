@@ -33,6 +33,9 @@ execute function avis_restaurant_insert ();
 -- Update
 create function avis_restaurant_update () returns trigger as $$
 begin
+    if old.id_restaurant <> new.id_restaurant then
+        raise 'Ne peut pas modifier id_restaurant';
+    end if;
     new = update_avis(old, new);
 
     update _avis_restaurant

@@ -207,8 +207,8 @@ $$ language plpgsql;
 
 create function update_avis(old record, inout new record) as $$
 begin
-    if old.id <> new.id or old.id_offre <> new.id_offre or old.id_membre_auteur <> new.id_membre_auteur then
-        raise 'Ne peut pas update id ou id_offre ou id_membre_auteur';
+    if old.id <> new.id or old.id_membre_auteur <> new.id_membre_auteur then
+        raise 'Ne peut pas update id  ou id_membre_auteur';
     end if;
 
     update _avis
