@@ -52,7 +52,7 @@ create table _abonnement (
     libelle mot_minuscule
         constraint abonnement_pk primary key,
     prix_journalier decimal not null,
-    description ligne not null,
+    description ligne not null
 );
 
 create table _image (
