@@ -20,7 +20,7 @@ $page->put(function () {
 
     <h1>Accueil Professionnel</h1>
     <a class="btn-more-info bouton_principale_pro" href="<?= location_creation_offre() ?>"  id='bouton_creer_offre' >Créer une offre</a>
-    <?php if ($pro instanceof ProfessionnelPrive { ?>
+    <?php if ($pro instanceof ProfessionnelPrive) { ?>
         <a class="btn-more-info bouton_principale_pro" href="<?= location_facturation() ?>">Facturation</a>
     <?php } ?>
 
