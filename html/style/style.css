@@ -639,6 +639,12 @@ textarea {
     cursor: pointer;
 }
 
+.btn-publish a {
+    
+    text-decoration: none;
+    color: white;
+}
+
 .offer-info h2 {
     text-align: center;
     font-size: 2rem;
