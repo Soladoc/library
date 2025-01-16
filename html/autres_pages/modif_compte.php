@@ -7,9 +7,9 @@ require_once 'component/Page.php';
 require_once 'component/InputAdresse.php';
 require_once 'model/Compte.php';
 
-$page = new Page('Modification compte', body_id: 'detail_compte', scripts: ['module/modif_compte.js' => 'type="module"']);
-$error_mdp = null;
-$error_tel = null;
+$page        = new Page('Modification compte', body_id: 'detail_compte', scripts: ['module/modif_compte.js' => 'type="module"']);
+$error_mdp   = null;
+$error_tel   = null;
 $error_email = null;
 $error_siren = null;
 
@@ -69,18 +69,14 @@ if ($_POST) {
 
     // modif mot de passe
 
-    if (null !== $old_mdp = getarg($_POST, 'old_mdp', required: false)) {
-        $new_mdp = getarg($_POST, 'new_mdp', required: false);
+    if (null !== $old_mdp = getarg($_POST, 'old_mdp', required: false)
+            && null !== $new_mdp = getarg($_POST, 'new_mdp', required: false)) {
         $confirmation_mdp = getarg($_POST, 'confirmation_mdp', filter: null, required: false);
         if (password_verify($old_mdp, $compte->mdp_hash)) {
-            if ($new_mdp) {
-                if ($confirmation_mdp === $new_mdp) {
-                    $compte->mdp_hash = password_hash($new_mdp, algo: PASSWORD_DEFAULT);
-                } else {
-                    $error_mdp = 'Mot de passe de confirmation different.';
-                }
+            if ($confirmation_mdp === $new_mdp) {
+                $compte->mdp_hash = password_hash($new_mdp, algo: PASSWORD_DEFAULT);
             } else {
-                $error_mdp = 'Nouveau mot de passe manquant.';
+                $error_mdp = 'Mot de passe de confirmation different.';
             }
         } else {
             $error_mdp = 'Mot de passe incorrect.';
@@ -172,8 +168,8 @@ $page->put(function () use ($compte, $input_adresse, $error_email, $error_mdp, $
             </div>
             <?php $input_adresse->put($compte->adresse) ?>
             <br>
-            <div id="changer_mdp">
-                <label>Modifier son mot de passe</label>
+            <details id="changer_mdp">
+                <summary>Modifier son mot de passe</su>
                 <div class="champ">
                     <label for="mdp">Mot de passe actuel *</label>
                     <input id="mdp" name="old_mdp" type="password" placeholder="**********">
@@ -190,7 +186,7 @@ $page->put(function () use ($compte, $input_adresse, $error_email, $error_mdp, $
                     <p class="error"><?= h14s($error_mdp) ?></p>
                 <?php } ?>
 
-            </div>
+            </details>
             <br>
             <div>
                 <label for="api_key">Clé d'API : </label>
