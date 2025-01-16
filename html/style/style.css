@@ -1257,3 +1257,8 @@ label > input {
     max-width: 80%;
     text-align: center;
 }
+
+.centrer-enfants{
+    display: flex;
+    justify-content: center;
+}
