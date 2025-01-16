@@ -21,6 +21,9 @@ execute function avis_insert ();
 -- Update
 create function avis_update () returns trigger as $$
 begin
+    if old.id_offre <> new.id_offre then
+        raise 'Ne peut pas modifier id_offre'
+    end if;
     new = update_avis(old, new);
     return new;
 end
