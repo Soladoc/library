@@ -34,7 +34,7 @@ $page->put(function () {
         <td><?= $offre->categorie ?></td>
         <td><?= $offre->en_ligne_ce_mois_pendant->days ?></td>
         <?php
-        $resultat_offre  = $offre->en_ligne_ce_mois_pendant->days * $offre->abonnement->prix_journalier;
+        $resultat_offre  = ceil($offre->en_ligne_ce_mois_pendant->total_days) * $offre->abonnement->prix_journalier;
         $resultat_offre += $resultat_offre * 0.2;
         $resultat_global += $resultat_offre;
         if ( strcasecmp($offre->abonnement->libelle,'Gratuit') == 0 ) { ?>
