@@ -15,6 +15,7 @@ require_once 'component/InputImage.php';
 require_once 'component/DynamicTable.php';
 require_once 'model/ProfessionnelPrive.php';
 require_once 'component/InputAdresse.php';
+require_once 'redirect.php';
 
 /**
  * @extends Input<Offre>
@@ -260,7 +261,7 @@ final class InputOffre extends Input
                 </aside>
             <?php } else { ?>
                 <p>Comme vous êtres un professionnel public, l'offre créée sera gratuite (pas de facturation)</p>
-                <p><a href="/autres_pages/mentions-legales.php" target="_blank" rel="noopener noreferrer">Plus d'informations&hellip;</>
+                <p><a href="<?= location_mentions_legales() ?>" target="_blank" rel="noopener noreferrer">Plus d'informations&hellip;</>
                 </p>
             <?php } ?>
         </section>

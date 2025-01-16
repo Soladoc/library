@@ -104,3 +104,8 @@ function location_avis_supprimer(int $id_avis, string $return_url)
 {
     return '/auto/avis/supprimer.php?' . http_build_query(['id_avis' => $id_avis, 'return_url' => $return_url]);
 }
+
+function location_mentions_legales()
+{
+    return '/autres_pages/legal/mentions-legales.php';
+}

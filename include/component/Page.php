@@ -161,7 +161,7 @@ final class Page
                 <article>
                     <p><a href="/autres_pages/legal/cgu.php"><abbr title="Conditions Générales d'Utilisation">CGU</abbr></a></p>
                     <p><a href="/autres_pages/legal/cgv.php"><abbr title="Conditions Générales de Vente">CGV</abbr></a></p>
-                    <p><a href="/autres_pages/legal/mentions-legales.php">Mentions légales</a></p>
+                    <p><a href="<?= location_mentions_legales() ?>">Mentions légales</a></p>
                 </article>
             </div>
             <div class="footer-bottom">

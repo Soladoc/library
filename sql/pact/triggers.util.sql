@@ -166,6 +166,37 @@ begin
 end
 $$ language plpgsql;
 
+create function update_professionnel(old, record, new record) as $$
+begin
+    update_compte(old, new);
+    update _professionnel
+    set
+        denomination = new.denomination
+    where
+        id = new.id;
+end
+$$ language plpgsql;
+
+create function update_compte(old record, new record) as $$
+begin
+    if old.id <> new.id then
+        raise 'Ne peut pas update id.';
+    end if;
+
+    update _compte
+    set
+        email = new.email,
+        mdp_hash = new.mdp_hash,
+        nom = new.nom,
+        prenom = new.prenom,
+        telephone = new.telephone,
+        id_adresse = new.id_adresse,
+        api_key = new.api_key
+    where
+        id = new.id;
+end
+$$ langue plpgsql;
+
 create function _compte_delete() returns trigger as $$
 begin
     delete from _signalable where id = old.id;
