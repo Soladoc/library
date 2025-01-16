@@ -3,6 +3,7 @@ require_once 'component/Page.php';
 require_once 'auth.php';
 require_once 'redirect.php';
 require_once 'component/CarteOffrePro.php';
+require_once 'model/Professionnel.php';
 require_once 'model/ProfessionnelPrive.php';
 require_once 'model/Offre.php';
 
@@ -11,13 +12,15 @@ $page = new Page('Accueil Professionnel');
 $page->put(function () {
     $id_professionnel = Auth\exiger_connecte_pro();
 
+    $pro = Professionnel::from_db($id_professionnel);
+
     $nb_offres = Offre::count($id_professionnel);
     $nb_offres_en_ligne = Offre::count($id_professionnel, en_ligne: true);
     ?>
 
     <h1>Accueil Professionnel</h1>
     <a class="btn-more-info bouton_principale_pro" href="<?= location_creation_offre() ?>"  id='bouton_creer_offre' >Créer une offre</a>
-    <?php if (false !== ProfessionnelPrive::from_db($id_professionnel)) { ?>
+    <?php if ($pro instanceof ProfessionnelPrive { ?>
         <a class="btn-more-info bouton_principale_pro" href="<?= location_facturation() ?>">Facturation</a>
     <?php } ?>
 
