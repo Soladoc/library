@@ -174,7 +174,7 @@ abstract class Offre extends Signalable
      */
     static function from_db_en_ligne(): Iterator
     {
-        $stmt = notfalse(DB\connect()->prepare(self::make_select() . ' where ' . static::TABLE . '.en_ligne order by random()'));
+        $stmt = notfalse(DB\connect()->prepare(self::make_select() . ' where ' . static::TABLE . '.en_ligne order by id desc'));
         notfalse($stmt->execute());
         while (false !== $row = $stmt->fetch()) {
             yield $row['id'] => self::from_db_row($row);
