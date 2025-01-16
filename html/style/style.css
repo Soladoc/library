@@ -1263,3 +1263,8 @@ label > input {
     justify-content: center;
     flex-direction: column;
 }
+
+#mention-legales-section{
+    text-align: center;
+    margin: 5vh;
+}
