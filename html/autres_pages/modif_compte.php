@@ -89,6 +89,8 @@ if ($_POST) {
     }
 
     $compte->push_to_db();
+
+    redirect_to(location_detail_compte());
 }
 
 $page->put(function () use ($compte, $input_adresse, $error_email, $error_mdp, $error_siren, $error_tel) {
