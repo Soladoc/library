@@ -29,7 +29,7 @@ final class Commune
     /**
      * @var ?string[]
      */
-    private ?array $code_postaux;
+    private ?array $code_postaux = null;
 
     /**
      * Retourne les code postaux de cette commune.
