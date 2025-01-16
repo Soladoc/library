@@ -18,10 +18,10 @@ function redirect_to(string $location): never
  * @param ?string $return_url L'URL ou rediriger lorsque la connexion réussit. `null` indique de rediriger l'utilisateur vers la page d'accueil (pro ou membre).
  * @return string L'URL de la page de connection.
  */
-function location_connexion(?string $error = null, ?string $return_url = null): string
+function location_connexion(?string $error = null, ?string $return_url = null, ?string $pseudo = null): string
 {
 
-    return '/autres_pages/connexion.php?' . http_build_query(['error' => $error, 'return_url' => $return_url]);
+    return '/autres_pages/connexion.php?' . http_build_query(['error' => $error, 'return_url' => $return_url, 'pseudo' => $pseudo]);
 }
 
 /**

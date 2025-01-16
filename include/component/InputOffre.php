@@ -260,8 +260,7 @@ final class InputOffre extends Input
                 </aside>
             <?php } else { ?>
                 <p>Comme vous êtres un professionnel public, l'offre créée sera gratuite (pas de facturation)</p>
-                <!-- todo: mettre un lien utile ici -->
-                <p><a href="/" target="_blank" rel="noopener noreferrer">Plus d'informations&hellip;</>
+                <p><a href="/autres_pages/mentions-legales.php" target="_blank" rel="noopener noreferrer">Plus d'informations&hellip;</>
                 </p>
             <?php } ?>
         </section>

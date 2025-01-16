@@ -8,6 +8,7 @@ $page = new Page('Connexion');
 $page->put(function () {
     $return_url = getarg($_GET, 'return_url', required: false);
     $error = getarg($_GET, 'error', required: false);
+    $pseudo = getarg($_GET, 'pseudo', required: false);
     ?>
     <h1>Connexion</h1>
     <section class="connexion">
@@ -16,8 +17,8 @@ $page->put(function () {
             <!-- Formulaire de connexion -->
             <form action="<?= location_login() ?>" method="post">
                 <div class="champ">
-                    <label for="login">Adresse e-mail *</label>
-                    <input id="login" name="login" type="text" placeholder="exemple@mail.fr" required>
+                    <label for="login">Pseudo/Adresse e-mail *</label>
+                    <input id="login" name="login" type="text" placeholder="exemple@mail.fr" required value="<?= $pseudo ?>">
                 </div>
                 <br>
                 <div class="champ">

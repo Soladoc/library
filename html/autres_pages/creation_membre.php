@@ -47,7 +47,7 @@ if (isset($_POST['motdepasse'])) {
     } catch (PDOException $e) {
         fail($e->getMessage());
     }
-    redirect_to(location_connexion());  // todo: passer en GET le pseudo pour l'afficher dans le formulaire connexion, pour que l'utilisateur n'ait pas à le retaper.
+    redirect_to(location_connexion(pseudo: $pseudo));
 }
 
 $page->put(function () {
