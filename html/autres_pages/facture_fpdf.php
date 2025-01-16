@@ -189,7 +189,7 @@ $header = ['Titre', "Type d'abonnement", 'Catégorie', 'Jours en ligne',"Prix TT
 $data = [];
 $resultat_global = 0;
 $id_professionnel = Auth\exiger_connecte_pro();
-$offres= Offre::from_db_all($id_professionnel);
+$offres= Offre::from_db_all_ordered($id_professionnel);
 foreach ($offres as $offre) {
     $resultat_offre  = $offre->en_ligne_ce_mois_pendant->days * $offre->abonnement->prix_journalier;
     $resultat_offre += $resultat_offre * 0.2;

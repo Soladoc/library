@@ -31,7 +31,7 @@ $page->put(function () {
 
         <div class="offer-list">
             <?php
-            $offres_en_ligne = Offre::from_db_all($id_professionnel, en_ligne: true);
+            $offres_en_ligne = Offre::from_db_all_ordered($id_professionnel, en_ligne: true);
             foreach ($offres_en_ligne as $offre) {
                 (new CarteOffrePro($offre))->put();
             }
@@ -45,7 +45,7 @@ $page->put(function () {
 
         <div class="offer-carousel">
             <?php
-            $offres_hors_ligne = Offre::from_db_all($id_professionnel, en_ligne: false);
+            $offres_hors_ligne = Offre::from_db_all_ordered($id_professionnel, en_ligne: false);
             foreach ($offres_hors_ligne as $offre) {
                 (new CarteOffrePro($offre))->put();
             }

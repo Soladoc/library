@@ -159,9 +159,9 @@ abstract class Offre extends Signalable
      * Récupère les offres "À la Une" de la BDD.
      * @return Iterator<int, self> Les offres "À la Une" de la BDD, indexés par ID.
      */
-    static function from_db_a_la_une(): Iterator
+    static function from_db_a_la_une_ordered(): Iterator
     {
-        $stmt = notfalse(DB\connect()->prepare(self::make_select() . ' where ' . static::TABLE . ".libelle_abonnement = 'premium' and " . static::TABLE . '.en_ligne order by id desc limit 6'));
+        $stmt = notfalse(DB\connect()->prepare(self::make_select() . ' where ' . static::TABLE . ".libelle_abonnement = 'premium' and " . static::TABLE . '.en_ligne order by id'));
         notfalse($stmt->execute());
         while (false !== $row = $stmt->fetch()) {
             yield $row['id'] => self::from_db_row($row);
@@ -172,9 +172,9 @@ abstract class Offre extends Signalable
      * Récupère les offres "en ligne" de la BDD.
      * @return Iterator<int, self> Les offres "À la Une" de la BDD, indexés par ID.
      */
-    static function from_db_en_ligne(): Iterator
+    static function from_db_en_ligne_ordered(): Iterator
     {
-        $stmt = notfalse(DB\connect()->prepare(self::make_select() . ' where ' . static::TABLE . '.en_ligne order by id desc'));
+        $stmt = notfalse(DB\connect()->prepare(self::make_select() . ' where ' . static::TABLE . '.en_ligne order by id'));
         notfalse($stmt->execute());
         while (false !== $row = $stmt->fetch()) {
             yield $row['id'] => self::from_db_row($row);
@@ -187,10 +187,10 @@ abstract class Offre extends Signalable
      * @param mixed $en_ligne Si on veut les offres actuellement en ligne ou hors ligne, ou `null` pour les deux.
      * @return Iterator<int, self> Les offres de la BDD répondant au critères passés en paramètre.
      */
-    static function from_db_all(?int $id_professionnel = null, ?bool $en_ligne = null): Iterator
+    static function from_db_all_ordered(?int $id_professionnel = null, ?bool $en_ligne = null): Iterator
     {
         $args = DB\filter_null_args(['id_professionnel' => [$id_professionnel, PDO::PARAM_INT], 'en_ligne' => [$en_ligne, PDO::PARAM_BOOL]]);
-        $stmt = notfalse(DB\connect()->prepare(self::make_select() . DB\where_clause(DB\BoolOperator::AND, array_keys($args), static::TABLE)));
+        $stmt = notfalse(DB\connect()->prepare(self::make_select() . DB\where_clause(DB\BoolOperator::AND, array_keys($args), static::TABLE) . ' order by id'));
         DB\bind_values($stmt, $args);
         notfalse($stmt->execute());
         while (false !== $row = $stmt->fetch()) {
