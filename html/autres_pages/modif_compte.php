@@ -69,8 +69,8 @@ if ($_POST) {
 
     // modif mot de passe
 
-    if (null !== $old_mdp = getarg($_POST, 'old_mdp', required: false)
-            && null !== $new_mdp = getarg($_POST, 'new_mdp', required: false)) {
+    if ($old_mdp = getarg($_POST, 'old_mdp', required: false)
+            && $new_mdp = getarg($_POST, 'new_mdp', required: false)) {
         $confirmation_mdp = getarg($_POST, 'confirmation_mdp', filter: null, required: false);
         if (password_verify($old_mdp, $compte->mdp_hash)) {
             if ($confirmation_mdp === $new_mdp) {
