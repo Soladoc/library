@@ -17,6 +17,7 @@
 | Fonctionnalité | Personne assignée |Contributeur|
 |:-----|:----|:---|
 |Générer un PDF de facturation|Marius|******|
+|Tchatator|Romain|******|
 |signaler une offre|Maelan|******|
 |Modifier un avis sur téléphone|Maelan|******|
 |Supprimer un avis sur téléphone|Maelan|********|
