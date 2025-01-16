@@ -168,7 +168,7 @@ $$ language plpgsql;
 
 create procedure update_professionnel(old record, new record) as $$
 begin
-    update_compte(old, new);
+    call update_compte(old, new);
     update _professionnel
     set
         denomination = new.denomination
@@ -195,7 +195,7 @@ begin
     where
         id = new.id;
 end
-$$ langue plpgsql;
+$$ language plpgsql;
 
 create function _compte_delete() returns trigger as $$
 begin

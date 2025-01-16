@@ -24,7 +24,7 @@ execute function membre_insert ();
 -- Update
 create function membre_update () returns trigger as $$
 begin
-    update_compte(old, new);
+    call update_compte(old, new);
     update _membre
     set
         pseudo = new.pseudo

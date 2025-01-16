@@ -29,7 +29,7 @@ execute function pro_public_insert ();
 -- Update
 create function pro_public_update () returns trigger as $$
 begin
-    update_professionnel(old, new);
+    call update_professionnel(old, new);
 end
 $$ language plpgsql;
 

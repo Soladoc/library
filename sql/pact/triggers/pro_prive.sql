@@ -31,7 +31,7 @@ execute function pro_prive_insert ();
 -- Update
 create function pro_prive_update () returns trigger as $$
 begin
-    update_professionnel(old, new);
+    call update_professionnel(old, new);
     update _prive
     set
         siren = new.siren
