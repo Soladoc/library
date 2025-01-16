@@ -11,7 +11,7 @@ $pd = new Parsedown();
 $page->put( function(Parsedown $pd ){
     ?>
     <section class="centrer-enfants" style="text-align: center;">
-    <?php
+    <?=
         $pd->text(file_get_contents('doc/mentions-legales.md', use_include_path: true));
     ?>
     </section>
