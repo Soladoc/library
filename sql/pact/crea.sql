@@ -192,27 +192,6 @@ create table _membre (
     pseudo pseudonyme not null unique
 );
 
-create table _facture (
-    id serial
-        constraint facture_pk primary key,
-    date date not null,
-    remise_ht decimal not null,
-    montant_deja_verse decimal not null,
-    id_offre int -- On ne supprime pas la facture quand l'offre est supprimée
-        constraint facture_fk_offre references _offre on delete set null
-);
-
-create table _prestation (
-    id serial
-        constraint prestation_pk primary key,
-    description ligne not null,
-    prix_unitaire_ht decimal not null,
-    tva decimal not null,
-    qte int not null,
-    id_facture int not null
-        constraint prestation_fk_facture references _facture on delete cascade
-);
-
 create table _tarif (
     nom ligne not null,
     id_offre int
