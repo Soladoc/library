@@ -1,12 +1,12 @@
 set schema 'pact';
 
 insert into
-    _abonnement (libelle, prix_journalier)
+    _abonnement (libelle, prix_journalier, description)
 values 
     -- prix hors taxe par jour
-    ('gratuit', 0),
-    ('standard', 1.67),
-    ('premium', 3.34);
+    ('gratuit', 0, 'Aucun avantage'),
+    ('standard', 1.67, 'Option, grille tarifaire'),
+    ('premium', 3.34, 'Option, grille tarifaire, blacklister des avis');
 
 insert into
     _option (nom, prix_hebdomadaire)

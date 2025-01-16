@@ -33,8 +33,8 @@ final class InputOffre extends Input
     function __construct(
         private readonly string $categorie,
         private readonly Professionnel $professionnel,
-        string $id = '',
-        string $name = '',
+        string $id      = '',
+        string $name    = '',
         string $form_id = ''
     ) {
         parent::__construct($id, $name, $form_id);
@@ -43,7 +43,7 @@ final class InputOffre extends Input
             name: $this->name('indication_duree'),
             form_id: $form_id,
         );
-        $this->input_adresse = new InputAdresse(
+        $this->input_adresse          = new InputAdresse(
             id: $this->id('adresse'),
             name: $this->name('adresse'),
             form_id: $form_id,
@@ -54,13 +54,13 @@ final class InputOffre extends Input
             name: $this->name('image_principale'),
             form_id: $form_id,
         );
-        $this->input_image_plan = new InputImage(
+        $this->input_image_plan       = new InputImage(
             fieldset_legend: 'Photo du plan',
             id: $this->id('input_image_plan'),
             name: $this->name('input_image_plan'),
             form_id: $form_id,
         );
-        $this->tarifs = new DynamicTable(
+        $this->tarifs                 = new DynamicTable(
             columns: ['Nom', 'Montant'],
             put_row: function (DynamicTable $dt, ?array $row) {
                 $form_attr = $dt->form_id ? "form=\"$dt->form_id\"" : '';
@@ -137,7 +137,7 @@ final class InputOffre extends Input
             $this->input_adresse->get($get_or_post),
             $image_princiaple,
             $this->professionnel,
-            Abonnement::from_db(getarg($get_or_post, $this->name('libelle_abonnement'), required: false) ?? 'gratuit'),
+            Abonnement::all()[getarg($get_or_post, $this->name('libelle_abonnement'), required: false) ?? 'gratuit'],
             getarg($get_or_post, $this->name('titre')),
             getarg($get_or_post, $this->name('resume')),
             getarg($get_or_post, $this->name('description_detaillee')),
@@ -154,7 +154,7 @@ final class InputOffre extends Input
         ];
 
         $offre = match ($this->categorie) {
-            Activite::CATEGORIE => new Activite(
+            Activite::CATEGORIE        => new Activite(
                 $args_offre,
                 $this->input_indication_duree->get($get_or_post),
                 getarg($get_or_post, 'age_requis', arg_int(1), required: false),
@@ -167,12 +167,12 @@ final class InputOffre extends Input
                 getarg($get_or_post, 'nb_attractions', arg_int(0)),
                 $this->input_image_plan->get($get_or_post)[0] ?? $current_offre?->image_principale,
             ),
-            Spectacle::CATEGORIE => new Spectacle(
+            Spectacle::CATEGORIE       => new Spectacle(
                 $args_offre,
                 $this->input_indication_duree->get($get_or_post),
                 getarg($get_or_post, 'capacite_accueil', arg_int(0)),
             ),
-            Restaurant::CATEGORIE => new Restaurant(
+            Restaurant::CATEGORIE      => new Restaurant(
                 $args_offre,
                 getarg($get_or_post, 'carte'),
                 getarg($get_or_post, 'richesse'),
@@ -182,7 +182,7 @@ final class InputOffre extends Input
                 getarg($get_or_post, 'sert_diner', required: false) ?? false,
                 getarg($get_or_post, 'sert_boissons', required: false) ?? false,
             ),
-            Visite::CATEGORIE => new Visite(
+            Visite::CATEGORIE          => new Visite(
                 $args_offre,
                 $this->input_indication_duree->get($get_or_post),
             ),
@@ -232,28 +232,24 @@ final class InputOffre extends Input
             <h2>Abonnement</h2>
             <?php if ($this->professionnel instanceof ProfessionnelPrive) { ?>
                 <ul id="<?= $this->id('liste-choix-abonnement') ?>">
+                    <?php
+                    foreach (Abonnement::all() as $abo) {
+                        // skip abo gratuit
+                        if ($abo->prix_journalier === 0)
+                            continue;
+                        ?>
                     <li>
                         <label><input <?= $form_attr ?>
-                            id="<?= $this->id('libelle_abonnement_standard') ?>"
+                            id="<?= $this->id("libelle_abonnement_$abo->libelle") ?>"
                             name="<?= $this->name('libelle_abonnement') ?>"
                             type="radio"
-                            value="standard"
+                            value="<?= $abo->libelle ?>"
                             required
                             <?= $current === null ? '' : 'disabled' ?>
                             <?= $current?->abonnement->libelle === 'standard' ? 'checked' : '' ?>>
-                            Standard</label>
+                            <?= ucfirst($abo->libelle) ?> (<?= h14s($abo->description) ?>, <?= $abo->prix_journalier ?>€&nbsp;/&nbsp;jour)</label>
                     </li>
-                    <li>
-                        <label><input <?= $form_attr ?>
-                            id="<?= $this->id('libelle_abonnement_premium') ?>"
-                            name="<?= $this->name('libelle_abonnement') ?>"
-                            type="radio"
-                            value="premium"
-                            required
-                            <?= $current === null ? '' : 'disabled' ?>
-                            <?= $current?->abonnement->libelle === 'premium' ? 'checked' : '' ?>>
-                            Premium</label>
-                    </li>
+                    <?php } ?>
                 </ul>
                 <aside>
                     <img src="/icon/icons8-haute-importance-100.png" alt="Haute importance" width="25" height="25">
