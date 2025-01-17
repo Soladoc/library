@@ -30,7 +30,7 @@ $page->put(function () {
         foreach ($offres as $offre) {
             ?>
             <tr>
-            <td><?= $offre->titre; ?></td>
+            <td><?= $offre->titre ?></td>
             <td><?= $offre->abonnement->libelle ?></td>
             <td><?= $offre->categorie ?></td>
             <td><?= $offre->en_ligne_ce_mois_pendant->days ?></td>

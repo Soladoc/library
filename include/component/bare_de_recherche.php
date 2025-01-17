@@ -21,7 +21,7 @@ if (isset($valider) && !empty(trim($search))) {
 
 <form action="" name="barre_de_recherche" method="get">
 
-<input type="text" name="search" value="<?php echo $search ?>" placeholder=">Mots-clés">
+<input type="text" name="search" value="<?= $search ?>" placeholder=">Mots-clés">
 <input type="submit" name="valider" value="Recherche">
 </form>
 
@@ -36,7 +36,7 @@ if ($recherche) {
                 <?php
                 for ($i = 0; $i < count($tab); $i++) {
                     ?>
-                    <li><?php echo $tab[$i]['titre'] ?></li>
+                    <li><?= $tab[$i]['titre'] ?></li>
                     <?php
                 }
                 ?>

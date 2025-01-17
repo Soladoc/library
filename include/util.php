@@ -361,8 +361,6 @@ function soa_to_aos(array $array): array
     return $result;
 }
 
-const NBSP = "\xc2\xa0";
-
 /**
  * DÉBOGAGE UNIQUEMENT - Affiche une valeur et la renvoie
  * @template T

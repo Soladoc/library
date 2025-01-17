@@ -74,6 +74,9 @@ const CONTEXTES_VISITE = [
     'solo',
     'famille',
     'amis',
+    'autre',
 ];
 
 const PDO_PARAM_FLOAT = PDO::PARAM_STR;
+
+const NBSP = "\xc2\xa0";
