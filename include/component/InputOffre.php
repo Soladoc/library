@@ -198,7 +198,7 @@ final class InputOffre extends Input
                     Time::parse($horaire_row['fin']),
                     false,
                 ),
-                dbg_print($horaires),
+                soa_to_aos($horaires),
             ));
         }
 
