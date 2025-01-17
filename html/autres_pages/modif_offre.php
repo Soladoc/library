@@ -48,7 +48,7 @@ $page->put(function () use (
     ?>
 
     <form id="f" method="post" enctype="multipart/form-data">
-        <button type="submit">Valider</button>
+        <button type="submit" class="btn-publish">Valider</button>
     </form>
     <?php
 });
