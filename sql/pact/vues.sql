@@ -16,22 +16,16 @@ create view offres as select
     o.modifiee_le,
     o.url_site_web,
     o.periodes_ouverture,
-    (select count(*) from _changement_etat where _changement_etat.id_offre = o.id) % 2 = 0 en_ligne,
-    (select round(avg(_avis.note),2) from _avis where _avis.id_offre = o.id) note_moyenne,
+    offre_en_ligne(o.id) en_ligne,
+    offre_note_moyenne(o.id) note_moyenne,
     offre_prix_min(o.id) prix_min,
-    (select count(*) from avis where id_offre = o.id) nb_avis,
+    offre_nb_avis(o.id) nb_avis,
     offre_creee_le(o.id) creee_le,
     offre_categorie(o.id) categorie,
     offre_en_ligne_pendant(o.id, date_trunc('month', localtimestamp), '1 month') en_ligne_ce_mois_pendant,
     offre_changement_ouverture_suivant_le(o.id, localtimestamp, o.periodes_ouverture) changement_ouverture_suivant_le,
     -- Considérer une offre sans période ou horaire comme ouverte tout le temps
-    (with horaire_match as (
-        select horaires from _ouverture_hebdomadaire
-         where id_offre = o.id
-           and dow = extract(dow from localtimestamp))
-     select isempty(o.periodes_ouverture) and not exists((table horaire_match))
-         or localtimestamp <@ o.periodes_ouverture
-         or coalesce(localtime <@ (table horaire_match), false)) est_ouverte,
+    offre_est_ouverte(o.id, o.periodes_ouverture) est_ouverte,
     case
         when so.actif is null then null
         else json_build_array(so.actif, so.nom_option, so.lancee_le, so.nb_semaines, opt.prix_hebdomadaire)
