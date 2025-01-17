@@ -38,7 +38,7 @@ Comme le pseudo est `unique`, on peut garantir qu''il n''existe qu''un seul memb
 -- Offres
 
 create function offre_prix_min (p_id_offre int) returns float as $$ 
-    select min(tarif.montant) from tarif where tarif.id_offre = o.id;
+    select min(montant) from _tarif where id_offre = p_id_offre;
 $$ language sql strict stable;
 
 create function offre_creee_le (p_id_offre int) returns timestamp as $$
