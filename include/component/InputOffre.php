@@ -64,21 +64,20 @@ final class InputOffre extends Input
         $this->tarifs                 = new DynamicTable(
             columns: ['Nom', 'Montant'],
             put_row: function (DynamicTable $dt, ?array $row) {
-                $form_attr = $dt->form_id ? "form=\"$dt->form_id\"" : '';
                 ?>
-                <td><input <?= $form_attr ?>
+                <td><input <?= $dt->form_attr ?>
                     name="<?= $this->name('tarifs') ?>[nom][]"
                     type="text"
                     placeholder="Enfant, Sénior&hellip;"
                     required
                     readonly
-                    value="<?= $row === null ? null : $row['nom'] ?>"></td>
-                <td><input <?= $form_attr ?> name="<?= $this->name('tarifs') ?>[montant][]"
+                    value="<?= $row === null ? null : h14s($row['nom']) ?>"></td>
+                <td><input <?= $dt->form_attr ?> name="<?= $this->name('tarifs') ?>[montant][]"
                     type="number"
                     min="0"
                     placeholder="Prix"
                     required
-                    value="<?= $row === null ? null : $row['montant'] ?>"> €</td>
+                    value="<?= $row === null ? null : h14s($row['montant']) ?>"> €</td>
                 <?php
             },
             put_prompt: function (DynamicTable $dt) {
@@ -95,10 +94,9 @@ final class InputOffre extends Input
         $this->periodes = new DynamicTable(
             columns: ['Début', 'Fin'],
             put_row: function (DynamicTable $dt, ?array $horaire) {
-                $form_attr = $dt->form_id ? "form=\"$dt->form_id\"" : '';
                 ?>
-                <td><input <?= $form_attr ?> name="<?= $this->name('periodes') ?>[debut][]" type="datetime-local" value="<?= $horaire === null ? null : $horaire[0] ?>)"></td>
-                <td><input <?= $form_attr ?> name="<?= $this->name('periodes') ?>[fin][]" type="datetime-local" value="<?= $horaire === null ? null : $horaire[1] ?>"></td>
+                <td><input <?= $dt->form_attr ?> name="<?= $this->name('periodes') ?>[debut][]" type="datetime-local" value="<?= $horaire === null ? null : $horaire[0] ?>)"></td>
+                <td><input <?= $dt->form_attr ?> name="<?= $this->name('periodes') ?>[fin][]" type="datetime-local" value="<?= $horaire === null ? null : $horaire[1] ?>"></td>
                 <?php
             },
             put_prompt: function (DynamicTable $dt) {
@@ -225,7 +223,6 @@ final class InputOffre extends Input
      */
     function put(mixed $current = null): void
     {
-        $form_attr = $this->form_id ? "form=\"$this->form_id\"" : '';
         ?>
         <h1><?= $current === null ? 'Créer' : 'Modifier' ?> <?= CATEGORIES_OFFRE[$this->categorie] ?></h1>
 
@@ -241,7 +238,7 @@ final class InputOffre extends Input
                             continue;
                         ?>
                     <li>
-                        <label><input <?= $form_attr ?>
+                        <label><input <?= $this->form_attr ?>
                             id="<?= $this->id("libelle_abonnement_$abo->libelle") ?>"
                             name="<?= $this->name('libelle_abonnement') ?>"
                             type="radio"
@@ -271,7 +268,7 @@ final class InputOffre extends Input
             <div>
                 <label for="<?= $this->id('titre') ?>">Titre*</label>
                 <p>
-                    <input <?= $form_attr ?>
+                    <input <?= $this->form_attr ?>
                         id="<?= $this->id('titre') ?>"
                         name="<?= $this->name('titre') ?>"
                         type="text"
@@ -280,7 +277,7 @@ final class InputOffre extends Input
                 </p>
                 <label for="<?= $this->id('resume') ?>">Resumé*</label>
                 <p>
-                    <input <?= $form_attr ?>
+                    <input <?= $this->form_attr ?>
                         id="<?= $this->id('resume') ?>"
                         name="<?= $this->name('resume') ?>"
                         type="text"
@@ -291,7 +288,7 @@ final class InputOffre extends Input
                 <?php $this->input_adresse->put($current?->adresse) ?>
                 <label for="<?= $this->id('url_site_web') ?>">Site Web</label>
                 <p>
-                    <input <?= $form_attr ?>
+                    <input <?= $this->form_attr ?>
                         id="<?= $this->id('url_site_web') ?>"
                         name="<?= $this->name('url_site_web') ?>"
                         type="url"
@@ -333,12 +330,12 @@ final class InputOffre extends Input
                             <tbody>
                                 <?php foreach ($current?->ouverture_hebdomadaire[$dow] ?? [] as $horaire) { ?>
                                     <tr>
-                                        <td><input <?= $form_attr ?>
+                                        <td><input <?= $this->form_attr ?>
                                             name="<?= $this->name('horaires') ?>[<?= $dow ?>][debut][]"
                                             type="time"
                                             required
                                             value="<?= $horaire->lower ?>"></td>
-                                        <td><input <?= $form_attr ?>
+                                        <td><input <?= $this->form_attr ?>
                                             name="<?= $this->name('horaires') ?>[<?= $dow ?>][fin][]"
                                             type="time"
                                             required
@@ -349,11 +346,11 @@ final class InputOffre extends Input
                         </table>
                         <template id="<?= $this->id("template-horaire-tr-$dow") ?>">
                             <tr>
-                                <td><input <?= $form_attr ?>
+                                <td><input <?= $this->form_attr ?>
                                     name="<?= $this->name('horaires') ?>[<?= $dow ?>][debut][]"
                                     type="time"
                                     required></td>
-                                <td><input <?= $form_attr ?>
+                                <td><input <?= $this->form_attr ?>
                                     name="<?= $this->name('horaires') ?>[<?= $dow ?>][fin][]"
                                     type="time"
                                     required></td>
@@ -376,7 +373,7 @@ final class InputOffre extends Input
                 <?php
                 foreach ($this->categorie === Restaurant::CATEGORIE ? TAGS_RESTAURANT : DEFAULT_TAGS as $tag) {
                     ?>
-                    <li><label><input <?= $form_attr ?>
+                    <li><label><input <?= $this->form_attr ?>
                         id="<?= $this->id("tag_$tag") ?>"
                         name="<?= $this->name('tags') ?>[<?= $tag ?>]"
                         type="checkbox"><?= $tag ?></label></li>
@@ -386,7 +383,7 @@ final class InputOffre extends Input
 
         <section>
             <h2>Description détaillée</h2>
-            <textarea class="text" <?= $form_attr ?>
+            <textarea class="text" <?= $this->form_attr ?>
                 id="<?= $this->id('description_detaillee') ?>"
                 name="<?= $this->name('description_detaillee') ?>"
                 required
@@ -409,20 +406,20 @@ final class InputOffre extends Input
                     /** @var ?Activite */
                     $activite = $current;
                     ?>
-                    <p><label>Âge requis&nbsp;: <input <?= $form_attr ?>
+                    <p><label>Âge requis&nbsp;: <input <?= $this->form_attr ?>
                         id="<?= $this->id('age_requis') ?>"
                         name="<?= $this->name('age_requis') ?>"
                         type="number"
                         min="1"
                         value="<?= $activite?->age_requis ?>"> an</label></p>
                     <p>Prestations incluses*</p>
-                    <textarea <?= $form_attr ?>
+                    <textarea <?= $this->form_attr ?>
                         id="<?= $this->id('prestations_incluses') ?>"
                         name="<?= $this->name('prestations_incluses') ?>"
                         required
                         ><?= $activite?->prestations_incluses ?></textarea>
                     <p>Prestations non incluses</p>
-                    <textarea <?= $form_attr ?>
+                    <textarea <?= $this->form_attr ?>
                         id="<?= $this->id('prestations_non_incluses') ?>"
                         name="<?= $this->name('prestations_non_incluses') ?>"
                         ><?= $activite?->prestations_non_incluses ?></textarea>
@@ -433,13 +430,13 @@ final class InputOffre extends Input
                     /** @var ?ParcAttractions */
                     $parc_attractions = $current;
                     ?>
-                    <p><label>Nombre d'attractions&nbsp;: <input <?= $form_attr ?>
+                    <p><label>Nombre d'attractions&nbsp;: <input <?= $this->form_attr ?>
                         id="<?= $this->id('nb_attractions') ?>"
                         name="<?= $this->name('nb_attractions') ?>"
                         type="number"
                         min="0"
                         value="<?= $parc_attractions?->nb_attractions ?>"></label></p>
-                    <p><label>Âge requis&nbsp;: <input <?= $form_attr ?>
+                    <p><label>Âge requis&nbsp;: <input <?= $this->form_attr ?>
                         id="<?= $this->id('age_requis') ?>"
                         name="<?= $this->name('age_requis') ?>"
                         type="number"
@@ -457,19 +454,19 @@ final class InputOffre extends Input
                     ?>
                     <fieldset>
                         <legend>Echelle tarifaire</legend>
-                        <p><label><input <?= $form_attr ?>
+                        <p><label><input <?= $this->form_attr ?>
                             id="<?= $this->id('richesse-1') ?>"
                             name="<?= $this->name('richesse') ?>"
                             type="radio"
                             value="1" <?= $restaurant?->richesse === 1 ? 'checked' : '' ?>>
                             €</label></p>
-                        <p><label><input <?= $form_attr ?>
+                        <p><label><input <?= $this->form_attr ?>
                             id="<?= $this->id('richesse-2') ?>"
                             name="<?= $this->name('richesse') ?>"
                             type="radio"
                             value="2" <?= $restaurant?->richesse === 2 ? 'checked' : '' ?>> 
                             €</label></p>
-                        <p><label><input <?= $form_attr ?>
+                        <p><label><input <?= $this->form_attr ?>
                             id="<?= $this->id('richesse-3') ?>"
                             name="<?= $this->name('richesse') ?>"
                             type="radio"
@@ -478,31 +475,31 @@ final class InputOffre extends Input
                     </fieldset>
                     <fieldset>
                         <legend>Repas servis</legend>
-                        <p><label><input <?= $form_attr ?>
+                        <p><label><input <?= $this->form_attr ?>
                             id="<?= $this->id('sert_petit_dejeuner') ?>"
                             type="checkbox"
                             name="<?= $this->name('sert_petit_dejeuner') ?>"
                             <?= $restaurant?->sert_petit_dejeuner ? 'checked' : '' ?>>
                             Petit déjeuner</label></p>
-                        <p><label><input <?= $form_attr ?>
+                        <p><label><input <?= $this->form_attr ?>
                             id="<?= $this->id('sert_brunch') ?>"
                             type="checkbox"
                             name="<?= $this->name('sert_brunch') ?>"
                             <?= $restaurant?->sert_brunch ? 'checked' : '' ?>>
                             Brunch</label></p>
-                        <p><label><input <?= $form_attr ?>
+                        <p><label><input <?= $this->form_attr ?>
                             id="<?= $this->id('sert_dejeuner') ?>"
                             type="checkbox"
                             name="<?= $this->name('sert_dejeuner') ?>"
                             <?= $restaurant?->sert_dejeuner ? 'checked' : '' ?>>
                             Déjeuner</label></p>
-                        <p><label><input <?= $form_attr ?>
+                        <p><label><input <?= $this->form_attr ?>
                             id="<?= $this->id('sert_diner') ?>"
                             type="checkbox"
                             name="<?= $this->name('sert_diner') ?>"
                             <?= $restaurant?->sert_diner ? 'checked' : '' ?>>
                             Dîner</label></p>
-                        <p><label><input <?= $form_attr ?>
+                        <p><label><input <?= $this->form_attr ?>
                             id="<?= $this->id('sert_boissons') ?>"
                             type="checkbox"
                             name="<?= $this->name('sert_boissons') ?>"
@@ -510,7 +507,7 @@ final class InputOffre extends Input
                             Boissons</label></p>
                     </fieldset>
                     <p>Carte</p>
-                    <textarea <?= $form_attr ?>
+                    <textarea <?= $this->form_attr ?>
                         name="<?= $this->name('carte') ?>"
                         ><?= $restaurant?->carte ?></textarea>
                     <?php
@@ -519,7 +516,7 @@ final class InputOffre extends Input
                     /** @var ?Spectacle */
                     $spectacle = $current;
                     ?>
-                    <p><label>Capacité d'accueil&nbsp;: <input <?= $form_attr ?>
+                    <p><label>Capacité d'accueil&nbsp;: <input <?= $this->form_attr ?>
                         id="<?= $this->id('capacite_accueil') ?>"
                         name="<?= $this->name('capacite_accueil') ?>"
                         type="number"

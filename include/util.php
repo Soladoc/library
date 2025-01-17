@@ -265,7 +265,7 @@ function arg_filter(int $filter, array|int $options = 0): callable
 function html_error(mixed $arg): never
 {
     ?>
-    <p>Erreur: <?= strval($arg) ?></p><?php
+    <p>Erreur: <?= h14s(strval($arg)) ?></p><?php
     if ($arg instanceof Throwable) {
         throw $arg;
     }

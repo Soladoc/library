@@ -111,9 +111,9 @@ $page->put(function () use ($offre, $input_rating, $input_note_cuisine, $input_n
             <h3>Emplacement et coordonnées</h3>
             <!-- <div id="map" class="map"></div> -->
             <div class="contact-info">
-                <p><strong>Adresse&nbsp;:</strong> <?= $offre->adresse->format() ?></p>
+                <p><strong>Adresse&nbsp;:</strong> <?= h14s($offre->adresse->format()) ?></p>
                 <?php if ($offre->url_site_web) { ?>
-                    <p><strong>Site web&nbsp;:</strong> <a href="<?= $offre->url_site_web ?>"><?= $offre->url_site_web ?></a></p>
+                    <p><strong>Site web&nbsp;:</strong> <a href="<?= h14s($offre->url_site_web) ?>"><?= h14s($offre->url_site_web) ?></a></p>
                 <?php } ?>
             </div>
         </section>
@@ -146,7 +146,7 @@ $page->put(function () use ($offre, $input_rating, $input_note_cuisine, $input_n
                     <?php } ?>
                 </select>
                 <label for="date">Date de votre visite</label>
-                <input type="date" id="date" name="date" min="<?= $offre->creee_le->format_date() ?>" value="<?= date('Y-m-d') ?>" required>
+                <input type="date" id="date" name="date" min="<?= h14s($offre->creee_le->format_date()) ?>" value="<?= h14s(date('Y-m-d')) ?>" required>
                 <br>
                 <label for="consent">Je certifie que l'avis reflète mes propres expérience et opinion sur cette offre.</label>
                 <input type="checkbox" name="consent" required>
@@ -161,7 +161,7 @@ $page->put(function () use ($offre, $input_rating, $input_note_cuisine, $input_n
             <?php if ($id_membre_co !== null) {
                 $signalement_actuel = Signalable::signalable_from_db($offre->id)->get_signalement($id_membre_co) ?>
                 <form method="post">
-                    <textarea name="report_message" placeholder="Décrivez le problème&hellip;" required <?= $signalement_actuel === null ? '' : 'readonly' ?>><?= $signalement_actuel ?></textarea>
+                    <textarea name="report_message" placeholder="Décrivez le problème&hellip;" required <?= $signalement_actuel === null ? '' : 'readonly' ?>><?= h14s($signalement_actuel) ?></textarea>
                     <button type="submit" name="submit_report" class="btn-publish"><?= $signalement_actuel === null ? 'Envoyer' : 'Supprimer' ?></button>
                 </form>
                 <?php if (isset($error_message)) { ?>
@@ -172,7 +172,7 @@ $page->put(function () use ($offre, $input_rating, $input_note_cuisine, $input_n
             <?php } else { ?>
                 <h3>Veuillez vous connecter à un compte membre pour signaler un problème</h3>
                 <p>Connectez-vous pour nous aider à améliorer nos services en signalant les problèmes rencontrés.</p>
-                <a href="<?= location_connexion(return_url: $_SERVER['REQUEST_URI']) ?>" class="btn-login btn-publish">Se connecter</a>
+                <a href="<?= h14s(location_connexion(return_url: $_SERVER['REQUEST_URI'])) ?>" class="btn-login btn-publish">Se connecter</a>
             <?php } ?>
         </details>
 

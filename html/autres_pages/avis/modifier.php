@@ -49,7 +49,7 @@ $page->put(function () use ($id_avis, $avis, $id_offre, $error_message) {
                 <?php } ?>
             </div>
 
-            <form method="post" action="<?= location_modifier_avis($id_offre, $id_avis) ?>">
+            <form method="post" action="<?= h14s(location_modifier_avis($id_offre, $id_avis)) ?>">
                 <textarea name="commentaire" placeholder="Votre avis&hellip;" required><?= h14s($avis->commentaire) ?></textarea>
 
                 <label for="rating">Note&nbsp;:</label>
@@ -64,7 +64,7 @@ $page->put(function () use ($id_avis, $avis, $id_offre, $error_message) {
                 <label for="contexte">Contexte&nbsp;:</label>
                 <select name="contexte" id="contexte" required>
                     <?php foreach (CONTEXTES_VISITE as $ctx) { ?>
-                        <option value="<?= $ctx ?>" <?= $avis->contexte === $ctx ? 'selected' : '' ?>><?= ucfirst($ctx) ?></option>
+                        <option value="<?= h14s($ctx) ?>" <?= $avis->contexte === $ctx ? 'selected' : '' ?>><?= h14s(ucfirst($ctx)) ?></option>
                         <?php } ?>
                     </select>
                     
@@ -74,7 +74,7 @@ $page->put(function () use ($id_avis, $avis, $id_offre, $error_message) {
                     <br>
                 <button type="submit" class="btn-publish">Modifier</button>
                 <button class="btn-publish">
-                    <a href="<?= location_avis_supprimer($id_avis, location_detail_offre($id_offre)) ?>">Supprimer</a>
+                    <a href="<?= h14s(location_avis_supprimer($id_avis, location_detail_offre($id_offre))) ?>">Supprimer</a>
                 </button>
             </form>
         </div>

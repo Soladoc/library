@@ -104,7 +104,7 @@ $page->put(function () {
                 <p class="champ" id="champ-siren">
                     <label>SIREN <input type="text" id="siren" name="siren" placeholder="231 654 988" oninput="formatInput(this)" maxlength="12"></label>
                 </p>
-                <p class="error"><?= $_GET['error'] ?? '' ?></p>
+                <p class="error"><?= h14s($_GET['error'] ?? null) ?></p>
                 <button type="submit" class="btn-connexion">Créer un compte professionnel</button>
             </form>
             <br>

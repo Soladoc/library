@@ -42,7 +42,7 @@ $page->put(function () use (
 ) {
     if ($error = $_GET['error'] ?? null) {
         ?>
-        <p class="error"><?= $error ?></p><?php
+        <p class="error"><?= h14s($error) ?></p><?php
     }
     $input_offre->put($offre);
     ?>

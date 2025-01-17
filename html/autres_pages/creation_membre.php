@@ -92,7 +92,7 @@ $page->put(function () {
                     <br>
                 </div>
                 <!-- Todo: confirmation mdp -->
-                <p class="error"><?= $_GET['error'] ?? '' ?></p>
+                <p class="error"><?= h14s($_GET['error'] ?? null) ?></p>
 
                 <div class="champ">
                     <button type="submit">Valider</button>

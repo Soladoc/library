@@ -25,7 +25,7 @@ notfalse(ob_start());
     <title>Test creation_offre</title>
 </head>
 <body>
-<form id="<?= FORM_ID ?>">
+<form id="<?= h14s(FORM_ID) ?>">
     <?php $input_offre->put() ?>
 </form>
 </body>

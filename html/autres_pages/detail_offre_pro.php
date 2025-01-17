@@ -74,9 +74,9 @@ $page->put(function () use ($offre, $review_list) {
         <h3>Emplacement et coordonnées</h3>
         <!-- <div id="map" class="map"></div> -->
         <div class="contact-info">
-            <p><strong>Adresse&nbsp;:</strong> <?= $offre->adresse->format() ?></p>
+            <p><strong>Adresse&nbsp;:</strong> <?= h14s($offre->adresse->format()) ?></p>
             <?php if ($offre->url_site_web) { ?>
-                <p><strong>Site web&nbsp;:</strong> <a href="<?= $offre->url_site_web ?>"><?= $offre->url_site_web ?></a></p>
+                <p><strong>Site web&nbsp;:</strong> <a href="<?= h14s($offre->url_site_web) ?>"><?= h14s($offre->url_site_web) ?></a></p>
             <?php } ?>
         </div>
     </section>

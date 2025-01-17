@@ -50,10 +50,10 @@ final class ReviewList
                             <p class="review-date"><?= h14s($a->date_experience) ?></p>
                             <?php
                             if ($a->membre_auteur !== null and $a->membre_auteur->id === Auth\id_membre_connecte()) { ?>
-                                <form method="post" action="<?= location_modifier_avis($this->offre->id, $a->id) ?>">
+                                <form method="post" action="<?= h14s(location_modifier_avis($this->offre->id, $a->id)) ?>">
                                     <button type="submit" class="btn-publish">Modifier</button>
                                     <button class="btn-publish">
-                                        <a href="<?= location_avis_supprimer($a->id, location_detail_offre($this->offre->id)) ?>" >Supprimer</a>
+                                        <a href="<?= h14s(location_avis_supprimer($a->id, location_detail_offre($this->offre->id))) ?>" >Supprimer</a>
                                     </button>
                                 </form>
                             <?php }
