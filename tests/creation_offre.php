@@ -89,7 +89,7 @@ $_FILES['galerie'] = [
         'assmy',
     ],
     'error' => [
-        0
+        0,
     ]
 ];
 

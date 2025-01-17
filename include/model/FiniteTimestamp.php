@@ -22,6 +22,7 @@ final class FiniteTimestamp implements JsonSerializable
      */
     static function parse(?string $output): ?FiniteTimestamp
     {
+        dbg_print($output);
         return $output === null
             ? null
             : new self(notfalse(iterator_first_notfalse(self::FORMATS,
