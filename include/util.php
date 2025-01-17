@@ -15,12 +15,13 @@ function apply(mixed &$arg, callable $fn): mixed {
 
 /**
  * HTML5 `htmlspecialchars` (name shortened using numeronym)
- * @param string $s String to encode.
+ * This function propagates a `null` argument.
+ * @param ?string $s String to encode.
  * @return string Encoded string.
  */
-function h14s(string $s)
+function h14s(?string $s)
 {
-    return htmlspecialchars($s, ENT_QUOTES | ENT_SUBSTITUTE | ENT_HTML5);
+    return $s === null ? null : htmlspecialchars($s, ENT_QUOTES | ENT_SUBSTITUTE | ENT_HTML5);
 }
 
 /**

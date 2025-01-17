@@ -2,6 +2,8 @@ set schema 'pact';
 
 create view tarif as table _tarif;
 
+create view avis as table _avis;
+
 create view offres as select
     o.id,
     o.id_adresse,
@@ -17,7 +19,7 @@ create view offres as select
     (select count(*) from _changement_etat where _changement_etat.id_offre = o.id) % 2 = 0 en_ligne,
     (select round(avg(_avis.note),2) from _avis where _avis.id_offre = o.id) note_moyenne,
     (select min(tarif.montant) from tarif where tarif.id_offre = o.id) prix_min,
-    (select count(*) from _avis where id_offre = o.id) nb_avis,
+    (select count(*) from avis where id_offre = o.id) nb_avis,
     offre_creee_le(o.id) creee_le,
     offre_categorie(o.id) categorie,
     offre_en_ligne_pendant(o.id, date_trunc('month', localtimestamp), '1 month') en_ligne_ce_mois_pendant,
@@ -80,12 +82,6 @@ create view pro_prive as select * from _prive
 
 create view pro_public as select * from _public
     join professionnel using (id);
-
-create view avis as select
-    _avis.*
-from
-    _avis
-    join membre on id_membre_auteur = membre.id;
 
 create view avis_restaurant as select
     commentaire,
