@@ -234,6 +234,7 @@ final class InputOffre extends Input
             <?php if ($this->professionnel instanceof ProfessionnelPrive) { ?>
                 <ul id="<?= $this->id('liste-choix-abonnement') ?>">
                     <?php
+                    $first = true;
                     foreach (Abonnement::all() as $abo) {
                         // skip abo gratuit
                         if ($abo->prix_journalier == 0)
@@ -247,7 +248,10 @@ final class InputOffre extends Input
                             value="<?= $abo->libelle ?>"
                             required
                             <?= $current === null ? '' : 'disabled' ?>
-                            <?= $current?->abonnement->libelle === 'standard' ? 'checked' : '' ?>>
+                            <?= $current?->abonnement->libelle === 'standard' ? 'checked' : '' ?>
+                            <?php
+                            if ($first) { echo 'checked'; $first = false; }
+                            ?>>
                             <?= ucfirst($abo->libelle) ?> (<?= h14s($abo->description) ?>, <?= $abo->prix_journalier ?>€&nbsp;/&nbsp;jour)</label>
                     </li>
                     <?php } ?>
