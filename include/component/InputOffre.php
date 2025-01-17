@@ -194,7 +194,7 @@ final class InputOffre extends Input
             $offre->ouverture_hebdomadaire[$dow] = new MultiRange(array_map(
                 fn($horaire_row) => new NonEmptyRange(
                     true,
-                    Time::parse($horaire_row['debut']),
+                    Time::parse(dbg_print($horaire_row['debut'])),
                     Time::parse($horaire_row['fin']),
                     false,
                 ),

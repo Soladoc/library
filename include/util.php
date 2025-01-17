@@ -9,7 +9,8 @@
  * @param callable(T): TResult $fn
  * @return T
  */
-function apply(mixed &$arg, callable $fn): mixed {
+function apply(mixed &$arg, callable $fn): mixed
+{
     return $arg = $fn($arg);
 }
 
@@ -361,11 +362,13 @@ function soa_to_aos(array $array): array
 }
 
 /**
- * DÉBOGAGE UNIQUEMENT - Affiche une valeur
- * @param mixed $value
- * @return void
+ * DÉBOGAGE UNIQUEMENT - Affiche une valeur et la renvoie
+ * @template T
+ * @param T $value
+ * @return T
  */
-function dbg_print(mixed $value): void
+function dbg_print(mixed $value): mixed
 {
 ?><pre><samp><?php var_dump($value) ?></samp></pre><?php
+    return $value;
 }
