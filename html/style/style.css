@@ -630,6 +630,7 @@ textarea {
 }
 
 .btn-publish {
+    display: inline-block;
     background-color: #4A90E2;
     text-decoration: none;
     color: white;
@@ -1012,7 +1013,7 @@ section#info_compte div span {
     color: #333;
 }
 
-#info_compte :is(a, button[type=submit]) {
+#info_compte button[type=submit] {
     display: inline-block;
     text-decoration: none;
     background-color: #3498db;
