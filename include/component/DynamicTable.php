@@ -1,4 +1,5 @@
 <?php
+require_once 'component/Input.php';
 require_once 'util.php';
 
 /**
