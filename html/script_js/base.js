@@ -139,13 +139,8 @@ function setup_button_signaler(element) {
     element.addEventListener('click', async () => {
         let raison;
         if (is_signaled || (raison = prompt('Raison de votre signalement'))) {
-            fetch(location_signaler(element.dataset.idcco, element.dataset.avisId, raison));
-            is_signaled = !is_signaled;
-            if (is_signaled) {
-                element.children[0].src = '/images/flag-filled.svg';
-            } else {
-                element.children[0].src = '/images/flag.svg';
-            }
+            await fetch(location_signaler(element.dataset.idcco, element.dataset.avisId, raison));
+            location.reload();
         }
     });
 }
