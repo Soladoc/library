@@ -12,7 +12,7 @@ $page->put(function () {
         <br>
         <form action="recherche.php" name="barre_de_recherche" method="post" class="search-bar">
             <input type="text" name="search" placeholder="Entrez des mots-clés de recherche ici (ex: restaurant)">
-            <input class="searchbutton" type="submit" name="valider" value="Recherche">
+            <button class="searchbutton" type="submit" name="valider">Recherche</button>
         </form>
     </section>
 
