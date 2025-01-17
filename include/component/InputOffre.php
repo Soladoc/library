@@ -252,7 +252,7 @@ final class InputOffre extends Input
                     <?php } ?>
                 </ul>
                 <aside>
-                    <p><img src="/icon/icons8-haute-importance-100.png" alt="Haute importance" width="25" height="25"> Attention&nbsp;! Une fois l'abonnement choisi, vous ne pourrez plus la modifier.</p>
+                    <p><img src="/icon/icons8-haute-importance-100.png" alt="Haute importance" width="25" height="25"> Attention&nbsp;! Une fois l'abonnement choisi, vous ne pourrez plus le modifier.</p>
                 </aside>
             <?php } else { ?>
                 <p>Comme vous êtres un professionnel public, l'offre créée sera gratuite (pas de facturation)</p>
