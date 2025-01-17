@@ -1273,4 +1273,5 @@ label > input {
 
 .mention-legales-sections{
     text-align: center;
+    list-style: none;
 }
