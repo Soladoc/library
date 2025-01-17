@@ -66,7 +66,7 @@ $page->put(function () use ($compte) {
             </span>
         </div>
 
-        <a href="modif_compte.php?id=<?= $compte->id ?>">Modifier</a>
+        <a class="btn-publish" href="modif_compte.php?id=<?= $compte->id ?>">Modifier</a>
     </section>
     <?php
 });

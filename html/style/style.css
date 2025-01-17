@@ -636,6 +636,7 @@ textarea {
 }
 
 .btn-publish {
+    width: fit-content;
     display: inline-block;
     background-color: #4A90E2;
     text-decoration: none;
