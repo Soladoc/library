@@ -101,7 +101,7 @@ $page->put(function () use ($compte, $input_adresse, $error_email, $error_mdp, $
             <?php if ($compte instanceof Membre) { ?>
                 <div>
                     <div id="pseudo">
-                        <label>Pseudo : </label>
+                        <label>Pseudo&nbsp;: </label>
                     </div>
                     <input id="new_pseudo" name="new_pseudo" type="text" value="<?= h14s($compte->pseudo) ?>" placeholder="votre nouveau pseudo">
                 </div>
@@ -130,21 +130,21 @@ $page->put(function () use ($compte, $input_adresse, $error_email, $error_mdp, $
 
             <div>
                 <div id="nom">
-                    <label>Nom : </label>
+                    <label>Nom&nbsp;: </label>
                 </div>
                 <input id="new_nom" name="new_nom" type="text" value="<?= h14s($compte->nom) ?>" placeholder="votre nouveau nom">
             </div>
             <br>
             <div>
                 <div id="prenom">
-                    <label>Prénom : </label>
+                    <label>Prénom&nbsp;: </label>
                 </div>
                 <input id="new_prenom" name="new_prenom" type="text" value="<?= h14s($compte->prenom) ?>" placeholder="votre nouveau prénom">
             </div>
             <br>
             <div>
                 <div id="email">
-                    <label>Email : </label>
+                    <label>Email&nbsp;: </label>
                 </div>
                 <?php if ($error_email !== null) { ?>
                     <p class="error"><?= h14s($error_email) ?></p>
@@ -155,7 +155,7 @@ $page->put(function () use ($compte, $input_adresse, $error_email, $error_mdp, $
             <br>
             <div>
                 <div id="telephone">
-                    <label>Numéro de téléphone : </label>
+                    <label>Numéro de téléphone&nbsp;: </label>
                 </div>
                 <?php if ($error_tel !== null) { ?>
                     <p class="error"><?= h14s($error_tel) ?></p>
@@ -165,8 +165,8 @@ $page->put(function () use ($compte, $input_adresse, $error_email, $error_mdp, $
             </div>
             <br>
             <div>
-                <label>Adresse : </label>
-                <?= $compte->adresse->format() ?>
+                <label>Adresse&nbsp;: </label>
+                <?= h14s($compte->adresse->format()) ?>
             </div>
             <?php $input_adresse->put($compte->adresse) ?>
             <br>
@@ -197,11 +197,11 @@ $page->put(function () use ($compte, $input_adresse, $error_email, $error_mdp, $
                 <button type="button" id="button-delete-api-key" class="btn-publish">Supprimer</button>
             </div>
             <button type="submit">Valider</button>
-            <a href="<?= location_detail_compte() ?>">Retour</a>
+            <a href="<?= h14s(location_detail_compte()) ?>">Retour</a>
             <?php if ($compte instanceof Membre) { ?>
-                <a href="<?= location_supprimer_compte($compte->id) ?>">Supprimer le compte</a>
+                <a href="<?= h14s(location_supprimer_compte($compte->id)) ?>">Supprimer le compte</a>
             <?php } else { ?>
-                <p><small>Pour supprimer votre compte professionnel, veuillez contacter l'administrateur du site. Voir les <a href="<?= location_mentions_legales() ?>">mentions légales</a> pour plus d'informations.</small></p>
+                <p><small>Pour supprimer votre compte professionnel, veuillez contacter l'administrateur du site. Voir les <a href="<?= h14s(location_mentions_legales()) ?>">mentions légales</a> pour plus d'informations.</small></p>
             <?php } ?>
         </form>
     </section>

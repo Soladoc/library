@@ -3,6 +3,7 @@
 require_once 'const.php';
 require_once 'util.php';
 require_once 'model/Image.php';
+require_once 'util.php';
 
 final class ImageView
 {
@@ -20,7 +21,7 @@ final class ImageView
 <figure>
     <?php $this->put_img() ?>
     <?php if ($this->image->legende) { ?>
-        <figcaption><?= $this->image->legende ?></figcaption>
+        <figcaption><?= h14s($this->image->legende) ?></figcaption>
     <?php } ?>
 </figure>
 <?php
@@ -33,9 +34,9 @@ final class ImageView
     function put_img(): void
     {
 ?>
-<img src="<?= $this->image->src() ?>"
-    alt="<?= $this->image->legende ?: 'image' ?>"
-    title="<?= $this->image->legende ?>">
+<img src="<?= h14s($this->image->src()) ?>"
+    alt="<?= h14s($this->image->legende ?: 'image') ?>"
+    title="<?= h14s($this->image->legende) ?>">
 <?php
     }
 

@@ -289,7 +289,7 @@ abstract class Offre extends Signalable
             Adresse::from_db($row['id_adresse']),
             Image::from_db($row['id_image_principale']),
             Professionnel::from_db($row['id_professionnel']),
-            Abonnement::from_db($row['libelle_abonnement']),
+            Abonnement::all()[$row['libelle_abonnement']],
             $row['titre'],
             $row['resume'],
             $row['description_detaillee'],

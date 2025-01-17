@@ -37,6 +37,33 @@ Comme le pseudo est `unique`, on peut garantir qu''il n''existe qu''un seul memb
 
 -- Offres
 
+create function offre_en_ligne (p_id_offre int) returns bool as $$
+    select (select count(*) from _changement_etat where id_offre = p_id_offre) % 2 = 0;
+$$ language sql strict stable;
+
+create function offre_prix_min (p_id_offre int) returns float as $$ 
+    select min(montant) from _tarif where id_offre = p_id_offre;
+$$ language sql strict stable;
+
+create function offre_nb_avis (p_id_offre int) returns int as $$
+    select count(*) from _avis where id_offre = p_id_offre;
+$$ language sql strict stable;
+
+create function offre_note_moyenne (p_id_offre int) returns float as $$
+    select round(avg(note),2) from _avis where id_offre = p_id_offre;
+$$ language sql strict stable;
+
+create function offre_est_ouverte (p_id_offre int, p_periodes_ouverture tsmultirange) returns bool as $$
+    -- Considérer une offre sans période ou horaire comme ouverte tout le temps
+    with horaire_match as (
+        select horaires from _ouverture_hebdomadaire
+         where id_offre = p_id_offre
+           and dow = extract(dow from localtimestamp))
+    select isempty(p_periodes_ouverture) and not exists((table horaire_match))
+        or localtimestamp <@ p_periodes_ouverture
+        or coalesce(localtime <@ (table horaire_match), false);
+$$ language sql strict stable;
+
 create function offre_creee_le (p_id_offre int) returns timestamp as $$
     select
         fait_le
@@ -92,7 +119,7 @@ create function offre_changement_ouverture_suivant_le (
                  + heure
             from (
                 select bound heure, inclusive, rmod(dow - extract(dow from p_apres_le), 7) dans_jours
-                  from _ouverture_hebdomadaire o, bounds(o.horaires)
+                  from _ouverture_hebdomadaire oh, bounds(oh.horaires)
                  where id_offre = p_id_offre
             ) b
             where dans_jours <> 0 or (b.inclusive and heure > p_apres_le::time

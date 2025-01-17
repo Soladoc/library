@@ -38,7 +38,7 @@ final class ReviewList
                 <?php if (!empty($avis)) {
                     foreach ($avis as $a) { ?>
                         <div class="review">
-                            <p><strong><?= h14s($a->membre_auteur->pseudo) ?></strong> - <?= h14s($a->note) ?>/5
+                            <p><strong><?= h14s($a->membre_auteur?->pseudo) ?? 'Anonyme' ?></strong> - <?= h14s($a->note) ?>/5
                                 <?php if (null !== $idcco = Auth\id_compte_connecte()) {
                                     $raison_signalement_actuel = Signalable::signalable_from_db($a->id)->get_signalement($idcco);
                                     ?>
@@ -49,15 +49,15 @@ final class ReviewList
                             <p><?= h14s($a->commentaire) ?></p>
                             <p class="review-date"><?= h14s($a->date_experience) ?></p>
                             <?php
-                            if (notnull($a->membre_auteur->id) === Auth\id_membre_connecte()) { ?>
-                                <form method="post" action="<?= location_modifier_avis($this->offre->id, $a->id) ?>">
+                            if ($a->membre_auteur !== null and $a->membre_auteur->id === Auth\id_membre_connecte()) { ?>
+                                <form method="post" action="<?= h14s(location_modifier_avis($this->offre->id, $a->id)) ?>">
                                     <button type="submit" class="btn-publish">Modifier</button>
                                     <button class="btn-publish">
-                                        <a href="<?= location_avis_supprimer($a->id, location_detail_offre($this->offre->id)) ?>" >Supprimer</a>
+                                        <a href="<?= h14s(location_avis_supprimer($a->id, location_detail_offre($this->offre->id))) ?>" >Supprimer</a>
                                     </button>
                                 </form>
                             <?php }
-                            $h14s_rep_contenu = mapnull(Reponse::from_db_by_avis($a->id)?->contenu, h14s(...));
+                            $h14s_rep_contenu = h14s(Reponse::from_db_by_avis($a->id)?->contenu);
                             if (notnull($this->offre->professionnel->id) === Auth\id_pro_connecte()) { ?>
                                 <form method="post" action="<?= location_repondre_avis($a->id) ?>">
                                     <p><label for="contenu">Votre réponse&nbsp;:</label></p>

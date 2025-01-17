@@ -1,5 +1,6 @@
 <?php
 require_once 'auth.php';
+require_once 'const.php';
 require_once 'Parsedown.php';
 require_once 'component/ImageView.php';
 require_once 'component/InputNote.php';
@@ -11,30 +12,31 @@ require_once 'model/AvisRestaurant.php';
 require_once 'model/Offre.php';
 require_once 'model/Restaurant.php';
 require_once 'model/Date.php';
+require_once 'util.php';
 require_once 'model/Membre.php';
 
 $offre = notfalse(Offre::from_db(getarg($_GET, 'id', arg_int())));
 
 $page = new Page($offre->titre, scripts: [
     'module/detail_offre.js' => 'type="module"',
-    'carousel.js'            => 'defer',
+    'carousel.js' => 'defer',
 ]);
 
 $input_rating = new InputNote(name: 'rating');
 if ($offre instanceof Restaurant) {
-    $input_note_cuisine      = new InputNote(name: 'note_cuisine');
-    $input_note_service      = new InputNote(name: 'note_service');
-    $input_note_ambiance     = new InputNote(name: 'note_ambiance');
+    $input_note_cuisine = new InputNote(name: 'note_cuisine');
+    $input_note_service = new InputNote(name: 'note_service');
+    $input_note_ambiance = new InputNote(name: 'note_ambiance');
     $input_note_qualite_prix = new InputNote(name: 'note_qualite_prix');
 } else {
-    $input_note_cuisine      = null;
-    $input_note_service      = null;
-    $input_note_ambiance     = null;
+    $input_note_cuisine = null;
+    $input_note_service = null;
+    $input_note_ambiance = null;
     $input_note_qualite_prix = null;
 }
 
 $id_membre_co = Auth\id_membre_connecte();
-$review_list  = new ReviewList($offre);
+$review_list = new ReviewList($offre);
 
 if (null !== $report_message = getarg($_POST, 'report_message', required: false)) {
     redirect_to(location_signaler($id_membre_co, $offre->id, $report_message));
@@ -56,7 +58,7 @@ if (null !== $commentaire = getarg($_POST, 'commentaire', required: false)) {
             Membre::from_db($id_membre_co),
             $offre,
         ];
-        $avis      = $offre instanceof Restaurant
+        $avis = $offre instanceof Restaurant
             ? new AvisRestaurant(
                 $args_avis,
                 $input_note_cuisine->get($_POST),
@@ -110,9 +112,9 @@ $page->put(function () use ($offre, $input_rating, $input_note_cuisine, $input_n
             <h3>Emplacement et coordonnées</h3>
             <!-- <div id="map" class="map"></div> -->
             <div class="contact-info">
-                <p><strong>Adresse&nbsp;:</strong> <?= $offre->adresse->format() ?></p>
+                <p><strong>Adresse&nbsp;:</strong> <?= h14s($offre->adresse->format()) ?></p>
                 <?php if ($offre->url_site_web) { ?>
-                    <p><strong>Site web&nbsp;:</strong> <a href="<?= $offre->url_site_web ?>"><?= $offre->url_site_web ?></a></p>
+                    <p><strong>Site web&nbsp;:</strong> <a href="<?= h14s($offre->url_site_web) ?>"><?= h14s($offre->url_site_web) ?></a></p>
                 <?php } ?>
             </div>
         </section>
@@ -124,8 +126,8 @@ $page->put(function () use ($offre, $input_rating, $input_note_cuisine, $input_n
                 <?php if (isset($error_message)): ?>
                     <p class="error"><?= h14s($error_message) ?></p>
                     <?php
-    elseif (isset($success_message)):
-        ?>
+                elseif (isset($success_message)):
+                    ?>
                     <p class="success"><?= h14s($success_message) ?></p>
                 <?php endif ?>
             </div>
@@ -140,14 +142,12 @@ $page->put(function () use ($offre, $input_rating, $input_note_cuisine, $input_n
                 <?php } ?>
                 <label for="contexte">Contexte&nbsp;:</label>
                 <select name="contexte" id="contexte" required>
-                    <option value="affaires">Affaires</option>
-                    <option value="couple">Couple</option>
-                    <option value="solo">Solo</option>
-                    <option value="famille">Famille</option>
-                    <option value="amis">Amis</option>
+                    <?php foreach (CONTEXTES_VISITE as $ctx) { ?>
+                        <option value="<?= h14s($ctx) ?>"><?= h14s(ucfirst($ctx)) ?></option>
+                    <?php } ?>
                 </select>
                 <label for="date">Date de votre visite</label>
-                <input type="date" id="date" name="date" min="<?= $offre->creee_le->format_date() ?>" value="<?= date('Y-m-d') ?>" required>
+                <input type="date" id="date" name="date" min="<?= h14s($offre->creee_le->format_date()) ?>" value="<?= h14s(date('Y-m-d')) ?>" required>
                 <br>
                 <label for="consent">Je certifie que l'avis reflète mes propres expérience et opinion sur cette offre.</label>
                 <input type="checkbox" name="consent" required>
@@ -160,9 +160,9 @@ $page->put(function () use ($offre, $input_rating, $input_note_cuisine, $input_n
         <details class="report-form">
             <summary>Signaler un problème</summary>
             <?php if ($id_membre_co !== null) {
-                $signalement_actuel = Signalable::signalable_from_db($offre->id)->get_signalement($id_membre_co); ?>
+                $signalement_actuel = Signalable::signalable_from_db($offre->id)->get_signalement($id_membre_co) ?>
                 <form method="post">
-                    <textarea name="report_message" placeholder="Décrivez le problème&hellip;" required <?= $signalement_actuel === null ? '' : 'readonly' ?>><?= $signalement_actuel ?></textarea>
+                    <textarea name="report_message" placeholder="Décrivez le problème&hellip;" required <?= $signalement_actuel === null ? '' : 'readonly' ?>><?= h14s($signalement_actuel) ?></textarea>
                     <button type="submit" name="submit_report" class="btn-publish"><?= $signalement_actuel === null ? 'Envoyer' : 'Supprimer' ?></button>
                 </form>
                 <?php if (isset($error_message)) { ?>
@@ -173,7 +173,7 @@ $page->put(function () use ($offre, $input_rating, $input_note_cuisine, $input_n
             <?php } else { ?>
                 <h3>Veuillez vous connecter à un compte membre pour signaler un problème</h3>
                 <p>Connectez-vous pour nous aider à améliorer nos services en signalant les problèmes rencontrés.</p>
-                <a href="<?= location_connexion(return_url: $_SERVER['REQUEST_URI']) ?>" class="btn-login btn-publish">Se connecter</a>
+                <a href="<?= h14s(location_connexion(return_url: $_SERVER['REQUEST_URI'])) ?>" class="btn-login btn-publish">Se connecter</a>
             <?php } ?>
         </details>
 

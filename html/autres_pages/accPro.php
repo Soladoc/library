@@ -6,6 +6,7 @@ require_once 'component/CarteOffrePro.php';
 require_once 'model/Professionnel.php';
 require_once 'model/ProfessionnelPrive.php';
 require_once 'model/Offre.php';
+require_once 'util.php';
 
 $page = new Page('Accueil Professionnel');
 
@@ -19,9 +20,9 @@ $page->put(function () {
     ?>
 
     <h1>Accueil Professionnel</h1>
-    <a class="btn-more-info bouton_principale_pro" href="<?= location_creation_offre() ?>"  id='bouton_creer_offre' >Créer une offre</a>
+    <a class="btn-more-info bouton_principale_pro" href="<?= h14s(location_creation_offre()) ?>"  id='bouton_creer_offre' >Créer une offre</a>
     <?php if ($pro instanceof ProfessionnelPrive) { ?>
-        <a class="btn-more-info bouton_principale_pro" href="<?= location_facturation() ?>">Facturation</a>
+        <a class="btn-more-info bouton_principale_pro" href="<?= h14s(location_facturation()) ?>">Facturation</a>
     <?php } ?>
 
     <h3 class="nb-offres"><?= $nb_offres ?> offres</h3>
@@ -54,7 +55,7 @@ $page->put(function () {
     </section>
 
     <!-- Bouton pour créer une nouvelle offre -->
-    <a class="btn-more-info bouton_principale_pro" href="<?= location_creation_offre() ?>"  id='bouton_creer_offre' >Créer une offre</a>
+    <a class="btn-more-info bouton_principale_pro" href="<?= h14s(location_creation_offre()) ?>"  id='bouton_creer_offre' >Créer une offre</a>
 
     <?php
 });

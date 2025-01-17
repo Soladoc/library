@@ -85,28 +85,18 @@ begin
         new.modifiee_le,
         new.periodes_ouverture
     );
+    
     insert into pact._changement_etat (id_offre, fait_le) values (new.id, new.modifiee_le);
 
-    select
-        en_ligne,
-        note_moyenne,
-        prix_min,
-        creee_le,
-        en_ligne_ce_mois_pendant,
-        changement_ouverture_suivant_le,
-        est_ouverte
-    from
-        offres
-    where
-        id = new.id
-    into
-        new.en_ligne,
-        new.note_moyenne,
-        new.prix_min,
-        new.creee_le,
-        new.en_ligne_ce_mois_pendant,
-        new.changement_ouverture_suivant_le,
-        new.est_ouverte;
+    new.en_ligne = offre_en_ligne(new.id);
+    new.note_moyenne = offre_note_moyenne(new.id);
+    new.nb_avis = offre_nb_avis(new.id);
+    new.prix_min = offre_prix_min(new.id);
+    new.creee_le = offre_creee_le(new.id);
+    new.en_ligne_ce_mois_pendant = offre_en_ligne_pendant(new.id, date_trunc('month', localtimestamp), '1 month');
+    new.changement_ouverture_suivant_le = offre_changement_ouverture_suivant_le(new.id, localtimestamp, new.periodes_ouverture);
+    new.est_ouverte = offre_est_ouverte(new.id, new.periodes_ouverture);
+    -- new.option devrait tjrs etre null
 end
 $$ language plpgsql strict;
 comment on function insert_offre (record) is

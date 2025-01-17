@@ -41,12 +41,12 @@ if ($_POST) {
 $page->put(function () use ($input_offre) {
     if ($error = $_GET['error'] ?? null) {
         ?>
-        <p class="error"><?= $error ?></p><?php
+        <p class="error"><?= h14s($error) ?></p><?php
     }
     ?>
     <?php $input_offre->put() ?>
 
-    <form id="<?= $input_offre->form_id ?>" method="post" enctype="multipart/form-data">
+    <form id="<?= h14s($input_offre->form_id) ?>" method="post" enctype="multipart/form-data">
         <button type="submit">Valider</button>
     </form>
     <?php

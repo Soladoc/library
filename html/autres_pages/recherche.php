@@ -1,6 +1,7 @@
 <?php
 require_once 'component/Page.php';
 require_once 'component/CarteOffre.php';
+require_once 'util.php';
 
 $page = new Page('Recherche', scripts: [
     'tri_recherche.js' => 'defer',
@@ -28,7 +29,7 @@ $page->put(function () {
         <br>
         <div class="search-bar">
             <!-- <input id="barre-recherche" type="text" placeholder="Rechercher des activités, restaurants, spectacles..."> -->
-            <input type="text" id="keyword-search" value="<?= $search ?>" placeholder="Rechercher par mot-clé" oninput="filterOffers()">
+            <input type="text" id="keyword-search" value="<?= h14s($search) ?>" placeholder="Rechercher par mot-clé" oninput="filterOffers()">
 
         </div>
     </section>

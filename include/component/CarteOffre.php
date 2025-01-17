@@ -23,10 +23,10 @@ final class CarteOffre
 ?>
 <div class="offer-card">
     <?php $this->image_principale->put_img() ?>
-    <h3><a href="<?= location_detail_offre($this->offre->id) ?>"><?= $this->offre->titre ?></a></h3>
-    <p class="location"><?= $this->offre->adresse->format() ?></p>
-    <p><?= $this->offre->resume ?></p>
-    <p class="category"><?= ucfirst($this->offre->categorie) ?></p>
+    <h3><a href="<?= h14s(location_detail_offre($this->offre->id)) ?>"><?= h14s($this->offre->titre) ?></a></h3>
+    <p class="location"><?= h14s($this->offre->adresse->format()) ?></p>
+    <p><?= h14s($this->offre->resume) ?></p>
+    <p class="category"><?= h14s(ucfirst($this->offre->categorie)) ?></p>
 </div>
 <?php
     }
