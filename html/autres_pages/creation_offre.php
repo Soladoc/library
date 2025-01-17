@@ -47,7 +47,7 @@ $page->put(function () use ($input_offre) {
     <?php $input_offre->put() ?>
 
     <form id="<?= h14s($input_offre->form_id) ?>" method="post" enctype="multipart/form-data">
-        <button type="submit">Valider</button>
+        <button class="btn-publish" type="submit">Valider</button>
     </form>
     <?php
 });
