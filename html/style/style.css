@@ -1013,18 +1013,6 @@ section#info_compte div span {
     color: #333;
 }
 
-#info_compte button[type=submit] {
-    display: inline-block;
-    text-decoration: none;
-    background-color: #3498db;
-    color: white;
-    padding: 0.8rem 1.5rem;
-    border-radius: 5px;
-    font-size: 1rem;
-    margin-top: 1rem;
-    text-align: center;
-}
-
 #info_compte a:hover {
     background-color: #2980b9;
 }
