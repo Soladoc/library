@@ -1175,6 +1175,10 @@ section#info_compte div span {
     margin-top: 0.3rem;
 }
 
+button {
+    font-size: 1em;
+}
+
 .button {
     display: inline-block;
     text-align: center;
