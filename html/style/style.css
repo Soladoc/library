@@ -16,6 +16,12 @@
     font-family: "Tw Cen MT", Arial, sans-serif;
 }
 
+
+button {
+    font-size: 1em;
+    font-family: "Tw Cen MT", Arial, sans-serif;
+}
+
 html,
 body {
     height: 100%;
@@ -1173,10 +1179,6 @@ section#info_compte div span {
     color: var(--color-accent);
     font-size: 0.9rem;
     margin-top: 0.3rem;
-}
-
-button {
-    font-size: 1em;
 }
 
 .button {
