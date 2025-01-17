@@ -10,7 +10,7 @@ $page = new Page('Conditions Générales de Vente', main_class: 'text');
 $page->put( function(){
     $pd = new Parsedown();
     ?>
-    <section class="centrer-enfants mention-legales-sections" >
+    <section class="centrer-enfants" >
         <div>
             <?=
                 $pd->text(file_get_contents('doc/cgv.md', use_include_path: true));
