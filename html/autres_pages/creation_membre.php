@@ -95,7 +95,7 @@ $page->put(function () {
                 <p class="error"><?= h14s($_GET['error'] ?? null) ?></p>
 
                 <div class="champ">
-                    <button type="submit">Valider</button>
+                    <button type="submit" class="btn-publish">Valider</button>
                 </div>
             </form>
         </div>
