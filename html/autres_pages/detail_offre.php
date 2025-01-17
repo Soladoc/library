@@ -1,4 +1,7 @@
 <?php
+
+use function Auth\id_membre_connecte;
+
 require_once 'auth.php';
 require_once 'const.php';
 require_once 'Parsedown.php';
@@ -19,24 +22,24 @@ $offre = notfalse(Offre::from_db(getarg($_GET, 'id', arg_int())));
 
 $page = new Page($offre->titre, scripts: [
     'module/detail_offre.js' => 'type="module"',
-    'carousel.js' => 'defer',
+    'carousel.js'            => 'defer',
 ]);
 
 $input_rating = new InputNote(name: 'rating');
 if ($offre instanceof Restaurant) {
-    $input_note_cuisine = new InputNote(name: 'note_cuisine');
-    $input_note_service = new InputNote(name: 'note_service');
-    $input_note_ambiance = new InputNote(name: 'note_ambiance');
+    $input_note_cuisine      = new InputNote(name: 'note_cuisine');
+    $input_note_service      = new InputNote(name: 'note_service');
+    $input_note_ambiance     = new InputNote(name: 'note_ambiance');
     $input_note_qualite_prix = new InputNote(name: 'note_qualite_prix');
 } else {
-    $input_note_cuisine = null;
-    $input_note_service = null;
-    $input_note_ambiance = null;
+    $input_note_cuisine      = null;
+    $input_note_service      = null;
+    $input_note_ambiance     = null;
     $input_note_qualite_prix = null;
 }
 
 $id_membre_co = Auth\id_membre_connecte();
-$review_list = new ReviewList($offre);
+$review_list  = new ReviewList($offre);
 
 if (null !== $report_message = getarg($_POST, 'report_message', required: false)) {
     redirect_to(location_signaler($id_membre_co, $offre->id, $report_message));
@@ -58,7 +61,7 @@ if (null !== $commentaire = getarg($_POST, 'commentaire', required: false)) {
             Membre::from_db($id_membre_co),
             $offre,
         ];
-        $avis = $offre instanceof Restaurant
+        $avis      = $offre instanceof Restaurant
             ? new AvisRestaurant(
                 $args_avis,
                 $input_note_cuisine->get($_POST),
@@ -120,14 +123,15 @@ $page->put(function () use ($offre, $input_rating, $input_note_cuisine, $input_n
         </section>
 
         <!-- Formulaire d'avis -->
+        <?php if (null !== $idmco = id_membre_connecte() and false === Avis::from_db_one($idmco, $offre->id)) { ?>
         <div class="review-form" id="review-form">
             <h3>Laisser un avis</h3><br>
             <div class="message">
                 <?php if (isset($error_message)): ?>
                     <p class="error"><?= h14s($error_message) ?></p>
                     <?php
-                elseif (isset($success_message)):
-                    ?>
+        elseif (isset($success_message)):
+            ?>
                     <p class="success"><?= h14s($success_message) ?></p>
                 <?php endif ?>
             </div>
@@ -155,7 +159,8 @@ $page->put(function () use ($offre, $input_rating, $input_note_cuisine, $input_n
             </form>
         </div>
 
-        <?php $review_list->put() ?>
+        <?php }
+    $review_list->put() ?>
 
         <details class="report-form">
             <summary>Signaler un problème</summary>

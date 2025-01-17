@@ -16,10 +16,13 @@
     font-family: "Tw Cen MT", Arial, sans-serif;
 }
 
+textarea, input {
+    font-family: Arial, Helvetica, sans-serif;
+}
 
 button {
-    font-size: 1em;
     font-family: "Tw Cen MT", Arial, sans-serif;
+    font-size: 1em;
 }
 
 html,
