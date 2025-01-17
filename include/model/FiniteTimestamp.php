@@ -8,7 +8,7 @@ require_once 'util.php';
 final class FiniteTimestamp implements JsonSerializable
 {
     private const FORMAT_DATE = 'Y-m-d';
-    private const FORMATS = ['!Y-m-d H:i:s.u', '!Y-m-d H:i:s', '!Y-m-d\\TH:i:s.u'];
+    private const FORMATS = ['!Y-m-d H:i:s.u', '!Y-m-d H:i:s', '!Y-m-d\\TH:i:s.u', '!Y-m-d\\TH:i:s'];
 //"2025-01-10T16:02:10.029899"
     private function __construct(
         private readonly DateTimeImmutable $datetime,
