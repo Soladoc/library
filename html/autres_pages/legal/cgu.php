@@ -13,7 +13,7 @@ $page->put( function(){
     <section class="centrer-enfants mention-legales-sections" >
         <div>
             <?=
-                $pd->text(file_get_contents('doc/cgv.md', use_include_path: true));
+                $pd->text(file_get_contents('doc/cgu.md', use_include_path: true));
             ?>     
         </div>
     </section>
