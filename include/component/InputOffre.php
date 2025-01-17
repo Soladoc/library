@@ -1,20 +1,21 @@
 <?php
 
-require_once 'Parsedown.php';
 require_once 'auth.php';
-require_once 'const.php';
-require_once 'model/Activite.php';
-require_once 'model/ParcAttractions.php';
-require_once 'model/Restaurant.php';
-require_once 'model/Spectacle.php';
-require_once 'model/Visite.php';
-require_once 'model/NonEmptyRange.php';
-require_once 'model/FiniteTimestamp.php';
+require_once 'component/DynamicTable.php';
+require_once 'component/InputAdresse.php';
 require_once 'component/InputDuree.php';
 require_once 'component/InputImage.php';
-require_once 'component/DynamicTable.php';
+require_once 'const.php';
+require_once 'model/Activite.php';
+require_once 'model/FiniteTimestamp.php';
+require_once 'model/NonEmptyRange.php';
+require_once 'model/ParcAttractions.php';
 require_once 'model/ProfessionnelPrive.php';
-require_once 'component/InputAdresse.php';
+require_once 'model/Restaurant.php';
+require_once 'model/Spectacle.php';
+require_once 'model/Time.php';
+require_once 'model/Visite.php';
+require_once 'Parsedown.php';
 require_once 'redirect.php';
 
 /**
