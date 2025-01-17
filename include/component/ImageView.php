@@ -3,6 +3,7 @@
 require_once 'const.php';
 require_once 'util.php';
 require_once 'model/Image.php';
+require_once 'util.php';
 
 final class ImageView
 {

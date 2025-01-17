@@ -17,6 +17,7 @@ require_once 'model/Time.php';
 require_once 'model/Visite.php';
 require_once 'Parsedown.php';
 require_once 'redirect.php';
+require_once 'util.php';
 
 /**
  * @extends Input<Offre>

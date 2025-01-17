@@ -6,6 +6,7 @@ require_once 'component/CarteOffrePro.php';
 require_once 'model/Professionnel.php';
 require_once 'model/ProfessionnelPrive.php';
 require_once 'model/Offre.php';
+require_once 'util.php';
 
 $page = new Page('Accueil Professionnel');
 

@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Apply a function, mutating the argument. Think of it like a generalized assignment operator (e.g. "+=") that can work on any function. Used to avoid specifying the argument twice.
  * @template T

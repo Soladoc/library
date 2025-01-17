@@ -12,6 +12,7 @@ require_once 'model/AvisRestaurant.php';
 require_once 'model/Offre.php';
 require_once 'model/Restaurant.php';
 require_once 'model/Date.php';
+require_once 'util.php';
 require_once 'model/Membre.php';
 
 $offre = notfalse(Offre::from_db(getarg($_GET, 'id', arg_int())));

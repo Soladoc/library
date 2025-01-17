@@ -1,6 +1,7 @@
 <?php
 require_once 'component/Page.php';
 require_once 'component/CarteOffre.php';
+require_once 'util.php';
 
 $page = new Page('Recherche', scripts: [
     'tri_recherche.js' => 'defer',

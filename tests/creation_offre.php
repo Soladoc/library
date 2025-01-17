@@ -1,4 +1,5 @@
 <?php
+require_once 'util.php';
 require_once 'testing.php';
 require_once 'component/InputOffre.php';
 

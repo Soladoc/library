@@ -4,6 +4,7 @@ require_once 'component/Page.php';
 require_once 'auth.php';
 require_once 'model/Duree.php';
 require_once 'model/Offre.php';
+require_once 'util.php';
 
 $page = new Page('Facturation');
 

@@ -1,6 +1,8 @@
 <?php
 require_once 'const.php';
 require_once 'component/Page.php';
+require_once 'util.php';
+
 $page = new Page("Choix de l'offre", ['choix_categorie_creation_offre.css']);
 $page->put(function () {
     ?>

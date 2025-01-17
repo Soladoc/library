@@ -3,6 +3,7 @@ require_once 'component/ImageView.php';
 require_once 'const.php';
 require_once 'model/Offre.php';
 require_once 'redirect.php';
+require_once 'util.php';
 
 final class CarteOffrePro
 {
