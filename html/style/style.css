@@ -1271,7 +1271,7 @@ label > input {
     padding: 5vh;
 }
 
-.mention-legales-sections *{
+.mention-legales-sections {
     text-align: center;
-    list-style: none;
+    list-style-position: inside;
 }
