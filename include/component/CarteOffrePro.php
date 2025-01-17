@@ -1,7 +1,8 @@
 <?php
-require_once 'model/Offre.php';
 require_once 'component/ImageView.php';
+require_once 'model/Offre.php';
 require_once 'redirect.php';
+require_once 'util.php';
 
 final class CarteOffrePro
 {
@@ -27,7 +28,7 @@ final class CarteOffrePro
     <p class="category"><?= ucfirst($this->offre->categorie) ?></p>
     <p class="rating"><?= mapnull(
         $this->offre->note_moyenne,
-        fn(float $note) => "Note\xa0: $note/5 ★ ({$this->offre->nb_avis} avis)"
+        fn(float $note) => 'Note'.NBSP.": $note/5 ★ ({$this->offre->nb_avis} avis)"
     ) ?? 'Aucun avis' ?></p>
 </div>
 <?php
