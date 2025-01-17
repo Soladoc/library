@@ -196,10 +196,14 @@ $page->put(function () use ($compte, $input_adresse, $error_email, $error_mdp, $
                 <button type="button" id="button-regenerate-api-key" class="btn-publish">Regénérer</button>
                 <button type="button" id="button-delete-api-key" class="btn-publish">Supprimer</button>
             </div>
-            <button type="submit">Valider</button>
-            <a href="<?= h14s(location_detail_compte()) ?>">Retour</a>
+            <button type="submit" class="btn-publish">Valider</button>
+            <button class="btn-publish">
+                <a href="<?= h14s(location_detail_compte()) ?>">Retour</a>
+            </button>
             <?php if ($compte instanceof Membre) { ?>
-                <a href="<?= h14s(location_supprimer_compte($compte->id)) ?>">Supprimer le compte</a>
+                <button class="btn-publish">
+                    <a href="<?= h14s(location_supprimer_compte($compte->id)) ?>">Supprimer le compte</a>
+                </button>
             <?php } else { ?>
                 <p><small>Pour supprimer votre compte professionnel, veuillez contacter l'administrateur du site. Voir les <a href="<?= h14s(location_mentions_legales()) ?>">mentions légales</a> pour plus d'informations.</small></p>
             <?php } ?>
