@@ -197,9 +197,7 @@ $page->put(function () use ($compte, $input_adresse, $error_email, $error_mdp, $
                 <button type="button" id="button-delete-api-key" class="btn-publish">Supprimer</button>
             </div>
             <button type="submit" class="btn-publish">Valider</button>
-            <button class="btn-publish">
-                <a href="<?= h14s(location_detail_compte()) ?>">Retour</a>
-            </button>
+            <a class="btn-publish" href="<?= h14s(location_detail_compte()) ?>">Retour</a>
             <?php if ($compte instanceof Membre) { ?>
                 <a class="btn-publish" href="<?= h14s(location_supprimer_compte($compte->id)) ?>">Supprimer le compte</a>
             <?php } else { ?>
