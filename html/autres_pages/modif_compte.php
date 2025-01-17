@@ -201,9 +201,7 @@ $page->put(function () use ($compte, $input_adresse, $error_email, $error_mdp, $
                 <a href="<?= h14s(location_detail_compte()) ?>">Retour</a>
             </button>
             <?php if ($compte instanceof Membre) { ?>
-                <button class="btn-publish">
-                    <a href="<?= h14s(location_supprimer_compte($compte->id)) ?>">Supprimer le compte</a>
-                </button>
+                <a class="btn-publish" href="<?= h14s(location_supprimer_compte($compte->id)) ?>">Supprimer le compte</a>
             <?php } else { ?>
                 <p><small>Pour supprimer votre compte professionnel, veuillez contacter l'administrateur du site. Voir les <a href="<?= h14s(location_mentions_legales()) ?>">mentions légales</a> pour plus d'informations.</small></p>
             <?php } ?>
