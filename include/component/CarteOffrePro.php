@@ -25,13 +25,10 @@ final class CarteOffrePro
     <h3><a href="<?= location_detail_offre_pro($this->offre->id) ?>"><?= $this->offre->titre ?></a></h3>
     <p class="location"><?= $this->offre->adresse->format() ?></p>
     <p class="category"><?= ucfirst($this->offre->categorie) ?></p>
-    <p class="rating">
-        <?php if ($this->offre->note_moyenne === 0) { ?>
-            Aucun avis
-        <?php } else { ?>
-            Note&nbsp;: <?= $this->offre->note_moyenne ?> /5 ★ (<?= $this->offre->nb_avis ?> avis)
-        <?php } ?>
-    </p>
+    <p class="rating"><?= mapnull(
+        $this->offre->note_moyenne,
+        fn(float $note) => "Note\xa0: $note/5 ★ ({$this->offre->nb_avis} avis)"
+    ) ?? 'Aucun avis' ?></p>
 </div>
 <?php
     }

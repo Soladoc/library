@@ -85,12 +85,14 @@ begin
         new.modifiee_le,
         new.periodes_ouverture
     );
+    
     insert into pact._changement_etat (id_offre, fait_le) values (new.id, new.modifiee_le);
 
     select
         en_ligne,
         note_moyenne,
         prix_min,
+        nb_avis,
         creee_le,
         en_ligne_ce_mois_pendant,
         changement_ouverture_suivant_le,
@@ -102,6 +104,7 @@ begin
     into
         new.en_ligne,
         new.note_moyenne,
+        new.nb_avis,
         new.prix_min,
         new.creee_le,
         new.en_ligne_ce_mois_pendant,
