@@ -48,7 +48,7 @@ with
             avis (id_offre, id_membre_auteur, note, contexte, date_experience, commentaire)
         values
             ((table id_offre), null, 5, 'famille', '2024-12-22', 'Activités variées et cadre magnifique.'),
-            ((table id_offre), null, 5, 'famille', '2025-01-05', 'Activités magnifiques et cadre varié.'),
+            ((table id_offre), null, 5, 'famille', '2025-01-05', 'Activités magnifiques et cadre varié.')
     ),
     s2 as (
         insert into
