@@ -190,8 +190,18 @@ $$ language plpgsql;
 create function _compte_delete() returns trigger as $$
 begin
     delete from _signalable where id = old.id;
-    delete from _adresse where id = old.id_adresse;
+    call delete_unused_adress(old.id_adresse);
     return old;
+end
+$$ language plpgsql;
+
+create procedure delete_unused_adress(p_id_adresse int) as $$
+-- We need to do this because _adresse rows can be shared, but we still want to avoid having unused adresses around.
+begin
+    delete from _adresse where id = old.id_adresse;
+exception
+    when foreign_key_violation then
+        -- do nothing
 end
 $$ language plpgsql;
 

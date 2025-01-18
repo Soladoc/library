@@ -8,7 +8,7 @@ set
 create function _offre_after_delete () returns trigger as $$
 begin
     delete from _image where id = old.id_image_principale;
-    delete from _adresse where id = old.id_adresse;
+    call delete_unused_adress(old.id_adresse);
     return old;
 end
 $$ language plpgsql;
