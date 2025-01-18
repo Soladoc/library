@@ -1,5 +1,6 @@
 <?php
 require_once 'util.php';
+require_once 'Compte.php';
 
 $id_compte = getarg($_GET, 'id_compte', arg_int());
 
