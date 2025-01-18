@@ -1274,3 +1274,8 @@ label > input {
     text-align: center;
     list-style-position: inside;
 }
+
+.deleted-pseudo {
+    opacity: .67;
+    font-style: italic;
+}

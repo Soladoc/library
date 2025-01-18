@@ -38,7 +38,7 @@ final class ReviewList
                 <?php if (!empty($avis)) {
                     foreach ($avis as $a) { ?>
                         <div class="review">
-                            <p><strong><?= h14s($a->membre_auteur?->pseudo) ?? 'Anonyme' ?></strong> - <?= h14s($a->note) ?>/5
+                            <p><strong><?= h14s($a->membre_auteur?->pseudo) ?? '<span class="deleted-pseudo">Compte supprimé</span>' ?></strong> - <?= h14s($a->note) ?>/5
                                 <?php if (null !== $idcco = Auth\id_compte_connecte()) {
                                     $raison_signalement_actuel = Signalable::signalable_from_db($a->id)->get_signalement($idcco);
                                     ?>
