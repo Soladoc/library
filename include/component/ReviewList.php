@@ -38,8 +38,14 @@ final class ReviewList
                 <?php if (!empty($avis)) {
                     foreach ($avis as $a) { ?>
                         <div class="review">
-                            <p><strong><?= h14s($a->membre_auteur?->pseudo) ?? '<span class="deleted-pseudo">Compte supprimé</span>' ?></strong> - <?= h14s($a->note) ?>/5
-                                <?php if (null !== $idcco = Auth\id_compte_connecte()) {
+                            <p><?php if (null === $a->membre_auteur) { ?>
+                                    <span class="deleted-pseudo">Compte supprimé</span>
+                                <?php } else { ?>
+                                    <strong><?= h14s($a->membre_auteur->pseudo) ?></strong>
+                                <?php } ?>
+                                &ndash; <?= h14s($a->note) ?>/5
+                                <?php
+                                if (null !== $idcco = Auth\id_compte_connecte()) {
                                     $raison_signalement_actuel = Signalable::signalable_from_db($a->id)->get_signalement($idcco);
                                     ?>
                                     <button class="button-signaler" data-idcco="<?= $idcco ?>" data-avis-id="<?= $a->id ?>" type="button"><img class="signalement-flag" src="/images/<?= $raison_signalement_actuel === null ? 'flag' : 'flag-filled' ?>.svg" title="<?= $raison_signalement_actuel === null ? 'Signaler' : 'Retirer le signalement (' . h14s($raison_signalement_actuel) . ')' ?>" width="24" height="29" alt="Drapeau"></button>
@@ -49,11 +55,12 @@ final class ReviewList
                             <p><?= h14s($a->commentaire) ?></p>
                             <p class="review-date"><?= h14s($a->date_experience) ?></p>
                             <?php
-                            if ($a->membre_auteur !== null and $a->membre_auteur->id === Auth\id_membre_connecte()) { ?>
+                            if ($a->membre_auteur !== null and $a->membre_auteur->id === Auth\id_membre_connecte()) {
+                                ?>
                                 <form method="post" action="<?= h14s(location_modifier_avis($this->offre->id, $a->id)) ?>">
                                     <button type="submit" class="btn-publish">Modifier</button>
                                     <button class="btn-publish">
-                                        <a href="<?= h14s(location_avis_supprimer($a->id, location_detail_offre($this->offre->id))) ?>" >Supprimer</a>
+                                        <a href="<?= h14s(location_avis_supprimer($a->id, location_detail_offre($this->offre->id))) ?>">Supprimer</a>
                                     </button>
                                 </form>
                             <?php }
@@ -65,8 +72,8 @@ final class ReviewList
                                     <button type="submit" class="btn-publish">Répondre</button>
                                 </form>
                             <?php } else if ($h14s_rep_contenu !== null) { ?>
-                                <p>Réponse de <?= h14s($this->offre->professionnel->denomination) ?>&nbsp;:</p>
-                                <p><?= $h14s_rep_contenu ?></p>
+                                    <p>Réponse de <?= h14s($this->offre->professionnel->denomination) ?>&nbsp;:</p>
+                                    <p><?= $h14s_rep_contenu ?></p>
                             <?php } ?>
                         </div>
                     <?php }
