@@ -33,7 +33,7 @@ final class FiniteTimestamp implements JsonSerializable
     }
 
     function format_date(): string {
-        return $this->datetime->format(self::FORMAT_DATE);
+        return $this->datetime->format('d/m/Y H:i:s');
     }
 
     /**
