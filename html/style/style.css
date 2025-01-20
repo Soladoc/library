@@ -1280,6 +1280,7 @@ label > input {
     font-style: italic;
 }
 
-#facturation th{
+.test{
     text-align: left;
+    color: red;
 }
