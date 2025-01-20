@@ -164,7 +164,11 @@ function createOfferCardElement(offer) {
     get('location').textContent = offer.formatted_address;
     get('offer-resume').textContent = offer.resume;
     get('category').textContent = offer.categorie;
-    get('offer-prix-min').textContent = offer.prix_min;
+
+    const prix_min = get('offer-prix-min');
+    if (offer.prix_min) prix_min.textContent = offer.prix_min;
+    else prix_min.parent.remove();
+
     get('offer-note').textContent = offer.note_moyenne;
     get('offer-creee-le').textContent = new Date(offer.creee_le).toLocaleDateString('fr-FR', { day: '2-digit', month: '2-digit', year: 'numeric' });
 

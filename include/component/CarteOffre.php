@@ -27,7 +27,9 @@ final class CarteOffre
     <p class="location"><?= h14s($this->offre->adresse->format()) ?></p>
     <p><?= h14s($this->offre->resume) ?></p>
     <p class="category"><?= h14s(ucfirst($this->offre->categorie)) ?></p>
+    <?php if ($this->offre->prix_min) { ?>
     <p>À partir de &nbsp;: <?= $this->offre->prix_min ?>&nbsp;€</p>
+    <?php } ?>
     <p>Note&nbsp;: <?= $this->offre->note_moyenne ?>&nbsp;/&nbsp;5</p>
     <p>Créee le&nbsp;: <?= $this->offre->creee_le ?></p>
 </div>
