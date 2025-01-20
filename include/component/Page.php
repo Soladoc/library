@@ -109,13 +109,13 @@ final class Page
         ?>
         <header>
             <div class="logo">
-                <a href="<?= Auth\location_home() ?>"><img src="/images/logo.png" alt="Logo pact"></a>
+                <a href="<?= h14s(Auth\location_home()) ?>"><img src="/images/logo.png" alt="Logo pact"></a>
             </div>
             <?php
             if (Auth\est_connecte()) {
                 // Vérification du statut de la session
                 ?>
-                <a href="<?= location_logout() ?>">
+                <a href="<?= h14s(location_logout()) ?>">
                     <div class="auth-button">
                         <img src="/images/logout-icon.png" alt="Profil">
                         <span>Déconnexion</span>
@@ -159,9 +159,9 @@ final class Page
                     <li><a href="https://www.youtube.com" target="_blank" rel="noopener noreferrer"><img src="/images/social/youtube.png" alt="YouTube" width="90" height="90" loading="lazy" title="YouTube"></a></li>
                 </ul>
                 <article>
-                    <p><a href="<?= location_mentions_legales() ?>">Mentions légales</a></p>
-                    <p><a href="<?= location_cgu() ?>">CGU</a></p>
-                    <p><a href="<?= location_cgv() ?>">CGV</a></p>
+                    <p><a href="<?= h14s(location_mentions_legales()) ?>">Mentions légales</a></p>
+                    <p><a href="<?= h14s(location_cgu()) ?>">CGU</a></p>
+                    <p><a href="<?= h14s(location_cgv()) ?>">CGV</a></p>
                 </article>
             </div>
             <div class="footer-bottom">

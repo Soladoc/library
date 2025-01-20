@@ -45,7 +45,7 @@ $page->put(function () {
             <?php
             } else {
                 ?>
-                <td><?= "$resultat_offre €" ?></td>
+                <td><?= $resultat_offre ?>&nbsp;€</td>
             <?php
             }
             ?>
@@ -57,7 +57,7 @@ $page->put(function () {
         <tfoot>
             <tr>
                 <th scope="row" colspan="4">Prix global TTC</th>
-                <td><?= $resultat_global ?> €</td>
+                <td><?= $resultat_global ?>&nbsp;€</td>
             </tr>
         </tfoot>
         </table>

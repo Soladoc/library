@@ -78,7 +78,7 @@ final class InputOffre extends Input
                     min="0"
                     placeholder="Prix"
                     required
-                    value="<?= $row === null ? null : h14s($row['montant']) ?>"> €</td>
+                    value="<?= $row === null ? null : $row['montant'] ?>">&nbsp;€</td>
                 <?php
             },
             put_prompt: function (DynamicTable $dt) {
@@ -225,7 +225,7 @@ final class InputOffre extends Input
     function put(mixed $current = null): void
     {
         ?>
-        <h1><?= $current === null ? 'Créer' : 'Modifier' ?> <?= CATEGORIES_OFFRE[$this->categorie] ?></h1>
+        <h1><?= $current === null ? 'Créer' : 'Modifier' ?> <?= h14s(CATEGORIES_OFFRE[$this->categorie]) ?></h1>
 
         <section id="<?= $this->id('type-abonnement') ?>">
             <h2>Abonnement</h2>
@@ -243,14 +243,14 @@ final class InputOffre extends Input
                             id="<?= $this->id("libelle_abonnement_$abo->libelle") ?>"
                             name="<?= $this->name('libelle_abonnement') ?>"
                             type="radio"
-                            value="<?= $abo->libelle ?>"
+                            value="<?= h14s($abo->libelle) ?>"
                             required
                             <?= $current === null ? '' : 'disabled' ?>
                             <?= $current?->abonnement->libelle === 'standard' ? 'checked' : '' ?>
                             <?php
                             if ($first) { echo 'checked'; $first = false; }
                             ?>>
-                            <?= ucfirst($abo->libelle) ?> (<?= h14s($abo->description) ?>, <?= $abo->prix_journalier ?>€&nbsp;/&nbsp;jour)</label>
+                            <?= h14s(ucfirst($abo->libelle)) ?> (<?= h14s($abo->description) ?>, <?= $abo->prix_journalier ?>€&nbsp;/&nbsp;jour)</label>
                     </li>
                     <?php } ?>
                 </ul>
@@ -259,7 +259,7 @@ final class InputOffre extends Input
                 </aside>
             <?php } else { ?>
                 <p>Comme vous êtres un professionnel public, l'offre créée sera gratuite (pas de facturation)</p>
-                <p><a href="<?= location_mentions_legales() ?>" target="_blank" rel="noopener noreferrer">Plus d'informations&hellip;</>
+                <p><a href="<?= h14s(location_mentions_legales()) ?>" target="_blank" rel="noopener noreferrer">Plus d'informations&hellip;</>
                 </p>
             <?php } ?>
         </section>
@@ -274,7 +274,7 @@ final class InputOffre extends Input
                         name="<?= $this->name('titre') ?>"
                         type="text"
                         required
-                        value="<?= $current?->titre ?>">
+                        value="<?= h14s($current?->titre) ?>">
                 </p>
                 <label for="<?= $this->id('resume') ?>">Resumé*</label>
                 <p>
@@ -283,9 +283,9 @@ final class InputOffre extends Input
                         name="<?= $this->name('resume') ?>"
                         type="text"
                         required
-                        value="<?= $current?->resume ?>">
+                        value="<?= h14s($current?->resume) ?>">
                 </p>
-                <label for="<?= $this->input_adresse->for_id() ?>">Adresse*</label>
+                <label for="<?= h14s($this->input_adresse->for_id()) ?>">Adresse*</label>
                 <?php $this->input_adresse->put($current?->adresse) ?>
                 <label for="<?= $this->id('url_site_web') ?>">Site Web</label>
                 <p>
@@ -293,7 +293,7 @@ final class InputOffre extends Input
                         id="<?= $this->id('url_site_web') ?>"
                         name="<?= $this->name('url_site_web') ?>"
                         type="url"
-                        value="<?= $current?->url_site_web ?>">
+                        value="<?= h14s($current?->url_site_web) ?>">
                 </p>
             </div>
         </section>
@@ -319,7 +319,7 @@ final class InputOffre extends Input
             <div>
                 <?php foreach (JOURS_SEMAINE as $dow => $jour) { ?>
                     <article id="<?= $this->id($jour) ?>">
-                        <h3><?= ucfirst($jour) ?></h3>
+                        <h3><?= h14s(ucfirst($jour)) ?></h3>
                         <button id="<?= $this->id("button-add-horaire-$dow") ?>" type="button">+</button>
                         <table id="<?= $this->id("table-horaires-$dow") ?>">
                             <thead>
@@ -376,8 +376,8 @@ final class InputOffre extends Input
                     ?>
                     <li><label><input <?= $this->form_attr ?>
                         id="<?= $this->id("tag_$tag") ?>"
-                        name="<?= $this->name('tags') ?>[<?= $tag ?>]"
-                        type="checkbox"><?= $tag ?></label></li>
+                        name="<?= $this->name('tags') ?>[<?= h14s($tag) ?>]"
+                        type="checkbox"><?= h14s($tag) ?></label></li>
                 <?php } ?>
             </ul>
         </section>
@@ -388,7 +388,7 @@ final class InputOffre extends Input
                 id="<?= $this->id('description_detaillee') ?>"
                 name="<?= $this->name('description_detaillee') ?>"
                 required
-                ><?= $current?->description_detaillee ?></textarea>
+                ><?= h14s($current?->description_detaillee) ?></textarea>
         </section>
 
         <section id="<?= $this->id('image-creation-offre') ?>">
@@ -418,12 +418,12 @@ final class InputOffre extends Input
                         id="<?= $this->id('prestations_incluses') ?>"
                         name="<?= $this->name('prestations_incluses') ?>"
                         required
-                        ><?= $activite?->prestations_incluses ?></textarea>
+                        ><?= h14s($activite?->prestations_incluses) ?></textarea>
                     <p>Prestations non incluses</p>
                     <textarea <?= $this->form_attr ?>
                         id="<?= $this->id('prestations_non_incluses') ?>"
                         name="<?= $this->name('prestations_non_incluses') ?>"
-                        ><?= $activite?->prestations_non_incluses ?></textarea>
+                        ><?= h14s($activite?->prestations_non_incluses) ?></textarea>
                     <?php
                     $this->put_input_indication_duree($activite?->indication_duree);
                     break;
@@ -454,7 +454,7 @@ final class InputOffre extends Input
                     $restaurant = $current;
                     ?>
                     <fieldset>
-                        <legend>Echelle tarifaire</legend>
+                        <legend>Échelle tarifaire</legend>
                         <p><label><input <?= $this->form_attr ?>
                             id="<?= $this->id('richesse-1') ?>"
                             name="<?= $this->name('richesse') ?>"
@@ -510,7 +510,7 @@ final class InputOffre extends Input
                     <p>Carte</p>
                     <textarea <?= $this->form_attr ?>
                         name="<?= $this->name('carte') ?>"
-                        ><?= $restaurant?->carte ?></textarea>
+                        ><?= h14s($restaurant?->carte) ?></textarea>
                     <?php
                     break;
                 case Spectacle::CATEGORIE:
@@ -542,7 +542,7 @@ final class InputOffre extends Input
     function put_input_indication_duree(?Duree $current)
     {
         ?>
-        <label for="<?= $this->input_indication_duree->for_id() ?>">Durée estimée&nbsp;: </label>
+        <label for="<?= h14s($this->input_indication_duree->for_id()) ?>">Durée estimée&nbsp;: </label>
         <?php $this->input_indication_duree->put($current) ?>
         <?php
     }

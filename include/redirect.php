@@ -1,4 +1,5 @@
 <?php
+require_once 'model/Offre.php';
 
 /**
  * Redirige l'utilisateur vers une URL, mettant fin au script actuel.
@@ -59,9 +60,9 @@ function location_detail_compte(): string
     return '/autres_pages/detail_compte.php';
 }
 
-function location_modifier_offre(int $id_offre): string
+function location_modifier_offre(Offre $offre): string
 {
-    return '/autres_pages/modif_offre.php?' . http_build_query(['id_offre' => $id_offre]);
+    return '/autres_pages/modif_offre.php?' . http_build_query(['categorie' => $offre->categorie, 'id' => $offre->id]);
 }
 
 function location_modifier_compte(int $id, ?string $error = null): string

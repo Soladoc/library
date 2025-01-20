@@ -51,7 +51,7 @@ final class InputImage extends Input
         $current ??= [];
         ?>
 <fieldset <?= $this->id_attr ?> class="input-image">
-    <legend><?= $this->fieldset_legend ?></legend>
+    <legend><?= h14s($this->fieldset_legend) ?></legend>
     <p>
         <input class="pourquoi"<?= $this->form_attr ?>
             name="<?= $this->name . ($this->multiple ? '[]' : '') ?>"
@@ -66,7 +66,7 @@ final class InputImage extends Input
             name="<?= $this->name ?>_legende"
             type="text"
             placeholder="Légende"
-            value="<?= ($current[0] ?? null)?->legende ?>">
+            value="<?= h14s(($current[0] ?? null)?->legende) ?>">
     </p>
     <div id="<?= $this->id ?>-preview">
         <?php foreach ($current as $image) {

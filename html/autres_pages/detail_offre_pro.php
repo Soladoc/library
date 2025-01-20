@@ -33,7 +33,7 @@ $page->put(function () use ($offre, $review_list) {
             <form id="toggleForm" method="post" style="display: inline;">
                 <button type="submit" name="valider" class="bouton" id="validateButton" disabled>Valider</button>
             </form>
-            <a class="bouton modifier" href="modif_offre.php?id=<?= $offre->id ?>&categorie=<?= $offre->categorie ?>">Modifier</a>
+            <a class="bouton modifier" href="<?= h14s(location_modifier_offre($offre)) ?>">Modifier</a>
         </div>
     </section>
 
