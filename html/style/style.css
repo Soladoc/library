@@ -1280,7 +1280,10 @@ label > input {
     font-style: italic;
 }
 
-.test{
+.prix-ht{
+    text-align: right;
+}
+
+#facturation th{
     text-align: left;
-    color: red;
 }
