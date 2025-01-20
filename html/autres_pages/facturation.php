@@ -71,7 +71,9 @@ $page->put(function () {
     </section>
     <!-- Bouton pour obtenir le pdf -->
     <section class="centrer-enfant">
-        <a class="btn-publish" href="facture_fpdf.php" id="obtenir_facture_pdf" target="_blank">Version PDF</a>
+        <div>
+            <a class="btn-publish" href="facture_fpdf.php" id="obtenir_facture_pdf" target="_blank">Version PDF</a>
+        </div>
     </section>
 
     <?php
