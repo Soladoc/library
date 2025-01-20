@@ -211,7 +211,7 @@ $tva = $resultat_global * 0.2;
 $pdf->Cell(144, 10, 'TVA (20%)', 1, 0, 'R');
 $pdf->Cell(48, 10, $tva." ".EURO, 1, 1, 'C');
 //Total TTC
-$resultat_global_ttc = $resultat_global + $resultat_global * 0.2 ; // ne fonctionne pas avec un '+='
+$resultat_global_ttc = round($resultat_global + $resultat_global * 0.2,2) ; // ne fonctionne pas avec un '+='
 $pdf->Cell(144, 10, 'Total TTC', 1, 0, 'R');
 $pdf->Cell(48, 10, $resultat_global_ttc." ".EURO, 1, 1, 'C');
 
