@@ -40,11 +40,11 @@ final class ImageView
 <?php
     }
 
-    static function put_template(): void {
+    static function put_template(?string $class = null): void {
 ?>
-<img src="[MISSING]"
-    alt="[MISSING]"
-    title="[MISSING]">
+<img <?= mapnull($class, fn(string $c) => "class=\"$c\"") ?> src=""
+    alt=""
+    title="">
 <?php
     }
 }
