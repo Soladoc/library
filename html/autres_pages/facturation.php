@@ -33,7 +33,7 @@ $page->put(function () {
             <td><?= h14s($offre->titre) ?></td>
             <td><?= h14s($offre->abonnement->libelle) ?></td>
             <td><?= h14s($offre->categorie) ?></td>
-            <td><?= h14s($offre->en_ligne_ce_mois_pendant->total_days) ?></td>
+            <td><?= h14s($offre->en_ligne_ce_mois_pendant->days) ?></td>
             <?php
             // affiche le prix de l'offre ce mois ci ou NA si l'offre est gratuite
             if (strcasecmp($offre->abonnement->libelle, 'Gratuit') === 0) {
@@ -41,7 +41,7 @@ $page->put(function () {
                 <td class="prix-ht">N/A</td>
                 <?php
             } else {
-                $resultat_offre   = ceil($offre->en_ligne_ce_mois_pendant->total_days) * $offre->abonnement->prix_journalier;
+                $resultat_offre   = ceil($offre->en_ligne_ce_mois_pendant->days) * $offre->abonnement->prix_journalier;
                 $resultat_global += $resultat_offre;
                 ?>
                 <td class="prix-ht"><?= round($resultat_offre,2) ?>&nbsp;€</td>
