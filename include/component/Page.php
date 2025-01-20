@@ -9,10 +9,10 @@ require_once 'redirect.php';
 final class Page
 {
     private const BASE_STYLESHEETS = [
-        'style.css',
         'offer-list.css',
         'footer.css',
         'dynamic-table.css',
+        'style.css',
     ];
 
     private const BASE_SCRIPTS = [
