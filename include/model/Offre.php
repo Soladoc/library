@@ -228,6 +228,9 @@ abstract class Offre extends Signalable
     private static function make_select(): string
     {
         // Todo: this is just a proof of concept for single-query inheritance.
+        /* vous comprenez l'enfer de travailler dans ce groupe quand je cherche 
+         * d'où es-ce qu'il tire une donnée et que je tombe sur ça? 
+         */
         return 'select
             ' . static::TABLE . '.id,
             ' . static::TABLE . '.id_adresse,
