@@ -1279,3 +1279,7 @@ label > input {
     opacity: .67;
     font-style: italic;
 }
+
+#facturation th{
+    text-align: left;
+}
