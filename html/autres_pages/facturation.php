@@ -1,5 +1,4 @@
 <?php
-
 require_once 'component/Page.php';
 require_once 'auth.php';
 require_once 'model/Duree.php';
@@ -18,7 +17,7 @@ $page->put(function () {
                     <th scope="col">Type d'abonnement</th>
                     <th scope="col">Catégorie</th>
                     <th scope="col">Jours en ligne</th>
-                    <th scope="col" class="test">Prix HT</th>
+                    <th class="test">Prix HT</th>
                 </tr>
             </thead>
             <tbody>
