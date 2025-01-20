@@ -185,14 +185,13 @@ $pdf->Cell(100, 10, "Date : " . date('d/m/Y'), 0, 1);
 $pdf->Ln(10); // Saut de ligne
 
 // Tableau des offre
-$header = ['Titre', "Type d'abonnement", 'Catégorie', 'Jours en ligne',"Prix TTC"];
+$header = ['Titre', "Type d'abonnement", 'Catégorie', 'Jours en ligne',"Prix HT"];
 $data = [];
 $resultat_global = 0;
 $id_professionnel = Auth\exiger_connecte_pro();
 $offres= Offre::from_db_all_ordered($id_professionnel);
 foreach ($offres as $offre) {
     $resultat_offre  = $offre->en_ligne_ce_mois_pendant->days * $offre->abonnement->prix_journalier;
-    $resultat_offre += $resultat_offre * 0.2;
     $resultat_global += $resultat_offre;
 
 
@@ -204,8 +203,16 @@ $pdf->Ln(10); // Saut de ligne
 
 // Total
 $pdf->SetFont('Arial', 'B', 12);
-$pdf->Cell(144, 10, 'Total', 1, 0, 'R');
+//total ht
+$pdf->Cell(144, 10, 'Total HT', 1, 0, 'R');
 $pdf->Cell(48, 10, $resultat_global." ".EURO, 1, 1, 'C');
+//TVA
+$pdf->Cell(144, 10, 'TVA (20%)', 1, 0, 'R');
+$pdf->Cell(48, 10, $resultat_global * 0.2." ".EURO, 1, 1, 'C');
+//Total TTC
+$resultat_global += $resultat_global * 0.2;
+$pdf->Cell(144, 10, 'Total TTC', 1, 0, 'R');
+$pdf->Cell(48, 10, $resultat_global * 0.2." ".EURO, 1, 1, 'C');
 
 // Générer et afficher le PDF
 $pdf->Output('I', "facture_Pact_$compte->denomination.pdf"); // I = afficher dans le navigateur, D = télécharger
