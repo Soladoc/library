@@ -1,7 +1,7 @@
 <?php
 require_once 'util.php';
 require_once 'model/Commune.php';
-require_once 'model/Signalable.php';
+require_once 'Signalable.php';
 require_once 'model/Adresse.php';
 require_once 'model/Uuid.php';
 
