@@ -74,6 +74,6 @@ $page->put(function () {
 
         </div>
     </section>
-    <template id="template-offre-card"><?php CarteOffre::put_template() ?></template>
+    <template id="template-offer-card"><?php CarteOffre::put_template() ?></template>
     <?php
 });
