@@ -18,7 +18,7 @@ $page->put(function () {
                     <th scope="col">Type d'abonnement</th>
                     <th scope="col">Catégorie</th>
                     <th scope="col">Jours en ligne</th>
-                    <th scope="col">Prix TTC</th>
+                    <th scope="col">Prix HT</th>
                 </tr>
             </thead>
             <tbody>
@@ -37,7 +37,6 @@ $page->put(function () {
             <td><?= h14s($offre->en_ligne_ce_mois_pendant->days) ?></td>
             <?php
             $resultat_offre   = ceil($offre->en_ligne_ce_mois_pendant->total_days) * $offre->abonnement->prix_journalier;
-            $resultat_offre  += $resultat_offre * 0.2;
             $resultat_global += $resultat_offre;
             if (strcasecmp($offre->abonnement->libelle, 'Gratuit') === 0) {
                 ?>
@@ -45,7 +44,7 @@ $page->put(function () {
             <?php
             } else {
                 ?>
-                <td><?= $resultat_offre ?>&nbsp;€</td>
+                <td><?= round($resultat_offre,2) ?>&nbsp;€</td>
             <?php
             }
             ?>
@@ -56,8 +55,16 @@ $page->put(function () {
         </tbody>
         <tfoot>
             <tr>
+                <th scope="row" colspan="4">Prix global HT</th>
+                <td><?= round($resultat_global,2) ?>&nbsp;€</td>
+            </tr>
+            <tr>
+                <th scope="row" colspan="4">TVA</th>
+                <td><?= round($resultat_global * 0.2,2) ?>&nbsp;€</td>
+            </tr>
+            <tr>
                 <th scope="row" colspan="4">Prix global TTC</th>
-                <td><?= $resultat_global ?>&nbsp;€</td>
+                <td><?= round($resultat_global + $resultat_global * 0.2 ,2) ?>&nbsp;€</td>
             </tr>
         </tfoot>
         </table>
