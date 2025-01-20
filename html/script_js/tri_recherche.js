@@ -155,7 +155,7 @@ function createOfferCardElement(offer) {
     function get(cls) { return element.getElementsByClassName(cls).item(0); }
 
     const imagePrincipale = get('offer-image-principale');
-    imagePrincipale.href = getImageFilename(offer.id_image_principale);
+    imagePrincipale.src = getImageFilename(offer.id_image_principale);
 
     const titre = get('titre');
     titre.href = '/autres_pages/detail_offre.php?id' + offer.id;
