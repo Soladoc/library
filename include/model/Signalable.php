@@ -3,6 +3,8 @@ require_once 'model/Model.php';
 require_once 'db.php';
 require_once 'redirect.php';
 
+echo "je suis bien chargé";
+
 // not abstract so we don't have to figure out which concrete class an id belongs, we don't need to anyway.
 class Signalable extends Model
 {
