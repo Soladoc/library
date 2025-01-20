@@ -9,16 +9,9 @@ let images;
 
 async function initializeOffers() {
     [offers, images] = await Promise.all([
-        getDataJson(`/json/offres.php`),
+        (await getDataJson(`/json/offres.php`)).filter(o => o.en_ligne),
         getDataJson(`/json/images.php`),
     ]);
-    offers = offers
-        .filter(offer => offer.en_ligne === true)  // Filter out offers where en_ligne is false
-        .map(offer => ({
-            ...offer,
-            tags: Array.isArray(offer.tags) ? offer.tags.map(tagObj => tagObj.tag.toLowerCase()) : []
-        }))
-        ;
     filterOffers();
 }
 initializeOffers();
