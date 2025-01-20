@@ -191,7 +191,7 @@ $resultat_global = 0;
 $id_professionnel = Auth\exiger_connecte_pro();
 $offres= Offre::from_db_all_ordered($id_professionnel);
 foreach ($offres as $offre) {
-    $resultat_offre  = $offre->en_ligne_ce_mois_pendant->days * $offre->abonnement->prix_journalier;
+    $resultat_offre  = round($offre->en_ligne_ce_mois_pendant->days * $offre->abonnement->prix_journalier,2);
     $resultat_global += $resultat_offre;
 
 
@@ -207,7 +207,7 @@ $pdf->SetFont('Arial', 'B', 12);
 $pdf->Cell(144, 10, 'Total HT', 1, 0, 'R');
 $pdf->Cell(48, 10, $resultat_global." ".EURO, 1, 1, 'C');
 //TVA
-$tva = $resultat_global * 0.2;
+$tva = round($resultat_global * 0.2,2);
 $pdf->Cell(144, 10, 'TVA (20%)', 1, 0, 'R');
 $pdf->Cell(48, 10, $tva." ".EURO, 1, 1, 'C');
 //Total TTC
