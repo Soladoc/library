@@ -45,7 +45,7 @@ $page->put(function () {
                 $resultat_offre   = ceil($offre->en_ligne_ce_mois_pendant->total_days) * $offre->abonnement->prix_journalier;
                 $resultat_global += $resultat_offre;
                 ?>
-                <td class="prix-ht"><?= round($resultat_offre,2) ?>&nbsp;€</td>
+                <td style="text-align : right !important;"><?= round($resultat_offre,2) ?>&nbsp;€</td>
             <?php
             }
             ?>
