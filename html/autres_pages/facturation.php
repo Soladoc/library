@@ -37,9 +37,10 @@ $page->put(function () {
             <td><?= h14s($offre->en_ligne_ce_mois_pendant->days) ?></td>
             <?php
             // affiche le prix de l'offre ce mois ci ou NA si l'offre est gratuite
+            //oui ce n'est pas propre de mettre un style dans la balise mais j'ai tout essayé peandant 1 h ca ne marche pas autrement
             if (strcasecmp($offre->abonnement->libelle, 'Gratuit') === 0) {
                 ?>
-                <td>N/A</td>
+                <td style="text-align : right !important;">N/A</td>
                 <?php
             } else {
                 $resultat_offre   = ceil($offre->en_ligne_ce_mois_pendant->total_days) * $offre->abonnement->prix_journalier;
@@ -57,15 +58,15 @@ $page->put(function () {
         <tfoot>
             <tr>
                 <th scope="row" colspan="4">Prix global HT</th>
-                <td><?= round($resultat_global,2) ?>&nbsp;€</td>
+                <td style="text-align : right !important;"><?= round($resultat_global,2) ?>&nbsp;€</td>
             </tr>
             <tr>
                 <th scope="row" colspan="4">TVA</th>
-                <td><?= round($resultat_global * 0.2,2) ?>&nbsp;€</td>
+                <td style="text-align : right !important;"><?= round($resultat_global * 0.2,2) ?>&nbsp;€</td>
             </tr>
             <tr>
                 <th scope="row" colspan="4">Prix global TTC</th>
-                <td><?= round($resultat_global + $resultat_global * 0.2 ,2) ?>&nbsp;€</td>
+                <td style="text-align : right !important;"><?= round($resultat_global + $resultat_global * 0.2 ,2) ?>&nbsp;€</td>
             </tr>
         </tfoot>
         </table>
