@@ -160,8 +160,8 @@ final class Page
                 </ul>
                 <article>
                     <p><a href="<?= h14s(location_mentions_legales()) ?>">Mentions légales</a></p>
-                    <p><a href="<?= h14s(location_cgu()) ?>">CGU</a></p>
-                    <p><a href="<?= h14s(location_cgv()) ?>">CGV</a></p>
+                    <p><a href="<?= h14s(location_cgu()) ?>"><abbr title="Conditions Générales d'Utilisation">CGU</abbr></a></p>
+                    <p><a href="<?= h14s(location_cgv()) ?>"><abbr title="Conditions Générales de Vente">CGV</abbr></a></p>
                 </article>
             </div>
             <div class="footer-bottom">
