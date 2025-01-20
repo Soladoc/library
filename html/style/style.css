@@ -1281,5 +1281,7 @@ label > input {
 }
 
 .text-align-right{
-    text-align: right;
+    display: flex;
+    flex-direction: row;
+    justify-content: right;
 }
