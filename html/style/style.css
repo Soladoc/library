@@ -1280,6 +1280,6 @@ label > input {
     font-style: italic;
 }
 
-table#facturation td.phix-ht{
-    text-align: right;
+.phix-ht{
+    text-align: right !important;
 }
