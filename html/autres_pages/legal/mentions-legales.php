@@ -1,7 +1,7 @@
 <?php
 require_once 'component/Page.php';
 require_once 'Parsedown.php';
-require_once 'include/Redirect.php';
+require_once 'include/redirect.php';
 
 $page = new Page('Mentions légales', main_class: 'text');
 
