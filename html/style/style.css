@@ -1280,8 +1280,6 @@ label > input {
     font-style: italic;
 }
 
-.text-align-right{
-    display: flex;
-    flex-direction: row;
-    justify-content: right;
+.prix-ht{
+    text-align: right;
 }
