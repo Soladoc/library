@@ -167,7 +167,7 @@ function createOfferCardElement(offer) {
 
     const prix_min = get('offer-prix-min');
     if (offer.prix_min) prix_min.textContent = offer.prix_min;
-    else prix_min.parent.remove();
+    else prix_min.parentElement.remove();
 
     get('offer-note').textContent = offer.note_moyenne;
     get('offer-creee-le').textContent = new Date(offer.creee_le).toLocaleDateString('fr-FR', { day: '2-digit', month: '2-digit', year: 'numeric' });
