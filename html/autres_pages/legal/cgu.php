@@ -1,7 +1,6 @@
 <?php
 require_once 'component/Page.php';
 require_once 'Parsedown.php';
-require_once 'redirect.php';
 
 $page = new Page('Conditions Générales d\'Utilisation', main_class: 'text');
 
@@ -14,7 +13,7 @@ $page->put( function(){
     <section class="centrer-enfants" >
         <div>
             <?=
-                $pd->text(file_get_contents(location_cgu(), use_include_path: true));
+                $pd->text(file_get_contents('doc/cgu.md', use_include_path: true));
             ?>     
         </div>
     </section>

@@ -1,8 +1,6 @@
 <?php
 require_once 'component/Page.php';
 require_once 'Parsedown.php';
-require_once 'redirect.php';
-
 $page = new Page('Conditions Générales de Vente', main_class: 'text');
 
 // 4 pages
@@ -14,7 +12,7 @@ $page->put( function(){
     <section class="centrer-enfants" >
         <div>
             <?=
-                $pd->text(file_get_contents(location_cgv(), use_include_path: true));
+                $pd->text(file_get_contents('doc/cgv.md', use_include_path: true));
             ?>     
         </div>
     </section>
