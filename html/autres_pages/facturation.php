@@ -69,8 +69,10 @@ $page->put(function () {
         </tfoot>
         </table>
     </section>
-       <!-- Bouton pour obtenir le pdf -->
-       <a class="btn-publish" href="facture_fpdf.php" id="obtenir_facture_pdf" target="_blank">Version PDF</a>
+    <!-- Bouton pour obtenir le pdf -->
+    <section class="centrer-enfant">
+        <a class="btn-publish" href="facture_fpdf.php" id="obtenir_facture_pdf" target="_blank">Version PDF</a>
+    </section>
 
     <?php
 });
