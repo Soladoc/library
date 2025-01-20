@@ -1,7 +1,7 @@
 <?php
 require_once 'component/Page.php';
 require_once 'Parsedown.php';
-require_once 'include/redirect.php';
+require_once 'redirect.php';
 
 $page = new Page('Conditions Générales de Vente', main_class: 'text');
 
