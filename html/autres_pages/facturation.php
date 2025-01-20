@@ -17,7 +17,7 @@ $page->put(function () {
                     <th scope="col">Type d'abonnement</th>
                     <th scope="col">Catégorie</th>
                     <th scope="col">Jours en ligne</th>
-                    <th class="test">Prix HT</th>
+                    <th scope="col">Prix HT</th>
                 </tr>
             </thead>
             <tbody>
