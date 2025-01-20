@@ -33,7 +33,7 @@ $page->put(function () {
             <tr>
             <td><?= h14s($offre->titre) ?></td>
             <td><?= h14s($offre->abonnement->libelle) ?></td>
-            <td><?= h14s($offre->abonnement->prix_journalier) ?>&nbsp;€</td>
+            <td class="prix-ht"><?= h14s( round($offre->abonnement->prix_journalier,2) ) ?>&nbsp;€</td>
             <td><?= h14s($offre->categorie) ?></td>
             <td><?= h14s($offre->en_ligne_ce_mois_pendant->days) ?></td>
             <?php
@@ -58,15 +58,15 @@ $page->put(function () {
         <tfoot>
             <tr>
                 <th scope="row" colspan="4">Prix global HT</th>
-                <td class="prix-ht"><?= round($resultat_global,2) ?>&nbsp;€</td>
+                <td class="prix-ht" colspan="2"><?= round($resultat_global,2) ?>&nbsp;€</td>
             </tr>
             <tr>
                 <th scope="row" colspan="4">TVA</th>
-                <td class="prix-ht"><?= round($resultat_global * 0.2,2) ?>&nbsp;€</td>
+                <td class="prix-ht" colspan="2"><?= round($resultat_global * 0.2,2) ?>&nbsp;€</td>
             </tr>
             <tr>
                 <th scope="row" colspan="4">Prix global TTC</th>
-                <td class="prix-ht"><?= round($resultat_global + $resultat_global * 0.2 ,2) ?>&nbsp;€</td>
+                <td class="prix-ht" colspan="2"><?= round($resultat_global + $resultat_global * 0.2 ,2) ?>&nbsp;€</td>
             </tr>
         </tfoot>
         </table>
