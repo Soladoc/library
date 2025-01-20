@@ -8,21 +8,7 @@ $page = new Page('Recherche', scripts: [
 ]);
 
 $page->put(function () {
-    $valider = getarg($_GET, "valider", required: false);
     $search = getarg($_GET, "search", required: false);
-    $modif_affichage = false;
-
-    if ($valider && !empty($search)) {
-        $modif_affichage = true;
-        $search = getarg($_GET, "search");
-    }
-
-    if ($_POST) {
-        $search = getarg($_POST, 'search', required: false);
-        if (!$search) {
-            $search = null;
-        }
-    }
     ?>
     <section class="search-section">
         <h1>Recherche</h1>

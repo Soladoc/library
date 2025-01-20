@@ -150,7 +150,7 @@ function filterOffers() {
 }
 
 function createOfferCardElement(offer) {
-    const element = document.getElementById('template-offer-card').content.cloneNode(true);
+    const element = document.getElementById('template-offer-card').content.cloneNode(true).firstElementChild;
 
     function get(cls) { return element.getElementsByClassName(cls).item(0); }
 
