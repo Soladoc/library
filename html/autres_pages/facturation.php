@@ -57,16 +57,16 @@ $page->put(function () {
         </tbody>
         <tfoot>
             <tr>
-                <th scope="row" colspan="4">Prix global HT</th>
-                <td class="prix-ht" colspan="2"><?= round($resultat_global,2) ?>&nbsp;€</td>
+                <th scope="row" colspan="5">Prix global HT</th>
+                <td class="prix-ht"><?= round($resultat_global,2) ?>&nbsp;€</td>
             </tr>
             <tr>
-                <th scope="row" colspan="4">TVA</th>
-                <td class="prix-ht" colspan="2"><?= round($resultat_global * 0.2,2) ?>&nbsp;€</td>
+                <th scope="row" colspan="5">TVA</th>
+                <td class="prix-ht"><?= round($resultat_global * 0.2,2) ?>&nbsp;€</td>
             </tr>
             <tr>
-                <th scope="row" colspan="4">Prix global TTC</th>
-                <td class="prix-ht" colspan="2"><?= round($resultat_global + $resultat_global * 0.2 ,2) ?>&nbsp;€</td>
+                <th scope="row" colspan="5">Prix global TTC</th>
+                <td class="prix-ht"><?= round($resultat_global + $resultat_global * 0.2 ,2) ?>&nbsp;€</td>
             </tr>
         </tfoot>
         </table>
