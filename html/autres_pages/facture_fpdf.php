@@ -207,12 +207,13 @@ $pdf->SetFont('Arial', 'B', 12);
 $pdf->Cell(144, 10, 'Total HT', 1, 0, 'R');
 $pdf->Cell(48, 10, $resultat_global." ".EURO, 1, 1, 'C');
 //TVA
+$tva = $resultat_global * 0.2;
 $pdf->Cell(144, 10, 'TVA (20%)', 1, 0, 'R');
-$pdf->Cell(48, 10, $resultat_global * 0.2." ".EURO, 1, 1, 'C');
+$pdf->Cell(48, 10, $tva." ".EURO, 1, 1, 'C');
 //Total TTC
-$resultat_global = $resultat_global + $resultat_global * 0.2 ; // ne fonctionne pas avec un '+='
+$resultat_global_ttc = $resultat_global + $resultat_global * 0.2 ; // ne fonctionne pas avec un '+='
 $pdf->Cell(144, 10, 'Total TTC', 1, 0, 'R');
-$pdf->Cell(48, 10, $resultat_global * 0.2." ".EURO, 1, 1, 'C');
+$pdf->Cell(48, 10, $resultat_global_ttc." ".EURO, 1, 1, 'C');
 
 // Générer et afficher le PDF
 $pdf->Output('I', "facture_Pact_$compte->denomination.pdf"); // I = afficher dans le navigateur, D = télécharger
