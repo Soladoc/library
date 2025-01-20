@@ -15,6 +15,7 @@ $page->put(function () {
                 <tr>
                     <th scope="col">Titre</th>
                     <th scope="col">Type d'abonnement</th>
+                    <th scope="col">Prix/J (HT)</th>
                     <th scope="col">Catégorie</th>
                     <th scope="col">Jours en ligne</th>
                     <th scope="col">Prix HT</th>
@@ -32,6 +33,7 @@ $page->put(function () {
             <tr>
             <td><?= h14s($offre->titre) ?></td>
             <td><?= h14s($offre->abonnement->libelle) ?></td>
+            <td><?= h14s($offre->abonnement->prix_journalier) ?>&nbsp;€</td>
             <td><?= h14s($offre->categorie) ?></td>
             <td><?= h14s($offre->en_ligne_ce_mois_pendant->days) ?></td>
             <?php
