@@ -36,15 +36,16 @@ $page->put(function () {
             <td><?= h14s($offre->categorie) ?></td>
             <td><?= h14s($offre->en_ligne_ce_mois_pendant->days) ?></td>
             <?php
-            $resultat_offre   = ceil($offre->en_ligne_ce_mois_pendant->total_days) * $offre->abonnement->prix_journalier;
-            $resultat_global += $resultat_offre;
+            // affiche le prix de l'offre ce mois ci ou NA si l'offre est gratuite
             if (strcasecmp($offre->abonnement->libelle, 'Gratuit') === 0) {
                 ?>
                 <td>N/A</td>
-            <?php
+                <?php
             } else {
+                $resultat_offre   = ceil($offre->en_ligne_ce_mois_pendant->total_days) * $offre->abonnement->prix_journalier;
+                $resultat_global += $resultat_offre;
                 ?>
-                <td><?= round($resultat_offre,2) ?>&nbsp;€</td>
+                <td class="text-align-right"><?= round($resultat_offre,2) ?>&nbsp;€</td>
             <?php
             }
             ?>
