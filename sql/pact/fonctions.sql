@@ -190,7 +190,7 @@ begin
     return en_ligne_pendant;
 end
 $$ language plpgsql strict stable;
-comment on function offre_en_ligne_pendant (int, timestamp, interval) is
+comment on function offre_en_ligne_pendant (int, timestamp, timestamp) is
 'Retourne la durée pendant laquelle un offre a été en ligne sur une période donnée.
 @param p_id_offre l''ID de l''offre
 @param p_debut début de la période d''observation
