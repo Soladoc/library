@@ -148,9 +148,6 @@ final class Page
             <div class="footer-content">
                 <div class="footer-logo">
                     <a href="/"><img src="/images/logo_vertical_big.png" alt="Logo PACT" width="5vh" height="5vh" loading="lazy"></a>
-                    <article>
-                        <p><a href="https://github.com/5cover/413/issues/new" target="_blank" rel="noopener noreferrer">Nous contacter</a></p>
-                    </article>
                 </div>
                 <ul class="social-links">
                     <li><a href="https://www.facebook.com" target="_blank" rel="noopener noreferrer"><img src="/images/social/facebook.png" alt="Facebook" width="90" height="90" loading="lazy" title="Facebook"></a></li>
@@ -162,6 +159,7 @@ final class Page
                     <p><a href="<?= h14s(location_mentions_legales()) ?>">Mentions légales</a></p>
                     <p><a href="<?= h14s(location_cgu()) ?>"><abbr title="Conditions Générales d'Utilisation">CGU</abbr></a></p>
                     <p><a href="<?= h14s(location_cgv()) ?>"><abbr title="Conditions Générales de Vente">CGV</abbr></a></p>
+                    <p><a href="https://github.com/5cover/413/issues/new" target="_blank" rel="noopener noreferrer">Nous contacter</a></p>
                 </article>
             </div>
             <div class="footer-bottom">
