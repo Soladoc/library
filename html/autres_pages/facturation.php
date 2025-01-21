@@ -10,7 +10,6 @@ $page = new Page('Facturation');
 const TVA = .2;
 
 $page->put(function () {
-    var_dump($offre);
     ?>
     <section class="centrer-enfants">
         <table id="facturation">
@@ -74,6 +73,7 @@ $page->put(function () {
                         
                         <?php
                         // affiche le prix de l'offre ce mois ci ou NA si l'offre est gratuite
+                        var_dump($offre->en_ligne_ce_mois_pendant);
                         if (strcasecmp($offre->abonnement->libelle, 'Gratuit') === 0 || $offre->en_ligne_ce_mois_pendant == 0 ) {
                         ?>
                             <td class="prix-ht">N/A</td><!-- nb de jours en ligne de l'offre -->
