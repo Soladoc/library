@@ -20,8 +20,8 @@ $page->put(function () {
 
                     <th scope="col">Option</th>
                     <th scope="col">Semaines d'option</th>
-                    <th scope="col">Prix option/semaine</th>
-                    <th scope="col">Prix Option</th>
+                    <th scope="col">Prix option/semaine(HT)</th>
+                    <th scope="col">Prix Option(HT)</th>
 
                     <th scope="col">Formule</th>
                     <th scope="col">Prix/J(HT)</th>
