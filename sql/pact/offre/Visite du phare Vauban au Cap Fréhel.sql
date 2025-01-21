@@ -134,7 +134,7 @@ Ne manquez pas cette opportunité unique de découvrir l''un des joyaux de la Br
         insert into
             _souscription_option (id_offre, nom_option, lancee_le, nb_semaines)
         values
-            ((table id_offre), 'À la Une', localtimestamp, 3)
+            ((table id_offre), 'À la Une', localtimestamp, 2)
     )
 insert into
     _ouverture_hebdomadaire (id_offre, dow, horaires)

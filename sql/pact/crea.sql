@@ -310,12 +310,13 @@ create table _changement_etat (
 
 create table _souscription_option (
     id_offre int
-        constraint souscription_option_pk primary key
         constraint souscription_option_fk_offre references _offre on delete cascade,
     nom_option nom_option not null
         constraint souscription_option_fk_option references _option,
     lancee_le timestamp not null,
-    nb_semaines int not null,
+    -- todo: this key could be improved - invalid state is still representable
+    constraint souscription_option_pk primary key (id_offre, nom_option, lancee_le),
+    nb_semaines int not null check (nb_semaines between 1 and 4),
     actif bool not null default true
 );
 
