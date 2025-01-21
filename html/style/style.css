@@ -1125,7 +1125,7 @@ section#info_compte div span {
     justify-content: center;
 }
 
-#facturation td {
+#facturation td,thead th {
     border: 1px solid;
     padding: 8px 10px;
 }

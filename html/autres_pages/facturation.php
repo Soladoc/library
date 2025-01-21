@@ -59,7 +59,7 @@ $page->put(function () {
                         }else{
                             $prixOption = false;
                         ?>
-                           <td>N/A</td> <!--  -->
+                           <td class="prix-ht">N/A</td> <!-- nom de l'option  -->
                            <td class="prix-ht">N/A</td> <!-- nb de semaine de l'options -->
                            <td class="prix-ht">N/A</td> <!-- prix option de la semaine -->
                            <td class="prix-ht">N/A</td> <!-- prix globale de l'option -->
