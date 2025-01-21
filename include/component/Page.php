@@ -147,7 +147,9 @@ final class Page
         <footer>
             <div class="footer-content">
                 <div class="footer-logo">
-                    <a href="/"><img src="/images/logo_vertical_big.png" alt="Logo PACT" width="5vh" height="5vh" loading="lazy"></a>
+                    <a href="/">
+                        <img src="/images/logo_vertical_big.png" alt="Logo PACT" width="5vh" height="5vh" loading="lazy">
+                    </a>
                 </div>
                 <ul class="social-links">
                     <li><a href="https://www.facebook.com" target="_blank" rel="noopener noreferrer"><img src="/images/social/facebook.png" alt="Facebook" width="90" height="90" loading="lazy" title="Facebook"></a></li>
