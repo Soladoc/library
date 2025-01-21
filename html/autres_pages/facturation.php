@@ -9,7 +9,7 @@ $page = new Page('Facturation');
 
 const TVA = .2;
 
-$page->put(function () {//ce commentaire est un test
+$page->put(function () {
     ?>
     <section class="centrer-enfants">
         <table id="facturation">
