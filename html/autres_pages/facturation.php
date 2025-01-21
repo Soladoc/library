@@ -73,18 +73,10 @@ $page->put(function () {
                         
                         <!-- je vérifie que le nb de jours en ligne ne sois pas a 0 -->
                         <?php
-                        if ($offre->en_ligne_ce_mois_pendant->days == 0) {
-                        ?>
-                            <td class="prix-ht">N/A</td>
-                        <?php
-                        }else{
-                        ?>
-                            <td class="prix-ht"><?= h14s($offre->en_ligne_ce_mois_pendant->days) ?></td>
-                        <?php  
-                        }
                         // affiche le prix de l'offre ce mois ci ou NA si l'offre est gratuite
-                        if (strcasecmp($offre->abonnement->libelle, 'Gratuit') === 0) {
+                        if (strcasecmp($offre->abonnement->libelle, 'Gratuit') === 0 || $offre->abonnement->libelle === 0 ) {
                             ?>
+                            <td class="prix-ht">N/A</td>
                             <td class="prix-ht">N/A</td>
                             <?php
                         } else {
@@ -94,6 +86,7 @@ $page->put(function () {
                             }                             
                             $resultat_global += $resultat_offre;
                             ?>
+                            <td class="prix-ht"><?= h14s($offre->en_ligne_ce_mois_pendant->days) ?></td><!-- nb de jours en ligne de l'offre -->
                             <td class="prix-ht"><?= round($resultat_offre, 2) ?>&nbsp;€</td>
                             <?php
                         }
