@@ -73,8 +73,8 @@ $page->put(function () {
                         
                         <?php
                         // affiche le prix de l'offre ce mois ci ou NA si l'offre est gratuite
-                        var_dump($offre->en_ligne_ce_mois_pendant);
-                        if (strcasecmp($offre->abonnement->libelle, 'Gratuit') === 0 || $offre->en_ligne_ce_mois_pendant == 0 ) {
+                        var_dump($offre->en_ligne_ce_mois_pendant->days);
+                        if (strcasecmp($offre->abonnement->libelle, 'Gratuit') === 0 || $offre->en_ligne_ce_mois_pendant->days == 0 ) {
                         ?>
                             <td class="prix-ht">N/A</td><!-- nb de jours en ligne de l'offre -->
                             <td class="prix-ht">N/A</td><!-- prix de l'offre -->
