@@ -28,12 +28,6 @@ footer > div:first-child ul li img {
     filter: drop-shadow(5px 5px 5px rgba(0, 0, 0, 0.2));
 }
 
-footer > div:first-child > div:first-child {
-    display: flex;
-    column-gap: 3em;
-    padding: 1em;
-}
-
 footer > div:nth-child(2) {
     padding: 1em 2em;
     display: flex;
@@ -53,9 +47,11 @@ footer > div:nth-child(2) {
 }
 
 .footer-logo img {
-    max-height: 5vh; /* L'image ne dépasse pas 5vh */
-    max-width: 5vh; /* L'image ne dépasse pas 5vh */
-    display: block; /* Évite les comportements indésirables liés à inline-block */
+    max-height: 5vh;
+    height: 5vh;
+    max-width: 5vh;
+    width: 5vh;
+    display: block; 
 }
 
 

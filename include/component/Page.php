@@ -148,7 +148,7 @@ final class Page
             <div class="footer-content">
                 <div class="footer-logo">
                     <a href="/">
-                        <img src="/images/logo_vertical_big.png" alt="Logo PACT" width="5vh" height="5vh" loading="lazy">
+                        <img src="/images/logo_vertical_big.png" alt="Logo PACT" loading="lazy">
                     </a>
                 </div>
                 <ul class="social-links">
