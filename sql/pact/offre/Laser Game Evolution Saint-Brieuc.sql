@@ -63,7 +63,7 @@ with
         insert into
             _souscription_option (id_offre, nom_option, lancee_le, nb_semaines)
         values
-            ((table id_offre), 'À la Une', localtimestamp, 5)
+            ((table id_offre), 'À la Une', localtimestamp, 1)
     )
 insert into
     _galerie (id_offre, id_image)
