@@ -147,7 +147,7 @@ final class Page
         <footer>
             <div class="footer-content">
                 <div class="footer-logo">
-                    <a href="/"><img src="/images/logo_vertical_big.png" alt="Logo PACT" width="500" height="500" loading="lazy"></a>
+                    <a href="/"><img src="/images/logo_vertical_big.png" alt="Logo PACT" width="5vh" height="5vh" loading="lazy"></a>
                     <article>
                         <p><a href="https://github.com/5cover/413/issues/new" target="_blank" rel="noopener noreferrer">Nous contacter</a></p>
                     </article>
