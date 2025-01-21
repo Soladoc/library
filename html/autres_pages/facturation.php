@@ -52,6 +52,7 @@ $page->put(function () {
 
                         <?php
                         }else{
+                            $prixOption = false;
                         ?>
                            <td>N/A</td> 
                            <td>N/A</td> 
