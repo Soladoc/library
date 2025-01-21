@@ -49,19 +49,19 @@ $page->put(function () {
                             ?>
                             <td><?= h14s($offre->option->nom) ?></td>
                             <td><?= h14s($offre->option->nb_semaines) ?></td>
-                            <td><?= h14s($offre->option->prix_hebdomadaire) ?>&nbsp;€</td>
+                            <td class="prix-ht"><?= h14s($offre->option->prix_hebdomadaire) ?>&nbsp;€</td>
                             <?php
                             $prixOption = $offre->option->nb_semaines * $offre->option->prix_hebdomadaire;
                             ?>
-                            <td><?= h14s(round($prixOption,2)) ?>&nbsp;€</td>
+                            <td class="prix-ht"><?= h14s(round($prixOption,2)) ?>&nbsp;€</td>
 
                         <?php
                         }else{
                             $prixOption = false;
                         ?>
                            <td>N/A</td> 
-                           <td>0</td> 
-                           <td>N/A</td> 
+                           <tdclass="prix-ht">0</td> 
+                           <td class="prix-ht">N/A</td> 
                            <td>0</td> 
                         <?php
                         }
