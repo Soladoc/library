@@ -22,7 +22,7 @@ create view offres as select
     offre_nb_avis(o.id) nb_avis,
     offre_creee_le(o.id) creee_le,
     offre_categorie(o.id) categorie,
-    offre_en_ligne_pendant(o.id, date_trunc('month', localtimestamp), '1 month') en_ligne_ce_mois_pendant,
+    offre_en_ligne_pendant(o.id, date_trunc('month', localtimestamp), '1 month' - date_trunc('month', localtimestamp)) en_ligne_ce_mois_pendant,
     offre_changement_ouverture_suivant_le(o.id, localtimestamp, o.periodes_ouverture) changement_ouverture_suivant_le,
     -- Considérer une offre sans période ou horaire comme ouverte tout le temps
     offre_est_ouverte(o.id, o.periodes_ouverture) est_ouverte,
