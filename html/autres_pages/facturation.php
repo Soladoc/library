@@ -48,7 +48,7 @@ $page->put(function () {
                             <?php
                             $prixOption = $offre->option->nb_semaines * $offre->option->prix_hebdomadaire;
                             ?>
-                            <td><?= h14s($prixOption) ?></td>
+                            <td><?= h14s(round($prixOption,2)) ?>&nbsp;€</td>
 
                         <?php
                         }else{
