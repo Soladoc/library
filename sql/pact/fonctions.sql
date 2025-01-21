@@ -151,19 +151,18 @@ On ne peut pas utiliser une vue pour les changements d''ouverture car il y en ai
 create function offre_en_ligne_pendant (
     p_id_offre int,
     p_debut timestamp,
-    p_duree interval
+    p_fin timestamp
 ) returns interval as $$
 declare
     fait_le timestamp;
     derniere_mise_en_ligne timestamp;
     en_ligne bool not null = false;
     en_ligne_pendant interval not null = '0';
-    fin constant timestamp not null = p_debut + p_duree;
     -- le premier changement d'état représente toujours la création.
     creee_le constant timestamp not null = c.fait_le from _changement_etat c where id_offre = p_id_offre order by fait_le limit 1;
 begin
-    if p_duree <= interval '0' then
-        raise 'La durée doit être positive';
+    if p_fin < p_debut then
+        raise 'La fin doit être postérieure au début';
     end if;
 
     for fait_le in
@@ -171,7 +170,7 @@ begin
     loop
         en_ligne = not en_ligne;
 
-        if fin <= fait_le then
+        if p_fin <= fait_le then
             exit;
         elseif p_debut <= fait_le then
             if en_ligne then -- mise en ligne
@@ -185,7 +184,7 @@ begin
     end loop;
 
     if en_ligne then
-        en_ligne_pendant = en_ligne_pendant + (fin - coalesce(derniere_mise_en_ligne, greatest(p_debut, creee_le)));
+        en_ligne_pendant = en_ligne_pendant + (p_fin - coalesce(derniere_mise_en_ligne, greatest(p_debut, creee_le)));
     end if;
 
     return en_ligne_pendant;
@@ -195,5 +194,5 @@ comment on function offre_en_ligne_pendant (int, timestamp, interval) is
 'Retourne la durée pendant laquelle un offre a été en ligne sur une période donnée.
 @param p_id_offre l''ID de l''offre
 @param p_debut début de la période d''observation
-@param p_duree durée de la période d''observation
-@returns La valeur de retour est inférieure ou égale à @p p_duree';
+@param p_fin fin de la période d''observation
+@returns La valeur de retour est inférieure ou égale à @p p_fin - @p p_debut';
