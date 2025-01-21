@@ -21,6 +21,7 @@ footer > div:first-child ul {
     column-gap: 4em;
     height: fit-content;
     align-items: center;
+    align-self: center;
 }
 
 footer > div:first-child ul li img {
