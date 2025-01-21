@@ -20,7 +20,7 @@ $page->put(function () {
 
                     <th scope="col">Option</th>
                     <th scope="col">Semaines d'option</th>
-                    <th scope="col">Prix HT option</th>
+                    <th scope="col">Prix unitaire d'option</th>
                     <th scope="col">Prix Option</th>
 
                     <th scope="col">Formule</th>
@@ -49,7 +49,7 @@ $page->put(function () {
                             ?>
                             <td><?= h14s($offre->option->nom) ?></td>
                             <td><?= h14s($offre->option->nb_semaines) ?></td>
-                            <td><?= h14s($offre->option->nb_semaines) ?></td>
+                            <td><?= h14s($offre->option->prix_hebdomadaire) ?>&nbsp;€</td>
                             <?php
                             $prixOption = $offre->option->nb_semaines * $offre->option->prix_hebdomadaire;
                             ?>
