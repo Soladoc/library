@@ -41,14 +41,14 @@ $page->put(function () {
                     ?>
                     <tr>
                         <td><?= h14s($offre->titre) ?></td>
-                        <td><?= h14s($offre->option->nb_semaines) ?></td>
                         <td><?= h14s($offre->categorie) ?></td>
-
+                        
                         <!-- affiche le type de l'option -->
                         <?php 
                         if ($offre->option) {
-                        ?>
+                            ?>
                             <td><?= h14s($offre->option->nom) ?></td>
+                            <td><?= h14s($offre->option->nb_semaines) ?></td>
                             <td><?= h14s($offre->option->nb_semaines) ?></td>
                             <?php
                             $prixOption = $offre->option->nb_semaines * $offre->option->prix_hebdomadaire;
