@@ -104,7 +104,6 @@ abstract class Offre extends Signalable
         public string $description_detaillee,
         public ?string $url_site_web,
         public MultiRange $periodes_ouverture,
-        //
         protected ?FiniteTimestamp $modifiee_le                     = null,
         protected ?bool $en_ligne                                   = null,
         protected ?float $note_moyenne                              = null,
