@@ -1130,6 +1130,10 @@ section#info_compte div span {
     padding: 8px 10px;
 }
 
+#facturation tfoot th {
+    margin-left: 10px;
+}
+
 .body-center {
     display: flex;
     justify-content: center;
