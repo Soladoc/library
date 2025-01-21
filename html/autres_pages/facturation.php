@@ -7,6 +7,8 @@ require_once 'util.php';
 
 $page = new Page('Facturation');
 
+const TVA = .2;
+
 $page->put(function () {
     ?>
     <section class="centrer-enfants">
@@ -61,12 +63,12 @@ $page->put(function () {
                 <td class="prix-ht"><?= round($resultat_global,2) ?>&nbsp;€</td>
             </tr>
             <tr>
-                <th scope="row" colspan="5">TVA</th>
-                <td class="prix-ht"><?= round($resultat_global * 0.2,2) ?>&nbsp;€</td>
+                <th scope="row" colspan="5">TVA <?= TVA * 100 ?>&nbsp;%</th>
+                <td class="prix-ht"><?= round($resultat_global * TVA,2) ?>&nbsp;€</td>
             </tr>
             <tr>
                 <th scope="row" colspan="5">Prix global TTC</th>
-                <td class="prix-ht"><?= round($resultat_global + $resultat_global * 0.2 ,2) ?>&nbsp;€</td>
+                <td class="prix-ht"><?= round($resultat_global + $resultat_global * TVA ,2) ?>&nbsp;€</td>
             </tr>
         </tfoot>
         </table>
