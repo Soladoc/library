@@ -24,53 +24,53 @@ $page->put(function () {
                 </tr>
             </thead>
             <tbody>
-        <?php
-
-        $resultat_global  = 0;  // resultat global
-        $resultat_offre   = 0;  // resultat offre
-        $id_professionnel = Auth\exiger_connecte_pro();
-        $offres           = Offre::from_db_all_ordered(id_professionnel: $id_professionnel);
-        foreach ($offres as $offre) {
-            ?>
-            <tr>
-            <td><?= h14s($offre->titre) ?></td>
-            <td><?= h14s($offre->categorie) ?></td>
-            <td><?= h14s($offre->abonnement->libelle) ?></td>
-            <td class="prix-ht"><?= h14s( round($offre->abonnement->prix_journalier,2) ) ?>&nbsp;€</td>
-            <td><?= h14s($offre->en_ligne_ce_mois_pendant->days) ?></td>
-            <?php
-            // affiche le prix de l'offre ce mois ci ou NA si l'offre est gratuite
-            if (strcasecmp($offre->abonnement->libelle, 'Gratuit') === 0) {
-                ?>
-                <td class="prix-ht">N/A</td>
                 <?php
-            } else {
-                $resultat_offre   = ceil($offre->en_ligne_ce_mois_pendant->days) * $offre->abonnement->prix_journalier;
-                $resultat_global += $resultat_offre;
+
+                $resultat_global = 0;  // resultat global
+                $resultat_offre = 0;  // resultat offre
+                $id_professionnel = Auth\exiger_connecte_pro();
+                $offres = Offre::from_db_all_ordered(id_professionnel: $id_professionnel);
+                foreach ($offres as $offre) {
+                    ?>
+                    <tr>
+                        <td><?= h14s($offre->titre) ?></td>
+                        <td><?= h14s($offre->categorie) ?></td>
+                        <td><?= h14s($offre->abonnement->libelle) ?></td>
+                        <td class="prix-ht"><?= h14s(round($offre->abonnement->prix_journalier, 2)) ?>&nbsp;€</td>
+                        <td><?= h14s($offre->en_ligne_ce_mois_pendant->days) ?></td>
+                        <?php
+                        // affiche le prix de l'offre ce mois ci ou NA si l'offre est gratuite
+                        if (strcasecmp($offre->abonnement->libelle, 'Gratuit') === 0) {
+                            ?>
+                            <td class="prix-ht">N/A</td>
+                            <?php
+                        } else {
+                            $resultat_offre = ceil($offre->en_ligne_ce_mois_pendant->days) * $offre->abonnement->prix_journalier;
+                            $resultat_global += $resultat_offre;
+                            ?>
+                            <td class="prix-ht"><?= round($resultat_offre, 2) ?>&nbsp;€</td>
+                            <?php
+                        }
+                        ?>
+                    </tr>
+                    <?php
+                }
                 ?>
-                <td class="prix-ht"><?= round($resultat_offre,2) ?>&nbsp;€</td>
-            <?php
-            }
-            ?>
-            </tr>
-            <?php
-        }
-        ?>
-        </tbody>
-        <tfoot>
-            <tr>
-                <th scope="row" colspan="5">Prix global HT</th>
-                <td class="prix-ht"><?= round($resultat_global,2) ?>&nbsp;€</td>
-            </tr>
-            <tr>
-                <th scope="row" colspan="5">TVA <?= TVA * 100 ?>&nbsp;%</th>
-                <td class="prix-ht"><?= round($resultat_global * TVA,2) ?>&nbsp;€</td>
-            </tr>
-            <tr>
-                <th scope="row" colspan="5">Prix global TTC</th>
-                <td class="prix-ht"><?= round($resultat_global + $resultat_global * TVA ,2) ?>&nbsp;€</td>
-            </tr>
-        </tfoot>
+            </tbody>
+            <tfoot>
+                <tr>
+                    <th scope="row" colspan="5">Prix global HT</th>
+                    <td class="prix-ht"><?= round($resultat_global, 2) ?>&nbsp;€</td>
+                </tr>
+                <tr>
+                    <th scope="row" colspan="5">TVA <?= TVA * 100 ?>&nbsp;%</th>
+                    <td class="prix-ht"><?= round($resultat_global * TVA, 2) ?>&nbsp;€</td>
+                </tr>
+                <tr>
+                    <th scope="row" colspan="5">Prix global TTC</th>
+                    <td class="prix-ht"><?= round($resultat_global + $resultat_global * TVA, 2) ?>&nbsp;€</td>
+                </tr>
+            </tfoot>
         </table>
     </section>
     <!-- Bouton pour obtenir le pdf -->
