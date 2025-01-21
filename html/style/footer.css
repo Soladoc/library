@@ -45,7 +45,7 @@ footer > div:nth-child(2) {
     justify-content: center;
     align-items: center; /* Centre le contenu, y compris l'image */
     align-self: center;
-    justify-self: center;
+    margin-left: 1vh;
 }
 
 .footer-logo img {
