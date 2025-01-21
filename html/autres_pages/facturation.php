@@ -60,9 +60,9 @@ $page->put(function () {
                             $prixOption = false;
                         ?>
                            <td>N/A</td> 
-                           <td class="prix-ht">0</td> 
-                           <td class="prix-ht">N/A</td> 
                            <td>0</td> 
+                           <td class="prix-ht">N/A</td> 
+                           <td class="prix-ht">0</td> 
                         <?php
                         }
                         ?>
