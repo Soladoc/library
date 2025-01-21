@@ -39,16 +39,16 @@ footer > div:nth-child(2) {
     background-color: #f2f3f9;
     border: 2px solid #f2f3f9;
     border-radius: 0.5em; /* Les bords arrondis pour le conteneur */
-    height: 7vh;
-    width: 7vh;
+    height: 12vh;
+    width: 12vh;
     display: flex;
     justify-content: center;
     align-items: center; /* Centre le contenu, y compris l'image */
 }
 
 .footer-logo img {
-    height: 5vh;
-    width: 5vh;
+    height: 10vh;
+    width: 10vh;
     display: block; 
 }
 
