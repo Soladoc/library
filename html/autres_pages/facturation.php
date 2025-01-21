@@ -10,6 +10,7 @@ $page = new Page('Facturation');
 const TVA = .2;
 
 $page->put(function () {
+    var_dump($offre);
     ?>
     <section class="centrer-enfants">
         <table id="facturation">
