@@ -47,7 +47,7 @@ $page->put(function () {
                         <?php 
                         if ($offre->option) {
                             ?>
-                            <td><?= h14s($offre->option->nom) ?></td>
+                            <td class="prix-ht"><?= h14s($offre->option->nom) ?></td>
                             <td class="prix-ht"><?= h14s($offre->option->nb_semaines) ?></td>
                             <td class="prix-ht"><?= h14s($offre->option->prix_hebdomadaire) ?>&nbsp;€</td>
                             <?php
