@@ -20,7 +20,7 @@ $page->put(function () {
 
                     <th scope="col">Option</th>
                     <th scope="col">Semaines d'option</th>
-                    <th scope="col">Prix unitaire d'option</th>
+                    <th scope="col">Prix option/semaine</th>
                     <th scope="col">Prix Option</th>
 
                     <th scope="col">Formule</th>
@@ -94,15 +94,15 @@ $page->put(function () {
             </tbody>
             <tfoot>
                 <tr>
-                    <th scope="row" colspan="5">Prix global HT</th>
+                    <th scope="row" colspan="0">Prix global HT</th>
                     <td class="prix-ht"><?= round($resultat_global, 2) ?>&nbsp;€</td>
                 </tr>
                 <tr>
-                    <th scope="row" colspan="5">TVA <?= TVA * 100 ?>&nbsp;%</th>
+                    <th scope="row" colspan="0">TVA <?= TVA * 100 ?>&nbsp;%</th>
                     <td class="prix-ht"><?= round($resultat_global * TVA, 2) ?>&nbsp;€</td>
                 </tr>
                 <tr>
-                    <th scope="row" colspan="5">Prix global TTC</th>
+                    <th scope="row" colspan="0">Prix global TTC</th>
                     <td class="prix-ht"><?= round($resultat_global + $resultat_global * TVA, 2) ?>&nbsp;€</td>
                 </tr>
             </tfoot>
