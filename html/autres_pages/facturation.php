@@ -18,6 +18,8 @@ $page->put(function () {
                     <th scope="col">Titre</th>
                     <th scope="col">Catégorie</th>
                     <th scope="col">Option</th>
+                    <th scope="col">Prix HT option</th>
+                    <th scope="col">Prix Option</th>
                     <th scope="col">Formule</th>
                     <th scope="col">Prix/J(HT)</th>
                     <th scope="col">Jours en ligne</th>
@@ -42,10 +44,18 @@ $page->put(function () {
                         if ($offre->option) {
                         ?>
                             <td><?= h14s($offre->option->nom) ?></td>
+                            <td><?= h14s($offre->option->nb_semaines) ?></td>
+                            <?php
+                            $prixOption = $offre->option->nb_semaines * $offre->option->prix_hebdomadaire;
+                            ?>
+                            <td><?= h14s($prixOption) ?></td>
+
                         <?php
                         }else{
                         ?>
                            <td>N/A</td> 
+                           <td>N/A</td> 
+                           <td>0</td> 
                         <?php
                         }
                         ?>
@@ -61,6 +71,9 @@ $page->put(function () {
                             <?php
                         } else {
                             $resultat_offre = ceil($offre->en_ligne_ce_mois_pendant->days) * $offre->abonnement->prix_journalier;
+                            if ($prixOption) {
+                                $resultat_offre = $resultat_offre + $prixOption; 
+                            }                             
                             $resultat_global += $resultat_offre;
                             ?>
                             <td class="prix-ht"><?= round($resultat_offre, 2) ?>&nbsp;€</td>
