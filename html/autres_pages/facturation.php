@@ -17,12 +17,16 @@ $page->put(function () {
                 <tr>
                     <th scope="col">Titre</th>
                     <th scope="col">Catégorie</th>
+
                     <th scope="col">Option</th>
+                    <th scope="col">Semaines d'option</th>
                     <th scope="col">Prix HT option</th>
                     <th scope="col">Prix Option</th>
+
                     <th scope="col">Formule</th>
                     <th scope="col">Prix/J(HT)</th>
                     <th scope="col">Jours en ligne</th>
+
                     <th scope="col">Prix HT</th>
                 </tr>
             </thead>
@@ -37,6 +41,7 @@ $page->put(function () {
                     ?>
                     <tr>
                         <td><?= h14s($offre->titre) ?></td>
+                        <td><?= h14s($offre->option->nb_semaines) ?></td>
                         <td><?= h14s($offre->categorie) ?></td>
 
                         <!-- affiche le type de l'option -->
@@ -55,6 +60,7 @@ $page->put(function () {
                             $prixOption = false;
                         ?>
                            <td>N/A</td> 
+                           <td>0</td> 
                            <td>N/A</td> 
                            <td>0</td> 
                         <?php
