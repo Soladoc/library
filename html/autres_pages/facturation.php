@@ -94,15 +94,15 @@ $page->put(function () {
             </tbody>
             <tfoot>
                 <tr>
-                    <th scope="row" colspan="0">Prix global HT</th>
+                    <th scope="row" colspan="9">Prix global HT</th>
                     <td class="prix-ht"><?= round($resultat_global, 2) ?>&nbsp;€</td>
                 </tr>
                 <tr>
-                    <th scope="row" colspan="0">TVA <?= TVA * 100 ?>&nbsp;%</th>
+                    <th scope="row" colspan="9">TVA <?= TVA * 100 ?>&nbsp;%</th>
                     <td class="prix-ht"><?= round($resultat_global * TVA, 2) ?>&nbsp;€</td>
                 </tr>
                 <tr>
-                    <th scope="row" colspan="0">Prix global TTC</th>
+                    <th scope="row" colspan="9">Prix global TTC</th>
                     <td class="prix-ht"><?= round($resultat_global + $resultat_global * TVA, 2) ?>&nbsp;€</td>
                 </tr>
             </tfoot>
