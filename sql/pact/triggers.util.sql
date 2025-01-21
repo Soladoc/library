@@ -93,7 +93,7 @@ begin
     new.nb_avis = offre_nb_avis(new.id);
     new.prix_min = offre_prix_min(new.id);
     new.creee_le = offre_creee_le(new.id);
-    new.en_ligne_ce_mois_pendant = offre_en_ligne_pendant(new.id, date_trunc('month', localtimestamp), '1 month');
+    new.en_ligne_ce_mois_pendant = offre_en_ligne_pendant(new.id, date_trunc('month', localtimestamp), localtimestamp);
     new.changement_ouverture_suivant_le = offre_changement_ouverture_suivant_le(new.id, localtimestamp, new.periodes_ouverture);
     new.est_ouverte = offre_est_ouverte(new.id, new.periodes_ouverture);
     -- new.option devrait tjrs etre null
