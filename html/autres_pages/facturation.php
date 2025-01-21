@@ -59,18 +59,29 @@ $page->put(function () {
                         }else{
                             $prixOption = false;
                         ?>
-                           <td>N/A</td> 
-                           <td class="prix-ht">0</td> 
-                           <td class="prix-ht">N/A</td> 
-                           <td class="prix-ht">0</td> 
+                           <td>N/A</td> <!--  -->
+                           <td class="prix-ht">N/A</td> <!-- nb de semaine de l'options -->
+                           <td class="prix-ht">N/A</td> <!-- prix option de la semaine -->
+                           <td class="prix-ht">N/A</td> <!-- prix globale de l'option -->
                         <?php
                         }
                         ?>
                         
+                        <!-- section de l'abonnement -->
                         <td><?= h14s($offre->abonnement->libelle) ?></td>
                         <td class="prix-ht"><?= h14s(round($offre->abonnement->prix_journalier, 2)) ?>&nbsp;€</td>
-                        <td class="prix-ht"><?= h14s($offre->en_ligne_ce_mois_pendant->days) ?></td>
+                        
+                        <!-- je vérifie que le nb de jours en ligne ne sois pas a 0 -->
                         <?php
+                        if ($offre->en_ligne_ce_mois_pendant->days == 0) {
+                        ?>
+                            <td class="prix-ht">N/A</td>
+                        <?php
+                        }else{
+                        ?>
+                            <td class="prix-ht"><?= h14s($offre->en_ligne_ce_mois_pendant->days) ?></td>
+                        <?php  
+                        }
                         // affiche le prix de l'offre ce mois ci ou NA si l'offre est gratuite
                         if (strcasecmp($offre->abonnement->libelle, 'Gratuit') === 0) {
                             ?>
