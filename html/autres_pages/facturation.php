@@ -71,14 +71,13 @@ $page->put(function () {
                         <td><?= h14s($offre->abonnement->libelle) ?></td>
                         <td class="prix-ht"><?= h14s(round($offre->abonnement->prix_journalier, 2)) ?>&nbsp;€</td>
                         
-                        <!-- je vérifie que le nb de jours en ligne ne sois pas a 0 -->
                         <?php
                         // affiche le prix de l'offre ce mois ci ou NA si l'offre est gratuite
                         if (strcasecmp($offre->abonnement->libelle, 'Gratuit') === 0 || $offre->en_ligne_ce_mois_pendant == 0 ) {
-                            ?>
+                        ?>
                             <td class="prix-ht">N/A</td><!-- nb de jours en ligne de l'offre -->
                             <td class="prix-ht">N/A</td><!-- prix de l'offre -->
-                            <?php
+                        <?php
                         } else {
                             $resultat_offre = ceil($offre->en_ligne_ce_mois_pendant->days) * $offre->abonnement->prix_journalier;
                             if ($prixOption) {
