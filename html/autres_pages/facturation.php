@@ -76,8 +76,8 @@ $page->put(function () {
                         // affiche le prix de l'offre ce mois ci ou NA si l'offre est gratuite
                         if (strcasecmp($offre->abonnement->libelle, 'Gratuit') === 0 || $offre->abonnement->libelle === 0 ) {
                             ?>
-                            <td class="prix-ht">N/A</td>
-                            <td class="prix-ht">N/A</td>
+                            <td class="prix-ht">N/A</td><!-- nb de jours en ligne de l'offre -->
+                            <td class="prix-ht">N/A</td><!-- prix de l'offre -->
                             <?php
                         } else {
                             $resultat_offre = ceil($offre->en_ligne_ce_mois_pendant->days) * $offre->abonnement->prix_journalier;
