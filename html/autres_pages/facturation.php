@@ -19,7 +19,7 @@ $page->put(function () {
                     <th scope="col">Catégorie</th>
                     <th scope="col">Formule</th>
                     <th scope="col">Prix/J(HT)</th>
-                    <th scope="col">Jours<br>en<br>ligne</th>
+                    <th scope="col">Jours en ligne</th>
                     <th scope="col">Prix HT</th>
                 </tr>
             </thead>
