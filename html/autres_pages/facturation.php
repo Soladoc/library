@@ -17,9 +17,16 @@ $page->put(function () {
                 <tr>
                     <th scope="col">Titre</th>
                     <th scope="col">Catégorie</th>
-                    <th scope="col">Type d'abonnement</th>
-                    <th scope="col">Prix/J (HT)</th>
+
+                    <th scope="col">Option</th>
+                    <th scope="col">Semaines d'option</th>
+                    <th scope="col">Prix option/semaine(HT)</th>
+                    <th scope="col">Prix Option(HT)</th>
+
+                    <th scope="col">Formule</th>
+                    <th scope="col">Prix/J(HT)</th>
                     <th scope="col">Jours en ligne</th>
+
                     <th scope="col">Prix HT</th>
                 </tr>
             </thead>
@@ -35,6 +42,31 @@ $page->put(function () {
                     <tr>
                         <td><?= h14s($offre->titre) ?></td>
                         <td><?= h14s($offre->categorie) ?></td>
+                        
+                        <!-- affiche le type de l'option -->
+                        <?php 
+                        if ($offre->option) {
+                            ?>
+                            <td><?= h14s($offre->option->nom) ?></td>
+                            <td><?= h14s($offre->option->nb_semaines) ?></td>
+                            <td><?= h14s($offre->option->prix_hebdomadaire) ?>&nbsp;€</td>
+                            <?php
+                            $prixOption = $offre->option->nb_semaines * $offre->option->prix_hebdomadaire;
+                            ?>
+                            <td><?= h14s(round($prixOption,2)) ?>&nbsp;€</td>
+
+                        <?php
+                        }else{
+                            $prixOption = false;
+                        ?>
+                           <td>N/A</td> 
+                           <td>0</td> 
+                           <td>N/A</td> 
+                           <td>0</td> 
+                        <?php
+                        }
+                        ?>
+                        
                         <td><?= h14s($offre->abonnement->libelle) ?></td>
                         <td class="prix-ht"><?= h14s(round($offre->abonnement->prix_journalier, 2)) ?>&nbsp;€</td>
                         <td><?= h14s($offre->en_ligne_ce_mois_pendant->days) ?></td>
@@ -46,6 +78,9 @@ $page->put(function () {
                             <?php
                         } else {
                             $resultat_offre = ceil($offre->en_ligne_ce_mois_pendant->days) * $offre->abonnement->prix_journalier;
+                            if ($prixOption) {
+                                $resultat_offre = $resultat_offre + $prixOption; 
+                            }                             
                             $resultat_global += $resultat_offre;
                             ?>
                             <td class="prix-ht"><?= round($resultat_offre, 2) ?>&nbsp;€</td>
@@ -59,15 +94,15 @@ $page->put(function () {
             </tbody>
             <tfoot>
                 <tr>
-                    <th scope="row" colspan="5">Prix global HT</th>
+                    <th scope="row" colspan="9">Prix global HT</th>
                     <td class="prix-ht"><?= round($resultat_global, 2) ?>&nbsp;€</td>
                 </tr>
                 <tr>
-                    <th scope="row" colspan="5">TVA <?= TVA * 100 ?>&nbsp;%</th>
+                    <th scope="row" colspan="9">TVA <?= TVA * 100 ?>&nbsp;%</th>
                     <td class="prix-ht"><?= round($resultat_global * TVA, 2) ?>&nbsp;€</td>
                 </tr>
                 <tr>
-                    <th scope="row" colspan="5">Prix global TTC</th>
+                    <th scope="row" colspan="9">Prix global TTC</th>
                     <td class="prix-ht"><?= round($resultat_global + $resultat_global * TVA, 2) ?>&nbsp;€</td>
                 </tr>
             </tfoot>
