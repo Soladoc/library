@@ -21,7 +21,6 @@ function redirect_to(string $location): never
  */
 function location_connexion(?string $error = null, ?string $return_url = null, ?string $pseudo = null): string
 {
-
     return '/autres_pages/connexion.php?' . http_build_query(['error' => $error, 'return_url' => $return_url, 'pseudo' => $pseudo]);
 }
 
@@ -50,9 +49,9 @@ function location_creation_offre(): string
     return '/autres_pages/choix_categorie_creation_offre.php';
 }
 
-function location_facturation(): string
+function location_facturation(?int $id_offre = null): string
 {
-    return '/autres_pages/facturation.php';
+    return '/autres_pages/facturation.php?' . http_build_query(['id_offre' => $id_offre]);
 }
 
 function location_detail_compte(): string
@@ -67,7 +66,6 @@ function location_modifier_offre(Offre $offre): string
 
 function location_modifier_compte(int $id, ?string $error = null): string
 {
-
     return '/autres_pages/modif_compte.php?' . http_build_query(['id' => $id, 'return_url' => $_SERVER['REQUEST_URI'], 'error' => $error]);
 }
 
@@ -110,10 +108,12 @@ function location_mentions_legales()
 {
     return '/autres_pages/legal/mentions-legales.php';
 }
+
 function location_cgu()
 {
     return '/autres_pages/legal/cgu.php';
 }
+
 function location_cgv()
 {
     return '/autres_pages/legal/cgv.php';

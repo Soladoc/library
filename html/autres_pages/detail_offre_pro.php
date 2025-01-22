@@ -24,17 +24,18 @@ $review_list = new ReviewList($offre);
 
 $page->put(function () use ($offre, $review_list) {
     ?>
-    <section class="modif">
-        <div class="bandeau-etat <?= $offre->en_ligne ? 'vert' : 'rouge' ?>">
-            <p class="etat"><?= $offre->en_ligne ? 'Offre en ligne' : 'Offre hors ligne' ?></p>
-            <button type="button" class="bouton" id="alternateButton">
-                <?= $offre->en_ligne ? 'Mettre hors ligne' : 'Mettre en ligne' ?>
-            </button>
-            <form id="toggleForm" method="post" style="display: inline;">
-                <button type="submit" name="valider" class="bouton" id="validateButton" disabled>Valider</button>
-            </form>
-            <a class="bouton modifier" href="<?= h14s(location_modifier_offre($offre)) ?>">Modifier</a>
-        </div>
+    <section class="bandeau-etat <?= $offre->en_ligne ? 'vert' : 'rouge' ?>">
+        <p class="etat"><?= $offre->en_ligne ? 'Offre en ligne' : 'Offre hors ligne' ?></p>
+        <button type="button" class="bouton" id="alternateButton">
+            <?= $offre->en_ligne ? 'Mettre hors ligne' : 'Mettre en ligne' ?>
+        </button>
+        <form id="toggleForm" method="post" style="display: inline;">
+            <button type="submit" name="valider" class="bouton" id="validateButton" disabled>Valider</button>
+        </form>
+        <a class="bouton modifier" href="<?= h14s(location_modifier_offre($offre)) ?>">Modifier</a>
+        <?php if ($offre->abonnement->libelle !== 'gratuit') { ?>
+            <a id="a-facturation"- class="btn-more-info bouton_principale_pro" href="<?= h14s(location_facturation($offre->id)) ?>">Facturation</a>
+        <?php } ?>
     </section>
 
     <section class="offer-details">

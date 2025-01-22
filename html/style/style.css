@@ -89,6 +89,7 @@ header {
     padding: 10px 20px;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
     position: relative;
+    z-index: 1;
 }
 
 header #header_pro {
@@ -1036,17 +1037,23 @@ section#info_compte div span {
     display: flex;
     justify-content: center;
     align-items: center;
-    padding: 10px;
-    border-radius: 5px;
     margin-bottom: 20px;
+    border-radius: 5px;
+    padding: .8em;
+    position: relative;
 }
 
-.bandeau-etat.vert {
+#a-facturation {
+    position: absolute;
+    right: 1em;
+}
+
+.vert {
     background-color: #d4f4dd;
     /* Vert pastel */
 }
 
-.bandeau-etat.rouge {
+.rouge {
     background-color: #f4d4d4;
     /* Rouge pastel */
 }
