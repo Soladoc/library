@@ -11,7 +11,7 @@ final class FiniteTimestamp implements JsonSerializable
     private const FORMAT = '!Y-m-d H:i:s.u';
 
     private function __construct(
-        private readonly DateTimeImmutable $datetime,
+        readonly DateTimeImmutable $datetime,
     ) {}
 
     /**

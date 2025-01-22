@@ -1,4 +1,5 @@
 <?php
+require_once 'const.php';
 require_once 'component/Page.php';
 require_once 'auth.php';
 require_once 'model/Duree.php';
@@ -7,7 +8,7 @@ require_once 'util.php';
 
 $page = new Page('Facturation');
 
-const TVA = .2;
+const TVA = 0.2;
 
 $page->put(function () {
     ?>
@@ -32,14 +33,21 @@ $page->put(function () {
             </thead>
             <tbody>
                 <?php
-                $resultat_global = 0;
                 if ($offre = mapnull(getarg($_GET, 'id_offre', arg_int(), required: false), Offre::from_db(...))) {
-                    $resultat_global += facturer($offre);
+                    $offres = [$offre];
                 } else {
                     $id_professionnel = Auth\exiger_connecte_pro();
-                    foreach (Offre::from_db_all_ordered(id_professionnel: $id_professionnel) as $offre) {
-                        $resultat_global += facturer($offre);
-                    }
+                    $offres           = iterator_to_array(Offre::from_db_all_ordered(id_professionnel: $id_professionnel));
+                }
+
+                put_select_mois(
+                    min(array_map(fn($o) => $o->creee_le->datetime, $offres)),
+                    getarg($_GET, 'mois', required: false),
+                );
+
+                $resultat_global = 0;
+                foreach ($offres as $offre) {
+                    $resultat_global += facturer($offre);
                 }
                 ?>
             </tbody>
@@ -124,4 +132,26 @@ function facturer($offre)
     </tr>
     <?php
     return $resultat_offre;
+}
+
+function put_select_mois(DateTimeInterface $debut, ?string $mois_actuel)
+{
+    $m_debut           = (int) $debut->format('n');
+    $y_debut           = (int) $debut->format('Y');
+    [$m_sel, $m_sel] = mapnull($mois_actuel, fn($m) => explode('.', $m, 2)) ?? [$m_debut, $y_debut];
+
+    $m_fin  = (int) date('n');
+    $y_fin = (int) date('Y');
+    ?>
+    <select name="mois-facture" id="select-mois-facture">
+        <?php
+        for ($y = $y_debut; $y <= $y_fin; ++$y) {
+            for ($m = $y === $y_debut ? $m_debut : 1; $m <= ($y === $y_fin ? $m_fin : 12); ++$m) {
+                ?><option value="<?= $y ?>.<?= $m ?>" <?= $y === $m_sel and $m === $m_sel ? 'selected' : '' ?>><?= ucfirst(MOIS[$m]) ?> <?= $y ?></option><?php
+            }
+        }
+
+        ?>
+    </select>
+    <?php
 }
