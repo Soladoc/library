@@ -81,7 +81,7 @@ $page->put(function () {
                         } else {
                             $resultat_offre = ceil($offre->en_ligne_ce_mois_pendant->days) * $offre->abonnement->prix_journalier;
                             if ($prixOption) {
-                                $resultat_offre = $resultat_offre + $prixOption; 
+                                $resultat_offre += $prixOption; 
                             }                             
                             $resultat_global += $resultat_offre;
                             ?>
