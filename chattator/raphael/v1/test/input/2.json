@@ -1,0 +1,14 @@
+[
+  {
+    "do": "whois",
+    "with": {
+      "user": "1"
+    }
+  },
+  {
+    "do": "whois",
+    "with": {
+      "user": "1"
+    }
+  }
+]

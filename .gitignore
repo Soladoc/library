@@ -1,2 +1,4 @@
 .env
+bin
+*.o
 #info.php
