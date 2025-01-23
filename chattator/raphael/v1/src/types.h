@@ -8,8 +8,14 @@
 
 typedef uuid4_t api_key_t;
 typedef uint64_t token_t;
-typedef uint32_t serial_t, page_number_t;
-typedef char password_hash_t[256], pseudo_t[256], email_t[320];
+typedef uint32_t page_number_t;
+typedef int32_t serial_t;
+
+#define PASSWORD_HASH_LENGTH 255
+#define PSEUDO_LENGTH 255
+#define EMAIL_LENGTH 319
+
+typedef char password_hash_t[PASSWORD_HASH_LENGTH + 1], pseudo_t[PSEUDO_LENGTH + 1], email_t[EMAIL_LENGTH + 1];
 
 enum account_key_tag {
     account_key_tag_id,

@@ -1,5 +1,5 @@
 # compile project with generic rules
-SOURCE	= src/action.c src/uuid.c
+SOURCE	= src/action.c src/uuid.c src/db.c
 HEADER	= $(wildcard src/*.h)
 CFLAGS	= -g -Og -Wall -Wextra -pedantic -fanalyzer -std=c17
 LFLAGS	= -ljson-c -lm

@@ -3,6 +3,7 @@
 
 #include <stdbool.h>
 #include <stdint.h>
+#include <stdio.h>
 
 /// @brief Version 4 UUID
 typedef struct {
@@ -24,5 +25,10 @@ char *uuid4_repr(uuid4_t uuid, char repr[const UUID4_REPR_LENGTH]);
 /// @return `true` on success, `false` on failure.
 /// @remark The syntax ABNF can be found at https://www.rfc-editor.org/rfc/rfc9562.html#section-4-5. Lowercase hex digits are allowed.
 bool uuid4_from_repr(uuid4_t *uuid, char const repr[static const UUID4_REPR_LENGTH]);
+
+/// @brief Put the canonical representation of version 4 UUID.
+/// @param uuid The UUID to write.
+/// @param stream The stream to write to.
+void uuid4_put(uuid4_t uuid, FILE *stream);
 
 #endif // UUID_H

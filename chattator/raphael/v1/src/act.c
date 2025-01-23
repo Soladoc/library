@@ -4,10 +4,10 @@
 #include <stdlib.h>
 #include <unistd.h>
 
-#include "const.h"
+#include "action.h"
 #include "util.h"
 
-void act(json_object *const);
+bool act(json_object *const);
 
 int main() {
     // Allocation
@@ -41,6 +41,13 @@ int main() {
     return EXIT_SUCCESS;
 }
 
-void act(json_object *const action) {
-    printf("%s\n", json_object_to_json_string(action));
+bool act(json_object *const action_obj) {
+    struct action action;
+    if (!action_parse(&action, action_obj)) return false;
+
+    action_explain(&action, stdout);
+
+    action_destroy(&action);
+
+    return true;
 }

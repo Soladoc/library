@@ -3,6 +3,7 @@
 
 #include <json-c/json.h>
 #include <stdbool.h>
+#include <stdio.h>
 
 #include "types.h"
 
@@ -19,6 +20,7 @@ enum action_type {
     action_type_block,
     action_type_unblock,
     action_type_ban,
+    action_type_unban,
 };
 
 struct action {
@@ -69,5 +71,9 @@ bool action_parse(struct action *action, json_object *obj);
 /// @brief Destroys an action.
 /// @param action The action to destroy. No-op if NULL.
 void action_destroy(struct action const *action);
+
+#ifndef NDEBUG
+void action_explain(struct action const *action, FILE *output);
+#endif // NDEBUG
 
 #endif // ACTION_H

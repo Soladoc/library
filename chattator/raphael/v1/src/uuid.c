@@ -56,6 +56,20 @@ bool uuid4_from_repr(uuid4_t *uuid, char const repr[static const UUID4_REPR_LENG
     return true;
 }
 
+void uuid4_put(uuid4_t uuid, FILE *stream) {
+    size_t idata = 0;
+#define o                                                      \
+    do {                                                       \
+        putc(hex_half_to_repr(uuid.data[idata] >> 4), stream); \
+        putc(hex_half_to_repr(uuid.data[idata] & 15), stream); \
+        ++idata;                                               \
+    } while (0);
+#define h putc('-', stream);
+    X_42226;
+#undef o
+#undef h
+}
+
 char hex_half_to_repr(uint8_t value) {
     assert(value < 16);
     return value < 10 ? '0' + value : 'a' - 10 + value;
