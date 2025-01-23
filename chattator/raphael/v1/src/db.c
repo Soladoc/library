@@ -4,17 +4,17 @@
 #include "db.h"
 #include "util.h"
 
-#define CONNINFO_HOSTNAME_LENGTH 64
+#define conn_param(param) coalesce(getenv(#param), STR(param))
 
-#define CONNINFO_FMT_HOST "%." STR(CONNINFO_HOSTNAME_LENGTH) "s"
-
-#define CONNINFO "host=" CONNINFO_FMT_HOST " port=" STR(PGDB_PORT) " dbname=" STR(DB_NAME) " user=" STR(DB_USER) " password=" STR(DB_ROOT_PASSWORD)
-
-#define CONNINFO_LENGTH (STRLEN(CONNINFO) - STRLEN(CONNINFO_FMT_HOST) + CONNINFO_HOSTNAME_LENGTH)
-
-db_t *db_connection_connect(char const *host) {
-    char conninfo[CONNINFO_LENGTH + 1];
-    snprintf(conninfo, sizeof conninfo, CONNINFO, host);
+db_t *db_connection_connect(void) {
+    char conninfo[256];
+    snprintf(conninfo, sizeof conninfo,
+        "host=%s port=%s dbname=%s user=%s password=%s",
+        conn_param(DB_HOST),
+        conn_param(PGDB_PORT),
+        conn_param(DB_NAME),
+        conn_param(DB_USER),
+        conn_param(DB_ROOT_PASSWORD));
     PGconn *db = PQconnectdb(conninfo);
 
     if (PQstatus(db) != CONNECTION_OK) {

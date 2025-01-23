@@ -5,7 +5,7 @@
 
 typedef void db_t;
 
-db_t *db_connection_connect(char const *host);
+db_t *db_connection_connect(void);
 
 void db_connection_destroy(db_t *db);
 

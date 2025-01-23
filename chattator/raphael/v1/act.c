@@ -14,12 +14,10 @@ bool act(json_object *const, db_t *);
 enum { EX_NODB = EX__MAX + 1 };
 
 int main(int argc, char **argv) {
-    char const *host = STR(DB_HOST);
     // Arguments
     {
         enum { opt_help = 1,
-               opt_version,
-               opt_host = 'h' };
+               opt_version };
         struct option long_options[] = {
             {
                 .name = "help",
@@ -28,11 +26,6 @@ int main(int argc, char **argv) {
             {
                 .name = "version",
                 .val = opt_version,
-            },
-            {
-                .name = "host",
-                .val = opt_host,
-                .has_arg = required_argument,
             },
             {},
         };
@@ -46,9 +39,6 @@ int main(int argc, char **argv) {
             case opt_version:
                 puts("version string");
                 return EX_OK;
-            case opt_host:
-                host = optarg;
-                break;
             case '?':
                 return EX_USAGE;
             }
@@ -59,7 +49,7 @@ int main(int argc, char **argv) {
     json_object *const input = json_object_from_fd(STDIN_FILENO);
     if (!input) return EX_DATAERR;
 
-    db_t *db = db_connection_connect(host);
+    db_t *db = db_connection_connect();
     if (!db) return EX_NODB;
 
     json_type const input_type = json_object_get_type(input);

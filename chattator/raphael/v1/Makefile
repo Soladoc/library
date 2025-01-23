@@ -6,10 +6,12 @@ endef # Wake up, this isn't a dream.
 SRC=$(wildcard src/*)
 TEST_LIB=$(wildcard test/lib/*)
 
-.ENV=$(file <../../../include/.env)
+# raphael.env : config db locale de Raphael
+# .env : config db serveur
+ENV_FILE=raphael.env
 
 CC=gcc
-CFLAGS=-g -Og -Wall -Wextra -pedantic -std=c23 -D$(subst $(NEWLINE), -D,$(.ENV))
+CFLAGS=-g -Og -Wall -Wextra -pedantic -std=c23 -D$(subst $(NEWLINE), -D,$(file <../../../include/$(ENV_FILE)))
 LFLAGS=-ljson-c -I/usr/include/postgresql -L/usr/lib/x86_64-linux-gnu -lpq
 
 .PHONY: all test clean

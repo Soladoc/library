@@ -1,6 +1,6 @@
 ---
   BasedOnStyle: WebKit
-  AlignAfterOpenBracket: BlockIndent
+  AlignAfterOpenBracket: DontAlign
   AlignOperands: AlignAfterOperator
   AlignTrailingComments:
     Kind: Always

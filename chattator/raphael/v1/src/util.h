@@ -26,4 +26,6 @@
 
 #define array_length(array) (sizeof(array) / sizeof((array)[0]))
 
+#define coalesce(a, b) ((a == NULL) ? (b) : (a))
+
 #endif // UTIL_H
