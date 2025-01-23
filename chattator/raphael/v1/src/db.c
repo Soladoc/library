@@ -7,15 +7,13 @@
 #define conn_param(param) coalesce(getenv(#param), STR(param))
 
 db_t *db_connection_connect(void) {
-    char conninfo[256];
-    snprintf(conninfo, sizeof conninfo,
-        "host=%s port=%s dbname=%s user=%s password=%s",
+    PGconn *db = PQsetdbLogin(
         conn_param(DB_HOST),
         conn_param(PGDB_PORT),
+        NULL, NULL,
         conn_param(DB_NAME),
         conn_param(DB_USER),
         conn_param(DB_ROOT_PASSWORD));
-    PGconn *db = PQconnectdb(conninfo);
 
     if (PQstatus(db) != CONNECTION_OK) {
         fprintf(stderr, "error: failed to connect to db: %s\n", PQerrorMessage(db));
@@ -38,6 +36,8 @@ bool db_verify_api_key(db_t *db, api_key_t api_key) {
 }
 
 serial_t db_get_user_id_by_email(db_t *db, const char email[static const EMAIL_LENGTH]) {
+    //
+    "select id from pact._compte where email = ?";
     (void)db;
     (void)email;
     return 1;
