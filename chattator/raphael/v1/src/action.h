@@ -6,6 +6,7 @@
 #include <stdio.h>
 
 #include "types.h"
+#include "db.h"
 
 enum action_type {
     action_type_login,
@@ -65,8 +66,9 @@ struct action {
 /// @brief Parse an action from a JSON object.
 /// @param action Mutated to the parsed action.
 /// @param obj The JSON object allegedly containing an action.
+/// @param db The DB connection to query the database for supplemental information.
 /// @return `true` on success, `false` on failure.
-bool action_parse(struct action *action, json_object *obj);
+bool action_parse(struct action *action, json_object *obj, struct db_connection *db);
 
 /// @brief Destroys an action.
 /// @param action The action to destroy. No-op if NULL.

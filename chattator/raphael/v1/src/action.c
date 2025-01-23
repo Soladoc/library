@@ -12,9 +12,9 @@
 
 #define fail_missing_or_invalid(parent, key) fail("error: missing key or invalid value in " parent ": " key "\n")
 
-static inline serial_t json_object_get_user_id(json_object *user_key);
+static inline serial_t json_object_get_user_id(json_object *user_key, struct db_connection *db);
 
-bool action_parse(struct action *action, json_object *obj) {
+bool action_parse(struct action *action, json_object *obj, struct db_connection *db) {
     char const *name = json_object_get_string(json_object_object_get(obj, "do"));
     if (!name) fail_missing_or_invalid("action", "do");
 
@@ -46,7 +46,7 @@ bool action_parse(struct action *action, json_object *obj) {
         if (!api_key) fail_missing_or_invalid("whois", "api_key");
         uuid4_from_repr(&action->whois.api_key, api_key);
 
-        if (!(action->whois.user_id = json_object_get_user_id(json_object_object_get(with, "user")))) {
+        if (!(action->whois.user_id = json_object_get_user_id(json_object_object_get(with, "user"), db))) {
             fail_missing_or_invalid("whois", "user");
         }
     } else if (streq(name, "send")) {
@@ -147,7 +147,7 @@ void action_explain(const struct action *action, FILE *output) {
 }
 #endif // NDEBUG
 
-serial_t json_object_get_user_id(json_object *user_key) {
+serial_t json_object_get_user_id(json_object *user_key, struct db_connection *db) {
     switch (json_object_get_type(user_key)) {
 
     case json_type_int: return json_object_get_int(user_key);
@@ -155,8 +155,8 @@ serial_t json_object_get_user_id(json_object *user_key) {
         if (json_object_get_string_len(user_key) > max(EMAIL_LENGTH, PSEUDO_LENGTH)) break;
         const char *email_or_pseudo = json_object_get_string(user_key);
         return strchr(email_or_pseudo, '@')
-                 ? db_get_user_id_by_email(email_or_pseudo)
-                 : db_get_user_id_by_pseudo(email_or_pseudo);
+                 ? db_get_user_id_by_email(db, email_or_pseudo)
+                 : db_get_user_id_by_pseudo(db, email_or_pseudo);
     }
     default: break;
     }
