@@ -76,14 +76,11 @@ char hex_half_to_repr(uint8_t value) {
 }
 
 uint8_t hex_repr_to_half(char c) {
-    if ('0' <= c && c <= '9') {
-        return c - '0';
-    }
-    if ('A' <= c && c <= 'F') {
-        return c - 'A' + 10;
-    }
-    if ('a' <= c && c <= 'f') {
-        return c - 'a' + 10;
-    }
-    return INVALID_HALF;
+    return '0' <= c && c <= '9'
+             ? c - '0'
+         : 'A' <= c && c <= 'F'
+             ? c - 'A' + 10
+         : 'a' <= c && c <= 'f'
+             ? c - 'a' + 10
+             : INVALID_HALF;
 }

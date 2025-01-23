@@ -1,0 +1,79 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+cd "$(dirname "${BASH_SOURCE[0]}")"
+
+function host_is_iut() {
+    [[ "$(hostname)" == 'PCE*' ]]
+    return $?
+}
+
+readonly container=413-tchattator-build-service
+readonly workdir=work
+
+cflags=''
+lflags=''
+output=a.out
+
+image=gcc-mariadb-pgsql:14.2-sae34
+if ! host_is_iut; then
+    image=bigpapoo/$image
+fi
+
+eval set -- "$(getopt -o c:l:o:s -n "$0" -- "$@")"
+
+while true; do
+    case "$1" in
+    -c)
+        shift
+        IFS=' ' read -ra cflags <<<"$1"
+        ;;
+    -l)
+        shift
+        IFS=' ' read -ra lflags <<<"$1"
+        ;;
+    -o)
+        shift
+        output="$1"
+        ;;
+    -s)
+        echo -n "stopping $container... "
+        docker stop stop $container
+        docker rm $container
+        echo ok
+        exit
+        ;;
+    --)
+        shift
+        break
+        ;;
+    esac
+    shift
+done
+
+# ensure run container
+if ! docker ps --format '{{.Names}}' | grep -q "^$container$"; then
+    echo "setting up $container"
+    docker run -td --name $container $image
+    docker exec $container apt-get -y install libjson-c-dev
+fi
+
+# copy source code
+echo 'copying files'
+for f in "$@"; do
+    dest="/$workdir/$f"
+    docker exec $container mkdir -p "$(dirname "$dest")"
+    docker cp "$f" "$container:$dest"
+done
+
+# run gcc
+echo 'compiling'
+for f in "$@"; do if [[ $f == *.c ]]; then srcs+=("$f"); fi; done
+docker exec -w /$workdir $container gcc -fdiagnostics-color "${cflags[@]}" "${srcs[@]}" "${lflags[@]}"
+
+# copy back binaries
+echo 'retreving binary'
+mkdir -p "$(dirname "$output")"
+docker cp "$container:$workdir/a.out" "$output"
+
+echo 'done'

@@ -5,8 +5,8 @@
 #include <unistd.h>
 #include <sysexits.h>
 
-#include "action.h"
-#include "util.h"
+#include "src/action.h"
+#include "src/util.h"
 
 bool act(json_object *const, struct db_connection *);
 
