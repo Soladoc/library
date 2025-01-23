@@ -17,21 +17,6 @@ typedef int32_t serial_t;
 
 typedef char password_hash_t[PASSWORD_HASH_LENGTH + 1], pseudo_t[PSEUDO_LENGTH + 1], email_t[EMAIL_LENGTH + 1];
 
-enum account_key_tag {
-    account_key_tag_id,
-    account_key_tag_pseudo,
-    account_key_tag_email,
-};
-
-struct account_key {
-    enum account_key_tag tag;
-    union {
-        serial_t id;
-        pseudo_t pseudo;
-        email_t email;
-    } value;
-};
-
 typedef char action_name[8]; // keep the size as small as possible
 
 #define X(str) _Static_assert(sizeof str <= sizeof(action_name), "buffer size too small for action name");
