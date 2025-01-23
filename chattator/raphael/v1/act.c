@@ -14,6 +14,7 @@ bool act(json_object *const, db_t *);
 enum { EX_NODB = EX__MAX + 1 };
 
 int main(int argc, char **argv) {
+    int verbosity = 0;
     // Arguments
     {
         enum { opt_help = 1,
@@ -31,7 +32,7 @@ int main(int argc, char **argv) {
         };
 
         int opt;
-        while (-1 != (opt = getopt_long(argc, argv, "h:", long_options, NULL))) {
+        while (-1 != (opt = getopt_long(argc, argv, "qvh:", long_options, NULL))) {
             switch (opt) {
             case opt_help:
                 puts("help string");
@@ -39,6 +40,8 @@ int main(int argc, char **argv) {
             case opt_version:
                 puts("version string");
                 return EX_OK;
+            case 'q': --verbosity; break;
+            case 'v': ++verbosity; break;
             case '?':
                 return EX_USAGE;
             }
@@ -49,7 +52,7 @@ int main(int argc, char **argv) {
     json_object *const input = json_object_from_fd(STDIN_FILENO);
     if (!input) return EX_DATAERR;
 
-    db_t *db = db_connection_connect();
+    db_t *db = db_connect(verbosity);
     if (!db) return EX_NODB;
 
     json_type const input_type = json_object_get_type(input);
