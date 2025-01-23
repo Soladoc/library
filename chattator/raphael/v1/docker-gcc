@@ -37,7 +37,7 @@ while true; do
         ;;
     -s)
         echo -n "stopping $container... "
-        docker stop stop $container
+        docker stop $container
         docker rm $container
         echo ok
         exit
@@ -58,21 +58,16 @@ if ! docker ps --format '{{.Names}}' | grep -q "^$container$"; then
 fi
 
 # copy source code
-echo 'copying files'
 for f in "$@"; do
     dest="/$workdir/$f"
     docker exec $container mkdir -p "$(dirname "$dest")"
-    docker cp "$f" "$container:$dest"
+    docker cp -q "$f" "$container:$dest"
 done
 
 # run gcc
-echo 'compiling'
 for f in "$@"; do if [[ $f == *.c ]]; then srcs+=("$f"); fi; done
 docker exec -w /$workdir $container gcc -fdiagnostics-color "${cflags[@]}" "${srcs[@]}" "${lflags[@]}"
 
 # copy back binaries
-echo 'retreving binary'
 mkdir -p "$(dirname "$output")"
 docker cp "$container:$workdir/a.out" "$output"
-
-echo 'done'

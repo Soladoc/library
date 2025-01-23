@@ -9,7 +9,7 @@
 #include "src/action.h"
 #include "src/util.h"
 
-bool act(json_object *const, db_t *);
+static inline bool act(json_object *const, db_t *);
 
 enum { EX_NODB = EX__MAX + 1 };
 
@@ -17,8 +17,10 @@ int main(int argc, char **argv) {
     int verbosity = 0;
     // Arguments
     {
-        enum { opt_help = 1,
-               opt_version };
+        enum {
+            opt_help,
+            opt_version,
+        };
         struct option long_options[] = {
             {
                 .name = "help",

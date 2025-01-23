@@ -15,6 +15,8 @@
 
 #define conn_param(param) coalesce(getenv(#param), STR(param))
 
+#define pq_get_l(type, res, row, col) (ntohl(*((type *)PQgetvalue((res), (row), (col)))))
+
 db_t *db_connect(int verbosity) {
     PGconn *db = PQsetdbLogin(
         conn_param(DB_HOST),
@@ -55,26 +57,43 @@ bool db_verify_api_key(db_t *db, api_key_t api_key) {
     return true;
 }
 
-serial_t db_get_user_id_by_email(db_t *db, const char email[static const EMAIL_LENGTH]) {
-    // Oid p_oid = VARCHAROID;
+serial_t db_get_user_id_by_email(db_t *db, const char *email) {
     PGresult *res = PQexecParams(db, "select id from " SCHEMA_PACT "._compte where email = $1",
         1, NULL, &email, NULL, NULL, 1);
 
     serial_t user_id;
 
     if (PQresultStatus(res) != PGRES_TUPLES_OK) {
-        fprintf(stderr, "error: PQexecParams: %s", PQresultErrorMessage(res));
+        fprintf(stderr, "error: PQexecParams: %s\n", PQresultErrorMessage(res));
+        user_id = 0;
+    } else if (PQntuples(res) == 0) {
+        fprintf(stderr, "error: user of email '%s' not found\n", email);
         user_id = 0;
     } else {
-        user_id = ntohl(*((serial_t *)PQgetvalue(res, 0, 0)));
+        user_id = pq_get_l(serial_t, res, 0, 0);
     }
 
     PQclear(res);
     return user_id;
 }
 
-serial_t db_get_user_id_by_pseudo(db_t *db, const char pseudo[static const PSEUDO_LENGTH]) {
-    (void)db;
-    (void)pseudo;
-    return 1;
+serial_t db_get_user_id_by_pseudo(db_t *db, const char *pseudo) {
+    PGresult *res = PQexecParams(db, "select id from " SCHEMA_PACT "._membre where pseudo = $1",
+        1, NULL, &pseudo, NULL, NULL, 1);
+
+    serial_t user_id;
+
+    if (PQresultStatus(res) != PGRES_TUPLES_OK) {
+        fprintf(stderr, "error: PQexecParams: %s\n", PQresultErrorMessage(res));
+        user_id = 0;
+    } else if (PQntuples(res) == 0) {
+        fprintf(stderr, "error: user of pseudo '%s' not found\n", pseudo);
+        user_id = 0;
+    } else {
+        user_id = pq_get_l(serial_t, res, 0, 0);
+    }
+
+    PQclear(res);
+
+    return user_id;
 }
