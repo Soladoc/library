@@ -68,7 +68,7 @@ struct action {
 /// @param obj The JSON object allegedly containing an action.
 /// @param db The DB connection to query the database for supplemental information.
 /// @return `true` on success, `false` on failure.
-bool action_parse(struct action *action, json_object *obj, struct db_connection *db);
+bool action_parse(struct action *action, json_object *obj, db_t *db);
 
 /// @brief Destroys an action.
 /// @param action The action to destroy. No-op if NULL.

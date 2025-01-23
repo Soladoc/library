@@ -39,7 +39,7 @@ function connect(): PDO
             'postgres'
         ]
         : [
-            'postgresdb',
+            getenv('DB_HOST') ?: 'postgresdb', // for backwards compatibility with old .env
             notfalse(getenv('PGDB_PORT'), 'PGDB_PORT not set'),
             'postgres',
             notfalse(getenv('DB_USER'), 'DB_USER not set'),

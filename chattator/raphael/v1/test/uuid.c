@@ -3,6 +3,7 @@
 #include <strings.h>
 
 #include "../src/uuid.h"
+#include "../src/util.h"
 #include "lib/stb_test.h"
 
 int main() {
@@ -23,7 +24,7 @@ int main() {
 
     struct test t = test_start("uuid4");
 
-    for (size_t i = 0; i < sizeof uuids / sizeof uuids[0]; ++i) {
+    for (size_t i = 0; i < array_length(uuids); ++i) {
         uuid4_t uuid;
         test_case(&t, uuid4_from_repr(&uuid, uuids[i]), //
                   "%.*s", UUID4_REPR_LENGTH, uuids[i]);
@@ -32,7 +33,7 @@ int main() {
                   "%.*s == %.*s", UUID4_REPR_LENGTH, uuids[i], UUID4_REPR_LENGTH, repr);
     }
 
-    for (size_t i = 0; i < sizeof invalid_uuids / sizeof invalid_uuids[0]; ++i) {
+    for (size_t i = 0; i < array_length(invalid_uuids); ++i) {
         uuid4_t uuid;
         test_case(&t, !uuid4_from_repr(&uuid, invalid_uuids[i]), //
                   "%.*s", UUID4_REPR_LENGTH, invalid_uuids[i]);

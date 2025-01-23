@@ -1,18 +1,18 @@
 # todo
 
-- [ ] invoke build in bigpapoo/gcc-mariadb-pgsql:14.2-sae34
-  - [ ] make it work with make
+- [x] invoke build in bigpapoo/gcc-mariadb-pgsql:14.2-sae34
+  - [x] make it work with make
 
 - [ ] configuration
   - [ ] dynamic message string length
-- [ ] unit tests
-  - [ ] uuid
+- [x] unit tests
+  - [x] uuid
 
 pgsql build:
 
 ```sh
 apt install libjson-c-dev -y
-gcc test-pgsql.c -o test-pgsql -I/usr/include/postgresql -L/usr/lib/x86_64-linux-gnu -lpqroot@656a2197bf76
+gcc test-pgsql.c -o test-pgsql -I/usr/include/postgresql -L/usr/lib/x86_64-linux-gnu -lpq
 ```
 
 pgsql:

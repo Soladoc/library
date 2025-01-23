@@ -12,9 +12,14 @@
 
 #define fail_missing_or_invalid(parent, key) fail("error: missing key or invalid value in " parent ": " key "\n")
 
-static inline serial_t json_object_get_user_id(json_object *user_key, struct db_connection *db);
+static inline serial_t json_object_get_user_id(json_object *user_key, db_t *db);
 
-bool action_parse(struct action *action, json_object *obj, struct db_connection *db) {
+static inline bool get_api_key(uuid4_t *api_key, json_object *with, db_t *db) {
+    char const *repr = json_object_get_string(json_object_object_get(with, "api_key"));
+    return repr && uuid4_from_repr(api_key, repr) && db_verify_api_key(db, *api_key);
+}
+
+bool action_parse(struct action *action, json_object *obj, db_t *db) {
     char const *name = json_object_get_string(json_object_object_get(obj, "do"));
     if (!name) fail_missing_or_invalid("action", "do");
 
@@ -25,13 +30,13 @@ bool action_parse(struct action *action, json_object *obj, struct db_connection 
     if (streq(name, "login")) {
         action->type = action_type_login;
 
-        char const *api_key = json_object_get_string(json_object_object_get(with, "api_key"));
-        if (!api_key) fail_missing_or_invalid("login", "api_key");
-        uuid4_from_repr(&action->login.api_key, api_key);
+        if (!get_api_key(&action->login.api_key, with, db)) {
+            fail_missing_or_invalid("login", "api_key");
+        }
 
         char const *password_hash = json_object_get_string(json_object_object_get(with, "password_hash"));
         if (!password_hash) fail_missing_or_invalid("login", "password_hash");
-        strncpy(action->login.password_hash, api_key, sizeof action->login.password_hash - 1);
+        strncpy(action->login.password_hash, password_hash, sizeof action->login.password_hash - 1);
         action->login.password_hash[sizeof action->login.password_hash - 1] = '\0';
     } else if (streq(name, "logout")) {
         action->type = action_type_logout;
@@ -42,9 +47,9 @@ bool action_parse(struct action *action, json_object *obj, struct db_connection 
     } else if (streq(name, "whois")) {
         action->type = action_type_whois;
 
-        char const *api_key = json_object_get_string(json_object_object_get(with, "api_key"));
-        if (!api_key) fail_missing_or_invalid("whois", "api_key");
-        uuid4_from_repr(&action->whois.api_key, api_key);
+        if (!get_api_key(&action->whois.api_key, with, db)) {
+            fail_missing_or_invalid("whois", "api_key");
+        }
 
         if (!(action->whois.user_id = json_object_get_user_id(json_object_object_get(with, "user"), db))) {
             fail_missing_or_invalid("whois", "user");
@@ -147,7 +152,7 @@ void action_explain(const struct action *action, FILE *output) {
 }
 #endif // NDEBUG
 
-serial_t json_object_get_user_id(json_object *user_key, struct db_connection *db) {
+serial_t json_object_get_user_id(json_object *user_key, db_t *db) {
     switch (json_object_get_type(user_key)) {
 
     case json_type_int: return json_object_get_int(user_key);
