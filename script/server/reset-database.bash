@@ -3,6 +3,10 @@
 set -xeu
 
 cd /docker/sae/data
+
+# shellcheck disable=SC1091
+. include/.env
+
 sudo git fetch --all
 sudo git reset --hard origin/main
 
@@ -16,4 +20,4 @@ for f in schemas.sql \
     fargs+=(-f "$f")
 done
 
-sudo docker exec -w / postgresdb psql -v ON_ERROR_STOP=on -U sae -d postgres --single-transaction "${fargs[@]}"
+sudo docker exec -w / postgresdb psql -v ON_ERROR_STOP=on -U "$DB_USER" -d "$DB_NAME" --single-transaction "${fargs[@]}"
