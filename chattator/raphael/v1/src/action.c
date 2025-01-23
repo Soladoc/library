@@ -140,7 +140,7 @@ bool action_run(struct action const *action) {
 }
 
 #ifndef NDEBUG
-void action_explain(const struct action *action, FILE *output) {
+void action_explain(struct action const *action, FILE *output) {
     switch (action->type) {
     case action_type_login:
         fprintf(output, "login api_key=");
@@ -186,7 +186,6 @@ void action_explain(const struct action *action, FILE *output) {
         fprintf(output, "unban\n");
         break;
     }
-    unreachable();
 }
 #endif // NDEBUG
 

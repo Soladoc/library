@@ -26,12 +26,6 @@ db_t *db_connect(int verbosity) {
         conn_param(DB_USER),
         conn_param(DB_ROOT_PASSWORD));
 
-    if (PQstatus(db) != CONNECTION_OK) {
-        fprintf(stderr, "error: PQsetdbLogin: %s\n", PQerrorMessage(db));
-        PQfinish(db);
-        return NULL;
-    }
-
     PGVerbosity v;
     if (verbosity <= -2)
         v = PQERRORS_SQLSTATE;
@@ -42,6 +36,12 @@ db_t *db_connect(int verbosity) {
     else // verbosity >= 1
         v = PQERRORS_VERBOSE;
     PQsetErrorVerbosity(db, v);
+
+    if (PQstatus(db) != CONNECTION_OK) {
+        fprintf(stderr, "error: PQsetdbLogin: %s\n", PQerrorMessage(db));
+        PQfinish(db);
+        return NULL;
+    }
 
     return db;
 }

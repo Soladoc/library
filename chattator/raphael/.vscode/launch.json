@@ -8,10 +8,11 @@
         "type": "gdb",
         "request": "launch",
         "name": "Launch Program",
-        "target": "${workspaceFolder}/v1/bin/test/uuid",
-        "cwd": "${workspaceRoot}",
+        "target": "${workspaceFolder}/v1/bin/act",
+        "cwd": "${workspaceRoot}/v1",
         "valuesFormatting": "parseText"
       }
+
         
     ]
 }

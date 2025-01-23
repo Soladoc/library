@@ -14,6 +14,29 @@
 #include "src/action.h"
 #include "src/util.h"
 
+#define PROG "act"
+
+#define HELP PROG" - A Tchattator413 implementation\n\
+\n\
+Usage: " PROG " -[qv]... [--help] [--version]\n\
+\n\
+Reads JSON actions from standard input. Writes JSON results to standard output.\n\
+\n\
+-q                More quiet (can be repeated)\n\
+-v                More verbose (can be repeated)\n\
+--help            Show this help\n\
+--version         Show version\n\
+\n\
+ENVIRONMENT\n\
+\n\
+DB_HOST           DB host\n\
+PGDB_PORT         DB port\n\
+DB_NAME           DB name\n\
+DB_USER           DB username\n\
+DB_ROOT_PASSWORD  DB password"
+
+#define VERSION PROG " 1.0.0"
+
 static inline bool act(json_object *const, db_t *);
 
 enum { EX_NODB = EX__MAX + 1 };
@@ -42,10 +65,10 @@ int main(int argc, char **argv) {
         while (-1 != (opt = getopt_long(argc, argv, "qvh:", long_options, NULL))) {
             switch (opt) {
             case opt_help:
-                puts("help string");
+                puts(HELP);
                 return EX_OK;
             case opt_version:
-                puts("version string");
+                puts(VERSION);
                 return EX_OK;
             case 'q': --verbosity; break;
             case 'v': ++verbosity; break;
