@@ -1,3 +1,8 @@
+/// @file
+/// @author Raphaël
+/// @brief UUID library - Implementation
+/// @date 23/01/2025
+
 #include "uuid.h"
 
 #include "assert.h"

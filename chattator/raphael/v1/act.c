@@ -1,3 +1,8 @@
+/// @file
+/// @author Raphaël
+/// @brief Tchattator413 JSON front-end - Main program
+/// @date 23/01/2025
+
 #include <assert.h>
 #include <getopt.h>
 #include <json-c/json.h>

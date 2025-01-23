@@ -1,3 +1,8 @@
+/// @file
+/// @author Raphaël
+/// @brief Tchattator413 protocol - Interface
+/// @date 23/01/2025
+
 #ifndef ACTION_H
 #define ACTION_H
 
@@ -5,9 +10,10 @@
 #include <stdbool.h>
 #include <stdio.h>
 
-#include "types.h"
 #include "db.h"
+#include "types.h"
 
+/// @brief The type of an action.
 enum action_type {
     action_type_login,
     action_type_logout,
@@ -24,6 +30,7 @@ enum action_type {
     action_type_unban,
 };
 
+/// @brief An action. Actions represent the commands the protocol implements.
 struct action {
     enum action_type type;
     union {
@@ -67,14 +74,24 @@ struct action {
 /// @param action Mutated to the parsed action.
 /// @param obj The JSON object allegedly containing an action.
 /// @param db The DB connection to query the database for supplemental information.
-/// @return `true` on success, `false` on failure.
+/// @return @p true on success
+/// @return @p false on failure.
 bool action_parse(struct action *action, json_object *obj, db_t *db);
 
 /// @brief Destroys an action.
-/// @param action The action to destroy. No-op if NULL.
+/// @param action The action to destroy. No-op if @c NULL.
 void action_destroy(struct action const *action);
 
+/// @brief Run an action.
+/// @param action The action to run.
+/// @return @p true on success
+/// @return @p false on failure.
+bool action_run(struct action const *action);
+
 #ifndef NDEBUG
+/// @brief Explain an action.
+/// @param action The action to explain.
+/// @param output The stream to write the exlanation to.
 void action_explain(struct action const *action, FILE *output);
 #endif // NDEBUG
 

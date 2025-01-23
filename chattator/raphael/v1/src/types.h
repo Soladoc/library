@@ -1,3 +1,8 @@
+/// @file
+/// @author Raphaël
+/// @brief General types - Standalone header
+/// @date 23/01/2025
+
 #ifndef TYPES_H
 #define TYPES_H
 

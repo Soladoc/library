@@ -1,3 +1,8 @@
+/// @file
+/// @author Raphaël
+/// @brief General constants - Standalone header
+/// @date 23/01/2025
+
 #ifndef CONST_H
 #define CONST_H
 

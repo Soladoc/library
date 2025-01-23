@@ -60,7 +60,7 @@ STB_TEST_DEFINITION bool test_conclude(struct test *test, FILE *output);
 #define _stb_test_digit_count(n, base) ((n) == 0 ? 1 : (int)(log(n) / log(base)) + 1)
 
 struct test test_start(char const *name) {
-    return (struct test){
+    return (struct test) {
         .name = name,
         .cases = NULL,
     };
@@ -83,7 +83,7 @@ void test_case_(struct test *test, bool ok, unsigned line, char const *expr, cha
     va_end(ap);
 
     arrput(test->cases,
-        ((struct test_case){
+        ((struct test_case) {
             .ok = ok,
             .line = line,
             .expr = expr,

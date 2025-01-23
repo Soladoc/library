@@ -2,6 +2,7 @@
 
 - [ ] elegant error handling
   - [ ] think of an approach that suits JSON, DB and other sources of errors
+- [ ] doxygen documentation
 
 - [x] invoke build in bigpapoo/gcc-mariadb-pgsql:14.2-sae34
   - [x] make it work with make

@@ -209,24 +209,24 @@ CREDITS
 #include <string.h>
 
 #ifndef STBDS_NO_SHORT_NAMES
-#define arrlen      stbds_arrlen
-#define arrlenu     stbds_arrlenu
-#define arrput      stbds_arrput
-#define arrpush     stbds_arrput
-#define arrpop      stbds_arrpop
-#define arrfree     stbds_arrfree
-#define arraddn     stbds_arraddn // deprecated, use one of the following instead:
-#define arraddnptr  stbds_arraddnptr
+#define arrlen stbds_arrlen
+#define arrlenu stbds_arrlenu
+#define arrput stbds_arrput
+#define arrpush stbds_arrput
+#define arrpop stbds_arrpop
+#define arrfree stbds_arrfree
+#define arraddn stbds_arraddn // deprecated, use one of the following instead:
+#define arraddnptr stbds_arraddnptr
 #define arraddnindex stbds_arraddnindex
-#define arrsetlen   stbds_arrsetlen
-#define arrlast     stbds_arrlast
-#define arrins      stbds_arrins
-#define arrinsn     stbds_arrinsn
-#define arrdel      stbds_arrdel
-#define arrdeln     stbds_arrdeln
-#define arrdelswap  stbds_arrdelswap
-#define arrcap      stbds_arrcap
-#define arrsetcap   stbds_arrsetcap
+#define arrsetlen stbds_arrsetlen
+#define arrlast stbds_arrlast
+#define arrins stbds_arrins
+#define arrinsn stbds_arrinsn
+#define arrdel stbds_arrdel
+#define arrdeln stbds_arrdeln
+#define arrdelswap stbds_arrdelswap
+#define arrcap stbds_arrcap
+#define arrsetcap stbds_arrsetcap
 
 #endif
 
@@ -235,14 +235,14 @@ CREDITS
 #endif
 #if !defined(STBDS_REALLOC) && !defined(STBDS_FREE)
 #include <stdlib.h>
-#define STBDS_REALLOC(c,p,s) realloc(p,s)
-#define STBDS_FREE(c,p)      free(p)
+#define STBDS_REALLOC(c, p, s) realloc(p, s)
+#define STBDS_FREE(c, p) free(p)
 #endif
 
 #ifdef _MSC_VER
-#define STBDS_NOTUSED(v)  (void)(v)
+#define STBDS_NOTUSED(v) (void)(v)
 #else
-#define STBDS_NOTUSED(v)  (void)sizeof(v)
+#define STBDS_NOTUSED(v) (void)sizeof(v)
 #endif
 
 #ifdef __cplusplus
@@ -254,8 +254,8 @@ extern "C" {
 // Everything below here is implementation details
 //
 
-extern void * stbds_arrgrowf(void *a, size_t elemsize, size_t addlen, size_t min_cap);
-extern void   stbds_arrfreef(void *a);
+extern void *stbds_arrgrowf(void *a, size_t elemsize, size_t addlen, size_t min_cap);
+extern void stbds_arrfreef(void *a);
 
 #ifdef __cplusplus
 }
@@ -264,7 +264,7 @@ extern void   stbds_arrfreef(void *a);
 #if defined(__GNUC__) || defined(__clang__)
 #define STBDS_HAS_TYPEOF
 #ifdef __cplusplus
-//#define STBDS_HAS_LITERAL_ARRAY  // this is currently broken for clang
+// #define STBDS_HAS_LITERAL_ARRAY  // this is currently broken for clang
 #endif
 #endif
 
@@ -276,58 +276,58 @@ extern void   stbds_arrfreef(void *a);
 
 // this macro takes the address of the argument, but on gcc/clang can accept rvalues
 #if defined(STBDS_HAS_LITERAL_ARRAY) && defined(STBDS_HAS_TYPEOF)
-  #if __clang__
-  #define STBDS_ADDRESSOF(typevar, value)     ((__typeof__(typevar)[1]){value}) // literal array decays to pointer to value
-  #else
-  #define STBDS_ADDRESSOF(typevar, value)     ((typeof(typevar)[1]){value}) // literal array decays to pointer to value
-  #endif
+#if __clang__
+#define STBDS_ADDRESSOF(typevar, value) ((__typeof__(typevar)[1]) { value }) // literal array decays to pointer to value
 #else
-#define STBDS_ADDRESSOF(typevar, value)     &(value)
+#define STBDS_ADDRESSOF(typevar, value) ((typeof(typevar)[1]) { value })     // literal array decays to pointer to value
+#endif
+#else
+#define STBDS_ADDRESSOF(typevar, value) &(value)
 #endif
 
-#define STBDS_OFFSETOF(var,field)           ((char *) &(var)->field - (char *) (var))
+#define STBDS_OFFSETOF(var, field) ((char *)&(var)->field - (char *)(var))
 
-#define stbds_header(t)  ((stbds_array_header *) (t) - 1)
-#define stbds_temp(t)    stbds_header(t)->temp
-#define stbds_temp_key(t) (*(char **) stbds_header(t)->hash_table)
+#define stbds_header(t) ((stbds_array_header *)(t) - 1)
+#define stbds_temp(t) stbds_header(t)->temp
+#define stbds_temp_key(t) (*(char **)stbds_header(t)->hash_table)
 
-#define stbds_arrsetcap(a,n)   (stbds_arrgrow(a,0,n))
-#define stbds_arrsetlen(a,n)   ((stbds_arrcap(a) < (size_t) (n) ? stbds_arrsetcap((a),(size_t)(n)),0 : 0), (a) ? stbds_header(a)->length = (size_t) (n) : 0)
-#define stbds_arrcap(a)        ((a) ? stbds_header(a)->capacity : 0)
-#define stbds_arrlen(a)        ((a) ? (ptrdiff_t) stbds_header(a)->length : 0)
-#define stbds_arrlenu(a)       ((a) ?             stbds_header(a)->length : 0)
-#define stbds_arrput(a,v)      (stbds_arrmaybegrow(a,1), (a)[stbds_header(a)->length++] = (v))
-#define stbds_arrpush          stbds_arrput  // synonym
-#define stbds_arrpop(a)        (stbds_header(a)->length--, (a)[stbds_header(a)->length])
-#define stbds_arraddn(a,n)     ((void)(stbds_arraddnindex(a, n)))    // deprecated, use one of the following instead:
-#define stbds_arraddnptr(a,n)  (stbds_arrmaybegrow(a,n), (n) ? (stbds_header(a)->length += (n), &(a)[stbds_header(a)->length-(n)]) : (a))
-#define stbds_arraddnindex(a,n)(stbds_arrmaybegrow(a,n), (n) ? (stbds_header(a)->length += (n), stbds_header(a)->length-(n)) : stbds_arrlen(a))
-#define stbds_arraddnoff       stbds_arraddnindex
-#define stbds_arrlast(a)       ((a)[stbds_header(a)->length-1])
-#define stbds_arrfree(a)       ((void) ((a) ? STBDS_FREE(NULL,stbds_header(a)) : (void)0), (a)=NULL)
-#define stbds_arrdel(a,i)      stbds_arrdeln(a,i,1)
-#define stbds_arrdeln(a,i,n)   (memmove(&(a)[i], &(a)[(i)+(n)], sizeof *(a) * (stbds_header(a)->length-(n)-(i))), stbds_header(a)->length -= (n))
-#define stbds_arrdelswap(a,i)  ((a)[i] = stbds_arrlast(a), stbds_header(a)->length -= 1)
-#define stbds_arrinsn(a,i,n)   (stbds_arraddn((a),(n)), memmove(&(a)[(i)+(n)], &(a)[i], sizeof *(a) * (stbds_header(a)->length-(n)-(i))))
-#define stbds_arrins(a,i,v)    (stbds_arrinsn((a),(i),1), (a)[i]=(v))
+#define stbds_arrsetcap(a, n) (stbds_arrgrow(a, 0, n))
+#define stbds_arrsetlen(a, n) ((stbds_arrcap(a) < (size_t)(n) ? stbds_arrsetcap((a), (size_t)(n)), 0 : 0), (a) ? stbds_header(a)->length = (size_t)(n) : 0)
+#define stbds_arrcap(a) ((a) ? stbds_header(a)->capacity : 0)
+#define stbds_arrlen(a) ((a) ? (ptrdiff_t)stbds_header(a)->length : 0)
+#define stbds_arrlenu(a) ((a) ? stbds_header(a)->length : 0)
+#define stbds_arrput(a, v) (stbds_arrmaybegrow(a, 1), (a)[stbds_header(a)->length++] = (v))
+#define stbds_arrpush stbds_arrput                             // synonym
+#define stbds_arrpop(a) (stbds_header(a)->length--, (a)[stbds_header(a)->length])
+#define stbds_arraddn(a, n) ((void)(stbds_arraddnindex(a, n))) // deprecated, use one of the following instead:
+#define stbds_arraddnptr(a, n) (stbds_arrmaybegrow(a, n), (n) ? (stbds_header(a)->length += (n), &(a)[stbds_header(a)->length - (n)]) : (a))
+#define stbds_arraddnindex(a, n) (stbds_arrmaybegrow(a, n), (n) ? (stbds_header(a)->length += (n), stbds_header(a)->length - (n)) : stbds_arrlen(a))
+#define stbds_arraddnoff stbds_arraddnindex
+#define stbds_arrlast(a) ((a)[stbds_header(a)->length - 1])
+#define stbds_arrfree(a) ((void)((a) ? STBDS_FREE(NULL, stbds_header(a)) : (void)0), (a) = NULL)
+#define stbds_arrdel(a, i) stbds_arrdeln(a, i, 1)
+#define stbds_arrdeln(a, i, n) (memmove(&(a)[i], &(a)[(i) + (n)], sizeof *(a) * (stbds_header(a)->length - (n) - (i))), stbds_header(a)->length -= (n))
+#define stbds_arrdelswap(a, i) ((a)[i] = stbds_arrlast(a), stbds_header(a)->length -= 1)
+#define stbds_arrinsn(a, i, n) (stbds_arraddn((a), (n)), memmove(&(a)[(i) + (n)], &(a)[i], sizeof *(a) * (stbds_header(a)->length - (n) - (i))))
+#define stbds_arrins(a, i, v) (stbds_arrinsn((a), (i), 1), (a)[i] = (v))
 
-#define stbds_arrmaybegrow(a,n)  ((!(a) || stbds_header(a)->length + (n) > stbds_header(a)->capacity) \
-                                  ? (stbds_arrgrow(a,n,0),0) : 0)
+#define stbds_arrmaybegrow(a, n) ((!(a) || stbds_header(a)->length + (n) > stbds_header(a)->capacity) \
+                                      ? (stbds_arrgrow(a, n, 0), 0)                                   \
+                                      : 0)
 
-#define stbds_arrgrow(a,b,c)   ((a) = stbds_arrgrowf_wrapper((a), sizeof *(a), (b), (c)))
+#define stbds_arrgrow(a, b, c) ((a) = stbds_arrgrowf_wrapper((a), sizeof *(a), (b), (c)))
 
 typedef struct
 {
-  size_t      length;
-  size_t      capacity;
-  void      * hash_table;
-  ptrdiff_t   temp;
+    size_t length;
+    size_t capacity;
+    void *hash_table;
+    ptrdiff_t temp;
 } stbds_array_header;
 
-#define stbds_arrgrowf_wrapper            stbds_arrgrowf
+#define stbds_arrgrowf_wrapper stbds_arrgrowf
 
 #endif // INCLUDE_STB_DS_H
-
 
 //////////////////////////////////////////////////////////////////////////////
 //
@@ -340,11 +340,11 @@ typedef struct
 
 #ifndef STBDS_ASSERT
 #define STBDS_ASSERT_WAS_UNDEFINED
-#define STBDS_ASSERT(x)   ((void) 0)
+#define STBDS_ASSERT(x) ((void)0)
 #endif
 
 #ifdef STBDS_STATISTICS
-#define STBDS_STATS(x)   x
+#define STBDS_STATS(x) x
 size_t stbds_array_grow;
 size_t stbds_hash_grow;
 size_t stbds_hash_shrink;
@@ -361,50 +361,48 @@ size_t stbds_rehash_items;
 // stbds_arr implementation
 //
 
-//int *prev_allocs[65536];
-//int num_prev;
+// int *prev_allocs[65536];
+// int num_prev;
 
-void *stbds_arrgrowf(void *a, size_t elemsize, size_t addlen, size_t min_cap)
-{
-  stbds_array_header temp={0}; // force debugging
-  void *b;
-  size_t min_len = stbds_arrlen(a) + addlen;
-  (void) sizeof(temp);
+void *stbds_arrgrowf(void *a, size_t elemsize, size_t addlen, size_t min_cap) {
+    stbds_array_header temp = { 0 }; // force debugging
+    void *b;
+    size_t min_len = stbds_arrlen(a) + addlen;
+    (void)sizeof(temp);
 
-  // compute the minimum capacity needed
-  if (min_len > min_cap)
-    min_cap = min_len;
+    // compute the minimum capacity needed
+    if (min_len > min_cap)
+        min_cap = min_len;
 
-  if (min_cap <= stbds_arrcap(a))
-    return a;
+    if (min_cap <= stbds_arrcap(a))
+        return a;
 
-  // increase needed capacity to guarantee O(1) amortized
-  if (min_cap < 2 * stbds_arrcap(a))
-    min_cap = 2 * stbds_arrcap(a);
-  else if (min_cap < 4)
-    min_cap = 4;
+    // increase needed capacity to guarantee O(1) amortized
+    if (min_cap < 2 * stbds_arrcap(a))
+        min_cap = 2 * stbds_arrcap(a);
+    else if (min_cap < 4)
+        min_cap = 4;
 
-  //if (num_prev < 65536) if (a) prev_allocs[num_prev++] = (int *) ((char *) a+1);
-  //if (num_prev == 2201)
-  //  num_prev = num_prev;
-  b = STBDS_REALLOC(NULL, (a) ? stbds_header(a) : 0, elemsize * min_cap + sizeof(stbds_array_header));
-  //if (num_prev < 65536) prev_allocs[num_prev++] = (int *) (char *) b;
-  b = (char *) b + sizeof(stbds_array_header);
-  if (a == NULL) {
-    stbds_header(b)->length = 0;
-    stbds_header(b)->hash_table = 0;
-    stbds_header(b)->temp = 0;
-  } else {
-    STBDS_STATS(++stbds_array_grow);
-  }
-  stbds_header(b)->capacity = min_cap;
+    // if (num_prev < 65536) if (a) prev_allocs[num_prev++] = (int *) ((char *) a+1);
+    // if (num_prev == 2201)
+    //   num_prev = num_prev;
+    b = STBDS_REALLOC(NULL, (a) ? stbds_header(a) : 0, elemsize * min_cap + sizeof(stbds_array_header));
+    // if (num_prev < 65536) prev_allocs[num_prev++] = (int *) (char *) b;
+    b = (char *)b + sizeof(stbds_array_header);
+    if (a == NULL) {
+        stbds_header(b)->length = 0;
+        stbds_header(b)->hash_table = 0;
+        stbds_header(b)->temp = 0;
+    } else {
+        STBDS_STATS(++stbds_array_grow);
+    }
+    stbds_header(b)->capacity = min_cap;
 
-  return b;
+    return b;
 }
 
-void stbds_arrfreef(void *a)
-{
-  STBDS_FREE(NULL, stbds_header(a));
+void stbds_arrfreef(void *a) {
+    STBDS_FREE(NULL, stbds_header(a));
 }
 
 #endif

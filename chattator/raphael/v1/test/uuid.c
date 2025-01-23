@@ -1,9 +1,14 @@
-#define STB_TEST_IMPLEMENTATION
+/// @file
+/// @author Raphaël
+/// @brief UUID unit tests - Main program
+/// @date 23/01/2025
 
 #include <strings.h>
 
-#include "../src/uuid.h"
 #include "../src/util.h"
+#include "../src/uuid.h"
+
+#define STB_TEST_IMPLEMENTATION
 #include "lib/stb_test.h"
 
 int main() {
@@ -27,16 +32,16 @@ int main() {
     for (size_t i = 0; i < array_length(uuids); ++i) {
         uuid4_t uuid;
         test_case(&t, uuid4_from_repr(&uuid, uuids[i]), //
-                  "%.*s", UUID4_REPR_LENGTH, uuids[i]);
+            "%.*s", UUID4_REPR_LENGTH, uuids[i]);
         char repr[UUID4_REPR_LENGTH];
         test_case(&t, strncasecmp(uuids[i], uuid4_repr(uuid, repr), UUID4_REPR_LENGTH) == 0, //
-                  "%.*s == %.*s", UUID4_REPR_LENGTH, uuids[i], UUID4_REPR_LENGTH, repr);
+            "%.*s == %.*s", UUID4_REPR_LENGTH, uuids[i], UUID4_REPR_LENGTH, repr);
     }
 
     for (size_t i = 0; i < array_length(invalid_uuids); ++i) {
         uuid4_t uuid;
         test_case(&t, !uuid4_from_repr(&uuid, invalid_uuids[i]), //
-                  "%.*s", UUID4_REPR_LENGTH, invalid_uuids[i]);
+            "%.*s", UUID4_REPR_LENGTH, invalid_uuids[i]);
     }
 
     test_conclude(&t, stdout);

@@ -1,3 +1,8 @@
+/// @file
+/// @author Raphaël
+/// @brief General utilities - Standalone hedaer
+/// @date 23/01/2025
+
 #ifndef UTIL_H
 #define UTIL_H
 
@@ -6,7 +11,7 @@
 
 #define QUOTE(name) #name
 #define STR(macro) QUOTE(macro)
-#define STRLEN(strlit) (sizeof (strlit) - 1)
+#define STRLEN(strlit) (sizeof(strlit) - 1)
 
 #define handle_error(...)             \
     do {                              \
@@ -21,11 +26,19 @@
 
 #define streq(x, y) (strcmp((x), (y)) == 0)
 
-#define max(a,b) ((a) > (b) ? (a) : (b))
-#define min(a,b) ((a) < (b) ? (a) : (b))
+#define max(a, b) ((a) > (b) ? (a) : (b))
+#define min(a, b) ((a) < (b) ? (a) : (b))
 
 #define array_length(array) (sizeof(array) / sizeof((array)[0]))
 
 #define coalesce(a, b) ((a == NULL) ? (b) : (a))
+
+#ifndef unreachable
+#ifdef __GNUC__
+#define unreachable() (__builtin_unreachable())
+#else
+#define unreachable()
+#endif // __GNUC__
+#endif // unreachable
 
 #endif // UTIL_H

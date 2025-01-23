@@ -17,7 +17,7 @@ typedef void db_t;
 db_t *db_connect(int verbosity);
 
 /// @brief Destroy a database connection.
-/// @param db The database connection to destroy.
+/// @param db The database connection to destroy. No-op if @c NULL.
 void db_destroy(db_t *db);
 
 /// @brief Verify an API key.

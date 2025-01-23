@@ -1,3 +1,8 @@
+/// @file
+/// @author Raphaël
+/// @brief Tchattator413 protocol - Implementation
+/// @date 23/01/2025
+
 #include "action.h"
 #include "db.h"
 #include "util.h"
@@ -102,6 +107,38 @@ void action_destroy(struct action const *action) {
     }
 }
 
+bool action_run(struct action const *action) {
+    switch (action->type) {
+    case action_type_login:
+        return true;
+    case action_type_logout:
+        return true;
+    case action_type_whois:
+        return true;
+    case action_type_send:
+        return true;
+    case action_type_motd:
+        return true;
+    case action_type_inbox:
+        return true;
+    case action_type_outbox:
+        return true;
+    case action_type_edit:
+        return true;
+    case action_type_rm:
+        return true;
+    case action_type_block:
+        return true;
+    case action_type_unblock:
+        return true;
+    case action_type_ban:
+        return true;
+    case action_type_unban:
+        return true;
+    }
+    unreachable();
+}
+
 #ifndef NDEBUG
 void action_explain(const struct action *action, FILE *output) {
     switch (action->type) {
@@ -149,6 +186,7 @@ void action_explain(const struct action *action, FILE *output) {
         fprintf(output, "unban\n");
         break;
     }
+    unreachable();
 }
 #endif // NDEBUG
 
