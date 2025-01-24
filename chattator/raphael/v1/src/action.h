@@ -89,12 +89,11 @@ struct response {
         struct {
             token_t token;
         } login;
-        struct { } logout;
         user_t whois;
         struct {
             serial_t msg_id;
         } send;
-        struct {
+        /*struct {
 
         } motd;
         struct {
@@ -120,7 +119,7 @@ struct response {
         } ban;
         struct {
 
-        } unban;
+        } unban;*/
     } body;
     enum status status;
     enum action_type type;
@@ -131,21 +130,19 @@ struct response {
 /// @param action Mutated to the parsed action.
 /// @param obj The JSON object allegedly containing an action.
 /// @param db The DB connection.
-/// @return @p true on success
-/// @return @p false on failure.
-bool action_parse(struct action *action, json_object *obj, db_t *db);
+/// @return The error status of the operation.
+errstatus_t action_parse(struct action *action, json_object *obj, db_t *db);
 
 /// @brief Destroys an action.
 /// @param action The action to destroy. No-op if @c NULL.
 void action_destroy(struct action const *action);
 
 /// @brief Evaluate an action.
-/// @param response Mutated to the response.
 /// @param action The action to evaluate.
+/// @param response Mutated to the response.
 /// @param db The DB connection.
-/// @return @p true on success
-/// @return @p false on failure.
-bool action_evaluate(struct response *response, struct action const *action, db_t *db);
+/// @return The error status of the operation.
+errstatus_t action_evaluate(struct action const *action, struct response *response, db_t *db);
 
 /// @brief Convert an action response to JSON.
 /// @param response The action response.

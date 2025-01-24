@@ -42,23 +42,23 @@ char *uuid4_repr(uuid4_t uuid, char repr[const UUID4_REPR_LENGTH]) {
     return repr;
 }
 
-bool uuid4_from_repr(uuid4_t *uuid, char const repr[static const UUID4_REPR_LENGTH]) {
+errstatus_t uuid4_from_repr(uuid4_t *uuid, char const repr[static const UUID4_REPR_LENGTH]) {
     size_t idata = 0, i = 0;
     uint8_t v1, v2;
 #define o                                                            \
     do {                                                             \
         if ((v1 = hex_repr_to_half(repr[i++])) == INVALID_HALF       \
             || (v2 = hex_repr_to_half(repr[i++])) == INVALID_HALF) { \
-            return false;                                            \
+            return errstatus_error;                                            \
         }                                                            \
         uuid->data[idata++] = (v1 << 4) + v2;                        \
     } while (0);
 #define h \
-    if (repr[i++] != '-') return false;
+    if (repr[i++] != '-') return errstatus_error;
     X_42226
 #undef o
 #undef h
-    return true;
+    return errstatus_ok;
 }
 
 void uuid4_put(uuid4_t uuid, FILE *stream) {

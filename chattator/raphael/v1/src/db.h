@@ -23,29 +23,29 @@ void db_destroy(db_t *db);
 /// @brief Verify an API key.
 /// @param db The database connection.
 /// @param api_key The API key to verify.
-/// @return @c true when the API key is valid
-/// @return @c false otherwise
-bool db_verify_api_key(db_t *db, api_key_t api_key);
+/// @return @ref errstatus_ok - the API key is valid
+/// @return @ref errstatus_error - the API key is invalid
+/// @return @ref errstatus_handled - an error occured
+errstatus_t db_verify_api_key(db_t *db, api_key_t api_key);
 
 /// @brief Get the ID of an user from their e-mail.
 /// @param db The database connection.
 /// @param email The e-mail to look for.
 /// @return The ID of the user with the specified e-mail.
-/// @return @c 0 if an error occured or there is no user of such email.
+/// @return @ref errstatus_t in case of failure.
 serial_t db_get_user_id_by_email(db_t *db, const char *email);
 
 /// @brief Get the ID of an user from their pseudo.
 /// @param db The database connection.
 /// @param pseudo The pseudo to look for.
 /// @return The ID of the user with the specified pseudo.
-/// @return @c 0 if an error occured or their is no user of sech pseudo.
+/// @return @ref errstatus_t in case of failure.
 serial_t db_get_user_id_by_pseudo(db_t *db, const char *pseudo);
 
 /// @brief Fills a user record from its ID. If @p user->user_id is undefined, the behavior is undefined.
 /// @param db The database connection.
 /// @param user The user record to fill.
-/// @return @p true on success
-/// @return @p false one failure.
-bool db_get_user(db_t *db, user_t *user);
+/// @return The error status of the operation.
+errstatus_t db_get_user(db_t *db, user_t *user);
 
 #endif // DB_H

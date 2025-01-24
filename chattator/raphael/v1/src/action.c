@@ -19,7 +19,9 @@ void action_destroy(struct action const *action) {
     }
 }
 
-bool action_evaluate(struct response *response, struct action const *action, db_t *db) {
+errstatus_t action_evaluate(struct action const *action, struct response *response, db_t *db) {
+    // todo...
+
     switch (response->type = action->type) {
     case action_type_login:
         break;
@@ -53,11 +55,13 @@ bool action_evaluate(struct response *response, struct action const *action, db_
         break;
     }
 
-    return true;
+    return errstatus_ok;
 }
 
 #ifndef NDEBUG
 void action_explain(struct action const *action, FILE *output) {
+    // todo...
+
     switch (action->type) {
     case action_type_login:
         fprintf(output, "login api_key=");

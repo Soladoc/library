@@ -6,57 +6,65 @@
 #include "action.h"
 #include "util.h"
 
-#define fail(...)                     \
-    do {                              \
-        fprintf(stderr, __VA_ARGS__); \
-        return false;                 \
-    } while (0)
-
-#define fail_missing(parent, key) fail("error: missing key in " parent ": " key "\n")
-
-#define fail_missing_or_invalid(parent, key) fail("error: missing key or invalid value in " parent ": " key "\n")
+#define put_error_missing(parent, key) put_error("missing key in " parent ": " key "\n");
+#define put_error_missing_or_invalid(parent, key) put_error("missing key or invalid value: " parent " > " key "\n")
 
 static inline serial_t json_object_get_user_id(json_object *user_key, db_t *db);
+static inline errstatus_t get_api_key(uuid4_t *api_key, json_object *with, db_t *db);
 
-static inline bool get_api_key(uuid4_t *api_key, json_object *with, db_t *db) {
-    char const *repr = json_object_get_string(json_object_object_get(with, "api_key"));
-    return repr && uuid4_from_repr(api_key, repr) && db_verify_api_key(db, *api_key);
-}
-
-bool action_parse(struct action *action, json_object *obj, db_t *db) {
+errstatus_t action_parse(struct action *action, json_object *obj, db_t *db) {
     char const *name = json_object_get_string(json_object_object_get(obj, "do"));
-    if (!name) fail_missing_or_invalid("action", "do");
+    if (!name) {
+        put_error_missing_or_invalid("action", "do");
+        return errstatus_handled;
+    }
 
     json_object *with = json_object_object_get(obj, "with");
+    if (!with) {
+        put_error_missing_or_invalid("action", "with");
+        return errstatus_handled;
+    }
 
     // todo..
 
     if (streq(name, "login")) {
         action->type = action_type_login;
 
-        if (!get_api_key(&action->with.login.api_key, with, db)) {
-            fail_missing_or_invalid("login", "api_key");
+        errstatus_t err = get_api_key(&action->with.login.api_key, with, db);
+        switch (err) {
+        case errstatus_error: put_error_missing_or_invalid("login", "api_key"); [[fallthrough]];
+        case errstatus_handled: return err;
+        default:;
         }
 
         char const *password_hash = json_object_get_string(json_object_object_get(with, "password_hash"));
-        if (!password_hash) fail_missing_or_invalid("login", "password_hash");
+        if (!password_hash) {
+            put_error_missing_or_invalid("login", "password_hash");
+            return errstatus_handled;
+        }
         strncpy(action->with.login.password_hash, password_hash, sizeof action->with.login.password_hash - 1);
         action->with.login.password_hash[sizeof action->with.login.password_hash - 1] = '\0';
     } else if (streq(name, "logout")) {
         action->type = action_type_logout;
 
         if (!(action->with.logout.token = json_object_get_uint64(json_object_object_get(with, "token")))) {
-            fail_missing_or_invalid("logout", "token");
+            put_error_missing_or_invalid("logout", "token");
         }
     } else if (streq(name, "whois")) {
         action->type = action_type_whois;
 
-        if (!get_api_key(&action->with.whois.api_key, with, db)) {
-            fail_missing_or_invalid("whois", "api_key");
+        errstatus_t err = get_api_key(&action->with.whois.api_key, with, db);
+        switch (err) {
+        case errstatus_error: put_error_missing_or_invalid("whois", "api_key"); [[fallthrough]];
+        case errstatus_handled: return err;
+        default:;
         }
 
-        if (!(action->with.whois.user_id = json_object_get_user_id(json_object_object_get(with, "user"), db))) {
-            fail_missing_or_invalid("whois", "user");
+        serial_t res = json_object_get_user_id(json_object_object_get(with, "user"), db);
+        switch (res) {
+        case errstatus_error: put_error_missing_or_invalid("whois", "user"); [[fallthrough]];
+        case errstatus_handled: return res;
+        default: action->with.whois.user_id = res;
         }
     } else if (streq(name, "send")) {
         action->type = action_type_send;
@@ -87,14 +95,16 @@ bool action_parse(struct action *action, json_object *obj, db_t *db) {
     } else if (streq(name, "unban")) {
         action->type = action_type_unban;
     } else {
-        fail("unknown action: '%s'", name);
+        put_error("unknown action: %s\n", name);
+        return errstatus_handled;
     }
 
     return true;
 }
 
-
 json_object *response_to_json(struct response *response) {
+    // todo...
+
     json_object *obj = json_object_new_object(), *body = json_object_new_object();
 
 #define add_key(o, k, v) json_object_object_add_ex(o, k, v, JSON_C_OBJECT_ADD_KEY_IS_NEW | JSON_C_OBJECT_KEY_IS_CONSTANT)
@@ -155,9 +165,17 @@ json_object *response_to_json(struct response *response) {
     return obj;
 }
 
+errstatus_t get_api_key(uuid4_t *api_key, json_object *with, db_t *db) {
+    char const *repr = json_object_get_string(json_object_object_get(with, "api_key"));
+    if (!repr) return errstatus_error;
+    errstatus_t err;
+    if (errstatus_ok != (err = uuid4_from_repr(api_key, repr))) return err;
+    if (errstatus_ok != (err = db_verify_api_key(db, *api_key))) return err;
+    return errstatus_ok;
+}
+
 serial_t json_object_get_user_id(json_object *user_key, db_t *db) {
     switch (json_object_get_type(user_key)) {
-
     case json_type_int: return json_object_get_int(user_key);
     case json_type_string: {
         if (json_object_get_string_len(user_key) > max(EMAIL_LENGTH, PSEUDO_LENGTH)) break;
@@ -166,7 +184,7 @@ serial_t json_object_get_user_id(json_object *user_key, db_t *db) {
                  ? db_get_user_id_by_email(db, email_or_pseudo)
                  : db_get_user_id_by_pseudo(db, email_or_pseudo);
     }
-    default: break;
+    default:;
     }
-    return 0;
+    return errstatus_error;
 }

@@ -13,16 +13,13 @@
 #define STR(macro) QUOTE(macro)
 #define STRLEN(strlit) (sizeof(strlit) - 1)
 
-#define handle_error(...)             \
-    do {                              \
-        fprintf(stderr, __VA_ARGS__); \
-        exit(EXIT_FAILURE);           \
-    } while (0)
+#define PROG "act"
+
+#define put_error(fmt, ...) fprintf(stderr, "error: " fmt __VA_OPT__(, ) __VA_ARGS__)
+#define put_error_json(fmt, ...) put_error("json-c: " fmt ": %s" __VA_ARGS__, json_util_get_last_err())
 
 /// @brief Gets the necessary buffer size for a sprintf operation.
 #define buffer_size(format, ...) (snprintf(NULL, 0, (format), __VA_ARGS__) + 1) // safe byte for \0
-
-#define handle_json_error() handle_error("error: json-c: %s\n", json_util_get_last_err())
 
 #define streq(x, y) (strcmp((x), (y)) == 0)
 

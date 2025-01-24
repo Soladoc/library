@@ -31,7 +31,7 @@ int main() {
 
     for (size_t i = 0; i < array_length(uuids); ++i) {
         uuid4_t uuid;
-        test_case(&t, uuid4_from_repr(&uuid, uuids[i]), //
+        test_case(&t, errstatus_ok == uuid4_from_repr(&uuid, uuids[i]), //
             "%.*s", UUID4_REPR_LENGTH, uuids[i]);
         char repr[UUID4_REPR_LENGTH];
         test_case(&t, strncasecmp(uuids[i], uuid4_repr(uuid, repr), UUID4_REPR_LENGTH) == 0, //
@@ -40,7 +40,7 @@ int main() {
 
     for (size_t i = 0; i < array_length(invalid_uuids); ++i) {
         uuid4_t uuid;
-        test_case(&t, !uuid4_from_repr(&uuid, invalid_uuids[i]), //
+        test_case(&t, errstatus_ok != uuid4_from_repr(&uuid, invalid_uuids[i]), //
             "%.*s", UUID4_REPR_LENGTH, invalid_uuids[i]);
     }
 

@@ -14,8 +14,6 @@
 #include "src/action.h"
 #include "src/util.h"
 
-#define PROG "act"
-
 #define HELP PROG " - A Tchattator413 implementation\n\
 \n\
 Usage: " PROG " -[qv]... [--help] [--version]\n\
@@ -79,8 +77,11 @@ int main(int argc, char **argv) {
     }
 
     // Allocation
-    json_object *const input = json_object_from_fd(STDIN_FILENO);
-    if (!input) return EX_DATAERR;
+    json_object *const input = json_object_from_file("test/input/1.json"); // json_object_from_fd(STDIN_FILENO);
+    if (!input) {
+        put_error_json("failed to parse input\n");
+        return EX_DATAERR;
+    }
 
     db_t *db = db_connect(verbosity);
     if (!db) return EX_NODB;
@@ -106,7 +107,7 @@ int main(int argc, char **argv) {
         if ((item = act(input, db))) json_object_array_add(output, item);
         break;
     default:
-        handle_error("error: invalid request (expected array or object, got %s)", json_type_to_name(input_type));
+        put_error("invalid request (expected array or object, got %s)\n", json_type_to_name(input_type));
     }
 
     // Results
@@ -126,11 +127,21 @@ int main(int argc, char **argv) {
 }
 
 json_object *act(json_object *const action_obj, db_t *db) {
-    struct action action;
-    struct response response;
-    if (!action_parse(&action, action_obj, db)) return NULL;
+    errstatus_t err;
 
-    if (!action_evaluate(&response, &action, db)) return NULL;
+    struct action action;
+    switch (err = action_parse(&action, action_obj, db)) {
+    case errstatus_error: put_error("failed to parse action"); [[fallthrough]];
+    case errstatus_handled: return NULL;
+    default:;
+    }
+
+    struct response response;
+    switch (err = action_evaluate(&action, &response, db)) {
+    case errstatus_error: put_error("failed to parse action"); [[fallthrough]];
+    case errstatus_handled: return NULL;
+    default:;
+    }
 
     json_object *json_response = response_to_json(&response);
 
