@@ -16,7 +16,7 @@
 
 #define PROG "act"
 
-#define HELP PROG" - A Tchattator413 implementation\n\
+#define HELP PROG " - A Tchattator413 implementation\n\
 \n\
 Usage: " PROG " -[qv]... [--help] [--version]\n\
 \n\
@@ -37,7 +37,7 @@ DB_ROOT_PASSWORD  DB password"
 
 #define VERSION PROG " 1.0.0"
 
-static inline bool act(json_object *const, db_t *);
+static inline json_object *act(json_object *const, db_t *);
 
 enum { EX_NODB = EX__MAX + 1 };
 
@@ -85,40 +85,56 @@ int main(int argc, char **argv) {
     db_t *db = db_connect(verbosity);
     if (!db) return EX_NODB;
 
+    json_object *const output = json_object_new_array();
+
+    // Usage
+
     json_type const input_type = json_object_get_type(input);
+    json_object *item;
     switch (input_type) {
     case json_type_array: {
         size_t const len = json_object_array_length(input);
         for (size_t i = 0; i < len; ++i) {
             json_object *const action = json_object_array_get_idx(input, i);
             assert(action);
-            act(action, db);
+
+            if ((item = act(action, db))) json_object_array_add(output, item);
         }
         break;
     }
     case json_type_object:
-        act(input, db);
+        if ((item = act(input, db))) json_object_array_add(output, item);
         break;
     default:
         handle_error("error: invalid request (expected array or object, got %s)", json_type_to_name(input_type));
     }
 
-    // Usage
+    // Results
+
+    fputs(json_object_to_json_string(output), stdout);
 
     // Deallocation
 
+#ifndef NDEBUG // The OS will release the memory anyway
     json_object_put(input);
+    json_object_put(output);
+
+    db_destroy(db);
+#endif // NBDEBUG
 
     return EX_OK;
 }
 
-bool act(json_object *const action_obj, db_t *db) {
+json_object *act(json_object *const action_obj, db_t *db) {
     struct action action;
-    if (!action_parse(&action, action_obj, db)) return false;
+    struct response response;
+    if (!action_parse(&action, action_obj, db)) return NULL;
 
-    action_explain(&action, stdout);
+    if (!action_evaluate(&response, &action, db)) return NULL;
+
+    json_object *json_response = response_to_json(&response);
 
     action_destroy(&action);
 
-    return true;
+    return json_response;
 }

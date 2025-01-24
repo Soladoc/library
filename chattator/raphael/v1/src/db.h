@@ -41,4 +41,11 @@ serial_t db_get_user_id_by_email(db_t *db, const char *email);
 /// @return @c 0 if an error occured or their is no user of sech pseudo.
 serial_t db_get_user_id_by_pseudo(db_t *db, const char *pseudo);
 
+/// @brief Fills a user record from its ID. If @p user->user_id is undefined, the behavior is undefined.
+/// @param db The database connection.
+/// @param user The user record to fill.
+/// @return @p true on success
+/// @return @p false one failure.
+bool db_get_user(db_t *db, user_t *user);
+
 #endif // DB_H

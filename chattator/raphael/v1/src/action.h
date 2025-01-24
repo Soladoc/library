@@ -67,13 +67,70 @@ struct action {
             token_t token;
             serial_t user_id;
         } block, unblock, ban, unban;
-    };
+    } with;
+};
+
+// Note : resemblance with HTTP status code is only for familiarity
+enum status {
+    status_ok = 200,
+    status_created = 201,
+    status_no_content = 204,
+    status_unauthorized = 401,
+    status_forbidden = 403,
+    status_not_found = 404,
+    status_payload_too_large = 413,
+    status_unprocessable_content = 422,
+    status_too_many_requests = 429,
+    status_internal_serveur_error = 500,
+};
+
+struct response {
+    union {
+        struct {
+            token_t token;
+        } login;
+        struct { } logout;
+        user_t whois;
+        struct {
+            serial_t msg_id;
+        } send;
+        struct {
+
+        } motd;
+        struct {
+
+        } inbox;
+        struct {
+
+        } outbox;
+        struct {
+
+        } edit;
+        struct {
+
+        } rm;
+        struct {
+
+        } block;
+        struct {
+
+        } unblock;
+        struct {
+
+        } ban;
+        struct {
+
+        } unban;
+    } body;
+    enum status status;
+    enum action_type type;
+    bool has_next_page;
 };
 
 /// @brief Parse an action from a JSON object.
 /// @param action Mutated to the parsed action.
 /// @param obj The JSON object allegedly containing an action.
-/// @param db The DB connection to query the database for supplemental information.
+/// @param db The DB connection.
 /// @return @p true on success
 /// @return @p false on failure.
 bool action_parse(struct action *action, json_object *obj, db_t *db);
@@ -82,11 +139,18 @@ bool action_parse(struct action *action, json_object *obj, db_t *db);
 /// @param action The action to destroy. No-op if @c NULL.
 void action_destroy(struct action const *action);
 
-/// @brief Run an action.
-/// @param action The action to run.
+/// @brief Evaluate an action.
+/// @param response Mutated to the response.
+/// @param action The action to evaluate.
+/// @param db The DB connection.
 /// @return @p true on success
 /// @return @p false on failure.
-bool action_run(struct action const *action);
+bool action_evaluate(struct response *response, struct action const *action, db_t *db);
+
+/// @brief Convert an action response to JSON.
+/// @param response The action response.
+/// @return A new JSON object.
+json_object *response_to_json(struct response *response);
 
 #ifndef NDEBUG
 /// @brief Explain an action.

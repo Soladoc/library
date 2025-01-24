@@ -35,28 +35,28 @@ bool action_parse(struct action *action, json_object *obj, db_t *db) {
     if (streq(name, "login")) {
         action->type = action_type_login;
 
-        if (!get_api_key(&action->login.api_key, with, db)) {
+        if (!get_api_key(&action->with.login.api_key, with, db)) {
             fail_missing_or_invalid("login", "api_key");
         }
 
         char const *password_hash = json_object_get_string(json_object_object_get(with, "password_hash"));
         if (!password_hash) fail_missing_or_invalid("login", "password_hash");
-        strncpy(action->login.password_hash, password_hash, sizeof action->login.password_hash - 1);
-        action->login.password_hash[sizeof action->login.password_hash - 1] = '\0';
+        strncpy(action->with.login.password_hash, password_hash, sizeof action->with.login.password_hash - 1);
+        action->with.login.password_hash[sizeof action->with.login.password_hash - 1] = '\0';
     } else if (streq(name, "logout")) {
         action->type = action_type_logout;
 
-        if (!(action->logout.token = json_object_get_uint64(json_object_object_get(with, "token")))) {
+        if (!(action->with.logout.token = json_object_get_uint64(json_object_object_get(with, "token")))) {
             fail_missing_or_invalid("logout", "token");
         }
     } else if (streq(name, "whois")) {
         action->type = action_type_whois;
 
-        if (!get_api_key(&action->whois.api_key, with, db)) {
+        if (!get_api_key(&action->with.whois.api_key, with, db)) {
             fail_missing_or_invalid("whois", "api_key");
         }
 
-        if (!(action->whois.user_id = json_object_get_user_id(json_object_object_get(with, "user"), db))) {
+        if (!(action->with.whois.user_id = json_object_get_user_id(json_object_object_get(with, "user"), db))) {
             fail_missing_or_invalid("whois", "user");
         }
     } else if (streq(name, "send")) {
@@ -97,46 +97,51 @@ bool action_parse(struct action *action, json_object *obj, db_t *db) {
 void action_destroy(struct action const *action) {
     switch (action->type) {
     case action_type_send:
-        free(action->send.content);
+        free(action->with.send.content);
         break;
     case action_type_edit:
-        free(action->edit.new_content);
+        free(action->with.edit.new_content);
         break;
     default:
         break;
     }
 }
 
-bool action_run(struct action const *action) {
-    switch (action->type) {
+bool action_evaluate(struct response *response, struct action const *action, db_t *db) {
+    switch (response->type = action->type) {
     case action_type_login:
-        return true;
+        break;
     case action_type_logout:
-        return true;
+        break;
     case action_type_whois:
-        return true;
+        response->has_next_page = false;
+        response->status = status_ok;
+        response->body.whois.user_id = action->with.whois.user_id;
+        if (!db_get_user(db, &response->body.whois)) return false;
+        break;
     case action_type_send:
-        return true;
+        break;
     case action_type_motd:
-        return true;
+        break;
     case action_type_inbox:
-        return true;
+        break;
     case action_type_outbox:
-        return true;
+        break;
     case action_type_edit:
-        return true;
+        break;
     case action_type_rm:
-        return true;
+        break;
     case action_type_block:
-        return true;
+        break;
     case action_type_unblock:
-        return true;
+        break;
     case action_type_ban:
-        return true;
+        break;
     case action_type_unban:
-        return true;
+        break;
     }
-    unreachable();
+
+    return true;
 }
 
 #ifndef NDEBUG
@@ -144,16 +149,16 @@ void action_explain(struct action const *action, FILE *output) {
     switch (action->type) {
     case action_type_login:
         fprintf(output, "login api_key=");
-        uuid4_put(action->login.api_key, output);
-        fprintf(output, " password_hash=%s\n", action->login.password_hash);
+        uuid4_put(action->with.login.api_key, output);
+        fprintf(output, " password_hash=%s\n", action->with.login.password_hash);
         break;
     case action_type_logout:
-        fprintf(output, "logout token=%lu\n", action->logout.token);
+        fprintf(output, "logout token=%lu\n", action->with.logout.token);
         break;
     case action_type_whois:
         fprintf(output, "whois api_key=");
-        uuid4_put(action->whois.api_key, output);
-        fprintf(output, " user_id=%d\n", action->whois.user_id);
+        uuid4_put(action->with.whois.api_key, output);
+        fprintf(output, " user_id=%d\n", action->with.whois.user_id);
         break;
     case action_type_send:
         fprintf(output, "send\n");
@@ -188,6 +193,68 @@ void action_explain(struct action const *action, FILE *output) {
     }
 }
 #endif // NDEBUG
+
+json_object *response_to_json(struct response *response) {
+    json_object *obj = json_object_new_object(), *body = json_object_new_object();
+
+#define add_key(o, k, v) json_object_object_add_ex(o, k, v, JSON_C_OBJECT_ADD_KEY_IS_NEW | JSON_C_OBJECT_KEY_IS_CONSTANT)
+
+    add_key(obj, "status", json_object_new_int(response->status));
+    add_key(obj, "has_next_page", json_object_new_boolean(response->has_next_page));
+    add_key(obj, "body", body);
+
+    switch (response->type) {
+
+    case action_type_login:
+
+        break;
+    case action_type_logout:
+
+        break;
+    case action_type_whois:
+        add_key(body, "user_id", json_object_new_int(response->body.whois.user_id));
+        add_key(body, "email", json_object_new_string(response->body.whois.email));
+        add_key(body, "last_name", json_object_new_string(response->body.whois.email));
+        add_key(body, "first_name", json_object_new_string(response->body.whois.email));
+        add_key(body, "display_name", json_object_new_string(response->body.whois.display_name));
+        add_key(body, "kind", json_object_new_int(response->body.whois.kind));
+        break;
+    case action_type_send:
+
+        break;
+    case action_type_motd:
+
+        break;
+    case action_type_inbox:
+
+        break;
+    case action_type_outbox:
+
+        break;
+    case action_type_edit:
+
+        break;
+    case action_type_rm:
+
+        break;
+    case action_type_block:
+
+        break;
+    case action_type_unblock:
+
+        break;
+    case action_type_ban:
+
+        break;
+    case action_type_unban:
+
+        break;
+    }
+
+#undef add_key
+
+    return obj;
+}
 
 serial_t json_object_get_user_id(json_object *user_key, db_t *db) {
     switch (json_object_get_type(user_key)) {

@@ -15,7 +15,7 @@ echo 'begin;'
 if [[ "$cat_struct" = true ]]; then
     cat schemas.sql \
         pact/types.sql pact/crea.sql pact/fonctions.sql pact/vues.sql pact/triggers.util.sql pact/triggers/*.sql \
-        tchattator/crea.sql
+        tchattator/crea.sql tchattator/vues.sql
 fi
 if [[ "$cat_data" = true ]]; then
     cat pact/bigdata.sql pact/data.sql pact/images.sql pact/offre/*.sql

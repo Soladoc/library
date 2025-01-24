@@ -17,15 +17,30 @@ typedef uint32_t page_number_t;
 typedef int32_t serial_t;
 
 #define PASSWORD_HASH_LENGTH 255
-#define PSEUDO_LENGTH 255
 #define EMAIL_LENGTH 319
+#define PSEUDO_LENGTH 255
 
-typedef char password_hash_t[PASSWORD_HASH_LENGTH + 1], pseudo_t[PSEUDO_LENGTH + 1], email_t[EMAIL_LENGTH + 1];
+typedef char word_t[256];
+
+typedef char password_hash_t[PASSWORD_HASH_LENGTH + 1], email_t[EMAIL_LENGTH + 1], pseudo_t[PSEUDO_LENGTH + 1];
 
 typedef char action_name[8]; // keep the size as small as possible
 
 #define X(str) _Static_assert(sizeof str <= sizeof(action_name), "buffer size too small for action name");
 X_ACTION_NAMES
 #undef X
+
+enum user_kind {
+    user_kind_membre,
+    user_kind_pro_prive,
+    user_kind_pro_public,
+};
+
+typedef struct {
+    serial_t user_id;
+    email_t email;
+    word_t last_name, first_name, display_name;
+    enum user_kind kind;
+} user_t;
 
 #endif // TYPES_H
