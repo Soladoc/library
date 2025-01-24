@@ -3,7 +3,7 @@ set -euo pipefail
 cd "$(dirname "${BASH_SOURCE[0]}")"
 
 function host_is_iut() {
-    [[ "$(hostname)" == 'PCE*' ]]
+    [[ "$(hostname)" == PCE* ]]
     return $?
 }
 
@@ -15,7 +15,9 @@ lflags=''
 output=a.out
 
 image=gcc-mariadb-pgsql:14.2-sae34
-if ! host_is_iut; then
+if host_is_iut; then
+    image=docker.iutlan.etu.univ-rennes1.fr/info/$image
+else
     image=bigpapoo/$image
 fi
 
@@ -53,7 +55,7 @@ done
 # ensure run container
 if ! docker ps --format '{{.Names}}' | grep -q "^$container$"; then
     echo "setting up $container"
-    docker run -td --name $container $image
+    docker run -td --name=$container $image
     docker exec $container apt-get -y install libjson-c-dev
 fi
 
