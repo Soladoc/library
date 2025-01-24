@@ -17,7 +17,8 @@
 
 #define conn_param(param) coalesce(getenv(#param), STR(param))
 
-#define pq_get_l(type, res, row, col) ((type)(ntohl(*((type *)PQgetvalue((res), (row), (col))))))
+#define pq_recv_l(type, res, row, col) ((type)(ntohl(*((type *)PQgetvalue((res), (row), (col))))))
+#define pq_send_l(val) htonl(val)
 
 db_t *db_connect(int verbosity) {
     PGconn *db = PQsetdbLogin(
@@ -72,7 +73,7 @@ serial_t db_get_user_id_by_email(db_t *db, const char *email) {
         fprintf(stderr, "error: cannot find user of email %s\n", email);
         user_id = 0;
     } else {
-        user_id = pq_get_l(serial_t, res, 0, 0);
+        user_id = pq_recv_l(serial_t, res, 0, 0);
     }
 
     PQclear(res);
@@ -92,7 +93,7 @@ serial_t db_get_user_id_by_pseudo(db_t *db, const char *pseudo) {
         fprintf(stderr, "error: cannot find user of pseudo %s\n", pseudo);
         user_id = 0;
     } else {
-        user_id = pq_get_l(serial_t, res, 0, 0);
+        user_id = pq_recv_l(serial_t, res, 0, 0);
     }
 
     PQclear(res);
@@ -101,9 +102,15 @@ serial_t db_get_user_id_by_pseudo(db_t *db, const char *pseudo) {
 }
 
 bool db_get_user(db_t *db, user_t *user) {
-    void *arg = &user->user_id;
+    char const *p_value[1];
+    int p_length[1], p_format[1];
+
+    uint32_t arg = pq_send_l(user->user_id);
+    p_value[0] = (char *)&arg;
+    p_length[0] = sizeof arg;
+    p_format[0] = 1;
     PGresult *res = PQexecParams(db, "select kind, id, email, nom, prenom, display_name from " SCHEMA_TCHATTATOR ".user where id=$1",
-        1, NULL, (const char **)&arg, NULL, NULL, 1);
+        1, NULL, p_value, p_length, p_format, 1);
 
     bool ok;
 
@@ -114,8 +121,8 @@ bool db_get_user(db_t *db, user_t *user) {
         fprintf(stderr, "error: cannot find user of id %d\n", user->user_id);
         ok = false;
     } else {
-        user->kind = pq_get_l(enum user_kind, res, 0, 0);
-        assert(user->user_id == pq_get_l(serial_t, res, 0, 1));
+        user->kind = pq_recv_l(enum user_kind, res, 0, 0);
+        assert(user->user_id == pq_recv_l(serial_t, res, 0, 1));
         strncpy(user->email, PQgetvalue(res, 0, 2), sizeof user->email);
         strncpy(user->last_name, PQgetvalue(res, 0, 3), sizeof user->last_name);
         strncpy(user->first_name, PQgetvalue(res, 0, 4), sizeof user->first_name);

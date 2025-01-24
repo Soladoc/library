@@ -214,8 +214,8 @@ json_object *response_to_json(struct response *response) {
     case action_type_whois:
         add_key(body, "user_id", json_object_new_int(response->body.whois.user_id));
         add_key(body, "email", json_object_new_string(response->body.whois.email));
-        add_key(body, "last_name", json_object_new_string(response->body.whois.email));
-        add_key(body, "first_name", json_object_new_string(response->body.whois.email));
+        add_key(body, "last_name", json_object_new_string(response->body.whois.last_name));
+        add_key(body, "first_name", json_object_new_string(response->body.whois.first_name));
         add_key(body, "display_name", json_object_new_string(response->body.whois.display_name));
         add_key(body, "kind", json_object_new_int(response->body.whois.kind));
         break;
