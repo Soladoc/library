@@ -15,9 +15,6 @@
 
 #define PROG "act"
 
-#define put_error(fmt, ...) fprintf(stderr, "error: " fmt __VA_OPT__(, ) __VA_ARGS__)
-#define put_error_json(fmt, ...) put_error("json-c: " fmt ": %s" __VA_ARGS__, json_util_get_last_err())
-
 /// @brief Gets the necessary buffer size for a sprintf operation.
 #define buffer_size(format, ...) (snprintf(NULL, 0, (format), __VA_ARGS__) + 1) // safe byte for \0
 
