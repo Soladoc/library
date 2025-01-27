@@ -250,8 +250,6 @@ create table _reponse (
     contenu paragraphe not null
 );
 
--- ASSOCIATIONS
-
 create table _ouverture_hebdomadaire (
     id_offre int
         constraint ouverture_hebdomadaire_fk_offre references _offre on delete cascade,
@@ -266,6 +264,31 @@ Ouvert sur toutes les semaines de l''année.
 Vacances, jours fériés et ponts non comptabilisées.';
 comment on column _ouverture_hebdomadaire.dow is 'The day of the week as Sunday (0) to Saturday (6)';
 
+create table _code_postal (
+    code_commune int not null,
+    numero_departement num_departement not null,
+    constraint adresse_fk_commune foreign key (code_commune, numero_departement) references _commune,
+
+    code_postal char(5) not null,
+    constraint code_postal_pk primary key (code_commune, numero_departement, code_postal)
+);
+
+create table _changement_etat (
+    id_offre int
+        constraint changement_etat_fk_offre references _offre on delete cascade,
+    fait_le timestamp default localtimestamp,
+    constraint changement_etat_pk primary key (id_offre, fait_le)
+);
+
+create table _tags (
+    id_offre int
+        constraint tags_fk_offre references _offre on delete cascade,
+    tag mot_minuscule,
+    constraint tags_pk primary key (id_offre, tag)
+);
+
+-- ASSOCIATIONS BINAIRES
+
 create table _signalement (
     id_compte int
         constraint signalement_fk_compte references _compte on delete cascade,
@@ -274,15 +297,6 @@ create table _signalement (
     constraint signalement_pk primary key (id_compte, id_signalable),
 
     raison paragraphe not null
-);
-
-create table _code_postal (
-    code_commune int not null,
-    numero_departement num_departement not null,
-    constraint adresse_fk_commune foreign key (code_commune, numero_departement) references _commune,
-
-    code_postal char(5) not null,
-    constraint code_postal_pk primary key (code_commune, numero_departement, code_postal)
 );
 
 create table _langue_visite (
@@ -301,13 +315,6 @@ create table _galerie (
     constraint galerie_pk primary key (id_offre, id_image)
 );
 
-create table _changement_etat (
-    id_offre int
-        constraint changement_etat_fk_offre references _offre on delete cascade,
-    fait_le timestamp default localtimestamp,
-    constraint changement_etat_pk primary key (id_offre, fait_le)
-);
-
 create table _souscription_option (
     id_offre int
         constraint souscription_option_fk_offre references _offre on delete cascade,
@@ -318,11 +325,4 @@ create table _souscription_option (
     constraint souscription_option_pk primary key (id_offre, nom_option, lancee_le),
     nb_semaines int not null check (nb_semaines between 1 and 4),
     actif bool not null default true
-);
-
-create table _tags (
-    id_offre int
-        constraint tags_fk_offre references _offre on delete cascade,
-    tag mot_minuscule,
-    constraint tags_pk primary key (id_offre, tag)
 );
