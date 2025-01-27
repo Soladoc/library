@@ -190,7 +190,8 @@ create table _membre (
     id int
         constraint membre_pk primary key
         constraint membre_inherits_compte references _compte on delete cascade,
-    pseudo pseudonyme not null unique
+    pseudo pseudonyme not null unique,
+    full_block_expires_on timestamp
 );
 
 create table _tarif (
