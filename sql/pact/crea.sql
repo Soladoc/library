@@ -41,9 +41,9 @@ create table _adresse (
     precision_int ligne check (precision_int <> ''),
     precision_ext ligne check (precision_ext <> ''),
 
-    latitude decimal,
-    longitude decimal,
-    check ((latitude is null) = (longitude is null))
+    lat decimal,
+    long decimal,
+    check ((lat is null) = (long is null))
 );
 comment on constraint adresse_check_numero_voie_complement_numero on _adresse is
 'numero_voie is null => complement_numero is null';
@@ -194,7 +194,7 @@ create table _membre (
 );
 
 create table _tarif (
-    nom ligne not null,
+    nom ligne,
     id_offre int
         constraint tarif_fk_offre references _offre on delete cascade,
     constraint tarif_pk primary key (nom, id_offre),
