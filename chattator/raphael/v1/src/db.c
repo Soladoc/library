@@ -56,7 +56,7 @@ void db_destroy(db_t *db) {
     PQfinish(db);
 }
 
-serial_t db_verify_user_api_key(db_verify_user_api_key_t *result, db_t *db, api_key_t api_key) {
+errstatus_t db_verify_user_api_key(db_verify_user_api_key_t *out_result, db_t *db, api_key_t api_key) {
     char api_key_repr[UUID4_REPR_LENGTH + 1];
     uuid4_repr(api_key, api_key_repr);
     api_key_repr[UUID4_REPR_LENGTH] = '\0';
@@ -65,15 +65,17 @@ serial_t db_verify_user_api_key(db_verify_user_api_key_t *result, db_t *db, api_
     PGresult *pg_result = PQexecParams(db, "select kind, id from " TBL_USER " where api_key = $1",
         1, NULL, &arg, NULL, NULL, 1);
 
-    serial_t res;
+    errstatus_t res;
     if (PQresultStatus(pg_result) != PGRES_TUPLES_OK) {
         put_pq_result_error(pg_result);
-        return errstatus_handled;
+        res = errstatus_error;
     } else if (PQntuples(pg_result) == 0) {
-        return errstatus_error;
+        res = errstatus_error;
+    } else {
+        out_result->user_kind = pq_recv_l(serial_t, pg_result, 0, 0);
+        out_result->user_id = pq_recv_l(serial_t, pg_result, 0, 1);
+        res = errstatus_ok;
     }
-    result->user_kind = pq_recv_l(serial_t, pg_result, 0, 0);
-    result->user_id = pq_recv_l(serial_t, pg_result, 0, 1);
     PQclear(pg_result);
     return res;
 }

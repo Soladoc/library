@@ -13,38 +13,45 @@
 
 #include "src/action.h"
 #include "src/config.h"
+#include "src/json-helpers.h"
 #include "src/util.h"
 
 #define HELP PROG " - A Tchattator413 implementation\n\
 \n\
-Usage: " PROG " -[qv]... [--help] [--version]\n\
+SYNOPSIS\n\
+    " PROG " -[qv]... [-c FILE]\n\
+    " PROG " --dump-config\n\
+    " PROG " --help\n\
+    " PROG " --version\n\
 \n\
-Reads JSON actions from standard input. Writes JSON results to standard output.\n\
+DESCRIPTION\n\
+    Reads JSON actions from standard input. Writes JSON results to standard output.\n\
 \n\
-Mandatory arguments to long options are mandatory for short options too.\n\
+    Mandatory arguments to long options are mandatory for short options too.\n\
 \n\
--q, --quiet        More quiet (can be repeated)\n\
--v, --verbose      More verbose (can be repeated)\n\
--c, --config=FILE  Configuration file\n\
---help             Show this help\n\
---version          Show version\n\
+    -q, --quiet        More quiet (can be repeated)\n\
+    -v, --verbose      More verbose (can be repeated)\n\
+    -c, --config=FILE  Configuration file\n\
+    --dump-config      Dump current configuration\n\
+    --help             Show this help\n\
+    --version          Show version\n\
 \n\
 ENVIRONMENT\n\
-\n\
-DB_HOST            DB host\n\
-PGDB_PORT          DB port\n\
-DB_NAME            DB name\n\
-DB_USER            DB username\n\
-DB_ROOT_PASSWORD   DB password"
+    DB_HOST            DB host\n\
+    PGDB_PORT          DB port\n\
+    DB_NAME            DB name\n\
+    DB_USER            DB username\n\
+    DB_ROOT_PASSWORD   DB password"
 
 #define VERSION PROG " 1.0.0"
 
-static inline json_object *act(cfg_t *, db_t *, json_object *const);
+static inline json_object *act(cfg_t *cfg, db_t *db, json_object *const obj_action);
 
 enum { EX_NODB = EX__MAX + 1 };
 
 int main(int argc, char **argv) {
     int verbosity = 0;
+    bool dump_config = false;
 
     cfg_t *cfg = NULL;
 
@@ -53,23 +60,12 @@ int main(int argc, char **argv) {
         enum {
             opt_help,
             opt_version,
+            opt_dump_config,
             opt_quiet = 'q',
             opt_verbose = 'v',
             opt_config = 'c',
         };
         struct option long_options[] = {
-            {
-                .name = "quiet",
-                .val = opt_quiet,
-            },
-            {
-                .name = "verbose",
-                .val = opt_verbose
-            },
-            {
-                .name = "config",
-                .val = opt_config,
-            },
             {
                 .name = "help",
                 .val = opt_help,
@@ -78,12 +74,37 @@ int main(int argc, char **argv) {
                 .name = "version",
                 .val = opt_version,
             },
+            {
+                .name = "dump-config",
+                .val = opt_dump_config,
+            },
+            {
+                .name = "quiet",
+                .val = opt_quiet,
+            },
+            {
+                .name = "verbose",
+                .val = opt_verbose,
+            },
+            {
+                .name = "config",
+                .val = opt_config,
+            },
             {},
         };
 
         int opt;
         while (-1 != (opt = getopt_long(argc, argv, "qvh:", long_options, NULL))) {
             switch (opt) {
+            case opt_help:
+                puts(HELP);
+                return EX_OK;
+            case opt_version:
+                puts(VERSION);
+                return EX_OK;
+            case opt_dump_config:
+                dump_config = true;
+                break;
             case opt_quiet: --verbosity; break;
             case opt_verbose: ++verbosity; break;
             case opt_config:
@@ -94,22 +115,25 @@ int main(int argc, char **argv) {
                 cfg = config_from_file(optarg);
                 if (!cfg) return EX_CONFIG;
                 break;
-            case opt_help:
-                puts(HELP);
-                return EX_OK;
-            case opt_version:
-                puts(VERSION);
-                return EX_OK;
             case '?':
+                puts(HELP);
                 return EX_USAGE;
             }
         }
     }
 
+    if (!cfg) cfg = config_defaults();
+
+    if (dump_config) {
+        config_dump(cfg);
+        config_destroy(cfg);
+        return EXIT_SUCCESS;
+    }
+
     // Allocation
-    json_object *const input = json_object_from_file("test/input/1.json"); // json_object_from_fd(STDIN_FILENO);
+    json_object *const input = json_object_from_fd(STDIN_FILENO);
     if (!input) {
-        put_error_json("failed to parse input\n");
+        put_error_json_c("failed to parse input\n");
         return EX_DATAERR;
     }
 
@@ -157,18 +181,18 @@ int main(int argc, char **argv) {
     return EX_OK;
 }
 
-json_object *act(cfg_t *cfg, db_t *db, json_object *const action_obj) {
+json_object *act(cfg_t *cfg, db_t *db, json_object *const obj_action) {
     errstatus_t err;
 
-    struct action action;
-    switch (err = action_parse(&action, action_obj, db)) {
+    action_t action;
+    switch (err = action_parse(&action, obj_action, cfg, db)) {
     case errstatus_error: put_error("failed to parse action"); [[fallthrough]];
     case errstatus_handled: return NULL;
     default:;
     }
 
-    struct response response;
-    switch (err = action_evaluate(&action, &response, db)) {
+    response_t response;
+    switch (err = action_evaluate(&action, &response, cfg, db)) {
     case errstatus_error: put_error("failed to parse action"); [[fallthrough]];
     case errstatus_handled: return NULL;
     default:;

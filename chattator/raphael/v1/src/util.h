@@ -9,16 +9,17 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <sysexits.h>
 
 #define QUOTE(name) #name
 #define STR(macro) QUOTE(macro)
 #define STRLEN(strlit) (sizeof(strlit) - 1)
 
 #define CAT(x, y) CAT_(x, y)
-#define CAT_(x, y) x ## y
+#define CAT_(x, y) x##y
 
 #define PROG "act"
+
+#define put_error(fmt, ...) fprintf(stderr, PROG ": error: " fmt "\n" __VA_OPT__(, ) __VA_ARGS__)
 
 /// @brief Gets the necessary buffer size for a sprintf operation.
 #define buffer_size(format, ...) (snprintf(NULL, 0, (format), __VA_ARGS__) + 1) // safe byte for \0
@@ -32,7 +33,12 @@
 
 #define coalesce(a, b) ((a == NULL) ? (b) : (a))
 
-#define fail_malloc() exit(EX_OSERR)
+#define errno_exit(of)    \
+    do {                    \
+        perror(of);         \
+        exit(EXIT_FAILURE); \
+    } while (0)
+
 
 #ifndef unreachable
 #ifdef __GNUC__

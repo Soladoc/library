@@ -35,7 +35,7 @@ serial_t check_api_key(config_t *cfg, db_t *db, json_object *with, role_flags_t 
     return result.user_role & allowed_roles ? result.user_id : errstatus_unauthorized;
 }*/
 
-void action_destroy(struct action const *action) {
+void action_destroy(action_t const *action) {
     switch (action->type) {
     case action_type_send:
         free(action->with.send.content);
@@ -48,7 +48,7 @@ void action_destroy(struct action const *action) {
     }
 }
 
-errstatus_t action_evaluate(struct action const *action, struct response *response, db_t *db) {
+errstatus_t action_evaluate(action_t const *action, response_t *response, cfg_t *cfg, db_t *db) {
     // todo...
 
     switch (response->type = action->type) {
@@ -88,7 +88,7 @@ errstatus_t action_evaluate(struct action const *action, struct response *respon
 }
 
 #ifndef NDEBUG
-void action_explain(struct action const *action, FILE *output) {
+void action_explain(action_t const *action, FILE *output) {
     // todo...
 
     switch (action->type) {

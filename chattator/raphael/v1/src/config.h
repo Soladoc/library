@@ -7,14 +7,22 @@
 /// @brief An opaque handle to a configuration object.
 typedef struct config cfg_t;
 
+/// @brief Load the default configuration.
+/// @return A new configuration object
+cfg_t *config_defaults(void);
+
+/// @brief Destroy a configuration.
+/// @param cfg The configuration to destroy. No-op if @c NULL.
+void config_destroy(cfg_t *cfg);
+
 /// @brief Load configuration from a file.
 /// @param filename The filename to read the config from.
 /// @return A new configuration object.
 cfg_t *config_from_file(char const *filename);
 
-/// @brief Load the default configuration.
-/// @return A new configuration object
-cfg_t *config_defaults(void);
+/// @brief Dump a configuration to standard output.
+/// @param cfg The configuration to dump.
+void config_dump(cfg_t const *cfg);
 
 /// @brief Result of @ref config_verify_api_key.
 typedef struct {
@@ -24,20 +32,17 @@ typedef struct {
     serial_t user_id;
 } config_verify_api_key_t;
 
+
 /// @brief Verify if an API key is valid.
 /// 
-/// @param result Mutated to the result.
+/// @param out_result Assigned to the result.
 /// @param cfg The configuration.
 /// @param api_key The apik key to check.
 /// @param db The database connection.
 /// @return The ID of the user who own this API key.
 /// @return The error status. If an error occured, the value of @p result is untouched.
-serial_t config_verify_api_key(config_verify_api_key_t *result, cfg_t *cfg, api_key_t api_key, db_t *db);
+serial_t config_verify_api_key(config_verify_api_key_t *out_result, cfg_t const *cfg, api_key_t api_key, db_t *db);
 
-/// @brief Destroy a configuration.
-/// @param cfg The configuration to destroy. No-op if @c NULL.
-void config_destroy(cfg_t *cfg);
-
-int config_max_msg_length(cfg_t *cfg);
+int config_max_msg_length(cfg_t const *cfg);
 
 #endif // CONFIG_H

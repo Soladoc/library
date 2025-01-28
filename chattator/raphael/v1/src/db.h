@@ -29,26 +29,26 @@ typedef struct {
 } db_verify_user_api_key_t;
 
 /// @brief Verify an API key.
-/// @param result Mutated to the result.
+/// @param out_result Assigned to the result.
 /// @param db The database connection.
 /// @param api_key The API key to verify.
 /// @return The ID of the user who own this API key.
-/// @return The error status. If an error occured, the value of @p result is untouched.
-serial_t db_verify_user_api_key(db_verify_user_api_key_t *result, db_t *db, api_key_t api_key);
+/// @return The error status. If an error occured, the value of @p out_result is untouched.
+errstatus_t db_verify_user_api_key(db_verify_user_api_key_t *out_result, db_t *db, api_key_t api_key);
 
 /// @brief Get the ID of an user from their e-mail.
 /// @param db The database connection.
 /// @param email The e-mail to look for.
 /// @return The ID of the user with the specified e-mail.
 /// @return @ref errstatus_t in case of failure.
-serial_t db_get_user_id_by_email(db_t *db, const char *email);
+serial_t db_get_user_id_by_email(db_t *db, char const *email);
 
 /// @brief Get the ID of an user from their pseudo.
 /// @param db The database connection.
 /// @param pseudo The pseudo to look for.
 /// @return The ID of the user with the specified pseudo.
 /// @return @ref errstatus_t in case of failure.
-serial_t db_get_user_id_by_pseudo(db_t *db, const char *pseudo);
+serial_t db_get_user_id_by_pseudo(db_t *db, char const *pseudo);
 
 /// @brief Fills a user record from its ID. If @p user->user_id is undefined, the behavior is undefined.
 /// @param db The database connection.

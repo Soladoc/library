@@ -15,7 +15,7 @@
 #include "config.h"
 
 /// @brief The type of an action.
-enum action_type {
+typedef enum {
     action_type_login,
     action_type_logout,
     action_type_whois,
@@ -29,11 +29,11 @@ enum action_type {
     action_type_unblock,
     action_type_ban,
     action_type_unban,
-};
+} action_type_t;
 
 /// @brief An action. Actions represent the commands the protocol implements.
-struct action {
-    enum action_type type;
+typedef struct {
+    action_type_t type;
     union {
         struct {
             api_key_t api_key;
@@ -69,10 +69,10 @@ struct action {
             serial_t user_id;
         } block, unblock, ban, unban;
     } with;
-};
+} action_t;
 
 // Note : resemblance with HTTP status code is only for familiarity
-enum status {
+typedef enum {
     status_ok = 200,
     status_created = 201,
     status_no_content = 204,
@@ -83,9 +83,9 @@ enum status {
     status_unprocessable_content = 422,
     status_too_many_requests = 429,
     status_internal_serveur_error = 500,
-};
+} status_t;
 
-struct response {
+typedef struct {
     union {
         struct {
             token_t token;
@@ -122,40 +122,41 @@ struct response {
 
         } unban;*/
     } body;
-    enum status status;
-    enum action_type type;
+    status_t status;
+    action_type_t type;
     bool has_next_page;
-};
+} response_t;
 
 /// @brief Parse an action from a JSON object.
-/// @param action Mutated to the parsed action.
+/// @param out_action Mutated to the parsed action.
 /// @param obj The JSON object allegedly containing an action.
 /// @param cfg The configuration.
 /// @param db The DB connection.
 /// @return The error status of the operation.
-errstatus_t action_parse(struct action *action, json_object *obj, cfg_t *cfg, db_t *db);
+errstatus_t action_parse(action_t *out_action, json_object *obj, cfg_t *cfg, db_t *db);
 
 /// @brief Destroys an action.
 /// @param action The action to destroy. No-op if @c NULL.
-void action_destroy(struct action const *action);
+void action_destroy(action_t const *action);
 
 /// @brief Evaluate an action.
 /// @param action The action to evaluate.
 /// @param response Mutated to the response.
+/// @param cfg The configuration.
 /// @param db The DB connection.
 /// @return The error status of the operation.
-errstatus_t action_evaluate(struct action const *action, struct response *response, db_t *db);
+errstatus_t action_evaluate(action_t const *action, response_t *response, cfg_t *cfg, db_t *db);
 
 /// @brief Convert an action response to JSON.
 /// @param response The action response.
 /// @return A new JSON object.
-json_object *response_to_json(struct response *response);
+json_object *response_to_json(response_t *response);
 
 #ifndef NDEBUG
 /// @brief Explain an action.
 /// @param action The action to explain.
 /// @param output The stream to write the exlanation to.
-void action_explain(struct action const *action, FILE *output);
+void action_explain(action_t const *action, FILE *output);
 #endif // NDEBUG
 
 #endif // ACTION_H

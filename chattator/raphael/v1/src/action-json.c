@@ -4,298 +4,323 @@
 /// @date 23/01/2025
 
 #include "action.h"
+#include "json-helpers.h"
 #include "util.h"
 
-#define put_error_wrong_type(parent, key, value, expectedType) put_error("type error: %s > " key ": expected %s, got %s\n", parent, json_type_to_name(json_object_get_type(value)), json_type_to_name(expectedType));
+// error: DO.with: missing key: KEY
+#define put_error_arg_missing(do_, key, ...) put_error_json_missing_key(key, do_ ".with" __VA_OPT__(, ) __VA_ARGS__)
+// error: DO.with.key: type: expected TYPE, got ACTUAL
+#define put_error_arg_type(type, actual, do_, key, ...) put_error_json_type(type, actual, do_ ".with." key __VA_OPT__(, ) __VA_ARGS__)
+// error: DO.with.key: invalid value: MSG
+#define put_error_arg_invalid(do_, key, ...) put_error(do_ ".with." key ": invalid value" __VA_OPT__(, ) __VA_ARGS__)
+#define put_error_arg_invalid_because(do_, key, reason, ...) put_error(do_ ".with." key ": invalid value: " reason __VA_OPT__(, ) __VA_ARGS__)
 
-#define put_error_missing_or_invalid(parent, key) put_error("missing key or invalid value: " parent " > " key "\n")
-
-#define put_error_invalid(parent, key, msg, ...) put_error("invalid value at " parent " > " key ": " msg, __VA_ARGS__)
-
-static inline serial_t json_object_get_user_id(json_object *obj_user_key, db_t *db);
-
-static inline token_t get_token(char const *parent, json_object *obj_with) {
-    json_object *obj_token = json_object_object_get(obj_with, "token");
-    if (!json_object_is_type(obj_token, json_type_int)) {
-        put_error_wrong_type(parent, "with", obj_token, json_type_int);
+/// @return @ref serial_t the user ID.
+/// @return @ref errstatus_handled On error
+/// @return @ref errstatus_error On error
+static inline serial_t get_user_id(char const *do_, json_object *obj_with, char const *key, db_t *db) {
+    json_object *obj_user;
+    if (!json_object_object_get_ex(obj_with, key, &obj_user)) {
+        put_error_arg_missing("%s", "%s", do_, key);
         return 0;
     }
-    return json_object_get_int64(obj_token);
+    switch (json_object_get_type(obj_user)) {
+    case json_type_int: return json_object_get_int(obj_user);
+    case json_type_string: {
+        if (json_object_get_string_len(obj_user) > max(EMAIL_LENGTH, PSEUDO_LENGTH)) break;
+        const char *email_or_pseudo = json_object_get_string(obj_user);
+        return strchr(email_or_pseudo, '@')
+                 ? db_get_user_id_by_email(db, email_or_pseudo)
+                 : db_get_user_id_by_pseudo(db, email_or_pseudo);
+    }
+    default:;
+    }
+    return errstatus_error;
 }
 
-static inline token_t get_page(char const *parent, json_object *obj_with) {
-    json_object *obj_page = json_object_object_get(obj_with, "page");
-    if (!json_object_is_type(obj_page, json_type_int)) {
-        put_error_wrong_type(parent, "with", obj_page, json_type_int);
+/// @return a string 
+/// @return @c NULL on error
+static inline char *get_content(char const *do_, json_object *obj_with, char const *key, cfg_t const *cfg) {
+    json_object *obj_content;
+    if (!json_object_object_get_ex(obj_with, key, &obj_content)) {
+        put_error_arg_missing("%s", "%s", do_, key);
+        return NULL;
+    }
+    char const *content;
+    int content_len;
+    if (!json_object_get_string_strict(obj_content, &content, &content_len)) {
+        put_error_arg_type(json_type_string, json_object_get_type(obj_content), "%s", "%s", do_, key);
+        return NULL;
+    }
+    if (content_len > config_max_msg_length(cfg)) {
+        put_error_arg_invalid_because("%s", "%s", "length (%d) is longer than maximum (%d)",
+            do_, content, content_len, config_max_msg_length(cfg));
+        return NULL;
+    }
+    char *content_copy = strndup(content, content_len);
+    if (!content_copy) errno_exit("strndup");
+    return content_copy;
+}
+
+/// @return a page number
+/// @return @c 0 on error
+static inline page_number_t get_page(char const *do_, json_object *obj_with) {
+    json_object *obj_page;
+    if (!json_object_object_get_ex(obj_with, "page", &obj_page)) {
+        put_error_arg_missing("%s", "page", do_);
         return 0;
     }
-    return json_object_get_int64(obj_page);
+    page_number_t page;
+    if (!json_object_get_int_strict(obj_page, &page)) {
+        put_error_arg_type(json_type_int, json_object_get_type(obj_page), "%s", "page", do_);
+        return 0;
+    }
+    return page;
 }
 
-static inline serial_t try_get_api_key(uuid4_t *api_key, json_object *obj_with) {
-    char const *repr = json_object_get_string(json_object_object_get(obj_with, "api_key"));
-    return repr ? uuid4_from_repr(api_key, repr) : errstatus_error;
+/// @return a message ID
+/// @return @c 0 on error
+static inline serial_t get_msg_id(char const *do_, json_object *obj_with) {
+    json_object *obj_msg_id;
+    if (!json_object_object_get_ex(obj_with, "msg_id", &obj_msg_id)) {
+        put_error_arg_missing("%s", "msg_id", do_);
+        return 0;
+    }
+    serial_t msg_id;
+    if (!json_object_get_int_strict(obj_msg_id, &msg_id)) {
+        put_error_arg_type(json_type_int, json_object_get_type(obj_msg_id), "%s", "msg_id", do_);
+        return 0;
+    }
+    return msg_id;
 }
 
-errstatus_t action_parse(struct action *action, json_object *obj, cfg_t *cfg, db_t *db) {
-    json_object *obj_do = json_object_object_get(obj, "do");
-    char const *do_ = json_object_get_string(obj_do);
-    if (!do_) {
-        put_error_wrong_type("action", "do", obj_do, json_type_string);
+/// @return a token
+/// @return @c 0 on error
+static inline token_t get_token(char const *do_, json_object *obj_with) {
+    json_object *obj_token;
+    if (!json_object_object_get_ex(obj_with, "token", &obj_token)) {
+        put_error_arg_missing("%s", "token", do_);
+        return 0;
+    }
+    token_t token;
+    if (!json_object_get_int64_strict(obj_token, &token)) {
+        put_error_arg_type(json_type_int, json_object_get_type(obj_token), "%s", "token", do_);
+        return 0;
+    }
+    return token;
+}
+
+static inline bool get_api_key(uuid4_t *out_api_key, char const *do_, json_object *obj_with) {
+    json_object *obj_api_key;
+    if (!json_object_object_get_ex(obj_with, "api_key", &obj_api_key)) {
+        put_error_arg_missing("%s", "api_key", do_);
+        return false;
+    }
+    char const *repr;
+    if (!json_object_get_string_strict(obj_api_key, &repr, NULL)) {
+        put_error_arg_type(json_type_string, json_object_get_type(obj_api_key), "%s", "api_key", do_);
+        return false;
+    }
+    if (!uuid4_from_repr(out_api_key, repr)) {
+        put_error_arg_invalid_because("%s", "api_key", "invalid API key", do_);
+        return false;
+    }
+    return true;
+}
+
+errstatus_t action_parse(action_t *out_action, json_object *obj, cfg_t *cfg, db_t *db) {
+    json_object *obj_do;
+    if (!json_object_object_get_ex(obj, "do", &obj_do)) {
+        put_error_json_missing_key("do", "action");
         return errstatus_handled;
     }
 
-    json_object *obj_with = json_object_object_get(obj, "with");
-    if (!obj_with) {
-        put_error_wrong_type("action", "with", obj_with, json_type_object);
+    char const *do_;
+    if (!json_object_get_string_strict(obj_do, &do_, NULL)) {
+        put_error_json_type(json_type_string, json_object_get_type(obj_do), "do");
+        return errstatus_handled;
+    }
+
+    json_object *obj_with;
+    if (!json_object_object_get_ex(obj, "with", &obj_with)) {
+        put_error_json_missing_key("with", "action");
         return errstatus_handled;
     }
 
 #define ACTION_TYPE CAT(action_type_, DO)
-#define ACTION_IS_DO streq(STR(DO), do_)
+#define DO_IS_ACTION streq(STR(DO), do_)
 
 #define DO login
-    if (ACTION_IS_DO) {
-        action->type = ACTION_TYPE;
+    if (DO_IS_ACTION) {
+        out_action->type = ACTION_TYPE;
 
         // api_key
-        errstatus_t err = try_get_api_key(&action->with.DO.api_key, obj_with);
-        switch (err) {
-        case errstatus_error: put_error_missing_or_invalid(STR(DO), "api_key"); [[fallthrough]];
-        case errstatus_handled: return err;
-        default:;
-        }
+        if (!get_api_key(&out_action->with.DO.api_key, STR(DO), obj_with)) return errstatus_handled;
 
         // password_hash
-        char const *password_hash = json_object_get_string(json_object_object_get(obj_with, "password_hash"));
-        if (!password_hash) {
-            put_error_missing_or_invalid(STR(DO), "password_hash");
+        // Check if key exists
+        json_object *obj_password_hash;
+        if (!json_object_object_get_ex(obj_with, "password_hash", &obj_password_hash)) {
+            put_error_arg_missing("password_hash", STR(DO));
             return errstatus_handled;
         }
-        strncpy(action->with.DO.password_hash, password_hash, sizeof action->with.DO.password_hash - 1);
-        action->with.DO.password_hash[sizeof action->with.DO.password_hash - 1] = '\0';
+        // Ensure value has correct type
+        char const *password_hash;
+        if (!json_object_get_string_strict(obj_password_hash, &password_hash, NULL)) {
+            put_error_arg_type(json_type_string, json_object_get_type(obj_password_hash), STR(DO), "password_hash");
+            return errstatus_handled;
+        }
+        // Copy (because json_object value will be destroyed)
+        strncpy(out_action->with.DO.password_hash, password_hash, PASSWORD_HASH_LENGTH);
+        out_action->with.DO.password_hash[PASSWORD_HASH_LENGTH] = '\0';
 #undef DO
 #define DO logout
-    } else if (ACTION_IS_DO) {
-        action->type = ACTION_TYPE;
+    } else if (DO_IS_ACTION) {
+        out_action->type = ACTION_TYPE;
 
         // token
-        if (!(action->with.DO.token = get_token(STR(DO), obj_with))) {
-            return errstatus_handled;
-        }
+        if (!(out_action->with.DO.token = get_token(STR(DO), obj_with))) return errstatus_handled;
 #undef DO
 #define DO whois
-    } else if (ACTION_IS_DO) {
-        action->type = ACTION_TYPE;
+    } else if (DO_IS_ACTION) {
+        out_action->type = ACTION_TYPE;
 
         // api_key
-        errstatus_t err = try_get_api_key(&action->with.DO.api_key, obj_with);
-        switch (err) {
-        case errstatus_error: put_error_missing_or_invalid(STR(DO), "api_key"); [[fallthrough]];
-        case errstatus_handled: return err;
-        default:;
-        }
+        if (!get_api_key(&out_action->with.DO.api_key, STR(DO), obj_with)) return errstatus_handled;
 
         // user
-        serial_t user_id = json_object_get_user_id(json_object_object_get(obj_with, "user"), db);
-        switch (user_id) {
-        case errstatus_error: put_error_missing_or_invalid(STR(DO), "user"); [[fallthrough]];
-        case errstatus_handled: return user_id;
-        default: action->with.DO.user_id = user_id;
+        switch (out_action->with.DO.user_id = get_user_id(STR(DO), obj_with, "user", db)) {
+        case errstatus_error: put_error_arg_invalid(STR(DO), "user"); [[fallthrough]];
+        case errstatus_handled: return out_action->with.DO.user_id;
+        default:;
         }
 #undef DO
 #define DO send
-    } else if (ACTION_IS_DO) {
-        action->type = ACTION_TYPE;
+    } else if (DO_IS_ACTION) {
+        out_action->type = ACTION_TYPE;
 
         // token
-        if (!(action->with.DO.token = get_token(STR(DO), obj_with))) {
-            return errstatus_handled;
-        }
+        if (!(out_action->with.DO.token = get_token(STR(DO), obj_with))) return errstatus_handled;
 
         // content
-        json_object *obj_content = json_object_object_get(obj, "content");
-        char const *content = json_object_get_string(obj_content);
-        int const content_len = json_object_get_string_len(obj_content);
-        if (!json_object_is_type(obj, json_type_string) || !content) {
-            put_error_wrong_type(STR(DO), "content", obj_content, json_type_string);
-        }
-        if (content_len > config_max_msg_length(cfg)) {
-            put_error_invalid(STR(DO), "content", "length (%d) is longer than maximum (%d)",
-                content_len,
-                config_max_msg_length(cfg));
-        }
-        action->with.DO.content = strndup(content, content_len);
+        if (!(out_action->with.DO.content = get_content(STR(DO), obj_with, "content", cfg))) return errstatus_handled;
 
         // dest
-        serial_t res = json_object_get_user_id(json_object_object_get(obj_with, "dest"), db);
-        switch (res) {
-        case errstatus_error: put_error_missing_or_invalid(STR(DO), "dest"); [[fallthrough]];
-        case errstatus_handled: return res;
-        default: action->with.DO.dest_user_id = res;
+        switch (out_action->with.DO.dest_user_id = get_user_id(STR(DO), obj_with, "dest", db)) {
+        case errstatus_error: put_error_arg_invalid(STR(DO), "dest"); [[fallthrough]];
+        case errstatus_handled: return out_action->with.DO.dest_user_id;
         }
 #undef DO
 #define DO motd
-    } else if (ACTION_IS_DO) {
-        action->type = ACTION_TYPE;
+    } else if (DO_IS_ACTION) {
+        out_action->type = ACTION_TYPE;
 
         // token
-        if (!(action->with.DO.token = get_token(STR(DO), obj_with))) {
-            return errstatus_handled;
-        }
+        if (!(out_action->with.DO.token = get_token(STR(DO), obj_with))) return errstatus_handled;
 #undef DO
 #define DO inbox
-    } else if (ACTION_IS_DO) {
-        action->type = ACTION_TYPE;
+    } else if (DO_IS_ACTION) {
+        out_action->type = ACTION_TYPE;
 
         // token
-        if (!(action->with.DO.token = get_token(STR(DO), obj_with))) {
-            return errstatus_handled;
-        }
+        if (!(out_action->with.DO.token = get_token(STR(DO), obj_with))) return errstatus_handled;
 
         // page
-        if (!(action->with.DO.page = get_page(STR(DO), obj_with))) {
-            return errstatus_handled;
-        }
+        if (!(out_action->with.DO.page = get_page(STR(DO), obj_with))) return errstatus_handled;
 #undef DO
 #define DO outbox
-    } else if (ACTION_IS_DO) {
-        action->type = ACTION_TYPE;
+    } else if (DO_IS_ACTION) {
+        out_action->type = ACTION_TYPE;
 
         // token
-        if (!(action->with.DO.token = get_token(STR(DO), obj_with))) {
-            return errstatus_handled;
-        }
+        if (!(out_action->with.DO.token = get_token(STR(DO), obj_with))) return errstatus_handled;
 
         // page
-        if (!(action->with.DO.page = get_page(STR(DO), obj_with))) {
-            return errstatus_handled;
-        }
+        if (!(out_action->with.DO.page = get_page(STR(DO), obj_with))) return errstatus_handled;
 #undef DO
 #define DO edit
-    } else if (ACTION_IS_DO) {
-        action->type = ACTION_TYPE;
+    } else if (DO_IS_ACTION) {
+        out_action->type = ACTION_TYPE;
 
         // token
-        if (!(action->with.DO.token = get_token(STR(DO), obj_with))) {
-            return errstatus_handled;
-        }
+        if (!(out_action->with.DO.token = get_token(STR(DO), obj_with))) return errstatus_handled;
 
         // msg_id
-        json_object *obj_msg_id = json_object_object_get(obj_with, "msg_id");
-        action->with.DO.msg_id = json_object_get_int(obj_msg_id);
-        if (!json_object_is_type(obj_msg_id, json_type_int) || !action->with.DO.msg_id) {
-            put_error_wrong_type(STR(DO), "msg_id", obj_msg_id, json_type_int);
-            return errstatus_handled;
-        }
+        if (!(out_action->with.DO.msg_id = get_msg_id(STR(DO), obj_with))) return errstatus_handled;
 
         // new_content
-        json_object *obj_new_content = json_object_object_get(obj, "new_content");
-        char const *new_content = json_object_get_string(obj_new_content);
-        int const new_content_len = json_object_get_string_len(obj_new_content);
-        if (!json_object_is_type(obj, json_type_string) || !new_content) {
-            put_error_wrong_type(STR(DO), "new_content", obj_new_content, json_type_string);
-        }
-        if (new_content_len > config_max_msg_length(cfg)) {
-            put_error_invalid(STR(DO), "new_content", "length (%d) is longer than maximum (%d)",
-                new_content_len,
-                config_max_msg_length(cfg));
-        }
-        action->with.DO.new_content = strndup(new_content, new_content_len);
+        if (!(out_action->with.DO.new_content = get_content(STR(DO), obj_with, "new_content", cfg))) return errstatus_handled;
 #undef DO
 #define DO rm
-    } else if (ACTION_IS_DO) {
-        action->type = ACTION_TYPE;
+    } else if (DO_IS_ACTION) {
+        out_action->type = ACTION_TYPE;
 
         // token
-        if (!(action->with.DO.token = get_token(STR(DO), obj_with))) {
-            return errstatus_handled;
-        }
+        if (!(out_action->with.DO.token = get_token(STR(DO), obj_with))) return errstatus_handled;
 
         // msg_id
-        json_object *obj_msg_id = json_object_object_get(obj_with, "msg_id");
-        action->with.DO.msg_id = json_object_get_int(obj_msg_id);
-        if (!json_object_is_type(obj_msg_id, json_type_int) || !action->with.DO.msg_id) {
-            put_error_wrong_type(STR(DO), "msg_id", obj_msg_id, json_type_int);
-            return errstatus_handled;
-        }
+        if (!(out_action->with.DO.msg_id = get_msg_id(STR(DO), obj_with))) return errstatus_handled;
 #undef DO
 #define DO block
-    } else if (ACTION_IS_DO) {
-        action->type = ACTION_TYPE;
+    } else if (DO_IS_ACTION) {
+        out_action->type = ACTION_TYPE;
 
         // token
-        if (!(action->with.DO.token = get_token(STR(DO), obj_with))) {
-            return errstatus_handled;
-        }
+        if (!(out_action->with.DO.token = get_token(STR(DO), obj_with))) return errstatus_handled;
 
         // user
-        serial_t user_id = json_object_get_user_id(json_object_object_get(obj_with, "user"), db);
-        switch (user_id) {
-        case errstatus_error: put_error_missing_or_invalid(STR(DO), "user"); [[fallthrough]];
-        case errstatus_handled: return user_id;
-        default: action->with.DO.user_id = user_id;
+        switch (out_action->with.DO.user_id = get_user_id(STR(DO), obj_with, "user", db)) {
+        case errstatus_error: put_error_arg_invalid(STR(DO), "user"); [[fallthrough]];
+        case errstatus_handled: return out_action->with.DO.user_id;
         }
 #undef DO
 #define DO unblock
-    } else if (ACTION_IS_DO) {
-        action->type = ACTION_TYPE;
+    } else if (DO_IS_ACTION) {
+        out_action->type = ACTION_TYPE;
 
         // token
-        if (!(action->with.DO.token = get_token(STR(DO), obj_with))) {
-            return errstatus_handled;
-        }
+        if (!(out_action->with.DO.token = get_token(STR(DO), obj_with))) return errstatus_handled;
 
         // user
-        serial_t user_id = json_object_get_user_id(json_object_object_get(obj_with, "user"), db);
-        switch (user_id) {
-        case errstatus_error: put_error_missing_or_invalid(STR(DO), "user"); [[fallthrough]];
-        case errstatus_handled: return user_id;
-        default: action->with.DO.user_id = user_id;
+        switch (out_action->with.DO.user_id = get_user_id(STR(DO), obj_with, "user", db)) {
+        case errstatus_error: put_error_arg_invalid(STR(DO), "user"); [[fallthrough]];
+        case errstatus_handled: return out_action->with.DO.user_id;
         }
 #undef DO
 #define DO ban
-    } else if (ACTION_IS_DO) {
-        action->type = ACTION_TYPE;
+    } else if (DO_IS_ACTION) {
+        out_action->type = ACTION_TYPE;
 
         // token
-        if (!(action->with.DO.token = get_token(STR(DO), obj_with))) {
-            return errstatus_handled;
-        }
+        if (!(out_action->with.DO.token = get_token(STR(DO), obj_with))) return errstatus_handled;
 
         // user
-        serial_t user_id = json_object_get_user_id(json_object_object_get(obj_with, "user"), db);
-        switch (user_id) {
-        case errstatus_error: put_error_missing_or_invalid(STR(DO), "user"); [[fallthrough]];
-        case errstatus_handled: return user_id;
-        default: action->with.DO.user_id = user_id;
+        switch (out_action->with.DO.user_id = get_user_id(STR(DO), obj_with, "user", db)) {
+        case errstatus_error: put_error_arg_invalid(STR(DO), "user"); [[fallthrough]];
+        case errstatus_handled: return out_action->with.DO.user_id;
         }
 #undef DO
 #define DO unban
-    } else if (ACTION_IS_DO) {
-        action->type = ACTION_TYPE;
+    } else if (DO_IS_ACTION) {
+        out_action->type = ACTION_TYPE;
     } else {
         put_error("unknown action: %s\n", do_);
         return errstatus_handled;
 
         // token
-        if (!(action->with.DO.token = get_token(STR(DO), obj_with))) {
-            return errstatus_handled;
-        }
+        if (!(out_action->with.DO.token = get_token(STR(DO), obj_with))) return errstatus_handled;
 
         // user
-        serial_t user_id = json_object_get_user_id(json_object_object_get(obj_with, "user"), db);
-        switch (user_id) {
-        case errstatus_error: put_error_missing_or_invalid(STR(DO), "user"); [[fallthrough]];
-        case errstatus_handled: return user_id;
-        default: action->with.DO.user_id = user_id;
+        switch (out_action->with.DO.user_id = get_user_id(STR(DO), obj_with, "user", db)) {
+        case errstatus_error: put_error_arg_invalid(STR(DO), "user"); [[fallthrough]];
+        case errstatus_handled: return out_action->with.DO.user_id;
         }
     }
 
     return true;
 }
 
-json_object *response_to_json(struct response *response) {
+json_object *response_to_json(response_t *response) {
     // todo...
 
     json_object *obj = json_object_new_object(), *obj_body = json_object_new_object();
@@ -356,19 +381,4 @@ json_object *response_to_json(struct response *response) {
 #undef add_key
 
     return obj;
-}
-
-serial_t json_object_get_user_id(json_object *obj_user_key, db_t *db) {
-    switch (json_object_get_type(obj_user_key)) {
-    case json_type_int: return json_object_get_int(obj_user_key);
-    case json_type_string: {
-        if (json_object_get_string_len(obj_user_key) > max(EMAIL_LENGTH, PSEUDO_LENGTH)) break;
-        const char *email_or_pseudo = json_object_get_string(obj_user_key);
-        return strchr(email_or_pseudo, '@')
-                 ? db_get_user_id_by_email(db, email_or_pseudo)
-                 : db_get_user_id_by_pseudo(db, email_or_pseudo);
-    }
-    default:;
-    }
-    return errstatus_error;
 }
