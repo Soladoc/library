@@ -48,7 +48,7 @@ void action_destroy(action_t const *action) {
     }
 }
 
-errstatus_t action_evaluate(action_t const *action, response_t *response, cfg_t *cfg, db_t *db) {
+bool action_evaluate(action_t const *action, response_t *response, cfg_t *cfg, db_t *db) {
     // todo...
 
     switch (response->type = action->type) {
@@ -84,7 +84,7 @@ errstatus_t action_evaluate(action_t const *action, response_t *response, cfg_t 
         break;
     }
 
-    return errstatus_ok;
+    return true;
 }
 
 #ifndef NDEBUG

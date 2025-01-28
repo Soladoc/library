@@ -185,18 +185,10 @@ json_object *act(cfg_t *cfg, db_t *db, json_object *const obj_action) {
     errstatus_t err;
 
     action_t action;
-    switch (err = action_parse(&action, obj_action, cfg, db)) {
-    case errstatus_error: put_error("failed to parse action"); [[fallthrough]];
-    case errstatus_handled: return NULL;
-    default:;
-    }
+    if (!action_parse(&action, obj_action, cfg, db)) return NULL;
 
     response_t response;
-    switch (err = action_evaluate(&action, &response, cfg, db)) {
-    case errstatus_error: put_error("failed to parse action"); [[fallthrough]];
-    case errstatus_handled: return NULL;
-    default:;
-    }
+    if (!action_evaluate(&action, &response, cfg, db)) return NULL; 
 
     json_object *json_response = response_to_json(&response);
 

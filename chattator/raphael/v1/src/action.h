@@ -122,8 +122,9 @@ typedef struct {
 /// @param obj The JSON object allegedly containing an action.
 /// @param cfg The configuration.
 /// @param db The DB connection.
-/// @return The error status of the operation.
-errstatus_t action_parse(action_t *out_action, json_object *obj, cfg_t *cfg, db_t *db);
+/// @return @p true on success.
+/// @return @p false on error.
+bool action_parse(action_t *out_action, json_object *obj, cfg_t *cfg, db_t *db);
 
 /// @brief Destroys an action.
 /// @param action The action to destroy. No-op if @c NULL.
@@ -134,8 +135,9 @@ void action_destroy(action_t const *action);
 /// @param response Mutated to the response.
 /// @param cfg The configuration.
 /// @param db The DB connection.
-/// @return The error status of the operation.
-errstatus_t action_evaluate(action_t const *action, response_t *response, cfg_t *cfg, db_t *db);
+/// @return @p true on success.
+/// @return @p false on error.
+bool action_evaluate(action_t const *action, response_t *response, cfg_t *cfg, db_t *db);
 
 /// @brief Convert an action response to JSON.
 /// @param response The action response.
