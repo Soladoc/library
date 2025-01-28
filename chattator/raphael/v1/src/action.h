@@ -10,25 +10,15 @@
 #include <stdbool.h>
 #include <stdio.h>
 
+#include "config.h"
 #include "db.h"
 #include "types.h"
-#include "config.h"
 
 /// @brief The type of an action.
 typedef enum {
-    action_type_login,
-    action_type_logout,
-    action_type_whois,
-    action_type_send,
-    action_type_motd,
-    action_type_inbox,
-    action_type_outbox,
-    action_type_edit,
-    action_type_rm,
-    action_type_block,
-    action_type_unblock,
-    action_type_ban,
-    action_type_unban,
+#define X(name) action_type_##name,
+    X_ACTIONS(X)
+#undef X
 } action_type_t;
 
 /// @brief An action. Actions represent the commands the protocol implements.

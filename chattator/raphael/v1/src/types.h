@@ -29,8 +29,8 @@ typedef char password_hash_t[PASSWORD_HASH_LENGTH + 1], email_t[EMAIL_LENGTH + 1
 
 typedef char action_name[8]; // keep the size as small as possible
 
-#define X(str) _Static_assert(sizeof str <= sizeof(action_name), "buffer size too small for action name");
-X_ACTION_NAMES
+#define X(name) _Static_assert(sizeof #name <= sizeof(action_name), "buffer size too small for action name");
+X_ACTIONS(X)
 #undef X
 
 typedef enum {
