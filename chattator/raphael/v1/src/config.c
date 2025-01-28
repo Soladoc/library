@@ -127,7 +127,7 @@ void config_dump(cfg_t const *cfg) {
 }
 
 serial_t config_verify_api_key(config_verify_api_key_t *out_result, cfg_t const *cfg, api_key_t api_key, db_t *db) {
-    if (uuiq4_equal(api_key, cfg->admin_api_key)) {
+    if (uuid4_eq(api_key, cfg->admin_api_key)) {
         out_result->user_role = role_admin;
         out_result->user_id = 0;
         return errstatus_ok;

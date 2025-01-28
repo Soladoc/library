@@ -42,7 +42,7 @@ void uuid4_put(uuid4_t uuid, FILE *stream);
 /// @param a The first UUID (lvalue).
 /// @param b The second UUID (lvalue).
 /// @return A boolean indicating whether @p a and @p b are equal.
-#define uuiq4_equal(a, b) (memcmp(&(a), &(b), sizeof(uuid4_t)) == 0)
+#define uuid4_eq(a, b) (memcmp(&(a), &(b), sizeof(uuid4_t)) == 0)
 
 /// @brief Create a new version 4 UUID from the specified values.
 /// @retrun A new UUID Version 4.

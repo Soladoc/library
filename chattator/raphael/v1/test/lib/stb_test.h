@@ -38,9 +38,9 @@ struct test_case {
 
 STB_TEST_DEFINITION struct test test_start(char const *name);
 
-#define test_case(test, expr, name, ...) test_case_(__LINE__, (test), (expr), #expr, (name)__VA_OPT__(, ) __VA_ARGS__)
+#define test_case(test, expr, name, ...) _test_case(__LINE__, (test), (expr), #expr, (name)__VA_OPT__(, ) __VA_ARGS__)
 
-STB_TEST_DEFINITION void test_case_(unsigned line, struct test *test, bool ok, char const *expr, char const *fmt_name, ...)
+STB_TEST_DEFINITION void _test_case(unsigned line, struct test *test, bool ok, char const *expr, char const *fmt_name, ...)
     _stb_test_attr_format(printf, 5, 6);
 
 STB_TEST_DEFINITION bool test_conclude(struct test *test, FILE *output);
@@ -66,7 +66,7 @@ struct test test_start(char const *name) {
     };
 }
 
-void test_case_(unsigned line, struct test *test, bool ok, char const *expr, char const *fmt_name, ...) {
+void _test_case(unsigned line, struct test *test, bool ok, char const *expr, char const *fmt_name, ...) {
     va_list ap;
 
     va_start(ap, fmt_name);
