@@ -7,7 +7,9 @@
 #define UTIL_H
 
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
+#include <sysexits.h>
 
 #define QUOTE(name) #name
 #define STR(macro) QUOTE(macro)
@@ -26,6 +28,8 @@
 #define array_length(array) (sizeof(array) / sizeof((array)[0]))
 
 #define coalesce(a, b) ((a == NULL) ? (b) : (a))
+
+#define fail_malloc() exit(EX_OSERR)
 
 #ifndef unreachable
 #ifdef __GNUC__

@@ -14,6 +14,7 @@
 typedef uuid4_t api_key_t;
 typedef uint64_t token_t;
 typedef uint32_t page_number_t;
+/// @ref A Posrgres SERIAL primary key value (1..2^31-1)
 typedef int32_t serial_t;
 
 #define PASSWORD_HASH_LENGTH 255
@@ -30,17 +31,28 @@ typedef char action_name[8]; // keep the size as small as possible
 X_ACTION_NAMES
 #undef X
 
-enum user_kind {
+typedef enum {
     user_kind_membre,
     user_kind_pro_prive,
     user_kind_pro_public,
-};
+} user_kind_t;
 
 typedef struct {
     serial_t user_id;
     email_t email;
     word_t last_name, first_name, display_name;
-    enum user_kind kind;
+    user_kind_t kind;
 } user_t;
+
+typedef enum {
+    role_membre = 1 << 1,
+    role_pro = 1 << 2,
+    role_admin = 1 << 3,
+} role_flags_t;
+
+typedef struct {
+    role_flags_t role;
+    serial_t id;
+} user_role_t;
 
 #endif // TYPES_H

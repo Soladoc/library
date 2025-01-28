@@ -54,9 +54,14 @@ done
 
 # ensure run container
 if ! docker ps --format '{{.Names}}' | grep -q "^$container$"; then
-    echo "setting up $container"
-    docker run -td --name=$container $image
-    docker exec $container apt-get -y install libjson-c-dev
+    if docker ps --format '{{.Names}}' -a | grep -q "^$container$"; then
+        echo "restarting $container"
+        docker start $container
+    else
+        echo "runnning $container"
+        docker run -td --name=$container $image
+        docker exec $container apt-get -y install libjson-c-dev
+    fi
 fi
 
 # copy source code

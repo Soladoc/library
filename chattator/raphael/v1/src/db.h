@@ -23,10 +23,9 @@ void db_destroy(db_t *db);
 /// @brief Verify an API key.
 /// @param db The database connection.
 /// @param api_key The API key to verify.
-/// @return @ref errstatus_ok - the API key is valid
-/// @return @ref errstatus_error - the API key is invalid
-/// @return @ref errstatus_handled - an error occured
-errstatus_t db_verify_api_key(db_t *db, api_key_t api_key);
+/// @return The ID of the user who own this API key.
+/// @return @ref errstatus_t in case of failure (@ref errstatus_error if the API key is invalid).
+serial_t db_verify_user_api_key(db_t *db, api_key_t api_key);
 
 /// @brief Get the ID of an user from their e-mail.
 /// @param db The database connection.

@@ -56,11 +56,27 @@ void db_destroy(db_t *db) {
     PQfinish(db);
 }
 
-errstatus_t db_verify_api_key(db_t *db, api_key_t api_key) {
+serial_t db_verify_user_api_key(db_t *db, api_key_t api_key) {
+    char api_key_repr[UUID4_REPR_LENGTH + 1];
+    uuid4_repr(api_key, api_key_repr);
+    api_key_repr[UUID4_REPR_LENGTH] = '\0';
 
-    (void)db;
-    (void)api_key;
-    return errstatus_ok;
+
+    char const *arg = api_key_repr;
+    PGresult *result = PQexecParams(db, "select id from " SCHEMA_PACT "._compte where api_key = $1",
+        1, NULL, &arg, NULL, NULL, 1);
+
+    serial_t res;
+    if (PQresultStatus(result) != PGRES_TUPLES_OK) {
+        put_pq_result_error(result);
+        res = errstatus_handled;
+    } else if (PQntuples(result) == 0) {
+        res = errstatus_error;
+    } else {
+        res = pq_recv_l(serial_t, result, 0, 0);
+    }
+    PQclear(result);
+    return res;
 }
 
 serial_t db_get_user_id_by_email(db_t *db, const char *email) {
@@ -124,7 +140,7 @@ errstatus_t db_get_user(db_t *db, user_t *user) {
         put_error("cannot find user by id: %d\n", user->user_id);
         res = errstatus_handled;
     } else {
-        user->kind = pq_recv_l(enum user_kind, result, 0, 0);
+        user->kind = pq_recv_l(user_kind_t, result, 0, 0);
         assert(user->user_id == pq_recv_l(serial_t, result, 0, 1));
         strncpy(user->email, PQgetvalue(result, 0, 2), sizeof user->email);
         strncpy(user->last_name, PQgetvalue(result, 0, 3), sizeof user->last_name);

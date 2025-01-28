@@ -10,9 +10,9 @@
 #define put_error_missing_or_invalid(parent, key) put_error("missing key or invalid value: " parent " > " key "\n")
 
 static inline serial_t json_object_get_user_id(json_object *user_key, db_t *db);
-static inline errstatus_t get_api_key(uuid4_t *api_key, json_object *with, db_t *db);
+static inline serial_t get_api_key(uuid4_t *api_key, json_object *with, config_t *cfg, db_t *db);
 
-errstatus_t action_parse(struct action *action, json_object *obj, db_t *db) {
+errstatus_t action_parse(struct action *action, json_object *obj, config_t *cfg, db_t *db) {
     char const *name = json_object_get_string(json_object_object_get(obj, "do"));
     if (!name) {
         put_error_missing_or_invalid("action", "do");
@@ -30,7 +30,7 @@ errstatus_t action_parse(struct action *action, json_object *obj, db_t *db) {
     if (streq(name, "login")) {
         action->type = action_type_login;
 
-        errstatus_t err = get_api_key(&action->with.login.api_key, with, db);
+        errstatus_t err = get_api_key(&action->with.login.api_key, with, cfg, db);
         switch (err) {
         case errstatus_error: put_error_missing_or_invalid("login", "api_key"); [[fallthrough]];
         case errstatus_handled: return err;
@@ -53,7 +53,7 @@ errstatus_t action_parse(struct action *action, json_object *obj, db_t *db) {
     } else if (streq(name, "whois")) {
         action->type = action_type_whois;
 
-        errstatus_t err = get_api_key(&action->with.whois.api_key, with, db);
+        errstatus_t err = get_api_key(&action->with.whois.api_key, with, cfg, db);
         switch (err) {
         case errstatus_error: put_error_missing_or_invalid("whois", "api_key"); [[fallthrough]];
         case errstatus_handled: return err;
@@ -165,13 +165,18 @@ json_object *response_to_json(struct response *response) {
     return obj;
 }
 
-errstatus_t get_api_key(uuid4_t *api_key, json_object *with, db_t *db) {
+serial_t get_api_key(uuid4_t *api_key, json_object *with, config_t *cfg, db_t *db) {
     char const *repr = json_object_get_string(json_object_object_get(with, "api_key"));
     if (!repr) return errstatus_error;
-    errstatus_t err;
-    if (errstatus_ok != (err = uuid4_from_repr(api_key, repr))) return err;
-    if (errstatus_ok != (err = db_verify_api_key(db, *api_key))) return err;
-    return errstatus_ok;
+
+    serial_t res;
+    if (errstatus_ok != (res = uuid4_from_repr(api_key, repr))) return res;
+
+    if (errstatus_error == (res = config_verify_api_key(cfg, *api_key, db))) {
+        put_error("api key invalid: %s", repr);
+    }
+
+    return res;
 }
 
 serial_t json_object_get_user_id(json_object *user_key, db_t *db) {

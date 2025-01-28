@@ -7,12 +7,16 @@
 /// @brief An error status.
 /// @remark errstatus constants are used in other integral expressions, by considering -1 and 0 as errors and any other value as successful. When this is the case, it will be documented.
 typedef enum {
+    /// @brief Smallest value in the @ref errstatus_t enumeration.
+    min_errstatus = -1,
     /// @brief An error occured but it has already been handled, no action needed besides propagation.
-    errstatus_handled = -1,
+    errstatus_handled = min_errstatus,
     /// @brief An error occurred.
     errstatus_error,
     /// @brief No error.
     errstatus_ok,
+    /// @brief Largest value in the @ref errstatus_t enumeration.
+    max_errstatus = errstatus_ok
 } errstatus_t;
 
 #endif // ERRSTATUS_H
