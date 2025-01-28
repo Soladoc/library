@@ -15,6 +15,9 @@
 #define STR(macro) QUOTE(macro)
 #define STRLEN(strlit) (sizeof(strlit) - 1)
 
+#define CAT(x, y) CAT_(x, y)
+#define CAT_(x, y) x ## y
+
 #define PROG "act"
 
 /// @brief Gets the necessary buffer size for a sprintf operation.
