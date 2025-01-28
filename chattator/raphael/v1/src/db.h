@@ -20,12 +20,21 @@ db_t *db_connect(int verbosity);
 /// @param db The database connection to destroy. No-op if @c NULL.
 void db_destroy(db_t *db);
 
+/// @brief Result of @ref db_verify_user_api_key.
+typedef struct {
+    /// @brief The kind of the user.
+    user_kind_t user_kind;
+    /// @brief The ID of the user.
+    serial_t user_id;
+} db_verify_user_api_key_t;
+
 /// @brief Verify an API key.
+/// @param result Mutated to the result.
 /// @param db The database connection.
 /// @param api_key The API key to verify.
 /// @return The ID of the user who own this API key.
-/// @return @ref errstatus_t in case of failure (@ref errstatus_error if the API key is invalid).
-serial_t db_verify_user_api_key(db_t *db, api_key_t api_key);
+/// @return The error status. If an error occured, the value of @p result is untouched.
+serial_t db_verify_user_api_key(db_verify_user_api_key_t *result, db_t *db, api_key_t api_key);
 
 /// @brief Get the ID of an user from their e-mail.
 /// @param db The database connection.

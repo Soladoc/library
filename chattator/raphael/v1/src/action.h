@@ -10,9 +10,9 @@
 #include <stdbool.h>
 #include <stdio.h>
 
-#include "config.h"
 #include "db.h"
 #include "types.h"
+#include "config.h"
 
 /// @brief The type of an action.
 enum action_type {
@@ -130,10 +130,10 @@ struct response {
 /// @brief Parse an action from a JSON object.
 /// @param action Mutated to the parsed action.
 /// @param obj The JSON object allegedly containing an action.
-/// @param cfg The configuratioon object
+/// @param cfg The configuration.
 /// @param db The DB connection.
 /// @return The error status of the operation.
-errstatus_t action_parse(struct action *action, json_object *obj, config_t *cfg, db_t *db);
+errstatus_t action_parse(struct action *action, json_object *obj, cfg_t *cfg, db_t *db);
 
 /// @brief Destroys an action.
 /// @param action The action to destroy. No-op if @c NULL.

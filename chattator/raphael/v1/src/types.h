@@ -12,6 +12,7 @@
 #include "uuid.h"
 
 typedef uuid4_t api_key_t;
+/// @ref A session token (1..2^64-1)
 typedef uint64_t token_t;
 typedef uint32_t page_number_t;
 /// @ref A Posrgres SERIAL primary key value (1..2^31-1)
@@ -45,14 +46,10 @@ typedef struct {
 } user_t;
 
 typedef enum {
-    role_membre = 1 << 1,
-    role_pro = 1 << 2,
-    role_admin = 1 << 3,
+    role_membre = 1 << 0,
+    role_pro = 1 << 1,
+    role_admin = 1 << 2,
+    role_all = role_membre | role_pro | role_admin,
 } role_flags_t;
-
-typedef struct {
-    role_flags_t role;
-    serial_t id;
-} user_role_t;
 
 #endif // TYPES_H

@@ -39,14 +39,14 @@ DB_ROOT_PASSWORD   DB password"
 
 #define VERSION PROG " 1.0.0"
 
-static inline json_object *act(config_t *, db_t *, json_object *const);
+static inline json_object *act(cfg_t *, db_t *, json_object *const);
 
 enum { EX_NODB = EX__MAX + 1 };
 
 int main(int argc, char **argv) {
     int verbosity = 0;
 
-    config_t *cfg = NULL;
+    cfg_t *cfg = NULL;
 
     // Arguments
     {
@@ -157,11 +157,11 @@ int main(int argc, char **argv) {
     return EX_OK;
 }
 
-json_object *act(config_t *cfg, db_t *db, json_object *const action_obj) {
+json_object *act(cfg_t *cfg, db_t *db, json_object *const action_obj) {
     errstatus_t err;
 
     struct action action;
-    switch (err = action_parse(&action, action_obj, cfg, db)) {
+    switch (err = action_parse(&action, action_obj, db)) {
     case errstatus_error: put_error("failed to parse action"); [[fallthrough]];
     case errstatus_handled: return NULL;
     default:;

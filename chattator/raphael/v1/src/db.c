@@ -12,8 +12,8 @@
 #include "db.h"
 #include "util.h"
 
-#define SCHEMA_PACT "pact"
-#define SCHEMA_TCHATTATOR "tchattator"
+#define TBL_USER "tchattator.user"
+#define TBL_MEMBRE "pact.membre"
 
 #define conn_param(param) coalesce(getenv(#param), STR(param))
 
@@ -56,31 +56,30 @@ void db_destroy(db_t *db) {
     PQfinish(db);
 }
 
-serial_t db_verify_user_api_key(db_t *db, api_key_t api_key) {
+serial_t db_verify_user_api_key(db_verify_user_api_key_t *result, db_t *db, api_key_t api_key) {
     char api_key_repr[UUID4_REPR_LENGTH + 1];
     uuid4_repr(api_key, api_key_repr);
     api_key_repr[UUID4_REPR_LENGTH] = '\0';
 
-
     char const *arg = api_key_repr;
-    PGresult *result = PQexecParams(db, "select id from " SCHEMA_PACT "._compte where api_key = $1",
+    PGresult *pg_result = PQexecParams(db, "select kind, id from " TBL_USER " where api_key = $1",
         1, NULL, &arg, NULL, NULL, 1);
 
     serial_t res;
-    if (PQresultStatus(result) != PGRES_TUPLES_OK) {
-        put_pq_result_error(result);
-        res = errstatus_handled;
-    } else if (PQntuples(result) == 0) {
-        res = errstatus_error;
-    } else {
-        res = pq_recv_l(serial_t, result, 0, 0);
+    if (PQresultStatus(pg_result) != PGRES_TUPLES_OK) {
+        put_pq_result_error(pg_result);
+        return errstatus_handled;
+    } else if (PQntuples(pg_result) == 0) {
+        return errstatus_error;
     }
-    PQclear(result);
+    result->user_kind = pq_recv_l(serial_t, pg_result, 0, 0);
+    result->user_id = pq_recv_l(serial_t, pg_result, 0, 1);
+    PQclear(pg_result);
     return res;
 }
 
 serial_t db_get_user_id_by_email(db_t *db, const char *email) {
-    PGresult *result = PQexecParams(db, "select id from " SCHEMA_PACT "._compte where email = $1",
+    PGresult *result = PQexecParams(db, "select kind, id from " TBL_USER " where email = $1",
         1, NULL, &email, NULL, NULL, 1);
 
     serial_t res;
@@ -100,7 +99,7 @@ serial_t db_get_user_id_by_email(db_t *db, const char *email) {
 }
 
 serial_t db_get_user_id_by_pseudo(db_t *db, const char *pseudo) {
-    PGresult *result = PQexecParams(db, "select id from " SCHEMA_PACT "._membre where pseudo=$1",
+    PGresult *result = PQexecParams(db, "select id from " TBL_MEMBRE " where pseudo=$1",
         1, NULL, &pseudo, NULL, NULL, 1);
 
     serial_t res;
@@ -128,7 +127,7 @@ errstatus_t db_get_user(db_t *db, user_t *user) {
     p_value[0] = (char *)&arg;
     p_length[0] = sizeof arg;
     p_format[0] = 1;
-    PGresult *result = PQexecParams(db, "select kind, id, email, nom, prenom, display_name from " SCHEMA_TCHATTATOR ".user where id=$1",
+    PGresult *result = PQexecParams(db, "select kind, id, email, nom, prenom, display_name from " TBL_USER " where id=$1",
         1, NULL, p_value, p_length, p_format, 1);
 
     errstatus_t res;
