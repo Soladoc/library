@@ -16,14 +16,14 @@
 #define putln_error_arg_invalid(action_name, key, ...) put_error(action_name ".with." key ": invalid value\n" __VA_OPT__(, ) __VA_ARGS__)
 #define putln_error_arg_invalid_because(action_name, key, reason, ...) put_error(action_name ".with." key ": invalid value: " reason "\n" __VA_OPT__(, ) __VA_ARGS__)
 
-/// @return @ref serial_t the user ID.
-/// @return @ref errstatus_handled On error
-/// @return @ref errstatus_error On error
+/// @return @ref serial_t The user ID.
+/// @return @ref errstatus_handled An error occured and was handeld.
+/// @return @ref errstatus_error Invalid user key.
 static inline serial_t get_user_id(char const *action_name, json_object *obj_with, char const *key, db_t *db) {
     json_object *obj_user;
     if (!json_object_object_get_ex(obj_with, key, &obj_user)) {
         putln_error_arg_missing("%s", "%s", action_name, key);
-        return 0;
+        return errstatus_handled;
     }
     switch (json_object_get_type(obj_user)) {
     case json_type_int: return json_object_get_int(obj_user);
@@ -192,7 +192,6 @@ bool action_parse(action_t *out_action, json_object *obj, cfg_t *cfg, db_t *db) 
         switch (out_action->with.DO.user_id = get_user_id(STR(DO), obj_with, "user", db)) {
         case errstatus_error: putln_error_arg_invalid(STR(DO), "user"); [[fallthrough]];
         case errstatus_handled: return false;
-        default:;
         }
 #undef DO
 #define DO send

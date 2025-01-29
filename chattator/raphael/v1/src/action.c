@@ -83,12 +83,14 @@ bool action_evaluate(action_t const *action, response_t *rep, cfg_t *cfg, db_t *
     do {                                                                                                         \
         if (!(user.id = server_verify_token(server, action->with.action_name.token))) fail(status_unauthorized); \
         int user_role = db_get_user_role(db, user.id);                                                           \
-        if (user_role == -1) fail(status_forbidden);                                                             \
+        switch (user_role) {                                                                                     \
+        case errstatus_handled: return false;                                                                    \
+        case errstatus_error: fail(status_forbidden);                                                            \
+        }                                                                                                        \
         user.role = user_role;                                                                                   \
     } while (0)
-
-        switch (rep->type = action->type) {
-            // clang-format off
+    switch (rep->type = action->type) {
+        // clang-format off
     case action_type_login:   auth_api_key(login); check_role(role_all); break;
     case action_type_logout:  auth_token(logout);  check_role(role_all); break;
     case action_type_whois:   auth_api_key(whois); check_role(role_all); break;
@@ -102,18 +104,15 @@ bool action_evaluate(action_t const *action, response_t *rep, cfg_t *cfg, db_t *
     case action_type_unblock: auth_token(unblock); check_role(role_admin | role_pro); break;
     case action_type_ban:     auth_token(ban);     check_role(role_admin | role_pro); break;
     case action_type_unban:   auth_token(unban);   check_role(role_admin | role_pro); break;
-            // clang-format on
-        }
+        // clang-format on
+    }
 
 #undef auth_api_key
 #undef auth_token
 
     // "Turnstile" rate limit
 
-    if (!server_turnstile_rate_limit(server, user.id, cfg)) {
-        rep->status = status_too_many_requests;
-        return true;
-    }
+    if (!server_turnstile_rate_limit(server, user.id, cfg)) fail(status_too_many_requests);
 
     // Build answer
 
@@ -122,29 +121,27 @@ bool action_evaluate(action_t const *action, response_t *rep, cfg_t *cfg, db_t *
     switch (action->type) {
 #define DO login
     case action_type(DO):
-        if (!db_check_password(db, user.id, action->with.DO.password)) {
-            rep->status = status_unauthorized;
-            return true;
+        switch (db_check_password(db, user.id, action->with.DO.password)) {
+        case errstatus_error: fail(status_unauthorized);
+        case errstatus_handled: return false;
+        default:;
         }
-        if (!(rep->body.DO.token = server_login(server, user.id))) {
-            rep->status = status_internal_server_error;
-            return true;
-        };
+        if (!(rep->body.DO.token = server_login(server, user.id))) fail(status_internal_server_error);
         break;
 #undef DO
 #define DO logout
     case action_type(DO):
-        if (!server_logout(server, action->with.DO.token)) {
-            rep->status = status_unauthorized;
-            return true;
-        }
+        if (!server_logout(server, action->with.DO.token)) fail(status_unauthorized);
         break;
 #undef DO
 #define DO whois
     case action_type(DO):
-        rep->status = status_ok;
         rep->body.DO.user_id = action->with.DO.user_id;
-        if (!db_get_user(db, &rep->body.DO)) return false;
+        switch (db_get_user(db, &rep->body.DO)) {
+        case errstatus_error: fail(status_not_found);
+        case errstatus_handled: return false;
+        default:;
+        }
         break;
 #undef DO
 #define DO send

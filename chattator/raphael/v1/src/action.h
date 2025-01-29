@@ -67,8 +67,6 @@ typedef struct {
 // Note : resemblance with HTTP status code is only for familiarity
 typedef enum {
     status_ok = 200,
-    status_created = 201,
-    status_no_content = 204,
     status_unauthorized = 401,
     status_forbidden = 403,
     status_not_found = 404,

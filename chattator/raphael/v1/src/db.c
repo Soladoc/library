@@ -30,7 +30,7 @@ static inline role_flags_t user_kind_to_role(user_kind_t kind) {
     case user_kind_pro_prive: [[fallthrough]];
     case user_kind_pro_public: return role_pro;
     }
-    unreachable();
+    return (role_flags_t)errstatus_error;
 }
 
 db_t *db_connect(int verbosity) {
@@ -103,8 +103,7 @@ int db_get_user_role(db_t *db, serial_t user_id) {
         putln_error_pq_result(result);
         res = errstatus_handled;
     } else if (PQntuples(result) == 0) {
-        put_error("cannot find user by id: %d\n", user_id);
-        res = errstatus_handled;
+        res = errstatus_error;
     } else {
         res = user_kind_to_role(pq_recv_l(user_kind_t, result, 0, 0));
     }
@@ -123,8 +122,7 @@ serial_t db_get_user_id_by_email(db_t *db, const char *email) {
         putln_error_pq_result(result);
         res = errstatus_handled;
     } else if (PQntuples(result) == 0) {
-        put_error("cannot find user by email: %s\n", email);
-        res = errstatus_handled;
+        res = errstatus_error;
     } else {
         res = pq_recv_l(serial_t, result, 0, 0);
     }
@@ -143,8 +141,7 @@ serial_t db_get_user_id_by_pseudo(db_t *db, const char *pseudo) {
         putln_error_pq_result(result);
         res = errstatus_handled;
     } else if (PQntuples(result) == 0) {
-        put_error("cannot find user by pseudo: %s\n", pseudo);
-        res = errstatus_handled;
+        res = errstatus_error;
     } else {
         res = pq_recv_l(serial_t, result, 0, 0);
     }
@@ -168,8 +165,7 @@ errstatus_t db_get_user(db_t *db, user_t *user) {
         putln_error_pq_result(result);
         res = errstatus_handled;
     } else if (PQntuples(result) == 0) {
-        put_error("cannot find user by id: %d\n", user->user_id);
-        res = errstatus_handled;
+        res = errstatus_error;
     } else {
         user->kind = pq_recv_l(user_kind_t, result, 0, 0);
         assert(user->user_id == pq_recv_l(serial_t, result, 0, 1));
@@ -198,8 +194,7 @@ errstatus_t db_check_password(db_t *db, serial_t user_id, char const *password) 
         putln_error_pq_result(result);
         res = errstatus_handled;
     } else if (PQntuples(result) == 0) {
-        put_error("cannot find user by id: %d\n", user_id);
-        res = errstatus_handled;
+        res = errstatus_error;
     } else {
         switch (bcrypt_checkpw(password, PQgetvalue(result, 0, 0))) {
         case -1: errno_exit("bcrypt_checkpw");
