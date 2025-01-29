@@ -1,4 +1,5 @@
 <?php
+require_once 'const.php';
 require_once 'util.php';
 require_once 'redirect.php';
 require_once 'component/Page.php';
@@ -30,7 +31,7 @@ if (isset($_POST['motdepasse'])) {
     $adresse = new Adresse(null, $commune);
     $adresse->push_to_db();
 
-    $mdp_hash = notfalse(password_hash($_POST['motdepasse'], PASSWORD_DEFAULT));
+    $mdp_hash = notfalse(password_hash($_POST['motdepasse'], PASSWORD_ALGO));
 
     $membre = new Membre([
         null,

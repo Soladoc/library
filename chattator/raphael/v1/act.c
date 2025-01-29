@@ -45,7 +45,20 @@ ENVIRONMENT\n\
 
 #define VERSION PROG " 1.0.0"
 
-static inline json_object *act(cfg_t *cfg, db_t *db, json_object *const obj_action);
+static inline json_object *act(json_object *const obj_action, cfg_t *cfg, db_t *db, server_t *server) {
+    action_t action;
+    if (!action_parse(&action, obj_action, cfg, db)) return NULL;
+
+    response_t response;
+    if (!action_evaluate(&action, &response, cfg, db, server)) return NULL; 
+
+    json_object *json_response = response_to_json(&response);
+
+    action_destroy(&action);
+
+    return json_response;
+}
+
 
 enum { EX_NODB = EX__MAX + 1 };
 
@@ -140,6 +153,8 @@ int main(int argc, char **argv) {
     db_t *db = db_connect(verbosity);
     if (!db) return EX_NODB;
 
+    server_t server = {};
+
     json_object *const output = json_object_new_array();
 
     // Usage
@@ -153,12 +168,12 @@ int main(int argc, char **argv) {
             json_object *const action = json_object_array_get_idx(input, i);
             assert(action);
 
-            if ((item = act(cfg, db, action))) json_object_array_add(output, item);
+            if ((item = act(action, cfg, db, &server))) json_object_array_add(output, item);
         }
         break;
     }
     case json_type_object:
-        if ((item = act(cfg, db, input))) json_object_array_add(output, item);
+        if ((item = act(input, cfg, db, &server))) json_object_array_add(output, item);
         break;
     default:
         put_error("invalid request (expected array or object, got %s)\n", json_type_to_name(input_type));
@@ -176,21 +191,8 @@ int main(int argc, char **argv) {
 
     db_destroy(db);
     config_destroy(cfg);
+    server_destroy(&server);
 #endif // NBDEBUG
 
     return EX_OK;
-}
-
-json_object *act(cfg_t *cfg, db_t *db, json_object *const obj_action) {
-    action_t action;
-    if (!action_parse(&action, obj_action, cfg, db)) return NULL;
-
-    response_t response;
-    if (!action_evaluate(&action, &response, cfg, db)) return NULL; 
-
-    json_object *json_response = response_to_json(&response);
-
-    action_destroy(&action);
-
-    return json_response;
 }

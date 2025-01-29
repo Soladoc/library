@@ -14,46 +14,55 @@ typedef void db_t;
 /// @brief Initialize a database connection.
 /// @param verbosity The verbosity level.
 /// @return A new database connection.
+/// @return @c null if the connection failed.
 db_t *db_connect(int verbosity);
 
 /// @brief Destroy a database connection.
 /// @param db The database connection to destroy. No-op if @c NULL.
 void db_destroy(db_t *db);
 
-/// @brief Result of @ref db_verify_user_api_key.
-typedef struct {
-    /// @brief The kind of the user.
-    user_kind_t user_kind;
-    /// @brief The ID of the user.
-    serial_t user_id;
-} db_verify_user_api_key_t;
-
 /// @brief Verify an API key.
-/// @param out_result Assigned to the result.
-/// @param db The database connection.
+/// @param db The database.
+/// @param out_user Assigned to the identity of the user.
 /// @param api_key The API key to verify.
-/// @return The ID of the user who own this API key.
-/// @return The error status. If an error occured, the value of @p out_result is untouched.
-errstatus_t db_verify_user_api_key(db_verify_user_api_key_t *out_result, db_t *db, api_key_t api_key);
+/// @return @ref errstatus_handled A database error occured. A message has been shown. @p out_user is untouched.
+/// @return @ref errstatus_error The API key isn't valid. @p out_user is untouched.
+/// @return @ref errstatus_ok The API key is valid.
+errstatus_t db_verify_user_api_key(db_t *db, user_identity_t *out_user, api_key_t api_key);
 
 /// @brief Get the ID of an user from their e-mail.
-/// @param db The database connection.
+/// @param db The database.
 /// @param email The e-mail to look for.
 /// @return The ID of the user with the specified e-mail.
 /// @return @ref errstatus_t in case of failure.
 serial_t db_get_user_id_by_email(db_t *db, char const *email);
 
 /// @brief Get the ID of an user from their pseudo.
-/// @param db The database connection.
+/// @param db The database.
 /// @param pseudo The pseudo to look for.
 /// @return The ID of the user with the specified pseudo.
 /// @return @ref errstatus_t in case of failure.
 serial_t db_get_user_id_by_pseudo(db_t *db, char const *pseudo);
 
 /// @brief Fills a user record from its ID. If @p user->user_id is undefined, the behavior is undefined.
-/// @param db The database connection.
+/// @param db The database.
 /// @param user The user record to fill.
 /// @return The error status of the operation.
 errstatus_t db_get_user(db_t *db, user_t *user);
+
+/// @brief Check a password against the stored hash for an user.
+/// @param db The database.
+/// @param user_id The ID of the user to check the password of.
+/// @param password The clear password to check.
+/// @return @ref errstatus_ok if the password matches.
+/// @return @ref errstatus_error otherwise.
+/// @return @ref errstatus_handled on error (handled).
+errstatus_t db_check_password(db_t *db, serial_t user_id, char const *password);
+
+/// @brief Get the role of an user.
+/// @param db The database.
+/// @param user_id The ID of the user to get the role of.
+/// @return @ref role_flags_t the role of the user is found.
+int db_get_user_role(db_t *db, serial_t user_id);
 
 #endif // DB_H

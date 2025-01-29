@@ -30,7 +30,7 @@ typedef struct {
     union {
         struct {
             api_key_t api_key;
-            password_hash_t password_hash;
+            char *password;
         } login;
         struct {
             token_t token;

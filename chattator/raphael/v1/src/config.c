@@ -132,31 +132,13 @@ void config_dump(cfg_t const *cfg) {
     printf("rate_limit_m    %d\n", cfg->rate_limit_m);
 }
 
-serial_t config_verify_api_key(config_verify_api_key_t *out_result, cfg_t const *cfg, api_key_t api_key, db_t *db) {
-    if (uuid4_eq(api_key, cfg->admin_api_key)) {
-        out_result->user_role = role_admin;
-        out_result->user_id = 0;
-        return errstatus_ok;
-    }
-    db_verify_user_api_key_t db_result;
-    errstatus_t err = db_verify_user_api_key(&db_result, db, api_key);
-    if (err == errstatus_ok) {
-        out_result->user_id = db_result.user_id;
-        switch (db_result.user_kind) {
-        case user_kind_membre: out_result->user_role = role_membre; break;
-        case user_kind_pro_prive: [[fallthrough]];
-        case user_kind_pro_public: out_result->user_role = role_pro; break;
-        }
-    }
-    return err;
-}
+uuid4_t const *config_admin_api_key(cfg_t const *cfg) { return &cfg->admin_api_key; }
 
 #define DEFINE_CONFIG_GETTER(type, attr)   \
     type config_##attr(cfg_t const *cfg) { \
         return cfg->attr;                  \
     }
 
-DEFINE_CONFIG_GETTER(uuid4_t, admin_api_key)
 DEFINE_CONFIG_GETTER(FILE *, log_file)
 DEFINE_CONFIG_GETTER(int, max_msg_length)
 DEFINE_CONFIG_GETTER(int, page_inbox)

@@ -12,7 +12,7 @@ readonly workdir=work
 
 cflags=''
 lflags=''
-output=a.out
+output=''
 
 image=gcc-mariadb-pgsql:14.2-sae34
 if host_is_iut; then
@@ -65,16 +65,24 @@ if ! docker ps --format '{{.Names}}' | grep -q "^$container$"; then
 fi
 
 # copy source code
+n_f=1
 for f in "$@"; do
     dest="/$workdir/$f"
     docker exec $container mkdir -p "$(dirname "$dest")"
     docker cp -q "$f" "$container:$dest"
+    echo -ne "\r$((n_f++))/$#"
 done
+echo
 
 # run gcc
 for f in "$@"; do if [[ $f == *.c ]]; then srcs+=("$f"); fi; done
-docker exec -w /$workdir $container gcc -fdiagnostics-color "${cflags[@]}" "${srcs[@]}" "${lflags[@]}"
+docker exec -w /$workdir $container gcc -fdiagnostics-color "${cflags[@]}" "${srcs[@]}" "${lflags[@]}" || true
 
 # copy back binaries
-mkdir -p "$(dirname "$output")"
-docker cp "$container:$workdir/a.out" "$output"
+if [[ -n $output ]]; then
+    mkdir -p "$(dirname "$output")"
+    docker cp "$container:$workdir/a.out" "$output"
+fi
+
+# remove leftouvers
+docker exec $container rm -r "/$workdir"

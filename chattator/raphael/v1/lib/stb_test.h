@@ -51,7 +51,7 @@ STB_TEST_DEFINITION bool test_conclude(struct test *test, FILE *output);
 
 #ifndef STB_DS_IMPLEMENTATION
 #define STB_DS_IMPLEMENTATION
-#include "stb_ds.h"
+#include <stb_ds.h>
 #endif // STB_DS_IMPLEMENTATION
 
 #include <math.h>

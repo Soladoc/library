@@ -3,8 +3,11 @@ define NEWLINE
 
 endef # Wake up, this isn't a dream.
 
-SRC = $(wildcard src/*.c) $(wildcard src/*.h)
-TEST_SRC = $(wildcard test/*.c) $(wildcard test/*.h)
+rwildcard = $(foreach d,$(wildcard $(1:=/*)),$(call rwildcard,$d,$2) $(filter $(subst *,%,$2),$d))
+
+SRC = $(call rwildcard,src,*.c *.h)
+SRC_LIB = $(call rwildcard,lib,*.c *.h)
+SRC_TEST = $(call rwildcard,test, *.c *.h)
 
 # raphael.env : config db locale de Raphael
 # .env : config db serveur
@@ -12,7 +15,7 @@ ENV_FILE = raphael.env
 
 CC = gcc
 LFLAGS = -ljson-c -I/usr/include/postgresql -L/usr/lib/x86_64-linux-gnu -lpq
-CFLAGS = -Wall -Wextra -pedantic -std=c23 -D$(subst $(NEWLINE), -D,$(file <../../../include/$(ENV_FILE)))
+CFLAGS = -Wall -Wextra -pedantic -fanalyzer -std=c23 -isystem /work/lib -D$(subst $(NEWLINE), -D,$(file <../../../include/$(ENV_FILE)))
 
 CFLAGS_DEBUG = -g -Og -fsanitize=address
 CFLAGS_RELEASE = -DNDEBUG
@@ -37,8 +40,8 @@ test: bin/test/test
 clean:
 	rm -r bin
 
-bin/act: act.c $(SRC)
-	./docker-gcc -o $@ -c '$(CFLAGS) -fanalyzer' -l '$(LFLAGS)' $^
+bin/act: act.c $(SRC) $(SRC_LIB)
+	./docker-gcc -o $@ -c '$(CFLAGS)' -l '$(LFLAGS)' $^
 
-bin/test/test: test/test.c $(SRC) $(TEST_SRC) $(TEST_LIB)
+bin/test/test: test/test.c $(SRC) $(SRC_LIB) $(SRC_TEST)
 	./docker-gcc -o $@ -c '$(CFLAGS)' -l '$(LFLAGS) -lm' $^

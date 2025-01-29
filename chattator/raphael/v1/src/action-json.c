@@ -103,12 +103,12 @@ static inline token_t get_token(char const *action_name, json_object *obj_with) 
         putln_error_arg_missing("%s", "token", action_name);
         return 0;
     }
-    token_t token;
+    int64_t token;
     if (!json_object_get_int64_strict(obj_token, &token)) {
         putln_error_arg_type(json_type_int, json_object_get_type(obj_token), "%s", "token", action_name);
         return 0;
     }
-    return token;
+    return (token_t)token;
 }
 
 static inline bool get_api_key(uuid4_t *out_api_key, char const *action_name, json_object *obj_with) {
@@ -157,22 +157,22 @@ bool action_parse(action_t *out_action, json_object *obj, cfg_t *cfg, db_t *db) 
         // api_key
         if (!get_api_key(&out_action->with.DO.api_key, STR(DO), obj_with)) return false;
 
-        // password_hash
+        // password
         // Check if key exists
-        json_object *obj_password_hash;
-        if (!json_object_object_get_ex(obj_with, "password_hash", &obj_password_hash)) {
-            putln_error_arg_missing("password_hash", STR(DO));
+        json_object *obj_password;
+        if (!json_object_object_get_ex(obj_with, "password", &obj_password)) {
+            putln_error_arg_missing("password", STR(DO));
             return false;
         }
         // Ensure value has correct type
-        char const *password_hash;
-        if (!json_object_get_string_strict(obj_password_hash, &password_hash, NULL)) {
-            putln_error_arg_type(json_type_string, json_object_get_type(obj_password_hash), STR(DO), "password_hash");
+        char const *password;
+        int password_len;
+        if (!json_object_get_string_strict(obj_password, &password, &password_len)) {
+            putln_error_arg_type(json_type_string, json_object_get_type(obj_password), STR(DO), "password");
             return false;
         }
         // Copy (because json_object value will be destroyed)
-        strncpy(out_action->with.DO.password_hash, password_hash, PASSWORD_HASH_LENGTH);
-        out_action->with.DO.password_hash[PASSWORD_HASH_LENGTH] = '\0';
+        if (!(out_action->with.DO.password = strndup(password, password_len))) errno_exit("strndup");
 #undef DO
 #define DO logout
     } else if (action_is(DO)) {

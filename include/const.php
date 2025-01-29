@@ -1,5 +1,8 @@
 <?php
 
+// If you change this, change it in the tchattator too.
+const PASSWORD_ALGO = PASSWORD_BCRYPT;
+
 /**
  * Des propositions de tag.
  * @var string[]

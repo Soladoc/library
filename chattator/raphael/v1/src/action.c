@@ -10,108 +10,138 @@
 #define putln_error_rate_limit_exceeded(action_name, remaining_seconds) \
     put_error(action_name, ": rate limit exceeded. Next request in %d second%s.", remaining_seconds, remaining_seconds == 1 ? "s" : "");
 
-/// @brief Check the API key and put an erorr if it is invalid or the user doesn't have access.
-///
-/// @param action_name Action name.
+/*
+/// @brief Check an API key and return an error if it is invalid or the user doesn't have access.
 /// @param cfg Configuration.
 /// @param db Database.
 /// @param api_key API key.
 /// @param allowed_roles Bit-wise flags of the roles the user is allowed to have.
-/// @return @ref 0 The user's role doesn't correspond to @p allowed_roles, The API key is invalid, or another error occured and was handled.
+/// @return @c -2 The API key is invalid.
+/// @return @c -1 The user's role doesn't correspond to @p allowed_roles.
+/// @return @c 0 another error occured and was handled.
 /// @return The ID of the user who owns this API key.
-static inline serial_t check_api_key(const char *action_name, cfg_t *cfg, db_t *db, api_key_t api_key, role_flags_t allowed_roles) {
-    errstatus_t err;
+static inline serial_t check_api_key(api_key_t api_key, role_flags_t allowed_roles, cfg_t *cfg, db_t *db) {
     config_verify_api_key_t result;
-    switch (err = config_verify_api_key(&result, cfg, api_key, db)) {
-    case errstatus_error: {
-        char repr[UUID4_REPR_LENGTH];
-        put_error("%s: api key invalid: %" PRIuuid4_repr, action_name, uuid4_repr(api_key, repr));
-        [[fallthrough]];
-    }
+    switch (config_verify_api_key(&result, cfg, api_key, db)) {
     case errstatus_handled: return 0;
+    case errstatus_error: {
+        // char repr[UUID4_REPR_LENGTH];
+        // put_error("%s: api key invalid: %" PRIuuid4_repr, action_name, uuid4_repr(api_key, repr));
+        return -2;
+    }
     default:;
     }
     if (!(result.user_role & allowed_roles)) {
-        // this is an error on the client's end - it keepin this code to for logging later
+        // this is an error on the client's end - keeping this code to for logging later
         // put_error("%s: unauthorized: user is ", action_name);
         // put_role(result.user_role, stderr);
         // fputs(", must be ", stderr);
         // put_role(allowed_roles, stderr);
         // putc('\n', stderr);
-        return 0;
+        return -1;
     }
     return result.user_id;
-}
-
-static inline serial_t check_token(cfg_t *cfg, db_t *db, token_t token, role_flags_t allowed_roles) {
-    // todo
-    put_error("check_token not implemented");
-    return 0;
-}
+}*/
 
 void action_destroy(action_t const *action) {
     switch (action->type) {
-    case action_type_send:
-        free(action->with.send.content);
-        break;
-    case action_type_edit:
-        free(action->with.edit.new_content);
-        break;
-    default:
-        break;
+    case action_type_login: free(action->with.login.password); break;
+    case action_type_send: free(action->with.send.content); break;
+    case action_type_edit: free(action->with.edit.new_content); break;
+    default: break;
     }
 }
 
 bool action_evaluate(action_t const *action, response_t *rep, cfg_t *cfg, db_t *db, server_t *server) {
-    // todo...
-    serial_t user_id;
+    // Identify user
+    user_identity_t user;
+
+#define fail(return_status)          \
+    do {                             \
+        rep->status = return_status; \
+        return true;                 \
+    } while (0)
+
+#define check_role(allowed_roles) \
+    if (!(user.role & (allowed_roles))) fail(status_forbidden)
+
+#define auth_api_key(action_name)                                                      \
+    do {                                                                               \
+        if (uuid4_eq(action->with.action_name.api_key, *config_admin_api_key(cfg))) {  \
+            user.role = role_admin;                                                    \
+            user.id = 0;                                                               \
+            return errstatus_ok;                                                       \
+        }                                                                              \
+        switch (db_verify_user_api_key(db, &user, action->with.action_name.api_key)) { \
+        case errstatus_handled: fail(status_unauthorized);                             \
+        case errstatus_error: fail(status_forbidden);                                  \
+        default:;                                                                      \
+        }                                                                              \
+    } while (0)
+
+#define auth_token(action_name)                                                                                  \
+    do {                                                                                                         \
+        if (!(user.id = server_verify_token(server, action->with.action_name.token))) fail(status_unauthorized); \
+        int user_role = db_get_user_role(db, user.id);                                                           \
+        if (user_role == -1) fail(status_forbidden);                                                             \
+        user.role = user_role;                                                                                   \
+    } while (0)
+
+        switch (rep->type = action->type) {
+            // clang-format off
+    case action_type_login:   auth_api_key(login); check_role(role_all); break;
+    case action_type_logout:  auth_token(logout);  check_role(role_all); break;
+    case action_type_whois:   auth_api_key(whois); check_role(role_all); break;
+    case action_type_send:    auth_token(send);    check_role(role_all); break;
+    case action_type_motd:    auth_token(motd);    check_role(role_all); break;
+    case action_type_inbox:   auth_token(inbox);   check_role(role_all); break;
+    case action_type_outbox:  auth_token(outbox);  check_role(role_all); break;
+    case action_type_edit:    auth_token(edit);    check_role(role_all); break;
+    case action_type_rm:      auth_token(rm);      check_role(role_admin | role_pro); break;
+    case action_type_block:   auth_token(block);   check_role(role_admin | role_pro); break;
+    case action_type_unblock: auth_token(unblock); check_role(role_admin | role_pro); break;
+    case action_type_ban:     auth_token(ban);     check_role(role_admin | role_pro); break;
+    case action_type_unban:   auth_token(unban);   check_role(role_admin | role_pro); break;
+            // clang-format on
+        }
+
+#undef auth_api_key
+#undef auth_token
+
+    // "Turnstile" rate limit
+
+    if (!server_turnstile_rate_limit(server, user.id, cfg)) {
+        rep->status = status_too_many_requests;
+        return true;
+    }
+
+    // Build answer
 
     rep->has_next_page = false; // default most of the time - who cares if we set it twice
 
-#define check_rate_limit()                                    \
-    if (!server_turnstile_rate_limit(server, user_id, cfg)) { \
-        rep->status = status_too_many_requests;               \
-        return true;                                          \
-    }
-
-#define auth_api_key(action_name, allowed_roles)                                                      \
-    do {                                                                                              \
-        if (!(user_id = check_api_key(STR(DO), cfg, db, action->with.DO.api_key, (allowed_roles)))) { \
-            rep->status = status_forbidden;                                                           \
-            return true;                                                                              \
-        }                                                                                             \
-        check_rate_limit();                                                                           \
-    } while (0)
-
-#define auth_token(action_name, allowed_roles)                                           \
-    do {                                                                                 \
-        if (!(user_id = check_token(cfg, db, action->with.DO.token, (allowed_roles)))) { \
-            rep->status = status_forbidden;                                              \
-            return true;                                                                 \
-        }                                                                                \
-        check_rate_limit();                                                              \
-    } while (0)
-
-    switch (rep->type = action->type) {
+    switch (action->type) {
 #define DO login
     case action_type(DO):
-        auth_api_key(DO, role_all);
-        if (!server_login(server, &rep->body.DO.token, user_id, action->with.DO.password_hash)) {
+        if (!db_check_password(db, user.id, action->with.DO.password)) {
             rep->status = status_unauthorized;
+            return true;
+        }
+        if (!(rep->body.DO.token = server_login(server, user.id))) {
+            rep->status = status_internal_server_error;
             return true;
         };
         break;
 #undef DO
 #define DO logout
     case action_type(DO):
-        auth_token(DO, role_all);
-
+        if (!server_logout(server, action->with.DO.token)) {
+            rep->status = status_unauthorized;
+            return true;
+        }
         break;
 #undef DO
 #define DO whois
     case action_type(DO):
-        auth_api_key(DO, role_all);
-
         rep->status = status_ok;
         rep->body.DO.user_id = action->with.DO.user_id;
         if (!db_get_user(db, &rep->body.DO)) return false;
@@ -119,61 +149,51 @@ bool action_evaluate(action_t const *action, response_t *rep, cfg_t *cfg, db_t *
 #undef DO
 #define DO send
     case action_type(DO):
-        auth_token(DO, role_all);
 
         break;
 #undef DO
 #define DO motd
     case action_type(DO):
-        auth_token(DO, role_all);
 
         break;
 #undef DO
 #define DO inbox
     case action_type(DO):
-        auth_token(DO, role_all);
 
         break;
 #undef DO
 #define DO outbox
     case action_type(DO):
-        auth_token(DO, role_all);
 
         break;
 #undef DO
 #define DO edit
     case action_type(DO):
-        auth_token(DO, role_all);
 
         break;
 #undef DO
 #define DO rm
     case action_type(DO):
-        auth_token(DO, role_all);
 
         break;
 #undef DO
 #define DO block
     case action_type(DO):
-        auth_token(DO, role_admin | role_pro);
 
         break;
 #undef DO
 #define DO unblock
     case action_type(DO):
-        auth_token(DO, role_admin | role_pro);
 
         break;
 #undef DO
 #define DO ban
     case action_type(DO):
-        auth_token(DO, role_admin | role_pro);
 
         break;
 #undef DO
 #define DO unban
     case action_type(DO):
-        auth_token(DO, role_admin | role_pro);
 
         break;
     }
@@ -190,7 +210,7 @@ void action_explain(action_t const *action, FILE *output) {
     case action_type_login:
         fprintf(output, "login api_key=");
         uuid4_put(action->with.login.api_key, output);
-        fprintf(output, " password_hash=%s\n", action->with.login.password_hash);
+        fprintf(output, " password=%s\n", action->with.login.password);
         break;
     case action_type_logout:
         fprintf(output, "logout token=%lu\n", action->with.logout.token);

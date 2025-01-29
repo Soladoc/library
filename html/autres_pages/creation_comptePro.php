@@ -1,4 +1,5 @@
 <?php
+require_once 'const.php';
 require_once 'db.php';
 require_once 'util.php';
 require_once 'redirect.php';
@@ -34,7 +35,7 @@ if ($_POST) {
     if (false === Compte::from_db_by_email($args['email']))
         fail('Cette adresse e-mail est déjà utilisée.');
 
-    $mdp_hash = password_hash($args['mdp'], PASSWORD_DEFAULT);
+    $mdp_hash = password_hash($args['mdp'], PASSWORD_ALGO);
 
     $commune = Commune::from_db_by_nom($_POST['adresse']);
     if (false === $commune)

@@ -1,4 +1,5 @@
 <?php
+require_once 'const.php';
 require_once 'model/Uuid.php';
 require_once 'util.php';
 require_once 'auth.php';
@@ -71,10 +72,10 @@ if ($_POST) {
 
     if ($old_mdp = getarg($_POST, 'old_mdp', required: false)
             && $new_mdp = getarg($_POST, 'new_mdp', required: false)) {
-        $confirmation_mdp = getarg($_POST, 'confirmation_mdp', filter: null, required: false);
+        $confirmation_mdp = getarg($_POST, 'confirmation_mdp', required: false);
         if (password_verify($old_mdp, $compte->mdp_hash)) {
             if ($confirmation_mdp === $new_mdp) {
-                $compte->mdp_hash = password_hash($new_mdp, algo: PASSWORD_DEFAULT);
+                $compte->mdp_hash = password_hash($new_mdp, PASSWORD_ALGO);
             } else {
                 $error_mdp = 'Mot de passe de confirmation different.';
             }

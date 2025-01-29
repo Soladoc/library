@@ -8,9 +8,30 @@
 
 #include "config.h"
 #include <stdbool.h>
-typedef void* server_t;
+#include <time.h>
 
-server_t server_create();
+typedef struct {
+    /// @brief Timestamp of the last request.
+    time_t last_request_at;
+    /// @brief Number of requests performed since an hour.
+    int n_requests_h;
+    /// @brief Number of requests performed since a minute.
+    int n_requests_m;
+} user_stats_t;
+
+
+/// @remark It is undefined behavior to access a member of this struct outside of server.c
+typedef struct {
+    struct {
+        serial_t key;
+        user_stats_t value;
+    } *turnstile;
+    struct {
+        token_t key;
+        serial_t value;
+    } *sessions;
+} server_t;
+
 void server_destroy(server_t *server);
 
 /// @brief Checks and increments the rate limit for the specified user.
@@ -20,13 +41,25 @@ void server_destroy(server_t *server);
 /// @return @c false The turnstile blocks (the rate limit has been reached). An error has been put.
 bool server_turnstile_rate_limit(server_t *server, serial_t user_id, cfg_t *cfg);
 
-/// @brief Creates a new session
+/// @brief Creates a new session, logging in an user.
 /// @param server The server.
-/// @param out_token Assigned to the session token.
 /// @param user_id The ID of the user to login.
-/// @param password_hash The hash of the password to login with
-/// @return @c true The session was created successfully.
-/// @return @c false The password was incorrect. @p is untouched.
-bool server_login(server_t *server, token_t *out_token, serial_t user_id, char const password_hash[static PASSWORD_HASH_LENGTH]);
+/// @return The new session token.
+/// @return @c 0 if the the session could not be created.
+token_t server_login(server_t *server, serial_t user_id);
+
+/// @brief Deletes a session, logging out an user
+/// @param server The server.
+/// @param token The session token to invalidate.
+/// @return @c true on successful log out.
+/// @return @c false if the token is invalid.
+bool server_logout(server_t *server, token_t token);
+
+/// @brief Verifies a token, returning its owning user ID.
+/// @param server The server.
+/// @param token The session token to verify.
+/// @return @c 0 if the session token is invalid.
+/// @return The ID of the user that owns @p token if it is valid.
+serial_t server_verify_token(server_t *server, token_t token);
 
 #endif // SERVER_STATE_H
