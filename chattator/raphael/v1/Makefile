@@ -3,8 +3,9 @@ define NEWLINE
 
 endef # Wake up, this isn't a dream.
 
-SRC = $(wildcard src/*)
-TEST_LIB = $(wildcard test/lib/*)
+SRC = $(wildcard src/*.c) $(wildcard src/*.h)
+TEST_SRC = $(wildcard test/*.c) $(wildcard test/*.h)
+TEST_LIB = $(wildcard test/lib/*.c) $(wildcard test/lib/*.h)
 
 # raphael.env : config db locale de Raphael
 # .env : config db serveur
@@ -31,8 +32,8 @@ release: CONFIG=relase all
 
 all: bin/act
 
-test: bin/test/uuid
-	bin/test/uuid
+test: bin/test/test
+	bin/test/test
 
 clean:
 	rm -r bin
@@ -40,5 +41,5 @@ clean:
 bin/act: act.c $(SRC)
 	./docker-gcc -o $@ -c '$(CFLAGS) -fanalyzer' -l '$(LFLAGS)' $^
 
-bin/test/uuid: test/uuid.c $(SRC) $(TEST_LIB)
+bin/test/test: test/test.c $(SRC) $(TEST_SRC) $(TEST_LIB)
 	./docker-gcc -o $@ -c '$(CFLAGS)' -l '$(LFLAGS) -lm' $^

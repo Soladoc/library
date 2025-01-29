@@ -1,18 +1,19 @@
 /// @file
 /// @author Raphaël
-/// @brief UUID unit tests - Main program
+/// @brief UUID unit tests
 /// @date 23/01/2025
 
 #include <strings.h>
 
+#include "tests.h"
 #include "../src/util.h"
 #include "../src/uuid.h"
 
 #define STB_TEST_IMPLEMENTATION
 #include "lib/stb_test.h"
 
-int main() {
-    static const uuid4_t different_uuid = uuid4_of(0xf9, 0x1d, 0x4f, 0xae, 0x7d, 0xec, 0x11, 0xd0, 0xa7, 0x65, 0x00, 0xa0, 0xc9, 0x1e, 0x6b, 0xf6);
+bool test_uuid(void) {
+    static const uuid4_t different_uuid = uuid4_init(0xf9, 0x1d, 0x4f, 0xae, 0x7d, 0xec, 0x11, 0xd0, 0xa7, 0x65, 0x00, 0xa0, 0xc9, 0x1e, 0x6b, 0xf6);
     static char const uuids[][UUID4_REPR_LENGTH] = {
         "f81d4fae-7dec-11d0-a765-00a0c91e6bf6",
         "F81D4FAE-7DEC-11D0-A765-00A0C91E6BF6",
@@ -59,5 +60,5 @@ int main() {
     uuid4_from_repr(&uuid0_from_repr, uuids[0]);
     test_case(&t, uuid4_eq(uuid0, uuid0_from_repr), "literal == from repr");
 
-    test_conclude(&t, stdout);
+    return test_conclude(&t, stdout);
 }

@@ -47,10 +47,10 @@ typedef struct {
 } user_t;
 
 typedef enum {
-    role_membre = 1 << 0,
-    role_pro = 1 << 1,
-    role_admin = 1 << 2,
-    role_all = role_membre | role_pro | role_admin,
+    role_admin = 1 << 0,
+    role_membre = 1 << 1,
+    role_pro = 1 << 2,
+    role_all = role_admin | role_membre | role_pro,
 } role_flags_t;
 
 #endif // TYPES_H

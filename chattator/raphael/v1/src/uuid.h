@@ -19,6 +19,8 @@ typedef struct {
 /// @brief Length of the canonical representation of a version 4 UUID, excluding the null terminator.
 #define UUID4_REPR_LENGTH 36
 
+#define PRIuuid4_repr STR(UUID4_REPR_LENGTH) "s"
+
 /// @brief Generate the representation of a version 4 UUID.
 /// @param uuid The UUID.
 /// @param repr The representation buffer.
@@ -47,25 +49,28 @@ void uuid4_put(uuid4_t uuid, FILE *stream);
 /// @brief Create a new version 4 UUID from the specified values.
 /// @retrun A new UUID Version 4.
 #define uuid4_of(x1, x2, x3, x4, x5, x6, x7, x8, x9, x10, x11, x12, x13, x14, x15, x16) \
-    (uuid4_t) {                                                                         \
-        .data = {                                                                       \
-            x1,                                                                         \
-            x2,                                                                         \
-            x3,                                                                         \
-            x4,                                                                         \
-            x5,                                                                         \
-            x6,                                                                         \
-            x7,                                                                         \
-            x8,                                                                         \
-            x9,                                                                         \
-            x10,                                                                        \
-            x11,                                                                        \
-            x12,                                                                        \
-            x13,                                                                        \
-            x14,                                                                        \
-            x15,                                                                        \
-            x16,                                                                        \
-        }                                                                               \
+    (uuid4_t) uuid4_init(x1, x2, x3, x4, x5, x6, x7, x8, x9, x10, x11, x12, x13, x14, x15, x16)
+
+#define uuid4_init(x1, x2, x3, x4, x5, x6, x7, x8, x9, x10, x11, x12, x13, x14, x15, x16) \
+    {                                                                                     \
+        .data = {                                                                         \
+            x1,                                                                           \
+            x2,                                                                           \
+            x3,                                                                           \
+            x4,                                                                           \
+            x5,                                                                           \
+            x6,                                                                           \
+            x7,                                                                           \
+            x8,                                                                           \
+            x9,                                                                           \
+            x10,                                                                          \
+            x11,                                                                          \
+            x12,                                                                          \
+            x13,                                                                          \
+            x14,                                                                          \
+            x15,                                                                          \
+            x16,                                                                          \
+        }                                                                                 \
     }
 
 #endif // UUID_H

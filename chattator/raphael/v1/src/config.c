@@ -60,7 +60,7 @@ cfg_t *config_from_file(char const *filename) {
     if (json_object_object_get_ex(obj_cfg, "admin_api_key", &obj)) {
         const char *admin_api_key_repr;
         if (!json_object_get_string_strict(obj, &admin_api_key_repr, NULL)) {
-            put_error_json_type(json_type_string, json_object_get_type(obj), "config: admin_api_key");
+            putln_error_json_type(json_type_string, json_object_get_type(obj), "config: admin_api_key");
         }
         if (!uuid4_from_repr(&cfg->admin_api_key, json_object_get_string(obj))) {
             put_error("config: admin_api_key: invalid UUIDV4: %s", json_object_get_string(obj));
@@ -70,39 +70,39 @@ cfg_t *config_from_file(char const *filename) {
         const char *log_file_name;
         int log_file_name_len;
         if (!json_object_get_string_strict(obj, &log_file_name, &log_file_name_len)) {
-            put_error_json_type(json_type_string, json_object_get_type(obj), "config: log_file");
+            putln_error_json_type(json_type_string, json_object_get_type(obj), "config: log_file");
         }
         FILE *log_file = fopen(log_file_name, "a");
         if (log_file) {
             cfg->log_file = log_file;
             if (!(cfg->log_file_name = strndup(log_file_name, log_file_name_len))) errno_exit("strndup");
         } else {
-            put_error("config: could not open log file: %s", strerror(errno));
+            put_error("config: could not open log file: %s\n", strerror(errno));
         }
     }
     if (json_object_object_get_ex(obj_cfg, "backlog", &obj) && !json_object_get_int_strict(obj, &cfg->backlog)) {
-        put_error_json_type(json_type_int, json_object_get_type(obj), "config: backlog");
+        putln_error_json_type(json_type_int, json_object_get_type(obj), "config: backlog");
     }
     if (json_object_object_get_ex(obj_cfg, "block_for", &obj) && !json_object_get_int_strict(obj, &cfg->block_for)) {
-        put_error_json_type(json_type_int, json_object_get_type(obj), "config: block_for");
+        putln_error_json_type(json_type_int, json_object_get_type(obj), "config: block_for");
     }
     if (json_object_object_get_ex(obj_cfg, "max_msg_length", &obj) && !json_object_get_int_strict(obj, &cfg->max_msg_length)) {
-        put_error_json_type(json_type_int, json_object_get_type(obj), "config: max_msg_length");
+        putln_error_json_type(json_type_int, json_object_get_type(obj), "config: max_msg_length");
     }
     if (json_object_object_get_ex(obj_cfg, "page_inbox", &obj) && !json_object_get_int_strict(obj, &cfg->page_inbox)) {
-        put_error_json_type(json_type_int, json_object_get_type(obj), "config: page_inbox");
+        putln_error_json_type(json_type_int, json_object_get_type(obj), "config: page_inbox");
     }
     if (json_object_object_get_ex(obj_cfg, "page_outbox", &obj) && !json_object_get_int_strict(obj, &cfg->page_outbox)) {
-        put_error_json_type(json_type_int, json_object_get_type(obj), "config: page_outbox");
+        putln_error_json_type(json_type_int, json_object_get_type(obj), "config: page_outbox");
     }
     if (json_object_object_get_ex(obj_cfg, "port", &obj) && !json_object_get_uint16_strict(obj, &cfg->port)) {
-        put_error_json_type(json_type_int, json_object_get_type(obj), "config: port");
+        putln_error_json_type(json_type_int, json_object_get_type(obj), "config: port");
     }
     if (json_object_object_get_ex(obj_cfg, "rate_limit_h", &obj) && !json_object_get_int_strict(obj, &cfg->rate_limit_h)) {
-        put_error_json_type(json_type_int, json_object_get_type(obj), "config: rate_limit_h");
+        putln_error_json_type(json_type_int, json_object_get_type(obj), "config: rate_limit_h");
     }
     if (json_object_object_get_ex(obj_cfg, "rate_limit_m", &obj) && !json_object_get_int_strict(obj, &cfg->rate_limit_m)) {
-        put_error_json_type(json_type_int, json_object_get_type(obj), "config: rate_limit_m");
+        putln_error_json_type(json_type_int, json_object_get_type(obj), "config: rate_limit_m");
     }
 
     json_object_put(obj_cfg);

@@ -6,7 +6,7 @@
 #ifndef ACTION_H
 #define ACTION_H
 
-#include <json-c/json.h>
+#include <json-c/json_types.h>
 #include <stdbool.h>
 #include <stdio.h>
 
@@ -116,6 +116,11 @@ typedef struct {
     action_type_t type;
     bool has_next_page;
 } response_t;
+
+/// @brief Put an user role.
+/// @param role The role flags
+/// @param stream The stream to write to.
+void put_role(role_flags_t role, FILE *stream);
 
 /// @brief Parse an action from a JSON object.
 /// @param out_action Mutated to the parsed action.

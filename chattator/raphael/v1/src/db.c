@@ -20,8 +20,8 @@
 #define pq_recv_l(type, res, row, col) ((type)(ntohl(*((type *)PQgetvalue((res), (row), (col))))))
 #define pq_send_l(val) htonl(val)
 
-#define put_pq_error(db) put_error("database: %s", PQerrorMessage(db))
-#define put_pq_result_error(result) put_error("database: %s", PQresultErrorMessage(result))
+#define putln_error_pq(db) put_error("database: %s\n", PQerrorMessage(db))
+#define putln_error_pq_result(result) put_error("database: %s\n", PQresultErrorMessage(result))
 
 db_t *db_connect(int verbosity) {
     PGconn *db = PQsetdbLogin(
@@ -44,7 +44,7 @@ db_t *db_connect(int verbosity) {
     PQsetErrorVerbosity(db, v);
 
     if (PQstatus(db) != CONNECTION_OK) {
-        put_pq_error(db);
+        putln_error_pq(db);
         PQfinish(db);
         return NULL;
     }
@@ -67,7 +67,7 @@ errstatus_t db_verify_user_api_key(db_verify_user_api_key_t *out_result, db_t *d
 
     errstatus_t res;
     if (PQresultStatus(pg_result) != PGRES_TUPLES_OK) {
-        put_pq_result_error(pg_result);
+        putln_error_pq_result(pg_result);
         res = errstatus_error;
     } else if (PQntuples(pg_result) == 0) {
         res = errstatus_error;
@@ -87,7 +87,7 @@ serial_t db_get_user_id_by_email(db_t *db, const char *email) {
     serial_t res;
 
     if (PQresultStatus(result) != PGRES_TUPLES_OK) {
-        put_pq_result_error(result);
+        putln_error_pq_result(result);
         res = errstatus_handled;
     } else if (PQntuples(result) == 0) {
         put_error("cannot find user by email: %s\n", email);
@@ -107,7 +107,7 @@ serial_t db_get_user_id_by_pseudo(db_t *db, const char *pseudo) {
     serial_t res;
 
     if (PQresultStatus(result) != PGRES_TUPLES_OK) {
-        put_pq_result_error(result);
+        putln_error_pq_result(result);
         res = errstatus_handled;
     } else if (PQntuples(result) == 0) {
         put_error("cannot find user by pseudo: %s\n", pseudo);
@@ -135,7 +135,7 @@ errstatus_t db_get_user(db_t *db, user_t *user) {
     errstatus_t res;
 
     if (PQresultStatus(result) != PGRES_TUPLES_OK) {
-        put_pq_result_error(result);
+        putln_error_pq_result(result);
         res = errstatus_handled;
     } else if (PQntuples(result) == 0) {
         put_error("cannot find user by id: %d\n", user->user_id);

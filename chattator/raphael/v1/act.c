@@ -109,7 +109,7 @@ int main(int argc, char **argv) {
             case opt_verbose: ++verbosity; break;
             case opt_config:
                 if (cfg) {
-                    put_error("config already specified by previous argument");
+                    put_error("config already specified by previous argument\n");
                     return EX_USAGE;
                 }
                 cfg = config_from_file(optarg);
@@ -182,8 +182,6 @@ int main(int argc, char **argv) {
 }
 
 json_object *act(cfg_t *cfg, db_t *db, json_object *const obj_action) {
-    errstatus_t err;
-
     action_t action;
     if (!action_parse(&action, obj_action, cfg, db)) return NULL;
 

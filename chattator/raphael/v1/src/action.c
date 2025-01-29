@@ -5,35 +5,44 @@
 
 #include "action.h"
 #include "db.h"
+#include "util.h"
 
-/*
-enum { errstatus_unauthorized = min_errstatus - 1 };
+void put_role(role_flags_t role, FILE *stream) {
+    if (role & role_admin) fputs("admin", stream);
+    if (role & role_membre) fputs(role & role_admin ? " or membre" : "membre", stream);
+    if (role & role_pro) fputs(role & (role_admin | role_membre) ? " or professionnel" : "professionnel", stream);
+}
+
 /// @brief Check the API key and put an erorr if it is invalid or the user doesn't have access.
-/// 
+///
 /// @param cfg Configuration.
 /// @param db Database.
-/// @param with Args object.
+/// @param api_key API key.
 /// @param allowed_roles Bit-wise flags of the roles the user is allowed to have.
-/// @return @ref errstatus_unauthorized The user's role doesn't correspond to @p allowed_roles.
-/// @return @ref errstatus_handled An error has occured; a message has been shown. Propagate the error.
-/// @return @ref errstatus_error The API key is invalid.
+/// @return @ref 0 The user's role doesn't correspond to @p allowed_roles, The API key is invalid, or another error occured and was handled.
 /// @return The ID of the user who owns this API key.
-static inline serial_t check_api_key(config_t *cfg, db_t *db, json_object *with, role_flags_t allowed_roles);
-
-serial_t check_api_key(config_t *cfg, db_t *db, json_object *with, role_flags_t allowed_roles) {
-    char const *repr = json_object_get_string(json_object_object_get(with, "api_key"));
-    if (!repr) return errstatus_error;
-    api_key_t api_key;
-    serial_t err = uuid4_from_repr(&api_key, repr);
-    if (errstatus_ok != err) return err;
+static inline serial_t check_api_key(cfg_t *cfg, db_t *db, api_key_t api_key, role_flags_t allowed_roles) {
+    errstatus_t err;
     config_verify_api_key_t result;
     switch (err = config_verify_api_key(&result, cfg, api_key, db)) {
-    case errstatus_error: put_error("api key invalid: %s", repr); [[fallthrough]];
-    case errstatus_handled: return err;
+    case errstatus_error: {
+        char repr[UUID4_REPR_LENGTH];
+        put_error("api key invalid: %" PRIuuid4_repr, uuid4_repr(api_key, repr));
+        [[fallthrough]];
+    }
+    case errstatus_handled: return 0;
     default:;
     }
-    return result.user_role & allowed_roles ? result.user_id : errstatus_unauthorized;
-}*/
+    if (!(result.user_role & allowed_roles)) {
+        put_error("unauthorized: user is ");
+        put_role(result.user_role, stderr);
+        fputs(", must be ", stderr);
+        put_role(allowed_roles, stderr);
+        putc('\n', stderr);
+        return 0;
+    }
+    return result.user_id;
+}
 
 void action_destroy(action_t const *action) {
     switch (action->type) {
