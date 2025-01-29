@@ -19,7 +19,7 @@
 /// @param allowed_roles Bit-wise flags of the roles the user is allowed to have.
 /// @return @ref 0 The user's role doesn't correspond to @p allowed_roles, The API key is invalid, or another error occured and was handled.
 /// @return The ID of the user who owns this API key.
-static inline serial_t check_api_key(const char* action_name, cfg_t *cfg, db_t *db, api_key_t api_key, role_flags_t allowed_roles) {
+static inline serial_t check_api_key(const char *action_name, cfg_t *cfg, db_t *db, api_key_t api_key, role_flags_t allowed_roles) {
     errstatus_t err;
     config_verify_api_key_t result;
     switch (err = config_verify_api_key(&result, cfg, api_key, db)) {
@@ -32,31 +32,20 @@ static inline serial_t check_api_key(const char* action_name, cfg_t *cfg, db_t *
     default:;
     }
     if (!(result.user_role & allowed_roles)) {
-        put_error("%s: unauthorized: user is ", action_name);
-        put_role(result.user_role, stderr);
-        fputs(", must be ", stderr);
-        put_role(allowed_roles, stderr);
-        putc('\n', stderr);
+        // this is an error on the client's end - it keepin this code to for logging later
+        // put_error("%s: unauthorized: user is ", action_name);
+        // put_role(result.user_role, stderr);
+        // fputs(", must be ", stderr);
+        // put_role(allowed_roles, stderr);
+        // putc('\n', stderr);
         return 0;
     }
     return result.user_id;
 }
 
-/// @brief Checks and increments the rate limit for the specified user.
-///
-/// @param user_id The ID of the user performing the request.
-/// @return @c true The turnstile passes (the rate limit hasn't been reached)
-/// @return @c false The turnstile blocks (the rate limit has been reached). An error has been put.
-static inline bool turnstile_rate_limit(serial_t user_id)
-{
+static inline serial_t check_token(cfg_t *cfg, db_t *db, token_t token, role_flags_t allowed_roles) {
     // todo
-    return true;
-}
-
-static inline serial_t check_token(const char *action_name, cfg_t *cfg, db_t *db, token_t token, role_flags_t allowed_roles)
-{
-    // todo
-    put_error("%s: check_token not implemented", action_name);
+    put_error("check_token not implemented");
     return 0;
 }
 
@@ -73,31 +62,56 @@ void action_destroy(action_t const *action) {
     }
 }
 
-bool action_evaluate(action_t const *action, response_t *rep, cfg_t *cfg, db_t *db) {
+bool action_evaluate(action_t const *action, response_t *rep, cfg_t *cfg, db_t *db, server_t *server) {
     // todo...
     serial_t user_id;
+
+    rep->has_next_page = false; // default most of the time - who cares if we set it twice
+
+#define check_rate_limit()                                    \
+    if (!server_turnstile_rate_limit(server, user_id, cfg)) { \
+        rep->status = status_too_many_requests;               \
+        return true;                                          \
+    }
+
+#define auth_api_key(action_name, allowed_roles)                                                      \
+    do {                                                                                              \
+        if (!(user_id = check_api_key(STR(DO), cfg, db, action->with.DO.api_key, (allowed_roles)))) { \
+            rep->status = status_forbidden;                                                           \
+            return true;                                                                              \
+        }                                                                                             \
+        check_rate_limit();                                                                           \
+    } while (0)
+
+#define auth_token(action_name, allowed_roles)                                           \
+    do {                                                                                 \
+        if (!(user_id = check_token(cfg, db, action->with.DO.token, (allowed_roles)))) { \
+            rep->status = status_forbidden;                                              \
+            return true;                                                                 \
+        }                                                                                \
+        check_rate_limit();                                                              \
+    } while (0)
 
     switch (rep->type = action->type) {
 #define DO login
     case action_type(DO):
-        if (!(user_id = check_api_key(STR(DO), cfg, db, action->with.DO.api_key, role_all))) return false;
-        if (!turnstile_rate_limit(user_id)) return false;
-
+        auth_api_key(DO, role_all);
+        if (!server_login(server, &rep->body.DO.token, user_id, action->with.DO.password_hash)) {
+            rep->status = status_unauthorized;
+            return true;
+        };
         break;
 #undef DO
 #define DO logout
     case action_type(DO):
-        if (!(user_id = check_token(STR(DO), cfg, db, action->with.DO.token, role_all))) return false;
-        if (!turnstile_rate_limit(user_id)) return false;
+        auth_token(DO, role_all);
 
         break;
 #undef DO
 #define DO whois
     case action_type(DO):
-        if (!(user_id = check_api_key(STR(DO), cfg, db, action->with.DO.api_key, role_all))) return false;
-        if (!turnstile_rate_limit(user_id)) return false;
+        auth_api_key(DO, role_all);
 
-        rep->has_next_page = false;
         rep->status = status_ok;
         rep->body.DO.user_id = action->with.DO.user_id;
         if (!db_get_user(db, &rep->body.DO)) return false;
@@ -105,75 +119,66 @@ bool action_evaluate(action_t const *action, response_t *rep, cfg_t *cfg, db_t *
 #undef DO
 #define DO send
     case action_type(DO):
-        if (!(user_id = check_token(STR(DO), cfg, db, action->with.DO.token, role_all))) return false;
-        if (!turnstile_rate_limit(user_id)) return false;
+        auth_token(DO, role_all);
 
         break;
 #undef DO
 #define DO motd
     case action_type(DO):
-        if (!(user_id = check_token(STR(DO), cfg, db, action->with.DO.token, role_all))) return false;
-        if (!turnstile_rate_limit(user_id)) return false;
+        auth_token(DO, role_all);
 
         break;
 #undef DO
 #define DO inbox
     case action_type(DO):
-        if (!(user_id = check_token(STR(DO), cfg, db, action->with.DO.token, role_all))) return false;
-        if (!turnstile_rate_limit(user_id)) return false;
+        auth_token(DO, role_all);
 
         break;
 #undef DO
 #define DO outbox
     case action_type(DO):
-        if (!(user_id = check_token(STR(DO), cfg, db, action->with.DO.token, role_all))) return false;
-        if (!turnstile_rate_limit(user_id)) return false;
+        auth_token(DO, role_all);
 
         break;
 #undef DO
 #define DO edit
     case action_type(DO):
-        if (!(user_id = check_token(STR(DO), cfg, db, action->with.DO.token, role_all))) return false;
-        if (!turnstile_rate_limit(user_id)) return false;
+        auth_token(DO, role_all);
 
         break;
 #undef DO
 #define DO rm
     case action_type(DO):
-        if (!(user_id = check_token(STR(DO), cfg, db, action->with.DO.token, role_all))) return false;
-        if (!turnstile_rate_limit(user_id)) return false;
+        auth_token(DO, role_all);
 
         break;
 #undef DO
 #define DO block
     case action_type(DO):
-        if (!(user_id = check_token(STR(DO), cfg, db, action->with.DO.token, role_all))) return false;
-        if (!turnstile_rate_limit(user_id)) return false;
+        auth_token(DO, role_admin | role_pro);
 
         break;
 #undef DO
 #define DO unblock
     case action_type(DO):
-        if (!(user_id = check_token(STR(DO), cfg, db, action->with.DO.token, role_all))) return false;
-        if (!turnstile_rate_limit(user_id)) return false;
+        auth_token(DO, role_admin | role_pro);
 
         break;
 #undef DO
 #define DO ban
     case action_type(DO):
-        if (!(user_id = check_token(STR(DO), cfg, db, action->with.DO.token, role_all))) return false;
-        if (!turnstile_rate_limit(user_id)) return false;
+        auth_token(DO, role_admin | role_pro);
 
         break;
 #undef DO
 #define DO unban
     case action_type(DO):
-        if (!(user_id = check_token(STR(DO), cfg, db, action->with.DO.token, role_all))) return false;
-        if (!turnstile_rate_limit(user_id)) return false;
+        auth_token(DO, role_admin | role_pro);
 
         break;
     }
 
+    rep->status = status_ok;
     return true;
 }
 

@@ -1,3 +1,8 @@
+/// @file
+/// @author Raphaël
+/// @brief Tchattator413 server configuration - Implementation
+/// @date 29/01/2025
+
 #include <errno.h>
 #include <json-c/json.h>
 #include <stdlib.h>
@@ -20,6 +25,7 @@ struct config {
     int block_for;
     int backlog;
     uint16_t port;
+
     /// @remark Can be @c NULL if log_file is a standard stream.
     char *log_file_name;
 };
@@ -145,6 +151,18 @@ serial_t config_verify_api_key(config_verify_api_key_t *out_result, cfg_t const 
     return err;
 }
 
-int config_max_msg_length(cfg_t const *cfg) {
-    return cfg->max_msg_length;
-}
+#define DEFINE_CONFIG_GETTER(type, attr)   \
+    type config_##attr(cfg_t const *cfg) { \
+        return cfg->attr;                  \
+    }
+
+DEFINE_CONFIG_GETTER(uuid4_t, admin_api_key)
+DEFINE_CONFIG_GETTER(FILE *, log_file)
+DEFINE_CONFIG_GETTER(int, max_msg_length)
+DEFINE_CONFIG_GETTER(int, page_inbox)
+DEFINE_CONFIG_GETTER(int, page_outbox)
+DEFINE_CONFIG_GETTER(int, rate_limit_m)
+DEFINE_CONFIG_GETTER(int, rate_limit_h)
+DEFINE_CONFIG_GETTER(int, block_for)
+DEFINE_CONFIG_GETTER(int, backlog)
+DEFINE_CONFIG_GETTER(uint16_t, port)

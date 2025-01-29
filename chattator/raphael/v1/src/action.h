@@ -12,6 +12,7 @@
 
 #include "config.h"
 #include "db.h"
+#include "server.h"
 #include "types.h"
 
 /// @brief The type of an action.
@@ -74,7 +75,7 @@ typedef enum {
     status_payload_too_large = 413,
     status_unprocessable_content = 422,
     status_too_many_requests = 429,
-    status_internal_serveur_error = 500,
+    status_internal_server_error = 500,
 } status_t;
 
 typedef struct {
@@ -144,7 +145,7 @@ void action_destroy(action_t const *action);
 /// @param db The DB connection.
 /// @return @p true on success.
 /// @return @p false on error.
-bool action_evaluate(action_t const *action, response_t *response, cfg_t *cfg, db_t *db);
+bool action_evaluate(action_t const *action, response_t *response, cfg_t *cfg, db_t *db, server_t *server);
 
 /// @brief Convert an action response to JSON.
 /// @param response The action response.

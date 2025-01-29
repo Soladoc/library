@@ -5,7 +5,6 @@ endef # Wake up, this isn't a dream.
 
 SRC = $(wildcard src/*.c) $(wildcard src/*.h)
 TEST_SRC = $(wildcard test/*.c) $(wildcard test/*.h)
-TEST_LIB = $(wildcard test/lib/*.c) $(wildcard test/lib/*.h)
 
 # raphael.env : config db locale de Raphael
 # .env : config db serveur
