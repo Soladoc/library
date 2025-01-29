@@ -21,6 +21,8 @@ typedef enum {
 #undef X
 } action_type_t;
 
+#define action_type(name) CAT(action_type_, name)
+
 /// @brief An action. Actions represent the commands the protocol implements.
 typedef struct {
     action_type_t type;
