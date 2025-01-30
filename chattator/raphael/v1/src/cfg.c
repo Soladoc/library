@@ -8,7 +8,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "config.h"
+#include "cfg.h"
 #include "json-helpers.h"
 #include "util.h"
 
@@ -30,7 +30,7 @@ struct cfg {
     char *log_file_name;
 };
 
-cfg_t *config_defaults(void) {
+cfg_t *cfg_defaults(void) {
     cfg_t *cfg = malloc(sizeof *cfg);
     if (!cfg) errno_exit("malloc");
 
@@ -51,17 +51,17 @@ cfg_t *config_defaults(void) {
     return cfg;
 }
 
-void config_destroy(cfg_t *cfg) {
+void cfg_destroy(cfg_t *cfg) {
     if (!cfg) return;
     if (cfg->log_file && cfg->log_file != DEFAULT_LOG_STREAM) fclose(cfg->log_file);
     free(cfg->log_file_name);
     free(cfg);
 }
 
-cfg_t *config_from_file(char const *filename) {
+cfg_t *cfg_from_file(char const *filename) {
     json_object *obj_cfg = json_object_from_file(filename), *obj;
 
-    cfg_t *cfg = config_defaults();
+    cfg_t *cfg = cfg_defaults();
 
     if (json_object_object_get_ex(obj_cfg, "admin_api_key", &obj)) {
         slice_t admin_api_key_repr;
@@ -115,7 +115,7 @@ cfg_t *config_from_file(char const *filename) {
     return cfg;
 }
 
-void config_dump(cfg_t const *cfg) {
+void cfg_dump(cfg_t const *cfg) {
     puts("CONFIGURATION");
     printf("admin_api_key   ");
     uuid4_put(cfg->admin_api_key, stdout);
@@ -131,10 +131,10 @@ void config_dump(cfg_t const *cfg) {
     printf("rate_limit_m    %d\n", cfg->rate_limit_m);
 }
 
-uuid4_t const *config_admin_api_key(cfg_t const *cfg) { return &cfg->admin_api_key; }
+uuid4_t const *cfg_admin_api_key(cfg_t const *cfg) { return &cfg->admin_api_key; }
 
 #define DEFINE_CONFIG_GETTER(type, attr)   \
-    type config_##attr(cfg_t const *cfg) { \
+    type cfg_##attr(cfg_t const *cfg) { \
         return cfg->attr;                  \
     }
 

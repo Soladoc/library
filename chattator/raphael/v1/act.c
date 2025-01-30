@@ -3,7 +3,7 @@
 /// @brief Tchattator413 JSON front-end - Main program
 /// @date 23/01/2025
 
-#include "src/config.h"
+#include "src/cfg.h"
 #include "src/json-helpers.h"
 #include "src/tchattator413.h"
 #include "src/util.h"
@@ -80,7 +80,7 @@ int main(int argc, char **argv) {
                     put_error("config already specified by previous argument\n");
                     return EX_USAGE;
                 }
-                cfg = config_from_file(optarg);
+                cfg = cfg_from_file(optarg);
                 if (!cfg) return EX_CONFIG;
                 break;
             case '?':
@@ -90,10 +90,10 @@ int main(int argc, char **argv) {
         }
     }
 
-    if (!cfg) cfg = config_defaults();
+    if (!cfg) cfg = cfg_defaults();
 
     if (dump_config) {
-        config_dump(cfg);
+        cfg_dump(cfg);
     } else {
         json_object *const input = optind < argc
             ? json_tokener_parse(argv[optind])
@@ -124,7 +124,7 @@ int main(int argc, char **argv) {
         server_destroy(&server);
     }
 
-    config_destroy(cfg);
+    cfg_destroy(cfg);
 
     return EX_OK;
 }

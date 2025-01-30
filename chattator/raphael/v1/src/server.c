@@ -38,7 +38,7 @@ bool server_turnstile_rate_limit(server_t *server, serial_t user_id, cfg_t *cfg)
     ++stats->n_requests_m;
     ++stats->n_requests_h;
 
-    return stats->n_requests_m < config_rate_limit_m(cfg) && stats->n_requests_h < config_rate_limit_h(cfg);
+    return stats->n_requests_m < cfg_rate_limit_m(cfg) && stats->n_requests_h < cfg_rate_limit_h(cfg);
 }
 
 token_t server_login(server_t *server, serial_t user_id) {

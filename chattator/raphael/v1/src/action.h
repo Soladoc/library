@@ -10,7 +10,7 @@
 #include <stdbool.h>
 #include <stdio.h>
 
-#include "config.h"
+#include "cfg.h"
 #include "db.h"
 #include "server.h"
 #include "types.h"

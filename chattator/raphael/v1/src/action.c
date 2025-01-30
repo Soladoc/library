@@ -22,8 +22,8 @@
 /// @return @c 0 another error occured and was handled.
 /// @return The ID of the user who owns this API key.
 static inline serial_t check_api_key(api_key_t api_key, role_flags_t allowed_roles, cfg_t *cfg, db_t *db) {
-    config_verify_api_key_t result;
-    switch (config_verify_api_key(&result, cfg, api_key, db)) {
+    cfg_verify_api_key_t result;
+    switch (cfg_verify_api_key(&result, cfg, api_key, db)) {
     case errstatus_handled: return 0;
     case errstatus_error: {
         // char repr[UUID4_REPR_LENGTH];
@@ -48,7 +48,7 @@ static inline serial_t check_api_key(api_key_t api_key, role_flags_t allowed_rol
 /// @return @ref errstatus_error The API key isn't valid.
 /// @return @ref errstatus_handled DB error (handled).
 static inline errstatus_t auth_api_key(user_identity_t *out_user, uuid4_t api_key, cfg_t *cfg, db_t *db) {
-    if (uuid4_eq(api_key, *config_admin_api_key(cfg))) {
+    if (uuid4_eq(api_key, *cfg_admin_api_key(cfg))) {
         out_user->role = role_admin;
         out_user->id = 0;
         return errstatus_ok;
@@ -153,7 +153,7 @@ bool action_evaluate(action_t const *action, response_t *rep, cfg_t *cfg, db_t *
         }
 
         // if message length is greater than maximum
-        if (action->with.DO.content.len > config_max_msg_length(cfg)) fail(status_payload_too_large);
+        if (action->with.DO.content.len > cfg_max_msg_length(cfg)) fail(status_payload_too_large);
 
         if (
             // if sender and dest are the same user

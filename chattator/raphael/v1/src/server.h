@@ -6,7 +6,7 @@
 #ifndef SERVER_STATE_H
 #define SERVER_STATE_H
 
-#include "config.h"
+#include "cfg.h"
 #include <stdbool.h>
 #include <time.h>
 

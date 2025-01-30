@@ -7,7 +7,7 @@
 int main() {
     struct test t;
     bool success = true;
-    cfg_t *cfg = config_defaults();
+    cfg_t *cfg = cfg_defaults();
     db_t *db = db_connect(0);
     server_t server = {};
 
@@ -25,7 +25,7 @@ int main() {
     observe_put_role();
 #endif
 
-    config_destroy(cfg);
+    cfg_destroy(cfg);
     db_destroy(db);
     server_destroy(&server);
 

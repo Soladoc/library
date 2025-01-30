@@ -2,7 +2,7 @@
 #define TCHATTATOR_413_H
 
 #include "action.h"
-#include "config.h"
+#include "cfg.h"
 #include "db.h"
 #include "server.h"
 #include <json-c/json.h>
