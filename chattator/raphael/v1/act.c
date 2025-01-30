@@ -174,7 +174,7 @@ int main(int argc, char **argv) {
         if ((item = act(input, cfg, db, &server))) json_object_array_add(output, item);
         break;
     default:
-        put_error("invalid request (expected array or object, got %s)\n", json_type_to_name(input_type));
+        putln_error_json_type_union2(json_type_array, json_type_object, input_type, "invalid request");
     }
 
     // Results
