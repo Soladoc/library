@@ -79,5 +79,5 @@ if [[ -n $output ]]; then
     docker cp "$container:$workdir/a.out" "$output"
 fi
 
-# remove leftouvers
+# remove leftovers
 docker exec $container rm -r "$workdir"

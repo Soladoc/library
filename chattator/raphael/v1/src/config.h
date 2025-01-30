@@ -9,7 +9,7 @@
 #include "types.h"
 
 /// @brief An opaque handle to a configuration object.
-typedef struct config cfg_t;
+typedef struct cfg cfg_t;
 
 /// @brief Load the default configuration.
 /// @return A new configuration object

@@ -1,14 +1,32 @@
 #include "tests.h"
 #include <stdlib.h>
 
-#define VERBOSITY TEST_SUMMARY
+//#define DO_OBSERVE
+#define OUT stdout
 
 int main() {
-    bool const success = test_uuid(VERBOSITY);
+    struct test t;
+    bool success = true;
+    cfg_t *cfg = config_defaults();
+    db_t *db = db_connect(0);
+    server_t server = {};
 
-    if (VERBOSITY == TEST_VERBOSE) {
-        observe_put_role();
-    }
+#define test(new_test)              \
+    do {                            \
+        t = new_test;            \
+        success &= test_end(&t, OUT); \
+    } while (0)
+
+    test(test_uuid());
+    test(test_1(cfg, db, &server));
+
+#ifdef DO_OBSERVE
+    observe_put_role();
+#endif
+
+    config_destroy(cfg);
+    db_destroy(db);
+    server_destroy(&server);
 
     return success ? EXIT_SUCCESS : EXIT_FAILURE;
 }

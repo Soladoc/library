@@ -44,6 +44,8 @@ static inline serial_t check_api_key(api_key_t api_key, role_flags_t allowed_rol
 }*/
 
 bool action_evaluate(action_t const *action, response_t *rep, cfg_t *cfg, db_t *db, server_t *server) {
+    rep->has_next_page = false; // default most of the time - who cares if we set it twice
+
     // Identify user
     user_identity_t user;
 
@@ -64,8 +66,8 @@ bool action_evaluate(action_t const *action, response_t *rep, cfg_t *cfg, db_t *
             return errstatus_ok;                                                       \
         }                                                                              \
         switch (db_verify_user_api_key(db, &user, action->with.action_name.api_key)) { \
-        case errstatus_handled: fail(status_unauthorized);                             \
-        case errstatus_error: fail(status_forbidden);                                  \
+        case errstatus_handled: return false;                                          \
+        case errstatus_error: fail(status_unauthorized);                               \
         default:;                                                                      \
         }                                                                              \
     } while (0)
@@ -106,8 +108,6 @@ bool action_evaluate(action_t const *action, response_t *rep, cfg_t *cfg, db_t *
     if (!server_turnstile_rate_limit(server, user.id, cfg)) fail(status_too_many_requests);
 
     // Build answer
-
-    rep->has_next_page = false; // default most of the time - who cares if we set it twice
 
     switch (action->type) {
 #define DO login

@@ -26,21 +26,14 @@
 
 struct test {
     char const *name;
-    struct test_case *cases;
+    struct _stbtest_case *cases;
 };
 
-struct test_case {
+struct _stbtest_case {
     bool ok;
     unsigned line;
     char const *expr;
     char *name;
-};
-
-enum test_verbosity {
-    TEST_SILENT,
-    TEST_SUMMARY = 1 << 0,
-    TEST_TABLE = 1 << 1,
-    TEST_VERBOSE = TEST_SUMMARY | TEST_TABLE,
 };
 
 STB_TEST_DEFINITION struct test test_start(char const *name);
@@ -50,7 +43,7 @@ STB_TEST_DEFINITION struct test test_start(char const *name);
 STB_TEST_DEFINITION void _test_case(unsigned line, struct test *test, bool ok, char const *expr, char const *fmt_name, ...)
     _stbtest_attr_format(printf, 5, 6);
 
-STB_TEST_DEFINITION bool test_end(struct test *test, FILE *output, enum test_verbosity verbosity);
+STB_TEST_DEFINITION bool test_end(struct test *test, FILE *output);
 
 #endif // STB_TEST_H_
 
@@ -87,7 +80,7 @@ void _test_case(unsigned line, struct test *test, bool ok, char const *expr, cha
     va_end(ap);
 
     arrput(test->cases,
-        ((struct test_case) {
+        ((struct _stbtest_case) {
             .ok = ok,
             .line = line,
             .expr = expr,
@@ -95,16 +88,15 @@ void _test_case(unsigned line, struct test *test, bool ok, char const *expr, cha
         }));
 }
 
-bool test_end(struct test *test, FILE *output, enum test_verbosity verbosity) {
+bool test_end(struct test *test, FILE *output) {
     // Establish case success counts and column lengths
     int i, nb_ko = 0, nb_ok = 0;
-    int const col_len_num = _stbtest_digit_count(arrlenu(test->cases), 10);
-    int const col_len_line = _stbtest_digit_count(arrlast(test->cases).line, 10);
+    
     int col_len_expr = sizeof "expr";
     int col_len_name = sizeof "name";
 
     for (i = 0; i < arrlenu(test->cases); ++i) {
-        struct test_case const *c = &test->cases[i];
+        struct _stbtest_case const *c = &test->cases[i];
         c->ok ? ++nb_ok : ++nb_ko;
 
         size_t len;
@@ -112,7 +104,11 @@ bool test_end(struct test *test, FILE *output, enum test_verbosity verbosity) {
         if ((len = strlen(c->name)) > col_len_name) col_len_name = len;
     }
 
-    if (verbosity & TEST_TABLE) {
+    // Show table if test failed
+    if (nb_ko != 0) {
+        int const col_len_num = _stbtest_digit_count(arrlenu(test->cases), 10);
+        int const col_len_line = _stbtest_digit_count(arrlast(test->cases).line, 10);
+
         for (i = 0; i < col_len_num; ++i)
             putc('#', output);
         fprintf(output, " | OK | %*s | %-*s | %-*s |\n",
@@ -136,7 +132,7 @@ bool test_end(struct test *test, FILE *output, enum test_verbosity verbosity) {
         // Print cases
 
         for (i = 0; i < arrlenu(test->cases); ++i) {
-            struct test_case const *c = &test->cases[i];
+            struct _stbtest_case const *const c = &test->cases[i];
             fprintf(output, "%*d | %s | %*u | %-*s | %-*s |\n",
                 col_len_num, i,
                 c->ok ? "\033[32;49mOK\033[39;49m" : "\033[31;49mKO\033[39;49m",
@@ -146,17 +142,16 @@ bool test_end(struct test *test, FILE *output, enum test_verbosity verbosity) {
         }
     }
 
-    if (verbosity & TEST_SUMMARY) {
-        fprintf(output, "test %s: %d ko, %d ok, %d total: %s\n",
+    // Print summary
+    fprintf(output, "test %s: %d ko, %d ok, %d total: %s\n",
             test->name,
             nb_ko,
             nb_ok,
             nb_ko + nb_ok,
             nb_ko == 0 ? "\033[32;49msuccess\033[39;49m" : "\033[31;49mfailure\033[39;49m");
-    }
 
     // Deallocate
-    for (i = 0; i < arrlenu(test->cases); ++i) free(test->cases[i].name);
+    for (i = 0; i < arrlenu(test->cases); ++i) free(test->cases[i].name); // Free test
     arrfree(test->cases);
 
     return nb_ko == 0;

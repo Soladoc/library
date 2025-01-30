@@ -3,6 +3,12 @@
 /// @brief Tchattator413 JSON front-end - Main program
 /// @date 23/01/2025
 
+//#define DBG_INPUT_FILE "test/input/1.json"
+
+#include "src/config.h"
+#include "src/json-helpers.h"
+#include "src/tchattator413.h"
+#include "src/util.h"
 #include <assert.h>
 #include <getopt.h>
 #include <json-c/json.h>
@@ -10,53 +16,6 @@
 #include <stdlib.h>
 #include <sysexits.h>
 #include <unistd.h>
-
-#include "src/action.h"
-#include "src/config.h"
-#include "src/json-helpers.h"
-#include "src/util.h"
-
-#define HELP PROG " - A Tchattator413 implementation\n\
-\n\
-SYNOPSIS\n\
-    " PROG " -[qv]... [-c FILE]\n\
-    " PROG " --dump-config\n\
-    " PROG " --help\n\
-    " PROG " --version\n\
-\n\
-DESCRIPTION\n\
-    Reads JSON actions from standard input. Writes JSON results to standard output.\n\
-\n\
-    Mandatory arguments to long options are mandatory for short options too.\n\
-\n\
-    -q, --quiet        More quiet (can be repeated)\n\
-    -v, --verbose      More verbose (can be repeated)\n\
-    -c, --config=FILE  Configuration file\n\
-    --dump-config      Dump current configuration\n\
-    --help             Show this help\n\
-    --version          Show version\n\
-\n\
-ENVIRONMENT\n\
-    DB_HOST            DB host\n\
-    PGDB_PORT          DB port\n\
-    DB_NAME            DB name\n\
-    DB_USER            DB username\n\
-    DB_ROOT_PASSWORD   DB password"
-
-#define VERSION PROG " 1.0.0"
-
-static inline json_object *act(json_object *const obj_action, cfg_t *cfg, db_t *db, server_t *server) {
-    action_t action;
-    if (!action_parse(&action, obj_action, db)) return NULL;
-
-    response_t response;
-    if (!action_evaluate(&action, &response, cfg, db, server)) return NULL; 
-
-    json_object *json_response = response_to_json(&response);
-
-    return json_response;
-}
-
 
 enum { EX_NODB = EX__MAX + 1 };
 
@@ -144,7 +103,14 @@ int main(int argc, char **argv) {
     // Allocation
     db_t *db = db_connect(verbosity);
 
-    json_object *const input = json_object_from_fd(STDIN_FILENO);
+    json_object *const input =
+#ifdef DBG_INPUT_FILE
+        json_object_from_file(DBG_INPUT_FILE)
+#else
+        json_object_from_fd(STDIN_FILENO)
+#endif // DBG_INPUT_FILE
+        ;
+
     if (!input) {
         put_error_json_c("failed to parse input\n");
         return EX_DATAERR;
@@ -152,32 +118,11 @@ int main(int argc, char **argv) {
 
     server_t server = {};
 
-    json_object *const output = json_object_new_array();
-
-    // Usage
-
-    json_type const input_type = json_object_get_type(input);
-    json_object *item;
-    switch (input_type) {
-    case json_type_array: {
-        size_t const len = json_object_array_length(input);
-        for (size_t i = 0; i < len; ++i) {
-            json_object *const action = json_object_array_get_idx(input, i);
-            assert(action);
-            if ((item = act(action, cfg, db, &server))) json_object_array_add(output, item);
-        }
-        break;
-    }
-    case json_type_object:
-        if ((item = act(input, cfg, db, &server))) json_object_array_add(output, item);
-        break;
-    default:
-        putln_error_json_type_union2(json_type_array, json_type_object, input_type, "invalid request");
-    }
+    json_object *output = tchattator413_interpret(input, cfg, db, &server, NULL, NULL, NULL);
 
     // Results
 
-    fputs(json_object_to_json_string_ext(output, JSON_C_TO_STRING_PLAIN), stdout);
+    puts(json_object_to_json_string_ext(output, JSON_C_TO_STRING_PLAIN));
 
     // Deallocation
 

@@ -14,7 +14,7 @@
 
 #define DEFAULT_LOG_STREAM stderr
 
-struct config {
+struct cfg {
     uuid4_t admin_api_key;
     FILE *log_file;
     int max_msg_length;

@@ -317,53 +317,62 @@ json_object *response_to_json(response_t *response) {
     add_key(obj, "has_next_page", json_object_new_boolean(response->has_next_page));
     add_key(obj, "body", obj_body);
 
-    switch (response->type) {
-    case action_type_login:
+    switch (response->status) {
+    case status_unauthorized: break;
+    case status_forbidden: break;
+    case status_not_found: break;
+    case status_payload_too_large: break;
+    case status_unprocessable_content: break;
+    case status_too_many_requests: break;
+    case status_internal_server_error: break;
+    case status_ok:
+        switch (response->type) {
+        case action_type_login:
 
-        break;
-    case action_type_logout:
+            break;
+        case action_type_logout:
 
-        break;
-    case action_type_whois:
-        add_key(obj_body, "user_id", json_object_new_int(response->body.whois.user_id));
-        add_key(obj_body, "email", json_object_new_string(response->body.whois.email));
-        add_key(obj_body, "last_name", json_object_new_string(response->body.whois.last_name));
-        add_key(obj_body, "first_name", json_object_new_string(response->body.whois.first_name));
-        add_key(obj_body, "display_name", json_object_new_string(response->body.whois.display_name));
-        add_key(obj_body, "kind", json_object_new_int(response->body.whois.kind));
-        break;
-    case action_type_send:
+            break;
+        case action_type_whois:
+            add_key(obj_body, "user_id", json_object_new_int(response->body.whois.user_id));
+            add_key(obj_body, "email", json_object_new_string(response->body.whois.email));
+            add_key(obj_body, "last_name", json_object_new_string(response->body.whois.last_name));
+            add_key(obj_body, "first_name", json_object_new_string(response->body.whois.first_name));
+            add_key(obj_body, "display_name", json_object_new_string(response->body.whois.display_name));
+            add_key(obj_body, "kind", json_object_new_int(response->body.whois.kind));
+            break;
+        case action_type_send:
 
-        break;
-    case action_type_motd:
+            break;
+        case action_type_motd:
 
-        break;
-    case action_type_inbox:
+            break;
+        case action_type_inbox:
 
-        break;
-    case action_type_outbox:
+            break;
+        case action_type_outbox:
 
-        break;
-    case action_type_edit:
+            break;
+        case action_type_edit:
 
-        break;
-    case action_type_rm:
+            break;
+        case action_type_rm:
 
-        break;
-    case action_type_block:
+            break;
+        case action_type_block:
 
-        break;
-    case action_type_unblock:
+            break;
+        case action_type_unblock:
 
-        break;
-    case action_type_ban:
+            break;
+        case action_type_ban:
 
-        break;
-    case action_type_unban:
+            break;
+        case action_type_unban:
 
-        break;
+            break;
+        }
     }
-
 #undef add_key
 
     return obj;
