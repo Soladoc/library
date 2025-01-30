@@ -179,7 +179,7 @@ int main(int argc, char **argv) {
 
     // Results
 
-    fputs(json_object_to_json_string_ext(output, 0), stdout);
+    fputs(json_object_to_json_string_ext(output, JSON_C_TO_STRING_PLAIN), stdout);
 
     // Deallocation
 
