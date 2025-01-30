@@ -15,8 +15,8 @@ create table _msg (
     modified_age int,
     deleted_age int,
     
-    constraint deleted_gt_read check (deleted_age > read_age);
-    constraint deleted_gt_modified check (deleted_age > modified_age);
+    constraint deleted_gt_read check (deleted_age > read_age),
+    constraint deleted_gt_modified check (deleted_age > modified_age),
 
     id_compte_sender int -- Null for admin
         constraint message_fk_compte_sender references pact._compte on delete cascade,
