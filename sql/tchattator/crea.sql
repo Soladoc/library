@@ -23,7 +23,7 @@ create table _msg (
     id_compte_recipient int not null
         constraint message_fk_compte_recipient references pact._compte on delete cascade,
 
-    constraint sender_ne_recipient check (id_compte_sender <> id_compte_recipient);
+    constraint sender_ne_recipient check (id_compte_sender <> id_compte_recipient)
 );
 
 -- ASSOCIATIONS
