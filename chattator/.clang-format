@@ -1,7 +1,6 @@
 ---
   BasedOnStyle: WebKit
   AlignAfterOpenBracket: DontAlign
-  AlignOperands: AlignAfterOperator
   AlignTrailingComments:
     Kind: Always
     OverEmptyLines: 1

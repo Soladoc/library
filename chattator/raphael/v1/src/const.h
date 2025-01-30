@@ -29,13 +29,13 @@
 #define HELP PROG " - A Tchattator413 implementation\n\
 \n\
 SYNOPSIS\n\
-    " PROG " -[qv]... [-c FILE]\n\
+    " PROG " -[qv]... [-c FILE] [REQUEST]\n\
     " PROG " --dump-config\n\
     " PROG " --help\n\
     " PROG " --version\n\
 \n\
 DESCRIPTION\n\
-    Reads JSON actions from standard input. Writes JSON results to standard output.\n\
+    Reads JSON actions from standard input, or from the REQUEST argument if provided. Writes JSON results to standard output.\n\
 \n\
     Mandatory arguments to long options are mandatory for short options too.\n\
 \n\

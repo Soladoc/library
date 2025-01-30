@@ -71,7 +71,8 @@ docker cp . "$container:$workdir"
 
 # run gcc
 for f in "$@"; do if [[ $f == *.c ]]; then srcs+=("$f"); fi; done
-docker exec -w $workdir $container gcc -fdiagnostics-color "${cflags[@]}" "${srcs[@]}" "${lflags[@]}" || true
+# -ffile-prefix-map is necessary so lldb reaches breakpoints
+docker exec -w $workdir $container gcc -ffile-prefix-map="$workdir"="$PWD" -fdiagnostics-color "${cflags[@]}" "${srcs[@]}" "${lflags[@]}" || true
 
 # copy back binaries
 if [[ -n $output ]]; then

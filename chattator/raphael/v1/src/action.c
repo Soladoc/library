@@ -6,6 +6,7 @@
 #include "action.h"
 #include "db.h"
 #include "util.h"
+#include <assert.h>
 
 #define putln_error_rate_limit_exceeded(action_name, remaining_seconds) \
     put_error(action_name, ": rate limit exceeded. Next request in %d second%s.", remaining_seconds, remaining_seconds == 1 ? "s" : "");
@@ -43,11 +44,32 @@ static inline serial_t check_api_key(api_key_t api_key, role_flags_t allowed_rol
     return result.user_id;
 }*/
 
+/// @return @ref errstatus_ok The API key is valid.
+/// @return @ref errstatus_error The API key isn't valid.
+/// @return @ref errstatus_handled DB error (handled).
+static inline errstatus_t auth_api_key(user_identity_t *out_user, uuid4_t api_key, cfg_t *cfg, db_t *db) {
+    if (uuid4_eq(api_key, *config_admin_api_key(cfg))) {
+        out_user->role = role_admin;
+        out_user->id = 0;
+        return errstatus_ok;
+    }
+    return db_verify_user_api_key(db, out_user, api_key);
+}
+
+/// @return @ref errstatus_ok The token is valid.
+/// @return @ref errstatus_error The token isn't valid.
+/// @return @ref errstatus_handled DB error (handled).
+static inline errstatus_t auth_token(user_identity_t *out_user, token_t token, db_t *db, server_t *server) {
+    if (!(out_user->id = server_verify_token(server, token))) return errstatus_error;
+    int res = db_get_user_role(db, out_user->id);
+    // The token exists in server state, so the user ID must exist in the DB.
+    // assert(res != errstatus_error); // unless someone messes with the DB in the meantime. We don't have control over that.
+    out_user->role = res;
+    return min(res, errstatus_ok); // reduce ok results to errstatus_ok
+}
+
 bool action_evaluate(action_t const *action, response_t *rep, cfg_t *cfg, db_t *db, server_t *server) {
     rep->has_next_page = false; // default most of the time - who cares if we set it twice
-
-    // Identify user
-    user_identity_t user;
 
 #define fail(return_status)          \
     do {                             \
@@ -58,63 +80,26 @@ bool action_evaluate(action_t const *action, response_t *rep, cfg_t *cfg, db_t *
 #define check_role(allowed_roles) \
     if (!(user.role & (allowed_roles))) fail(status_forbidden)
 
-#define auth_api_key(action_name)                                                      \
-    do {                                                                               \
-        if (uuid4_eq(action->with.action_name.api_key, *config_admin_api_key(cfg))) {  \
-            user.role = role_admin;                                                    \
-            user.id = 0;                                                               \
-            return errstatus_ok;                                                       \
-        }                                                                              \
-        switch (db_verify_user_api_key(db, &user, action->with.action_name.api_key)) { \
-        case errstatus_handled: return false;                                          \
-        case errstatus_error: fail(status_unauthorized);                               \
-        default:;                                                                      \
-        }                                                                              \
-    } while (0)
+#define turnstile_rate_limit() \
+    if (!server_turnstile_rate_limit(server, user.id, cfg)) fail(status_too_many_requests)
 
-#define auth_token(action_name)                                                                                  \
-    do {                                                                                                         \
-        if (!(user.id = server_verify_token(server, action->with.action_name.token))) fail(status_unauthorized); \
-        int user_role = db_get_user_role(db, user.id);                                                           \
-        switch (user_role) {                                                                                     \
-        case errstatus_handled: return false;                                                                    \
-        case errstatus_error: fail(status_forbidden);                                                            \
-        }                                                                                                        \
-        user.role = user_role;                                                                                   \
-    } while (0)
+    // Identify user
+    user_identity_t user;
+
     switch (rep->type = action->type) {
-        // clang-format off
-    case action_type_login:   auth_api_key(login); check_role(role_all); break;
-    case action_type_logout:  auth_token(logout);  check_role(role_all); break;
-    case action_type_whois:   auth_api_key(whois); check_role(role_all); break;
-    case action_type_send:    auth_token(send);    check_role(role_all); break;
-    case action_type_motd:    auth_token(motd);    check_role(role_all); break;
-    case action_type_inbox:   auth_token(inbox);   check_role(role_all); break;
-    case action_type_outbox:  auth_token(outbox);  check_role(role_all); break;
-    case action_type_edit:    auth_token(edit);    check_role(role_all); break;
-    case action_type_rm:      auth_token(rm);      check_role(role_admin | role_pro); break;
-    case action_type_block:   auth_token(block);   check_role(role_admin | role_pro); break;
-    case action_type_unblock: auth_token(unblock); check_role(role_admin | role_pro); break;
-    case action_type_ban:     auth_token(ban);     check_role(role_admin | role_pro); break;
-    case action_type_unban:   auth_token(unban);   check_role(role_admin | role_pro); break;
-        // clang-format on
-    }
-
-#undef auth_api_key
-#undef auth_token
-
-    // "Turnstile" rate limit
-
-    if (!server_turnstile_rate_limit(server, user.id, cfg)) fail(status_too_many_requests);
-
-    // Build answer
-
-    switch (action->type) {
 #define DO login
     case action_type(DO):
-        switch (db_check_password(db, user.id, action->with.DO.password.val)) {
-        case errstatus_error: fail(status_unauthorized);
+        switch (auth_api_key(&user, action->with.DO.api_key, cfg, db)) {
         case errstatus_handled: return false;
+        case errstatus_error: fail(status_unauthorized);
+        default: check_role(role_all);
+        }
+
+        turnstile_rate_limit();
+
+        switch (db_check_password(db, user.id, action->with.DO.password.val)) {
+        case errstatus_handled: return false;
+        case errstatus_error: fail(status_unauthorized);
         default:;
         }
         if (!(rep->body.DO.token = server_login(server, user.id))) fail(status_internal_server_error);
@@ -122,25 +107,49 @@ bool action_evaluate(action_t const *action, response_t *rep, cfg_t *cfg, db_t *
 #undef DO
 #define DO logout
     case action_type(DO):
+        switch (auth_token(&user, action->with.DO.token, db, server)) {
+        case errstatus_handled: return false;
+        case errstatus_error: fail(status_unauthorized);
+        default: check_role(role_all);
+        }
+
+        turnstile_rate_limit();
+
         if (!server_logout(server, action->with.DO.token)) fail(status_unauthorized);
         break;
 #undef DO
 #define DO whois
     case action_type(DO):
+        switch (auth_api_key(&user, action->with.DO.api_key, cfg, db)) {
+        case errstatus_handled: return false;
+        case errstatus_error: fail(status_unauthorized);
+        default: check_role(role_all);
+        }
+
+        turnstile_rate_limit();
+
         rep->body.DO.user_id = action->with.DO.user_id;
         switch (db_get_user(db, &rep->body.DO)) {
-        case errstatus_error: fail(status_not_found);
         case errstatus_handled: return false;
+        case errstatus_error: fail(status_not_found);
         default:;
         }
         break;
 #undef DO
 #define DO send
     case action_type(DO): {
+        switch (auth_token(&user, action->with.DO.token, db, server)) {
+        case errstatus_handled: return false;
+        case errstatus_error: fail(status_unauthorized);
+        default: check_role(role_all);
+        }
+
+        turnstile_rate_limit();
+
         int dest_role;
         switch (dest_role = db_get_user_role(db, action->with.DO.dest_user_id)) {
-        case errstatus_error: fail(status_not_found);
         case errstatus_handled: return false;
+        case errstatus_error: fail(status_not_found);
         }
 
         // if message length is greater than maximum
@@ -151,7 +160,7 @@ bool action_evaluate(action_t const *action, response_t *rep, cfg_t *cfg, db_t *
             (user.id == action->with.DO.dest_user_id)
             // if user is client, dest is not pro
             || (user.role & role_membre && !(dest_role & role_pro))
-            // if user is pro, dest is not a client having sent him sent messages
+            // if user is pro, dest is not a client having contacted him first
             || (user.role & role_pro && (!(dest_role & role_membre) || !db_count_msg(db, action->with.DO.dest_user_id, user.id)))) {
             fail(status_unprocessable_content);
         }
@@ -166,46 +175,109 @@ bool action_evaluate(action_t const *action, response_t *rep, cfg_t *cfg, db_t *
 #undef DO
 #define DO motd
     case action_type(DO):
+        switch (auth_token(&user, action->with.DO.token, db, server)) {
+        case errstatus_handled: return false;
+        case errstatus_error: fail(status_unauthorized);
+        default: check_role(role_all);
+        }
+
+        turnstile_rate_limit();
 
         break;
 #undef DO
 #define DO inbox
     case action_type(DO):
+        switch (auth_token(&user, action->with.inbox.token, db, server)) {
+        case errstatus_handled: return false;
+        case errstatus_error: fail(status_unauthorized);
+        default: check_role(role_all);
+        }
+
+        turnstile_rate_limit();
 
         break;
 #undef DO
 #define DO outbox
     case action_type(DO):
+        switch (auth_token(&user, action->with.DO.token, db, server)) {
+        case errstatus_handled: return false;
+        case errstatus_error: fail(status_unauthorized);
+        default: check_role(role_all);
+        }
+
+        turnstile_rate_limit();
 
         break;
 #undef DO
 #define DO edit
     case action_type(DO):
+        switch (auth_token(&user, action->with.DO.token, db, server)) {
+        case errstatus_handled: return false;
+        case errstatus_error: fail(status_unauthorized);
+        default: check_role(role_all);
+        }
+
+        turnstile_rate_limit();
 
         break;
 #undef DO
 #define DO rm
     case action_type(DO):
+        switch (auth_token(&user, action->with.DO.token, db, server)) {
+        case errstatus_handled: return false;
+        case errstatus_error: fail(status_unauthorized);
+        default: check_role(role_all);
+        }
+
+        turnstile_rate_limit();
 
         break;
 #undef DO
 #define DO block
     case action_type(DO):
+        switch (auth_token(&user, action->with.DO.token, db, server)) {
+        case errstatus_handled: return false;
+        case errstatus_error: fail(status_unauthorized);
+        default: check_role(role_admin | role_pro);
+        }
+
+        turnstile_rate_limit();
 
         break;
 #undef DO
 #define DO unblock
     case action_type(DO):
+        switch (auth_token(&user, action->with.DO.token, db, server)) {
+        case errstatus_handled: return false;
+        case errstatus_error: fail(status_unauthorized);
+        default: check_role(role_admin | role_pro);
+        }
+
+        turnstile_rate_limit();
 
         break;
 #undef DO
 #define DO ban
     case action_type(DO):
+        switch (auth_token(&user, action->with.DO.token, db, server)) {
+        case errstatus_handled: return false;
+        case errstatus_error: fail(status_unauthorized);
+        default: check_role(role_admin | role_pro);
+        }
+
+        turnstile_rate_limit();
 
         break;
 #undef DO
 #define DO unban
     case action_type(DO):
+        switch (auth_token(&user, action->with.DO.token, db, server)) {
+        case errstatus_handled: return false;
+        case errstatus_error: fail(status_unauthorized);
+        default: check_role(role_admin | role_pro);
+        }
+
+        turnstile_rate_limit();
 
         break;
     }

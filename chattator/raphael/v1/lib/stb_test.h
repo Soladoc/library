@@ -40,7 +40,7 @@ STB_TEST_DEFINITION struct test test_start(char const *name);
 
 #define test_case(test, expr, name, ...) _test_case(__LINE__, (test), (expr), #expr, (name)__VA_OPT__(, ) __VA_ARGS__)
 
-STB_TEST_DEFINITION void _test_case(unsigned line, struct test *test, bool ok, char const *expr, char const *fmt_name, ...)
+STB_TEST_DEFINITION bool _test_case(unsigned line, struct test *test, bool ok, char const *expr, char const *fmt_name, ...)
     _stbtest_attr_format(printf, 5, 6);
 
 STB_TEST_DEFINITION bool test_end(struct test *test, FILE *output);
@@ -63,7 +63,7 @@ struct test test_start(char const *name) {
     };
 }
 
-void _test_case(unsigned line, struct test *test, bool ok, char const *expr, char const *fmt_name, ...) {
+bool _test_case(unsigned line, struct test *test, bool ok, char const *expr, char const *fmt_name, ...) {
     va_list ap;
 
     va_start(ap, fmt_name);
@@ -86,6 +86,8 @@ void _test_case(unsigned line, struct test *test, bool ok, char const *expr, cha
             .expr = expr,
             .name = name,
         }));
+
+    return ok;
 }
 
 bool test_end(struct test *test, FILE *output) {
@@ -144,11 +146,11 @@ bool test_end(struct test *test, FILE *output) {
 
     // Print summary
     fprintf(output, "test %s: %d ko, %d ok, %d total: %s\n",
-            test->name,
+            nb_ko == 0 ? "\033[32;49msuccess\033[39;49m" : "\033[31;49mfailure\033[39;49m",
             nb_ko,
             nb_ok,
             nb_ko + nb_ok,
-            nb_ko == 0 ? "\033[32;49msuccess\033[39;49m" : "\033[31;49mfailure\033[39;49m");
+            test->name);
 
     // Deallocate
     for (i = 0; i < arrlenu(test->cases); ++i) free(test->cases[i].name); // Free test

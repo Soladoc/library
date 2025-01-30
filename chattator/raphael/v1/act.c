@@ -3,8 +3,6 @@
 /// @brief Tchattator413 JSON front-end - Main program
 /// @date 23/01/2025
 
-//#define DBG_INPUT_FILE "test/input/1.json"
-
 #include "src/config.h"
 #include "src/json-helpers.h"
 #include "src/tchattator413.h"
@@ -96,42 +94,37 @@ int main(int argc, char **argv) {
 
     if (dump_config) {
         config_dump(cfg);
-        config_destroy(cfg);
-        return EXIT_SUCCESS;
+    } else {
+        json_object *const input = optind < argc
+            ? json_tokener_parse(argv[optind])
+            : json_object_from_fd(STDIN_FILENO);
+
+        // Allocation
+        db_t *db = db_connect(verbosity);
+
+        if (!input) {
+            put_error_json_c("failed to parse input");
+            return EX_DATAERR;
+        }
+
+        server_t server = {};
+
+        json_object *output = tchattator413_interpret(input, cfg, db, &server, NULL, NULL, NULL);
+
+        // Results
+
+        puts(json_object_to_json_string_ext(output, JSON_C_TO_STRING_PLAIN));
+
+        // Deallocation
+
+        json_object_put(input);
+        json_object_put(output);
+
+        db_destroy(db);
+        server_destroy(&server);
     }
 
-    // Allocation
-    db_t *db = db_connect(verbosity);
-
-    json_object *const input =
-#ifdef DBG_INPUT_FILE
-        json_object_from_file(DBG_INPUT_FILE)
-#else
-        json_object_from_fd(STDIN_FILENO)
-#endif // DBG_INPUT_FILE
-        ;
-
-    if (!input) {
-        put_error_json_c("failed to parse input\n");
-        return EX_DATAERR;
-    }
-
-    server_t server = {};
-
-    json_object *output = tchattator413_interpret(input, cfg, db, &server, NULL, NULL, NULL);
-
-    // Results
-
-    puts(json_object_to_json_string_ext(output, JSON_C_TO_STRING_PLAIN));
-
-    // Deallocation
-
-    json_object_put(input);
-    json_object_put(output);
-
-    db_destroy(db);
     config_destroy(cfg);
-    server_destroy(&server);
 
     return EX_OK;
 }
