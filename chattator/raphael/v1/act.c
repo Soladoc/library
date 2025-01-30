@@ -183,14 +183,12 @@ int main(int argc, char **argv) {
 
     // Deallocation
 
-#ifndef NDEBUG // The OS will release the memory anyway
     json_object_put(input);
     json_object_put(output);
 
     db_destroy(db);
     config_destroy(cfg);
     server_destroy(&server);
-#endif // NBDEBUG
 
     return EX_OK;
 }
