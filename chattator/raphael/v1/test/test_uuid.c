@@ -12,7 +12,7 @@
 #define STB_TEST_IMPLEMENTATION
 #include <stb_test.h>
 
-bool test_uuid(void) {
+bool test_uuid(enum test_verbosity verbosity) {
     static const uuid4_t different_uuid = uuid4_init(0xf9, 0x1d, 0x4f, 0xae, 0x7d, 0xec, 0x11, 0xd0, 0xa7, 0x65, 0x00, 0xa0, 0xc9, 0x1e, 0x6b, 0xf6);
     static char const uuids[][UUID4_REPR_LENGTH] = {
         "f81d4fae-7dec-11d0-a765-00a0c91e6bf6",
@@ -60,5 +60,5 @@ bool test_uuid(void) {
     uuid4_from_repr(&uuid0_from_repr, uuids[0]);
     test_case(&t, uuid4_eq(uuid0, uuid0_from_repr), "literal == from repr");
 
-    return test_conclude(&t, stdout);
+    return test_end(&t, stdout, verbosity);
 }

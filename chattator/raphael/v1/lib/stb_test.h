@@ -2,7 +2,7 @@
  * @author 5cover (Scover)
  * @brief Quick unit testing library
  * @copyright Public Domain - The Unlicense
- * @date 8/10/2024
+ * @date 30/01/2024
  * @details
  * See README.md for details and usage.
  */
@@ -19,9 +19,9 @@
 #include <stdio.h>
 
 #ifdef __GNUC__
-#define _stb_test_attr_format(archetype, string_index, first_to_check) __attribute__((format(archetype, string_index, first_to_check)))
+#define _stbtest_attr_format(archetype, string_index, first_to_check) __attribute__((format(archetype, string_index, first_to_check)))
 #else
-#define _stb_test_attr_format(archetype, string_index, first_to_check)
+#define _stbtest_attr_format(archetype, string_index, first_to_check)
 #endif // __GNUC__
 
 struct test {
@@ -36,14 +36,21 @@ struct test_case {
     char *name;
 };
 
+enum test_verbosity {
+    TEST_SILENT,
+    TEST_SUMMARY = 1 << 0,
+    TEST_TABLE = 1 << 1,
+    TEST_VERBOSE = TEST_SUMMARY | TEST_TABLE,
+};
+
 STB_TEST_DEFINITION struct test test_start(char const *name);
 
 #define test_case(test, expr, name, ...) _test_case(__LINE__, (test), (expr), #expr, (name)__VA_OPT__(, ) __VA_ARGS__)
 
 STB_TEST_DEFINITION void _test_case(unsigned line, struct test *test, bool ok, char const *expr, char const *fmt_name, ...)
-    _stb_test_attr_format(printf, 5, 6);
+    _stbtest_attr_format(printf, 5, 6);
 
-STB_TEST_DEFINITION bool test_conclude(struct test *test, FILE *output);
+STB_TEST_DEFINITION bool test_end(struct test *test, FILE *output, enum test_verbosity verbosity);
 
 #endif // STB_TEST_H_
 
@@ -57,7 +64,7 @@ STB_TEST_DEFINITION bool test_conclude(struct test *test, FILE *output);
 #include <math.h>
 #include <stdarg.h>
 
-#define _stb_test_digit_count(n, base) ((n) == 0 ? 1 : (int)(log(n) / log(base)) + 1)
+#define _stbtest_digit_count(n, base) ((n) == 0 ? 1 : (int)(log(n) / log(base)) + 1)
 
 struct test test_start(char const *name) {
     return (struct test) {
@@ -91,79 +98,74 @@ void _test_case(unsigned line, struct test *test, bool ok, char const *expr, cha
         }));
 }
 
-bool test_conclude(struct test *test, FILE *output) {
-
+bool test_end(struct test *test, FILE *output, enum test_verbosity verbosity) {
     // Establish case success counts and column lengths
+    int i, nb_ko = 0, nb_ok = 0;
+    int const col_len_num = _stbtest_digit_count(arrlenu(test->cases), 10);
+    int const col_len_line = _stbtest_digit_count(arrlast(test->cases).line, 10);
+    int col_len_expr = sizeof "expr";
+    int col_len_name = sizeof "name";
 
-    size_t nb_ko = 0, nb_ok = 0;
-    size_t const col_len_num = _stb_test_digit_count(arrlenu(test->cases), 10);
-    size_t const col_len_line = _stb_test_digit_count(arrlast(test->cases).line, 10);
-    size_t col_len_expr = sizeof "expr";
-    size_t col_len_name = sizeof "name";
-
-    for (size_t i = 0; i < arrlenu(test->cases); ++i) {
+    for (i = 0; i < arrlenu(test->cases); ++i) {
         struct test_case const *c = &test->cases[i];
         c->ok ? ++nb_ok : ++nb_ko;
 
         size_t len;
-        if (col_len_expr < (len = strlen(c->expr))) {
-            col_len_expr = len;
-        }
-        if (col_len_name < (len = strlen(c->name))) {
-            col_len_name = len;
+        if ((len = strlen(c->expr)) > col_len_expr) col_len_expr = len;
+        if ((len = strlen(c->name)) > col_len_name) col_len_name = len;
+    }
+
+    if (verbosity & TEST_TABLE) {
+        for (i = 0; i < col_len_num; ++i)
+            putc('#', output);
+        fprintf(output, " | OK | %*s | %-*s | %-*s |\n",
+            col_len_line, "L",
+            col_len_expr, "expr",
+            col_len_name, "name");
+
+        for (i = 0; i < col_len_num; ++i)
+            putc('-', output);
+        fputs(" | -- | ", output);
+        for (i = 0; i < col_len_line; ++i)
+            putc('-', output);
+        fputs(" | ", output);
+        for (i = 0; i < col_len_expr; ++i)
+            putc('-', output);
+        fputs(" | ", output);
+        for (i = 0; i < col_len_name; ++i)
+            putc('-', output);
+        fputs(" |\n", output);
+
+        // Print cases
+
+        for (i = 0; i < arrlenu(test->cases); ++i) {
+            struct test_case const *c = &test->cases[i];
+            fprintf(output, "%*d | %s | %*u | %-*s | %-*s |\n",
+                col_len_num, i,
+                c->ok ? "\033[32;49mOK\033[39;49m" : "\033[31;49mKO\033[39;49m",
+                col_len_line, c->line,
+                col_len_expr, c->expr,
+                col_len_name, c->name);
+
+            // Free case
+            free(c->name);
         }
     }
 
-    bool const success = nb_ko == 0;
-    for (size_t i = 0; i < col_len_num; ++i)
-        putc('#', output);
-    fprintf(output, " | OK | %*s | %-*s | %-*s |\n",
-        (int)col_len_line, "L",
-        (int)col_len_expr, "expr",
-        (int)col_len_name, "name");
-
-    for (size_t i = 0; i < col_len_num; ++i)
-        putc('-', output);
-    fputs(" | -- | ", output);
-    for (size_t i = 0; i < col_len_line; ++i)
-        putc('-', output);
-    fputs(" | ", output);
-    for (size_t i = 0; i < col_len_expr; ++i)
-        putc('-', output);
-    fputs(" | ", output);
-    for (size_t i = 0; i < col_len_name; ++i)
-        putc('-', output);
-    fputs(" |\n", output);
-
-    // Print cases
-
-    for (size_t i = 0; i < arrlenu(test->cases); ++i) {
-        struct test_case const *c = &test->cases[i];
-        fprintf(output, "%*zu | %s | %*u | %-*s | %-*s |\n",
-            (int)col_len_num, i,
-            c->ok ? "\033[32;49mOK\033[39;49m" : "\033[31;49mKO\033[39;49m",
-            (int)col_len_line, c->line,
-            (int)col_len_expr, c->expr,
-            (int)col_len_name, c->name);
-
-        // Free case
-        free(c->name);
+    if (verbosity & TEST_SUMMARY) {
+        fprintf(output, "test %s: %d ko, %d ok, %d total: %s\n",
+            test->name,
+            nb_ko,
+            nb_ok,
+            nb_ko + nb_ok,
+            nb_ko == 0 ? "\033[32;49msuccess\033[39;49m" : "\033[31;49mfailure\033[39;49m");
     }
-
-    // Print conclusion
-
-    fprintf(output, "test %s: %zu ko, %zu ok, %zu total: %s\n",
-        test->name,
-        nb_ko,
-        nb_ok,
-        nb_ko + nb_ok,
-        success ? "\033[32;49msuccess\033[39;49m" : "\033[31;49mfailure\033[39;49m");
 
     // Deallocate
 
     arrfree(test->cases);
 
-    return success;
+    return nb_ko == 0;
 }
 
 #endif // STB_TEST_IMPLEMENTATION

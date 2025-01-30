@@ -3,10 +3,13 @@
 /// @brief Tchattator413 dynamic server state - Implemtnation
 /// @date 29/01/2025
 
-#define STB_DS_IMPLEMENTATION
-#include <stb_ds.h>
 #include "server.h"
 #include "types.h"
+
+#ifndef STB_DS_IMPLEMENTATION
+#define STB_DS_IMPLEMENTATION
+#include <stb_ds.h>
+#endif // STB_DS_IMPLEMENTATION
 
 void server_destroy(server_t *server) {
     hmfree(server->turnstile);

@@ -1,10 +1,14 @@
-#include <stdlib.h>
 #include "tests.h"
+#include <stdlib.h>
+
+#define VERBOSITY TEST_SUMMARY
 
 int main() {
-    bool success = test_uuid();
+    bool const success = test_uuid(VERBOSITY);
 
-    observe_put_role();
+    if (VERBOSITY == TEST_VERBOSE) {
+        observe_put_role();
+    }
 
     return success ? EXIT_SUCCESS : EXIT_FAILURE;
 }
