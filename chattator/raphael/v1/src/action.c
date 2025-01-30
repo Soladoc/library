@@ -43,15 +43,6 @@ static inline serial_t check_api_key(api_key_t api_key, role_flags_t allowed_rol
     return result.user_id;
 }*/
 
-void action_destroy(action_t const *action) {
-    switch (action->type) {
-    case action_type_login: free(action->with.login.password); break;
-    case action_type_send: free(action->with.send.content); break;
-    case action_type_edit: free(action->with.edit.new_content); break;
-    default: break;
-    }
-}
-
 bool action_evaluate(action_t const *action, response_t *rep, cfg_t *cfg, db_t *db, server_t *server) {
     // Identify user
     user_identity_t user;
@@ -121,7 +112,7 @@ bool action_evaluate(action_t const *action, response_t *rep, cfg_t *cfg, db_t *
     switch (action->type) {
 #define DO login
     case action_type(DO):
-        switch (db_check_password(db, user.id, action->with.DO.password)) {
+        switch (db_check_password(db, user.id, action->with.DO.password.val)) {
         case errstatus_error: fail(status_unauthorized);
         case errstatus_handled: return false;
         default:;
@@ -145,9 +136,33 @@ bool action_evaluate(action_t const *action, response_t *rep, cfg_t *cfg, db_t *
         break;
 #undef DO
 #define DO send
-    case action_type(DO):
+    case action_type(DO): {
+        int dest_role;
+        switch (dest_role = db_get_user_role(db, action->with.DO.dest_user_id)) {
+        case errstatus_error: fail(status_not_found);
+        case errstatus_handled: return false;
+        }
+
+        // if message length is greater than maximum
+        if (action->with.DO.content.len > config_max_msg_length(cfg)) fail(status_payload_too_large);
+
+        if (
+            // if sender and dest are the same user
+            (user.id == action->with.DO.dest_user_id)
+            // if user is client, dest is not pro
+            || (user.role & role_membre && !(dest_role & role_pro))
+            // if user is pro, dest is not a client having sent him sent messages
+            || (user.role & role_pro && (!(dest_role & role_membre) || !db_count_msg(db, action->with.DO.dest_user_id, user.id)))) {
+            fail(status_unprocessable_content);
+        }
+
+        switch (rep->body.DO.msg_id = db_send_msg(db, user.id, action->with.DO.dest_user_id, action->with.DO.content.val)) {
+        case errstatus_handled: return false;
+        case errstatus_error: fail(status_forbidden);
+        }
 
         break;
+    }
 #undef DO
 #define DO motd
     case action_type(DO):
@@ -207,7 +222,7 @@ void action_explain(action_t const *action, FILE *output) {
     case action_type_login:
         fprintf(output, "login api_key=");
         uuid4_put(action->with.login.api_key, output);
-        fprintf(output, " password=%s\n", action->with.login.password);
+        fprintf(output, " password=%*s\n", action->with.login.password.len, action->with.login.password.val);
         break;
     case action_type_logout:
         fprintf(output, "logout token=%lu\n", action->with.logout.token);

@@ -39,28 +39,20 @@ static inline serial_t get_user_id(char const *action_name, json_object *obj_wit
     return errstatus_error;
 }
 
-/// @return a string 
-/// @return @c NULL on error
-static inline char *get_content(char const *action_name, json_object *obj_with, char const *key, cfg_t const *cfg) {
+/// @return a string
+/// @return @c true on success
+/// @return @c false on error. @p out_str is untouches
+static inline bool get_content(slice_t *out_str, char const *action_name, json_object *obj_with, char const *key) {
     json_object *obj_content;
     if (!json_object_object_get_ex(obj_with, key, &obj_content)) {
         putln_error_arg_missing("%s", "%s", action_name, key);
-        return NULL;
+        return false;
     }
-    char const *content;
-    int content_len;
-    if (!json_object_get_string_strict(obj_content, &content, &content_len)) {
+    if (!json_object_get_string_strict(obj_content, out_str)) {
         putln_error_arg_type(json_type_string, json_object_get_type(obj_content), "%s", "%s", action_name, key);
-        return NULL;
+        return false;
     }
-    if (content_len > config_max_msg_length(cfg)) {
-        putln_error_arg_invalid_because("%s", "%s", "length (%d) is longer than maximum (%d)",
-            action_name, content, content_len, config_max_msg_length(cfg));
-        return NULL;
-    }
-    char *content_copy = strndup(content, content_len);
-    if (!content_copy) errno_exit("strndup");
-    return content_copy;
+    return true;
 }
 
 /// @return a page number
@@ -117,27 +109,27 @@ static inline bool get_api_key(uuid4_t *out_api_key, char const *action_name, js
         putln_error_arg_missing("%s", "api_key", action_name);
         return false;
     }
-    char const *repr;
-    if (!json_object_get_string_strict(obj_api_key, &repr, NULL)) {
+    slice_t repr;
+    if (!json_object_get_string_strict(obj_api_key, &repr)) {
         putln_error_arg_type(json_type_string, json_object_get_type(obj_api_key), "%s", "api_key", action_name);
         return false;
     }
-    if (!uuid4_from_repr(out_api_key, repr)) {
+    if (!uuid4_from_repr(out_api_key, repr.val)) {
         putln_error_arg_invalid_because("%s", "api_key", "invalid API key", action_name);
         return false;
     }
     return true;
 }
 
-bool action_parse(action_t *out_action, json_object *obj, cfg_t *cfg, db_t *db) {
+bool action_parse(action_t *out_action, json_object *obj, db_t *db) {
     json_object *obj_do;
     if (!json_object_object_get_ex(obj, "do", &obj_do)) {
         putln_error_json_missing_key("do", "action");
         return false;
     }
 
-    char const *action_name;
-    if (!json_object_get_string_strict(obj_do, &action_name, NULL)) {
+    slice_t action_name;
+    if (!json_object_get_string_strict(obj_do, &action_name)) {
         putln_error_json_type(json_type_string, json_object_get_type(obj_do), "do");
         return false;
     }
@@ -148,7 +140,7 @@ bool action_parse(action_t *out_action, json_object *obj, cfg_t *cfg, db_t *db) 
         return false;
     }
 
-#define action_is(name) streq(STR(name), action_name)
+#define action_is(name) streq(STR(name), action_name.val)
 
 #define DO login
     if (action_is(DO)) {
@@ -165,14 +157,10 @@ bool action_parse(action_t *out_action, json_object *obj, cfg_t *cfg, db_t *db) 
             return false;
         }
         // Ensure value has correct type
-        char const *password;
-        int password_len;
-        if (!json_object_get_string_strict(obj_password, &password, &password_len)) {
+        if (!json_object_get_string_strict(obj_password, &out_action->with.DO.password)) {
             putln_error_arg_type(json_type_string, json_object_get_type(obj_password), STR(DO), "password");
             return false;
         }
-        // Copy (because json_object value will be destroyed)
-        if (!(out_action->with.DO.password = strndup(password, password_len))) errno_exit("strndup");
 #undef DO
 #define DO logout
     } else if (action_is(DO)) {
@@ -202,7 +190,7 @@ bool action_parse(action_t *out_action, json_object *obj, cfg_t *cfg, db_t *db) 
         if (!(out_action->with.DO.token = get_token(STR(DO), obj_with))) return false;
 
         // content
-        if (!(out_action->with.DO.content = get_content(STR(DO), obj_with, "content", cfg))) return false;
+        if (!get_content(&out_action->with.DO.content, STR(DO), obj_with, "content")) return false;
 
         // dest
         switch (out_action->with.DO.dest_user_id = get_user_id(STR(DO), obj_with, "dest", db)) {
@@ -248,7 +236,7 @@ bool action_parse(action_t *out_action, json_object *obj, cfg_t *cfg, db_t *db) 
         if (!(out_action->with.DO.msg_id = get_msg_id(STR(DO), obj_with))) return false;
 
         // new_content
-        if (!(out_action->with.DO.new_content = get_content(STR(DO), obj_with, "new_content", cfg))) return false;
+        if (!get_content(&out_action->with.DO.new_content, STR(DO), obj_with, "new_content")) return false;
 #undef DO
 #define DO rm
     } else if (action_is(DO)) {
@@ -311,7 +299,7 @@ bool action_parse(action_t *out_action, json_object *obj, cfg_t *cfg, db_t *db) 
         case errstatus_handled: return false;
         }
     } else {
-        put_error("unknown action: %s\n", action_name);
+        put_error("unknown action: %s\n", action_name.val);
         return false;
     }
 

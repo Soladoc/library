@@ -33,6 +33,11 @@ typedef char action_name[8]; // keep the size as small as possible
 X_ACTIONS(X)
 #undef X
 
+typedef struct {
+    int len;
+    char const *val;
+} slice_t;
+
 typedef enum {
     user_kind_membre,
     user_kind_pro_prive,
@@ -46,7 +51,7 @@ typedef struct {
     user_kind_t kind;
 } user_t;
 
-typedef enum {
+typedef enum attr_flag_enum {
     role_admin = 1 << 0,
     role_membre = 1 << 1,
     role_pro = 1 << 2,

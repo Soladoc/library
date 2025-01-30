@@ -1,6 +1,7 @@
 #ifndef JSON_HELPERS
 #define JSON_HELPERS
 
+#include "types.h"
 #include "util.h"
 #include <json-c/json_types.h>
 #include <stdbool.h>
@@ -41,10 +42,9 @@ bool json_object_get_int64_strict(json_object const *obj, int64_t *out);
 
 /// @brief Get the string value of a JSON object.
 /// @param obj The JSON object to get the value of.
-/// @param out Assigned to the string value of the object. Pass @c NULL to discard.
-/// @param out_len Assigned to the length of the string value of the object. Pass @c NULL to discard.
+/// @param out Assigned to the string value of the object. Pass @c NULL to only check the type.
 /// @return @c true when @p obj is of the string type.
-/// @return @c false otherwise. @p out and @p out_len are untouched.
-bool json_object_get_string_strict(json_object *obj, char const **out, int *out_len);
+/// @return @c false otherwise.  @p out is untouched.
+bool json_object_get_string_strict(json_object *obj, slice_t *out);
 
 #endif // JSON_HELPERS

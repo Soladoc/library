@@ -9,12 +9,14 @@
 
 #include <stdlib.h>
 
-#include <bcrypt/bcrypt.h>
 #include "db.h"
 #include "util.h"
+#include <bcrypt/bcrypt.h>
 
 #define TBL_USER "tchattator.user"
+#define TBL_MESSAGE "tchattator._msg"
 #define TBL_MEMBRE "pact.membre"
+#define FUN_SEND_MSG "send_msg"
 
 #define conn_param(param) coalesce(getenv(#param), STR(param))
 
@@ -180,7 +182,19 @@ errstatus_t db_get_user(db_t *db, user_t *user) {
     return res;
 }
 
+static inline bool check_password(char const *password, char const *hash) {
+    switch (bcrypt_checkpw(password, hash)) {
+    case -1: errno_exit("bcrypt_checkpw");
+    case 0: return true;
+    default: return false;
+    }
+}
+
 errstatus_t db_check_password(db_t *db, serial_t user_id, char const *password) {
+    if (!user_id) {
+        return check_password(password, ADMIN_PASSWORD_HASH);
+    }
+
     uint32_t arg = pq_send_l(user_id);
     char const *p_value = (char *)&arg;
     int p_length = sizeof arg;
@@ -196,13 +210,52 @@ errstatus_t db_check_password(db_t *db, serial_t user_id, char const *password) 
     } else if (PQntuples(result) == 0) {
         res = errstatus_error;
     } else {
-        switch (bcrypt_checkpw(password, PQgetvalue(result, 0, 0))) {
-        case -1: errno_exit("bcrypt_checkpw");
-        case 0: return errstatus_error;
-        }
-        res = errstatus_ok;
+        res = check_password(password, PQgetvalue(result, 0, 0));
     }
 
     PQclear(result);
+    return res;
+}
+
+int db_count_msg(db_t *db, serial_t sender_id, serial_t recipient_id) {
+    uint32_t const args[] = { pq_send_l(sender_id), pq_send_l(recipient_id) };
+    int const p_length[sizeof args] = { sizeof args[0], sizeof args[1] };
+    int const p_format[sizeof args] = { 1, 1 };
+    PGresult *result = PQexecParams(db, "select count(*) from " TBL_MESSAGE " where coalesce(id_compte_sender,0)=$1 and id_compte_recipient=$2",
+        1, NULL, (const char **)args, p_length, p_format, 1);
+
+    int res;
+
+    if (PQresultStatus(result) != PGRES_TUPLES_OK) {
+        putln_error_pq_result(result);
+        res = errstatus_handled;
+    } else {
+        res = PQntuples(result);
+    }
+
+    PQclear(result);
+    return res;
+}
+
+serial_t db_send_msg(db_t *db, serial_t sender_id, serial_t recipient_id, char const *content) {
+    sender_id = pq_send_l(sender_id);
+    recipient_id = pq_send_l(recipient_id);
+    char const *const args[] = { (char const *)&sender_id, (char const *)&recipient_id, content };
+    int const p_length[sizeof args] = { sizeof args[0], sizeof args[1] };
+    int const p_format[sizeof args] = { 1, 1, 0 };
+    PGresult *result = PQexecParams(db, "select " FUN_SEND_MSG "($1,$2,$3)",
+        1, NULL, args, p_length, p_format, 1);
+
+    serial_t res;
+
+    if (PQresultStatus(result) != PGRES_TUPLES_OK) {
+        putln_error_pq_result(result);
+        res = errstatus_handled;
+    } else {
+        // the sql function returns errstatus_error on error
+        res = pq_recv_l(serial_t, result, 0, 0);
+        _Static_assert(errstatus_error == 0, "DB compatiblity");
+    }
+
     return res;
 }

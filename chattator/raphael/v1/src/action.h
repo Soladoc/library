@@ -30,7 +30,7 @@ typedef struct {
     union {
         struct {
             api_key_t api_key;
-            char *password;
+            slice_t password;
         } login;
         struct {
             token_t token;
@@ -42,7 +42,7 @@ typedef struct {
         struct {
             token_t token;
             serial_t dest_user_id;
-            char *content;
+            slice_t content;
         } send;
         struct {
             token_t token;
@@ -51,7 +51,7 @@ typedef struct {
         struct {
             token_t token;
             serial_t msg_id;
-            char *new_content;
+            slice_t new_content;
         } edit;
         struct {
             token_t token;
@@ -77,6 +77,12 @@ typedef enum {
 } status_t;
 
 typedef struct {
+    time_t sent_at, read_age, modified_age, deleted_age;
+    char *content;
+    serial_t msg_id, sender, recipient;
+} msg_t;
+
+typedef struct {
     union {
         struct {
             token_t token;
@@ -85,10 +91,10 @@ typedef struct {
         struct {
             serial_t msg_id;
         } send;
-        /*struct {
-
-        } motd;
         struct {
+            struct msg_t *messages;
+        } motd;
+        /*struct {
 
         } inbox;
         struct {
@@ -126,15 +132,10 @@ void put_role(role_flags_t role, FILE *stream);
 /// @brief Parse an action from a JSON object.
 /// @param out_action Mutated to the parsed action.
 /// @param obj The JSON object allegedly containing an action.
-/// @param cfg The configuration.
 /// @param db The DB connection.
 /// @return @p true on success.
 /// @return @p false on error.
-bool action_parse(action_t *out_action, json_object *obj, cfg_t *cfg, db_t *db);
-
-/// @brief Destroys an action.
-/// @param action The action to destroy. No-op if @c NULL.
-void action_destroy(action_t const *action);
+bool action_parse(action_t *out_action, json_object *obj, db_t *db);
 
 /// @brief Evaluate an action.
 /// @param action The action to evaluate.

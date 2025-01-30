@@ -64,24 +64,23 @@ cfg_t *config_from_file(char const *filename) {
     cfg_t *cfg = config_defaults();
 
     if (json_object_object_get_ex(obj_cfg, "admin_api_key", &obj)) {
-        const char *admin_api_key_repr;
-        if (!json_object_get_string_strict(obj, &admin_api_key_repr, NULL)) {
+        slice_t admin_api_key_repr;
+        if (!json_object_get_string_strict(obj, &admin_api_key_repr)) {
             putln_error_json_type(json_type_string, json_object_get_type(obj), "config: admin_api_key");
         }
-        if (!uuid4_from_repr(&cfg->admin_api_key, json_object_get_string(obj))) {
-            put_error("config: admin_api_key: invalid UUIDV4: %s", json_object_get_string(obj));
+        if (!uuid4_from_repr(&cfg->admin_api_key, admin_api_key_repr.val)) {
+            put_error("config: admin_api_key: invalid UUIDV4: %*s", admin_api_key_repr.len, admin_api_key_repr.val);
         }
     }
     if (json_object_object_get_ex(obj_cfg, "log_file", &obj)) {
-        const char *log_file_name;
-        int log_file_name_len;
-        if (!json_object_get_string_strict(obj, &log_file_name, &log_file_name_len)) {
+        slice_t log_file_name;
+        if (!json_object_get_string_strict(obj, &log_file_name)) {
             putln_error_json_type(json_type_string, json_object_get_type(obj), "config: log_file");
         }
-        FILE *log_file = fopen(log_file_name, "a");
+        FILE *log_file = fopen(log_file_name.val, "a");
         if (log_file) {
             cfg->log_file = log_file;
-            if (!(cfg->log_file_name = strndup(log_file_name, log_file_name_len))) errno_exit("strndup");
+            if (!(cfg->log_file_name = strndup(log_file_name.val, log_file_name.len))) errno_exit("strndup");
         } else {
             put_error("config: could not open log file: %s\n", strerror(errno));
         }

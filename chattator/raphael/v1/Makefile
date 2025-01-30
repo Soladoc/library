@@ -18,7 +18,7 @@ LFLAGS = -ljson-c -I/usr/include/postgresql -L/usr/lib/x86_64-linux-gnu -lpq
 CFLAGS = -Wall -Wextra -pedantic -fanalyzer -std=c23 -isystem /work/lib -D$(subst $(NEWLINE), -D,$(file <../../../include/$(ENV_FILE)))
 
 CFLAGS_DEBUG = -g -Og -fsanitize=address
-CFLAGS_RELEASE = -DNDEBUG
+CFLAGS_RELEASE = -O2 -DNDEBUG
 
 CONFIG ?= debug
 ifeq ($(CONFIG), debug)

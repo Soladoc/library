@@ -47,14 +47,12 @@ ENVIRONMENT\n\
 
 static inline json_object *act(json_object *const obj_action, cfg_t *cfg, db_t *db, server_t *server) {
     action_t action;
-    if (!action_parse(&action, obj_action, cfg, db)) return NULL;
+    if (!action_parse(&action, obj_action, db)) return NULL;
 
     response_t response;
     if (!action_evaluate(&action, &response, cfg, db, server)) return NULL; 
 
     json_object *json_response = response_to_json(&response);
-
-    action_destroy(&action);
 
     return json_response;
 }
@@ -144,14 +142,15 @@ int main(int argc, char **argv) {
     }
 
     // Allocation
+    db_t *db = db_connect(verbosity);
+
+    db_test_interval(db);
+
     json_object *const input = json_object_from_fd(STDIN_FILENO);
     if (!input) {
         put_error_json_c("failed to parse input\n");
         return EX_DATAERR;
     }
-
-    db_t *db = db_connect(verbosity);
-    if (!db) return EX_NODB;
 
     server_t server = {};
 
@@ -167,7 +166,6 @@ int main(int argc, char **argv) {
         for (size_t i = 0; i < len; ++i) {
             json_object *const action = json_object_array_get_idx(input, i);
             assert(action);
-
             if ((item = act(action, cfg, db, &server))) json_object_array_add(output, item);
         }
         break;

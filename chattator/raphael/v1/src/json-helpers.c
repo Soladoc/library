@@ -24,9 +24,11 @@ bool json_object_get_int64_strict(json_object const *obj, int64_t *out) {
     return true;
 }
 
-bool json_object_get_string_strict(json_object *obj, char const **out, int *out_len) {
+bool json_object_get_string_strict(json_object *obj, slice_t *out) {
     if (!json_object_is_type(obj, json_type_string)) return false;
-    if (out) *out = json_object_get_string(obj);
-    if (out_len) *out_len = json_object_get_string_len(obj);
+    if (out) {
+        out->len = json_object_get_string_len(obj);
+        out->val = json_object_get_string(obj);
+    } 
     return true;
 }

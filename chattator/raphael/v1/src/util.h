@@ -39,13 +39,10 @@
         exit(EXIT_FAILURE); \
     } while (0)
 
-
-#ifndef unreachable
-#ifdef __GNUC__
-#define unreachable() (__builtin_unreachable())
+#ifdef __clang__
+#define attr_flag_enum [[clang::flag_enum]]
 #else
-#define unreachable()
-#endif // __GNUC__
-#endif // unreachable
+#define attr_flag_enum
+#endif // __clang__
 
 #endif // UTIL_H
