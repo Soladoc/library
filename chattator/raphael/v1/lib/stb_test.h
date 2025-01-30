@@ -56,10 +56,7 @@ STB_TEST_DEFINITION bool test_end(struct test *test, FILE *output, enum test_ver
 
 #ifdef STB_TEST_IMPLEMENTATION
 
-#ifndef STB_DS_IMPLEMENTATION
-#define STB_DS_IMPLEMENTATION
 #include <stb_ds.h>
-#endif // STB_DS_IMPLEMENTATION
 
 #include <math.h>
 #include <stdarg.h>
@@ -146,9 +143,6 @@ bool test_end(struct test *test, FILE *output, enum test_verbosity verbosity) {
                 col_len_line, c->line,
                 col_len_expr, c->expr,
                 col_len_name, c->name);
-
-            // Free case
-            free(c->name);
         }
     }
 
@@ -162,7 +156,7 @@ bool test_end(struct test *test, FILE *output, enum test_verbosity verbosity) {
     }
 
     // Deallocate
-
+    for (i = 0; i < arrlenu(test->cases); ++i) free(test->cases[i].name);
     arrfree(test->cases);
 
     return nb_ko == 0;

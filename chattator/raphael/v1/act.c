@@ -144,8 +144,6 @@ int main(int argc, char **argv) {
     // Allocation
     db_t *db = db_connect(verbosity);
 
-    db_test_interval(db);
-
     json_object *const input = json_object_from_fd(STDIN_FILENO);
     if (!input) {
         put_error_json_c("failed to parse input\n");

@@ -8,7 +8,7 @@ function host_is_iut() {
 }
 
 readonly container=413-tchattator-build-service
-readonly workdir=work
+readonly workdir=/work
 
 cflags=''
 lflags=''
@@ -65,18 +65,13 @@ if ! docker ps --format '{{.Names}}' | grep -q "^$container$"; then
 fi
 
 # copy source code
-n_f=1
-for f in "$@"; do
-    dest="/$workdir/$f"
-    docker exec $container mkdir -p "$(dirname "$dest")"
-    docker cp -q "$f" "$container:$dest"
-    echo -ne "\r$((n_f++))/$#"
-done
-echo
+
+docker exec $container mkdir -p "$workdir"
+docker cp . "$container:$workdir"
 
 # run gcc
 for f in "$@"; do if [[ $f == *.c ]]; then srcs+=("$f"); fi; done
-docker exec -w /$workdir $container gcc -fdiagnostics-color "${cflags[@]}" "${srcs[@]}" "${lflags[@]}" || true
+docker exec -w $workdir $container gcc -fdiagnostics-color "${cflags[@]}" "${srcs[@]}" "${lflags[@]}" || true
 
 # copy back binaries
 if [[ -n $output ]]; then
@@ -85,4 +80,4 @@ if [[ -n $output ]]; then
 fi
 
 # remove leftouvers
-docker exec $container rm -r "/$workdir"
+docker exec $container rm -r "$workdir"

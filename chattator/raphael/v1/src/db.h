@@ -89,6 +89,4 @@ int db_count_msg(db_t *db, serial_t sender_id, serial_t recipient_id);
 /// @return @ref errstatus_error The sender has been blocked from sending messages, either globally or by this particular recipient.
 serial_t db_send_msg(db_t *db, serial_t sender_id, serial_t recipient_id, char const *content);
 
-void db_test_interval(db_t *db);
-
 #endif // DB_H
