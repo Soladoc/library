@@ -7,11 +7,20 @@
 // #define DO_OBSERVE
 #define OUT stdout
 
+#define PGDB_PORT "5432"
+#define DB_USER "postgres"
+#define DB_NAME "sae413_test"
+#define DB_ROOT_PASSWORD "postgres"
+#define DB_HOST "localhost"
+
+
 int main() {
     struct test t;
     bool success = true;
     cfg_t *cfg = cfg_defaults();
-    db_t *db = db_connect(0);
+    db_t *db = db_connect(0, DB_HOST, PGDB_PORT, DB_NAME, DB_USER, DB_ROOT_PASSWORD);
+    if (!db) return EX_NODB;
+    
     server_t server = {};
 
 #define test(new_test)                \

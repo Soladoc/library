@@ -38,8 +38,8 @@ db_t *db_connect(int verbosity, char const *host, char const *port, char const *
         NULL, NULL,
         database,
         username,
-        password);
-
+        password
+    );
     PGVerbosity v;
     if (verbosity <= -2)
         v = PQERRORS_SQLSTATE;

@@ -8,14 +8,11 @@
 #include <json-c/json.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <sysexits.h>
 #include <tchattator413/cfg.h>
 #include <tchattator413/json-helpers.h>
 #include <tchattator413/tchattator413.h>
 #include <tchattator413/util.h>
 #include <unistd.h>
-
-enum { EX_NODB = EX__MAX + 1 };
 
 static inline char *require_env(char const *name) {
     char *value = getenv(name);
@@ -73,10 +70,10 @@ int main(int argc, char **argv) {
             switch (opt) {
             case opt_help:
                 puts(HELP);
-                return EX_OK;
+                return EXIT_SUCCESS;
             case opt_version:
                 puts(VERSION);
-                return EX_OK;
+                return EXIT_SUCCESS;
             case opt_dump_config:
                 dump_config = true;
                 break;
@@ -140,5 +137,5 @@ int main(int argc, char **argv) {
 
     cfg_destroy(cfg);
 
-    return EX_OK;
+    return EXIT_SUCCESS;
 }
