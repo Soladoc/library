@@ -31,8 +31,8 @@ void cfg_dump(cfg_t const *cfg);
 
 /// @brief Get the configuration admin_api_key.
 /// @param cfg Configuration
-/// @return Pointer to the che configuration admin_api_key.
-uuid4_t const *cfg_admin_api_key(cfg_t const *cfg);
+/// @return The configuration admin_api_key.
+uuid4_t cfg_admin_api_key(cfg_t const *cfg);
 /// @brief Get the configuration log_file.
 /// @param cfg Configuration
 /// @return the configuration log_file.

@@ -2,13 +2,13 @@
 #include "tests_tchattator413.h"
 #include <json-c/json.h>
 
-#define IN "[{\"do\":\"login\",\"with\":{\"api_key\":\"" INVALID_API_KEY_REPR "\",\"password\":""}}]"
+#define IN "[{\"do\":\"login\",\"with\":{\"api_key\":\"" API_KEY_NONE1 "\",\"password\":""}}]"
 #define OUT "[{\"status\":401,\"has_next_page\":false,\"body\":{}}]"
 
 static void invalid_login_on_action(action_t const *action, void *t) {
     begin_on_action(t);
     if (!test_case(t, action->type == action_type_login, "action type")) return;
-    test_case(t, uuid4_eq(action->with.login.api_key, INVALID_API_KEY), "api key");
+    test_case(t, uuid4_eq_repr(action->with.login.api_key, API_KEY_NONE1), "api key");
     test_case(t, action->with.login.password.len == 0, "password");
 }
 

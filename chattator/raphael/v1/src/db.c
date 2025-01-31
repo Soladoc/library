@@ -16,9 +16,9 @@
 #define TBL_MEMBRE "pact.membre"
 #define FUN_SEND_MSG "send_msg"
 
-#define conn_param(param) coalesce(getenv(#param), STR(param))
+#define conn_param(param) COALESCE(getenv(#param), STR(param))
 
-#define pq_recv_l(type, res, row, col) ((type)(ntohl(*((type *)PQgetvalue((res), (row), (col))))))
+#define pq_recv_l(type, res, row, col) ((type)(ntohl(*(PQgetvalue((res), (row), (col))))))
 #define pq_send_l(val) htonl(val)
 
 #define putln_error_pq(db) put_error("database: %s\n", PQerrorMessage(db))

@@ -67,7 +67,7 @@ cfg_t *cfg_from_file(char const *filename) {
         if (!json_object_get_string_strict(obj, &admin_api_key_repr)) {
             putln_error_json_type(json_type_string, json_object_get_type(obj), "config: admin_api_key");
         }
-        if (!uuid4_from_repr_slice(&cfg->admin_api_key, admin_api_key_repr)) {
+        if (!uuid4_parse_slice(&cfg->admin_api_key, admin_api_key_repr)) {
             put_error("config: admin_api_key: invalid UUIDV4: %*s", slice_leni(admin_api_key_repr), admin_api_key_repr.val);
         }
     }
@@ -127,7 +127,7 @@ void cfg_dump(cfg_t const *cfg) {
     putchar('\n');
     printf("backlog         %d\n", cfg->backlog);
     printf("block_for       %d seconds\n", cfg->block_for);
-    printf("log_file        %s\n", coalesce(cfg->log_file_name, STR(DEFAULT_LOG_STREAM)));
+    printf("log_file        %s\n", COALESCE(cfg->log_file_name, STR(DEFAULT_LOG_STREAM)));
     printf("max_msg_length  %zu characters\n", cfg->max_msg_length);
     printf("page_inbox      %d\n", cfg->page_inbox);
     printf("page_outbox     %d\n", cfg->page_outbox);
@@ -136,13 +136,12 @@ void cfg_dump(cfg_t const *cfg) {
     printf("rate_limit_m    %d\n", cfg->rate_limit_m);
 }
 
-uuid4_t const *cfg_admin_api_key(cfg_t const *cfg) { return &cfg->admin_api_key; }
-
 #define DEFINE_CONFIG_GETTER(type, attr) \
     type cfg_##attr(cfg_t const *cfg) {  \
         return cfg->attr;                \
     }
 
+DEFINE_CONFIG_GETTER(uuid4_t, admin_api_key)
 DEFINE_CONFIG_GETTER(FILE *, log_file)
 DEFINE_CONFIG_GETTER(size_t, max_msg_length)
 DEFINE_CONFIG_GETTER(int, page_inbox)

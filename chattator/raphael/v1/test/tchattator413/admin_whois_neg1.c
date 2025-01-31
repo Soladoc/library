@@ -2,7 +2,7 @@
 #include "tests_tchattator413.h"
 #include <json-c/json.h>
 
-#define IN "[{\"do\":\"whois\",\"with\":{\"api_key\":\"" ADMIN_API_KEY_REPR "\",\"user\":-1}}]"
+#define IN "[{\"do\":\"whois\",\"with\":{\"api_key\":\"" API_KEY_ADMIN "\",\"user\":-1}}]"
 #define OUT OUTPUT_500
 
 static void admin_whois_neg1_on_action(action_t const *action, void *t) {

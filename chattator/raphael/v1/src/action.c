@@ -49,7 +49,7 @@ static inline serial_t check_api_key(api_key_t api_key, role_flags_t allowed_rol
 /// @return @ref errstatus_error The API key isn't valid.
 /// @return @ref errstatus_handled DB error (handled).
 static inline errstatus_t auth_api_key(user_identity_t *out_user, uuid4_t api_key, cfg_t *cfg, db_t *db) {
-    if (uuid4_eq(api_key, *cfg_admin_api_key(cfg))) {
+    if (uuid4_eq(api_key, cfg_admin_api_key(cfg))) {
         out_user->role = role_admin;
         out_user->id = 0;
         return errstatus_ok;
@@ -66,7 +66,7 @@ static inline errstatus_t auth_token(user_identity_t *out_user, token_t token, d
     // The token exists in server state, so the user ID must exist in the DB.
     // assert(res != errstatus_error); // unless someone messes with the DB in the meantime. We don't have control over that.
     out_user->role = res;
-    return min(res, errstatus_ok); // reduce ok results to errstatus_ok
+    return MIN(res, errstatus_ok); // reduce ok results to errstatus_ok
 }
 
 response_t action_evaluate(action_t const *action, cfg_t *cfg, db_t *db, server_t *server) {

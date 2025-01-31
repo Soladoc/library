@@ -33,15 +33,6 @@ typedef char action_name_t[8]; // keep the size as small as possible
 X_ACTIONS(X)
 #undef X
 
-/// @brief A memory slice.
-typedef struct {
-    size_t len;
-    /// @remark Make sure to check the length before using this pointer.
-    char const *val;
-} slice_t;
-
-#define slice_leni(slice) ((int)min(INT_MAX, (slice).len))
-
 typedef enum {
     user_kind_membre,
     user_kind_pro_prive,

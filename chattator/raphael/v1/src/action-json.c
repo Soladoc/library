@@ -32,7 +32,7 @@ static inline serial_t get_user_id(char const *action_name, json_object *obj_wit
         return maybe_user_id > 0 ? maybe_user_id : errstatus_error;
     }
     case json_type_string: {
-        if (json_object_get_string_len(obj_user) > max(EMAIL_LENGTH, PSEUDO_LENGTH)) break;
+        if (json_object_get_string_len(obj_user) > MAX(EMAIL_LENGTH, PSEUDO_LENGTH)) break;
         const char *email_or_pseudo = json_object_get_string(obj_user);
         return strchr(email_or_pseudo, '@')
             ? db_get_user_id_by_email(db, email_or_pseudo)
@@ -118,7 +118,7 @@ static inline bool get_api_key(uuid4_t *out_api_key, char const *action_name, js
         putln_error_arg_type(json_type_string, json_object_get_type(obj_api_key), "%s", "api_key", action_name);
         return false;
     }
-    if (!uuid4_from_repr_slice(out_api_key, repr)) {
+    if (!uuid4_parse_slice(out_api_key, repr)) {
         putln_error_arg_invalid_because("%s", "api_key", "invalid API key", action_name);
         return false;
     }

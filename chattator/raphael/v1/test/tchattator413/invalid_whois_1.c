@@ -2,13 +2,13 @@
 #include "tests_tchattator413.h"
 #include <json-c/json.h>
 
-#define IN "[{\"do\":\"whois\",\"with\":{\"api_key\":\"" INVALID_API_KEY_REPR "\",\"user\":1}}]"
+#define IN "[{\"do\":\"whois\",\"with\":{\"api_key\":\"" API_KEY_NONE1 "\",\"user\":1}}]"
 #define OUT "[{\"status\":401,\"has_next_page\":false,\"body\":{}}]"
 
 static void invalid_whois_1_on_action(action_t const *action, void *t) {
     begin_on_action(t);
     if (!test_case(t, action->type == action_type_whois, "action type")) return;
-    test_case(t, uuid4_eq(action->with.whois.api_key, INVALID_API_KEY), "api key");
+    test_case(t, uuid4_eq_repr(action->with.whois.api_key, API_KEY_NONE1), "api key");
     test_case(t, action->with.whois.user_id == 1, "user id");
 }
 

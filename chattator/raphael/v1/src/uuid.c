@@ -42,7 +42,7 @@ char *uuid4_repr(uuid4_t uuid, char repr[const UUID4_REPR_LENGTH]) {
     return repr;
 }
 
-bool uuid4_from_repr(uuid4_t *out_uuid, char const repr[static const UUID4_REPR_LENGTH]) {
+bool uuid4_parse(uuid4_t *out_uuid, char const repr[static const UUID4_REPR_LENGTH]) {
     size_t idata = 0, i = 0;
     uint8_t v1, v2;
 #define o                                                            \
@@ -88,4 +88,14 @@ uint8_t hex_repr_to_half(char c) {
         : 'a' <= c && c <= 'f'
         ? c - 'a' + 10
         : INVALID_HALF;
+}
+
+bool uuid4_eq(uuid4_t a, uuid4_t b)
+{
+    return memcmp(&a, &b, sizeof a) == 0;
+}
+
+bool uuid4_parse_slice(uuid4_t *out_uuid, slice_t repr_slice)
+{
+    return repr_slice.len >= UUID4_REPR_LENGTH && uuid4_parse(out_uuid, repr_slice.val);
 }

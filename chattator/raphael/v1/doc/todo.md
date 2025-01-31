@@ -1,4 +1,4 @@
-# todo
+# Todo
 
 - [x] elegant error handling
   - [x] think of an approach that suits JSON, DB and other sources of errors

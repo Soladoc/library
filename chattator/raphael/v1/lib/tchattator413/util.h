@@ -12,7 +12,6 @@
 
 #define QUOTE(name) #name
 #define STR(macro) QUOTE(macro)
-#define STRLEN(strlit) (sizeof(strlit) - 1)
 
 #define CAT(x, y) CAT_(x, y)
 #define CAT_(x, y) x##y
@@ -26,12 +25,12 @@
 
 #define streq(x, y) (strcmp((x), (y)) == 0)
 
-#define max(a, b) ((a) > (b) ? (a) : (b))
-#define min(a, b) ((a) < (b) ? (a) : (b))
+#define MAX(a, b) ((a) > (b) ? (a) : (b))
+#define MIN(a, b) ((a) < (b) ? (a) : (b))
 
 #define array_length(array) (sizeof(array) / sizeof((array)[0]))
 
-#define coalesce(a, b) ((a == NULL) ? (b) : (a))
+#define COALESCE(a, b) ((a == NULL) ? (b) : (a))
 
 #define errno_exit(of)    \
     do {                    \

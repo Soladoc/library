@@ -9,6 +9,7 @@
 #include <stdbool.h>
 #include <stdint.h>
 #include <stdio.h>
+#include <tchattator413/slice.h>
 
 /// @brief Version 4 UUID.
 typedef struct {
@@ -27,7 +28,7 @@ typedef struct {
 /// @remark This function doesn't add a null terminator at the end of @p repr.
 char *uuid4_repr(uuid4_t uuid, char repr[const UUID4_REPR_LENGTH]);
 
-#define uuid4_from_repr_slice(out_uuid, repr_slice) ((repr_slice).len >= UUID4_REPR_LENGTH && uuid4_from_repr((out_uuid), (repr_slice).val))
+bool uuid4_parse_slice(uuid4_t *out_uuid, slice_t repr_slice);
 
 /// @brief Parse a version 4 UUID from its canonical representation.
 /// @param out_uuid Mutated to the parsed UUID.
@@ -35,7 +36,7 @@ char *uuid4_repr(uuid4_t uuid, char repr[const UUID4_REPR_LENGTH]);
 /// @return @c true parsing successful @p out_uuid is set.
 /// @return @c false parsing unsucessful.
 /// @remark The syntax ABNF can be found at https://www.rfc-editor.org/rfc/rfc9562.html#section-4-5. Lowercase hex digits are allowed.
-bool uuid4_from_repr(uuid4_t *out_uuid, char const repr[static const UUID4_REPR_LENGTH]);
+bool uuid4_parse(uuid4_t *out_uuid, char const repr[static const UUID4_REPR_LENGTH]);
 
 /// @brief Put the canonical representation of version 4 UUID.
 /// @param uuid The UUID Version 4 to write.
@@ -43,10 +44,10 @@ bool uuid4_from_repr(uuid4_t *out_uuid, char const repr[static const UUID4_REPR_
 void uuid4_put(uuid4_t uuid, FILE *stream);
 
 /// @brief Are two version 4 UUIDs equal?
-/// @param a The first UUID (lvalue).
-/// @param b The second UUID (lvalue).
+/// @param a The first UUID.
+/// @param b The second UUID.
 /// @return A boolean indicating whether @p a and @p b are equal.
-#define uuid4_eq(a, b) (memcmp(&(a), &(b), sizeof(uuid4_t)) == 0)
+bool uuid4_eq(uuid4_t a, uuid4_t b);
 
 /// @brief Create a new version 4 UUID from the specified values.
 /// @retrun A new UUID Version 4.
