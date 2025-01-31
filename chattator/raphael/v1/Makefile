@@ -15,7 +15,7 @@ ENV_FILE = raphael.env
 
 CC = gcc
 LFLAGS = -ljson-c -I/usr/include/postgresql -L/usr/lib/x86_64-linux-gnu -lpq
-CFLAGS = -Wall -Wextra -pedantic -std=c23 -isystem /work/lib -D$(subst $(NEWLINE), -D,$(file <../../../include/$(ENV_FILE)))
+CFLAGS = -pedantic -std=c23 -isystem /work/lib -D$(subst $(NEWLINE), -D,$(file <../../../include/$(ENV_FILE))) -Wall -Wextra -Wcast-qual -Wcast-align -Wstrict-aliasing -Wpointer-arith -Winit-self -Wshadow -Wstrict-prototypes -Wmissing-prototypes -Wredundant-decls -Wfloat-equal -Wundef -Wvla
 # CLFAGS += -fanalyzer # takes time
 # CLFAGS += -fsanitize=address # messes with debugging
 CFLAGS_DEBUG = -g -Og

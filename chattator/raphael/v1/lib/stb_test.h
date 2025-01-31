@@ -32,15 +32,18 @@ struct test {
 struct _stbtest_case {
     bool ok;
     unsigned line;
-    char const *expr;
+    char const *expr; // can be null
     char *name;
 };
 
 STB_TEST_DEFINITION struct test test_start(char const *name);
 
-#define test_case(test, expr, name, ...) _test_case(__LINE__, (test), (expr), #expr, (name)__VA_OPT__(, ) __VA_ARGS__)
+/// @brief Add a test case.
+#define test_case(test, expr, name, ...) _stbtest_test_case(__LINE__, (test), (expr), #expr, (name)__VA_OPT__(, ) __VA_ARGS__)
+/// @brief Add a test case with the expr and name columns merged.
+#define test_case_n(test, expr, name, ...) _stbtest_test_case(__LINE__, (test), (expr), NULL, (name)__VA_OPT__(, ) __VA_ARGS__)
 
-STB_TEST_DEFINITION bool _test_case(unsigned line, struct test *test, bool ok, char const *expr, char const *fmt_name, ...)
+STB_TEST_DEFINITION bool _stbtest_test_case(unsigned line, struct test *test, bool ok, char const *expr, char const *fmt_name, ...)
     _stbtest_attr_format(printf, 5, 6);
 
 STB_TEST_DEFINITION bool test_end(struct test *test, FILE *output);
@@ -63,7 +66,7 @@ struct test test_start(char const *name) {
     };
 }
 
-bool _test_case(unsigned line, struct test *test, bool ok, char const *expr, char const *fmt_name, ...) {
+bool _stbtest_test_case(unsigned line, struct test *test, bool ok, char const *expr, char const *fmt_name, ...) {
     va_list ap;
 
     va_start(ap, fmt_name);
@@ -93,17 +96,22 @@ bool _test_case(unsigned line, struct test *test, bool ok, char const *expr, cha
 bool test_end(struct test *test, FILE *output) {
     // Establish case success counts and column lengths
     int i, nb_ko = 0, nb_ok = 0;
-    
+
     int col_len_expr = sizeof "expr";
     int col_len_name = sizeof "name";
 
     for (i = 0; i < arrlenu(test->cases); ++i) {
         struct _stbtest_case const *c = &test->cases[i];
         c->ok ? ++nb_ok : ++nb_ko;
-
         size_t len;
-        if ((len = strlen(c->expr)) > col_len_expr) col_len_expr = len;
-        if ((len = strlen(c->name)) > col_len_name) col_len_name = len;
+        if (c->expr) {
+            if ((len = strlen(c->expr)) > col_len_expr) col_len_expr = len;
+            if ((len = strlen(c->name)) > col_len_name) col_len_name = len;
+        } else {
+            len = strlen(c->name) - 3;
+            if (len / 2 + len % 2 > col_len_expr) col_len_expr = len / 2 + len % 2;
+            if (len / 2 > col_len_name) col_len_name = len;
+        }
     }
 
     // Show table if test failed
@@ -135,25 +143,32 @@ bool test_end(struct test *test, FILE *output) {
 
         for (i = 0; i < arrlenu(test->cases); ++i) {
             struct _stbtest_case const *const c = &test->cases[i];
-            fprintf(output, "%*d | %s | %*u | %-*s | %-*s |\n",
-                col_len_num, i,
-                c->ok ? "\033[32;49mOK\033[39;49m" : "\033[31;49mKO\033[39;49m",
-                col_len_line, c->line,
-                col_len_expr, c->expr,
-                col_len_name, c->name);
+            char const *ok = c->ok ? "\033[32;49mOK\033[39;49m" : "\033[31;49mKO\033[39;49m";
+            if (c->expr)
+                fprintf(output, "%*d | %s | %*u | %-*s | %-*s |\n",
+                    col_len_num, i, ok,
+                    col_len_line, c->line,
+                    col_len_expr, c->expr,
+                    col_len_name, c->name);
+            else
+                fprintf(output, "%*d | %s | %*u | %-*s |\n",
+                    col_len_num, i, ok,
+                    col_len_line, c->line,
+                    col_len_expr + col_len_name + 3, c->name);
         }
     }
 
     // Print summary
     fprintf(output, "test %s: %d ko, %d ok, %d total: %s\n",
-            nb_ko == 0 ? "\033[32;49msuccess\033[39;49m" : "\033[31;49mfailure\033[39;49m",
-            nb_ko,
-            nb_ok,
-            nb_ko + nb_ok,
-            test->name);
+        nb_ko == 0 ? "\033[32;49msuccess\033[39;49m" : "\033[31;49mfailure\033[39;49m",
+        nb_ko,
+        nb_ok,
+        nb_ko + nb_ok,
+        test->name);
 
     // Deallocate
-    for (i = 0; i < arrlenu(test->cases); ++i) free(test->cases[i].name); // Free test
+    for (i = 0; i < arrlenu(test->cases); ++i)
+        free(test->cases[i].name); // Free test
     arrfree(test->cases);
 
     return nb_ko == 0;

@@ -27,9 +27,9 @@ typedef char word_t[256];
 
 typedef char email_t[EMAIL_LENGTH + 1], pseudo_t[PSEUDO_LENGTH + 1];
 
-typedef char action_name[8]; // keep the size as small as possible
+typedef char action_name_t[8]; // keep the size as small as possible
 
-#define X(name) _Static_assert(sizeof #name <= sizeof(action_name), "buffer size too small for action name");
+#define X(name) _Static_assert(sizeof #name <= sizeof(action_name_t), "buffer size too small for action name");
 X_ACTIONS(X)
 #undef X
 

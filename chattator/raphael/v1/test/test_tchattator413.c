@@ -15,6 +15,7 @@ typedef struct {
     struct test t;
     int n_actions, n_responses;
 } test_t;
+_Static_assert(offsetof(test_t, t) == 0, "backing test must be at start of struct for implicit base type punning");
 
 #define new_test() { .t = test_start(__func__) }
 
@@ -24,7 +25,11 @@ typedef struct {
 #define begin_on_response(ptest) \
     ++((test_t *)ptest)->n_responses
 
-#define get_t(ptest) &((test_t *)ptest)->t;
+#define min_json(obj) json_object_to_json_string_ext(obj, JSON_C_TO_STRING_PLAIN)
+
+#define test_case_i(test, obj_input, i) test_case_n(&test.t, obj_input, "input: " i) // input JSON test case
+#define test_case_o(test, obj_output, o) test_case_n(&test.t,                    \
+    streq(min_json(obj_output), o), "output: %s == " o, min_json(obj_output)) // output JSON test case
 
 #define test_case_count(t, actual, expected, singular) test_case(t, actual == expected, "expected %d %s%s, got %d", expected, singular, expected == 1 ? "" : "s", actual)
 #define test_case_n_actions(test, expected)                               \
@@ -47,13 +52,12 @@ struct test test_tchattator413_zero(cfg_t *cfg, db_t *db, server_t *server) {
     test_t test = new_test();
 
     json_object *obj_input = json_tokener_parse(zero_I);
-    test_case(&test.t, obj_input, "parse input JSON successful");
+    test_case_i(test, obj_input, zero_I);
 
     json_object *obj_output = tchattator413_interpret(obj_input, cfg, db, server, zero_on_action, zero_on_response, &test);
     test_case_n_actions(test, 0);
 
-    char const *json_output = json_object_to_json_string_ext(obj_output, JSON_C_TO_STRING_PLAIN);
-    test_case(&test.t, streq(json_output, zero_O), "json output == expected");
+    test_case_o(test, obj_output, zero_O);
 
     json_object_put(obj_output);
     json_object_put(obj_input);
@@ -64,17 +68,15 @@ struct test test_tchattator413_zero(cfg_t *cfg, db_t *db, server_t *server) {
 #define admin_whois_1_I "[{\"do\":\"whois\",\"with\":{\"api_key\":\"" ADMIN_API_KEY_REPR "\",\"user\":1}}]"
 #define admin_whois_1_O "[{\"status\":200,\"has_next_page\":false,\"body\":{\"user_id\":1,\"email\":\"contact@mertrem.org\",\"last_name\":\"Dephric\",\"first_name\":\"Max\",\"display_name\":\"MERTREM Solutions\",\"kind\":1}}]"
 
-static void admin_whois_1_on_action(action_t const *action, void *test) {
-    begin_on_action(test);
-    struct test *t = get_t(test);
+static void admin_whois_1_on_action(action_t const *action, void *t) {
+    begin_on_action(t);
     if (!test_case(t, action->type == action_type_whois, "action type")) return;
     test_case(t, uuid4_eq(action->with.whois.api_key, ADMIN_API_KEY), "api key");
     test_case(t, action->with.whois.user_id == 1, "user id");
 }
 
-static void admin_whois_1_on_response(response_t const *response, void *test) {
-    begin_on_response(test);
-    struct test *t = get_t(test);
+static void admin_whois_1_on_response(response_t const *response, void *t) {
+    begin_on_response(t);
     if (!test_case(t, response->type == action_type_whois, "action type")) return;
     if (!test_case(t, response->status == status_ok, "status")) return;
     test_case(t, !response->has_next_page, "has next page");
@@ -90,13 +92,45 @@ struct test test_tchattator413_admin_whois_1(cfg_t *cfg, db_t *db, server_t *ser
     test_t test = new_test();
 
     json_object *obj_input = json_tokener_parse(admin_whois_1_I);
-    test_case(&test.t, obj_input, "parse input JSON successful");
+    test_case_i(test, obj_input, admin_whois_1_I);
 
     json_object *obj_output = tchattator413_interpret(obj_input, cfg, db, server, admin_whois_1_on_action, admin_whois_1_on_response, &test);
     test_case_n_actions(test, 1);
 
-    char const *json_output = json_object_to_json_string_ext(obj_output, JSON_C_TO_STRING_PLAIN);
-    test_case(&test.t, streq(json_output, admin_whois_1_O), "json output == expected");
+    test_case_o(test, obj_output, admin_whois_1_O);
+
+    json_object_put(obj_output);
+    json_object_put(obj_input);
+
+    return test.t;
+}
+
+#define admin_whois_neg1_I "[{\"do\":\"whois\",\"with\":{\"api_key\":\"" ADMIN_API_KEY_REPR "\",\"user\":-1}}]"
+#define admin_whois_neg1_O "[{\"status\":404,\"has_next_page\":false,\"body\":{}]"
+
+static void admin_whois_neg1_on_action(action_t const *action, void *t) {
+    begin_on_action(t);
+    if (!test_case(t, action->type == action_type_whois, "action type")) return;
+    test_case(t, uuid4_eq(action->with.whois.api_key, ADMIN_API_KEY), "api key");
+    test_case(t, action->with.whois.user_id == -1, "user id");
+}
+
+static void admin_whois_neg1_on_response(response_t const *response, void *t) {
+    begin_on_response(t);
+    test_case(t, response->type == action_type_whois, "action type");
+    test_case(t, response->status == status_not_found, "status");
+}
+
+struct test test_tchattator413_admin_whois_neg1(cfg_t *cfg, db_t *db, server_t *server) {
+    test_t test = new_test();
+
+    json_object *obj_input = json_tokener_parse(admin_whois_neg1_I);
+    test_case_i(test, obj_input, admin_whois_neg1_I);
+
+    json_object *obj_output = tchattator413_interpret(obj_input, cfg, db, server, admin_whois_neg1_on_action, admin_whois_neg1_on_response, &test);
+    test_case_n_actions(test, 1);
+
+    test_case_o(test, obj_output, admin_whois_neg1_O);
 
     json_object_put(obj_output);
     json_object_put(obj_input);
@@ -107,17 +141,15 @@ struct test test_tchattator413_admin_whois_1(cfg_t *cfg, db_t *db, server_t *ser
 #define invalid_whois_1_I "[{\"do\":\"whois\",\"with\":{\"api_key\":\"" INVALID_API_KEY_REPR "\",\"user\":1}}]"
 #define invalid_whois_1_O "[{\"status\":401,\"has_next_page\":false,\"body\":{}}]"
 
-static void invalid_whois_1_on_action(action_t const *action, void *test) {
-    begin_on_action(test);
-    struct test *t = get_t(test);
+static void invalid_whois_1_on_action(action_t const *action, void *t) {
+    begin_on_action(t);
     if (!test_case(t, action->type == action_type_whois, "action type")) return;
     test_case(t, uuid4_eq(action->with.whois.api_key, INVALID_API_KEY), "api key");
     test_case(t, action->with.whois.user_id == 1, "user id");
 }
 
-static void invalid_whois_1_on_response(response_t const *response, void *test) {
-    begin_on_response(test);
-    struct test *t = get_t(test);
+static void invalid_whois_1_on_response(response_t const *response, void *t) {
+    begin_on_response(t);
     test_case(t, response->type == action_type_whois, "action type");
     test_case(t, response->status == status_unauthorized, "status");
     test_case(t, !response->has_next_page, "has next page");
@@ -127,13 +159,12 @@ struct test test_tchattator413_invalid_whois_1(cfg_t *cfg, db_t *db, server_t *s
     test_t test = new_test();
 
     json_object *obj_input = json_tokener_parse(invalid_whois_1_I);
-    test_case(&test.t, obj_input, "parse input JSON successful");
+    test_case_i(test, obj_input, invalid_whois_1_I);
 
     json_object *obj_output = tchattator413_interpret(obj_input, cfg, db, server, invalid_whois_1_on_action, invalid_whois_1_on_response, &test);
     test_case_n_actions(test, 1);
 
-    char const *json_output = json_object_to_json_string_ext(obj_output, JSON_C_TO_STRING_PLAIN);
-    test_case(&test.t, streq(json_output, invalid_whois_1_O), "json output == expected");
+    test_case_o(test, obj_output, invalid_whois_1_O);
 
     json_object_put(obj_output);
     json_object_put(obj_input);

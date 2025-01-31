@@ -222,7 +222,7 @@ int db_count_msg(db_t *db, serial_t sender_id, serial_t recipient_id) {
     int const p_length[sizeof args] = { sizeof args[0], sizeof args[1] };
     int const p_format[sizeof args] = { 1, 1 };
     PGresult *result = PQexecParams(db, "select count(*) from " TBL_MESSAGE " where coalesce(id_compte_sender,0)=$1 and id_compte_recipient=$2",
-        1, NULL, (const char **)args, p_length, p_format, 1);
+        1, NULL, (char const *const *)args, p_length, p_format, 1);
 
     int res;
 
