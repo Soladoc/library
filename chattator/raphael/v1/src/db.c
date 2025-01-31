@@ -4,14 +4,12 @@
 /// @date 23/01/2025
 
 #include <assert.h>
+#include <bcrypt/bcrypt.h>
 #include <netinet/in.h>
 #include <postgresql/libpq-fe.h>
-
 #include <stdlib.h>
-
-#include "db.h"
-#include "util.h"
-#include <bcrypt/bcrypt.h>
+#include <tchattator413/db.h>
+#include <tchattator413/util.h>
 
 #define TBL_USER "tchattator.user"
 #define TBL_MESSAGE "tchattator._msg"

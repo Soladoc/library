@@ -114,6 +114,14 @@ bool test_end(struct test *test, FILE *output) {
         }
     }
 
+    // Print summary
+    fprintf(output, "test %s: %d ko, %d ok, %d total: %s\n",
+        nb_ko == 0 ? "\033[32;49msuccess\033[39;49m" : "\033[31;49mfailure\033[39;49m",
+        nb_ko,
+        nb_ok,
+        nb_ko + nb_ok,
+        test->name);
+
     // Show table if test failed
     if (nb_ko != 0) {
         int const col_len_num = _stbtest_digit_count(arrlenu(test->cases), 10);
@@ -157,14 +165,6 @@ bool test_end(struct test *test, FILE *output) {
                     col_len_expr + col_len_name + 3, c->name);
         }
     }
-
-    // Print summary
-    fprintf(output, "test %s: %d ko, %d ok, %d total: %s\n",
-        nb_ko == 0 ? "\033[32;49msuccess\033[39;49m" : "\033[31;49mfailure\033[39;49m",
-        nb_ko,
-        nb_ok,
-        nb_ko + nb_ok,
-        test->name);
 
     // Deallocate
     for (i = 0; i < arrlenu(test->cases); ++i)

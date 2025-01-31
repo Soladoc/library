@@ -1,5 +1,8 @@
+#include "tchattator413/tests_tchattator413.h"
 #include "tests.h"
 #include <stdlib.h>
+#include <tchattator413/cfg.h>
+#include <tchattator413/db.h>
 
 // #define DO_OBSERVE
 #define OUT stdout

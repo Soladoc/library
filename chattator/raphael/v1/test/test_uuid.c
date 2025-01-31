@@ -3,13 +3,11 @@
 /// @brief UUID unit tests
 /// @date 23/01/2025
 
-#include <strings.h>
-
+#include "strings.h"
 #include "tests.h"
-#include "../src/util.h"
-#include "../src/uuid.h"
-
-#include <stb_test.h>
+#include <tchattator413/errstatus.h>
+#include <tchattator413/util.h>
+#include <tchattator413/uuid.h>
 
 struct test test_uuid4(void) {
     static const uuid4_t different_uuid = uuid4_init(0xf9, 0x1d, 0x4f, 0xae, 0x7d, 0xec, 0x11, 0xd0, 0xa7, 0x65, 0x00, 0xa0, 0xc9, 0x1e, 0x6b, 0xf6);

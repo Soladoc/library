@@ -1,5 +1,5 @@
-#include "json-helpers.h"
 #include <json-c/json.h>
+#include <tchattator413/json-helpers.h>
 
 static inline uint16_t clamp_uint16(int32_t x) {
     int32_t const t = x < 0 ? 0 : x;
@@ -29,6 +29,6 @@ bool json_object_get_string_strict(json_object *obj, slice_t *out) {
     if (out) {
         out->len = json_object_get_string_len(obj);
         out->val = json_object_get_string(obj);
-    } 
+    }
     return true;
 }

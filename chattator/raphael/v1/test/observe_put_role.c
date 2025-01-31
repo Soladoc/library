@@ -1,4 +1,4 @@
-#include "../src/action.h"
+#include <tchattator413/action.h>
 
 #include "tests.h"
 

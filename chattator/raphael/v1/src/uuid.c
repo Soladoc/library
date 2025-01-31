@@ -3,7 +3,7 @@
 /// @brief UUID library - Implementation
 /// @date 23/01/2025
 
-#include "uuid.h"
+#include <tchattator413/uuid.h>
 
 #include "assert.h"
 #include <stdint.h>

@@ -3,16 +3,16 @@
 /// @brief Tchattator413 JSON front-end - Main program
 /// @date 23/01/2025
 
-#include "src/cfg.h"
-#include "src/json-helpers.h"
-#include "src/tchattator413.h"
-#include "src/util.h"
 #include <assert.h>
 #include <getopt.h>
 #include <json-c/json.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <sysexits.h>
+#include <tchattator413/cfg.h>
+#include <tchattator413/json-helpers.h>
+#include <tchattator413/tchattator413.h>
+#include <tchattator413/util.h>
 #include <unistd.h>
 
 enum { EX_NODB = EX__MAX + 1 };

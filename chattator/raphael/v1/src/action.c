@@ -3,11 +3,11 @@
 /// @brief Tchattator413 protocol - Implementation
 /// @date 23/01/2025
 
-#include "action.h"
-#include "db.h"
-#include "util.h"
 #include <assert.h>
 #include <limits.h>
+#include <tchattator413/action.h>
+#include <tchattator413/db.h>
+#include <tchattator413/util.h>
 
 #define putln_error_rate_limit_exceeded(action_name, remaining_seconds) \
     put_error(action_name, ": rate limit exceeded. Next request in %d second%s.", remaining_seconds, remaining_seconds == 1 ? "s" : "");

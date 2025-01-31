@@ -1,5 +1,5 @@
-#include "tchattator413.h"
-#include "json-helpers.h"
+#include <tchattator413/tchattator413.h>
+#include <tchattator413/json-helpers.h>
 #include <assert.h>
 
 static inline json_object *act(json_object *const obj_action, cfg_t *cfg, db_t *db, server_t *server, fn_on_action_t on_action, fn_on_response_t on_response, void *on_ctx) {

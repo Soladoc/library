@@ -7,10 +7,9 @@
 #include <json-c/json.h>
 #include <stdlib.h>
 #include <string.h>
-
-#include "cfg.h"
-#include "json-helpers.h"
-#include "util.h"
+#include <tchattator413/cfg.h>
+#include <tchattator413/json-helpers.h>
+#include <tchattator413/util.h>
 
 #define DEFAULT_LOG_STREAM stderr
 

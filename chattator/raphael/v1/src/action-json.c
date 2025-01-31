@@ -3,11 +3,11 @@
 /// @brief Tchattator413 protocol - Implementation (JSON-related)
 /// @date 23/01/2025
 
-#include "action.h"
-#include "errstatus.h"
-#include "json-helpers.h"
-#include "util.h"
 #include <json-c/json.h>
+#include <tchattator413/action.h>
+#include <tchattator413/errstatus.h>
+#include <tchattator413/json-helpers.h>
+#include <tchattator413/util.h>
 
 // error: DO.with: missing key: KEY
 #define putln_error_arg_missing(action_name, key, ...) putln_error_json_missing_key(key, action_name ".with" __VA_OPT__(, ) __VA_ARGS__)
@@ -153,7 +153,7 @@ action_t action_parse(json_object *obj, db_t *db) {
         fail();
     }
 
- // this is save because the null terminator of the literal string STR(name) will stop strcmp
+    // this is save because the null terminator of the literal string STR(name) will stop strcmp
 #define action_is(name) streq(STR(name), action_name.val)
 
 #define DO login

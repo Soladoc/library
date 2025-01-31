@@ -3,8 +3,8 @@
 /// @brief Tchattator413 dynamic server state - Implemtnation
 /// @date 29/01/2025
 
-#include "server.h"
-#include "types.h"
+#include <tchattator413/server.h>
+#include <tchattator413/types.h>
 
 #include <stb_ds.h>
 
