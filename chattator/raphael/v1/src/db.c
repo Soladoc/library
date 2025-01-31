@@ -14,9 +14,7 @@
 #define TBL_USER "tchattator.user"
 #define TBL_MESSAGE "tchattator._msg"
 #define TBL_MEMBRE "pact.membre"
-#define FUN_SEND_MSG "send_msg"
-
-#define conn_param(param) COALESCE(getenv(#param), STR(param))
+#define FUN_SEND_MSG "tchattator.send_msg"
 
 #define pq_recv_l(type, res, row, col) ((type)(ntohl(*(PQgetvalue((res), (row), (col))))))
 #define pq_send_l(val) htonl(val)
@@ -33,14 +31,14 @@ static inline role_flags_t user_kind_to_role(user_kind_t kind) {
     return (role_flags_t)errstatus_error;
 }
 
-db_t *db_connect(int verbosity) {
+db_t *db_connect(int verbosity, char const *host, char const *port, char const *database, char const *username, char const *password) {
     PGconn *db = PQsetdbLogin(
-        conn_param(DB_HOST),
-        conn_param(PGDB_PORT),
+        host,
+        port,
         NULL, NULL,
-        conn_param(DB_NAME),
-        conn_param(DB_USER),
-        conn_param(DB_ROOT_PASSWORD));
+        database,
+        username,
+        password);
 
     PGVerbosity v;
     if (verbosity <= -2)

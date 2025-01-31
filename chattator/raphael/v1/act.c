@@ -17,6 +17,13 @@
 
 enum { EX_NODB = EX__MAX + 1 };
 
+static inline char *require_env(char const *name) {
+    char *value = getenv(name);
+    if (value) return value;
+    put_error("environment variable '%s' is required\n", name);
+    exit(EX_USAGE);
+}
+
 int main(int argc, char **argv) {
     int verbosity = 0;
     bool dump_config = false;
@@ -95,12 +102,19 @@ int main(int argc, char **argv) {
     if (dump_config) {
         cfg_dump(cfg);
     } else {
+        // Allocation
+
+        db_t *db = db_connect(verbosity,
+            require_env("DB_HOST"),
+            require_env("PGDB_PORT"),
+            require_env("DB_NAME"),
+            require_env("DB_USER"),
+            require_env("DB_ROOT_PASSWORD"));
+        if (!db) return EX_NODB;
+
         json_object *const input = optind < argc
             ? json_tokener_parse(argv[optind])
             : json_object_from_fd(STDIN_FILENO);
-
-        // Allocation
-        db_t *db = db_connect(verbosity);
 
         if (!input) {
             put_error_json_c("failed to parse input");

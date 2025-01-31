@@ -6,7 +6,8 @@ on:
       - main
     paths:
       - '.github/workflows/Reset database.yml'
-      - '**.sql'
+      - 'sql/instances/main/**.sql'
+      - 'sql/schemas/**.sql'
 jobs:
   reset_db:
     runs-on: ubuntu-latest

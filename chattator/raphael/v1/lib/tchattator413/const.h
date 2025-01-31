@@ -47,11 +47,11 @@ DESCRIPTION\n\
     --version          Show version\n\
 \n\
 ENVIRONMENT\n\
-    DB_HOST            DB host\n\
-    PGDB_PORT          DB port\n\
-    DB_NAME            DB name\n\
-    DB_USER            DB username\n\
-    DB_ROOT_PASSWORD   DB password"
+    DB_HOST            DB host (required)\n\
+    PGDB_PORT          DB port (required)\n\
+    DB_NAME            DB name (required)\n\
+    DB_USER            DB username (required)\n\
+    DB_ROOT_PASSWORD   DB password (required)"
 
 #define VERSION PROG " 1.0.0"
 

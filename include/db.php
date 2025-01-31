@@ -22,7 +22,7 @@ function connect(): PDO
 
     // Load .env file
     {
-        $envfile = __DIR__ . (is_localhost() ? '/raphael.env' : '/.env');
+        $envfile = __DIR__ . (is_localhost() ? '/raphael-main.env' : '/.env');
         foreach (notfalse(file($envfile, FILE_SKIP_EMPTY_LINES), "dotenv file missing at $envfile") as $line) {
             notfalse(putenv(trim($line)));
         }

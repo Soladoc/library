@@ -115,7 +115,8 @@ begin
         nom,
         prenom,
         telephone,
-        id_adresse
+        id_adresse,
+        api_key
     ) values (
         new.id,
         new.email,
@@ -123,7 +124,8 @@ begin
         new.nom,
         new.prenom,
         new.telephone,
-        new.id_adresse
+        new.id_adresse,
+        new.api_key
     ) returning id into new.id;
 end
 $$ language plpgsql strict;

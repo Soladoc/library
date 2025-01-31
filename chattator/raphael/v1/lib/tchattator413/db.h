@@ -15,8 +15,8 @@ typedef void db_t;
 /// @brief Initialize a database connection.
 /// @param verbosity The verbosity level.
 /// @return A new database connection.
-/// @return @c null if the connection failed.
-db_t *db_connect(int verbosity);
+/// @return @ref NULL if the connection failed.
+db_t *db_connect(int verbosity, char const *host, char const *port, char const *database, char const *username, char const *password);
 
 /// @brief Destroy a database connection.
 /// @param db The database connection to destroy. No-op if @c NULL.
