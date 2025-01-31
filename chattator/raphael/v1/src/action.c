@@ -68,13 +68,13 @@ static inline errstatus_t auth_token(user_identity_t *out_user, token_t token, d
     return min(res, errstatus_ok); // reduce ok results to errstatus_ok
 }
 
-bool action_evaluate(action_t const *action, response_t *rep, cfg_t *cfg, db_t *db, server_t *server) {
-    rep->has_next_page = false; // default most of the time - who cares if we set it twice
+response_t action_evaluate(action_t const *action, cfg_t *cfg, db_t *db, server_t *server) {
+    response_t rep = {};
 
-#define fail(return_status)          \
-    do {                             \
-        rep->status = return_status; \
-        return true;                 \
+#define fail(return_status)         \
+    do {                            \
+        rep.status = return_status; \
+        return rep;                 \
     } while (0)
 
 #define check_role(allowed_roles) \
@@ -86,11 +86,12 @@ bool action_evaluate(action_t const *action, response_t *rep, cfg_t *cfg, db_t *
     // Identify user
     user_identity_t user;
 
-    switch (rep->type = action->type) {
+    switch (rep.type = action->type) {
+    case action_type_error: fail(status_internal_server_error);
 #define DO login
     case action_type(DO):
         switch (auth_api_key(&user, action->with.DO.api_key, cfg, db)) {
-        case errstatus_handled: return false;
+        case errstatus_handled: fail(status_internal_server_error);
         case errstatus_error: fail(status_unauthorized);
         default: check_role(role_all);
         }
@@ -98,17 +99,17 @@ bool action_evaluate(action_t const *action, response_t *rep, cfg_t *cfg, db_t *
         turnstile_rate_limit();
 
         switch (db_check_password(db, user.id, action->with.DO.password.val)) {
-        case errstatus_handled: return false;
+        case errstatus_handled: fail(status_internal_server_error);
         case errstatus_error: fail(status_unauthorized);
         default:;
         }
-        if (!(rep->body.DO.token = server_login(server, user.id))) fail(status_internal_server_error);
+        if (!(rep.body.DO.token = server_login(server, user.id))) fail(status_internal_server_error);
         break;
 #undef DO
 #define DO logout
     case action_type(DO):
         switch (auth_token(&user, action->with.DO.token, db, server)) {
-        case errstatus_handled: return false;
+        case errstatus_handled: fail(status_internal_server_error);
         case errstatus_error: fail(status_unauthorized);
         default: check_role(role_all);
         }
@@ -121,16 +122,16 @@ bool action_evaluate(action_t const *action, response_t *rep, cfg_t *cfg, db_t *
 #define DO whois
     case action_type(DO):
         switch (auth_api_key(&user, action->with.DO.api_key, cfg, db)) {
-        case errstatus_handled: return false;
+        case errstatus_handled: fail(status_internal_server_error);
         case errstatus_error: fail(status_unauthorized);
         default: check_role(role_all);
         }
 
         turnstile_rate_limit();
 
-        rep->body.DO.user_id = action->with.DO.user_id;
-        switch (db_get_user(db, &rep->body.DO)) {
-        case errstatus_handled: return false;
+        rep.body.DO.user_id = action->with.DO.user_id;
+        switch (db_get_user(db, &rep.body.DO)) {
+        case errstatus_handled: fail(status_internal_server_error);
         case errstatus_error: fail(status_not_found);
         default:;
         }
@@ -139,7 +140,7 @@ bool action_evaluate(action_t const *action, response_t *rep, cfg_t *cfg, db_t *
 #define DO send
     case action_type(DO): {
         switch (auth_token(&user, action->with.DO.token, db, server)) {
-        case errstatus_handled: return false;
+        case errstatus_handled: fail(status_internal_server_error);
         case errstatus_error: fail(status_unauthorized);
         default: check_role(role_all);
         }
@@ -148,7 +149,7 @@ bool action_evaluate(action_t const *action, response_t *rep, cfg_t *cfg, db_t *
 
         int dest_role;
         switch (dest_role = db_get_user_role(db, action->with.DO.dest_user_id)) {
-        case errstatus_handled: return false;
+        case errstatus_handled: fail(status_internal_server_error);
         case errstatus_error: fail(status_not_found);
         }
 
@@ -165,8 +166,8 @@ bool action_evaluate(action_t const *action, response_t *rep, cfg_t *cfg, db_t *
             fail(status_unprocessable_content);
         }
 
-        switch (rep->body.DO.msg_id = db_send_msg(db, user.id, action->with.DO.dest_user_id, action->with.DO.content.val)) {
-        case errstatus_handled: return false;
+        switch (rep.body.DO.msg_id = db_send_msg(db, user.id, action->with.DO.dest_user_id, action->with.DO.content.val)) {
+        case errstatus_handled: fail(status_internal_server_error);
         case errstatus_error: fail(status_forbidden);
         }
 
@@ -176,7 +177,7 @@ bool action_evaluate(action_t const *action, response_t *rep, cfg_t *cfg, db_t *
 #define DO motd
     case action_type(DO):
         switch (auth_token(&user, action->with.DO.token, db, server)) {
-        case errstatus_handled: return false;
+        case errstatus_handled: fail(status_internal_server_error);
         case errstatus_error: fail(status_unauthorized);
         default: check_role(role_all);
         }
@@ -188,7 +189,7 @@ bool action_evaluate(action_t const *action, response_t *rep, cfg_t *cfg, db_t *
 #define DO inbox
     case action_type(DO):
         switch (auth_token(&user, action->with.inbox.token, db, server)) {
-        case errstatus_handled: return false;
+        case errstatus_handled: fail(status_internal_server_error);
         case errstatus_error: fail(status_unauthorized);
         default: check_role(role_all);
         }
@@ -200,7 +201,7 @@ bool action_evaluate(action_t const *action, response_t *rep, cfg_t *cfg, db_t *
 #define DO outbox
     case action_type(DO):
         switch (auth_token(&user, action->with.DO.token, db, server)) {
-        case errstatus_handled: return false;
+        case errstatus_handled: fail(status_internal_server_error);
         case errstatus_error: fail(status_unauthorized);
         default: check_role(role_all);
         }
@@ -212,7 +213,7 @@ bool action_evaluate(action_t const *action, response_t *rep, cfg_t *cfg, db_t *
 #define DO edit
     case action_type(DO):
         switch (auth_token(&user, action->with.DO.token, db, server)) {
-        case errstatus_handled: return false;
+        case errstatus_handled: fail(status_internal_server_error);
         case errstatus_error: fail(status_unauthorized);
         default: check_role(role_all);
         }
@@ -224,7 +225,7 @@ bool action_evaluate(action_t const *action, response_t *rep, cfg_t *cfg, db_t *
 #define DO rm
     case action_type(DO):
         switch (auth_token(&user, action->with.DO.token, db, server)) {
-        case errstatus_handled: return false;
+        case errstatus_handled: fail(status_internal_server_error);
         case errstatus_error: fail(status_unauthorized);
         default: check_role(role_all);
         }
@@ -236,7 +237,7 @@ bool action_evaluate(action_t const *action, response_t *rep, cfg_t *cfg, db_t *
 #define DO block
     case action_type(DO):
         switch (auth_token(&user, action->with.DO.token, db, server)) {
-        case errstatus_handled: return false;
+        case errstatus_handled: fail(status_internal_server_error);
         case errstatus_error: fail(status_unauthorized);
         default: check_role(role_admin | role_pro);
         }
@@ -248,7 +249,7 @@ bool action_evaluate(action_t const *action, response_t *rep, cfg_t *cfg, db_t *
 #define DO unblock
     case action_type(DO):
         switch (auth_token(&user, action->with.DO.token, db, server)) {
-        case errstatus_handled: return false;
+        case errstatus_handled: fail(status_internal_server_error);
         case errstatus_error: fail(status_unauthorized);
         default: check_role(role_admin | role_pro);
         }
@@ -260,7 +261,7 @@ bool action_evaluate(action_t const *action, response_t *rep, cfg_t *cfg, db_t *
 #define DO ban
     case action_type(DO):
         switch (auth_token(&user, action->with.DO.token, db, server)) {
-        case errstatus_handled: return false;
+        case errstatus_handled: fail(status_internal_server_error);
         case errstatus_error: fail(status_unauthorized);
         default: check_role(role_admin | role_pro);
         }
@@ -272,7 +273,7 @@ bool action_evaluate(action_t const *action, response_t *rep, cfg_t *cfg, db_t *
 #define DO unban
     case action_type(DO):
         switch (auth_token(&user, action->with.DO.token, db, server)) {
-        case errstatus_handled: return false;
+        case errstatus_handled: fail(status_internal_server_error);
         case errstatus_error: fail(status_unauthorized);
         default: check_role(role_admin | role_pro);
         }
@@ -282,8 +283,8 @@ bool action_evaluate(action_t const *action, response_t *rep, cfg_t *cfg, db_t *
         break;
     }
 
-    rep->status = status_ok;
-    return true;
+    rep.status = status_ok;
+    return rep;
 }
 
 #ifndef NDEBUG
@@ -291,6 +292,9 @@ void action_explain(action_t const *action, FILE *output) {
     // todo...
 
     switch (action->type) {
+    case action_type_error:
+        fprintf(output, "(none)\n");
+        break;
     case action_type_login:
         fprintf(output, "login api_key=");
         uuid4_put(action->with.login.api_key, output);

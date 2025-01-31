@@ -17,7 +17,7 @@ typedef uuid4_t api_key_t;
 typedef uint64_t token_t;
 /// @ref A page number (1..2^31-1)
 typedef int32_t page_number_t;
-/// @ref A Posrgres SERIAL primary key value (1..2^31-1)
+/// @ref A Posrgres SERIAL primary key value starting at 1. (1..2^31-1)
 typedef int32_t serial_t;
 
 #define EMAIL_LENGTH 319

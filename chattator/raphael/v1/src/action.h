@@ -17,6 +17,8 @@
 
 /// @brief The type of an action.
 typedef enum {
+    /// @brief A malformed action. No member other than @c type are defined.
+    action_type_error,
 #define X(name) action_type_##name,
     X_ACTIONS(X)
 #undef X
@@ -130,21 +132,17 @@ typedef struct {
 void put_role(role_flags_t role, FILE *stream);
 
 /// @brief Parse an action from a JSON object.
-/// @param out_action Mutated to the parsed action.
 /// @param obj The JSON object allegedly containing an action.
 /// @param db The DB connection.
-/// @return @p true on success.
-/// @return @p false on error.
-bool action_parse(action_t *out_action, json_object *obj, db_t *db);
+/// @return The parsed action.
+action_t action_parse(json_object *obj, db_t *db);
 
 /// @brief Evaluate an action.
 /// @param action The action to evaluate.
-/// @param response Mutated to the response.
 /// @param cfg The configuration.
 /// @param db The DB connection.
-/// @return @p true on success.
-/// @return @p false on error.
-bool action_evaluate(action_t const *action, response_t *response, cfg_t *cfg, db_t *db, server_t *server);
+/// @return The response to the action.
+response_t action_evaluate(action_t const *action, cfg_t *cfg, db_t *db, server_t *server);
 
 /// @brief Convert an action response to JSON.
 /// @param response The action response.

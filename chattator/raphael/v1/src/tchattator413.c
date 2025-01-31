@@ -3,13 +3,10 @@
 #include <assert.h>
 
 static inline json_object *act(json_object *const obj_action, cfg_t *cfg, db_t *db, server_t *server, fn_on_action_t on_action, fn_on_response_t on_response, void *on_ctx) {
-    action_t action;
-
-    if (!action_parse(&action, obj_action, db)) return NULL;
+    action_t action = action_parse(obj_action, db);
     if (on_action) on_action(&action, on_ctx);
 
-    response_t response;
-    if (!action_evaluate(&action, &response, cfg, db, server)) return NULL; 
+    response_t response = action_evaluate(&action, cfg, db, server);
     if (on_response) on_response(&response, on_ctx);
 
     json_object *obj_response = response_to_json(&response);
@@ -21,7 +18,6 @@ json_object *tchattator413_interpret(json_object *input, cfg_t *cfg, db_t *db, s
     json_object *output;
 
     json_type const input_type = json_object_get_type(input);
-    json_object *item;
     switch (input_type) {
     case json_type_array: {
         int const len = json_object_array_length(input);
@@ -29,13 +25,13 @@ json_object *tchattator413_interpret(json_object *input, cfg_t *cfg, db_t *db, s
         for (int i = 0; i < len; ++i) {
             json_object *const action = json_object_array_get_idx(input, i);
             assert(action);
-            if ((item = act(action, cfg, db, server, on_action, on_response, on_ctx))) json_object_array_add(output, item);
+            json_object_array_add(output, act(action, cfg, db, server, on_action, on_response, on_ctx));
         }
         break;
     }
     case json_type_object:
         output = json_object_new_array_ext(1);
-        if ((item = act(input, cfg, db, server, on_action, on_response, on_ctx))) json_object_array_add(output, item);
+        json_object_array_add(output, act(input, cfg, db, server, on_action, on_response, on_ctx));
         break;
     default:
         output = json_object_new_array_ext(0);
