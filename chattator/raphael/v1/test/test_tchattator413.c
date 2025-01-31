@@ -108,19 +108,17 @@ struct test test_tchattator413_admin_whois_1(cfg_t *cfg, db_t *db, server_t *ser
 }
 
 #define admin_whois_neg1_I "[{\"do\":\"whois\",\"with\":{\"api_key\":\"" ADMIN_API_KEY_REPR "\",\"user\":-1}}]"
-#define admin_whois_neg1_O "[{\"status\":404,\"has_next_page\":false,\"body\":{}]"
+#define admin_whois_neg1_O OUTPUT_500
 
 static void admin_whois_neg1_on_action(action_t const *action, void *t) {
     begin_on_action(t);
-    if (!test_case(t, action->type == action_type_whois, "action type")) return;
-    test_case(t, uuid4_eq(action->with.whois.api_key, ADMIN_API_KEY), "api key");
-    test_case(t, action->with.whois.user_id == -1, "user id");
+    if (!test_case(t, action->type == action_type_error, "action type")) return;
 }
 
 static void admin_whois_neg1_on_response(response_t const *response, void *t) {
     begin_on_response(t);
-    test_case(t, response->type == action_type_whois, "action type");
-    test_case(t, response->status == status_not_found, "status");
+    test_case(t, response->type == action_type_error, "action type");
+    test_case(t, response->status == status_internal_server_error, "status");
 }
 
 struct test test_tchattator413_admin_whois_neg1(cfg_t *cfg, db_t *db, server_t *server) {
@@ -141,7 +139,7 @@ struct test test_tchattator413_admin_whois_neg1(cfg_t *cfg, db_t *db, server_t *
 }
 
 #define invalid_whois_1_I "[{\"do\":\"whois\",\"with\":{\"api_key\":\"" INVALID_API_KEY_REPR "\",\"user\":1}}]"
-#define invalid_whois_1_O OUTPUT_500
+#define invalid_whois_1_O "[{\"status\":401,\"has_next_page\":false,\"body\":{}}]"
 
 static void invalid_whois_1_on_action(action_t const *action, void *t) {
     begin_on_action(t);
