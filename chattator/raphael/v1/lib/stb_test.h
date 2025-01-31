@@ -110,7 +110,7 @@ bool test_end(struct test *test, FILE *output) {
         } else {
             len = strlen(c->name) - 3;
             if (len / 2 + len % 2 > col_len_expr) col_len_expr = len / 2 + len % 2;
-            if (len / 2 > col_len_name) col_len_name = len;
+            if (len / 2 > col_len_name) col_len_name = len / 2;
         }
     }
 

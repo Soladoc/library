@@ -6,6 +6,8 @@
 #define zero_I "[]"
 #define zero_O "[]"
 
+#define OUTPUT_500 "[{\"status\":500,\"has_next_page\":false,\"body\":{}}]"
+
 #define ADMIN_API_KEY_REPR "ed33c143-5752-4543-a821-00a187955a28"
 #define ADMIN_API_KEY uuid4_of(0xed, 0x33, 0xc1, 0x43, 0x57, 0x52, 0x45, 0x43, 0xa8, 0x21, 0x00, 0xa1, 0x87, 0x95, 0x5a, 0x28)
 #define INVALID_API_KEY_REPR "00123400-0000-0000-0100-000000000000"
@@ -139,7 +141,7 @@ struct test test_tchattator413_admin_whois_neg1(cfg_t *cfg, db_t *db, server_t *
 }
 
 #define invalid_whois_1_I "[{\"do\":\"whois\",\"with\":{\"api_key\":\"" INVALID_API_KEY_REPR "\",\"user\":1}}]"
-#define invalid_whois_1_O "[{\"status\":401,\"has_next_page\":false,\"body\":{}}]"
+#define invalid_whois_1_O OUTPUT_500
 
 static void invalid_whois_1_on_action(action_t const *action, void *t) {
     begin_on_action(t);

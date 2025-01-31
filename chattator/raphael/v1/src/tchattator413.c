@@ -20,13 +20,14 @@ json_object *tchattator413_interpret(json_object *input, cfg_t *cfg, db_t *db, s
     json_type const input_type = json_object_get_type(input);
     switch (input_type) {
     case json_type_array: {
-        int const len = json_object_array_length(input);
+        size_t const len = json_object_array_length(input);
         output = json_object_new_array_ext(len);
-        for (int i = 0; i < len; ++i) {
+        for (size_t i = 0; i < len; ++i) {
             json_object *const action = json_object_array_get_idx(input, i);
             assert(action);
             json_object_array_add(output, act(action, cfg, db, server, on_action, on_response, on_ctx));
         }
+        assert(len == json_object_array_length(output)); // Same amount of input and output actions
         break;
     }
     case json_type_object:
