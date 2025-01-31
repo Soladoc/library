@@ -31,8 +31,8 @@ static inline serial_t get_user_id(char const *action_name, json_object *obj_wit
         if (json_object_get_string_len(obj_user) > max(EMAIL_LENGTH, PSEUDO_LENGTH)) break;
         const char *email_or_pseudo = json_object_get_string(obj_user);
         return strchr(email_or_pseudo, '@')
-                 ? db_get_user_id_by_email(db, email_or_pseudo)
-                 : db_get_user_id_by_pseudo(db, email_or_pseudo);
+            ? db_get_user_id_by_email(db, email_or_pseudo)
+            : db_get_user_id_by_pseudo(db, email_or_pseudo);
     }
     default:;
     }
@@ -123,6 +123,7 @@ static inline bool get_api_key(uuid4_t *out_api_key, char const *action_name, js
 
 bool action_parse(action_t *out_action, json_object *obj, db_t *db) {
     json_object *obj_do;
+
     if (!json_object_object_get_ex(obj, "do", &obj_do)) {
         putln_error_json_missing_key("do", "action");
         return false;

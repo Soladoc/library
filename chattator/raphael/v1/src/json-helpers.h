@@ -7,6 +7,8 @@
 #include <stdbool.h>
 #include <stdint.h>
 
+#define json_object_dbg_print(obj) fprintf(stderr, "json_object_dbg_print: %s\n", json_object_to_json_string_ext(obj, JSON_C_TO_STRING_PRETTY))
+
 #define put_error_json_c(fmt, ...) put_error("json-c: " fmt ": %s" __VA_ARGS__, json_util_get_last_err());
 
 #define putln_error_json_type_union2(type1, type2, actual, fmt, ...) put_error("json: " fmt ": type: expected %s or %s, got %s\n" __VA_OPT__(,) __VA_ARGS__, json_type_to_name(type1), json_type_to_name(type2), json_type_to_name(actual))

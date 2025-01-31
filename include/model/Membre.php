@@ -56,8 +56,8 @@ final class Membre extends Compte
         a.localite adresse_localite,
         a.precision_int adresse_precision_int,
         a.precision_ext adresse_precision_ext,
-        a.latitude adresse_latitude,
-        a.longitude adresse_longitude
+        a.lat adresse_lat,
+        a.long adresse_long
 
         from membre
             join _adresse a on a.id = ' . static::TABLE . '.id_adresse
@@ -86,8 +86,8 @@ final class Membre extends Compte
                 $row['adresse_localite'],
                 $row['adresse_precision_int'],
                 $row['adresse_precision_ext'],
-                $row['adresse_latitude'],
-                $row['adresse_longitude'],
+                $row['adresse_lat'],
+                $row['adresse_long'],
             ),
         ], $row['pseudo']);
     }

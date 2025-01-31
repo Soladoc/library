@@ -26,8 +26,8 @@ final class InputAdresse extends Input
             $data['localite'] ?: null,
             $data['precision_int'] ?: null,
             $data['precision_ext'] ?: null,
-            $data['latitude'] ?? null ?: null,
-            $data['longitude'] ?? null ?: null,
+            $data['lat'] ?? null ?: null,
+            $data['long'] ?? null ?: null,
         );
     }
 
@@ -104,8 +104,8 @@ final class InputAdresse extends Input
         placeholder="bâtiment, voie, résidence (optionnel)&hellip;"
         value="<?= h14s($current?->precision_ext) ?>">
     </label></p>
-    <input type="hidden" name="latitude" value="<?= h14s($current?->latitude) ?>">
-    <input type="hidden" name="longitude" value="<?= h14s($current?->longitude) ?>">
+    <input type="hidden" name="lat" value="<?= h14s($current?->lat) ?>">
+    <input type="hidden" name="long" value="<?= h14s($current?->long) ?>">
 </details>
 <?php
     }

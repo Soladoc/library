@@ -82,8 +82,8 @@ abstract class Compte extends Signalable
         a.localite adresse_localite,
         a.precision_int adresse_precision_int,
         a.precision_ext adresse_precision_ext,
-        a.latitude adresse_latitude,
-        a.longitude adresse_longitude
+        a.lat adresse_lat,
+        a.long adresse_long
 
         from ' . self::TABLE . '
             left join professionnel using (id)
@@ -116,8 +116,8 @@ abstract class Compte extends Signalable
                 $row['adresse_localite'],
                 $row['adresse_precision_int'],
                 $row['adresse_precision_ext'],
-                $row['adresse_latitude'],
-                $row['adresse_longitude'],
+                $row['adresse_lat'],
+                $row['adresse_long'],
             ),
             Uuid::parse($row['api_key'] ?? null),
         ];
