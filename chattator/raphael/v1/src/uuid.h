@@ -6,10 +6,9 @@
 #ifndef UUID_H
 #define UUID_H
 
+#include <stdbool.h>
 #include <stdint.h>
 #include <stdio.h>
-
-#include "errstatus.h"
 
 /// @brief Version 4 UUID.
 typedef struct {
@@ -28,12 +27,15 @@ typedef struct {
 /// @remark This function doesn't add a null terminator at the end of @p repr.
 char *uuid4_repr(uuid4_t uuid, char repr[const UUID4_REPR_LENGTH]);
 
+#define uuid4_from_repr_slice(out_uuid, repr_slice) ((repr_slice).len >= UUID4_REPR_LENGTH && uuid4_from_repr((out_uuid), (repr_slice).val))
+
 /// @brief Parse a version 4 UUID from its canonical representation.
 /// @param out_uuid Mutated to the parsed UUID.
 /// @param repr The string containing the representation.
-/// @return The error status of the operation.
+/// @return @c true parsing successful @p out_uuid is set.
+/// @return @c false parsing unsucessful.
 /// @remark The syntax ABNF can be found at https://www.rfc-editor.org/rfc/rfc9562.html#section-4-5. Lowercase hex digits are allowed.
-errstatus_t uuid4_from_repr(uuid4_t *out_uuid, char const repr[static const UUID4_REPR_LENGTH]);
+bool uuid4_from_repr(uuid4_t *out_uuid, char const repr[static const UUID4_REPR_LENGTH]);
 
 /// @brief Put the canonical representation of version 4 UUID.
 /// @param uuid The UUID Version 4 to write.

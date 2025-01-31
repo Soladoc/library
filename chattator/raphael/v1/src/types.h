@@ -6,11 +6,11 @@
 #ifndef TYPES_H
 #define TYPES_H
 
-#include <stdint.h>
-
-
 #include "const.h"
 #include "uuid.h"
+#include "util.h"
+#include <stdint.h>
+#include <limits.h>
 
 typedef uuid4_t api_key_t;
 /// @ref A session token (1..2^64-1)
@@ -33,10 +33,14 @@ typedef char action_name_t[8]; // keep the size as small as possible
 X_ACTIONS(X)
 #undef X
 
+/// @brief A memory slice.
 typedef struct {
-    int len;
+    size_t len;
+    /// @remark Make sure to check the length before using this pointer.
     char const *val;
 } slice_t;
+
+#define slice_leni(slice) ((int)min(INT_MAX, (slice).len))
 
 typedef enum {
     user_kind_membre,

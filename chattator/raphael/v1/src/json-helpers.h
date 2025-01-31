@@ -46,7 +46,7 @@ bool json_object_get_int64_strict(json_object const *obj, int64_t *out);
 
 /// @brief Get the string value of a JSON object.
 /// @param obj The JSON object to get the value of.
-/// @param out Assigned to the string value of the object. Pass @c NULL to only check the type.
+/// @param out Assigned to the string value of the object. Pass @c NULL to only check the type. The returned slice is null-terminated, but the null terminator is not included in the length.
 /// @return @c true when @p obj is of the string type.
 /// @return @c false otherwise.  @p out is untouched.
 bool json_object_get_string_strict(json_object *obj, slice_t *out);

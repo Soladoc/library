@@ -4,7 +4,7 @@
   - [x] think of an approach that suits JSON, DB and other sources of errors
 - [ ] doxygen documentation
 
-- [ ] prefix out parameter with out_
+- [x] prefix out parameter with out_
 
 - [x] invoke build in bigpapoo/gcc-mariadb-pgsql:14.2-sae34
   - [x] make it work with make

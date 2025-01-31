@@ -42,23 +42,23 @@ char *uuid4_repr(uuid4_t uuid, char repr[const UUID4_REPR_LENGTH]) {
     return repr;
 }
 
-errstatus_t uuid4_from_repr(uuid4_t *out_uuid, char const repr[static const UUID4_REPR_LENGTH]) {
+bool uuid4_from_repr(uuid4_t *out_uuid, char const repr[static const UUID4_REPR_LENGTH]) {
     size_t idata = 0, i = 0;
     uint8_t v1, v2;
 #define o                                                            \
     do {                                                             \
         if ((v1 = hex_repr_to_half(repr[i++])) == INVALID_HALF       \
             || (v2 = hex_repr_to_half(repr[i++])) == INVALID_HALF) { \
-            return errstatus_error;                                            \
+            return false;                                            \
         }                                                            \
-        out_uuid->data[idata++] = (v1 << 4) + v2;                        \
+        out_uuid->data[idata++] = (v1 << 4) + v2;                    \
     } while (0);
 #define h \
-    if (repr[i++] != '-') return errstatus_error;
+    if (repr[i++] != '-') return false;
     X_42226
 #undef o
 #undef h
-    return errstatus_ok;
+    return true;
 }
 
 void uuid4_put(uuid4_t uuid, FILE *stream) {
@@ -82,10 +82,10 @@ char hex_half_to_repr(uint8_t value) {
 
 uint8_t hex_repr_to_half(char c) {
     return '0' <= c && c <= '9'
-             ? c - '0'
-         : 'A' <= c && c <= 'F'
-             ? c - 'A' + 10
-         : 'a' <= c && c <= 'f'
-             ? c - 'a' + 10
-             : INVALID_HALF;
+        ? c - '0'
+        : 'A' <= c && c <= 'F'
+        ? c - 'A' + 10
+        : 'a' <= c && c <= 'f'
+        ? c - 'a' + 10
+        : INVALID_HALF;
 }

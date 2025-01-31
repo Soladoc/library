@@ -21,9 +21,12 @@ struct test test_uuid4(void);
 
 /// @brief Tchattator413 test: empty input (0 actions)
 struct test test_tchattator413_zero(cfg_t *cfg, db_t *db, server_t *server);
+
 struct test test_tchattator413_admin_whois_1(cfg_t *cfg, db_t *db, server_t *server);
 struct test test_tchattator413_admin_whois_neg1(cfg_t *cfg, db_t *db, server_t *server);
+
 struct test test_tchattator413_invalid_whois_1(cfg_t *cfg, db_t* db, server_t *server);
+struct test test_tchattator413_invalid_login(cfg_t *cfg, db_t *db, server_t *server);
 
 void observe_put_role(void);
 

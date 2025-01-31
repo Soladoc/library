@@ -4,6 +4,7 @@
 /// @date 23/01/2025
 
 #include "action.h"
+#include "errstatus.h"
 #include "json-helpers.h"
 #include "util.h"
 #include <json-c/json.h>
@@ -42,9 +43,9 @@ static inline serial_t get_user_id(char const *action_name, json_object *obj_wit
     return errstatus_error;
 }
 
-/// @return a string
-/// @return @c true on success
-/// @return @c false on error. @p out_str is untouches
+/// @return a non null-terminated string
+/// @return @c true on success. @p out_str is assigned to the content argument.
+/// @return @c false on error.
 static inline bool get_content(slice_t *out_str, char const *action_name, json_object *obj_with, char const *key) {
     json_object *obj_content;
     if (!json_object_object_get_ex(obj_with, key, &obj_content)) {
@@ -117,7 +118,7 @@ static inline bool get_api_key(uuid4_t *out_api_key, char const *action_name, js
         putln_error_arg_type(json_type_string, json_object_get_type(obj_api_key), "%s", "api_key", action_name);
         return false;
     }
-    if (!uuid4_from_repr(out_api_key, repr.val)) {
+    if (!uuid4_from_repr_slice(out_api_key, repr)) {
         putln_error_arg_invalid_because("%s", "api_key", "invalid API key", action_name);
         return false;
     }
@@ -152,6 +153,7 @@ action_t action_parse(json_object *obj, db_t *db) {
         fail();
     }
 
+ // this is save because the null terminator of the literal string STR(name) will stop strcmp
 #define action_is(name) streq(STR(name), action_name.val)
 
 #define DO login

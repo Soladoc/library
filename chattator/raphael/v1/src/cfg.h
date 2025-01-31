@@ -6,7 +6,8 @@
 #ifndef CONFIG_H
 #define CONFIG_H
 
-#include "types.h"
+#include "uuid.h"
+#include <stdio.h>
 
 /// @brief An opaque handle to a configuration object.
 typedef struct cfg cfg_t;
@@ -35,11 +36,11 @@ uuid4_t const *cfg_admin_api_key(cfg_t const *cfg);
 /// @brief Get the configuration log_file.
 /// @param cfg Configuration
 /// @return the configuration log_file.
-FILE * cfg_log_file(cfg_t const *cfg);
+FILE *cfg_log_file(cfg_t const *cfg);
 /// @brief Get the configuration max_msg_length.
 /// @param cfg Configuration
 /// @return the configuration max_msg_length.
-int cfg_max_msg_length(cfg_t const *cfg);
+size_t cfg_max_msg_length(cfg_t const *cfg);
 /// @brief Get the configuration page_inbox.
 /// @param cfg Configuration
 /// @return the configuration page_inbox.

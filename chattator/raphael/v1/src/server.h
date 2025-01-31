@@ -7,6 +7,7 @@
 #define SERVER_STATE_H
 
 #include "cfg.h"
+#include "types.h"
 #include <stdbool.h>
 #include <time.h>
 

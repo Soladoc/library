@@ -7,6 +7,7 @@
 #include "db.h"
 #include "util.h"
 #include <assert.h>
+#include <limits.h>
 
 #define putln_error_rate_limit_exceeded(action_name, remaining_seconds) \
     put_error(action_name, ": rate limit exceeded. Next request in %d second%s.", remaining_seconds, remaining_seconds == 1 ? "s" : "");
@@ -298,7 +299,7 @@ void action_explain(action_t const *action, FILE *output) {
     case action_type_login:
         fprintf(output, "login api_key=");
         uuid4_put(action->with.login.api_key, output);
-        fprintf(output, " password=%*s\n", action->with.login.password.len, action->with.login.password.val);
+        fprintf(output, " password=%*s\n", slice_leni(action->with.login.password), action->with.login.password.val);
         break;
     case action_type_logout:
         fprintf(output, "logout token=%lu\n", action->with.logout.token);

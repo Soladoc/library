@@ -7,6 +7,7 @@
 #define DB_H
 
 #include "types.h"
+#include "errstatus.h"
 
 /// @brief An opaque handle to a database connection.
 typedef void db_t;

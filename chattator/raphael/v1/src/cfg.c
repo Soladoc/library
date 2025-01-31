@@ -17,7 +17,7 @@
 struct cfg {
     uuid4_t admin_api_key;
     FILE *log_file;
-    int max_msg_length;
+    size_t max_msg_length;
     int page_inbox;
     int page_outbox;
     int rate_limit_m;
@@ -68,8 +68,8 @@ cfg_t *cfg_from_file(char const *filename) {
         if (!json_object_get_string_strict(obj, &admin_api_key_repr)) {
             putln_error_json_type(json_type_string, json_object_get_type(obj), "config: admin_api_key");
         }
-        if (!uuid4_from_repr(&cfg->admin_api_key, admin_api_key_repr.val)) {
-            put_error("config: admin_api_key: invalid UUIDV4: %*s", admin_api_key_repr.len, admin_api_key_repr.val);
+        if (!uuid4_from_repr_slice(&cfg->admin_api_key, admin_api_key_repr)) {
+            put_error("config: admin_api_key: invalid UUIDV4: %*s", slice_leni(admin_api_key_repr), admin_api_key_repr.val);
         }
     }
     if (json_object_object_get_ex(obj_cfg, "log_file", &obj)) {
@@ -91,8 +91,14 @@ cfg_t *cfg_from_file(char const *filename) {
     if (json_object_object_get_ex(obj_cfg, "block_for", &obj) && !json_object_get_int_strict(obj, &cfg->block_for)) {
         putln_error_json_type(json_type_int, json_object_get_type(obj), "config: block_for");
     }
-    if (json_object_object_get_ex(obj_cfg, "max_msg_length", &obj) && !json_object_get_int_strict(obj, &cfg->max_msg_length)) {
-        putln_error_json_type(json_type_int, json_object_get_type(obj), "config: max_msg_length");
+    if (json_object_object_get_ex(obj_cfg, "max_msg_length", &obj)) {
+        int64_t max_msg_length;
+        if (!json_object_get_int64_strict(obj, &max_msg_length)) putln_error_json_type(json_type_int, json_object_get_type(obj), "config: max_msg_length");
+        if (max_msg_length < 0) {
+            put_error("config: max_msg_length: must be > 0\n");
+        } else {
+            cfg->max_msg_length = max_msg_length;
+        }
     }
     if (json_object_object_get_ex(obj_cfg, "page_inbox", &obj) && !json_object_get_int_strict(obj, &cfg->page_inbox)) {
         putln_error_json_type(json_type_int, json_object_get_type(obj), "config: page_inbox");
@@ -123,7 +129,7 @@ void cfg_dump(cfg_t const *cfg) {
     printf("backlog         %d\n", cfg->backlog);
     printf("block_for       %d seconds\n", cfg->block_for);
     printf("log_file        %s\n", coalesce(cfg->log_file_name, STR(DEFAULT_LOG_STREAM)));
-    printf("max_msg_length  %d characters\n", cfg->max_msg_length);
+    printf("max_msg_length  %zu characters\n", cfg->max_msg_length);
     printf("page_inbox      %d\n", cfg->page_inbox);
     printf("page_outbox     %d\n", cfg->page_outbox);
     printf("port            %hd\n", cfg->port);
@@ -133,13 +139,13 @@ void cfg_dump(cfg_t const *cfg) {
 
 uuid4_t const *cfg_admin_api_key(cfg_t const *cfg) { return &cfg->admin_api_key; }
 
-#define DEFINE_CONFIG_GETTER(type, attr)   \
-    type cfg_##attr(cfg_t const *cfg) { \
-        return cfg->attr;                  \
+#define DEFINE_CONFIG_GETTER(type, attr) \
+    type cfg_##attr(cfg_t const *cfg) {  \
+        return cfg->attr;                \
     }
 
 DEFINE_CONFIG_GETTER(FILE *, log_file)
-DEFINE_CONFIG_GETTER(int, max_msg_length)
+DEFINE_CONFIG_GETTER(size_t, max_msg_length)
 DEFINE_CONFIG_GETTER(int, page_inbox)
 DEFINE_CONFIG_GETTER(int, page_outbox)
 DEFINE_CONFIG_GETTER(int, rate_limit_m)
