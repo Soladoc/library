@@ -4,28 +4,20 @@
 /// @date 23/01/2025
 
 #include <json-c/json.h>
+#include <stddef.h>
 #include <tchattator413/action.h>
 #include <tchattator413/errstatus.h>
 #include <tchattator413/json-helpers.h>
 #include <tchattator413/util.h>
 
-// error: DO.with: missing key: KEY
-#define putln_error_arg_missing(action_name, key, ...) putln_error_json_missing_key(key, action_name ".with" __VA_OPT__(, ) __VA_ARGS__)
-// error: DO.with.key: type: expected TYPE, got ACTUAL
-#define putln_error_arg_type(type, actual, action_name, key, ...) putln_error_json_type(type, actual, action_name ".with." key __VA_OPT__(, ) __VA_ARGS__)
-// error: DO.with.key: invalid value: MSG
-#define putln_error_arg_invalid(action_name, key, ...) put_error(action_name ".with." key ": invalid value\n" __VA_OPT__(, ) __VA_ARGS__)
-#define putln_error_arg_invalid_because(action_name, key, reason, ...) put_error(action_name ".with." key ": invalid value: " reason "\n" __VA_OPT__(, ) __VA_ARGS__)
+#if __STDC_VERSION__ < 202000L
+#define unreachable()
+#endif
 
 /// @return @ref serial_t The user ID.
 /// @return @ref errstatus_handled An error occured and was handled.
 /// @return @ref errstatus_error Invalid user key.
-static inline serial_t get_user_id(char const *action_name, json_object *obj_with, char const *key, db_t *db) {
-    json_object *obj_user;
-    if (!json_object_object_get_ex(obj_with, key, &obj_user)) {
-        putln_error_arg_missing("%s", "%s", action_name, key);
-        return errstatus_handled;
-    }
+static inline serial_t get_user_id(json_object *obj_user, db_t *db) {
     switch (json_object_get_type(obj_user)) {
     case json_type_int: {
         serial_t maybe_user_id = json_object_get_int(obj_user);
@@ -43,117 +35,96 @@ static inline serial_t get_user_id(char const *action_name, json_object *obj_wit
     return errstatus_error;
 }
 
-/// @return a non null-terminated string
-/// @return @c true on success. @p out_str is assigned to the content argument.
-/// @return @c false on error.
-static inline bool get_content(slice_t *out_str, char const *action_name, json_object *obj_with, char const *key) {
-    json_object *obj_content;
-    if (!json_object_object_get_ex(obj_with, key, &obj_content)) {
-        putln_error_arg_missing("%s", "%s", action_name, key);
-        return false;
-    }
-    if (!json_object_get_string_strict(obj_content, out_str)) {
-        putln_error_arg_type(json_type_string, json_object_get_type(obj_content), "%s", "%s", action_name, key);
-        return false;
-    }
-    return true;
-}
-
-/// @return a page number
-/// @return @c 0 on error
-static inline page_number_t get_page(char const *action_name, json_object *obj_with) {
-    json_object *obj_page;
-    if (!json_object_object_get_ex(obj_with, "page", &obj_page)) {
-        putln_error_arg_missing("%s", "page", action_name);
-        return 0;
-    }
-    page_number_t page;
-    if (!json_object_get_int_strict(obj_page, &page)) {
-        putln_error_arg_type(json_type_int, json_object_get_type(obj_page), "%s", "page", action_name);
-        return 0;
-    }
-    return page;
-}
-
-/// @return a message ID
-/// @return @c 0 on error
-static inline serial_t get_msg_id(char const *action_name, json_object *obj_with) {
-    json_object *obj_msg_id;
-    if (!json_object_object_get_ex(obj_with, "msg_id", &obj_msg_id)) {
-        putln_error_arg_missing("%s", "msg_id", action_name);
-        return 0;
-    }
-    serial_t msg_id;
-    if (!json_object_get_int_strict(obj_msg_id, &msg_id)) {
-        putln_error_arg_type(json_type_int, json_object_get_type(obj_msg_id), "%s", "msg_id", action_name);
-        return 0;
-    }
-    return msg_id;
-}
-
-/// @return a token
-/// @return @c 0 on error
-static inline token_t get_token(char const *action_name, json_object *obj_with) {
-    json_object *obj_token;
-    if (!json_object_object_get_ex(obj_with, "token", &obj_token)) {
-        putln_error_arg_missing("%s", "token", action_name);
-        return 0;
-    }
-    int64_t token;
-    if (!json_object_get_int64_strict(obj_token, &token)) {
-        putln_error_arg_type(json_type_int, json_object_get_type(obj_token), "%s", "token", action_name);
-        return 0;
-    }
-    return (token_t)token;
-}
-
-static inline bool get_api_key(uuid4_t *out_api_key, char const *action_name, json_object *obj_with) {
-    json_object *obj_api_key;
-    if (!json_object_object_get_ex(obj_with, "api_key", &obj_api_key)) {
-        putln_error_arg_missing("%s", "api_key", action_name);
-        return false;
-    }
-    slice_t repr;
-    if (!json_object_get_string_strict(obj_api_key, &repr)) {
-        putln_error_arg_type(json_type_string, json_object_get_type(obj_api_key), "%s", "api_key", action_name);
-        return false;
-    }
-    if (!uuid4_parse_slice(out_api_key, repr)) {
-        putln_error_arg_invalid_because("%s", "api_key", "invalid API key", action_name);
-        return false;
-    }
-    return true;
-}
-
 action_t action_parse(json_object *obj, db_t *db) {
     action_t action = {};
 
-#define fail()                           \
-    do {                                 \
-        action.type = action_type_error; \
-        return action;                   \
+#define fail()                                                  \
+    do {                                                        \
+        action.type = action_type_error;                        \
+        action.with.error.type = action_error_type_unspecified; \
+        return action;                                          \
     } while (0)
 
-    json_object *obj_do;
+#define fail_missing_key(_location)                              \
+    do {                                                         \
+        action.type = action_type_error;                         \
+        action.with.error.type = action_error_type_missing_key;  \
+        action.with.error.info.missing_key.location = _location; \
+        return action;                                           \
+    } while (0)
 
-    if (!json_object_object_get_ex(obj, "do", &obj_do)) {
-        putln_error_json_missing_key("do", "action");
-        fail();
-    }
+#define fail_type(_location, _obj_actual, _expected)          \
+    do {                                                      \
+        action.type = action_type_error;                      \
+        action.with.error.type = action_error_type_type;      \
+        action.with.error.info.type.location = _location;     \
+        action.with.error.info.type.obj_actual = _obj_actual; \
+        action.with.error.info.type.expected = _expected;     \
+        return action;                                        \
+    } while (0)
+
+#define fail_invalid(_location, _obj_bad, _reason)           \
+    do {                                                     \
+        action.type = action_type_error;                     \
+        action.with.error.type = action_error_type_invalid;  \
+        action.with.error.info.invalid.location = _location; \
+        action.with.error.info.invalid.obj_bad = _obj_bad;   \
+        action.with.error.info.invalid.reason = _reason;     \
+        return action;                                       \
+    } while (0)
+
+#define getarg(obj, key, out_value, json_type, getter)         \
+    do {                                                       \
+        if (!json_object_object_get_ex(obj_with, key, &obj)) { \
+            fail_missing_key(arg_loc(key));                    \
+        }                                                      \
+        if (!getter(obj, out_value)) {                         \
+            fail_type(arg_loc(key), obj, json_type);           \
+        }                                                      \
+    } while (0)
+
+#define getarg_string(obj, key, out_value) getarg(obj, key, out_value, json_type_string, json_object_get_string_strict)
+#define getarg_int(obj, key, out_value) getarg(obj, key, out_value, json_type_int, json_object_get_int_strict)
+#define getarg_int64(obj, key, out_value) getarg(obj, key, out_value, json_type_int, json_object_get_int64_strict)
+#define getarg_user(obj, key, out_value)                                           \
+    do {                                                                           \
+        if (!json_object_object_get_ex(obj_with, key, &obj)) {                     \
+            fail_missing_key(arg_loc(key));                                        \
+        }                                                                          \
+        switch (*out_value = get_user_id(obj, db)) {                               \
+        case errstatus_error: fail_invalid(arg_loc(key), obj, "invalid user key"); \
+        case errstatus_handled: fail();                                            \
+        case errstatus_ok:;                                                        \
+        }                                                                          \
+    } while (0)
+#define getarg_page(obj, key, out_value)                            \
+    do {                                                            \
+        getarg_int(obj, key, out_value);                            \
+        if (*out_value < 1) {                                       \
+            fail_invalid(arg_loc(key), obj, "invalid page number"); \
+        }                                                           \
+    } while (0)
+#define getarg_api_key(obj, get, out_value)                              \
+    do {                                                                 \
+        slice_t api_key_repr;                                            \
+        getarg_string(obj, "api_key", &api_key_repr);                    \
+        if (!uuid4_parse_slice(&action.with.DO.api_key, api_key_repr)) { \
+            fail_invalid(arg_loc("api_key"), obj, "invalid API key");    \
+        }                                                                \
+    } while (0)
+
+#define arg_loc(key) (STR(DO) ".with" key)
+
+    json_object *obj_do;
+    if (!json_object_object_get_ex(obj, "do", &obj_do)) fail_missing_key("action.do");
 
     slice_t action_name;
-    if (!json_object_get_string_strict(obj_do, &action_name)) {
-        putln_error_json_type(json_type_string, json_object_get_type(obj_do), "do");
-        fail();
-    }
+    if (!json_object_get_string_strict(obj_do, &action_name)) fail_type("action", obj_do, json_type_string);
 
     json_object *obj_with;
-    if (!json_object_object_get_ex(obj, "with", &obj_with)) {
-        putln_error_json_missing_key("with", "action");
-        fail();
-    }
+    if (!json_object_object_get_ex(obj, "with", &obj_with)) fail_missing_key("action.with");
 
-    // this is save because the null terminator of the literal string STR(name) will stop strcmp
+// this is save because the null terminator of the literal string STR(name) will stop strcmp
 #define action_is(name) streq(STR(name), action_name.val)
 
 #define DO login
@@ -161,157 +132,155 @@ action_t action_parse(json_object *obj, db_t *db) {
         action.type = action_type(DO);
 
         // api_key
-        if (!get_api_key(&action.with.DO.api_key, STR(DO), obj_with)) fail();
+        json_object *obj_api_key;
+        getarg_api_key(obj_api_key, "api_key", &action.with.DO.api_key);
 
         // password
-        // Check if key exists
         json_object *obj_password;
-        if (!json_object_object_get_ex(obj_with, "password", &obj_password)) {
-            putln_error_arg_missing("password", STR(DO));
-            return action;
-        }
-        // Ensure value has correct type
-        if (!json_object_get_string_strict(obj_password, &action.with.DO.password)) {
-            putln_error_arg_type(json_type_string, json_object_get_type(obj_password), STR(DO), "password");
-            return action;
-        }
+        getarg_string(obj_password, "password", &action.with.DO.password);
 #undef DO
 #define DO logout
     } else if (action_is(DO)) {
         action.type = action_type(DO);
 
         // token
-        if (!(action.with.DO.token = get_token(STR(DO), obj_with))) fail();
+        json_object *obj_token;
+        getarg_int64(obj_token, "token", &action.with.DO.token);
 #undef DO
 #define DO whois
     } else if (action_is(DO)) {
         action.type = action_type(DO);
 
         // api_key
-        if (!get_api_key(&action.with.DO.api_key, STR(DO), obj_with)) fail();
+        json_object *obj_api_key;
+        getarg_api_key(obj_api_key, "api_key", &action.with.DO.api_key);
 
         // user
-        switch (action.with.DO.user_id = get_user_id(STR(DO), obj_with, "user", db)) {
-        case errstatus_error: putln_error_arg_invalid(STR(DO), "user"); [[fallthrough]];
-        case errstatus_handled: fail();
-        }
+        json_object *obj_user;
+        getarg_user(obj_user, "user", &action.with.DO.user_id);
 #undef DO
 #define DO send
     } else if (action_is(DO)) {
         action.type = action_type(DO);
 
         // token
-        if (!(action.with.DO.token = get_token(STR(DO), obj_with))) fail();
+        json_object *obj_token;
+        getarg_int64(obj_token, "token", &action.with.DO.token);
 
         // content
-        if (!get_content(&action.with.DO.content, STR(DO), obj_with, "content")) fail();
+        json_object *obj_content;
+        getarg_string(obj_content, "content", &action.with.DO.content);
 
         // dest
-        switch (action.with.DO.dest_user_id = get_user_id(STR(DO), obj_with, "dest", db)) {
-        case errstatus_error: putln_error_arg_invalid(STR(DO), "dest"); [[fallthrough]];
-        case errstatus_handled: fail();
-        }
+        json_object *obj_dest;
+        getarg_user(obj_dest, "dest", &action.with.DO.dest_user_id);
 #undef DO
 #define DO motd
     } else if (action_is(DO)) {
         action.type = action_type(DO);
 
         // token
-        if (!(action.with.DO.token = get_token(STR(DO), obj_with))) fail();
+        json_object *obj_token;
+        getarg_int64(obj_token, "token", &action.with.DO.token);
 #undef DO
 #define DO inbox
     } else if (action_is(DO)) {
         action.type = action_type(DO);
 
         // token
-        if (!(action.with.DO.token = get_token(STR(DO), obj_with))) fail();
+        json_object *obj_token;
+        getarg_int64(obj_token, "token", &action.with.DO.token);
 
         // page
-        if (!(action.with.DO.page = get_page(STR(DO), obj_with))) fail();
+        json_object *obj_page;
+        getarg_page(obj_page, "page", &action.with.DO.page);
 #undef DO
 #define DO outbox
     } else if (action_is(DO)) {
         action.type = action_type(DO);
 
         // token
-        if (!(action.with.DO.token = get_token(STR(DO), obj_with))) fail();
+        json_object *obj_token;
+        getarg_int64(obj_token, "token", &action.with.DO.token);
 
         // page
-        if (!(action.with.DO.page = get_page(STR(DO), obj_with))) fail();
+        json_object *obj_page;
+        getarg_page(obj_page, "page", &action.with.DO.page);
 #undef DO
 #define DO edit
     } else if (action_is(DO)) {
         action.type = action_type(DO);
 
         // token
-        if (!(action.with.DO.token = get_token(STR(DO), obj_with))) fail();
+        json_object *obj_token;
+        getarg_int64(obj_token, "token", &action.with.DO.token);
 
         // msg_id
-        if (!(action.with.DO.msg_id = get_msg_id(STR(DO), obj_with))) fail();
+        json_object *obj_msg_id;
+        getarg_int(obj_msg_id, "msg_id", &action.with.DO.msg_id);
 
         // new_content
-        if (!get_content(&action.with.DO.new_content, STR(DO), obj_with, "new_content")) fail();
+        json_object *obj_new_content;
+        getarg_string(obj_new_content, "new_content", &action.with.DO.new_content);
 #undef DO
 #define DO rm
     } else if (action_is(DO)) {
         action.type = action_type(DO);
 
         // token
-        if (!(action.with.DO.token = get_token(STR(DO), obj_with))) fail();
+        json_object *obj_token;
+        getarg_int64(obj_token, "token", &action.with.DO.token);
 
         // msg_id
-        if (!(action.with.DO.msg_id = get_msg_id(STR(DO), obj_with))) fail();
+        json_object *obj_msg_id;
+        getarg_int(obj_msg_id, "msg_id", &action.with.DO.msg_id);
 #undef DO
 #define DO block
     } else if (action_is(DO)) {
         action.type = action_type(DO);
 
         // token
-        if (!(action.with.DO.token = get_token(STR(DO), obj_with))) fail();
+        json_object *obj_token;
+        getarg_int64(obj_token, "token", &action.with.DO.token);
 
         // user
-        switch (action.with.DO.user_id = get_user_id(STR(DO), obj_with, "user", db)) {
-        case errstatus_error: putln_error_arg_invalid(STR(DO), "user"); [[fallthrough]];
-        case errstatus_handled: fail();
-        }
+        json_object *obj_user;
+        getarg_user(obj_user, "user", &action.with.DO.user_id);
 #undef DO
 #define DO unblock
     } else if (action_is(DO)) {
         action.type = action_type(DO);
 
         // token
-        if (!(action.with.DO.token = get_token(STR(DO), obj_with))) fail();
+        json_object *obj_token;
+        getarg_int64(obj_token, "token", &action.with.DO.token);
 
         // user
-        switch (action.with.DO.user_id = get_user_id(STR(DO), obj_with, "user", db)) {
-        case errstatus_error: putln_error_arg_invalid(STR(DO), "user"); [[fallthrough]];
-        case errstatus_handled: fail();
-        }
+        json_object *obj_user;
+        getarg_user(obj_user, "user", &action.with.DO.user_id);
 #undef DO
 #define DO ban
     } else if (action_is(DO)) {
         action.type = action_type(DO);
 
         // token
-        if (!(action.with.DO.token = get_token(STR(DO), obj_with))) fail();
+        json_object *obj_token;
+        getarg_int64(obj_token, "token", &action.with.DO.token);
 
         // user
-        switch (action.with.DO.user_id = get_user_id(STR(DO), obj_with, "user", db)) {
-        case errstatus_error: putln_error_arg_invalid(STR(DO), "user"); [[fallthrough]];
-        case errstatus_handled: fail();
-        }
+        json_object *obj_user;
+        getarg_user(obj_user, "user", &action.with.DO.user_id);
 #undef DO
 #define DO unban
     } else if (action_is(DO)) {
         action.type = action_type(DO);
         // token
-        if (!(action.with.DO.token = get_token(STR(DO), obj_with))) fail();
+        json_object *obj_token;
+        getarg_int64(obj_token, "token", &action.with.DO.token);
 
         // user
-        switch (action.with.DO.user_id = get_user_id(STR(DO), obj_with, "user", db)) {
-        case errstatus_error: putln_error_arg_invalid(STR(DO), "user"); [[fallthrough]];
-        case errstatus_handled: fail();
-        }
+        json_object *obj_user;
+        getarg_user(obj_user, "user", &action.with.DO.user_id);
     } else {
         put_error("unknown action: %s\n", action_name.val);
         fail();
@@ -328,18 +297,47 @@ json_object *response_to_json(response_t *response) {
     add_key(obj, "status", json_object_new_int(response->status));
     add_key(obj, "has_next_page", json_object_new_boolean(response->has_next_page));
     add_key(obj, "body", obj_body);
+    // error: DO.with: missing key: KEY
+    // #define putln_error_arg_missing(action_name, key, ...) putln_error_json_missing_key(key, action_name ".with" __VA_OPT__(, ) __VA_ARGS__)
+    // error: DO.with.key: type: expected TYPE, got ACTUAL
+    // #define putln_error_arg_type(type, actual, action_name, key, ...) putln_error_json_type(type, actual, action_name ".with." key __VA_OPT__(, ) __VA_ARGS__)
+    // error: DO.with.key: invalid value: MSG
+    // #define putln_error_arg_invalid(action_name, key, reason, ...) put_error(action_name ".with." key ": invalid value: " reason "\n" __VA_OPT__(, ) __VA_ARGS__)
 
-    switch (response->status) {
-    case status_unauthorized: break;
-    case status_forbidden: break;
-    case status_not_found: break;
-    case status_payload_too_large: break;
-    case status_unprocessable_content: break;
-    case status_too_many_requests: break;
-    case status_internal_server_error: break;
-    case status_ok:
+    if (response->type == action_type_error && response->body.error.type != action_error_type_unspecified) {
+        char *msg;
+        switch (response->body.error.type) {
+        case action_error_type_type: {
+            char const *fmt = "%s: expected %s, got %s";
+            char const *arg1 = response->body.error.info.type.location;
+            char const *arg2 = json_type_to_name(response->body.error.info.type.expected);
+            char const *arg3 = json_type_to_name(json_object_get_type(response->body.error.info.type.obj_actual));
+            msg = malloc(buffer_size(fmt, arg1, arg2, arg3));
+            sprintf(msg, fmt, arg1, arg2, arg3);
+            break;
+        }
+        case action_error_type_missing_key: {
+            char const *fmt = "%s: key missing";
+            char const *arg1 = response->body.error.info.missing_key.location;
+            msg = malloc(buffer_size(fmt, arg1));
+            sprintf(msg, fmt, arg1);
+            break;
+        }
+        case action_error_type_invalid: {
+            char const *fmt = "%s: %s: %s";
+            char const *arg1 = response->body.error.info.invalid.location;
+            char const *arg2 = response->body.error.info.invalid.reason;
+            char const *arg3 = json_object_to_json_string(response->body.error.info.invalid.obj_bad);
+            msg = malloc(buffer_size(fmt, arg1, arg2, arg3));
+            sprintf(msg, fmt, arg1, arg2, arg3);
+            break;
+        }
+        default: unreachable();
+        }
+        add_key(obj_body, "message", json_object_new_string(COALESCE(msg, "(out of memory)")));
+        free(msg);
+    } else if (response->status == status_ok) {
         switch (response->type) {
-        case action_type_error: break;
         case action_type_login:
 
             break;
@@ -384,6 +382,7 @@ json_object *response_to_json(response_t *response) {
         case action_type_unban:
 
             break;
+        default: unreachable();
         }
     }
 #undef add_key

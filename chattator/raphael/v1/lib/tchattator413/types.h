@@ -13,8 +13,8 @@
 #include <limits.h>
 
 typedef uuid4_t api_key_t;
-/// @ref A session token (1..2^64-1)
-typedef uint64_t token_t;
+/// @ref A session token
+typedef int64_t token_t;
 /// @ref A page number (1..2^31-1)
 typedef int32_t page_number_t;
 /// @ref A Posrgres SERIAL primary key value starting at 1. (1..2^31-1)

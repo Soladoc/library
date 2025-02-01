@@ -3,7 +3,7 @@
 #include <json-c/json.h>
 
 #define IN "[{\"do\":\"whois\",\"with\":{\"api_key\":\"" API_KEY_ADMIN "\",\"user\":1}}]"
-#define OUT "[{\"status\":200,\"has_next_page\":false,\"body\":{\"user_id\":1,\"email\":\"contact@mertrem.org\",\"last_name\":\"Dephric\",\"first_name\":\"Max\",\"display_name\":\"MERTREM Solutions\",\"kind\":1}}]"
+#define OUT "[{\"status\":200,\"has_next_page\":false,\"body\":{\"user_id\":1,\"email\":\"pro@1.413\",\"last_name\":\"pro1_nom\",\"first_name\":\"pro1_prenom\",\"display_name\":\"pro1\",\"kind\":1}}]"
 
 static void admin_whois_1_on_action(action_t const *action, void *t) {
     begin_on_action(t);
@@ -19,10 +19,10 @@ static void admin_whois_1_on_response(response_t const *response, void *t) {
     test_case(t, !response->has_next_page, "has next page");
     test_case(t, response->body.whois.user_id == 1, "user id");
     test_case(t, response->body.whois.kind == user_kind_pro_prive, "kind");
-    test_case(t, streq(response->body.whois.display_name, "MERTREM Solutions"), "display name");
-    test_case(t, streq(response->body.whois.email, "contact@mertrem.org"), "email");
-    test_case(t, streq(response->body.whois.first_name, "Max"), "first name");
-    test_case(t, streq(response->body.whois.last_name, "Dephric"), "last name");
+    test_case(t, streq(response->body.whois.display_name, "pro1"), "display name");
+    test_case(t, streq(response->body.whois.email, "pro@1.413"), "email");
+    test_case(t, streq(response->body.whois.first_name, "pro1_prenom"), "first name");
+    test_case(t, streq(response->body.whois.last_name, "pro1_nom"), "last name");
 }
 
 struct test test_tchattator413_admin_whois_1(cfg_t *cfg, db_t *db, server_t *server) {

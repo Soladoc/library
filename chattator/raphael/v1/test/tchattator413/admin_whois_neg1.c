@@ -3,7 +3,7 @@
 #include <json-c/json.h>
 
 #define IN "[{\"do\":\"whois\",\"with\":{\"api_key\":\"" API_KEY_ADMIN "\",\"user\":-1}}]"
-#define OUT OUTPUT_500
+#define OUT "[{\"status\":500,\"has_next_page\":false,\"body\":{\"message\":\"whois.withuser: invalid user key: -1\"}}]"
 
 static void admin_whois_neg1_on_action(action_t const *action, void *t) {
     begin_on_action(t);

@@ -15,10 +15,36 @@
 #include "server.h"
 #include "types.h"
 
+typedef enum {
+    action_error_type_unspecified,
+    action_error_type_type,
+    action_error_type_missing_key,
+    action_error_type_invalid,
+} action_error_type_t;
+
+typedef struct {
+    action_error_type_t type;
+    union {
+        struct {
+            char const *location;
+            json_object *obj_actual;
+            json_type expected;
+        } type;
+        struct {
+            char const *location;
+        } missing_key;
+        struct {
+            char const *location, *reason;
+            json_object *obj_bad;
+        } invalid;
+    } info;
+} action_error_t;
+
 /// @brief The type of an action.
 typedef enum {
-    /// @brief A malformed action. No member other than @c type are defined.
+    /// @brief Malformed action
     action_type_error,
+
 #define X(name) action_type_##name,
     X_ACTIONS(X)
 #undef X
@@ -30,6 +56,7 @@ typedef enum {
 typedef struct {
     action_type_t type;
     union {
+        action_error_t error;
         struct {
             api_key_t api_key;
             slice_t password;
@@ -85,7 +112,11 @@ typedef struct {
 } msg_t;
 
 typedef struct {
+    status_t status;
+    action_type_t type;
+    bool has_next_page;
     union {
+        action_error_t error;
         struct {
             token_t token;
         } login;
@@ -121,9 +152,6 @@ typedef struct {
 
         } unban;*/
     } body;
-    status_t status;
-    action_type_t type;
-    bool has_next_page;
 } response_t;
 
 /// @brief Put an user role.

@@ -88,7 +88,11 @@ response_t action_evaluate(action_t const *action, cfg_t *cfg, db_t *db, server_
     user_identity_t user;
 
     switch (rep.type = action->type) {
-    case action_type_error: fail(status_internal_server_error);
+    case action_type_error: {
+        rep.status = status_internal_server_error;
+        rep.body.error = action->with.error;
+        return rep;
+    }
 #define DO login
     case action_type(DO):
         switch (auth_api_key(&user, action->with.DO.api_key, cfg, db)) {

@@ -37,8 +37,8 @@ release: CONFIG=relase all
 
 all: bin/act
 
-test: bin/test/test
-	bin/test/test
+test: bin/test
+	bin/test
 
 clean:
 	rm -r bin
@@ -46,5 +46,5 @@ clean:
 bin/act: act.c $(SRC) $(SRC_LIB)
 	./docker-gcc -o $@ -c '$(CFLAGS)' -l '$(LFLAGS)' $^
 
-bin/test/test: test/test.c $(SRC) $(SRC_LIB) $(SRC_TEST)
+bin/test: test/test.c $(SRC) $(SRC_LIB) $(SRC_TEST)
 	./docker-gcc -o $@ -c '$(CFLAGS)' -l '$(LFLAGS) -lm' $^

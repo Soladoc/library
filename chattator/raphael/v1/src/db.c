@@ -16,7 +16,7 @@
 #define TBL_MEMBRE "pact.membre"
 #define FUN_SEND_MSG "tchattator.send_msg"
 
-#define pq_recv_l(type, res, row, col) ((type)(ntohl(*(PQgetvalue((res), (row), (col))))))
+#define pq_recv_l(type, res, row, col) ((type)(ntohl(*(type *)(PQgetvalue((res), (row), (col))))))
 #define pq_send_l(val) htonl(val)
 
 #define putln_error_pq(db) put_error("database: %s\n", PQerrorMessage(db))
@@ -154,7 +154,7 @@ errstatus_t db_get_user(db_t *db, user_t *user) {
     char const *p_value = (char *)&arg;
     int p_length = sizeof arg;
     int p_format = 1;
-    PGresult *result = PQexecParams(db, "select kind, id, email, nom, prenom, display_name from " TBL_USER " where id=$1",
+    PGresult *result = PQexecParams(db, "select kind, email, nom, prenom, display_name from " TBL_USER " where id=$1",
         1, NULL, &p_value, &p_length, &p_format, 1);
 
     errstatus_t res;
@@ -166,11 +166,10 @@ errstatus_t db_get_user(db_t *db, user_t *user) {
         res = errstatus_error;
     } else {
         user->kind = pq_recv_l(user_kind_t, result, 0, 0);
-        assert(user->user_id == pq_recv_l(serial_t, result, 0, 1));
-        strncpy(user->email, PQgetvalue(result, 0, 2), sizeof user->email);
-        strncpy(user->last_name, PQgetvalue(result, 0, 3), sizeof user->last_name);
-        strncpy(user->first_name, PQgetvalue(result, 0, 4), sizeof user->first_name);
-        strncpy(user->display_name, PQgetvalue(result, 0, 5), sizeof user->display_name);
+        strncpy(user->email, PQgetvalue(result, 0, 1), sizeof user->email);
+        strncpy(user->last_name, PQgetvalue(result, 0, 2), sizeof user->last_name);
+        strncpy(user->first_name, PQgetvalue(result, 0, 3), sizeof user->first_name);
+        strncpy(user->display_name, PQgetvalue(result, 0, 4), sizeof user->display_name);
         res = errstatus_ok;
     }
 
