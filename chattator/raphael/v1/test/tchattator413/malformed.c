@@ -1,13 +1,13 @@
 /// @file
 /// @author Raphaël
-/// @brief Tchattator413 test - empty request
+/// @brief Tchattator413 test - maformed request
 /// @date 1/02/2025
 
 #include "tests_tchattator413.h"
 #include <tchattator413/tchattator413.h>
 
-#define IN "[]"
-#define OUT "[]"
+#define IN "["
+#define OUT "[{\"status\":500,\"has_next_page\":false,\"body\":{\"message\":\"request: expected object, got null\"}}]"
 
 static void on_action(action_t const *action, void *t) {
     base_on_action(t);
@@ -19,11 +19,11 @@ static void on_response(response_t const *response, void *t) {
     (void)response;
 }
 
-struct test test_tchattator413_zero(cfg_t *cfg, db_t *db, server_t *server) {
+struct test test_tchattator413_malformed(cfg_t *cfg, db_t *db, server_t *server) {
     test_t test = new_test();
 
     json_object *obj_input = json_tokener_parse(IN);
-    test_case_i(test, obj_input, IN);
+    test_case(&test.t, !obj_input, "input failed to parse");
 
     json_object *obj_output = tchattator413_interpret(obj_input, cfg, db, server, on_action, on_response, &test);
     test_case_n_actions(test, 0);

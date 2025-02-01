@@ -11,8 +11,6 @@
 
 #define put_error_json_c(fmt, ...) put_error("json-c: " fmt ": %s" __VA_ARGS__, json_util_get_last_err());
 
-#define putln_error_json_type_union2(type1, type2, actual, fmt, ...) put_error("json: " fmt ": type: expected %s or %s, got %s\n" __VA_OPT__(,) __VA_ARGS__, json_type_to_name(type1), json_type_to_name(type2), json_type_to_name(actual))
-
 #define putln_error_json_type(type, actual, fmt, ...) put_error("json: " fmt ": type: expected %s, got %s\n" __VA_OPT__(,) __VA_ARGS__, json_type_to_name(type), json_type_to_name(actual))
 
 #define putln_error_json_missing_key(key, fmt, ...) put_error("json: " fmt ": missing key: " key "\n" __VA_OPT__(,) __VA_ARGS__)

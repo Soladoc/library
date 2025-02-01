@@ -1,6 +1,6 @@
-#include <tchattator413/tchattator413.h>
-#include <tchattator413/json-helpers.h>
 #include <assert.h>
+#include <tchattator413/json-helpers.h>
+#include <tchattator413/tchattator413.h>
 
 static inline json_object *act(json_object *const obj_action, cfg_t *cfg, db_t *db, server_t *server, fn_on_action_t on_action, fn_on_response_t on_response, void *on_ctx) {
     action_t action = action_parse(obj_action, db);
@@ -35,8 +35,20 @@ json_object *tchattator413_interpret(json_object *input, cfg_t *cfg, db_t *db, s
         json_object_array_add(output, act(input, cfg, db, server, on_action, on_response, on_ctx));
         break;
     default:
-        output = json_object_new_array_ext(0);
-        putln_error_json_type_union2(json_type_array, json_type_object, input_type, "invalid request");
+        output = json_object_new_array_ext(1);
+        json_object_array_add(output,
+            response_to_json(&(response_t) {
+                .status = status_internal_server_error,
+                .type = action_type_error,
+                .body.error = {
+                    .type = action_error_type_type,
+                    .info.type = {
+                        .expected = json_type_object,
+                        .obj_actual = input,
+                        .location = "request",
+                    },
+                },
+            }));
     }
 
     return output;

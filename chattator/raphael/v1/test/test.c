@@ -30,11 +30,10 @@ int main() {
     } while (0)
 
     test(test_uuid4());
-    test(test_tchattator413_zero(cfg, db, &server));
-    test(test_tchattator413_admin_whois_1(cfg, db, &server));
-    test(test_tchattator413_admin_whois_neg1(cfg, db, &server));
-    test(test_tchattator413_admin_whois_imax(cfg, db, &server));
-    test(test_tchattator413_invalid_whois_1(cfg, db, &server));
+
+#define CALL_TEST(name) test(test_tchattator413_##name(cfg, db, &server));
+    X_TESTS(CALL_TEST)
+#undef CALL_TEST
 
 #ifdef DO_OBSERVE
     observe_put_role();

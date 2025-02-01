@@ -12,39 +12,6 @@
 #define putln_error_rate_limit_exceeded(action_name, remaining_seconds) \
     put_error(action_name, ": rate limit exceeded. Next request in %d second%s.", remaining_seconds, remaining_seconds == 1 ? "s" : "");
 
-/*
-/// @brief Check an API key and return an error if it is invalid or the user doesn't have access.
-/// @param cfg Configuration.
-/// @param db Database.
-/// @param api_key API key.
-/// @param allowed_roles Bit-wise flags of the roles the user is allowed to have.
-/// @return @c -2 The API key is invalid.
-/// @return @c -1 The user's role doesn't correspond to @p allowed_roles.
-/// @return @c 0 another error occured and was handled.
-/// @return The ID of the user who owns this API key.
-static inline serial_t check_api_key(api_key_t api_key, role_flags_t allowed_roles, cfg_t *cfg, db_t *db) {
-    cfg_verify_api_key_t result;
-    switch (cfg_verify_api_key(&result, cfg, api_key, db)) {
-    case errstatus_handled: return 0;
-    case errstatus_error: {
-        // char repr[UUID4_REPR_LENGTH];
-        // put_error("%s: api key invalid: %" PRIuuid4_repr, action_name, uuid4_repr(api_key, repr));
-        return -2;
-    }
-    default:;
-    }
-    if (!(result.user_role & allowed_roles)) {
-        // this is an error on the client's end - keeping this code to for logging later
-        // put_error("%s: unauthorized: user is ", action_name);
-        // put_role(result.user_role, stderr);
-        // fputs(", must be ", stderr);
-        // put_role(allowed_roles, stderr);
-        // putc('\n', stderr);
-        return -1;
-    }
-    return result.user_id;
-}*/
-
 /// @return @ref errstatus_ok The API key is valid.
 /// @return @ref errstatus_error The API key isn't valid.
 /// @return @ref errstatus_handled DB error (handled).

@@ -20,15 +20,19 @@
 // ACTION is an action name
 // WITH are the action arguments, one or more, separated by '_'
 
-/// @brief Tchattator413 test: empty input (0 actions)
-struct test test_tchattator413_zero(cfg_t *cfg, db_t *db, server_t *server);
+#define X_TESTS(X)      \
+    X(zero)             \
+    X(admin_whois_neg1) \
+    X(admin_whois_1)    \
+    X(admin_whois_imax) \
+    X(invalid_whois_1)  \
+    X(invalid_login)    \
+    X(malformed) \
+    X(empty)
 
-struct test test_tchattator413_admin_whois_1(cfg_t *cfg, db_t *db, server_t *server);
-struct test test_tchattator413_admin_whois_neg1(cfg_t *cfg, db_t *db, server_t *server);
-struct test test_tchattator413_admin_whois_imax(cfg_t *cfg, db_t *db, server_t *server);
-
-struct test test_tchattator413_invalid_whois_1(cfg_t *cfg, db_t *db, server_t *server);
-struct test test_tchattator413_invalid_login(cfg_t *cfg, db_t *db, server_t *server);
+#define DECLARE_TEST(name) struct test test_tchattator413_##name(cfg_t *cfg, db_t *db, server_t *server);
+X_TESTS(DECLARE_TEST)
+#undef DECLARE_TEST
 
 // Implementation details
 
@@ -60,16 +64,16 @@ _Static_assert(offsetof(test_t, t) == 0, "backing test must be at start of struc
 
 #define new_test() { .t = test_start(__func__) }
 
-#define begin_on_action(ptest) \
+#define base_on_action(ptest) \
     ++((test_t *)ptest)->n_actions
 
-#define begin_on_response(ptest) \
+#define base_on_response(ptest) \
     ++((test_t *)ptest)->n_responses
 
 #define min_json(obj) json_object_to_json_string_ext(obj, JSON_C_TO_STRING_PLAIN)
 
-#define test_case_i(test, obj_input, i) test_case_n(&test.t, obj_input, "input: " i) // input JSON test case
-#define test_case_o(test, obj_output, o) test_case_n(&test.t, \
+#define test_case_i(test, obj_input, i) test_case_wide(&test.t, obj_input, "input: " i) // input JSON test case
+#define test_case_o(test, obj_output, o) test_case_wide(&test.t, \
     streq(min_json(obj_output), o), "output: %s == " o, min_json(obj_output))        // output JSON test case
 
 #define test_case_count(t, actual, expected, singular) test_case(t, actual == expected, "expected %d %s%s, got %d", expected, singular, expected == 1 ? "" : "s", actual)

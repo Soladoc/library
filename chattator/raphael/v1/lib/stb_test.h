@@ -41,7 +41,7 @@ STB_TEST_DEFINITION struct test test_start(char const *name);
 /// @brief Add a test case.
 #define test_case(test, expr, name, ...) _stbtest_test_case(__LINE__, (test), (expr), #expr, (name)__VA_OPT__(, ) __VA_ARGS__)
 /// @brief Add a test case with the expr and name columns merged.
-#define test_case_n(test, expr, name, ...) _stbtest_test_case(__LINE__, (test), (expr), NULL, (name)__VA_OPT__(, ) __VA_ARGS__)
+#define test_case_wide(test, expr, name, ...) _stbtest_test_case(__LINE__, (test), (expr), NULL, (name)__VA_OPT__(, ) __VA_ARGS__)
 
 STB_TEST_DEFINITION bool _stbtest_test_case(unsigned line, struct test *test, bool ok, char const *expr, char const *fmt_name, ...)
     _stbtest_attr_format(printf, 5, 6);
