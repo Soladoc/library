@@ -4,15 +4,10 @@
 /// @date 23/01/2025
 
 #include <json-c/json.h>
-#include <stddef.h>
 #include <tchattator413/action.h>
 #include <tchattator413/errstatus.h>
 #include <tchattator413/json-helpers.h>
 #include <tchattator413/util.h>
-
-#if __STDC_VERSION__ < 202000L
-#define unreachable()
-#endif
 
 /// @return @ref serial_t The user ID.
 /// @return @ref errstatus_handled An error occured and was handled.
@@ -38,11 +33,12 @@ static inline serial_t get_user_id(json_object *obj_user, db_t *db) {
 action_t action_parse(json_object *obj, db_t *db) {
     action_t action = {};
 
-#define fail()                                                  \
-    do {                                                        \
-        action.type = action_type_error;                        \
-        action.with.error.type = action_error_type_unspecified; \
-        return action;                                          \
+#define fail()                                                                \
+    do {                                                                      \
+        action.type = action_type_error;                                      \
+        action.with.error.type = action_error_type_runtime;                   \
+        action.with.error.info.runtime.status = status_internal_server_error; \
+        return action;                                                        \
     } while (0)
 
 #define fail_missing_key(_location)                              \
@@ -113,7 +109,7 @@ action_t action_parse(json_object *obj, db_t *db) {
         }                                                                \
     } while (0)
 
-#define arg_loc(key) (STR(DO) ".with" key)
+#define arg_loc(key) (STR(DO) ".with." key)
 
     json_object *obj_do;
     if (!json_object_object_get_ex(obj, "do", &obj_do)) fail_missing_key("action.do");
@@ -293,97 +289,101 @@ json_object *response_to_json(response_t *response) {
     json_object *obj = json_object_new_object(), *obj_body = json_object_new_object();
 
 #define add_key(o, k, v) json_object_object_add_ex(o, k, v, JSON_C_OBJECT_ADD_KEY_IS_NEW | JSON_C_OBJECT_KEY_IS_CONSTANT)
+    if (response->has_next_page) add_key(obj, "has_next_page", json_object_new_boolean(true));
+    add_key(obj, response->type == action_type_error ? "error" : "body", obj_body);
 
-    add_key(obj, "status", json_object_new_int(response->status));
-    add_key(obj, "has_next_page", json_object_new_boolean(response->has_next_page));
-    add_key(obj, "body", obj_body);
-    // error: DO.with: missing key: KEY
-    // #define putln_error_arg_missing(action_name, key, ...) putln_error_json_missing_key(key, action_name ".with" __VA_OPT__(, ) __VA_ARGS__)
-    // error: DO.with.key: type: expected TYPE, got ACTUAL
-    // #define putln_error_arg_type(type, actual, action_name, key, ...) putln_error_json_type(type, actual, action_name ".with." key __VA_OPT__(, ) __VA_ARGS__)
-    // error: DO.with.key: invalid value: MSG
-    // #define putln_error_arg_invalid(action_name, key, reason, ...) put_error(action_name ".with." key ": invalid value: " reason "\n" __VA_OPT__(, ) __VA_ARGS__)
-
-    if (response->type == action_type_error && response->body.error.type != action_error_type_unspecified) {
-        char *msg;
+    switch (response->type) {
+    case action_type_error: {
+        status_t status;
         switch (response->body.error.type) {
         case action_error_type_type: {
-            char const *fmt = "%s: expected %s, got %s";
-            char const *arg1 = response->body.error.info.type.location;
-            char const *arg2 = json_type_to_name(response->body.error.info.type.expected);
-            char const *arg3 = json_type_to_name(json_object_get_type(response->body.error.info.type.obj_actual));
-            msg = malloc(buffer_size(fmt, arg1, arg2, arg3));
-            sprintf(msg, fmt, arg1, arg2, arg3);
+            status = status_bad_request;
+            json_object *obj_actual = response->body.error.info.type.obj_actual;
+            json_type actual_type = json_object_get_type(obj_actual);
+            char *msg = actual_type == json_type_null
+                ? strfmt("%s: expected %s, got %s",
+                      response->body.error.info.type.location,
+                      json_type_to_name(response->body.error.info.type.expected),
+                      json_type_to_name(actual_type))
+                : strfmt("%s: expected %s, got %s: %s",
+                      response->body.error.info.type.location,
+                      json_type_to_name(response->body.error.info.type.expected),
+                      json_type_to_name(actual_type),
+                      min_json(obj_actual));
+            if (msg) add_key(obj_body, "message", json_object_new_string(msg));
+            free(msg);
             break;
         }
         case action_error_type_missing_key: {
-            char const *fmt = "%s: key missing";
-            char const *arg1 = response->body.error.info.missing_key.location;
-            msg = malloc(buffer_size(fmt, arg1));
-            sprintf(msg, fmt, arg1);
+            status = status_bad_request;
+            char *msg = strfmt("%s: key missing", response->body.error.info.missing_key.location);
+            if (msg) add_key(obj_body, "message", json_object_new_string(msg));
+            free(msg);
             break;
         }
         case action_error_type_invalid: {
-            char const *fmt = "%s: %s: %s";
-            char const *arg1 = response->body.error.info.invalid.location;
-            char const *arg2 = response->body.error.info.invalid.reason;
-            char const *arg3 = json_object_to_json_string(response->body.error.info.invalid.obj_bad);
-            msg = malloc(buffer_size(fmt, arg1, arg2, arg3));
-            sprintf(msg, fmt, arg1, arg2, arg3);
+            status = status_bad_request;
+            char *msg = strfmt("%s: %s: %s", response->body.error.info.invalid.location,
+                response->body.error.info.invalid.reason,
+                json_object_to_json_string(response->body.error.info.invalid.obj_bad));
+            if (msg) add_key(obj_body, "message", json_object_new_string(msg));
+            free(msg);
+            break;
+        }
+        case action_error_type_runtime: {
+            status = response->body.error.info.runtime.status;
             break;
         }
         default: unreachable();
         }
-        add_key(obj_body, "message", json_object_new_string(COALESCE(msg, "(out of memory)")));
-        free(msg);
-    } else if (response->status == status_ok) {
-        switch (response->type) {
-        case action_type_login:
-            add_key(obj_body, "token", json_object_new_int64(response->body.login.token));
-            break;
-        case action_type_logout:
+        add_key(obj_body, "status", json_object_new_int(status));
+        break;
+    }
+    case action_type_login:
+        add_key(obj_body, "token", json_object_new_int64(response->body.login.token));
+        break;
+    case action_type_logout:
 
-            break;
-        case action_type_whois:
-            add_key(obj_body, "user_id", json_object_new_int(response->body.whois.user_id));
-            add_key(obj_body, "email", json_object_new_string(response->body.whois.email));
-            add_key(obj_body, "last_name", json_object_new_string(response->body.whois.last_name));
-            add_key(obj_body, "first_name", json_object_new_string(response->body.whois.first_name));
-            add_key(obj_body, "display_name", json_object_new_string(response->body.whois.display_name));
-            add_key(obj_body, "kind", json_object_new_int(response->body.whois.kind));
-            break;
-        case action_type_send:
+        break;
+    case action_type_whois:
+        add_key(obj_body, "user_id", json_object_new_int(response->body.whois.user_id));
+        add_key(obj_body, "email", json_object_new_string(response->body.whois.email));
+        add_key(obj_body, "last_name", json_object_new_string(response->body.whois.last_name));
+        add_key(obj_body, "first_name", json_object_new_string(response->body.whois.first_name));
+        add_key(obj_body, "display_name", json_object_new_string(response->body.whois.display_name));
+        add_key(obj_body, "kind", json_object_new_int(response->body.whois.kind));
+        break;
+    case action_type_send:
 
-            break;
-        case action_type_motd:
+        break;
+    case action_type_motd:
 
-            break;
-        case action_type_inbox:
+        break;
+    case action_type_inbox:
 
-            break;
-        case action_type_outbox:
+        break;
+    case action_type_outbox:
 
-            break;
-        case action_type_edit:
+        break;
+    case action_type_edit:
 
-            break;
-        case action_type_rm:
+        break;
+    case action_type_rm:
 
-            break;
-        case action_type_block:
+        break;
+    case action_type_block:
 
-            break;
-        case action_type_unblock:
+        break;
+    case action_type_unblock:
 
-            break;
-        case action_type_ban:
+        break;
+    case action_type_ban:
 
-            break;
-        case action_type_unban:
+        break;
+    case action_type_unban:
 
-            break;
-        default: unreachable();
-        }
+        break;
+    default: unreachable();
     }
 #undef add_key
 

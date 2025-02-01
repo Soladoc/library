@@ -20,7 +20,7 @@ int main() {
     cfg_t *cfg = cfg_defaults();
     db_t *db = db_connect(0, DB_HOST, PGDB_PORT, DB_NAME, DB_USER, DB_ROOT_PASSWORD);
     if (!db) return EX_NODB;
-    
+
     server_t server = {};
 
 #define test(new_test)                \

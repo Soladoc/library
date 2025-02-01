@@ -10,6 +10,8 @@
 #include <tchattator413/uuid.h>
 
 struct test test_uuid4(void) {
+    struct test t = test_start("uuid4");
+
     static const uuid4_t different_uuid = uuid4_init(0xf9, 0x1d, 0x4f, 0xae, 0x7d, 0xec, 0x11, 0xd0, 0xa7, 0x65, 0x00, 0xa0, 0xc9, 0x1e, 0x6b, 0xf6);
     static char const uuids[][UUID4_REPR_LENGTH] = {
         "f81d4fae-7dec-11d0-a765-00a0c91e6bf6",
@@ -25,8 +27,6 @@ struct test test_uuid4(void) {
         "f81d4fa-7dec-11d0-a765-00a0c91e6bf6",
         "f81d4fae-7dec11d0-a765-00a0c91e6bf6"
     };
-
-    struct test t = test_start(__func__);
 
     for (size_t i = 0; i < array_length(uuids); ++i) {
         uuid4_t uuid;

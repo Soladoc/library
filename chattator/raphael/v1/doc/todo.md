@@ -1,5 +1,7 @@
 # Todo
 
+- get rid of `with`. no body needs it
+
 - [x] elegant error handling
   - [x] think of an approach that suits JSON, DB and other sources of errors
 - [ ] doxygen documentation

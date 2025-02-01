@@ -9,6 +9,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <stdarg.h>
 
 #define QUOTE(name) #name
 #define STR(macro) QUOTE(macro)
@@ -44,5 +45,22 @@
 #else
 #define attr_flag_enum
 #endif // __clang__
+
+#ifdef __GNUC__
+#define attr_format(archetype, string_index, first_to_check) __attribute__((format(archetype, string_index, first_to_check)))
+#else
+#define attr_format(archetype, string_index, first_to_check)
+#endif // __GNUC__
+
+char *strfmt(const char *fmt, ...) attr_format(printf, 1, 2);
+char *vstrfmt(const char *fmt, va_list ap);
+
+char *fslurp(FILE *fp);
+
+#if __STDC_VERSION__ < 202000L
+#define unreachable() abort();
+#else
+#include <stddef.h>
+#endif
 
 #endif // UTIL_H

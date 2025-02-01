@@ -12,3 +12,65 @@
   - 1 public pro
   - 1 private pro
   - 1 member
+
+## I/O expected JSON format
+
+I/O json files are compared as JSON objects (objects are unordered).
+
+A special object can be used instead of any value for input, validation and extraction of runtime-known values:
+
+```json
+{
+  "$fmt_number": "%*ld"
+}
+```
+
+where the value at key `$fmt` is a `scanf` conversion specifier for output, or a `printf` conversion specifier for input.
+
+When inputting format JSON, the formatted value is parses as JSON, in order to create a JSON object of the appropriate type.
+
+```json
+{
+  "$fmt_number": "%d"
+}
+```
+
+Becomes with arg `177`:
+
+```json
+177
+```
+
+Another example:
+
+```json
+{
+  "$fmt": "%s"
+}
+```
+
+Becomes with arg `177`:
+
+```json
+"177"
+```
+
+More complex example:
+
+```json
+{
+  "$fmt": {
+    "a":"%s",
+    "b":"%d"
+  }
+}
+```
+
+Becomes, given the arguments `"hello"` and `14`:
+
+```json
+{
+  "a": "hello",
+  "b": 14
+}
+```

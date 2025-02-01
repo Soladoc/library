@@ -15,11 +15,24 @@
 #include "server.h"
 #include "types.h"
 
+
+// Note : resemblance with HTTP status code is only for familiarity
 typedef enum {
-    action_error_type_unspecified,
+    status_bad_request = 400,
+    status_unauthorized = 401,
+    status_forbidden = 403,
+    status_not_found = 404,
+    status_payload_too_large = 413,
+    status_unprocessable_content = 422,
+    status_too_many_requests = 429,
+    status_internal_server_error = 500,
+} status_t;
+
+typedef enum {
     action_error_type_type,
     action_error_type_missing_key,
     action_error_type_invalid,
+    action_error_type_runtime,
 } action_error_type_t;
 
 typedef struct {
@@ -37,6 +50,9 @@ typedef struct {
             char const *location, *reason;
             json_object *obj_bad;
         } invalid;
+        struct {
+            status_t status;
+        } runtime;
     } info;
 } action_error_t;
 
@@ -92,19 +108,6 @@ typedef struct {
         } block, unblock, ban, unban;
     } with;
 } action_t;
-
-// Note : resemblance with HTTP status code is only for familiarity
-typedef enum {
-    status_ok = 200,
-    status_unauthorized = 401,
-    status_forbidden = 403,
-    status_not_found = 404,
-    status_payload_too_large = 413,
-    status_unprocessable_content = 422,
-    status_too_many_requests = 429,
-    status_internal_server_error = 500,
-} status_t;
-
 typedef struct {
     time_t sent_at, read_age, modified_age, deleted_age;
     char *content;
@@ -112,7 +115,6 @@ typedef struct {
 } msg_t;
 
 typedef struct {
-    status_t status;
     action_type_t type;
     bool has_next_page;
     union {

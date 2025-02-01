@@ -39,10 +39,12 @@ static inline errstatus_t auth_token(user_identity_t *out_user, token_t token, d
 response_t action_evaluate(action_t const *action, cfg_t *cfg, db_t *db, server_t *server) {
     response_t rep = {};
 
-#define fail(return_status)         \
-    do {                            \
-        rep.status = return_status; \
-        return rep;                 \
+#define fail(return_status)                                 \
+    do {                                                    \
+        rep.type = action_type_error;                       \
+        rep.body.error.type = action_error_type_runtime;    \
+        rep.body.error.info.runtime.status = return_status; \
+        return rep;                                         \
     } while (0)
 
 #define check_role(allowed_roles) \
@@ -56,7 +58,6 @@ response_t action_evaluate(action_t const *action, cfg_t *cfg, db_t *db, server_
 
     switch (rep.type = action->type) {
     case action_type_error: {
-        rep.status = status_internal_server_error;
         rep.body.error = action->with.error;
         return rep;
     }
@@ -72,7 +73,8 @@ response_t action_evaluate(action_t const *action, cfg_t *cfg, db_t *db, server_
 
         switch (db_check_password(db, user.id, action->with.DO.password.val)) {
         case errstatus_handled: fail(status_internal_server_error);
-        case errstatus_error: fail(status_unauthorized);
+        // we know the user ID exists in the DB at this point since we fetched it from the DB
+        case errstatus_error: fail(status_forbidden);
         default:;
         }
         if (!(rep.body.DO.token = server_login(server, user.id))) fail(status_internal_server_error);
@@ -255,7 +257,6 @@ response_t action_evaluate(action_t const *action, cfg_t *cfg, db_t *db, server_
         break;
     }
 
-    rep.status = status_ok;
     return rep;
 }
 

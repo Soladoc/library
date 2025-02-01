@@ -109,27 +109,27 @@ int main(int argc, char **argv) {
             require_env("DB_ROOT_PASSWORD"));
         if (!db) return EX_NODB;
 
-        json_object *const input = optind < argc
+        json_object *const obj_input = optind < argc
             ? json_tokener_parse(argv[optind])
             : json_object_from_fd(STDIN_FILENO);
 
-        if (!input) {
-            put_error_json_c("failed to parse input");
+        if (!obj_input) {
+            put_error_json_c("failed to parse input\n");
             return EX_DATAERR;
         }
 
         server_t server = {};
 
-        json_object *output = tchattator413_interpret(input, cfg, db, &server, NULL, NULL, NULL);
+        json_object *obj_output = tchattator413_interpret(obj_input, cfg, db, &server, NULL, NULL, NULL);
 
         // Results
 
-        puts(json_object_to_json_string_ext(output, JSON_C_TO_STRING_PLAIN));
+        puts(min_json(obj_output));
 
         // Deallocation
 
-        json_object_put(input);
-        json_object_put(output);
+        json_object_put(obj_input);
+        json_object_put(obj_output);
 
         db_destroy(db);
         server_destroy(&server);

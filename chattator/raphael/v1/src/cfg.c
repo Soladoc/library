@@ -62,6 +62,11 @@ cfg_t *cfg_from_file(char const *filename) {
 
     cfg_t *cfg = cfg_defaults();
 
+    if (!obj_cfg) {
+        put_error_json_c("config: failed to parse config file at '%s'. Using defaults.\n", filename);
+        return cfg;
+    }
+
     if (json_object_object_get_ex(obj_cfg, "admin_api_key", &obj)) {
         slice_t admin_api_key_repr;
         if (!json_object_get_string_strict(obj, &admin_api_key_repr)) {

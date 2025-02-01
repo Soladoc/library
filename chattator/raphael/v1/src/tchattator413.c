@@ -38,7 +38,6 @@ json_object *tchattator413_interpret(json_object *input, cfg_t *cfg, db_t *db, s
         output = json_object_new_array_ext(1);
         json_object_array_add(output,
             response_to_json(&(response_t) {
-                .status = status_internal_server_error,
                 .type = action_type_error,
                 .body.error = {
                     .type = action_error_type_type,

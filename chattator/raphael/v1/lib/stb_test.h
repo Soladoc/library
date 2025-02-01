@@ -34,17 +34,18 @@ struct _stbtest_case {
     unsigned line;
     char const *expr; // can be null
     char *name;
+    char *file;
 };
 
 STB_TEST_DEFINITION struct test test_start(char const *name);
 
 /// @brief Add a test case.
-#define test_case(test, expr, name, ...) _stbtest_test_case(__LINE__, (test), (expr), #expr, (name)__VA_OPT__(, ) __VA_ARGS__)
+#define test_case(test, expr, name, ...) _stbtest_test_case(__LINE__, __FILE_NAME__, (test), (expr), #expr, (name)__VA_OPT__(, ) __VA_ARGS__)
 /// @brief Add a test case with the expr and name columns merged.
-#define test_case_wide(test, expr, name, ...) _stbtest_test_case(__LINE__, (test), (expr), NULL, (name)__VA_OPT__(, ) __VA_ARGS__)
+#define test_case_wide(test, expr, name, ...) _stbtest_test_case(__LINE__, __FILE_NAME__, (test), (expr), NULL, (name)__VA_OPT__(, ) __VA_ARGS__)
 
-STB_TEST_DEFINITION bool _stbtest_test_case(unsigned line, struct test *test, bool ok, char const *expr, char const *fmt_name, ...)
-    _stbtest_attr_format(printf, 5, 6);
+STB_TEST_DEFINITION bool _stbtest_test_case(unsigned line, char const *file, struct test *test, bool ok, char const *expr, char const *fmt_name, ...)
+    _stbtest_attr_format(printf, 6, 7);
 
 STB_TEST_DEFINITION bool test_end(struct test *test, FILE *output);
 
@@ -66,7 +67,7 @@ struct test test_start(char const *name) {
     };
 }
 
-bool _stbtest_test_case(unsigned line, struct test *test, bool ok, char const *expr, char const *fmt_name, ...) {
+bool _stbtest_test_case(unsigned line, char const *file, struct test *test, bool ok, char const *expr, char const *fmt_name, ...) {
     va_list ap;
 
     va_start(ap, fmt_name);
@@ -74,9 +75,7 @@ bool _stbtest_test_case(unsigned line, struct test *test, bool ok, char const *e
     va_end(ap);
 
     char *name = malloc(sizeof *name * name_size);
-    if (!name) {
-        abort();
-    }
+    if (!name) abort();
 
     va_start(ap, fmt_name);
     vsnprintf(name, name_size, fmt_name, ap);
@@ -88,6 +87,7 @@ bool _stbtest_test_case(unsigned line, struct test *test, bool ok, char const *e
             .line = line,
             .expr = expr,
             .name = name,
+            .file = file,
         }));
 
     return ok;
@@ -97,20 +97,18 @@ bool test_end(struct test *test, FILE *output) {
     // Establish case success counts and column lengths
     int i, nb_ko = 0, nb_ok = 0;
 
+    int col_len_file = sizeof "file";
     int col_len_expr = sizeof "expr";
-    int col_len_name = sizeof "name";
+    int col_len_name = sizeof "info";
 
     for (i = 0; i < arrlenu(test->cases); ++i) {
         struct _stbtest_case const *c = &test->cases[i];
         c->ok ? ++nb_ok : ++nb_ko;
-        size_t len;
         if (c->expr) {
+            size_t len;
+            if ((len = strlen(c->file)) > col_len_file) col_len_file = len;
             if ((len = strlen(c->expr)) > col_len_expr) col_len_expr = len;
             if ((len = strlen(c->name)) > col_len_name) col_len_name = len;
-        } else {
-            len = strlen(c->name) - 3;
-            if (len / 2 + len % 2 > col_len_expr) col_len_expr = len / 2 + len % 2;
-            if (len / 2 > col_len_name) col_len_name = len / 2;
         }
     }
 
@@ -129,14 +127,18 @@ bool test_end(struct test *test, FILE *output) {
 
         for (i = 0; i < col_len_num; ++i)
             putc('#', output);
-        fprintf(output, " | OK | %*s | %-*s | %-*s |\n",
+        fprintf(output, " | OK | %-*s | %*s | %-*s | %-*s |\n",
+            col_len_file, "file",
             col_len_line, "L",
             col_len_expr, "expr",
-            col_len_name, "name");
+            col_len_name, "info");
 
         for (i = 0; i < col_len_num; ++i)
             putc('-', output);
         fputs(" | -- | ", output);
+        for (i = 0; i < col_len_file; ++i)
+            putc('-', output);
+        fputs(" | ", output);
         for (i = 0; i < col_len_line; ++i)
             putc('-', output);
         fputs(" | ", output);
@@ -153,16 +155,18 @@ bool test_end(struct test *test, FILE *output) {
             struct _stbtest_case const *const c = &test->cases[i];
             char const *ok = c->ok ? "\033[32;49mOK\033[39;49m" : "\033[31;49mKO\033[39;49m";
             if (c->expr)
-                fprintf(output, "%*d | %s | %*u | %-*s | %-*s |\n",
+                fprintf(output, "%*d | %s | %-*s | %*u | %-*s | %-*s |\n",
                     col_len_num, i, ok,
+                    col_len_file, c->file,
                     col_len_line, c->line,
                     col_len_expr, c->expr,
                     col_len_name, c->name);
             else
-                fprintf(output, "%*d | %s | %*u | %-*s |\n",
+                fprintf(output, "%*d | %s | %-*s | %*u | %s\n",
                     col_len_num, i, ok,
+                    col_len_file, c->file,
                     col_len_line, c->line,
-                    col_len_expr + col_len_name + 3, c->name);
+                    c->name);
         }
     }
 
