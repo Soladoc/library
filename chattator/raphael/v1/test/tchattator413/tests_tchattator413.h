@@ -1,3 +1,8 @@
+/// @file
+/// @author Raphaël
+/// @brief Tchattator413 testing - interface
+/// @date 1/02/2025
+
 #ifndef TEST_TCHATTATOR413_H
 #define TEST_TCHATTATOR413_H
 
@@ -21,14 +26,17 @@
 // WITH are the action arguments, one or more, separated by '_'
 
 #define X_TESTS(X)      \
+    X(empty)            \
+    X(malformed)        \
     X(zero)             \
-    X(admin_whois_neg1) \
+                        \
     X(admin_whois_1)    \
+    X(admin_whois_neg1) \
     X(admin_whois_imax) \
-    X(invalid_whois_1)  \
     X(invalid_login)    \
-    X(malformed) \
-    X(empty)
+    X(invalid_whois_1)  \
+    X(member1_login)    \
+    //
 
 #define DECLARE_TEST(name) struct test test_tchattator413_##name(cfg_t *cfg, db_t *db, server_t *server);
 X_TESTS(DECLARE_TEST)
@@ -43,8 +51,8 @@ X_TESTS(DECLARE_TEST)
 #define API_KEY_ADMIN "ed33c143-5752-4543-a821-00a187955a28"
 
 // exist in the test DB
-#define API_KEY_MEMBER1 "9ea59c5b-bb75-4cc9-8f80-77b4ce851a0b"
-#define API_KEY_MEMBER2 "caace785-f8a0-4a4d-a177-45a323a5f361"
+#define API_KEY_MEMBER1 "123e4567-e89b-12d3-a456-426614174000"
+#define API_KEY_MEMBER2 "9ea59c5b-bb75-4cc9-8f80-77b4ce851a0b"
 #define API_KEY_PRO1 "bb1b5a1f-a482-4858-8c6b-f4746481cffa"
 #define API_KEY_PRO2 "52d43379-8f75-4fbd-8b06-d80a87b2c2b4"
 
@@ -58,36 +66,27 @@ typedef struct {
     /// @brief Backing test.
     struct test t;
     int n_actions, n_responses;
+    server_t *server;
 } test_t;
 
 _Static_assert(offsetof(test_t, t) == 0, "backing test must be at start of struct for implicit base type punning");
-
-#define new_test() { .t = test_start(__func__) }
-
-#define base_on_action(ptest) \
-    ++((test_t *)ptest)->n_actions
-
-#define base_on_response(ptest) \
-    ++((test_t *)ptest)->n_responses
 
 #define min_json(obj) json_object_to_json_string_ext(obj, JSON_C_TO_STRING_PLAIN)
 
 #define test_case_i(test, obj_input, i) test_case_wide(&test.t, obj_input, "input: " i) // input JSON test case
 #define test_case_o(test, obj_output, o) test_case_wide(&test.t, \
-    streq(min_json(obj_output), o), "output: %s == " o, min_json(obj_output))        // output JSON test case
+    streq(min_json(obj_output), o), "output: %s == " o, min_json(obj_output))           // output JSON test case
+#define test_case_o_start(test, obj_output, o) test_case_wide(&test.t, \
+    strneq(min_json(obj_output), o, strlen(o)), "output: %s ^= " o, min_json(obj_output))
 
 #define test_case_count(t, actual, expected, singular) test_case(t, actual == expected, "expected %d %s%s, got %d", expected, singular, expected == 1 ? "" : "s", actual)
 
-#define test_case_n_actions(test, expected)                               \
-    do {                                                                  \
-        test_case_count(&test.t, test.n_actions, expected, "action");     \
-        test_case_count(&test.t, test.n_responses, expected, "response"); \
-    } while (0)
+bool uuid4_eq_repr(uuid4_t uuid, char const repr[static const UUID4_REPR_LENGTH]);
 
-static inline bool uuid4_eq_repr(uuid4_t uuid, char const repr[static const UUID4_REPR_LENGTH]) {
-    uuid4_t parsed_repr;
-    assert(uuid4_parse(&parsed_repr, repr));
-    return uuid4_eq(uuid, parsed_repr);
-}
+
+test_t *base_on_action(void *test);
+test_t *base_on_response(void *test);
+
+void test_case_n_actions(test_t *test, int expected);
 
 #endif // TEST_TCHATTATOR413_H

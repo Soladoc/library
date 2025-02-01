@@ -11,23 +11,23 @@
 
 static void on_action(action_t const *action, void *t) {
     base_on_action(t);
-    if (!test_case(t, action->type == action_type_error, "action type")) return;
+    if (!test_case(t, action->type == action_type_error, "type")) return;
 }
 
 static void on_response(response_t const *response, void *t) {
     base_on_response(t);
-    test_case(t, response->type == action_type_error, "action type");
-    test_case(t, response->status == status_internal_server_error, "status");
+    test_case(t, response->type == action_type_error, "type");
+    test_case(t, response->status == status_internal_server_error, "status == %d", response->status);
 }
 
 struct test test_tchattator413_admin_whois_neg1(cfg_t *cfg, db_t *db, server_t *server) {
-    test_t test = new_test();
+    test_t test = { .t = test_start(__func__) };
 
     json_object *obj_input = json_tokener_parse(IN);
     test_case_i(test, obj_input, IN);
 
     json_object *obj_output = tchattator413_interpret(obj_input, cfg, db, server, on_action, on_response, &test);
-    test_case_n_actions(test, 1);
+    test_case_n_actions(&test, 1);
 
     test_case_o(test, obj_output, OUT);
 

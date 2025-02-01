@@ -339,7 +339,7 @@ json_object *response_to_json(response_t *response) {
     } else if (response->status == status_ok) {
         switch (response->type) {
         case action_type_login:
-
+            add_key(obj_body, "token", json_object_new_int64(response->body.login.token));
             break;
         case action_type_logout:
 

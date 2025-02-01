@@ -48,7 +48,7 @@ token_t server_login(server_t *server, serial_t user_id) {
     time_t const t = time(NULL);
     token_t token = ((long)user_id << 32) + (int32_t)t;
 
-    if (hmgeti(server->turnstile, user_id) != -1) return 0;
+    if (hmgeti(server->sessions, user_id) != -1) return 0;
     hmput(server->sessions, token, user_id);
 
     return token;

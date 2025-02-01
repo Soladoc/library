@@ -46,7 +46,7 @@ bool server_turnstile_rate_limit(server_t *server, serial_t user_id, cfg_t *cfg)
 /// @param server The server.
 /// @param user_id The ID of the user to login.
 /// @return The new session token.
-/// @return @c 0 if the the session could not be created.
+/// @return @c 0 if the the session could not be created. This happens if the same user tries logs in twice in the same second.
 token_t server_login(server_t *server, serial_t user_id);
 
 /// @brief Deletes a session, logging out an user

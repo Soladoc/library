@@ -24,6 +24,7 @@
 #define buffer_size(format, ...) (snprintf(NULL, 0, (format), __VA_ARGS__) + 1) // safe byte for \0
 
 #define streq(x, y) (strcmp((x), (y)) == 0)
+#define strneq(x, y, n) (strncmp((x), (y), (n)) == 0)
 
 #define MAX(a, b) ((a) > (b) ? (a) : (b))
 #define MIN(a, b) ((a) < (b) ? (a) : (b))
