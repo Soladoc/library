@@ -144,7 +144,7 @@ int db_get_user_role(db_t *db, serial_t user_id) {
 }
 
 serial_t db_get_user_id_by_email(db_t *db, const char *email) {
-    PGresult *result = PQexecParams(db, "select id from " TBL_USER " where email = $1",
+    PGresult *result = PQexecParams(db, "select user_id from " TBL_USER " where email = $1",
         1, NULL, &email, NULL, NULL, 1);
 
     serial_t res;
