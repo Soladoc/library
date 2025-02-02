@@ -6,7 +6,7 @@ SRC_TEST = $(call rwildcard,test, *.c *.h)
 
 CC = gcc
 LFLAGS = -ljson-c -I/usr/include/postgresql -L/usr/lib/x86_64-linux-gnu -lpq
-CFLAGS = -pedantic -static-libgcc -include src/force_link_glibc_2.27.h -std=gnu17 -isystem /work/lib -Wall -Wextra -Wcast-qual -Wcast-align -Wstrict-aliasing -Wpointer-arith -Winit-self -Wshadow -Wstrict-prototypes -Wmissing-prototypes -Wredundant-decls -Wfloat-equal -Wundef -Wvla
+CFLAGS = -pedantic -std=gnu17 -isystem /work/lib -Wall -Wextra -Wcast-qual -Wcast-align -Wstrict-aliasing -Wpointer-arith -Winit-self -Wshadow -Wstrict-prototypes -Wmissing-prototypes -Wredundant-decls -Wfloat-equal -Wundef -Wvla
 
 # CLFAGS += -fanalyzer # takes time
 # CLFAGS += -fsanitize=address,leak,undefined # messes with debugging
