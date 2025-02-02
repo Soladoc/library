@@ -13,10 +13,10 @@ set -a
 . include/.env
 set +a
 
-cd chattator
+cd chattator/raphael/v1
 
 sudo apt-get install make -y
 
-sudo make -f raphael/v1/Makefile
+sudo make
 
-sudo raphael/v1/bin/tct413 -c config.json
+sudo bin/tct413 -c ../../config.json
