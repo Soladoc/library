@@ -23,6 +23,7 @@ struct server {
 server_t *server_create(server_flags_t flags) {
     server_t *server = calloc(1, sizeof *server);
     server->flags = flags;
+    hmdefault(server->sessions, -1);
     return server;
 }
 
@@ -83,5 +84,5 @@ bool server_logout(server_t *server, token_t token) {
 }
 
 serial_t server_verify_token(server_t *server, token_t token) {
-    return hmget(server->sessions, token); // the default value is 0
+    return hmget(server->sessions, token); // the default value is -1
 }

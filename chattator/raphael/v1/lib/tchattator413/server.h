@@ -55,7 +55,7 @@ bool server_logout(server_t *server, token_t token);
 /// @brief Verifies a token, returning its owning user ID.
 /// @param server The server.
 /// @param token The session token to verify.
-/// @return @c 0 if the session token is invalid.
+/// @return @c -1 if the session token is invalid.
 /// @return The ID of the user that owns @p token if it is valid.
 serial_t server_verify_token(server_t *server, token_t token);
 

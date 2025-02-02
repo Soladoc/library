@@ -39,13 +39,13 @@ errstatus_t db_verify_user_api_key(db_t *db, user_identity_t *out_user, api_key_
 /// @return @ref errstatus_error No user of e-mail @p email exists in the database.
 serial_t db_get_user_id_by_email(db_t *db, char const *email);
 
-/// @brief Get the ID of an user from their pseudo.
+/// @brief Get the ID of an user from their name.
 /// @param db The database.
-/// @param pseudo The pseudo to look for.
-/// @return The ID of the user with the specified pseudo.
+/// @param name The name to look for. It can be a member's pseudo or a pro's display name
+/// @return The ID of the user with the specified name.
 /// @return @ref errstatus_handled A database error occured. A message has been shown. @p out_user is untouched.
-/// @return @ref errstatus_error No user of pseudo @p pseudo exists in the database.
-serial_t db_get_user_id_by_pseudo(db_t *db, char const *pseudo);
+/// @return @ref errstatus_error No user of name @p name exists in the database.
+serial_t db_get_user_id_by_name(db_t *db, char const *name);
 
 /// @brief Fills a user record from its ID. If @p user->user_id is undefined, the behavior is undefined.
 /// @param db The database.

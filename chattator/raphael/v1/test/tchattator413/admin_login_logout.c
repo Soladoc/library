@@ -6,13 +6,13 @@
 #include "tests_tchattator413.h"
 #include <tchattator413/tchattator413.h>
 
-#define NAME member1_login_logout
+#define NAME admin_login_logout
 
 static void on_action_1(action_t const *action, void *t) {
     base_on_action(t);
     if (!test_case_eq_int(t, action->type, action_type_login, )) return;
-    test_case_eq_uuid(t, action->with.login.api_key, API_KEY_MEMBER1, );
-    test_case_eq_str(t, action->with.login.password.val, "member1_mdp", );
+    test_case_eq_uuid(t, action->with.login.api_key, API_KEY_ADMIN, );
+    test_case_eq_str(t, action->with.login.password.val, "admin314317admin", );
 }
 
 static void on_response_1(response_t const *response, void *t) {

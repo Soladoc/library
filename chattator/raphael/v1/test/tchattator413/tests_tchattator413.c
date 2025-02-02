@@ -55,7 +55,7 @@ static inline json_object *reduce_fmt_v(json_object *obj, va_list *ap) {
         // arguments -> json object
         char *fmted = vstrfmt(fmt, *ap);
         if (!fmted) errno_exit("vstrfmt");
-        //va_advance_printf(ap, fmt);
+        // va_advance_printf(ap, fmt);
 
         json_object_put(obj);
         obj = json_tokener_parse(fmted);

@@ -23,7 +23,7 @@ static inline serial_t get_user_id(json_object *obj_user, db_t *db) {
         const char *email_or_pseudo = json_object_get_string(obj_user);
         return strchr(email_or_pseudo, '@')
             ? db_get_user_id_by_email(db, email_or_pseudo)
-            : db_get_user_id_by_pseudo(db, email_or_pseudo);
+            : db_get_user_id_by_name(db, email_or_pseudo);
     }
     default:;
     }

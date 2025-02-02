@@ -33,6 +33,12 @@
     X(zero)                                                      \
                                                                  \
     X(admin_whois_1)                                             \
+    X(member1_whois_1)                                           \
+    X(member1_whois_1_by_name)                                   \
+    X(member1_whois_1_by_email)                                  \
+    X(member1_whois_5)                                           \
+    X(member1_whois_5_by_name)                                   \
+    X(member1_whois_5_by_email)                                  \
     X(admin_whois_neg1)                                          \
     X(member1_login_wrong_password)                              \
     X(admin_whois_imax)                                          \
@@ -40,9 +46,12 @@
     X(invalid_whois_1)                                           \
     X(member1_login)                                             \
     X(member1_login_logout)                                      \
+    X(pro1_login_logout)                                         \
+    X(admin_login_logout)                                        \
     X(member1_login_logout_logout)                               \
     X(member1_login_login_logout_logout)                         \
     X(member1_login_member2_login_member1_logout_member2_logout) \
+    X(invalid_logout)                                            \
     //
 
 #define TEST_SIGNATURE(name) struct test CAT(test_tchattator413_, name)(cfg_t * cfg, db_t * db, server_t * server)
