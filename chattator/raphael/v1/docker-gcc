@@ -60,7 +60,7 @@ if ! docker ps --format '{{.Names}}' | grep -q "^$container$"; then
     else
         echo "runnning $container"
         docker run -td --name=$container $image
-        docker exec $container apt-get -y install libjson-c-dev
+        docker exec $container apt-get -y install libjson-c-dev libcrypt-dev
     fi
 fi
 
