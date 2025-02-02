@@ -32,7 +32,6 @@ static inline char *require_env(char const *name) {
     exit(EX_USAGE);
 }
 
-__asm__(".symver realpath,realpath@GLIBC_2.31");
 int main(int argc, char **argv) {
     int verbosity = 0;
     bool dump_config = false, interactive = false;
