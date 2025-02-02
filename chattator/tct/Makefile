@@ -10,11 +10,11 @@ CFLAGS = -pedantic -std=c17 -Wall -Wextra -Wcast-qual -Wcast-align -Wstrict-alia
 debug: CONFIG=debug all
 release: CONFIG=relase all
 
-all: bin/tclient
+all: bin/tct
 
 clean:
 	rm -r bin
 
-bin/tclient: romain.c
+bin/tct: tct.c
 	mkdir -p bin
 	gcc -o $@ $(CFLAGS) $^ $(LFLAGS)
