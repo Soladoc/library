@@ -22,7 +22,7 @@ cat schemas.sql
 cd pact
 cat types.sql crea.sql fonctions.sql vues.sql triggers.util.sql triggers/*.sql shared_data.sql
 cd ../tchattator
-cat crea.sql vues.sql
+cat crea.sql fonctions.sql vues.sql
 # shellcheck source=/dev/null
 . "$subunite"
 

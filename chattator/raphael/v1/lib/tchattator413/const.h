@@ -30,7 +30,6 @@ enum { EX_NODB = EX__MAX + 1 };
     X(ban)           \
     X(unban)
 
-
 #define HELP PROG " - A Tchattator413 implementation\n\
 \n\
 SYNOPSIS\n\

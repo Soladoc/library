@@ -3,6 +3,17 @@ set schema 'tchattator';
 set
     plpgsql.extra_errors to 'all';
 
+create function _insert_msg (p_id_compte_sender int, p_id_compte_recipient int, p_content varchar) returns int as $$
+with msg_id as (insert into
+    tchattator._msg (id_compte_sender, id_compte_recipient, content)
+values
+    -- condisder 0 as the admin user id.
+    (nullif(p_id_compte_sender, 0), p_id_compte_recipient, p_content)
+returning
+    msg_id
+) table msg_id
+$$ language sql strict;
+
 create function send_msg (p_id_compte_sender int, p_id_compte_recipient int, p_content varchar) returns int as $$
 select
     case
@@ -20,19 +31,11 @@ select
             select
                 expires_at < localtimestamp
             from
-                _single_block
+                tchattator._single_block
             where
                 id_membre = p_id_compte_sender
                 and id_professionnel = p_id_compte_recipient
         ) then 0 -- errstatus_error
-        else (
-            insert into
-                _msg (id_compte_sender, id_compte_recipient, content)
-            values
-                -- condisder 0 as the admin user id.
-                (nullif(p_id_compte_sender, 0), p_id_compte_recipient, p_content)
-            returning
-                msg_id
-        )
-    end;
-$$ language sql strict stable;
+        else (select tchattator._insert_msg(p_id_compte_sender, p_id_compte_recipient, p_content))
+    end
+$$ language sql strict;

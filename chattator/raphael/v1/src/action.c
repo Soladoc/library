@@ -9,6 +9,27 @@
 #include <tchattator413/db.h>
 #include <tchattator413/util.h>
 
+void response_destroy(response_t *response) {
+    switch (response->type) {
+    case action_type_whois:
+        db_collect(response->body.whois.user.memory_owner_db);
+        break;
+    case action_type_motd:
+        db_collect(response->body.motd.memory_owner_db);
+        free(response->body.motd.msgs);
+        break;
+    case action_type_inbox:
+        db_collect(response->body.inbox.memory_owner_db);
+        free(response->body.inbox.msgs);
+        break;
+    case action_type_outbox:
+        db_collect(response->body.outbox.memory_owner_db);
+        free(response->body.outbox.msgs);
+        break;
+    default:;
+    }
+}
+
 #define putln_error_rate_limit_exceeded(action_name, remaining_seconds) \
     put_error(action_name, ": rate limit exceeded. Next request in %d second%s.", remaining_seconds, remaining_seconds == 1 ? "s" : "");
 
@@ -50,18 +71,25 @@ response_t action_evaluate(action_t const *action, cfg_t *cfg, db_t *db, server_
         return rep;                                         \
     } while (0)
 
+#define fail_invariant(invariant_name)                       \
+    do {                                                     \
+        rep.type = action_type_error;                        \
+        rep.body.error.type = action_error_type_invariant;   \
+        rep.body.error.info.invariant.name = invariant_name; \
+    } while (0)
+
 #define check_role(allowed_roles) \
     if (!(user.role & (allowed_roles))) fail(status_forbidden)
 
-#define turnstile_rate_limit()                                           \
-    do {                                                                 \
-        time_t t = server_turnstile_rate_limit(server, user.id, cfg);    \
-        if (t) {                                                         \
-            rep.type = action_type_error;                                \
-            rep.body.error.type = action_error_type_rate_limit;          \
-            rep.body.error.info.rate_limit.next_request_at = t; \
-            return rep;                                                  \
-        }                                                                \
+#define turnstile_rate_limit()                                        \
+    do {                                                              \
+        time_t t = server_turnstile_rate_limit(server, user.id, cfg); \
+        if (t) {                                                      \
+            rep.type = action_type_error;                             \
+            rep.body.error.type = action_error_type_rate_limit;       \
+            rep.body.error.info.rate_limit.next_request_at = t;       \
+            return rep;                                               \
+        }                                                             \
     } while (0)
 
     // Identify user
@@ -114,8 +142,8 @@ response_t action_evaluate(action_t const *action, cfg_t *cfg, db_t *db, server_
 
         turnstile_rate_limit();
 
-        rep.body.DO.user_id = action->with.DO.user_id;
-        switch (db_get_user(db, &rep.body.DO)) {
+        rep.body.DO.user.id = action->with.DO.user_id;
+        switch (db_get_user(db, &rep.body.DO.user)) {
         case errstatus_handled: fail(status_internal_server_error);
         case errstatus_error: fail(status_not_found);
         default:;
@@ -141,15 +169,13 @@ response_t action_evaluate(action_t const *action, cfg_t *cfg, db_t *db, server_
         // if message length is greater than maximum
         if (action->with.DO.content.len > cfg_max_msg_length(cfg)) fail(status_payload_too_large);
 
-        if (
-            // if sender and dest are the same user
-            (user.id == action->with.DO.dest_user_id)
-            // if user is client, dest is not pro
-            || (user.role & role_membre && !(dest_role & role_pro))
-            // if user is pro, dest is not a client having contacted him first
-            || (user.role & role_pro && (!(dest_role & role_membre) || !db_count_msg(db, action->with.DO.dest_user_id, user.id)))) {
-            fail(status_unprocessable_content);
-        }
+        // if sender and dest are the same user
+        if (user.id == action->with.DO.dest_user_id) fail_invariant("no_send_self");
+        // if user is client and dest is not pro
+        if (user.role & role_membre && !(dest_role & role_pro)) fail_invariant("client_send_pro");
+        // if user is pro and dest is not a client or dest hasn't contacted pro user first
+        if (user.role & role_pro && (!(dest_role & role_membre) || !db_count_msg(db, action->with.DO.dest_user_id, user.id)))
+            fail_invariant("pro_responds_client");
 
         switch (rep.body.DO.msg_id = db_send_msg(db, user.id, action->with.DO.dest_user_id, action->with.DO.content.val)) {
         case errstatus_handled: fail(status_internal_server_error);
@@ -173,7 +199,7 @@ response_t action_evaluate(action_t const *action, cfg_t *cfg, db_t *db, server_
 #undef DO
 #define DO inbox
     case action_type(DO):
-        switch (auth_token(&user, action->with.inbox.token, db, server)) {
+        switch (auth_token(&user, action->with.DO.token, db, server)) {
         case errstatus_handled: fail(status_internal_server_error);
         case errstatus_error: fail(status_unauthorized);
         default: check_role(role_all);
@@ -181,6 +207,13 @@ response_t action_evaluate(action_t const *action, cfg_t *cfg, db_t *db, server_
 
         turnstile_rate_limit();
 
+        if (!(rep.body.DO = db_get_inbox(db,
+                  cfg_page_inbox(cfg),
+                  cfg_page_inbox(cfg) * (action->with.DO.page - 1),
+                  user.id))
+                .memory_owner_db) {
+            fail(status_internal_server_error);
+        }
         break;
 #undef DO
 #define DO outbox
@@ -216,6 +249,12 @@ response_t action_evaluate(action_t const *action, cfg_t *cfg, db_t *db, server_
         }
 
         turnstile_rate_limit();
+
+        switch (db_rm_msg(db, action->with.DO.msg_id)) {
+        case errstatus_handled: fail(status_internal_server_error);
+        case errstatus_error: fail(status_not_found);
+        default: check_role(role_all);
+        }
 
         break;
 #undef DO

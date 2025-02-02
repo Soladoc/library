@@ -7,10 +7,11 @@
 #define TYPES_H
 
 #include "const.h"
-#include "uuid.h"
 #include "util.h"
-#include <stdint.h>
+#include "uuid.h"
 #include <limits.h>
+#include <stdint.h>
+#include <time.h>
 
 typedef uuid4_t api_key_t;
 /// @ref A session token
@@ -22,10 +23,6 @@ typedef int32_t serial_t;
 
 #define EMAIL_LENGTH 319
 #define PSEUDO_LENGTH 255
-
-typedef char word_t[256];
-
-typedef char email_t[EMAIL_LENGTH + 1], pseudo_t[PSEUDO_LENGTH + 1];
 
 typedef char action_name_t[8]; // keep the size as small as possible
 
@@ -39,18 +36,13 @@ typedef enum {
     user_kind_pro_public,
 } user_kind_t;
 
-typedef struct {
-    serial_t user_id;
-    email_t email;
-    word_t last_name, first_name, display_name;
-    user_kind_t kind;
-} user_t;
-
 typedef enum attr_flag_enum {
     role_admin = 1 << 0,
+    min_role = role_admin,
     role_membre = 1 << 1,
     role_pro = 1 << 2,
     role_all = role_admin | role_membre | role_pro,
+    max_role = role_all,
 } role_flags_t;
 
 /// @brief Information about the identity of an user.
@@ -60,5 +52,12 @@ typedef struct {
     /// @brief The ID of the user or @c 0 if for the adminsitrator.
     serial_t id;
 } user_identity_t;
+
+typedef struct {
+    char *content;
+    time_t sent_at;
+    int32_t read_age, edited_age, deleted_age;
+    serial_t id, user_id_sender, user_id_recipient;
+} msg_t;
 
 #endif // TYPES_H

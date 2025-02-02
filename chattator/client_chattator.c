@@ -3,27 +3,27 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <sys/select.h>
 #include <sys/socket.h>
 #include <sys/types.h>
 #include <unistd.h>
-#include <sys/select.h>
 
 int connexion(int token, int sock) {
     char util[256];
     char mdp[256];
     char buffer[100];
     ssize_t bytes_read;
-    int confirmation,option_connexion;
+    int confirmation, option_connexion;
     option_connexion = 16;
 
     if (token == 0) {
         write(sock, &option_connexion, sizeof(option_connexion)); // envoi option connexion
         printf("Veuillez vous connecter pour continuer : quel est votre nom d'utilisateur ?");
-        fgets(util, sizeof(util), stdin);  // Read username
-        write(sock, util, strlen(util));  // Send username
+        fgets(util, sizeof(util), stdin);                         // Read username
+        write(sock, util, strlen(util));                          // Send username
         fflush(stdout);
 
-        bytes_read = read(sock, buffer, sizeof(buffer) - 1);  // 5-second timeout
+        bytes_read = read(sock, buffer, sizeof(buffer) - 1); // 5-second timeout
         if (bytes_read > 0) {
             buffer[bytes_read] = '\0';
             printf("Réponse du serveur pour le nom d'utilisateur: %s", buffer);
@@ -32,7 +32,7 @@ int connexion(int token, int sock) {
         }
         memset(buffer, 0, sizeof(buffer));
         printf("Quel est votre mot de passe ?");
-        fgets(mdp, sizeof(mdp), stdin);  // Read password
+        fgets(mdp, sizeof(mdp), stdin); // Read password
         write(sock, mdp, strlen(mdp));  // Send password
         fflush(stdout);
 
@@ -46,8 +46,8 @@ int connexion(int token, int sock) {
         printf("Buffer content before printing: '%s'\n", buffer);
         memset(buffer, 0, sizeof(buffer));
         // Receive token from the server
-        printf("Attente du token du serveur...\n");  // Debug line
-        bytes_read = read(sock, &token, sizeof(token));  // 5-second timeout
+        printf("Attente du token du serveur...\n");     // Debug line
+        bytes_read = read(sock, &token, sizeof(token)); // 5-second timeout
         if (bytes_read > 0) {
             printf("Token reçu du serveur: %d\n", token);
         } else {
@@ -57,19 +57,18 @@ int connexion(int token, int sock) {
 
         // Set confirmation to 1
         confirmation = 1;
-        printf("Envoi de la confirmation: %d\n", confirmation);  // Debugging line
+        printf("Envoi de la confirmation: %d\n", confirmation); // Debugging line
 
         // Send the confirmation value (1) back to the server
-        write(sock, &confirmation, sizeof(confirmation));  // Send confirmation
+        write(sock, &confirmation, sizeof(confirmation)); // Send confirmation
         printf("Confirmation (1) envoyée au serveur\n");
     }
 
     return token;
 }
 
-
 int main() {
-    int sock,ret,option,token,num_message;
+    int sock, ret, option, token, num_message;
     struct sockaddr_in addr;
     char buffer[10000];
     char message[1000];
@@ -91,7 +90,7 @@ int main() {
     }
 
     option = 0;
-    token=0;
+    token = 0;
     while (option != 15) {
         printf("Que voulez-vous faire ? \n");
         printf("Tapez 1 pour voir tous vos messages.\n");
@@ -107,23 +106,21 @@ int main() {
         printf("Tapez 11 pour débloquer un utilisateur.\n");
         printf("Tapez 12 pour bannir un utilisateur.\n");
         printf("Tapez 13 pour débannir un utilisateur.\n");
-        if (token!=0){
+        if (token != 0) {
             printf("Tapez 14 pour vous déconnecter\n");
             printf("Tapez 15 pour quitter.\n");
-        }
-        else {
+        } else {
             printf("Tapez 14 pour quitter.\n");
         }
         scanf("%d", &option);
         getchar();
-        if (token ==0){
-            if (option ==14) {
-                option=15;
-            }
-            else if (option == 1 || option==2 || option == 3 || option == 4 || option == 5 || option == 6 || option == 7 || option == 8 || option == 10 || option == 11 || option == 12 || option == 13) {
-                token=connexion(token,sock);
+        if (token == 0) {
+            if (option == 14) {
+                option = 15;
+            } else if (option == 1 || option == 2 || option == 3 || option == 4 || option == 5 || option == 6 || option == 7 || option == 8 || option == 10 || option == 11 || option == 12 || option == 13) {
+                token = connexion(token, sock);
             } else if (option != 9) {
-                option=50;
+                option = 50;
             }
         }
         write(sock, &option, sizeof(option));
@@ -131,156 +128,155 @@ int main() {
         fflush(stdout);
 
         switch (option) {
-            case 1:
-                bytes_read = read(sock, buffer, sizeof(buffer) - 1);
-                if (bytes_read > 0) {
-                    buffer[bytes_read] = '\0';
-                    printf("%s", buffer);
-                }
-                memset(buffer, 0, sizeof(buffer));
-                break;
-            case 2:
-                bytes_read = read(sock, buffer, sizeof(buffer) - 1);
-                if (bytes_read > 0) {
-                    buffer[bytes_read] = '\0';
-                    printf("%s", buffer);
-                }
-                memset(buffer, 0, sizeof(buffer));
-                break;
-            case 3:
-                bytes_read = read(sock, buffer, sizeof(buffer) - 1);
-                if (bytes_read > 0) {
-                    buffer[bytes_read] = '\0';
-                    printf("%s", buffer);
-                }
-                memset(buffer, 0, sizeof(buffer));
-                break;
-            case 4:
-                bytes_read = read(sock, buffer, sizeof(buffer) - 1);
-                if (bytes_read > 0) {
-                    buffer[bytes_read] = '\0';
-                    printf("%s", buffer);
-                }
-                memset(buffer, 0, sizeof(buffer));
-                break;
-            case 5:
-                bytes_read = read(sock, buffer, sizeof(buffer) - 1);
-                if (bytes_read > 0) {
-                    buffer[bytes_read] = '\0';
-                    printf("%s", buffer);
-                }
-                memset(buffer, 0, sizeof(buffer));
-                fgets(message, sizeof(message), stdin);
-                message[strcspn(message, "\n")] = 0;
-                write(sock, message, strlen(message));
-                fflush(stdout);
-                bytes_read = read(sock, buffer, sizeof(buffer) - 1);
-                if (bytes_read > 0) {
-                    buffer[bytes_read] = '\0';
-                    printf("%s", buffer);
-                }
-                memset(buffer, 0, sizeof(buffer));
-                break;
-            case 6:
-                bytes_read = read(sock, buffer, sizeof(buffer) - 1);
-                if (bytes_read > 0) {
-                    buffer[bytes_read] = '\0';
-                    printf("%s", buffer);
-                }
-                memset(buffer, 0, sizeof(buffer));
-                scanf("%d", &num_message);
-                write(sock, &num_message, sizeof(num_message));
-                bytes_read = read(sock, buffer, sizeof(buffer) - 1);
-                if (bytes_read > 0) {
-                    buffer[bytes_read] = '\0';
-                    printf("%s", buffer);
-                }
-                memset(buffer, 0, sizeof(buffer));
-                fgets(message, sizeof(message), stdin);
-                message[strcspn(message, "\n")] = 0;
-                write(sock, message, strlen(message));
-                fflush(stdout);
-                bytes_read = read(sock, buffer, sizeof(buffer) - 1);
-                if (bytes_read > 0) {
-                    buffer[bytes_read] = '\0';
-                    printf("%s", buffer);
-                }
-                memset(buffer, 0, sizeof(buffer));
-                break;
-            case 7:
-                bytes_read = read(sock, buffer, sizeof(buffer) - 1);
-                if (bytes_read > 0) {
-                    buffer[bytes_read] = '\0';
-                    printf("%s", buffer);
-                }
-                memset(buffer, 0, sizeof(buffer));
-                break;
-            case 8:
-                bytes_read = read(sock, buffer, sizeof(buffer) - 1);
-                if (bytes_read > 0) {
-                    buffer[bytes_read] = '\0';
-                    printf("%s", buffer);
-                }
-                memset(buffer, 0, sizeof(buffer));
-                break;
-            case 9:
-                bytes_read = read(sock, buffer, sizeof(buffer) - 1);
-                if (bytes_read > 0) {
-                    buffer[bytes_read] = '\0';
-                    printf("%s", buffer);
-                }
-                memset(buffer, 0, sizeof(buffer));
-                break;
-            case 10:
-                bytes_read = read(sock, buffer, sizeof(buffer) - 1);
-                if (bytes_read > 0) {
-                    buffer[bytes_read] = '\0';
-                    printf("%s", buffer);
-                }
-                memset(buffer, 0, sizeof(buffer));
-                break;
-            case 11:
-                bytes_read = read(sock, buffer, sizeof(buffer) - 1);
-                if (bytes_read > 0) {
-                    buffer[bytes_read] = '\0';
-                    printf("%s", buffer);
-                }
-                memset(buffer, 0, sizeof(buffer));
-                break;
-            case 12:
-                bytes_read = read(sock, buffer, sizeof(buffer) - 1);
-                if (bytes_read > 0) {
-                    buffer[bytes_read] = '\0';
-                    printf("%s", buffer);
-                }
-                memset(buffer, 0, sizeof(buffer));
-                break;
-            case 13:
-                bytes_read = read(sock, buffer, sizeof(buffer) - 1);
-                if (bytes_read > 0) {
-                    buffer[bytes_read] = '\0';
-                    printf("%s", buffer);
-                }
-                memset(buffer, 0, sizeof(buffer));
-                break;
-            case 14:
-                bytes_read = read(sock, buffer, sizeof(buffer) - 1);
-                if (bytes_read > 0) {
-                    buffer[bytes_read] = '\0';
-                    printf("%s", buffer);
-                }
-                memset(buffer, 0, sizeof(buffer));
-                break;
-            default:
-                bytes_read = read(sock, buffer, sizeof(buffer) - 1);
-                if (bytes_read > 0) {
-                    buffer[bytes_read] = '\0';
-                    printf("%s", buffer);
-                }
-                memset(buffer, 0, sizeof(buffer));
-                break;
+        case 1:
+            bytes_read = read(sock, buffer, sizeof(buffer) - 1);
+            if (bytes_read > 0) {
+                buffer[bytes_read] = '\0';
+                printf("%s", buffer);
+            }
+            memset(buffer, 0, sizeof(buffer));
+            break;
+        case 2:
+            bytes_read = read(sock, buffer, sizeof(buffer) - 1);
+            if (bytes_read > 0) {
+                buffer[bytes_read] = '\0';
+                printf("%s", buffer);
+            }
+            memset(buffer, 0, sizeof(buffer));
+            break;
+        case 3:
+            bytes_read = read(sock, buffer, sizeof(buffer) - 1);
+            if (bytes_read > 0) {
+                buffer[bytes_read] = '\0';
+                printf("%s", buffer);
+            }
+            memset(buffer, 0, sizeof(buffer));
+            break;
+        case 4:
+            bytes_read = read(sock, buffer, sizeof(buffer) - 1);
+            if (bytes_read > 0) {
+                buffer[bytes_read] = '\0';
+                printf("%s", buffer);
+            }
+            memset(buffer, 0, sizeof(buffer));
+            break;
+        case 5:
+            bytes_read = read(sock, buffer, sizeof(buffer) - 1);
+            if (bytes_read > 0) {
+                buffer[bytes_read] = '\0';
+                printf("%s", buffer);
+            }
+            memset(buffer, 0, sizeof(buffer));
+            fgets(message, sizeof(message), stdin);
+            message[strcspn(message, "\n")] = 0;
+            write(sock, message, strlen(message));
+            fflush(stdout);
+            bytes_read = read(sock, buffer, sizeof(buffer) - 1);
+            if (bytes_read > 0) {
+                buffer[bytes_read] = '\0';
+                printf("%s", buffer);
+            }
+            memset(buffer, 0, sizeof(buffer));
+            break;
+        case 6:
+            bytes_read = read(sock, buffer, sizeof(buffer) - 1);
+            if (bytes_read > 0) {
+                buffer[bytes_read] = '\0';
+                printf("%s", buffer);
+            }
+            memset(buffer, 0, sizeof(buffer));
+            scanf("%d", &num_message);
+            write(sock, &num_message, sizeof(num_message));
+            bytes_read = read(sock, buffer, sizeof(buffer) - 1);
+            if (bytes_read > 0) {
+                buffer[bytes_read] = '\0';
+                printf("%s", buffer);
+            }
+            memset(buffer, 0, sizeof(buffer));
+            fgets(message, sizeof(message), stdin);
+            message[strcspn(message, "\n")] = 0;
+            write(sock, message, strlen(message));
+            fflush(stdout);
+            bytes_read = read(sock, buffer, sizeof(buffer) - 1);
+            if (bytes_read > 0) {
+                buffer[bytes_read] = '\0';
+                printf("%s", buffer);
+            }
+            memset(buffer, 0, sizeof(buffer));
+            break;
+        case 7:
+            bytes_read = read(sock, buffer, sizeof(buffer) - 1);
+            if (bytes_read > 0) {
+                buffer[bytes_read] = '\0';
+                printf("%s", buffer);
+            }
+            memset(buffer, 0, sizeof(buffer));
+            break;
+        case 8:
+            bytes_read = read(sock, buffer, sizeof(buffer) - 1);
+            if (bytes_read > 0) {
+                buffer[bytes_read] = '\0';
+                printf("%s", buffer);
+            }
+            memset(buffer, 0, sizeof(buffer));
+            break;
+        case 9:
+            bytes_read = read(sock, buffer, sizeof(buffer) - 1);
+            if (bytes_read > 0) {
+                buffer[bytes_read] = '\0';
+                printf("%s", buffer);
+            }
+            memset(buffer, 0, sizeof(buffer));
+            break;
+        case 10:
+            bytes_read = read(sock, buffer, sizeof(buffer) - 1);
+            if (bytes_read > 0) {
+                buffer[bytes_read] = '\0';
+                printf("%s", buffer);
+            }
+            memset(buffer, 0, sizeof(buffer));
+            break;
+        case 11:
+            bytes_read = read(sock, buffer, sizeof(buffer) - 1);
+            if (bytes_read > 0) {
+                buffer[bytes_read] = '\0';
+                printf("%s", buffer);
+            }
+            memset(buffer, 0, sizeof(buffer));
+            break;
+        case 12:
+            bytes_read = read(sock, buffer, sizeof(buffer) - 1);
+            if (bytes_read > 0) {
+                buffer[bytes_read] = '\0';
+                printf("%s", buffer);
+            }
+            memset(buffer, 0, sizeof(buffer));
+            break;
+        case 13:
+            bytes_read = read(sock, buffer, sizeof(buffer) - 1);
+            if (bytes_read > 0) {
+                buffer[bytes_read] = '\0';
+                printf("%s", buffer);
+            }
+            memset(buffer, 0, sizeof(buffer));
+            break;
+        case 14:
+            bytes_read = read(sock, buffer, sizeof(buffer) - 1);
+            if (bytes_read > 0) {
+                buffer[bytes_read] = '\0';
+                printf("%s", buffer);
+            }
+            memset(buffer, 0, sizeof(buffer));
+            break;
+        default:
+            bytes_read = read(sock, buffer, sizeof(buffer) - 1);
+            if (bytes_read > 0) {
+                buffer[bytes_read] = '\0';
+                printf("%s", buffer);
+            }
+            memset(buffer, 0, sizeof(buffer));
+            break;
         }
-
     }
     bytes_read = read(sock, buffer, sizeof(buffer) - 1);
     if (bytes_read > 0) {

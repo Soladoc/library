@@ -26,7 +26,7 @@ typedef struct {
 /// @param repr The representation buffer.
 /// @return @p repr.
 /// @remark This function doesn't add a null terminator at the end of @p repr.
-char *uuid4_repr(uuid4_t uuid, char repr[const UUID4_REPR_LENGTH]);
+char *uuid4_repr(uuid4_t uuid, char repr[static const UUID4_REPR_LENGTH]);
 
 bool uuid4_parse_slice(uuid4_t *out_uuid, slice_t repr_slice);
 

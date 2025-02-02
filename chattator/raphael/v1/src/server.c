@@ -36,7 +36,7 @@ void server_destroy(server_t *server) {
 
 time_t server_turnstile_rate_limit(server_t *server, serial_t user_id, cfg_t *cfg) {
     if (!(server->flags & server_rate_limiting)) return 0;
-    
+
     time_t const t = time(NULL);
 
     int i = hmgeti(server->turnstile, user_id);
@@ -71,7 +71,7 @@ token_t server_login(server_t *server, serial_t user_id) {
     // we won't allow the same user to login twice in the same second. That will be a collision.
     // merge user_id (high bits) and time (low 32 bits)
     time_t const t = time(NULL);
-    token_t token = ((long)user_id << 32) + (int32_t)t;
+    token_t token = ((long)user_id << 32) + ~(int32_t)t;
 
     if (hmgeti(server->sessions, user_id) != -1) return 0;
     hmput(server->sessions, token, user_id);

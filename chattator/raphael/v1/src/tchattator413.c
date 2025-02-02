@@ -11,6 +11,8 @@ static inline json_object *act(json_object *const obj_action, cfg_t *cfg, db_t *
 
     json_object *obj_response = response_to_json(&response);
 
+    response_destroy(&response);
+
     return obj_response;
 }
 

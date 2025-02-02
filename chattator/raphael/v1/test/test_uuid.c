@@ -28,7 +28,7 @@ struct test test_uuid4(void) {
         "f81d4fae-7dec11d0-a765-00a0c91e6bf6"
     };
 
-    for (size_t i = 0; i < array_length(uuids); ++i) {
+    for (size_t i = 0; i < array_len(uuids); ++i) {
         uuid4_t uuid;
         test_case(&t,
             errstatus_ok == uuid4_parse(&uuid, uuids[i]),
@@ -45,7 +45,7 @@ struct test test_uuid4(void) {
             "%.*s != different_uuid", UUID4_REPR_LENGTH, uuids[i]);
     }
 
-    for (size_t i = 0; i < array_length(invalid_uuids); ++i) {
+    for (size_t i = 0; i < array_len(invalid_uuids); ++i) {
         uuid4_t uuid;
         test_case(&t,
             errstatus_ok != uuid4_parse(&uuid, invalid_uuids[i]),

@@ -10,6 +10,9 @@ typedef struct {
     char const *val;
 } slice_t;
 
+#define SLICE_CONST(STRLIT) \
+    (slice_t) { .len = sizeof STRLIT - 1, .val = STRLIT }
+
 /// @brief Returns the length of a slice as a signed integer.
 /// @param slice A slice.
 /// @return The length of @p slice, capped to @ref INT_MAX.

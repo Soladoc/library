@@ -27,7 +27,7 @@ static inline uint8_t hex_repr_to_half(char c);
 
 #define X_42226 o o o o h o o h o o h o o h o o o o o o
 
-char *uuid4_repr(uuid4_t uuid, char repr[const UUID4_REPR_LENGTH]) {
+char *uuid4_repr(uuid4_t uuid, char repr[static const UUID4_REPR_LENGTH]) {
     size_t idata = 0, i = 0;
 #define o                                                    \
     do {                                                     \
@@ -90,12 +90,10 @@ uint8_t hex_repr_to_half(char c) {
         : INVALID_HALF;
 }
 
-bool uuid4_eq(uuid4_t a, uuid4_t b)
-{
+bool uuid4_eq(uuid4_t a, uuid4_t b) {
     return memcmp(&a, &b, sizeof a) == 0;
 }
 
-bool uuid4_parse_slice(uuid4_t *out_uuid, slice_t repr_slice)
-{
+bool uuid4_parse_slice(uuid4_t *out_uuid, slice_t repr_slice) {
     return repr_slice.len >= UUID4_REPR_LENGTH && uuid4_parse(out_uuid, repr_slice.val);
 }

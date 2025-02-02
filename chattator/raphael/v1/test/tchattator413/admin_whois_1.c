@@ -3,8 +3,8 @@
 /// @brief Tchattator413 test - whois of 1 by admin
 /// @date 1/02/2025
 
-#include <tchattator413/tchattator413.h>
 #include "tests_tchattator413.h"
+#include <tchattator413/tchattator413.h>
 
 #define NAME admin_whois_1
 
@@ -19,12 +19,12 @@ static void on_response(response_t const *response, void *t) {
     base_on_response(t);
     if (!test_case_eq_int(t, response->type, action_type_whois, "type")) return;
     test_case(t, !response->has_next_page, "");
-    test_case_eq_int(t, response->body.whois.user_id, 1, "user id");
-    test_case_eq_int(t, response->body.whois.kind, user_kind_pro_prive, "kind");
-    test_case_eq_str(t, response->body.whois.display_name, "pro1", "display name");
-    test_case_eq_str(t, response->body.whois.email, "pro@1.413", "email");
-    test_case_eq_str(t, response->body.whois.first_name, "pro1_prenom", "first name");
-    test_case_eq_str(t, response->body.whois.last_name, "pro1_nom", "last name");
+    test_case_eq_int(t, response->body.whois.user.id, 1, "user id");
+    test_case_eq_int(t, response->body.whois.user.kind, user_kind_pro_prive, "kind");
+    test_case_eq_str(t, response->body.whois.user.display_name, "pro1", "display name");
+    test_case_eq_str(t, response->body.whois.user.email, "pro@1.413", "email");
+    test_case_eq_str(t, response->body.whois.user.first_name, "pro1_prenom", "first name");
+    test_case_eq_str(t, response->body.whois.user.last_name, "pro1_nom", "last name");
 }
 
 TEST_SIGNATURE(NAME) {

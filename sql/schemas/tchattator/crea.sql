@@ -12,11 +12,11 @@ create table _msg (
     -- null if never occured
     -- not using intervals because they are hard to deal with and we only need a number of seconds
     read_age int, -- read by recipient
-    modified_age int,
+    edited_age int,
     deleted_age int,
     
     constraint deleted_gt_read check (deleted_age > read_age),
-    constraint deleted_gt_modified check (deleted_age > modified_age),
+    constraint deleted_gt_modified check (deleted_age > edited_age),
 
     id_compte_sender int -- Null for admin
         constraint message_fk_compte_sender references pact._compte on delete cascade,

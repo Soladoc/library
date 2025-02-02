@@ -93,12 +93,16 @@ action_t action_parse(json_object *obj, db_t *db) {
         case errstatus_ok:;                                                        \
         }                                                                          \
     } while (0)
-#define getarg_page(obj, key, out_value)                            \
-    do {                                                            \
-        getarg_int(obj, key, out_value);                            \
-        if (*out_value < 1) {                                       \
-            fail_invalid(arg_loc(key), obj, "invalid page number"); \
-        }                                                           \
+#define getarg_page(obj, key, out_value)                                \
+    do { /* temporary fix to make optional arguments */                 \
+        if (json_object_object_get_ex(obj_with, key, &obj)) {           \
+            getarg_int(obj, key, out_value);                            \
+            if (*out_value < 1) {                                       \
+                fail_invalid(arg_loc(key), obj, "invalid page number"); \
+            }                                                           \
+        } else {                                                        \
+            *out_value = 1;                                             \
+        }                                                               \
     } while (0)
 #define getarg_api_key(obj, get, out_value)                              \
     do {                                                                 \
@@ -351,12 +355,12 @@ json_object *response_to_json(response_t *response) {
 
         break;
     case action_type_whois:
-        add_key(obj_body, "user_id", json_object_new_int(response->body.whois.user_id));
-        add_key(obj_body, "email", json_object_new_string(response->body.whois.email));
-        add_key(obj_body, "last_name", json_object_new_string(response->body.whois.last_name));
-        add_key(obj_body, "first_name", json_object_new_string(response->body.whois.first_name));
-        add_key(obj_body, "display_name", json_object_new_string(response->body.whois.display_name));
-        add_key(obj_body, "kind", json_object_new_int(response->body.whois.kind));
+        add_key(obj_body, "user_id", json_object_new_int(response->body.whois.user.id));
+        add_key(obj_body, "email", json_object_new_string(response->body.whois.user.email));
+        add_key(obj_body, "last_name", json_object_new_string(response->body.whois.user.last_name));
+        add_key(obj_body, "first_name", json_object_new_string(response->body.whois.user.first_name));
+        add_key(obj_body, "display_name", json_object_new_string(response->body.whois.user.display_name));
+        add_key(obj_body, "kind", json_object_new_int(response->body.whois.user.kind));
         break;
     case action_type_send:
 

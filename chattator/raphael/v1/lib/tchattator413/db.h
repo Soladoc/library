@@ -6,11 +6,24 @@
 #ifndef DB_H
 #define DB_H
 
-#include "types.h"
 #include "errstatus.h"
+#include "types.h"
 
 /// @brief An opaque handle to a database connection.
 typedef void db_t;
+
+typedef struct {
+    void *memory_owner_db;
+    serial_t id;
+    user_kind_t kind;
+    char const *email, *last_name, *first_name, *display_name;
+} user_t;
+
+typedef struct {
+    void *memory_owner_db;
+    msg_t *msgs;
+    uint32_t n_msgs;
+} msg_list_t;
 
 /// @brief Initialize a database connection.
 /// @param verbosity The verbosity level.
@@ -21,6 +34,10 @@ db_t *db_connect(int verbosity, char const *host, char const *port, char const *
 /// @brief Destroy a database connection.
 /// @param db The database connection to destroy. No-op if @c NULL.
 void db_destroy(db_t *db);
+
+/// @brief Cleans up a memory owner.
+/// @note @c NULL is no-op
+void db_collect(void *memory_owner);
 
 /// @brief Verify an API key.
 /// @param db The database.
@@ -89,5 +106,20 @@ int db_count_msg(db_t *db, serial_t sender_id, serial_t recipient_id);
 /// @return @ref errstatus_handled A database error occured. A message has been shown. @p out_user is untouched.
 /// @return @ref errstatus_error The sender has been blocked from sending messages, either globally or by this particular recipient.
 serial_t db_send_msg(db_t *db, serial_t sender_id, serial_t recipient_id, char const *content);
+
+/// @brief Creates an array with the messages an user has recieved, sorted by sent/edited date, in reverse chronological order.
+/// @param db The database.
+/// @param limit The maximum number of messages to fetch.
+/// @param offset The offset of the query.
+/// @param recipient_id The ID of the user who recieved the messages.
+/// @return A message list. The memory owner is @c NULL on error.
+msg_list_t db_get_inbox(db_t *db,
+    uint32_t limit,
+    uint32_t offset,
+    serial_t recipient_id);
+
+errstatus_t db_get_msg(db_t *db, msg_t *msg, void **memory_owner_db);
+
+errstatus_t db_rm_msg(db_t *db, serial_t msg_id);
 
 #endif // DB_H

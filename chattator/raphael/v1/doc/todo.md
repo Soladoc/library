@@ -1,6 +1,18 @@
 # Todo
 
-- [ ] get rid of `with`. no body needs it
+## bugs
+
+- [ ] does output formet check the values
+- [ ] when object fmt input or output, order of JSON objects is not defined, so for multiple arguments, we don't know which argument will go where
+  - [ ] solution : for output : only check : no more varargs : use global static variables set in onresponse
+
+## stuff
+
+- [ ] use a `db_memory_owner` pointer on `action_t` pointing to read-only memory instead of `strcpy`ing ourselves into oblivion.
+
+- [ ] do we really need `slice_t`? didn't think so.
+
+- [ ] rename action_error to error (action_error_type -> error_type, so on...)
   
 - multiaction requests shouldn't increase rate limits that much
 

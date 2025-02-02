@@ -31,8 +31,9 @@ typedef enum {
     action_error_type_type,
     action_error_type_missing_key,
     action_error_type_invalid,
-    action_error_type_runtime,
     action_error_type_rate_limit,
+    action_error_type_invariant,
+    action_error_type_runtime,
 } action_error_type_t;
 
 typedef struct {
@@ -51,11 +52,14 @@ typedef struct {
             json_object *obj_bad;
         } invalid;
         struct {
-            status_t status;
-        } runtime;
-        struct {
             time_t next_request_at;
         } rate_limit;
+        struct {
+            char const *name;
+        } invariant;
+        struct {
+            status_t status;
+        } runtime;
     } info;
 } action_error_t;
 
@@ -111,11 +115,6 @@ typedef struct {
         } block, unblock, ban, unban;
     } with;
 } action_t;
-typedef struct {
-    time_t sent_at, read_age, modified_age, deleted_age;
-    char *content;
-    serial_t msg_id, sender, recipient;
-} msg_t;
 
 typedef struct {
     action_type_t type;
@@ -125,20 +124,14 @@ typedef struct {
         struct {
             token_t token;
         } login;
-        user_t whois;
+        struct {
+            user_t user;
+        } whois;
         struct {
             serial_t msg_id;
         } send;
-        struct {
-            struct msg_t *messages;
-        } motd;
+        msg_list_t motd, inbox, outbox;
         /*struct {
-
-        } inbox;
-        struct {
-
-        } outbox;
-        struct {
 
         } edit;
         struct {
@@ -158,6 +151,8 @@ typedef struct {
         } unban;*/
     } body;
 } response_t;
+
+void response_destroy(response_t *response);
 
 /// @brief Put an user role.
 /// @param role The role flags

@@ -5,3 +5,5 @@
 - Macro naming : lowercase if acts completely transparently (like a function), meaning
   - no non-expression arguments
   - ... otherwise UPPER_CASE
+- function pointer typedef naming `fn_` prefix
+- typedef naming `_t` suffix

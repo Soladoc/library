@@ -1,0 +1,17 @@
+[
+  {
+    "body": [
+      {
+        "msg_id": {
+          "$fmt_number": "%d"
+        },
+        "sent_at": {
+          "$fmt_number": "%ld"
+        },
+        "content": "Bonjour du language C :)",
+        "sender": 5,
+        "recipient": 1
+      }
+    ]
+  }
+]
