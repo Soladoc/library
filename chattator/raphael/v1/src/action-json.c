@@ -31,7 +31,7 @@ static inline serial_t get_user_id(json_object *obj_user, db_t *db) {
 }
 
 action_t action_parse(json_object *obj, db_t *db) {
-    action_t action = {};
+    action_t action = {0};
 
 #define fail()                                                                \
     do {                                                                      \

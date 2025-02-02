@@ -78,7 +78,7 @@ int main(int argc, char **argv) {
                 .name = "config",
                 .val = opt_config,
             },
-            {},
+            {0},
         };
 
         int opt;

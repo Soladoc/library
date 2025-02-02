@@ -61,7 +61,7 @@ static inline errstatus_t auth_token(user_identity_t *out_user, token_t token, d
 }
 
 response_t action_evaluate(action_t const *action, cfg_t *cfg, db_t *db, server_t *server) {
-    response_t rep = {};
+    response_t rep = {0};
 
 #define fail(return_status)                                 \
     do {                                                    \
