@@ -6,7 +6,7 @@ cd /docker/sae/data
 sudo git fetch --all
 sudo git reset --hard origin/main
 
-killall tct413 || true
+sudo killall tct413 || true
 
 set -a
 # shellcheck source=/dev/null
@@ -15,6 +15,8 @@ set +a
 
 cd chattator
 
-make -f raphael/v1/Makefile
+sudo apt-get install make -y
 
-raphael/v1/bin/tct413 -c config.json
+sudo make -f raphael/v1/Makefile
+
+sudo raphael/v1/bin/tct413 -c config.json
