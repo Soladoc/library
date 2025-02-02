@@ -8,7 +8,7 @@ on:
       - '**.c'
       - '**.h'
 jobs:
-  update_server:
+  update_tchattator:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
@@ -18,7 +18,7 @@ jobs:
         env:
           ARTIFACT_SSH_KEY: '${{secrets.ARTIFACT_SSH_KEY}}'
           ARTIFACT_HOST: '${{secrets.ARTIFACT_HOST}}'
-        run: 'cd "$GITHUB_WORKSPACE"/script && ./server-run-script.bash ./tchattator/update-tchattator.bash'
+        run: 'cd "$GITHUB_WORKSPACE"/script && ./server-run-script.bash ./server/update-tchattator.bash'
 
       - name: Send Discord message
         env:
