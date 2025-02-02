@@ -3,6 +3,8 @@
 /// @brief Tchattator413 JSON front-end - Main program
 /// @date 23/01/2025
 
+#include "src/force_link_glibc_2.27.h"
+
 #include <assert.h>
 #include <getopt.h>
 #include <json-c/json.h>
