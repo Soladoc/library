@@ -39,6 +39,8 @@ struct _stbtest_case {
 
 STB_TEST_DEFINITION struct test test_start(char const *name);
 
+/// @brief Add a test case that is always a faliure.
+#define test_fail(test, name, ...) _stbtest_test_case(__LINE__, __FILE_NAME__, (test), false, "(fail)", (name)__VA_OPT__(, ) __VA_ARGS__)
 /// @brief Add a test case.
 #define test_case(test, expr, name, ...) _stbtest_test_case(__LINE__, __FILE_NAME__, (test), (expr), #expr, (name)__VA_OPT__(, ) __VA_ARGS__)
 /// @brief Add a test case with the expr and name columns merged.

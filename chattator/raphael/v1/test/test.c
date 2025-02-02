@@ -13,7 +13,6 @@
 #define DB_ROOT_PASSWORD "postgres"
 #define DB_HOST "localhost"
 
-
 int main() {
     struct test t;
     bool success = true;
@@ -21,7 +20,7 @@ int main() {
     db_t *db = db_connect(0, DB_HOST, PGDB_PORT, DB_NAME, DB_USER, DB_ROOT_PASSWORD);
     if (!db) return EX_NODB;
 
-    server_t server = {};
+    server_t *server = server_create(server_regular);
 
 #define test(new_test)                \
     do {                              \
@@ -31,7 +30,7 @@ int main() {
 
     test(test_uuid4());
 
-#define CALL_TEST(name) test(test_tchattator413_##name(cfg, db, &server));
+#define CALL_TEST(name) test(test_tchattator413_##name(cfg, db, server));
     X_TESTS(CALL_TEST)
 #undef CALL_TEST
 
@@ -41,7 +40,7 @@ int main() {
 
     cfg_destroy(cfg);
     db_destroy(db);
-    server_destroy(&server);
+    server_destroy(server);
 
     return success ? EXIT_SUCCESS : EXIT_FAILURE;
 }

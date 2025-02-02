@@ -6,6 +6,10 @@
 #include "tests_tchattator413.h"
 #include "tchattator413/json-helpers.h"
 #include <stdarg.h>
+#include <sys/types.h>
+#include <wctype.h>
+
+static inline void va_advance_printf(va_list *ap, const char *fmt);
 
 bool uuid4_eq_repr(uuid4_t uuid, char const repr[static const UUID4_REPR_LENGTH]) {
     uuid4_t parsed_repr;
@@ -45,11 +49,14 @@ static inline char const *json_object_get_fmt(json_object *obj) {
         : NULL;
 }
 
-static inline json_object *reduce_fmt_v(json_object *obj, va_list ap) {
+static inline json_object *reduce_fmt_v(json_object *obj, va_list *ap) {
     char const *fmt = json_object_get_fmt(obj);
     if (fmt) {
         // arguments -> json object
-        char *fmted = vstrfmt(fmt, ap);
+        char *fmted = vstrfmt(fmt, *ap);
+        if (!fmted) errno_exit("vstrfmt");
+        //va_advance_printf(ap, fmt);
+
         json_object_put(obj);
         obj = json_tokener_parse(fmted);
         free(fmted);
@@ -96,20 +103,24 @@ json_object *input_file_fmt(const char *input_filename, ...) {
 
     va_list ap;
     va_start(ap, input_filename);
-    obj = reduce_fmt_v(obj, ap);
+    obj = reduce_fmt_v(obj, &ap);
     va_end(ap);
 
     return obj;
 }
 
-static inline bool _json_object_eq_fmt_v(json_object *obj_actual, json_object *obj_expected, va_list ap) {
+static inline bool _json_object_eq_fmt_v(json_object *obj_actual, json_object *obj_expected, va_list *ap) {
     // Special handling of our JSON pattern matching mechanism
     const char *fmt = json_object_get_fmt(obj_expected);
     if (fmt) {
         // json object -> arguments
         char const *str = json_object_get_string(obj_actual);
-        int n = vsscanf(str, fmt, ap);
-        return n != EOF;
+        int n = vsscanf(str, fmt, *ap);
+        if (n == EOF) return false;
+        // requires all pointers expected by scanf to be the same size. this is the case on almost all modern platforms.
+        while (n--)
+            va_arg(*ap, void *);
+        return true;
     }
 
     json_type const actual_type = json_object_get_type(obj_actual), expected_type = json_object_get_type(obj_expected);
@@ -156,7 +167,7 @@ bool test_case_o_file_fmt(test_t *test, json_object *obj_output, char const *exp
 
     va_list ap;
     va_start(ap, expected_output_filename);
-    bool ok = _json_object_eq_fmt_v(obj_output, obj_output_expected, ap);
+    bool ok = _json_object_eq_fmt_v(obj_output, obj_output_expected, &ap);
     va_end(ap);
     json_object_put(obj_output_expected);
     return test_case_wide(&test->t, ok, "%s == cat %s", min_json(obj_output), expected_output_filename);
@@ -165,7 +176,156 @@ bool test_case_o_file_fmt(test_t *test, json_object *obj_output, char const *exp
 bool json_object_eq_fmt(json_object *obj_actual, json_object *obj_expected, ...) {
     va_list ap;
     va_start(ap, obj_expected);
-    bool ok = _json_object_eq_fmt_v(obj_actual, obj_expected, ap);
+    bool ok = _json_object_eq_fmt_v(obj_actual, obj_expected, &ap);
     va_end(ap);
     return ok;
+}
+
+// clang-format off
+void va_advance_printf(va_list *ap, const char *fmt) {
+    while (*fmt) {
+        if (*fmt++ == '%') { // Found format specifier
+            while (*fmt == '-'
+                || *fmt == '+'
+                || *fmt == ' '
+                || *fmt == '#'
+                || *fmt == '0') {
+                fmt++;
+            }
+            if (*fmt == '*') {
+                fmt++;
+                va_arg(*ap, int);
+            } else while ('0' <= *fmt && *fmt <= '9') {
+                fmt++;
+            }
+            if (*fmt == '.') {
+                fmt++;
+                if (*fmt == '*') {
+                    fmt++;
+                    va_arg(*ap, int);
+                } else while ('0' <= *fmt && *fmt <= '9') {
+                    fmt++;
+                }
+            }
+            switch (*fmt) {
+            case 'h':
+                switch (*(fmt + 1)) {
+                case 'h':
+                    switch (*(fmt + 2)) {
+                    case 'd':
+                    case 'i': fmt += 3; va_arg(*ap, int); break; // signed char
+                    case 'o':
+                    case 'x':
+                    case 'X':
+                    case 'u': fmt += 3; va_arg(*ap, int); break; // unsigned char
+                    case 'n': fmt += 3; va_arg(*ap, signed char *); break;
+                    }
+                    break;
+                case 'd':
+                case 'i': fmt += 2; va_arg(*ap, int); break; // short
+                case 'o':
+                case 'x':
+                case 'X':
+                case 'u': fmt += 2; va_arg(*ap, int); break; // unsigned short
+                case 'n': fmt += 2; va_arg(*ap, short *); break;
+                }
+                break;
+            case 'c': fmt++; va_arg(*ap, int); break;
+            case 's': fmt++; va_arg(*ap, char *); break;
+            case 'd':
+            case 'i': fmt++; va_arg(*ap, int); break;
+            case 'o':
+            case 'x': fmt++; va_arg(*ap, unsigned int); break;
+            case 'X': fmt++; va_arg(*ap, unsigned int); break;
+            case 'u': fmt++; va_arg(*ap, unsigned int); break;
+            case 'f':
+            case 'F':
+            case 'e':
+            case 'E':
+            case 'a':
+            case 'A':
+            case 'g':
+            case 'G': fmt++; va_arg(*ap, double); break;
+            case 'n': fmt++; va_arg(*ap, int *); break;
+            case 'p': fmt++; va_arg(*ap, void *); break;
+            case 'l':
+                switch (*(fmt + 1)) {
+                case 'c': fmt += 2; va_arg(*ap, wint_t); break;
+                case 's': fmt += 2; va_arg(*ap, wchar_t *); break;
+                case 'd':
+                case 'i': fmt += 2; va_arg(*ap, long); break;
+                case 'o':
+                case 'x':
+                case 'X':
+                case 'u': fmt += 2; va_arg(*ap, unsigned long); break;
+                case 'f':
+                case 'F':
+                case 'e':
+                case 'E':
+                case 'a':
+                case 'A':
+                case 'g':
+                case 'G': fmt += 2; va_arg(*ap, double); break;
+                case 'n': fmt += 2; va_arg(*ap, long *); break;
+                case 'l':
+                    switch (*(fmt + 2)) {
+                    case 'd':
+                    case 'i': fmt += 3; va_arg(*ap, long long); break;
+                    case 'o':
+                    case 'x':
+                    case 'X':
+                    case 'u': fmt += 3; va_arg(*ap, unsigned long long); break;
+                    case 'n': fmt += 3; va_arg(*ap, long long *); break;
+                    }
+                    break;
+                }
+                break;
+            case 'j':
+                switch (*(fmt + 1)) {
+                case 'd':
+                case 'i': fmt += 2; va_arg(*ap, intmax_t); break;
+                case 'o':
+                case 'x':
+                case 'X':
+                case 'u': fmt += 2; va_arg(*ap, uintmax_t); break;
+                case 'n': fmt += 2; va_arg(*ap, intmax_t *); break;
+                }
+                break;
+            case 'z':
+                switch (*(fmt + 1)) {
+                case 'd':
+                case 'i': fmt += 2; va_arg(*ap, ssize_t); break;
+                case 'o':
+                case 'x':
+                case 'X':
+                case 'n': fmt += 2; va_arg(*ap, size_t *); break;
+                case 'u': fmt += 2; va_arg(*ap, size_t); break;
+                }
+                break;
+            case 't':
+                switch (*(fmt + 1)) {
+                case 'd':
+                case 'i': fmt +=2; va_arg(*ap, ptrdiff_t); break;
+                case 'o':
+                case 'x':
+                case 'X':
+                case 'u': fmt += 2; va_arg(*ap, unsigned long); break; // uptrdiff_t
+                case 'n': fmt += 2; va_arg(*ap, ptrdiff_t *); break;
+                }
+                break;
+            case 'L':
+                switch (*(fmt + 1)) {
+                case 'f':
+                case 'F':
+                case 'e':
+                case 'E':
+                case 'a':
+                case 'A':
+                case 'g':
+                case 'G': fmt += 2; va_arg(*ap, long double); break;
+                }
+                break;
+            }
+        }
+    }
 }

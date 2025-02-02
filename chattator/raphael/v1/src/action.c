@@ -50,8 +50,16 @@ response_t action_evaluate(action_t const *action, cfg_t *cfg, db_t *db, server_
 #define check_role(allowed_roles) \
     if (!(user.role & (allowed_roles))) fail(status_forbidden)
 
-#define turnstile_rate_limit() \
-    if (!server_turnstile_rate_limit(server, user.id, cfg)) fail(status_too_many_requests)
+#define turnstile_rate_limit()                                           \
+    do {                                                                 \
+        time_t t = server_turnstile_rate_limit(server, user.id, cfg);    \
+        if (t) {                                                         \
+            rep.type = action_type_error;                                \
+            rep.body.error.type = action_error_type_rate_limit;          \
+            rep.body.error.info.rate_limit.next_request_at = t; \
+            return rep;                                                  \
+        }                                                                \
+    } while (0)
 
     // Identify user
     user_identity_t user;

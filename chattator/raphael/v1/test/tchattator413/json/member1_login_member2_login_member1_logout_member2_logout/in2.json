@@ -1,0 +1,18 @@
+[
+  {
+    "do": "logout",
+    "with": {
+      "token": {
+        "$fmt_number": "%ld"
+      }
+    }
+  },
+  {
+    "do": "logout",
+    "with": {
+      "token": {
+        "$fmt_number": "%ld"
+      }
+    }
+  }
+]

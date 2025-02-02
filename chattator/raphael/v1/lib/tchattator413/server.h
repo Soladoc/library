@@ -20,27 +20,23 @@ typedef struct {
     int n_requests_m;
 } user_stats_t;
 
+typedef struct server server_t;
 
-/// @remark It is undefined behavior to access a member of this struct outside of server.c
-typedef struct {
-    struct {
-        serial_t key;
-        user_stats_t value;
-    } *turnstile;
-    struct {
-        token_t key;
-        serial_t value;
-    } *sessions;
-} server_t;
+typedef enum {
+    server_regular,
+    server_rate_limiting = 1 << 0,
+} server_flags_t;
+
+server_t *server_create(server_flags_t flags);
 
 void server_destroy(server_t *server);
 
 /// @brief Checks and increments the rate limit for the specified user.
 /// @param server The server.
 /// @param user_id The ID of the user performing the request.
-/// @return @c true The turnstile passes (the rate limit hasn't been reached)
-/// @return @c false The turnstile blocks (the rate limit has been reached). An error has been put.
-bool server_turnstile_rate_limit(server_t *server, serial_t user_id, cfg_t *cfg);
+/// @return @c 0 The turnstile passes (the rate limit hasn't been reached)
+/// @return > @c 0 The turnstile blocks (the rate limit has been reached). An error has been put. The return value is time of the next allowed request.
+time_t server_turnstile_rate_limit(server_t *server, serial_t user_id, cfg_t *cfg);
 
 /// @brief Creates a new session, logging in an user.
 /// @param server The server.

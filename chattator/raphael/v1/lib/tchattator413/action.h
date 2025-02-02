@@ -15,7 +15,6 @@
 #include "server.h"
 #include "types.h"
 
-
 // Note : resemblance with HTTP status code is only for familiarity
 typedef enum {
     status_bad_request = 400,
@@ -33,6 +32,7 @@ typedef enum {
     action_error_type_missing_key,
     action_error_type_invalid,
     action_error_type_runtime,
+    action_error_type_rate_limit,
 } action_error_type_t;
 
 typedef struct {
@@ -53,6 +53,9 @@ typedef struct {
         struct {
             status_t status;
         } runtime;
+        struct {
+            time_t next_request_at;
+        } rate_limit;
     } info;
 } action_error_t;
 

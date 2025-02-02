@@ -118,9 +118,9 @@ int main(int argc, char **argv) {
             return EX_DATAERR;
         }
 
-        server_t server = {};
+        server_t *server = server_create(server_rate_limiting);
 
-        json_object *obj_output = tchattator413_interpret(obj_input, cfg, db, &server, NULL, NULL, NULL);
+        json_object *obj_output = tchattator413_interpret(obj_input, cfg, db, server, NULL, NULL, NULL);
 
         // Results
 
@@ -132,7 +132,7 @@ int main(int argc, char **argv) {
         json_object_put(obj_output);
 
         db_destroy(db);
-        server_destroy(&server);
+        server_destroy(server);
     }
 
     cfg_destroy(cfg);

@@ -12,8 +12,8 @@
 
 #include <tchattator413/cfg.h>
 #include <tchattator413/db.h>
-#include <tchattator413/server.h>
 #include <tchattator413/json-helpers.h>
+#include <tchattator413/server.h>
 
 // Tests
 
@@ -27,19 +27,22 @@
 // ACTION is an action name
 // WITH are the action arguments, one or more, separated by '_'
 
-#define X_TESTS(X)                  \
-    X(empty)                        \
-    X(malformed)                    \
-    X(zero)                         \
-                                    \
-    X(admin_whois_1)                \
-    X(admin_whois_neg1)             \
-    X(member1_login_wrong_password) \
-    X(admin_whois_imax)             \
-    X(invalid_login)                \
-    X(invalid_whois_1)              \
-    X(member1_login)                \
-    X(member1_login_logout)         \
+#define X_TESTS(X)                                               \
+    X(empty)                                                     \
+    X(malformed)                                                 \
+    X(zero)                                                      \
+                                                                 \
+    X(admin_whois_1)                                             \
+    X(admin_whois_neg1)                                          \
+    X(member1_login_wrong_password)                              \
+    X(admin_whois_imax)                                          \
+    X(invalid_login)                                             \
+    X(invalid_whois_1)                                           \
+    X(member1_login)                                             \
+    X(member1_login_logout)                                      \
+    X(member1_login_logout_logout)                               \
+    X(member1_login_login_logout_logout)                         \
+    X(member1_login_member2_login_member1_logout_member2_logout) \
     //
 
 #define TEST_SIGNATURE(name) struct test CAT(test_tchattator413_, name)(cfg_t * cfg, db_t * db, server_t * server)
@@ -77,7 +80,6 @@ typedef struct {
     int n_actions, n_responses;
     server_t *server;
 } test_t;
-
 _Static_assert(offsetof(test_t, t) == 0, "backing test must be at start of struct for implicit base type punning");
 
 #define test_case_count(t, actual, expected, singular) test_case(t, actual == expected, "expected %d %s%s, got %d", expected, singular, expected == 1 ? "" : "s", actual)

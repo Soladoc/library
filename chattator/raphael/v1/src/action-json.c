@@ -334,6 +334,11 @@ json_object *response_to_json(response_t *response) {
             status = response->body.error.info.runtime.status;
             break;
         }
+        case action_error_type_rate_limit: {
+            status = status_too_many_requests;
+            add_key(obj_body, "next_request_at", json_object_new_int64(response->body.error.info.rate_limit.next_request_at));
+            break;
+        }
         default: unreachable();
         }
         add_key(obj_body, "status", json_object_new_int(status));
