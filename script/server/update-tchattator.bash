@@ -17,6 +17,6 @@ cd chattator/raphael/v1
 
 sudo apt-get install make -y
 
-sudo make
+sudo make -B
 
 sudo bin/tct413 -c ../../config.json
