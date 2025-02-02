@@ -6,7 +6,7 @@ cd /docker/sae/data
 sudo git fetch --all
 sudo git reset --hard origin/main
 
-killall tct413
+killall tct413 || true
 
 set -a
 # shellcheck source=/dev/null
