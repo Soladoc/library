@@ -31,7 +31,7 @@ static inline serial_t get_user_id(json_object *obj_user, db_t *db) {
 }
 
 action_t action_parse(json_object *obj, db_t *db) {
-    action_t action = {0};
+    action_t action = { 0 };
 
 #define fail()                                                                \
     do {                                                                      \
@@ -289,10 +289,24 @@ action_t action_parse(json_object *obj, db_t *db) {
     return action;
 }
 
+#define add_key(o, k, v) json_object_object_add_ex(o, k, v, JSON_C_OBJECT_ADD_KEY_IS_NEW | JSON_C_OBJECT_KEY_IS_CONSTANT)
+
+static json_object *msg_to_json_object(msg_t *msg) {
+    json_object *obj = json_object_new_object();
+    add_key(obj, "msg_id", json_object_new_int(msg->id));
+    add_key(obj, "sent_at", json_object_new_int64(msg->sent_at));
+    add_key(obj, "content", json_object_new_string(msg->content));
+    add_key(obj, "sender", json_object_new_int(msg->user_id_sender));
+    add_key(obj, "recipient", json_object_new_int(msg->user_id_recipient));
+    if (msg->deleted_age) add_key(obj, "deleted_age", json_object_new_int(msg->deleted_age));
+    if (msg->read_age) add_key(obj, "read_age", json_object_new_int(msg->read_age));
+    if (msg->edited_age) add_key(obj, "edited_age", json_object_new_int(msg->edited_age));
+    return obj;
+}
+
 json_object *response_to_json(response_t *response) {
     json_object *obj = json_object_new_object(), *obj_body = json_object_new_object();
 
-#define add_key(o, k, v) json_object_object_add_ex(o, k, v, JSON_C_OBJECT_ADD_KEY_IS_NEW | JSON_C_OBJECT_KEY_IS_CONSTANT)
     if (response->has_next_page) add_key(obj, "has_next_page", json_object_new_boolean(true));
     add_key(obj, response->type == action_type_error ? "error" : "body", obj_body);
 
@@ -368,9 +382,17 @@ json_object *response_to_json(response_t *response) {
     case action_type_motd:
 
         break;
-    case action_type_inbox:
+    case action_type_inbox: {
+        json_object *o = json_object_new_array();
+        json_object_object_del(obj, "body");    // FIXME
 
+        for (size_t i = 0; i < response->body.inbox.n_msgs; ++i) {
+            json_object_array_add(o, msg_to_json_object(response->body.inbox.msgs));
+        }
+
+        json_object_object_add(obj, "body", o); // FIXME
         break;
+    }
     case action_type_outbox:
 
         break;
