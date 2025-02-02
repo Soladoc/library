@@ -86,7 +86,7 @@ ul {
 | Action | Résultat attendu | Résultat réel |
 |--------|-----------------|--------------|
 | Lancer le client et tenter de se connecter au serveur | Le client affiche "Connexion établie avec le serveur.(Code 200)" |  |
-| Saisir un nom d'utilisateur valide et un mot de passe correct | Le serveur répond "Nom d'utilisateur reçu" et "Mot de passe reçu", puis envoie un token |  |
+| Saisir un cle API valide et un mot de passe correct | Le serveur répond "Nom d'utilisateur reçu" et "Mot de passe reçu", puis envoie un token |  |
 | Saisir un nom d'utilisateur invalide | Le serveur refuse la connexion |  |
 
 ## Options disponibles dans le chat
