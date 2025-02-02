@@ -1,0 +1,9 @@
+{
+  "do": "send",
+  "with": {
+    "token": {
+      "$fmt": "%ld"
+    },
+    "dest": "pro1"
+  }
+}
