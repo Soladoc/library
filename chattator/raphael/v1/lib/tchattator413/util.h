@@ -17,13 +17,15 @@
 #define CAT(x, y) CAT_(x, y)
 #define CAT_(x, y) x##y
 
-#define PROG "act"
+#define PROG "tct413"
 
 #ifdef NDEBUG
-#define put_error(fmt, ...) fprintf(stderr, PROG ": error: " fmt __VA_OPT__(, ) __VA_ARGS__)
+#define put_log(fmt, ...) fprintf(stderr, PROG ": " fmt __VA_OPT__(, ) __VA_ARGS__)
 #else
-#define put_error(fmt, ...) fprintf(stderr, PROG ":" __FILE_NAME__ ":" STR(__LINE__) ": " fmt __VA_OPT__(, ) __VA_ARGS__)
+#define put_log(fmt, ...) fprintf(stderr, PROG ":" __FILE_NAME__ ":" STR(__LINE__) ": " fmt __VA_OPT__(, ) __VA_ARGS__)
 #endif // NDEBUG
+
+#define put_error(fmt, ...) put_log("error: " fmt __VA_OPT__(, ) __VA_ARGS__)
 
 /// @brief Gets the necessary buffer size for a sprintf operation.
 #define buffer_size(format, ...) (snprintf(NULL, 0, (format), __VA_ARGS__) + 1) // safe byte for \0

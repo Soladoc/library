@@ -14,6 +14,13 @@
 #include <tchattator413/util.h>
 #include <unistd.h>
 
+/* to run it
+set -a
+. .env
+set +a
+./tct413
+*/
+
 static inline char *require_env(char const *name) {
     char *value = getenv(name);
     if (value) return value;
@@ -23,7 +30,7 @@ static inline char *require_env(char const *name) {
 
 int main(int argc, char **argv) {
     int verbosity = 0;
-    bool dump_config = false;
+    bool dump_config = false, interactive = false;
 
     cfg_t *cfg = NULL;
 
@@ -35,6 +42,7 @@ int main(int argc, char **argv) {
             opt_dump_config,
             opt_quiet = 'q',
             opt_verbose = 'v',
+            opt_interactive = 'i',
             opt_config = 'c',
         };
         struct option long_options[] = {
@@ -59,6 +67,10 @@ int main(int argc, char **argv) {
                 .val = opt_verbose,
             },
             {
+                .name = "interactive",
+                .val = opt_interactive,
+            },
+            {
                 .name = "config",
                 .val = opt_config,
             },
@@ -79,6 +91,7 @@ int main(int argc, char **argv) {
                 break;
             case opt_quiet: --verbosity; break;
             case opt_verbose: ++verbosity; break;
+            case opt_interactive: interactive = true; break;
             case opt_config:
                 if (cfg) {
                     put_error("config already specified by previous argument\n");
@@ -96,11 +109,12 @@ int main(int argc, char **argv) {
 
     if (!cfg) cfg = cfg_defaults();
 
+    int result;
+
     if (dump_config) {
         cfg_dump(cfg);
+        result = EX_OK;
     } else {
-        // Allocation
-
         db_t *db = db_connect(verbosity,
             require_env("DB_HOST"),
             require_env("PGDB_PORT"),
@@ -109,33 +123,17 @@ int main(int argc, char **argv) {
             require_env("DB_ROOT_PASSWORD"));
         if (!db) return EX_NODB;
 
-        json_object *const obj_input = optind < argc
-            ? json_tokener_parse(argv[optind])
-            : json_object_from_fd(STDIN_FILENO);
-
-        if (!obj_input) {
-            put_error_json_c("failed to parse input\n");
-            return EX_DATAERR;
-        }
-
         server_t *server = server_create(server_rate_limiting);
 
-        json_object *obj_output = tchattator413_interpret(obj_input, cfg, db, server, NULL, NULL, NULL);
+        result = interactive
+            ? tchattator413_run_console(cfg, db, server, argc, argv)
+            : tchattator413_run_server(cfg, db, server);
 
-        // Results
-
-        puts(min_json(obj_output));
-
-        // Deallocation
-
-        json_object_put(obj_input);
-        json_object_put(obj_output);
-
-        db_destroy(db);
         server_destroy(server);
+        db_destroy(db);
     }
 
     cfg_destroy(cfg);
 
-    return EXIT_SUCCESS;
+    return result;
 }

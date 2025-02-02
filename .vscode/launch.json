@@ -5,14 +5,6 @@
   "version": "0.2.0",
   "configurations": [
     {
-      "type": "gdb",
-      "request": "launch",
-      "name": "Launch tchattator act",
-      "target": "${workspaceFolder}/chattator/raphael/v1/bin/act",
-      "cwd": "${workspaceFolder}/chattator/raphael/v1",
-      "valuesFormatting": "prettyPrinters",
-    },
-    {
       "name": "Launch built-in server and debug",
       "type": "php",
       "request": "launch",

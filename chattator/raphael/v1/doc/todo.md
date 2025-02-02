@@ -8,7 +8,9 @@
 
 ## stuff
 
-- [ ] use a `db_memory_owner` pointer on `action_t` pointing to read-only memory instead of `strcpy`ing ourselves into oblivion.
+- [ ] propper loggin
+
+- [x] use a `db_memory_owner` pointer on `action_t` pointing to read-only memory instead of `strcpy`ing ourselves into oblivion.
 
 - [ ] do we really need `slice_t`? didn't think so.
 

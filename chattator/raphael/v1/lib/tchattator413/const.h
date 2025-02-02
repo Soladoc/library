@@ -33,7 +33,8 @@ enum { EX_NODB = EX__MAX + 1 };
 #define HELP PROG " - A Tchattator413 implementation\n\
 \n\
 SYNOPSIS\n\
-    " PROG " -[qv]... [-c FILE] [REQUEST]\n\
+    " PROG " -[qv]... [-c FILE]\n\
+    " PROG " -[qv]... [-c FILE] -i [REQUEST]\n\
     " PROG " --dump-config\n\
     " PROG " --help\n\
     " PROG " --version\n\
@@ -45,6 +46,7 @@ DESCRIPTION\n\
 \n\
     -q, --quiet        More quiet (can be repeated)\n\
     -v, --verbose      More verbose (can be repeated)\n\
+    -i, --interactive  Run in interactive mode (read from STDIN)\n\
     -c, --config=FILE  Configuration file\n\
     --dump-config      Dump current configuration\n\
     --help             Show this help\n\

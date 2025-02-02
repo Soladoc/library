@@ -1,6 +1,33 @@
 #include <assert.h>
+#include <getopt.h>
 #include <tchattator413/json-helpers.h>
 #include <tchattator413/tchattator413.h>
+#include <unistd.h>
+#include <stdio.h>
+
+int tchattator413_run_console(cfg_t *cfg, db_t *db, server_t *server, int argc, char **argv) {
+    json_object *const obj_input = optind < argc
+        ? json_tokener_parse(argv[optind])
+        : json_object_from_fd(STDIN_FILENO);
+
+    if (!obj_input) {
+        put_error_json_c("failed to parse input\n");
+        return EX_DATAERR;
+    }
+
+    json_object *obj_output = tchattator413_interpret(obj_input, cfg, db, server, NULL, NULL, NULL);
+
+    // Results
+
+    puts(min_json(obj_output));
+
+    // Deallocation
+
+    json_object_put(obj_input);
+    json_object_put(obj_output);
+
+    return EX_OK;
+}
 
 static inline json_object *act(json_object *const obj_action, cfg_t *cfg, db_t *db, server_t *server, fn_on_action_t on_action, fn_on_response_t on_response, void *on_ctx) {
     action_t action = action_parse(obj_action, db);

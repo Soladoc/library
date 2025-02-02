@@ -35,7 +35,7 @@ endif
 debug: CONFIG=debug all
 release: CONFIG=relase all
 
-all: bin/act
+all: bin/tct413
 
 test: bin/test
 	bin/test
@@ -43,7 +43,7 @@ test: bin/test
 clean:
 	rm -r bin
 
-bin/act: act.c $(SRC) $(SRC_LIB)
+bin/tct413: tct413.c $(SRC) $(SRC_LIB)
 	./docker-gcc -o $@ -c '$(CFLAGS)' -l '$(LFLAGS)' $^
 
 bin/test: test/test.c $(SRC) $(SRC_LIB) $(SRC_TEST)
