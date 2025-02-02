@@ -13,7 +13,7 @@
 #define DB_ROOT_PASSWORD "postgres"
 #define DB_HOST "localhost"
 
-int main() {
+int main(void) {
     struct test t;
     bool success = true;
     cfg_t *cfg = cfg_defaults();
