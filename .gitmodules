@@ -1,3 +1,0 @@
-[submodule "chattator/raphael/v1/chattator/raphael/v1/lib/bcrypt"]
-	path = chattator/raphael/v1/chattator/raphael/v1/lib/bcrypt
-	url = https://github.com/rg3/libbcrypt.git
