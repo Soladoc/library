@@ -36,10 +36,10 @@ static struct {
 static void put_state(void) {
     switch (gs_state.tag) {
     case state_connected:
-        printf("Connecté : %s (token %ld)\n", gs_state.info.connected.username, gs_state.info.connected.token);
+        printf("Statut: Connecté : %s (token %ld)\n", gs_state.info.connected.username, gs_state.info.connected.token);
         break;
     case state_unconnected:
-        puts("Non connecté");
+        puts("Statut: Non connecté");
         break;
     default: break;
     }
@@ -53,11 +53,11 @@ int main(void) {
     while (!feof(stdin)) {
         put_state();
         printf("\nMenu:\n");
-        printf("1. Connexion\n");
-        printf("2. Déconnexion\n");
-        printf("3. Envoyer un message\n");
-        printf("4. Supprimer un message\n");
-        printf("5. Voir la boîte de réception\n");
+        if (gs_state.tag == state_unconnected) printf("1. Connexion\n");
+        if (gs_state.tag == state_connected) printf("2. Déconnexion\n");
+        if (gs_state.tag == state_connected) printf("3. Envoyer un message\n");
+        if (gs_state.tag == state_connected) printf("4. Supprimer un message\n");
+        if (gs_state.tag == state_connected) printf("5. Voir la boîte de réception\n");
         printf("6. Quitter\n");
         printf("Choisissez une option: ");
         scanf("%d", &choix);
@@ -216,11 +216,11 @@ void inbox(void) {
     int length = json_object_array_length(rep);
     for (int i = 0; i < length; ++i) {
         json_object *obj = json_object_array_get_idx(rep, i);
-        printf("%d, envoyé le %d: %s de %d\n",
+        printf("%d, envoyé le %ld, de %d: %s \n",
             json_object_get_int(json_object_object_get(obj, "msg_id")),
-            json_object_get_int(json_object_object_get(obj, "sent_at")),
-            json_object_get_string(json_object_object_get(obj, "content")),
-            json_object_get_int(json_object_object_get(obj, "sender")));
+            json_object_get_int64(json_object_object_get(obj, "sent_at")),
+            json_object_get_int(json_object_object_get(obj, "sender")),
+            json_object_get_string(json_object_object_get(obj, "content")));
     }
 
     json_object_put(rep);
