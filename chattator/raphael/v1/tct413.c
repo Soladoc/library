@@ -19,6 +19,10 @@ set -a
 . .env
 set +a
 ./tct413
+
+testing:
+nc 127.0.0.1 4113 <<< '[]'
+
 */
 
 static inline char *require_env(char const *name) {
