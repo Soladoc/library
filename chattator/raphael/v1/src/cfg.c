@@ -12,7 +12,7 @@
 #include <tchattator413/util.h>
 
 #define DEFAULT_LOG_STREAM stderr
-
+ 
 struct cfg {
     uuid4_t admin_api_key;
     FILE *log_file;
