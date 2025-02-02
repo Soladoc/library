@@ -20,7 +20,7 @@ static void on_response_login(response_t const *response, void *t) {
     test_t *test = base_on_response(t);
     test_case(t, !response->has_next_page, "");
     if (!test_case_eq_int(t, response->type, action_type_login, )) return;
-    test_case(t, server_verify_token(test->server, response->body.login.token), "server verifies token");
+    test_case(t, -1 != server_verify_token(test->server, response->body.login.token), "server verifies token %ld", response->body.login.token);
 }
 
 static token_t gs_tokens[2];

@@ -34,7 +34,7 @@ static void on_response(response_t const *response, void *t) {
     switch (test->n_responses) {
     case 1:
         if (!test_case_eq_int(t, response->type, action_type_login, )) return;
-        test_case(t, server_verify_token(test->server, response->body.login.token), "server verifies token");
+        test_case(t, -1 != server_verify_token(test->server, response->body.login.token), "server verifies token %ld", response->body.login.token);
         break;
     case 2:
         test_case_eq_int(t, response->type, action_type_logout, );

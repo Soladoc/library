@@ -93,7 +93,7 @@ values
     (
         (table id_adresse),
         'member1',
-        'membre@1.413',
+        'member@1.413',
         '$2y$10$xuJ9YQIsn1CnN5ja76YDbeY0rX8bmtMraSxeoeMRgBr20lGDpUm/2', -- member1_mdp
         'member1_nom',
         'member1_prenom',
@@ -103,7 +103,7 @@ values
     (
         (table id_adresse),
         'member2',
-        'membre@2.413',
+        'member@2.413',
         '$2y$10$WmZ.J1qFMf.m0mB3N7m6e.rYbkSjxH5yl/22ksIqjTth8Ar7jEgVO', -- member2_mdp
         'member2_nom',
         'member2_prenom',
@@ -113,7 +113,7 @@ values
     (
         (table id_adresse),
         'member3',
-        'membre@3.413',
+        'member@3.413',
         '$2y$10$TvDgV/Lk1OF8dIMmlIub/ellK3FoWCqhvDGF6Ob5bY7KDvAvwNeTO', -- member3_mdp
         'member3_nom',
         'member3_prenom',

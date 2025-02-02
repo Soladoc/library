@@ -14,6 +14,7 @@
 #define TBL_USER "tchattator.user"
 #define TBL_MESSAGE "tchattator._msg"
 #define TBL_MEMBRE "pact.membre"
+#define TBL_PRO "pact.professionnel"
 #define FUN_SEND_MSG "tchattator.send_msg"
 
 #define pq_recv_l(type, res, row, col) ((type)(ntohl(*(type *)(PQgetvalue((res), (row), (col))))))
@@ -38,8 +39,7 @@ db_t *db_connect(int verbosity, char const *host, char const *port, char const *
         NULL, NULL,
         database,
         username,
-        password
-    );
+        password);
     PGVerbosity v;
     if (verbosity <= -2)
         v = PQERRORS_SQLSTATE;
@@ -111,7 +111,7 @@ int db_get_user_role(db_t *db, serial_t user_id) {
 }
 
 serial_t db_get_user_id_by_email(db_t *db, const char *email) {
-    PGresult *result = PQexecParams(db, "select kind, id from " TBL_USER " where email = $1",
+    PGresult *result = PQexecParams(db, "select id from " TBL_USER " where email = $1",
         1, NULL, &email, NULL, NULL, 1);
 
     serial_t res;
@@ -129,9 +129,10 @@ serial_t db_get_user_id_by_email(db_t *db, const char *email) {
     return res;
 }
 
-serial_t db_get_user_id_by_pseudo(db_t *db, const char *pseudo) {
+serial_t db_get_user_id_by_name(db_t *db, const char *name) {
+    // First search by member pseudo since they are unique
     PGresult *result = PQexecParams(db, "select id from " TBL_MEMBRE " where pseudo=$1",
-        1, NULL, &pseudo, NULL, NULL, 1);
+        1, NULL, &name, NULL, NULL, 1);
 
     serial_t res;
 
@@ -139,7 +140,19 @@ serial_t db_get_user_id_by_pseudo(db_t *db, const char *pseudo) {
         putln_error_pq_result(result);
         res = errstatus_handled;
     } else if (PQntuples(result) == 0) {
-        res = errstatus_error;
+        PQclear(result);
+        // Fallback to pro display name (there must be only 1)
+        result = PQexecParams(db, "select id from " TBL_PRO " where denomination=$1",
+            1, NULL, &name, NULL, NULL, 1);
+
+        if (PQresultStatus(result) != PGRES_TUPLES_OK) {
+            putln_error_pq_result(result);
+            res = errstatus_handled;
+        } else if (PQntuples(result) != 1) {
+            res = errstatus_error;
+        } else {
+            res = pq_recv_l(serial_t, result, 0, 0);
+        }
     } else {
         res = pq_recv_l(serial_t, result, 0, 0);
     }

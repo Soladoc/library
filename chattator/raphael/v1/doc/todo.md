@@ -1,6 +1,8 @@
 # Todo
 
-- get rid of `with`. no body needs it
+- [ ] get rid of `with`. no body needs it
+  
+- multiaction requests shouldn't increase rate limits that much
 
 - [x] elegant error handling
   - [x] think of an approach that suits JSON, DB and other sources of errors

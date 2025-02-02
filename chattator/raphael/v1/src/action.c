@@ -15,6 +15,7 @@
 /// @return @ref errstatus_ok The API key is valid.
 /// @return @ref errstatus_error The API key isn't valid.
 /// @return @ref errstatus_handled DB error (handled).
+/// @note If the admin API is provided, the return user ID is @c 0.
 static inline errstatus_t auth_api_key(user_identity_t *out_user, uuid4_t api_key, cfg_t *cfg, db_t *db) {
     if (uuid4_eq(api_key, cfg_admin_api_key(cfg))) {
         out_user->role = role_admin;
@@ -28,12 +29,14 @@ static inline errstatus_t auth_api_key(user_identity_t *out_user, uuid4_t api_ke
 /// @return @ref errstatus_error The token isn't valid.
 /// @return @ref errstatus_handled DB error (handled).
 static inline errstatus_t auth_token(user_identity_t *out_user, token_t token, db_t *db, server_t *server) {
-    if (!(out_user->id = server_verify_token(server, token))) return errstatus_error;
-    int res = db_get_user_role(db, out_user->id);
+    serial_t maybe_user_id = server_verify_token(server, token);
+    if (-1 == maybe_user_id) return errstatus_error;
+
+    int res = maybe_user_id == 0 ? role_admin : db_get_user_role(db, out_user->id = maybe_user_id);
     // The token exists in server state, so the user ID must exist in the DB.
     // assert(res != errstatus_error); // unless someone messes with the DB in the meantime. We don't have control over that.
     out_user->role = res;
-    return MIN(res, errstatus_ok); // reduce ok results to errstatus_ok
+    return MIN(res, errstatus_ok); // reduce ok results to errstatus_ok (because res >= 0 if ok result as res is role_flags)
 }
 
 response_t action_evaluate(action_t const *action, cfg_t *cfg, db_t *db, server_t *server) {
@@ -78,8 +81,8 @@ response_t action_evaluate(action_t const *action, cfg_t *cfg, db_t *db, server_
         }
 
         turnstile_rate_limit();
-
-        switch (db_check_password(db, user.id, action->with.DO.password.val)) {
+        errstatus_t a = db_check_password(db, user.id, action->with.DO.password.val);
+        switch (a) {
         case errstatus_handled: fail(status_internal_server_error);
         // we know the user ID exists in the DB at this point since we fetched it from the DB
         case errstatus_error: fail(status_forbidden);
