@@ -1,10 +1,14 @@
-name: Update server
+name: Update PACT
 on:
+  workflow_dispatch:
   push:
     branches:
       - main
-    paths-ignore:
-      - '**.sql'
+    paths:
+      - '**.html'
+      - '**.css'
+      - '**.php'
+      - '**.js'
 jobs:
   update_server:
     runs-on: ubuntu-latest
@@ -12,11 +16,11 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Update server
+      - name: Update PACT
         env:
           ARTIFACT_SSH_KEY: '${{secrets.ARTIFACT_SSH_KEY}}'
           ARTIFACT_HOST: '${{secrets.ARTIFACT_HOST}}'
-        run: 'cd "$GITHUB_WORKSPACE"/script && ./server-run-script.bash ./server/update.bash'
+        run: 'cd "$GITHUB_WORKSPACE"/script && ./server-run-script.bash ./server/update-pact.bash'
 
       - name: Send Discord message
         env:
@@ -24,4 +28,4 @@ jobs:
           ACTOR: "${{github.actor}}"
           COMMIT: "${{ github.event.head_commit.message }}"
           URL: "${{ github.event.head_commit.url }}"
-        run: 'cd "$GITHUB_WORKSPACE"/script && ./discord-send-msg.bash "Serveur mis à jour ($ACTOR - \`$COMMIT\`) ([github]($URL))"'
+        run: 'cd "$GITHUB_WORKSPACE"/script && ./discord-send-msg.bash "PACT mis à jour ($ACTOR - \`$COMMIT\`) ([github]($URL))"'
