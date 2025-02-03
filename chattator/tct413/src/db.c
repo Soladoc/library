@@ -56,6 +56,17 @@ static inline int user_kind_to_role(user_kind_t kind) {
     }
 }
 
+static void log_hidden_password(const char *password) {
+    size_t len = strlen(password);
+    for (size_t i = 0; i < len; i++) {
+        if (i < len - 2) {
+            putc('*', stderr);
+        } else {
+            putc(password[i], stderr);
+        }
+    }
+}
+
 db_t *db_connect(int verbosity, char const *host, char const *port, char const *database, char const *username, char const *password) {
     PGconn *db = PQsetdbLogin(
         host,
@@ -81,9 +92,11 @@ db_t *db_connect(int verbosity, char const *host, char const *port, char const *
         return NULL;
     }
 
-    put_log("connected to db '%s' on %s:%s as %s,  password %c%c...\n", database, host, port, username,
-        password[0] ? password[0] : ' ',
-        password[0] && password[1] ? password[1] : ' ');
+    if (verbosity >= 0) {
+        put_log("connected to db '%s' on %s:%s as %s, password ", database, host, port, username);
+        log_hidden_password(password);
+        putc('\n', stderr);
+    }
 
     return db;
 }

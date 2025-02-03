@@ -25,7 +25,7 @@ nc 127.0.0.1 4113 <<< '[]'
 
 */
 
-static inline char const *get_env(char const *name, char const *fallback) {
+static inline char const *getenv_or(char const *name, char const *fallback) {
     char *value = getenv(name);
     return value ? value : fallback;
 }
@@ -76,7 +76,7 @@ int main(int argc, char **argv) {
                 .name = "config",
                 .val = opt_config,
             },
-            {0},
+            { 0 },
         };
 
         int opt;
@@ -118,11 +118,11 @@ int main(int argc, char **argv) {
         result = EX_OK;
     } else {
         db_t *db = db_connect(verbosity,
-            get_env("DB_HOST", "413.ventsdouest.dev"),
-            get_env("PGDB_PORT", "5432"),
-            get_env("DB_NAME", "sae413_test"), // Run on the test DB by default
-            get_env("DB_USER", "sae"),
-            get_env("DB_ROOT_PASSWORD", "bib3loTs-CRues-rdv"));
+            getenv_or("DB_HOST", FALLBACK_DB_HOST),
+            getenv_or("PGDB_PORT", FALLBACK_PGDB_PORT),
+            getenv_or("DB_NAME", FALLBACK_DB_NAME), // Run on the test DB by default
+            getenv_or("DB_USER", FALLBACK_DB_USER),
+            getenv_or("DB_ROOT_PASSWORD", FALLBACK_DB_ROOT_PASSWORD));
         if (!db) return EX_NODB;
 
         server_t *server = server_create(server_rate_limiting);
