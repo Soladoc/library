@@ -41,6 +41,8 @@
 #define putln_error_pq(db) put_error("database: %s\n", PQerrorMessage(db))
 #define putln_error_pq_result(result) put_error("database: %s\n", PQresultErrorMessage(result))
 
+#define PQgetvalue_coalesce(result, r, c, fallback) (PQgetisnull(result, r, c) ? (fallback) : PQgetvalue(result, r, c))
+
 /// @returns @ref role_flags_t
 /// @returns @ref errstatus_handled on error
 static inline int user_kind_to_role(user_kind_t kind) {
@@ -350,10 +352,10 @@ msg_list_t db_get_inbox(db_t *db,
         m->id = pq_recv_l(serial_t, PQgetvalue(result, i, 0));
         m->content = PQgetvalue(result, i, 1);
         m->sent_at = pq_recv_ll(time_t, PQgetvalue(result, i, 2));
-        m->read_age = pq_recv_l(int32_t, PQgetvalue(result, i, 3));
-        m->edited_age = pq_recv_l(int32_t, PQgetvalue(result, i, 4));
+        m->read_age = pq_recv_l(int32_t, PQgetvalue_coalesce(result, i, 3, 0));
+        m->edited_age = pq_recv_l(int32_t, PQgetvalue_coalesce(result, i, 4, 0));
         m->deleted_age = 0;
-        m->user_id_sender = pq_recv_l(serial_t, PQgetvalue(result, i, 5));
+        m->user_id_sender = pq_recv_l(serial_t, PQgetvalue_coalesce(result, i, 5, 0));
         m->user_id_recipient = recipient_id;
     }
 
@@ -378,10 +380,10 @@ errstatus_t db_get_msg(db_t *db, msg_t *msg, void **memory_owner_db) {
     } else {
         msg->content = PQgetvalue(result, 0, 0);
         msg->sent_at = pq_recv_ll(time_t, PQgetvalue(result, 0, 1));
-        msg->read_age = pq_recv_l(int32_t, PQgetvalue(result, 0, 2));
-        msg->edited_age = pq_recv_l(int32_t, PQgetvalue(result, 0, 3));
-        msg->deleted_age = pq_recv_l(int32_t, PQgetvalue(result, 0, 4));
-        msg->user_id_sender = pq_recv_l(serial_t, PQgetvalue(result, 0, 5));
+        msg->read_age = pq_recv_l(int32_t, PQgetvalue_coalesce(result, 0, 2, 0));
+        msg->edited_age = pq_recv_l(int32_t, PQgetvalue_coalesce(result, 0, 3, 0));
+        msg->deleted_age = pq_recv_l(int32_t, PQgetvalue_coalesce(result, 0, 4, 0));
+        msg->user_id_sender = pq_recv_l(serial_t, PQgetvalue_coalesce(result, 0, 5, 0));
         msg->user_id_recipient = pq_recv_l(serial_t, PQgetvalue(result, 0, 6));
         *memory_owner_db = result;
         return errstatus_ok;

@@ -46,7 +46,7 @@ SYNOPSIS\n\
     " PROG " --version\n\
 \n\
 DESCRIPTION\n\
-    A Tchattator413 server based on Unix sockets. Accepts JSON, responds with JSON.\n\
+    A Tchattator413-compliant server based on Unix sockets. Accepts JSON, responds with JSON.\n\
 \n\
     Mandatory arguments to long options are mandatory for short options too.\n\
 \n\
