@@ -305,14 +305,12 @@ static json_object *msg_to_json_object(msg_t *msg) {
 }
 
 json_object *response_to_json(response_t *response) {
-    json_object *obj = json_object_new_object(), *obj_body = json_object_new_object();
-
-    if (response->has_next_page) add_key(obj, "has_next_page", json_object_new_boolean(true));
-    add_key(obj, response->type == action_type_error ? "error" : "body", obj_body);
+    json_object *obj_body = NULL, *obj_error = NULL;
 
     switch (response->type) {
     case action_type_error: {
         status_t status;
+        obj_error = json_object_new_object();
         switch (response->body.error.type) {
         case action_error_type_type: {
             status = status_bad_request;
@@ -328,14 +326,14 @@ json_object *response_to_json(response_t *response) {
                       json_type_to_name(response->body.error.info.type.expected),
                       json_type_to_name(actual_type),
                       min_json(obj_actual));
-            if (msg) add_key(obj_body, "message", json_object_new_string(msg));
+            if (msg) add_key(obj_error, "message", json_object_new_string(msg));
             free(msg);
             break;
         }
         case action_error_type_missing_key: {
             status = status_bad_request;
             char *msg = strfmt("%s: key missing", response->body.error.info.missing_key.location);
-            if (msg) add_key(obj_body, "message", json_object_new_string(msg));
+            if (msg) add_key(obj_error, "message", json_object_new_string(msg));
             free(msg);
             break;
         }
@@ -344,7 +342,7 @@ json_object *response_to_json(response_t *response) {
             char *msg = strfmt("%s: %s: %s", response->body.error.info.invalid.location,
                 response->body.error.info.invalid.reason,
                 json_object_to_json_string(response->body.error.info.invalid.obj_bad));
-            if (msg) add_key(obj_body, "message", json_object_new_string(msg));
+            if (msg) add_key(obj_error, "message", json_object_new_string(msg));
             free(msg);
             break;
         }
@@ -354,21 +352,23 @@ json_object *response_to_json(response_t *response) {
         }
         case action_error_type_rate_limit: {
             status = status_too_many_requests;
-            add_key(obj_body, "next_request_at", json_object_new_int64(response->body.error.info.rate_limit.next_request_at));
+            add_key(obj_error, "next_request_at", json_object_new_int64(response->body.error.info.rate_limit.next_request_at));
             break;
         }
         default: unreachable();
         }
-        add_key(obj_body, "status", json_object_new_int(status));
+        add_key(obj_error, "status", json_object_new_int(status));
         break;
     }
     case action_type_login:
+        obj_body = json_object_new_object();
         add_key(obj_body, "token", json_object_new_int64(response->body.login.token));
         break;
     case action_type_logout:
 
         break;
     case action_type_whois:
+        obj_body = json_object_new_object();
         add_key(obj_body, "user_id", json_object_new_int(response->body.whois.user.id));
         add_key(obj_body, "email", json_object_new_string(response->body.whois.user.email));
         add_key(obj_body, "last_name", json_object_new_string(response->body.whois.user.last_name));
@@ -383,14 +383,11 @@ json_object *response_to_json(response_t *response) {
 
         break;
     case action_type_inbox: {
-        json_object *o = json_object_new_array();
-        json_object_object_del(obj, "body");    // FIXME
+        obj_body = json_object_new_array();
 
         for (size_t i = 0; i < response->body.inbox.n_msgs; ++i) {
-            json_object_array_add(o, msg_to_json_object(response->body.inbox.msgs));
+            json_object_array_add(obj_body, msg_to_json_object(response->body.inbox.msgs));
         }
-
-        json_object_object_add(obj, "body", o); // FIXME
         break;
     }
     case action_type_outbox:
@@ -416,6 +413,13 @@ json_object *response_to_json(response_t *response) {
         break;
     default: unreachable();
     }
+
+    json_object *obj = json_object_new_object();
+
+    if (response->has_next_page) add_key(obj, "has_next_page", json_object_new_boolean(true));
+    if (obj_body) add_key(obj, "body", obj_body);
+    if (obj_error) add_key(obj, "error", obj_error);
+
 #undef add_key
 
     return obj;
