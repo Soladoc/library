@@ -7,7 +7,7 @@
 #define TEST_TCHATTATOR413_H
 
 #include <assert.h>
-#include <json-c/json.h>
+#include <json-c.h>
 #include <stb_test.h>
 
 #include <tchattator413/cfg.h>
@@ -117,7 +117,7 @@ void test_case_n_actions(test_t *test, int expected);
 bool json_object_eq_fmt(json_object *obj_actual, json_object *obj_expected, ...);
 
 #define test_case_eq_int(t, actual, expected, fmt) test_case((t), actual == expected, fmt " == %d", actual)
-#define test_case_eq_long(t, actual, expected, fmt) test_case((t), actual == expected, fmt " == %ld", actual)
+#define test_case_eq_int64(t, actual, expected, fmt) test_case((t), actual == expected, fmt " == %ld", actual)
 #define test_case_eq_str(t, actual, expected, fmt) test_case((t), streq(actual, expected), fmt " == %s", actual)
 #define test_case_eq_json_object(t, actual, expected, fmt) test_case((t), json_object_equal(actual, expected), fmt " == %s", min_json(actual))
 #define test_case_eq_uuid(t, actual, expected, fmt)                                                    \

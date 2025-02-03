@@ -28,20 +28,21 @@
 #endif
 
 #ifdef __GNUC__
-#pragma GCC diagnostic ignored "-Wpedantic"
-#define pq_send_l(val) ({_Static_assert(sizeof val == 4, "type has wrong size"); htonl(val); })
-#define pq_recv_l(type, val) ({_Static_assert(sizeof (type) == 4, "type has wrong size"); (type)(ntohl(*(type *)(val))); })
-#define pq_recv_ll(type, val) ({_Static_assert(sizeof (type) == 8, "type has wrong size"); (type)(ntohll(*(type *)val)); })
+#define pq_send_l(val) __extension__({_Static_assert(sizeof val == 4, "type has wrong size"); htonl((uint32_t)val); })
+#define pq_recv_l(type, val) __extension__({_Static_assert(sizeof (type) == sizeof (uint32_t), "use pq_recv_ll"); (type)(ntohl(*(uint32_t *)(val))); })
+#define pq_recv_ll(type, val) __extension__(({_Static_assert(sizeof (type) == sizeof (uint64_t), "use pq_recv_l"); (type)(ntohll(*(uint64_t *)val)); }))
 #else
 #define pq_send_l(val) htonl(val)
 #define pq_recv_l(type, val) (type)(ntohl(*(type *)(val)))
 #define pq_recv_ll(type, val) (type)(ntohll(*(type *)val))
-#endif
+#endif // __GNUC__
+
+#define PG_EPOCH 946684800
+
+#define pq_recv_timestamp(val) ((time_t)(pq_recv_ll(uint64_t, val) / 1000000 + PG_EPOCH))
 
 #define putln_error_pq(db) put_error("database: %s\n", PQerrorMessage(db))
 #define putln_error_pq_result(result) put_error("database: %s\n", PQresultErrorMessage(result))
-
-#define PQgetvalue_coalesce(result, r, c, fallback) (PQgetisnull(result, r, c) ? (fallback) : PQgetvalue(result, r, c))
 
 /// @returns @ref role_flags_t
 /// @returns @ref errstatus_handled on error
@@ -130,7 +131,7 @@ errstatus_t db_verify_user_api_key(db_t *db, user_identity_t *out_user, api_key_
             res = errstatus_handled;
         } else {
             res = errstatus_ok;
-            out_user->role = role;
+            out_user->role = (role_flags_t)role;
             out_user->id = pq_recv_l(serial_t, PQgetvalue(result, 0, 1));
         }
     }
@@ -322,8 +323,8 @@ serial_t db_send_msg(db_t *db, serial_t sender_id, serial_t recipient_id, char c
 }
 
 msg_list_t db_get_inbox(db_t *db,
-    uint32_t limit,
-    uint32_t offset,
+    int32_t limit,
+    int32_t offset,
     serial_t recipient_id) {
     uint32_t const arg1 = pq_send_l(recipient_id), arg2 = pq_send_l(limit), arg3 = pq_send_l(offset);
     char const *const args[] = { (char const *)&arg1, (char const *)&arg2, (char const *)&arg3 };
@@ -341,21 +342,20 @@ msg_list_t db_get_inbox(db_t *db,
     }
 
     msg_list.memory_owner_db = result;
-    msg_list.n_msgs = PQntuples(result);
-    if (msg_list.n_msgs > limit) msg_list.n_msgs = limit;
-
+    int32_t ntuples = MIN(PQntuples(result), limit);
+    msg_list.n_msgs = (size_t)ntuples;
     msg_list.msgs = malloc(sizeof *msg_list.msgs * msg_list.n_msgs);
     if (!msg_list.msgs) errno_exit("malloc");
 
-    for (uint32_t i = 0; i < msg_list.n_msgs; ++i) {
+    for (int32_t i = 0; i < ntuples; ++i) {
         msg_t *m = &msg_list.msgs[i];
         m->id = pq_recv_l(serial_t, PQgetvalue(result, i, 0));
         m->content = PQgetvalue(result, i, 1);
-        m->sent_at = pq_recv_ll(time_t, PQgetvalue(result, i, 2));
-        m->read_age = pq_recv_l(int32_t, PQgetvalue_coalesce(result, i, 3, 0));
-        m->edited_age = pq_recv_l(int32_t, PQgetvalue_coalesce(result, i, 4, 0));
+        m->sent_at = pq_recv_timestamp(PQgetvalue(result, i, 2));
+        m->read_age = PQgetisnull(result, i, 3) ? 0 : pq_recv_l(int32_t, PQgetvalue(result, i, 3));
+        m->edited_age = PQgetisnull(result, i, 4) ? 0 : pq_recv_l(int32_t, PQgetvalue(result, i, 4));
         m->deleted_age = 0;
-        m->user_id_sender = pq_recv_l(serial_t, PQgetvalue_coalesce(result, i, 5, 0));
+        m->user_id_sender = PQgetisnull(result, i, 5) ? 0 : pq_recv_l(serial_t, PQgetvalue(result, i, 5));
         m->user_id_recipient = recipient_id;
     }
 
@@ -379,11 +379,11 @@ errstatus_t db_get_msg(db_t *db, msg_t *msg, void **memory_owner_db) {
         res = errstatus_error;
     } else {
         msg->content = PQgetvalue(result, 0, 0);
-        msg->sent_at = pq_recv_ll(time_t, PQgetvalue(result, 0, 1));
-        msg->read_age = pq_recv_l(int32_t, PQgetvalue_coalesce(result, 0, 2, 0));
-        msg->edited_age = pq_recv_l(int32_t, PQgetvalue_coalesce(result, 0, 3, 0));
-        msg->deleted_age = pq_recv_l(int32_t, PQgetvalue_coalesce(result, 0, 4, 0));
-        msg->user_id_sender = pq_recv_l(serial_t, PQgetvalue_coalesce(result, 0, 5, 0));
+        msg->sent_at = pq_recv_timestamp(PQgetvalue(result, 0, 1));
+        msg->read_age = PQgetisnull(result, 0, 2) ? 0 : pq_recv_l(int32_t, PQgetvalue(result, 0, 2));
+        msg->edited_age = PQgetisnull(result, 0, 3) ? 0 : pq_recv_l(int32_t, PQgetvalue(result, 0, 3));
+        msg->deleted_age = PQgetisnull(result, 0, 4) ? 0 : pq_recv_l(int32_t, PQgetvalue(result, 0, 4));
+        msg->user_id_sender = PQgetisnull(result, 0, 5) ? 0 : pq_recv_l(serial_t, PQgetvalue(result, 0, 5));
         msg->user_id_recipient = pq_recv_l(serial_t, PQgetvalue(result, 0, 6));
         *memory_owner_db = result;
         return errstatus_ok;

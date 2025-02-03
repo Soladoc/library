@@ -6,7 +6,7 @@
 #ifndef ACTION_H
 #define ACTION_H
 
-#include <json-c/json_types.h>
+#include <json-c.h>
 #include <stdbool.h>
 #include <stdio.h>
 

@@ -11,7 +11,7 @@
 static void on_action(action_t const *action, void *t) {
     base_on_action(t);
     if (!test_case_eq_int(t, action->type, action_type_logout, )) return;
-    test_case_eq_long(t, action->with.logout.token, 80085, );
+    test_case_eq_int64(t, action->with.logout.token, 80085, );
 }
 
 static void on_response(response_t const *response, void *t) {

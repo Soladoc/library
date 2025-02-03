@@ -56,7 +56,7 @@ static inline errstatus_t auth_token(user_identity_t *out_user, token_t token, d
     int res = maybe_user_id == 0 ? role_admin : db_get_user_role(db, out_user->id = maybe_user_id);
     // The token exists in server state, so the user ID must exist in the DB.
     // assert(res != errstatus_error); // unless someone messes with the DB in the meantime. We don't have control over that.
-    out_user->role = res;
+    out_user->role = (role_flags_t)res;
     return MIN(res, errstatus_ok); // reduce ok results to errstatus_ok (because res >= 0 if ok result as res is role_flags)
 }
 

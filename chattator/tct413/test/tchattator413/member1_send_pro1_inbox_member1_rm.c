@@ -21,18 +21,18 @@ static void on_action(action_t const *action, void *t) {
     switch (test->n_actions) {
     case 1: // send
         if (!test_case_eq_int(t, action->type, action_type_send, )) return;
-        test_case_eq_long(t, action->with.send.token, gs_token_member1, );
+        test_case_eq_int64(t, action->with.send.token, gs_token_member1, );
         test_case_eq_str(t, action->with.send.content.val, MSG_CONTENT, );
         test_case_eq_int(t, action->with.send.dest_user_id, 1, );
         break;
     case 2: // inbox
         if (!test_case_eq_int(t, action->type, action_type_inbox, )) return;
-        test_case_eq_long(t, action->with.inbox.token, gs_token_pro1, );
+        test_case_eq_int64(t, action->with.inbox.token, gs_token_pro1, );
         test_case_eq_int(t, action->with.inbox.page, 1, );
         break;
     case 3: // rm
         if (!test_case_eq_int(t, action->type, action_type_rm, )) return;
-        test_case_eq_long(t, action->with.rm.token, gs_token_member1, );
+        test_case_eq_int64(t, action->with.rm.token, gs_token_member1, );
         test_case_eq_int(t, action->with.rm.msg_id, gs_msg_id, );
         break;
     default: test_fail(t, "wrong test->n_actions: %d", test->n_actions);
@@ -61,10 +61,10 @@ static void on_response(response_t const *response, void *t) {
     }
     case 2: { // inbox
         if (!test_case_eq_int(t, response->type, action_type_inbox, )) return;
-        test_case_eq_int(t, response->body.inbox.n_msgs, 1, );
+        test_case_eq_int64(t, response->body.inbox.n_msgs, 1, );
         msg_t msg = response->body.inbox.msgs[0];
         test_case_eq_int(t, msg.id, gs_msg_id, );
-        test_case_eq_long(t, msg.sent_at, gs_msg_sent_at, );
+        test_case_eq_int64(t, msg.sent_at, gs_msg_sent_at, );
         test_case_eq_int(t, msg.read_age, 0, );
         test_case_eq_int(t, msg.edited_age, 0, );
         test_case_eq_int(t, msg.deleted_age, 0, );

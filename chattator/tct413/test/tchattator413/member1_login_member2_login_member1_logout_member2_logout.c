@@ -37,7 +37,7 @@ static token_t gs_tokens[2];
 static void on_action_logout(action_t const *action, void *t) {
     test_t *test = base_on_action(t);
     if (!test_case_eq_int(t, action->type, action_type_logout, )) return;
-    test_case_eq_long(t, action->with.logout.token, gs_tokens[test->n_actions - 3], );
+    test_case_eq_int64(t, action->with.logout.token, gs_tokens[test->n_actions - 3], );
 }
 
 static void on_response_logout(response_t const *response, void *t) {

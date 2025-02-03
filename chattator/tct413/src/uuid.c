@@ -51,7 +51,7 @@ bool uuid4_parse(uuid4_t *out_uuid, char const repr[static const UUID4_REPR_LENG
             || (v2 = hex_repr_to_half(repr[i++])) == INVALID_HALF) { \
             return false;                                            \
         }                                                            \
-        out_uuid->data[idata++] = (v1 << 4) + v2;                    \
+        out_uuid->data[idata++] = (uint8_t)(v1 << 4) + v2;                    \
     } while (0);
 #define h \
     if (repr[i++] != '-') return false;
@@ -82,11 +82,11 @@ char hex_half_to_repr(uint8_t value) {
 
 uint8_t hex_repr_to_half(char c) {
     return '0' <= c && c <= '9'
-        ? c - '0'
+        ? (uint8_t)c - '0'
         : 'A' <= c && c <= 'F'
-        ? c - 'A' + 10
+        ? (uint8_t)c - 'A' + 10
         : 'a' <= c && c <= 'f'
-        ? c - 'a' + 10
+        ? (uint8_t)c - 'a' + 10
         : INVALID_HALF;
 }
 

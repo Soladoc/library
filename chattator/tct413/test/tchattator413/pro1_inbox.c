@@ -18,7 +18,7 @@ static void on_action(action_t const *action, void *t) {
     switch (test->n_actions) {
     case 1: // inbox
         if (!test_case_eq_int(t, action->type, action_type_inbox, )) return;
-        test_case_eq_long(t, action->with.send.token, gs_token_pro1, );
+        test_case_eq_int64(t, action->with.send.token, gs_token_pro1, );
         break;
     default: test_fail(t, "wrong test->n_actions: %d", test->n_actions);
     }
@@ -30,7 +30,7 @@ static void on_response(response_t const *response, void *t) {
     switch (test->n_responses) {
     case 1: { // inbox
         if (!test_case_eq_int(t, response->type, action_type_inbox, )) return;
-        test_case_eq_int(t, response->body.inbox.n_msgs, 1, );
+        test_case_eq_int64(t, response->body.inbox.n_msgs, 1, );
         msg_t msg = response->body.inbox.msgs[0];
         test_case_eq_int(t, msg.id, 1, );
         test_case_eq_int(t, msg.read_age, 0, );

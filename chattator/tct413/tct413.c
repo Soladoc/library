@@ -5,7 +5,7 @@
 
 #include <assert.h>
 #include <getopt.h>
-#include <json-c/json.h>
+#include <json-c.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <tchattator413/cfg.h>

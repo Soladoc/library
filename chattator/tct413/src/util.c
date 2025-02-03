@@ -43,8 +43,8 @@ char *vstrfmt(const char *fmt, va_list ap) {
 char *fslurp(FILE *fp) {
     char *answer;
     char *temp;
-    int buffsize = 1024;
-    int i = 0;
+    size_t buffsize = 1024;
+    size_t i = 0;
     int ch;
 
     answer = malloc(1024);

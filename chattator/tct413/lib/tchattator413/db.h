@@ -22,7 +22,7 @@ typedef struct {
 typedef struct {
     void *memory_owner_db;
     msg_t *msgs;
-    uint32_t n_msgs;
+    size_t n_msgs;
 } msg_list_t;
 
 /// @brief Initialize a database connection.
@@ -114,8 +114,8 @@ serial_t db_send_msg(db_t *db, serial_t sender_id, serial_t recipient_id, char c
 /// @param recipient_id The ID of the user who recieved the messages.
 /// @return A message list. The memory owner is @c NULL on error.
 msg_list_t db_get_inbox(db_t *db,
-    uint32_t limit,
-    uint32_t offset,
+    int32_t limit,
+    int32_t offset,
     serial_t recipient_id);
 
 errstatus_t db_get_msg(db_t *db, msg_t *msg, void **memory_owner_db);

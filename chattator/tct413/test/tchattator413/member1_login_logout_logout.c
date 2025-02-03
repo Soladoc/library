@@ -21,7 +21,7 @@ static void on_action(action_t const *action, void *t) {
     case 2:
     case 3:
         if (!test_case_eq_int(t, action->type, action_type_logout, )) return;
-        test_case_eq_long(t, action->with.logout.token, gs_token, );
+        test_case_eq_int64(t, action->with.logout.token, gs_token, );
         break;
     default:
         test_fail(t, "wrong test->n_actions: %d", test->n_actions);

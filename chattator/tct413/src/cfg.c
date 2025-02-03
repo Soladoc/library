@@ -101,7 +101,7 @@ cfg_t *cfg_from_file(char const *filename) {
         if (max_msg_length < 0) {
             put_error("config: max_msg_length: must be > 0\n");
         } else {
-            cfg->max_msg_length = max_msg_length;
+            cfg->max_msg_length = (size_t)max_msg_length;
         }
     }
     if (json_object_object_get_ex(obj_cfg, "page_inbox", &obj) && !json_object_get_int_strict(obj, &cfg->page_inbox)) {

@@ -1,6 +1,6 @@
 #include <arpa/inet.h>
 #include <errno.h>
-#include <json-c/json.h>
+#include <json-c.h>
 #include <signal.h>
 #include <stdbool.h>
 #include <stdio.h>
@@ -37,7 +37,7 @@ static inline void interpret_request(cfg_t *cfg, db_t *db, server_t *server, int
     do {
         bytes_written = write(fd, output, len);
         if (-1 == bytes_written) errno_exit("write");
-        len -= bytes_written;
+        len -= (size_t)bytes_written;
         output += bytes_written;
         put_log("wrote %zd bytes, %zu remaining\n", bytes_written, len);
     } while (len > 0);

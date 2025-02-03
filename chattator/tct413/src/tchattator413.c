@@ -50,7 +50,7 @@ json_object *tchattator413_interpret(json_object *input, cfg_t *cfg, db_t *db, s
     switch (input_type) {
     case json_type_array: {
         size_t const len = json_object_array_length(input);
-        output = json_object_new_array_ext(len);
+        output = json_object_new_array_ext((int)len);
         for (size_t i = 0; i < len; ++i) {
             json_object *const action = json_object_array_get_idx(input, i);
             assert(action);

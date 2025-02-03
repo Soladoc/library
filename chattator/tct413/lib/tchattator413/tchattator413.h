@@ -5,7 +5,7 @@
 #include "cfg.h"
 #include "db.h"
 #include "server.h"
-#include <json-c/json.h>
+#include <json-c.h>
 
 typedef void (*fn_on_action_t)(const action_t *action, void *ctx);
 typedef void (*fn_on_response_t)(const response_t *response, void *ctx);

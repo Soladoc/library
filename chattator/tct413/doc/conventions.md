@@ -7,3 +7,4 @@
   - ... otherwise UPPER_CASE
 - function pointer typedef naming `fn_` prefix
 - typedef naming `_t` suffix
+- signed/unsigned types : sizes and port numbers are the only acceptable use case for unsigned types.

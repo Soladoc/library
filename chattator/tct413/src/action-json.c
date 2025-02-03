@@ -3,7 +3,7 @@
 /// @brief Tchattator413 protocol - Implementation (JSON-related)
 /// @date 23/01/2025
 
-#include <json-c/json.h>
+#include <json-c.h>
 #include <tchattator413/action.h>
 #include <tchattator413/errstatus.h>
 #include <tchattator413/json-helpers.h>
@@ -377,7 +377,8 @@ json_object *response_to_json(response_t *response) {
         add_key(obj_body, "kind", json_object_new_int(response->body.whois.user.kind));
         break;
     case action_type_send:
-
+        obj_body = json_object_new_object();
+        add_key(obj_body, "msg_id", json_object_new_int(response->body.send.msg_id));
         break;
     case action_type_motd:
 

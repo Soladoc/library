@@ -18,7 +18,7 @@ static void inbox(void);
 
 static void put_state(void);
 
-typedef long token_t;
+typedef int64_t token_t;
 
 static struct {
     enum {
