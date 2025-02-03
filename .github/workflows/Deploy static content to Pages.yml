@@ -37,7 +37,9 @@ jobs:
       - name: Setup Pages
         uses: actions/configure-pages@v5
       - name: Generate Tchatator Doxygen documentation
-        run: doxygen
+        run: |
+          sudo apt-get install -y doxygen
+          doxygen
         working-directory: ./chattator/tct413
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
