@@ -24,7 +24,7 @@
  *
  * \subsection cfg_sec Configuration Module (cfg)
  *
- * The \ref cfg.h module handles the server configuration. It reads configuration parameters from a file at startup and allows for dynamic reconfiguration via signals. This module ensures that the server can adapt to changes in configuration without requiring a restart.
+ * The \ref cfg.h module handles the server configuration. It reads configuration parameters from a file at startup.
  *
  * \subsection db_sec Database Module (db)
  *

@@ -34,7 +34,9 @@
 - [x] unit tests
   - [x] uuid
 
-pgsql build:
+- [ ] allow dynamic reconfiguration via signals. ensure that the server can adapt to changes in configuration without requiring a restart.
+
+pgsql build
 
 ```sh
 apt install libjson-c-dev -y
