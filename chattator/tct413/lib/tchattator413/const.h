@@ -52,7 +52,7 @@ DESCRIPTION\n\
 \n\
     -q, --quiet        More quiet (can be repeated)\n\
     -v, --verbose      More verbose (can be repeated)\n\
-    -i, --interactive  Run in interactive mode (read from STDIN)\n\
+    -i, --interactive  Run in interactive mode (read from STDIN or argument)\n\
     -c, --config=FILE  Configuration file\n\
     --dump-config      Dump current configuration\n\
     --help             Show this help\n\
