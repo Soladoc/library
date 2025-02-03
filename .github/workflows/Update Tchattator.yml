@@ -1,12 +1,13 @@
 name: Update Tchattator
 on:
   workflow_dispatch:
-  push:
-    branches:
-      - main
-    paths:
-      - '**.c'
-      - '**.h'
+  # workflow disabled
+  #push:
+  #  branches:
+  #    - main
+  #  paths:
+  #    - '**.c'
+  #    - '**.h'
 jobs:
   update_tchattator:
     runs-on: ubuntu-latest

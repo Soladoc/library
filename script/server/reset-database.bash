@@ -11,7 +11,7 @@ sudo git fetch --all
 sudo git reset --hard origin/main
 
 for instance in main test; do
-    db="sae413_$1"
+    db="sae413_$instance"
     bash sql/unite.bash $instance | sudo docker exec -iw / postgresdb psql -v ON_ERROR_STOP=on -h localhost -wU "$DB_USER" \
         -c "drop database if exists $db" \
         -c "create database $db" \
