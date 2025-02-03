@@ -46,7 +46,7 @@ SYNOPSIS\n\
     " PROG " --version\n\
 \n\
 DESCRIPTION\n\
-    Reads JSON actions from standard input, or from the REQUEST argument if provided. Writes JSON results to standard output.\n\
+    A Tchattator413 server based on Unix sockets. Accepts JSON, responds with JSON.\n\
 \n\
     Mandatory arguments to long options are mandatory for short options too.\n\
 \n\
