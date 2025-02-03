@@ -5,6 +5,7 @@
 
 #include <json-c.h>
 #include <tchattator413/action.h>
+#include <tchattator413/const.h>
 #include <tchattator413/errstatus.h>
 #include <tchattator413/json-helpers.h>
 #include <tchattator413/util.h>
@@ -36,8 +37,8 @@ action_t action_parse(json_object *obj, db_t *db) {
 #define fail()                                                                \
     do {                                                                      \
         action.type = action_type_error;                                      \
-        action.with.error.type = action_error_type_runtime;                   \
-        action.with.error.info.runtime.status = status_internal_server_error; \
+        action.with.error.type = action_error_type_other;                   \
+        action.with.error.info.other.status = status_internal_server_error; \
         return action;                                                        \
     } while (0)
 
@@ -129,7 +130,7 @@ action_t action_parse(json_object *obj, db_t *db) {
 
 #define DO login
     if (action_is(DO)) {
-        action.type = action_type(DO);
+        action.type = ACTION_TYPE(DO);
 
         // api_key
         json_object *obj_api_key;
@@ -141,7 +142,7 @@ action_t action_parse(json_object *obj, db_t *db) {
 #undef DO
 #define DO logout
     } else if (action_is(DO)) {
-        action.type = action_type(DO);
+        action.type = ACTION_TYPE(DO);
 
         // token
         json_object *obj_token;
@@ -149,7 +150,7 @@ action_t action_parse(json_object *obj, db_t *db) {
 #undef DO
 #define DO whois
     } else if (action_is(DO)) {
-        action.type = action_type(DO);
+        action.type = ACTION_TYPE(DO);
 
         // api_key
         json_object *obj_api_key;
@@ -161,7 +162,7 @@ action_t action_parse(json_object *obj, db_t *db) {
 #undef DO
 #define DO send
     } else if (action_is(DO)) {
-        action.type = action_type(DO);
+        action.type = ACTION_TYPE(DO);
 
         // token
         json_object *obj_token;
@@ -177,7 +178,7 @@ action_t action_parse(json_object *obj, db_t *db) {
 #undef DO
 #define DO motd
     } else if (action_is(DO)) {
-        action.type = action_type(DO);
+        action.type = ACTION_TYPE(DO);
 
         // token
         json_object *obj_token;
@@ -185,7 +186,7 @@ action_t action_parse(json_object *obj, db_t *db) {
 #undef DO
 #define DO inbox
     } else if (action_is(DO)) {
-        action.type = action_type(DO);
+        action.type = ACTION_TYPE(DO);
 
         // token
         json_object *obj_token;
@@ -197,7 +198,7 @@ action_t action_parse(json_object *obj, db_t *db) {
 #undef DO
 #define DO outbox
     } else if (action_is(DO)) {
-        action.type = action_type(DO);
+        action.type = ACTION_TYPE(DO);
 
         // token
         json_object *obj_token;
@@ -209,7 +210,7 @@ action_t action_parse(json_object *obj, db_t *db) {
 #undef DO
 #define DO edit
     } else if (action_is(DO)) {
-        action.type = action_type(DO);
+        action.type = ACTION_TYPE(DO);
 
         // token
         json_object *obj_token;
@@ -225,7 +226,7 @@ action_t action_parse(json_object *obj, db_t *db) {
 #undef DO
 #define DO rm
     } else if (action_is(DO)) {
-        action.type = action_type(DO);
+        action.type = ACTION_TYPE(DO);
 
         // token
         json_object *obj_token;
@@ -237,7 +238,7 @@ action_t action_parse(json_object *obj, db_t *db) {
 #undef DO
 #define DO block
     } else if (action_is(DO)) {
-        action.type = action_type(DO);
+        action.type = ACTION_TYPE(DO);
 
         // token
         json_object *obj_token;
@@ -249,7 +250,7 @@ action_t action_parse(json_object *obj, db_t *db) {
 #undef DO
 #define DO unblock
     } else if (action_is(DO)) {
-        action.type = action_type(DO);
+        action.type = ACTION_TYPE(DO);
 
         // token
         json_object *obj_token;
@@ -261,7 +262,7 @@ action_t action_parse(json_object *obj, db_t *db) {
 #undef DO
 #define DO ban
     } else if (action_is(DO)) {
-        action.type = action_type(DO);
+        action.type = ACTION_TYPE(DO);
 
         // token
         json_object *obj_token;
@@ -273,7 +274,7 @@ action_t action_parse(json_object *obj, db_t *db) {
 #undef DO
 #define DO unban
     } else if (action_is(DO)) {
-        action.type = action_type(DO);
+        action.type = ACTION_TYPE(DO);
         // token
         json_object *obj_token;
         getarg_int64(obj_token, "token", &action.with.DO.token);
@@ -346,8 +347,8 @@ json_object *response_to_json(response_t *response) {
             free(msg);
             break;
         }
-        case action_error_type_runtime: {
-            status = response->body.error.info.runtime.status;
+        case action_error_type_other: {
+            status = response->body.error.info.other.status;
             break;
         }
         case action_error_type_rate_limit: {

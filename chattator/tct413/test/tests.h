@@ -1,3 +1,8 @@
+/// @file
+/// @author Raphaël
+/// @brief Testing - other tests
+/// @date 1/02/2025
+
 #ifndef TESTS_H
 #define TESTS_H
 

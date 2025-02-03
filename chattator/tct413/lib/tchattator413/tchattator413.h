@@ -1,3 +1,8 @@
+/// @file
+/// @author Raphaël
+/// @brief Facade interface
+/// @date 1/02/2025
+
 #ifndef TCHATTATOR_413_H
 #define TCHATTATOR_413_H
 

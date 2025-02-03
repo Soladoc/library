@@ -1,6 +1,6 @@
 /// @file
 /// @author Raphaël
-/// @brief Tchattator413 protocol - Implementation
+/// @brief Tchattator413 request parsing and interpretation - Implementation
 /// @date 23/01/2025
 
 #include <assert.h>
@@ -66,8 +66,8 @@ response_t action_evaluate(action_t const *action, cfg_t *cfg, db_t *db, server_
 #define fail(return_status)                                 \
     do {                                                    \
         rep.type = action_type_error;                       \
-        rep.body.error.type = action_error_type_runtime;    \
-        rep.body.error.info.runtime.status = return_status; \
+        rep.body.error.type = action_error_type_other;    \
+        rep.body.error.info.other.status = return_status; \
         return rep;                                         \
     } while (0)
 
@@ -100,8 +100,10 @@ response_t action_evaluate(action_t const *action, cfg_t *cfg, db_t *db, server_
         rep.body.error = action->with.error;
         return rep;
     }
+
+
 #define DO login
-    case action_type(DO):
+    case ACTION_TYPE(DO):
         switch (auth_api_key(&user, action->with.DO.api_key, cfg, db)) {
         case errstatus_handled: fail(status_internal_server_error);
         case errstatus_error: fail(status_unauthorized);
@@ -120,7 +122,7 @@ response_t action_evaluate(action_t const *action, cfg_t *cfg, db_t *db, server_
         break;
 #undef DO
 #define DO logout
-    case action_type(DO):
+    case ACTION_TYPE(DO):
         switch (auth_token(&user, action->with.DO.token, db, server)) {
         case errstatus_handled: fail(status_internal_server_error);
         case errstatus_error: fail(status_unauthorized);
@@ -133,7 +135,7 @@ response_t action_evaluate(action_t const *action, cfg_t *cfg, db_t *db, server_
         break;
 #undef DO
 #define DO whois
-    case action_type(DO):
+    case ACTION_TYPE(DO):
         switch (auth_api_key(&user, action->with.DO.api_key, cfg, db)) {
         case errstatus_handled: fail(status_internal_server_error);
         case errstatus_error: fail(status_unauthorized);
@@ -151,7 +153,7 @@ response_t action_evaluate(action_t const *action, cfg_t *cfg, db_t *db, server_
         break;
 #undef DO
 #define DO send
-    case action_type(DO): {
+    case ACTION_TYPE(DO): {
         switch (auth_token(&user, action->with.DO.token, db, server)) {
         case errstatus_handled: fail(status_internal_server_error);
         case errstatus_error: fail(status_unauthorized);
@@ -186,7 +188,7 @@ response_t action_evaluate(action_t const *action, cfg_t *cfg, db_t *db, server_
     }
 #undef DO
 #define DO motd
-    case action_type(DO):
+    case ACTION_TYPE(DO):
         switch (auth_token(&user, action->with.DO.token, db, server)) {
         case errstatus_handled: fail(status_internal_server_error);
         case errstatus_error: fail(status_unauthorized);
@@ -198,7 +200,7 @@ response_t action_evaluate(action_t const *action, cfg_t *cfg, db_t *db, server_
         break;
 #undef DO
 #define DO inbox
-    case action_type(DO):
+    case ACTION_TYPE(DO):
         switch (auth_token(&user, action->with.DO.token, db, server)) {
         case errstatus_handled: fail(status_internal_server_error);
         case errstatus_error: fail(status_unauthorized);
@@ -217,7 +219,7 @@ response_t action_evaluate(action_t const *action, cfg_t *cfg, db_t *db, server_
         break;
 #undef DO
 #define DO outbox
-    case action_type(DO):
+    case ACTION_TYPE(DO):
         switch (auth_token(&user, action->with.DO.token, db, server)) {
         case errstatus_handled: fail(status_internal_server_error);
         case errstatus_error: fail(status_unauthorized);
@@ -229,7 +231,7 @@ response_t action_evaluate(action_t const *action, cfg_t *cfg, db_t *db, server_
         break;
 #undef DO
 #define DO edit
-    case action_type(DO):
+    case ACTION_TYPE(DO):
         switch (auth_token(&user, action->with.DO.token, db, server)) {
         case errstatus_handled: fail(status_internal_server_error);
         case errstatus_error: fail(status_unauthorized);
@@ -241,7 +243,7 @@ response_t action_evaluate(action_t const *action, cfg_t *cfg, db_t *db, server_
         break;
 #undef DO
 #define DO rm
-    case action_type(DO):
+    case ACTION_TYPE(DO):
         switch (auth_token(&user, action->with.DO.token, db, server)) {
         case errstatus_handled: fail(status_internal_server_error);
         case errstatus_error: fail(status_unauthorized);
@@ -259,7 +261,7 @@ response_t action_evaluate(action_t const *action, cfg_t *cfg, db_t *db, server_
         break;
 #undef DO
 #define DO block
-    case action_type(DO):
+    case ACTION_TYPE(DO):
         switch (auth_token(&user, action->with.DO.token, db, server)) {
         case errstatus_handled: fail(status_internal_server_error);
         case errstatus_error: fail(status_unauthorized);
@@ -271,7 +273,7 @@ response_t action_evaluate(action_t const *action, cfg_t *cfg, db_t *db, server_
         break;
 #undef DO
 #define DO unblock
-    case action_type(DO):
+    case ACTION_TYPE(DO):
         switch (auth_token(&user, action->with.DO.token, db, server)) {
         case errstatus_handled: fail(status_internal_server_error);
         case errstatus_error: fail(status_unauthorized);
@@ -283,7 +285,7 @@ response_t action_evaluate(action_t const *action, cfg_t *cfg, db_t *db, server_
         break;
 #undef DO
 #define DO ban
-    case action_type(DO):
+    case ACTION_TYPE(DO):
         switch (auth_token(&user, action->with.DO.token, db, server)) {
         case errstatus_handled: fail(status_internal_server_error);
         case errstatus_error: fail(status_unauthorized);
@@ -295,7 +297,7 @@ response_t action_evaluate(action_t const *action, cfg_t *cfg, db_t *db, server_
         break;
 #undef DO
 #define DO unban
-    case action_type(DO):
+    case ACTION_TYPE(DO):
         switch (auth_token(&user, action->with.DO.token, db, server)) {
         case errstatus_handled: fail(status_internal_server_error);
         case errstatus_error: fail(status_unauthorized);

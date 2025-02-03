@@ -1,6 +1,6 @@
 /// @file
 /// @author Raphaël
-/// @brief Tchattator413 test - login by member 1
+/// @brief Tchattator413 test - Member1 logs in twice and logs out twice (there should be errors)
 /// @date 1/02/2025
 
 #include "tests_tchattator413.h"

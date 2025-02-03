@@ -1,6 +1,6 @@
 /// @file
 /// @author Raphaël
-/// @brief Tchattator413 testing - interface
+/// @brief Testing - Interface
 /// @date 1/02/2025
 
 #ifndef TEST_TCHATTATOR413_H
@@ -109,11 +109,17 @@ bool test_case_o(test_t *test, json_object *obj_output, char const *expected_out
 /// @brief output from JSON file test case
 bool test_case_o_file_fmt(test_t *test, json_object *obj_output, char const *expected_output_filename, ...);
 
+/// @brief Base on_action event handler.
 test_t *base_on_action(void *test);
+/// @brief Base on_response event handler.
 test_t *base_on_response(void *test);
 
+/// @brief Actions count test case
 void test_case_n_actions(test_t *test, int expected);
 
+/// @brief Test two JSON objects are equal for equality, with pattern matching using formatting.
+///
+/// @p obj_expected may have contain formatting syntax to indicate the format of the expected values instead of hard strings.
 bool json_object_eq_fmt(json_object *obj_actual, json_object *obj_expected, ...);
 
 #define test_case_eq_int(t, actual, expected, fmt) test_case((t), actual == expected, fmt " == %d", actual)

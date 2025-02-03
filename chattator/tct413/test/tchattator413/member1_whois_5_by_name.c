@@ -1,6 +1,6 @@
 /// @file
 /// @author Raphaël
-/// @brief Tchattator413 test - whois of 1 by admin
+/// @brief Tchattator413 test - whois of 5 (by name) by member1
 /// @date 1/02/2025
 
 #include "tests_tchattator413.h"
@@ -20,7 +20,7 @@ static void on_response(response_t const *response, void *t) {
     if (!test_case_eq_int(t, response->type, action_type_whois, "type")) return;
     test_case(t, !response->has_next_page, "");
     test_case_eq_int(t, response->body.whois.user.id, 5, "user id");
-    test_case_eq_int(t, response->body.whois.user.kind, user_kind_membre, "kind");
+    test_case_eq_int(t, response->body.whois.user.kind, user_kind_member, "kind");
     test_case_eq_str(t, response->body.whois.user.display_name, "member1", "display name");
     test_case_eq_str(t, response->body.whois.user.email, "member@1.413", "email");
     test_case_eq_str(t, response->body.whois.user.first_name, "member1_prenom", "first name");

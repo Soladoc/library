@@ -1,3 +1,8 @@
+/// @file
+/// @author Raphaël
+/// @brief slice data strucutre - Interface
+/// @date 1/02/2025
+
 #ifndef SLICE_H
 #define SLICE_H
 

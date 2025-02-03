@@ -1,3 +1,8 @@
+/// @file
+/// @author Raphaël
+/// @brief Slice data structre - Implementation
+/// @date 1/02/2025
+
 #include <tchattator413/slice.h>
 
 #include <limits.h>

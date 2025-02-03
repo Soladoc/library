@@ -8,13 +8,16 @@
 
 #include <sysexits.h>
 
-// Additional sysexits
-enum { EX_NODB = EX__MAX + 1 };
+/// @brief Additional sysexits codes.
+enum {
+    /// @brief Exit code for when the database connection failed.
+    EX_NODB = EX__MAX + 1,
+};
 
-// https://en.wikipedia.org/wiki/X_macro
-
+/// @brief The bcrypt hash of the administrator password.
 #define ADMIN_PASSWORD_HASH "$2y$10$uggPw5mEgOJyxNVqkXF4uuGzFtT2xmgHKMstdMxsYObPjOlR1143O"
 
+/// @brief X-macro that expands to the list of actions
 #define X_ACTIONS(X) \
     X(login)         \
     X(logout)        \
@@ -30,12 +33,21 @@ enum { EX_NODB = EX__MAX + 1 };
     X(ban)           \
     X(unban)
 
+/// @brief Fallback database host if the corresponding environment variable isn't defined.
 #define FALLBACK_DB_HOST "413.ventsdouest.dev"
+/// @brief Fallback database post if the corresponding environment variable isn't defined.
 #define FALLBACK_PGDB_PORT "5432"
+/// @brief Fallback database name if the corresponding environment variable isn't defined.
 #define FALLBACK_DB_NAME "sae413_test"
+/// @brief Fallback database username if the corresponding environment variable isn't defined.
 #define FALLBACK_DB_USER "sae"
+/// @brief Fallback database password if the corresponding environment variable isn't defined.
 #define FALLBACK_DB_ROOT_PASSWORD "bib3loTs-CRues-rdv"
 
+/// @brief The name of the program.
+#define PROG "tct413"
+
+/// @brief The program's helpstring.
 #define HELP PROG " - A Tchattator413 implementation\n\
 \n\
 SYNOPSIS\n\
@@ -65,6 +77,7 @@ ENVIRONMENT\n\
     DB_USER            DB username  Fallback to: " FALLBACK_DB_USER "\n\
     DB_ROOT_PASSWORD   DB password  Fallback to: (it's a secret)"
 
+/// @brief The program's versionstring.
 #define VERSION PROG " 1.0.0"
 
 #endif // CONST_H

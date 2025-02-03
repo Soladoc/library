@@ -1,6 +1,6 @@
 /// @file
 /// @author Raphaël
-/// @brief Tchattator413 test - whois of 1 by admin
+/// @brief Tchattator413 test - whois of 1 by member1
 /// @date 1/02/2025
 
 #include "tests_tchattator413.h"

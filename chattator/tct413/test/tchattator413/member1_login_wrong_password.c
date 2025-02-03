@@ -1,6 +1,6 @@
 /// @file
 /// @author Raphaël
-/// @brief Tchattator413 test - login by member 1
+/// @brief Tchattator413 test - login by member 1, wrong password
 /// @date 1/02/2025
 
 #include "tests_tchattator413.h"
@@ -19,8 +19,8 @@ static void on_response(response_t const *response, void *t) {
     base_on_response(t);
     test_case(t, !response->has_next_page, "");
     if (!test_case_eq_int(t, response->type, action_type_error, )) return;
-    if (!test_case_eq_int(t, response->body.error.type, action_error_type_runtime, )) return;
-    test_case_eq_int(t, response->body.error.info.runtime.status, status_forbidden, );
+    if (!test_case_eq_int(t, response->body.error.type, action_error_type_other, )) return;
+    test_case_eq_int(t, response->body.error.info.other.status, status_forbidden, );
 }
 
 TEST_SIGNATURE(NAME) {

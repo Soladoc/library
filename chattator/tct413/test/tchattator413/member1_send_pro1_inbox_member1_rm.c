@@ -1,6 +1,12 @@
 /// @file
 /// @author Raphaël
-/// @brief Tchattator413 test - login by member 1
+/// @brief Tchattator413 test
+///
+/// Tests the sending, retrieval and removal of a message
+/// - member1 send
+/// - pro1 inbox
+/// - member1 rm
+///
 /// @date 1/02/2025
 
 #include "tests_tchattator413.h"

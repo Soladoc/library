@@ -1,3 +1,8 @@
+/// @file
+/// @author Raphaël
+/// @brief JSON-C extra functions - Implementation
+/// @date 29/01/2025
+
 #include <json-c.h>
 #include <tchattator413/json-helpers.h>
 

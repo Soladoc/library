@@ -1,6 +1,6 @@
 /// @file
 /// @author Raphaël
-/// @brief Tchattator413 testing - implementation of testing utilities
+/// @brief Testing - implementation of testing utilities
 /// @date 1/02/2025
 
 #include "tests_tchattator413.h"

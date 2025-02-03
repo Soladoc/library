@@ -1,3 +1,11 @@
+/// @file
+/// @author Raphaël
+/// @brief Tchattator413 Facade - Server implementation 
+///
+/// Uses Unix sockets.
+///
+/// @date 1/02/2025
+
 #include <arpa/inet.h>
 #include <errno.h>
 #include <json-c.h>

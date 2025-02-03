@@ -1,6 +1,6 @@
 /// @file
 /// @author Raphaël
-/// @brief UUID unit tests
+/// @brief Testing - UUID unit tests
 /// @date 23/01/2025
 
 #include "strings.h"

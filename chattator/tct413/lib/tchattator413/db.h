@@ -12,13 +12,18 @@
 /// @brief An opaque handle to a database connection.
 typedef void db_t;
 
+/// @brief Represents a user in the system.
+/// @details This struct contains the various fields that make up a user's profile, such as their ID, kind, email, names, and display name.
 typedef struct {
+    /// @brief Handle to the database memory owner.
     void *memory_owner_db;
     serial_t id;
     user_kind_t kind;
     char const *email, *last_name, *first_name, *display_name;
 } user_t;
 
+/// @brief Represents a list of messages.
+/// @details This struct contains a pointer to an array of messages and the number of messages in the array.
 typedef struct {
     void *memory_owner_db;
     msg_t *msgs;
@@ -27,8 +32,13 @@ typedef struct {
 
 /// @brief Initialize a database connection.
 /// @param verbosity The verbosity level.
+/// @param host The database host name to use for the connection.
+/// @param port The database port number to use for the connection.
+/// @param database The database name to use for the connection.
+/// @param username The database username to use for the connection.
+/// @param password The database password to use for the connection.
 /// @return A new database connection.
-/// @return @ref NULL if the connection failed.
+/// @return @c NULL if the connection failed.
 db_t *db_connect(int verbosity, char const *host, char const *port, char const *database, char const *username, char const *password);
 
 /// @brief Destroy a database connection.
@@ -36,6 +46,7 @@ db_t *db_connect(int verbosity, char const *host, char const *port, char const *
 void db_destroy(db_t *db);
 
 /// @brief Cleans up a memory owner.
+/// @param memory_owner The memory owner to clean up.
 /// @note @c NULL is no-op
 void db_collect(void *memory_owner);
 
@@ -102,7 +113,7 @@ int db_count_msg(db_t *db, serial_t sender_id, serial_t recipient_id);
 /// @param sender_id The ID of the sender user
 /// @param recipient_id The ID of the recipient user
 /// @param content The null-terminated string containing the content of the message.
-/// @return @ref The message ID.
+/// @return @ref serial_t The message ID.
 /// @return @ref errstatus_handled A database error occured. A message has been shown. @p out_user is untouched.
 /// @return @ref errstatus_error The sender has been blocked from sending messages, either globally or by this particular recipient.
 serial_t db_send_msg(db_t *db, serial_t sender_id, serial_t recipient_id, char const *content);
@@ -118,8 +129,19 @@ msg_list_t db_get_inbox(db_t *db,
     int32_t offset,
     serial_t recipient_id);
 
+/// @brief Retrieves a message from the database.
+/// @param db The database.
+/// @param msg The message to be filled with the retrieved data.
+/// @param memory_owner_db The owner of the memory allocated for the message data.
+/// @return @ref errstatus_ok The message was successfully retrieved.
+/// @return @ref errstatus_error The message could not be retrieved.
 errstatus_t db_get_msg(db_t *db, msg_t *msg, void **memory_owner_db);
 
+/// @brief Removes a message from the database.
+/// @param db The database.
+/// @param msg_id The ID of the message to be removed.
+/// @return @ref errstatus_ok The message was successfully removed.
+/// @return @ref errstatus_error The message could not be removed.
 errstatus_t db_rm_msg(db_t *db, serial_t msg_id);
 
 #endif // DB_H

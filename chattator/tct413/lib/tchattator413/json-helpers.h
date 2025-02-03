@@ -1,3 +1,8 @@
+/// @file
+/// @author Raphaël
+/// @brief JSON-C library extra functions - Interface
+/// @date 1/02/2025
+
 #ifndef JSON_HELPERS
 #define JSON_HELPERS
 

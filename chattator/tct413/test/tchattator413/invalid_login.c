@@ -19,8 +19,8 @@ static void on_response(response_t const *response, void *t) {
     base_on_response(t);
     test_case(t, !response->has_next_page, "");
     if (!test_case_eq_int(t, response->type, action_type_error, )) return;
-    if (!test_case_eq_int(t, response->body.error.type, action_error_type_runtime, )) return;
-    test_case_eq_int(t, response->body.error.info.runtime.status, status_unauthorized, );
+    if (!test_case_eq_int(t, response->body.error.type, action_error_type_other, )) return;
+    test_case_eq_int(t, response->body.error.info.other.status, status_unauthorized, );
 }
 
 TEST_SIGNATURE(NAME) {

@@ -1,6 +1,6 @@
 /// @file
 /// @author Raphaël
-/// @brief Tchattator413 dynamic server state - Implemtnation
+/// @brief Tchattator413 dynamic server state - Implementation
 /// @date 29/01/2025
 
 #include <tchattator413/server.h>

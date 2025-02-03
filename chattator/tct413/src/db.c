@@ -50,7 +50,7 @@ static inline int user_kind_to_role(user_kind_t kind) {
     _Static_assert((int)errstatus_handled < min_role || (int)errstatus_handled > max_role,
         "role_flags_t must not have errstatus_handled in order to avoid return value ambiguity");
     switch (kind) {
-    case user_kind_membre: return role_membre;
+    case user_kind_member: return role_membre;
     case user_kind_pro_prive: [[fallthrough]];
     case user_kind_pro_public: return role_pro;
     default:

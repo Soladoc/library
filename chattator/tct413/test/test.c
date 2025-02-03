@@ -1,3 +1,9 @@
+/// @file
+/// @author Raphaël
+/// @brief Tchattator413 test utilities - Implementation
+/// @date 1/02/2025
+
+#include "tchattator413/const.h"
 #include "tchattator413/tests_tchattator413.h"
 #include "tests.h"
 #include <stdlib.h>

@@ -1,3 +1,8 @@
+/// @file
+/// @author Raphaël
+/// @brief Tchattator413 Facade - Implementation
+/// @date 1/02/2025
+
 #include <assert.h>
 #include <getopt.h>
 #include <tchattator413/json-helpers.h>

@@ -1,6 +1,6 @@
 /// @file
 /// @author Raphaël
-/// @brief Tchattator413 JSON front-end - Main program
+/// @brief Tchattator413 server - Main program
 /// @date 23/01/2025
 
 #include <assert.h>
