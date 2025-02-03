@@ -10,4 +10,11 @@ cd /docker/sae/data
 sudo git fetch --all
 sudo git reset --hard origin/main
 
-bash sql/unite.bash main | sudo docker exec -iw / postgresdb psql -v ON_ERROR_STOP=on -h localhost -wU "$DB_USER" -d "$DB_NAME"
+for instance in main test; do
+    db="sae413_$1"
+    bash sql/unite.bash $instance | sudo docker exec -iw / postgresdb psql -v ON_ERROR_STOP=on -h localhost -wU "$DB_USER" \
+        -c "drop database if exists $db" \
+        -c "create database $db" \
+        -c "\c $db" \
+        -f -
+done

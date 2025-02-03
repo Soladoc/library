@@ -30,33 +30,33 @@
 #pragma GCC diagnostic ignored "-Wmissing-prototypes"
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wcomment"
-#define X_TESTS(X)                                                                       \
-    X(empty)                                                                             \
-    X(malformed)                                                                         \
-    X(zero)                                                                              \
-                                                                                         \
-    X(admin_login_logout)                                                                \
-    X(admin_whois_1)                                                                     \
-    X(admin_whois_imax)                                                                  \
-    X(admin_whois_neg1)                                                                  \
-    X(invalid_login)                                                                     \
-    X(invalid_logout)                                                                    \
-    X(invalid_whois_1)                                                                   \
-    X(member1_login_login_logout_logout)                                                 \
-    X(member1_login_logout_logout)                                                       \
-    X(member1_login_logout)                                                              \
-    /*X(member1_login_member2_login_member1_logout_member2_logout) FIXME temp disabled*/ \
-    X(member1_login_wrong_password)                                                      \
-    X(member1_login)                                                                     \
-    X(member1_send_pro1_inbox_member1_rm)                                                \
-    X(member1_whois_1_by_email)                                                          \
-    X(member1_whois_1_by_name)                                                           \
-    X(member1_whois_1)                                                                   \
-    X(member1_whois_5_by_email)                                                          \
-    X(member1_whois_5_by_name)                                                           \
-    X(member1_whois_5)                                                                   \
-    X(pro1_login_logout)                                                                 \
-    X(pro1_inbox)                                                                        \
+#define X_TESTS(X)                                               \
+    X(empty)                                                     \
+    X(malformed)                                                 \
+    X(zero)                                                      \
+                                                                 \
+    X(admin_login_logout)                                        \
+    X(admin_whois_1)                                             \
+    X(admin_whois_imax)                                          \
+    X(admin_whois_neg1)                                          \
+    X(invalid_login)                                             \
+    X(invalid_logout)                                            \
+    X(invalid_whois_1)                                           \
+    X(member1_login_login_logout_logout)                         \
+    X(member1_login_logout_logout)                               \
+    X(member1_login_logout)                                      \
+    X(member1_login_member2_login_member1_logout_member2_logout) \
+    X(member1_login_wrong_password)                              \
+    X(member1_login)                                             \
+    X(member1_send_pro1_inbox_member1_rm)                        \
+    X(member1_whois_1_by_email)                                  \
+    X(member1_whois_1_by_name)                                   \
+    X(member1_whois_1)                                           \
+    X(member1_whois_5_by_email)                                  \
+    X(member1_whois_5_by_name)                                   \
+    X(member1_whois_5)                                           \
+    X(pro1_login_logout)                                         \
+    X(pro1_inbox)                                                \
     //
 #pragma GCC diagnostic pop
 

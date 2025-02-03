@@ -81,6 +81,10 @@ db_t *db_connect(int verbosity, char const *host, char const *port, char const *
         return NULL;
     }
 
+    put_log("connected to db '%s' on %s:%s as %s,  password %c%c...\n", database, host, port, username,
+        password[0] ? password[0] : ' ',
+        password[0] && password[1] ? password[1] : ' ');
+
     return db;
 }
 

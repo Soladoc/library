@@ -25,11 +25,9 @@ nc 127.0.0.1 4113 <<< '[]'
 
 */
 
-static inline char *require_env(char const *name) {
+static inline char const *get_env(char const *name, char const *fallback) {
     char *value = getenv(name);
-    if (value) return value;
-    put_error("environment variable '%s' is required\n", name);
-    exit(EX_USAGE);
+    return value ? value : fallback;
 }
 
 int main(int argc, char **argv) {
@@ -119,18 +117,12 @@ int main(int argc, char **argv) {
         cfg_dump(cfg);
         result = EX_OK;
     } else {
-        /*db_t *db = db_connect(verbosity,
-            require_env("DB_HOST"),
-            require_env("PGDB_PORT"),
-            require_env("DB_NAME"),
-            require_env("DB_USER"),
-            require_env("DB_ROOT_PASSWORD"));*/
         db_t *db = db_connect(verbosity,
-            STR(DB_HOST),
-            STR(PGDB_PORT),
-            STR(DB_NAME),
-            STR(DB_USER),
-            STR(DB_ROOT_PASSWORD));
+            get_env("DB_HOST", "413.ventsdouest.dev"),
+            get_env("PGDB_PORT", "5432"),
+            get_env("DB_NAME", "sae413_test"), // Run on the test DB by default
+            get_env("DB_USER", "sae"),
+            get_env("DB_ROOT_PASSWORD", "bib3loTs-CRues-rdv"));
         if (!db) return EX_NODB;
 
         server_t *server = server_create(server_rate_limiting);
