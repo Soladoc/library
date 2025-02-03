@@ -1,12 +1,14 @@
 # PACT - Équipe 413
 
+SAÉ 3&4 BUT2 2025
+
 Raphaël Bardini
 
 Romain Grandchamp
 
 Maëlan Potier
 
-Mariis Chartier--Le Goff
+Marius Chartier--Le Goff
 
 Maël Gogdet
 
