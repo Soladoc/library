@@ -7,7 +7,7 @@ function host_is_iut() {
     return $?
 }
 
-readonly container=413-tchattator-build-service
+readonly container=413-tchatator-build-service
 readonly workdir=/work
 
 cflags=''

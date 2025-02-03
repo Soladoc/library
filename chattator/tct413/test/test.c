@@ -1,14 +1,14 @@
 /// @file
 /// @author Raphaël
-/// @brief Tchattator413 test utilities - Implementation
+/// @brief Tchatator413 test utilities - Implementation
 /// @date 1/02/2025
 
-#include "tchattator413/const.h"
-#include "tchattator413/tests_tchattator413.h"
+#include "tchatator413/const.h"
+#include "tchatator413/tests_tchatator413.h"
 #include "tests.h"
 #include <stdlib.h>
-#include <tchattator413/cfg.h>
-#include <tchattator413/db.h>
+#include <tchatator413/cfg.h>
+#include <tchatator413/db.h>
 
 // #define DO_OBSERVE
 #define OUT stdout
@@ -36,7 +36,7 @@ int main(void) {
 
     test(test_uuid4());
 
-#define CALL_TEST(name) test(test_tchattator413_##name(cfg, db, server));
+#define CALL_TEST(name) test(test_tchatator413_##name(cfg, db, server));
     X_TESTS(CALL_TEST)
 #undef CALL_TEST
 

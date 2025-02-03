@@ -5,9 +5,9 @@
 
 #include "strings.h"
 #include "tests.h"
-#include <tchattator413/errstatus.h>
-#include <tchattator413/util.h>
-#include <tchattator413/uuid.h>
+#include <tchatator413/errstatus.h>
+#include <tchatator413/util.h>
+#include <tchatator413/uuid.h>
 
 struct test test_uuid4(void) {
     struct test t = test_start("uuid4");

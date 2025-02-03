@@ -1,4 +1,4 @@
-set schema 'tchattator';
+set schema 'tchatator';
 
 create view
     msg as

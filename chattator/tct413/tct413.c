@@ -1,6 +1,6 @@
 /// @file
 /// @author Raphaël
-/// @brief Tchattator413 server - Main program
+/// @brief Tchatator413 server - Main program
 /// @date 23/01/2025
 
 #include <assert.h>
@@ -8,10 +8,10 @@
 #include <json-c.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <tchattator413/cfg.h>
-#include <tchattator413/json-helpers.h>
-#include <tchattator413/tchattator413.h>
-#include <tchattator413/util.h>
+#include <tchatator413/cfg.h>
+#include <tchatator413/json-helpers.h>
+#include <tchatator413/tchatator413.h>
+#include <tchatator413/util.h>
 #include <unistd.h>
 
 /* to run it
@@ -128,8 +128,8 @@ int main(int argc, char **argv) {
         server_t *server = server_create(server_rate_limiting);
 
         result = interactive
-            ? tchattator413_run_console(cfg, db, server, argc, argv)
-            : tchattator413_run_server(cfg, db, server);
+            ? tchatator413_run_console(cfg, db, server, argc, argv)
+            : tchatator413_run_server(cfg, db, server);
 
         server_destroy(server);
         db_destroy(db);

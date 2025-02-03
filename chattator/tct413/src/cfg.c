@@ -1,15 +1,15 @@
 /// @file
 /// @author Raphaël
-/// @brief Tchattator413 server configuration - Implementation
+/// @brief Tchatator413 server configuration - Implementation
 /// @date 29/01/2025
 
 #include <errno.h>
 #include <json-c/json.h>
 #include <stdlib.h>
 #include <string.h>
-#include <tchattator413/cfg.h>
-#include <tchattator413/json-helpers.h>
-#include <tchattator413/util.h>
+#include <tchatator413/cfg.h>
+#include <tchatator413/json-helpers.h>
+#include <tchatator413/util.h>
 
 #define DEFAULT_LOG_STREAM stderr
  

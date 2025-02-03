@@ -9,15 +9,15 @@
 #include <netinet/in.h>
 #include <postgresql/libpq-fe.h>
 #include <stdlib.h>
-#include <tchattator413/db.h>
-#include <tchattator413/util.h>
+#include <tchatator413/db.h>
+#include <tchatator413/util.h>
 
-#define TBL_USER "tchattator.user"
-#define TBL__MSG "tchattator._msg"
-#define TBL_INBOX "tchattator.inbox"
+#define TBL_USER "tchatator.user"
+#define TBL__MSG "tchatator._msg"
+#define TBL_INBOX "tchatator.inbox"
 #define TBL_MEMBRE "pact.membre"
 #define TBL_PRO "pact.professionnel"
-#define CALL_FUN_SEND_MSG(arg1, arg2, arg3) "tchattator.send_msg(" arg1 "::int," arg2 "::int," arg3 "::varchar)"
+#define CALL_FUN_SEND_MSG(arg1, arg2, arg3) "tchatator.send_msg(" arg1 "::int," arg2 "::int," arg3 "::varchar)"
 
 #if __BYTE_ORDER == __BIG_ENDIAN
 #define ntohll(x) x

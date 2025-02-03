@@ -1,14 +1,14 @@
 /// @file
 /// @author Raphaël
-/// @brief Tchattator413 protocol - Implementation (JSON-related)
+/// @brief Tchatator413 protocol - Implementation (JSON-related)
 /// @date 23/01/2025
 
 #include <json-c.h>
-#include <tchattator413/action.h>
-#include <tchattator413/const.h>
-#include <tchattator413/errstatus.h>
-#include <tchattator413/json-helpers.h>
-#include <tchattator413/util.h>
+#include <tchatator413/action.h>
+#include <tchatator413/const.h>
+#include <tchatator413/errstatus.h>
+#include <tchatator413/json-helpers.h>
+#include <tchatator413/util.h>
 
 /// @return @ref serial_t The user ID.
 /// @return @ref errstatus_handled An error occured and was handled.

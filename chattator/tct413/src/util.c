@@ -1,11 +1,11 @@
 /// @file
 /// @author Raphaël
-/// @brief Tchattator413 miscaelannous utilities - Implementation
+/// @brief Tchatator413 miscaelannous utilities - Implementation
 /// @date 1/02/2025
 
 #include <limits.h>
 #include <stdarg.h>
-#include <tchattator413/util.h>
+#include <tchatator413/util.h>
 
 char *strfmt(const char *fmt, ...) {
     va_list ap;

@@ -1,4 +1,4 @@
-set schema 'tchattator';
+set schema 'tchatator';
 
 insert into
     _msg (content, id_compte_sender, id_compte_recipient)
