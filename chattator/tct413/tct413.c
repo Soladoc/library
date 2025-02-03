@@ -119,12 +119,18 @@ int main(int argc, char **argv) {
         cfg_dump(cfg);
         result = EX_OK;
     } else {
-        db_t *db = db_connect(verbosity,
+        /*db_t *db = db_connect(verbosity,
             require_env("DB_HOST"),
             require_env("PGDB_PORT"),
             require_env("DB_NAME"),
             require_env("DB_USER"),
-            require_env("DB_ROOT_PASSWORD"));
+            require_env("DB_ROOT_PASSWORD"));*/
+        db_t *db = db_connect(verbosity,
+            STR(DB_HOST),
+            STR(PGDB_PORT),
+            STR(DB_NAME),
+            STR(DB_USER),
+            STR(DB_ROOT_PASSWORD));
         if (!db) return EX_NODB;
 
         server_t *server = server_create(server_rate_limiting);

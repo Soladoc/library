@@ -129,12 +129,13 @@ json_object *send_request(json_object *obj) {
     json_object *rep = json_object_from_fd(sockfd);
     printf("Réponse: %s\n", json_object_to_json_string(rep));
 
-    json_object *action = json_object_array_get_idx(rep, 0);
+    json_object *reponse = json_object_array_get_idx(rep, 0);
 
     json_object *body;
 
-    if (json_object_object_get_ex(action, "body", &body)) {
-    } else if (json_object_object_get_ex(action, "error", &body)) {
+    if (json_object_object_get_ex(reponse, "body", &body)) {
+        return body;
+    } else if (json_object_object_get_ex(reponse, "error", &body)) {
         body = NULL;
     } else {
         printf("Bizarre...\n"); // FIXME
