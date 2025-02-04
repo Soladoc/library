@@ -113,10 +113,10 @@ TEST_SIGNATURE(NAME) {
     if (!ok) return test.t;
 
     // Member sends message
-    json_object *obj_input = input_file_fmt(IN_FILE(NAME, "_send"), gs_token_member1);
+    json_object *obj_input = load_input_jsonf(IN_JSONF(NAME, "_send"), gs_token_member1);
     json_object *obj_output = tchatator413_interpret(obj_input, cfg, db, server, on_action, on_response, &test);
     test_case_n_actions(&test, 1);
-    ok = test_case_o_file_fmt(&test, obj_output, OUT_FILE(NAME, "_send"), gs_msg_id);
+    ok = test_case_o_file_fmt(&test, obj_output, OUT_JSON(NAME, "_send"), gs_msg_id);
     json_object_put(obj_input);
     json_object_put(obj_output);
 
@@ -139,10 +139,10 @@ TEST_SIGNATURE(NAME) {
     if (!ok) return test.t;
 
     // Pro queries inbox
-    obj_input = input_file_fmt(IN_FILE(NAME, "_inbox"), gs_token_pro1);
+    obj_input = load_input_jsonf(IN_JSONF(NAME, "_inbox"), gs_token_pro1);
     obj_output = tchatator413_interpret(obj_input, cfg, db, server, on_action, on_response, &test);
     test_case_n_actions(&test, 2);
-    test_case_o_file_fmt(&test, obj_output, OUT_FILE(NAME, "_send"), gs_msg_id, gs_msg_sent_at);
+    test_case_o_file_fmt(&test, obj_output, OUT_JSON(NAME, "_send"), gs_msg_id, gs_msg_sent_at);
 
     json_object_put(obj_input);
     json_object_put(obj_output);
@@ -158,10 +158,10 @@ TEST_SIGNATURE(NAME) {
 
     // Member deletes message
 
-    obj_input = input_file_fmt(IN_FILE(NAME, "_rm"), gs_token_member1, gs_msg_id);
+    obj_input = load_input_jsonf(IN_JSONF(NAME, "_rm"), gs_token_member1, gs_msg_id);
     obj_output = tchatator413_interpret(obj_input, cfg, db, server, on_action, on_response, &test);
     test_case_n_actions(&test, 3);
-    test_case_o_file_fmt(&test, obj_output, OUT_FILE(NAME, "_rm"));
+    test_case_o_file_fmt(&test, obj_output, OUT_JSON(NAME, "_rm"));
 
     // Member logs out
     response = action_evaluate(

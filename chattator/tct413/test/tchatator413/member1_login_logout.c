@@ -41,18 +41,18 @@ TEST_SIGNATURE(NAME) {
         .server = server,
     };
 
-    json_object *obj_input = json_object_from_file(IN_FILE(NAME, "1"));
+    json_object *obj_input = json_object_from_file(IN_JSON(NAME, "1"));
     json_object *obj_output = tchatator413_interpret(obj_input, cfg, db, server, on_action_1, on_response_1, &test);
     test_case_n_actions(&test, 1);
-    bool ok = test_case_o_file_fmt(&test, obj_output, OUT_FILE(NAME, "1"), &gs_token);
+    bool ok = test_case_o_file_fmt(&test, obj_output, OUT_JSON(NAME, "1"), &gs_token);
     json_object_put(obj_input);
     json_object_put(obj_output);
     if (!ok) return test.t;
 
-    obj_input = input_file_fmt(IN_FILE(NAME, "2"), gs_token);
+    obj_input = load_input_jsonf(IN_JSONF(NAME, "2"), gs_token);
     obj_output = tchatator413_interpret(obj_input, cfg, db, server, on_action_2, on_response_2, &test);
     test_case_n_actions(&test, 2);
-    test_case_o_file_fmt(&test, obj_output, OUT_FILE(NAME, "2"));
+    test_case_o_file_fmt(&test, obj_output, OUT_JSON(NAME, "2"));
     json_object_put(obj_output);
     json_object_put(obj_input);
 

@@ -71,10 +71,10 @@ TEST_SIGNATURE(NAME) {
     if (!ok) return test.t;
 
     // Pro queries inbox
-    json_object *obj_input = input_file_fmt(IN_FILE(NAME, "_inbox"), gs_token_pro1);
+    json_object *obj_input = load_input_jsonf(IN_JSONF(NAME, "_inbox"), gs_token_pro1);
     json_object *obj_output = tchatator413_interpret(obj_input, cfg, db, server, on_action, on_response, &test);
     test_case_n_actions(&test, 1);
-    test_case_o_file_fmt(&test, obj_output, OUT_FILE(NAME, "_inbox"));
+    test_case_o_file_fmt(&test, obj_output, OUT_JSON(NAME, "_inbox"));
 
     json_object_put(obj_input);
     json_object_put(obj_output);

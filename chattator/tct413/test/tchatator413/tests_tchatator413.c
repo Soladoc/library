@@ -91,20 +91,36 @@ static inline json_object *reduce_fmt_v(json_object *obj, va_list *ap) {
     return obj;
 }
 
-json_object *input_file_fmt(const char *input_filename, ...) {
+json_object *load_input_json(char const *input_filename)
+{
+    json_object *obj = json_object_from_file(input_filename);
+    if (!obj) {
+        put_error_json_c("failed to load %s", input_filename);
+        exit(EX_DATAERR);
+    }
+    return obj;
+}
+
+json_object *load_input_jsonf(const char *input_filename, ...) {
     FILE *finput = fopen(input_filename, "r");
-    if (!finput) return NULL;
-    char *input = fslurp(finput);
+    if (!finput) errno_exit("fopen");
+    char *input_fmt = fslurp(finput);
     fclose(finput);
-    if (!input) return NULL;
+    if (!input_fmt) errno_exit("fslurp");
 
-    json_object *obj = json_tokener_parse(input);
-    free(input);
-
+    // possible optimization : reuse input_fmt memory: call sprintf with null to get size, then realloc it
     va_list ap;
     va_start(ap, input_filename);
-    obj = reduce_fmt_v(obj, &ap);
+    char *input = vstrfmt(input_fmt, ap);
     va_end(ap);
+    free(input_fmt);
+
+    json_object *obj = json_tokener_parse(input);
+    if (!obj) {
+        put_error_json_c("failed to load %s", input_filename);
+        exit(EX_DATAERR);
+    }
+    free(input);
 
     return obj;
 }

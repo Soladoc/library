@@ -66,8 +66,9 @@
 X_TESTS(DECLARE_TEST)
 #undef DECLARE_TEST
 
-#define OUT_FILE(NAME, suffix) "test/tchatator413/json/" STR(NAME) "/out" suffix ".json"
-#define IN_FILE(NAME, suffix) "test/tchatator413/json/" STR(NAME) "/in" suffix ".json"
+#define OUT_JSON(NAME, suffix) "test/tchatator413/json/" STR(NAME) "/out" suffix ".json"
+#define IN_JSON(NAME, suffix) "test/tchatator413/json/" STR(NAME) "/in" suffix ".json"
+#define IN_JSONF(NAME, suffix) "test/tchatator413/json/" STR(NAME) "/in" suffix ".jsonf"
 
 // Implementation details
 
@@ -102,7 +103,8 @@ _Static_assert(offsetof(test_t, t) == 0, "backing test must be at start of struc
 
 bool uuid4_eq_repr(uuid4_t uuid, char const repr[static const UUID4_REPR_LENGTH]);
 
-json_object *input_file_fmt(char const *input_filename, ...);
+json_object *load_input_json(char const *input_filename);
+json_object *load_input_jsonf(char const *input_filename, ...);
 
 /// @brief output JSON test case
 bool test_case_o(test_t *test, json_object *obj_output, char const *expected_output);
@@ -118,6 +120,8 @@ test_t *base_on_response(void *test);
 void test_case_n_actions(test_t *test, int expected);
 
 /// @brief Test two JSON objects are equal for equality, with pattern matching using formatting.
+///
+/// Retrieves the values contained in the variadic arguments.
 ///
 /// @p obj_expected may have contain formatting syntax to indicate the format of the expected values instead of hard strings.
 bool json_object_eq_fmt(json_object *obj_actual, json_object *obj_expected, ...);

@@ -13,6 +13,12 @@
   - 1 private pro
   - 1 member
 
+## The jsonf format
+
+The JSONf format is like JSON expect printf format specifers can appear anywhere.
+
+The contents of a JSONf file is a format string.
+
 ## I/O expected JSON format
 
 I/O json files are compared as JSON objects (objects are unordered).
