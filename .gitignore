@@ -2,3 +2,4 @@
 bin
 *.o
 #info.php
+db.php
