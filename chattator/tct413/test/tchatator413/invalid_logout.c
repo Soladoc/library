@@ -25,12 +25,12 @@ static void on_response(response_t const *response, void *t) {
 TEST_SIGNATURE(NAME) {
     test_t test = { .t = test_start(STR(NAME)) };
 
-    json_object *obj_input = load_input_json(IN_JSON(NAME, ));
+    json_object *obj_input = load_json(IN_JSON(NAME, ));
 
     json_object *obj_output = tchatator413_interpret(obj_input, cfg, db, server, on_action, on_response, &test);
     test_case_n_actions(&test, 1);
 
-    test_case_o_file_fmt(&test, obj_output, OUT_JSON(NAME, ));
+    test_output_json_file(&test, obj_output, OUT_JSON(NAME, ));
 
     json_object_put(obj_output);
     json_object_put(obj_input);

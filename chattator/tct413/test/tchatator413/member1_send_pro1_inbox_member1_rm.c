@@ -67,7 +67,7 @@ static void on_response(response_t const *response, void *t) {
     }
     case 2: { // inbox
         if (!test_case_eq_int(t, response->type, action_type_inbox, )) return;
-        test_case_eq_int64(t, response->body.inbox.n_msgs, 1, );
+        if (!test_case_eq_int64(t, response->body.inbox.n_msgs, 1, )) return;
         msg_t msg = response->body.inbox.msgs[0];
         test_case_eq_int(t, msg.id, gs_msg_id, );
         test_case_eq_int64(t, msg.sent_at, gs_msg_sent_at, );
@@ -98,79 +98,91 @@ TEST_SIGNATURE(NAME) {
     assert(uuid4_parse(&api_key_p1, API_KEY_PRO1));
 
     // Member logs in
-    response_t response = action_evaluate(
-        &(action_t) {
-            .type = action_type_login,
-            .with.login = {
-                .api_key = api_key_m1,
-                .password = SLICE_CONST("member1_mdp"),
+    {
+        response_t response = action_evaluate(
+            &(action_t) {
+                .type = action_type_login,
+                .with.login = {
+                    .api_key = api_key_m1,
+                    .password = SLICE_CONST("member1_mdp"),
+                },
             },
-        },
-        cfg, db, server);
-    bool ok = test_case_eq_int(&test.t, response.type, action_type_login, "member logs in");
-    gs_token_member1 = response.body.login.token;
-    response_destroy(&response);
-    if (!ok) return test.t;
+            cfg, db, server);
+        if (!test_case_eq_int(&test.t, response.type, action_type_login, "member logs in")) return test.t;
+        gs_token_member1 = response.body.login.token;
+        response_destroy(&response);
+    }
 
     // Member sends message
-    json_object *obj_input = load_input_jsonf(IN_JSONF(NAME, "_send"), gs_token_member1);
-    json_object *obj_output = tchatator413_interpret(obj_input, cfg, db, server, on_action, on_response, &test);
-    test_case_n_actions(&test, 1);
-    ok = test_case_o_file_fmt(&test, obj_output, OUT_JSON(NAME, "_send"), gs_msg_id);
-    json_object_put(obj_input);
-    json_object_put(obj_output);
-
-    // if send output test failed, early return after logging out
-    if (!ok) return test.t;
+    {
+        json_object *obj_input = load_jsonf(IN_JSONF(NAME, "_send"), gs_token_member1);
+        json_object *obj_output = tchatator413_interpret(obj_input, cfg, db, server, on_action, on_response, &test);
+        test_case_n_actions(&test, 1);
+        json_object *obj_expected_output = load_jsonf(OUT_JSONF(NAME, "_send"), gs_msg_id);
+        if (!test_output_json(&test.t, obj_output, obj_expected_output)) return test.t;
+        json_object_put(obj_expected_output);
+        json_object_put(obj_input);
+        json_object_put(obj_output);
+    }
 
     // Pro logs in
-    response = action_evaluate(
-        &(action_t) {
-            .type = action_type_login,
-            .with.login = {
-                .api_key = api_key_p1,
-                .password = SLICE_CONST("pro1_mdp"),
+    {
+        response_t response = action_evaluate(
+            &(action_t) {
+                .type = action_type_login,
+                .with.login = {
+                    .api_key = api_key_p1,
+                    .password = SLICE_CONST("pro1_mdp"),
+                },
             },
-        },
-        cfg, db, server);
-    ok = test_case_eq_int(&test.t, response.type, action_type_login, "pro logs in");
-    gs_token_pro1 = response.body.login.token;
-    response_destroy(&response);
-    if (!ok) return test.t;
+            cfg, db, server);
+        if (!test_case_eq_int(&test.t, response.type, action_type_login, "pro logs in")) return test.t;
+        gs_token_pro1 = response.body.login.token;
+        response_destroy(&response);
+    }
 
     // Pro queries inbox
-    obj_input = load_input_jsonf(IN_JSONF(NAME, "_inbox"), gs_token_pro1);
-    obj_output = tchatator413_interpret(obj_input, cfg, db, server, on_action, on_response, &test);
-    test_case_n_actions(&test, 2);
-    test_case_o_file_fmt(&test, obj_output, OUT_JSON(NAME, "_send"), gs_msg_id, gs_msg_sent_at);
-
-    json_object_put(obj_input);
-    json_object_put(obj_output);
+    {
+        json_object *obj_input = load_jsonf(IN_JSONF(NAME, "_inbox"), gs_token_pro1);
+        json_object *obj_output = tchatator413_interpret(obj_input, cfg, db, server, on_action, on_response, &test);
+        test_case_n_actions(&test, 2);
+        json_object *obj_expected_output = load_jsonf(OUT_JSONF(NAME, "_inbox"), gs_msg_id, gs_msg_sent_at);
+        test_output_json(&test.t, obj_output, obj_expected_output);
+        json_object_put(obj_expected_output);
+        json_object_put(obj_input);
+        json_object_put(obj_output);
+    }
 
     // Pro logs out
-    response = action_evaluate(
-        &(action_t) {
-            .type = action_type_logout,
-            .with.logout.token = gs_token_pro1 },
-        cfg, db, server);
-    test_case_eq_int(&test.t, response.type, action_type_logout, "pro logs out");
-    response_destroy(&response);
+    {
+        response_t response = action_evaluate(
+            &(action_t) {
+                .type = action_type_logout,
+                .with.logout.token = gs_token_pro1 },
+            cfg, db, server);
+        test_case_eq_int(&test.t, response.type, action_type_logout, "pro logs out");
+        response_destroy(&response);
+    }
 
     // Member deletes message
+    {
+        json_object *obj_input = load_jsonf(IN_JSONF(NAME, "_rm"), gs_token_member1, gs_msg_id);
+        json_object *obj_output = tchatator413_interpret(obj_input, cfg, db, server, on_action, on_response, &test);
+        test_case_n_actions(&test, 3);
+        test_output_json_file(&test, obj_output, OUT_JSON(NAME, "_rm"));
 
-    obj_input = load_input_jsonf(IN_JSONF(NAME, "_rm"), gs_token_member1, gs_msg_id);
-    obj_output = tchatator413_interpret(obj_input, cfg, db, server, on_action, on_response, &test);
-    test_case_n_actions(&test, 3);
-    test_case_o_file_fmt(&test, obj_output, OUT_JSON(NAME, "_rm"));
+        // Member logs out
+        response_t response = action_evaluate(
+            &(action_t) {
+                .type = action_type_logout,
+                .with.logout.token = gs_token_member1 },
+            cfg, db, server);
+        if (!test_case_eq_int(&test.t, response.type, action_type_logout, "member logs out")) return test.t;
+        response_destroy(&response);
 
-    // Member logs out
-    response = action_evaluate(
-        &(action_t) {
-            .type = action_type_logout,
-            .with.logout.token = gs_token_member1 },
-        cfg, db, server);
-    ok &= test_case_eq_int(&test.t, response.type, action_type_logout, "member logs out");
-    response_destroy(&response);
+        json_object_put(obj_input);
+        json_object_put(obj_output);
+    }
 
     return test.t;
 }

@@ -1,7 +1,7 @@
 [
   {
     "body": {
-      "$fmt_number": "%ld"
+      "msg_id": %ld
     }
   }
 ]
