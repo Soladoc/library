@@ -3,7 +3,7 @@ set -euo pipefail
 cd "$(dirname "${BASH_SOURCE[0]}")"
 
 function host_is_iut() {
-    [[ "$(hostname)" == PCE* ]]
+    [[ "$(hostname)" == PCE* ]] || [[ "$(hostname)" == ALT-PCE* ]]
     return $?
 }
 
