@@ -8,13 +8,14 @@
 
 ## stuff
 
+- [ ] let bcrypt be a working submodule.
+
 - [ ] propper loggin
 
 - [x] use a `db_memory_owner` pointer on `action_t` pointing to read-only memory instead of `strcpy`ing ourselves into oblivion.
 
-- [ ] rename action_error to error (action_error_type -> error_type, so on...)
-  
-- multiaction requests shouldn't increase rate limits that much
+- [ ] multiaction requests shouldn't increase rate limits that much
+- [ ] rate limits should work with IPS so that the server can deny abusive requests immediately.
 
 - [x] elegant error handling
   - [x] think of an approach that suits JSON, DB and other sources of errors
