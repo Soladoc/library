@@ -66,8 +66,10 @@
 X_TESTS(DECLARE_TEST)
 #undef DECLARE_TEST
 
-#define OUT_FILE(NAME, suffix) "test/tchatator413/json/" STR(NAME) "/out" suffix ".json"
-#define IN_FILE(NAME, suffix) "test/tchatator413/json/" STR(NAME) "/in" suffix ".json"
+#define OUT_JSON(NAME, suffix) "test/tchatator413/json/" STR(NAME) "/out" suffix ".json"
+#define OUT_JSONF(NAME, suffix) OUT_JSON(NAME, suffix) "f"
+#define IN_JSON(NAME, suffix) "test/tchatator413/json/" STR(NAME) "/in" suffix ".json"
+#define IN_JSONF(NAME, suffix) IN_JSON(NAME, suffix) "f"
 
 // Implementation details
 
@@ -102,12 +104,14 @@ _Static_assert(offsetof(test_t, t) == 0, "backing test must be at start of struc
 
 bool uuid4_eq_repr(uuid4_t uuid, char const repr[static const UUID4_REPR_LENGTH]);
 
-json_object *input_file_fmt(char const *input_filename, ...);
+json_object *load_json(char const *input_filename);
+json_object *load_jsonf(char const *input_filename, ...);
 
-/// @brief output JSON test case
-bool test_case_o(test_t *test, json_object *obj_output, char const *expected_output);
+#define test_output_json(t, obj_output, obj_expected_output) \
+    test_case_wide(t, json_object_equal(obj_output, obj_expected_output), "output: %s == %s", min_json(obj_output), min_json(obj_expected_output))
+
 /// @brief output from JSON file test case
-bool test_case_o_file_fmt(test_t *test, json_object *obj_output, char const *expected_output_filename, ...);
+bool test_output_json_file(test_t *test, json_object *obj_output, char const *expected_output_filename);
 
 /// @brief Base on_action event handler.
 test_t *base_on_action(void *test);
@@ -119,8 +123,10 @@ void test_case_n_actions(test_t *test, int expected);
 
 /// @brief Test two JSON objects are equal for equality, with pattern matching using formatting.
 ///
+/// Retrieves the values contained in the variadic arguments.
+///
 /// @p obj_expected may have contain formatting syntax to indicate the format of the expected values instead of hard strings.
-bool json_object_eq_fmt(json_object *obj_actual, json_object *obj_expected, ...);
+bool json_object_eq_fmt(json_object *obj_actual, json_object *obj_expected);
 
 #define test_case_eq_int(t, actual, expected, fmt) test_case((t), actual == expected, fmt " == %d", actual)
 #define test_case_eq_int64(t, actual, expected, fmt) test_case((t), actual == expected, fmt " == %ld", actual)

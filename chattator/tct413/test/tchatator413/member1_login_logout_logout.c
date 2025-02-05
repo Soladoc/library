@@ -34,6 +34,7 @@ static void on_response(response_t const *response, void *t) {
     switch (test->n_responses) {
     case 1:
         if (!test_case_eq_int(t, response->type, action_type_login, )) return;
+        gs_token = response->body.login.token;
         test_case(t, -1 != server_verify_token(test->server, response->body.login.token), "server verifies token %ld", response->body.login.token);
         break;
     case 2:
@@ -55,24 +56,24 @@ TEST_SIGNATURE(NAME) {
         .server = server,
     };
 
-    json_object *obj_input = json_object_from_file(IN_FILE(NAME, "1"));
+    json_object *obj_input = json_object_from_file(IN_JSON(NAME, "1"));
     json_object *obj_output = tchatator413_interpret(obj_input, cfg, db, server, on_action, on_response, &test);
     test_case_n_actions(&test, 1);
-    bool ok = test_case_o_file_fmt(&test, obj_output, OUT_FILE(NAME, "1"), &gs_token);
+    bool ok = test_output_json_file(&test, obj_output, OUT_JSON(NAME, "1"));
     json_object_put(obj_input);
     json_object_put(obj_output);
     if (!ok) return test.t;
 
-    obj_input = input_file_fmt(IN_FILE(NAME, "2"), gs_token);
+    obj_input = load_jsonf(IN_JSONF(NAME, "2"), gs_token);
 
     obj_output = tchatator413_interpret(obj_input, cfg, db, server, on_action, on_response, &test);
     test_case_n_actions(&test, 2);
-    test_case_o_file_fmt(&test, obj_output, OUT_FILE(NAME, "2"));
+    test_output_json_file(&test, obj_output, OUT_JSON(NAME, "2"));
     json_object_put(obj_output);
 
     obj_output = tchatator413_interpret(obj_input, cfg, db, server, on_action, on_response, &test);
     test_case_n_actions(&test, 3);
-    test_case_o_file_fmt(&test, obj_output, OUT_FILE(NAME, "3"));
+    test_output_json_file(&test, obj_output, OUT_JSON(NAME, "3"));
     json_object_put(obj_output);
 
     json_object_put(obj_input);

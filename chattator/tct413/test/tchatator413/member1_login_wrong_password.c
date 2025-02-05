@@ -29,12 +29,12 @@ TEST_SIGNATURE(NAME) {
         .server = server,
     };
 
-    json_object *obj_input = json_object_from_file(IN_FILE(NAME, ));
+    json_object *obj_input = load_json(IN_JSON(NAME, ));
 
     json_object *obj_output = tchatator413_interpret(obj_input, cfg, db, server, on_action, on_response, &test);
     test_case_n_actions(&test, 1);
 
-    test_case_o_file_fmt(&test, obj_output, OUT_FILE(NAME, ));
+    test_output_json_file(&test, obj_output, OUT_JSON(NAME, ));
 
     json_object_put(obj_output);
     json_object_put(obj_input);

@@ -9,6 +9,8 @@
 
 #define NAME member1_login_login_logout_logout
 
+static token_t gs_tokens[2];
+
 static void on_action_login(action_t const *action, void *t) {
     base_on_action(t);
     if (!test_case_eq_int(t, action->type, action_type_login, )) return;
@@ -20,10 +22,9 @@ static void on_response_login(response_t const *response, void *t) {
     test_t *test = base_on_response(t);
     test_case(t, !response->has_next_page, "");
     if (!test_case_eq_int(t, response->type, action_type_login, )) return;
+    gs_tokens[test->n_responses - 1] = response->body.login.token;
     test_case(t, -1 != server_verify_token(test->server, response->body.login.token), "server verifies token %ld", response->body.login.token);
 }
-
-static token_t gs_tokens[2];
 
 static void on_action_logout(action_t const *action, void *t) {
     test_t *test = base_on_action(t);
@@ -49,32 +50,32 @@ TEST_SIGNATURE(NAME) {
         return test.t;               \
     } while (0)
 
-    json_object *obj_input = json_object_from_file(IN_FILE(NAME, "1"));
+    json_object *obj_input = json_object_from_file(IN_JSON(NAME, "1"));
 
     json_object *obj_output = tchatator413_interpret(obj_input, cfg, db, server, on_action_login, on_response_login, &test);
     test_case_n_actions(&test, 1);
-    if (!test_case_o_file_fmt(&test, obj_output, OUT_FILE(NAME, "1"), &gs_tokens[0])) STOP();
+    if (!test_output_json_file(&test, obj_output, OUT_JSON(NAME, "1"))) STOP();
 
-    sleep(1); // As per the protocol signification, it is an error to try to login as the same user twice in the same second.
+    sleep(1); // As per protocol specification, it is an error to try to login as the same user twice in the same second.
 
     json_object_put(obj_output);
     obj_output = tchatator413_interpret(obj_input, cfg, db, server, on_action_login, on_response_login, &test);
     test_case_n_actions(&test, 2);
-    if (!test_case_o_file_fmt(&test, obj_output, OUT_FILE(NAME, "1"), &gs_tokens[1])) STOP();
+    if (!test_output_json_file(&test, obj_output, OUT_JSON(NAME, "1"))) STOP();
 
     json_object_put(obj_input);
-    obj_input = input_file_fmt(IN_FILE(NAME, "2"), gs_tokens[0]);
+    obj_input = load_jsonf(IN_JSONF(NAME, "2"), gs_tokens[0]);
     json_object_put(obj_output);
     obj_output = tchatator413_interpret(obj_input, cfg, db, server, on_action_logout, on_response_logout, &test);
     test_case_n_actions(&test, 3);
-    if (!test_case_o_file_fmt(&test, obj_output, OUT_FILE(NAME, "2"))) STOP();
+    if (!test_output_json_file(&test, obj_output, OUT_JSON(NAME, "2"))) STOP();
 
     json_object_put(obj_input);
-    obj_input = input_file_fmt(IN_FILE(NAME, "2"), gs_tokens[1]);
+    obj_input = load_jsonf(IN_JSONF(NAME, "2"), gs_tokens[1]);
     json_object_put(obj_output);
     obj_output = tchatator413_interpret(obj_input, cfg, db, server, on_action_logout, on_response_logout, &test);
     test_case_n_actions(&test, 4);
-    test_case_o_file_fmt(&test, obj_output, OUT_FILE(NAME, "2"));
+    test_output_json_file(&test, obj_output, OUT_JSON(NAME, "2"));
 
     STOP();
 }

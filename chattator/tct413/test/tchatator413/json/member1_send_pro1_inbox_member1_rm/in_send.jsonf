@@ -1,9 +1,7 @@
 {
   "do": "send",
   "with": {
-    "token": {
-      "$fmt_number": "%ld"
-    },
+    "token": %ld,
     "dest": "pro1",
     "content": "Bonjour du language C :)"
   }

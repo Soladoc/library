@@ -2,7 +2,7 @@
   {
     "body": {
       "token": {
-        "$fmt_number": "%*ld"
+        "$fmt": "%*ld"
       }
     }
   }

@@ -2,14 +2,14 @@
   {
     "body": {
       "token": {
-        "$fmt_number": "%ld"
+        "$fmt": "%*ld"
       }
     }
   },
   {
     "body": {
       "token": {
-        "$fmt_number": "%ld"
+        "$fmt": "%*ld"
       }
     }
   }

@@ -12,22 +12,20 @@
 
 - [x] use a `db_memory_owner` pointer on `action_t` pointing to read-only memory instead of `strcpy`ing ourselves into oblivion.
 
-- [ ] do we really need `slice_t`? didn't think so.
-
 - [ ] rename action_error to error (action_error_type -> error_type, so on...)
   
 - multiaction requests shouldn't increase rate limits that much
 
 - [x] elegant error handling
   - [x] think of an approach that suits JSON, DB and other sources of errors
-- [ ] doxygen documentation
+- [x] doxygen documentation
 
 - [x] prefix out parameter with out_
 
 - [x] invoke build in bigpapoo/gcc-mariadb-pgsql:14.2-sae34
   - [x] make it work with make
 
-- [ ] write respone schema
+- [x] write respone schema
 
 - [ ] configuration
   - [ ] dynamic message string length

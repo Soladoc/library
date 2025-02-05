@@ -4,7 +4,7 @@
       {
         "msg_id": 1,
         "sent_at": {
-          "$fmt_number": "%*ld"
+          "$fmt": "%*ld"
         },
         "content": "Bonjour pro_1 (1er message)",
         "sender": 5,

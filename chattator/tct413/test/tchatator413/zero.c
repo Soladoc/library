@@ -29,8 +29,9 @@ TEST_SIGNATURE(NAME) {
     json_object *obj_output = tchatator413_interpret(obj_input, cfg, db, server, on_action, on_response, &test);
     test_case_n_actions(&test, 0);
 
-    test_case_o(&test, obj_output, OUT);
-
+    json_object *obj_expected_output = json_tokener_parse(OUT);
+    test_output_json(&test.t, obj_output, obj_expected_output);
+    json_object_put(obj_expected_output);
     json_object_put(obj_output);
     json_object_put(obj_input);
 
