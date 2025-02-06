@@ -29,14 +29,22 @@ cfg_t *cfg_from_file(char const *filename);
 /// @param cfg The configuration to dump.
 void cfg_dump(cfg_t const *cfg);
 
+typedef enum {
+    log_error,
+    log_info,
+    log_warning,
+} log_lvl_t;
+
+void _cfg_log(char const *file, int line,
+    cfg_t const *cfg, log_lvl_t lvl, char const *fmt, ...);
+#define cfg_log(cfg, lvl, fmt, ...) _cfg_log(__FILE_NAME__, __LINE__, cfg, lvl, fmt __VA_OPT__(,) __VA_ARGS__)
+
+void cfg_log_endl(cfg_t const *cfg);
+
 /// @brief Get the configuration admin_api_key.
 /// @param cfg Configuration
 /// @return The configuration admin_api_key.
 uuid4_t cfg_admin_api_key(cfg_t const *cfg);
-/// @brief Get the configuration log_file.
-/// @param cfg Configuration
-/// @return the configuration log_file.
-FILE *cfg_log_file(cfg_t const *cfg);
 /// @brief Get the configuration max_msg_length.
 /// @param cfg Configuration
 /// @return the configuration max_msg_length.

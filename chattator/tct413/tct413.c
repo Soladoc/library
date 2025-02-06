@@ -96,7 +96,7 @@ int main(int argc, char **argv) {
             case opt_interactive: interactive = true; break;
             case opt_config:
                 if (cfg) {
-                    put_error("config already specified by previous argument\n");
+                    cfg_log(cfg, log_error, "config already specified by previous argument\n");
                     return EX_USAGE;
                 }
                 cfg = cfg_from_file(optarg);
@@ -117,10 +117,10 @@ int main(int argc, char **argv) {
         cfg_dump(cfg);
         result = EX_OK;
     } else {
-        db_t *db = db_connect(verbosity,
+        db_t *db = db_connect(cfg, verbosity,
             getenv_or("DB_HOST", FALLBACK_DB_HOST),
             getenv_or("PGDB_PORT", FALLBACK_PGDB_PORT),
-            getenv_or("DB_NAME", FALLBACK_DB_NAME), // Run on the test DB by default
+            getenv_or("DB_NAME", FALLBACK_DB_NAME),
             getenv_or("DB_USER", FALLBACK_DB_USER),
             getenv_or("DB_ROOT_PASSWORD", FALLBACK_DB_ROOT_PASSWORD));
         if (!db) return EX_NODB;
@@ -128,8 +128,8 @@ int main(int argc, char **argv) {
         server_t *server = server_create(server_rate_limiting);
 
         result = interactive
-            ? tchatator413_run_console(cfg, db, server, argc, argv)
-            : tchatator413_run_server(cfg, db, server);
+            ? tchatator413_run_interactive(cfg, db, server, argc, argv)
+            : tchatator413_run_socket(cfg, db, server);
 
         server_destroy(server);
         db_destroy(db);

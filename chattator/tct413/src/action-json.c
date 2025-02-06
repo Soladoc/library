@@ -13,7 +13,7 @@
 /// @return @ref serial_t The user ID.
 /// @return @ref errstatus_handled An error occured and was handled.
 /// @return @ref errstatus_error Invalid user key.
-static inline serial_t get_user_id(json_object *obj_user, db_t *db) {
+static inline serial_t get_user_id(cfg_t *cfg, db_t *db, json_object *obj_user) {
     switch (json_object_get_type(obj_user)) {
     case json_type_int: {
         serial_t maybe_user_id = json_object_get_int(obj_user);
@@ -23,23 +23,23 @@ static inline serial_t get_user_id(json_object *obj_user, db_t *db) {
         if (json_object_get_string_len(obj_user) > MAX(EMAIL_LENGTH, PSEUDO_LENGTH)) break;
         const char *email_or_pseudo = json_object_get_string(obj_user);
         return strchr(email_or_pseudo, '@')
-            ? db_get_user_id_by_email(db, email_or_pseudo)
-            : db_get_user_id_by_name(db, email_or_pseudo);
+            ? db_get_user_id_by_email(db, cfg, email_or_pseudo)
+            : db_get_user_id_by_name(db, cfg, email_or_pseudo);
     }
     default:;
     }
     return errstatus_error;
 }
 
-action_t action_parse(json_object *obj, db_t *db) {
+action_t action_parse(cfg_t *cfg, db_t *db, json_object *obj) {
     action_t action = { 0 };
 
-#define fail()                                                                \
-    do {                                                                      \
-        action.type = action_type_error;                                      \
+#define fail()                                                              \
+    do {                                                                    \
+        action.type = action_type_error;                                    \
         action.with.error.type = action_error_type_other;                   \
         action.with.error.info.other.status = status_internal_server_error; \
-        return action;                                                        \
+        return action;                                                      \
     } while (0)
 
 #define fail_missing_key(_location)                              \
@@ -88,7 +88,7 @@ action_t action_parse(json_object *obj, db_t *db) {
         if (!json_object_object_get_ex(obj_with, key, &obj)) {                     \
             fail_missing_key(arg_loc(key));                                        \
         }                                                                          \
-        switch (*out_value = get_user_id(obj, db)) {                               \
+        switch (*out_value = get_user_id(cfg, db, obj)) {                          \
         case errstatus_error: fail_invalid(arg_loc(key), obj, "invalid user key"); \
         case errstatus_handled: fail();                                            \
         case errstatus_ok:;                                                        \
@@ -283,7 +283,7 @@ action_t action_parse(json_object *obj, db_t *db) {
         json_object *obj_user;
         getarg_user(obj_user, "user", &action.with.DO.user_id);
     } else {
-        put_error("unknown action: %s\n", action_name.val);
+        cfg_log(cfg, log_error, "unknown action: %s\n", action_name.val);
         fail();
     }
 

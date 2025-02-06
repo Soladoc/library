@@ -7,7 +7,6 @@
 #define JSON_HELPERS
 
 #include "slice.h"
-#include "util.h"
 #include <json-c.h>
 #include <stdbool.h>
 #include <stdint.h>
@@ -16,11 +15,11 @@
 
 #define json_object_dbg_print(obj) fprintf(stderr, "json_object_dbg_print: %s\n", json_object_to_json_string_ext(obj, JSON_C_TO_STRING_PRETTY))
 
-#define put_error_json_c(fmt, ...) put_error("json-c: " fmt ": %s" __VA_OPT__(, ) __VA_ARGS__, json_util_get_last_err());
+#define log_fmt_json_c(fmt, ...) "json-c: " fmt ": %s\n" __VA_OPT__(, ) __VA_ARGS__, json_util_get_last_err()
 
-#define putln_error_json_type(type, actual, fmt, ...) put_error("json: " fmt ": type: expected %s, got %s\n" __VA_OPT__(, ) __VA_ARGS__, json_type_to_name(type), json_type_to_name(actual))
+#define log_fmt_json_type(type, actual, fmt, ...) "json: " fmt ": type: expected %s, got %s\n" __VA_OPT__(, ) __VA_ARGS__, json_type_to_name(type), json_type_to_name(actual)
 
-#define putln_error_json_missing_key(key, fmt, ...) put_error("json: " fmt ": missing key: " key "\n" __VA_OPT__(, ) __VA_ARGS__)
+#define log_fmt_json_missing_key(key, fmt, ...) "json: " fmt ": missing key: " key "\n" __VA_OPT__(, ) __VA_ARGS__
 
 // JSON-C performs type coercion when getting values of the wrong type. That's confusing. We don't want that.
 // Creating explicit "strict" variants of each necessary getter function.

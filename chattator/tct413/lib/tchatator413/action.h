@@ -183,10 +183,11 @@ void response_destroy(response_t *response);
 void put_role(role_flags_t role, FILE *stream);
 
 /// @brief Parse an action from a JSON object.
-/// @param obj The JSON object allegedly containing an action.
+/// @param db The configuration.
 /// @param db The database connection.
+/// @param obj The JSON object allegedly containing an action.
 /// @return The parsed action.
-action_t action_parse(json_object *obj, db_t *db);
+action_t action_parse(cfg_t *cfg, db_t *db, json_object *obj);
 
 /// @brief Evaluate an action.
 /// @param action The action to evaluate.

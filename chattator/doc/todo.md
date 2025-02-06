@@ -8,7 +8,7 @@
 
 ## stuff
 
-- [ ] let bcrypt be a working submodule.
+- [x] let bcrypt be a working submodule.
 
 - [ ] propper loggin
 

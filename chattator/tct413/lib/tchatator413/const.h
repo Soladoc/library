@@ -38,7 +38,7 @@ enum {
 /// @brief Fallback database post if the corresponding environment variable isn't defined.
 #define FALLBACK_PGDB_PORT "5432"
 /// @brief Fallback database name if the corresponding environment variable isn't defined.
-#define FALLBACK_DB_NAME "sae413_test"
+#define FALLBACK_DB_NAME "sae413_test" // Run on the test DB by default
 /// @brief Fallback database username if the corresponding environment variable isn't defined.
 #define FALLBACK_DB_USER "sae"
 /// @brief Fallback database password if the corresponding environment variable isn't defined.
