@@ -80,7 +80,7 @@ int main(int argc, char **argv) {
         };
 
         int opt;
-        while (-1 != (opt = getopt_long(argc, argv, "qvh:", long_options, NULL))) {
+        while (-1 != (opt = getopt_long(argc, argv, "qvic:", long_options, NULL))) {
             switch (opt) {
             case opt_help:
                 puts(HELP);
