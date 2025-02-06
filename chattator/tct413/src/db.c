@@ -4,6 +4,7 @@
 /// @date 23/01/2025
 
 #include "tchatator413/cfg.h"
+#include "tchatator413/const.h"
 #include <assert.h>
 #include <bcrypt/bcrypt.h>
 #include <byteswap.h>
@@ -84,8 +85,7 @@ db_t *db_connect(cfg_t *cfg, int verbosity, char const *host, char const *port, 
         return NULL;
     }
 
-    if (verbosity >= 0) {
-        cfg_log(cfg, log_info, "connected to db '%s' on %s:%s as %s, password ", database, host, port, username);
+    if (cfg_log(cfg, log_info, "connected to db '%s' on %s:%s as %s, password ", database, host, port, username)) {
         size_t const len = strlen(password);
         for (size_t i = 0; i < len; i++) {
             if (i < len - 2) {

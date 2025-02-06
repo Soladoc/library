@@ -113,6 +113,8 @@ int main(int argc, char **argv) {
 
     int result;
 
+    cfg_set_verbosity(cfg, verbosity);
+
     if (dump_config) {
         cfg_dump(cfg);
         result = EX_OK;

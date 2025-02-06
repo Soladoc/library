@@ -28,6 +28,8 @@ struct cfg {
 
     /// @remark Can be @c NULL if log_file is a standard stream.
     char *log_file_name;
+
+    int verbosity;
 };
 
 #define INTRO "config: "
@@ -78,6 +80,7 @@ cfg_t *cfg_defaults(void) {
 
     cfg->log_file = STD_LOG_STREAM;
     cfg->log_file_name = NULL;
+    cfg->verbosity = 0;
 
     cfg->backlog = 1;
     cfg->block_for = 86400;
@@ -97,13 +100,17 @@ void cfg_destroy(cfg_t *cfg) {
     free(cfg);
 }
 
+void cfg_set_verbosity(cfg_t *cfg, int verbosity) {
+    cfg->verbosity = verbosity;
+}
+
 cfg_t *cfg_from_file(char const *filename) {
     json_object *obj_cfg = json_object_from_file(filename), *obj;
 
     cfg_t *cfg = cfg_defaults();
 
     if (!obj_cfg) {
-        log(STD_LOG_STREAM, log_error, INTRO log_fmt_json_c("failed to parse config file at '%s'"));
+        log(STD_LOG_STREAM, log_error, INTRO LOG_FMT_JSON_C("failed to parse config file at '%s'", filename));
         log(STD_LOG_STREAM, log_info, INTRO "using defaults\n");
         return cfg;
     }
@@ -111,7 +118,7 @@ cfg_t *cfg_from_file(char const *filename) {
     if (json_object_object_get_ex(obj_cfg, "admin_api_key", &obj)) {
         slice_t admin_api_key_repr;
         if (!json_object_get_string_strict(obj, &admin_api_key_repr)) {
-            log(STD_LOG_STREAM, log_error, INTRO log_fmt_json_type(json_type_string, json_object_get_type(obj), "admin_api_key"));
+            log(STD_LOG_STREAM, log_error, INTRO LOG_FMT_JSON_TYPE(json_type_string, json_object_get_type(obj), "admin_api_key"));
         }
         if (!uuid4_parse_slice(&cfg->admin_api_key, admin_api_key_repr)) {
             log(STD_LOG_STREAM, log_error, INTRO "admin_api_key: invalid UUIDV4: %*s\n", slice_leni(admin_api_key_repr), admin_api_key_repr.val);
@@ -120,22 +127,22 @@ cfg_t *cfg_from_file(char const *filename) {
     if (json_object_object_get_ex(obj_cfg, "log_file", &obj)) {
         slice_t lfn;
         if (!json_object_get_string_strict(obj, &lfn)) {
-            log(STD_LOG_STREAM, log_error, INTRO log_fmt_json_type(json_type_string, json_object_get_type(obj), "log_file"));
+            log(STD_LOG_STREAM, log_error, INTRO LOG_FMT_JSON_TYPE(json_type_string, json_object_get_type(obj), "log_file"));
         }
         if (lfn.len != 1 && lfn.val[0] != '-' && !(cfg->log_file_name = strndup(lfn.val, lfn.len))) {
             errno_exit("strndup");
         }
     }
     if (json_object_object_get_ex(obj_cfg, "backlog", &obj) && !json_object_get_int_strict(obj, &cfg->backlog)) {
-        log(STD_LOG_STREAM, log_error, INTRO log_fmt_json_type(json_type_int, json_object_get_type(obj), "backlog"));
+        log(STD_LOG_STREAM, log_error, INTRO LOG_FMT_JSON_TYPE(json_type_int, json_object_get_type(obj), "backlog"));
     }
     if (json_object_object_get_ex(obj_cfg, "block_for", &obj) && !json_object_get_int_strict(obj, &cfg->block_for)) {
-        log(STD_LOG_STREAM, log_error, INTRO log_fmt_json_type(json_type_int, json_object_get_type(obj), "block_for"));
+        log(STD_LOG_STREAM, log_error, INTRO LOG_FMT_JSON_TYPE(json_type_int, json_object_get_type(obj), "block_for"));
     }
     if (json_object_object_get_ex(obj_cfg, "max_msg_length", &obj)) {
         int64_t max_msg_length;
         if (!json_object_get_int64_strict(obj, &max_msg_length)) {
-            log(STD_LOG_STREAM, log_error, INTRO log_fmt_json_type(json_type_int, json_object_get_type(obj), "max_msg_length"));
+            log(STD_LOG_STREAM, log_error, INTRO LOG_FMT_JSON_TYPE(json_type_int, json_object_get_type(obj), "max_msg_length"));
         }
         if (max_msg_length < 0) {
             log(STD_LOG_STREAM, log_error, INTRO "max_msg_length: must be > 0\n");
@@ -144,19 +151,19 @@ cfg_t *cfg_from_file(char const *filename) {
         }
     }
     if (json_object_object_get_ex(obj_cfg, "page_inbox", &obj) && !json_object_get_int_strict(obj, &cfg->page_inbox)) {
-        log(STD_LOG_STREAM, log_error, INTRO log_fmt_json_type(json_type_int, json_object_get_type(obj), "page_inbox"));
+        log(STD_LOG_STREAM, log_error, INTRO LOG_FMT_JSON_TYPE(json_type_int, json_object_get_type(obj), "page_inbox"));
     }
     if (json_object_object_get_ex(obj_cfg, "page_outbox", &obj) && !json_object_get_int_strict(obj, &cfg->page_outbox)) {
-        log(STD_LOG_STREAM, log_error, INTRO log_fmt_json_type(json_type_int, json_object_get_type(obj), "page_outbox"));
+        log(STD_LOG_STREAM, log_error, INTRO LOG_FMT_JSON_TYPE(json_type_int, json_object_get_type(obj), "page_outbox"));
     }
     if (json_object_object_get_ex(obj_cfg, "port", &obj) && !json_object_get_uint16_strict(obj, &cfg->port)) {
-        log(STD_LOG_STREAM, log_error, INTRO log_fmt_json_type(json_type_int, json_object_get_type(obj), "port"));
+        log(STD_LOG_STREAM, log_error, INTRO LOG_FMT_JSON_TYPE(json_type_int, json_object_get_type(obj), "port"));
     }
     if (json_object_object_get_ex(obj_cfg, "rate_limit_h", &obj) && !json_object_get_int_strict(obj, &cfg->rate_limit_h)) {
-        log(STD_LOG_STREAM, log_error, INTRO log_fmt_json_type(json_type_int, json_object_get_type(obj), "rate_limit_h"));
+        log(STD_LOG_STREAM, log_error, INTRO LOG_FMT_JSON_TYPE(json_type_int, json_object_get_type(obj), "rate_limit_h"));
     }
     if (json_object_object_get_ex(obj_cfg, "rate_limit_m", &obj) && !json_object_get_int_strict(obj, &cfg->rate_limit_m)) {
-        log(STD_LOG_STREAM, log_error, INTRO log_fmt_json_type(json_type_int, json_object_get_type(obj), "rate_limit_m"));
+        log(STD_LOG_STREAM, log_error, INTRO LOG_FMT_JSON_TYPE(json_type_int, json_object_get_type(obj), "rate_limit_m"));
     }
 
     json_object_put(obj_cfg);
@@ -177,14 +184,19 @@ void cfg_dump(cfg_t const *cfg) {
     printf("page_outbox     %d\n", cfg->page_outbox);
     printf("port            %hd\n", cfg->port);
     printf("rate_limit_h    %d\n", cfg->rate_limit_h);
-    printf("rate_limit_m    %d\n", cfg->rate_limit_m);
+    printf("rate_limit_m    %d\n\n", cfg->rate_limit_m);
+    
+    printf("log verbosity   %d\n", cfg->verbosity);
 }
 
-void _cfg_log(char const *file, int line, cfg_t *cfg, log_lvl_t lvl, char const *fmt, ...) {
+bool _cfg_log(char const *file, int line, cfg_t *cfg, log_lvl_t lvl, char const *fmt, ...) {
+    if (lvl == log_info && cfg->verbosity <= 0
+        || lvl == log_warning && cfg->verbosity < 0) return false;
     va_list ap;
     va_start(ap, fmt);
     _vlog(file, line, open_log_file(cfg), lvl, fmt, ap);
     va_end(ap);
+    return true;
 }
 
 void cfg_log_putc(cfg_t *cfg, char c) {

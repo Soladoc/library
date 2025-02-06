@@ -10,7 +10,7 @@
 
 - [x] let bcrypt be a working submodule.
 
-- [ ] propper loggin
+- [x] propper loggin
 
 - [x] use a `db_memory_owner` pointer on `action_t` pointing to read-only memory instead of `strcpy`ing ourselves into oblivion.
 
@@ -33,7 +33,7 @@
 - [x] unit tests
   - [x] uuid
 
-- [ ] allow dynamic reconfiguration via signals. ensure that the server can adapt to changes in configuration without requiring a restart.
+- [ ] allow dynamic reconfiguration via signals. ensure that the server can adapt to changes in configuration without requiring a restart. basically, when recieving SIGUSR1, the server reloads its configuration.
 
 pgsql build
 

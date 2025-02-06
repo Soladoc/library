@@ -13,7 +13,9 @@
 typedef struct cfg cfg_t;
 
 /// @brief Load the default configuration.
-/// @return A new configuration object
+/// @return A new configuration object.
+///
+/// The default verbosity is 0.
 cfg_t *cfg_defaults(void);
 
 /// @brief Destroy a configuration.
@@ -29,16 +31,34 @@ cfg_t *cfg_from_file(char const *filename);
 /// @param cfg The configuration to dump.
 void cfg_dump(cfg_t const *cfg);
 
+/// @brief Set the logging verbosity.
+/// @param cfg The configuration.
+/// @param verbosity The logging verbosity.
+void cfg_set_verbosity(cfg_t *cfg, int verbosity);
+
+/// @brief Level of a log entry.
 typedef enum {
-    log_error,
-    log_info,
-    log_warning,
+    log_error, ///< Error. Always logged.
+    log_info, ///< Informational. Logged when verbosity is > @c 0.
+    log_warning, ///< Warning. Logged when verbosity is >= @c 0.
 } log_lvl_t;
 
-void _cfg_log(char const *file, int line,
+/// @brief Log a formatted string.
+/// @param file The file.
+/// @param line The line.
+/// @param cfg The configuration.
+/// @param lvl The logging level. With the configured verbosity, this determines whether an entry will be logged or not.
+/// @param fmt The format string.
+/// @param ... Arguments to the format string.
+/// @return @c true if an entry has been logged.
+/// @return @c false if no entry has been logged.
+bool _cfg_log(char const *file, int line,
     cfg_t *cfg, log_lvl_t lvl, char const *fmt, ...);
 #define cfg_log(cfg, lvl, fmt, ...) _cfg_log(__FILE_NAME__, __LINE__, cfg, lvl, fmt __VA_OPT__(,) __VA_ARGS__)
 
+/// @brief Log a single character.
+/// @param cfg The configuration.
+/// @param c A character.
 void cfg_log_putc(cfg_t *cfg, char c);
 
 /// @brief Get the configuration admin_api_key.

@@ -16,7 +16,7 @@ int tchatator413_run_interactive(cfg_t *cfg, db_t *db, server_t *server, int arg
         : json_object_from_fd(STDIN_FILENO);
 
     if (!obj_input) {
-        cfg_log(cfg, log_info, log_fmt_json_c("failed to parse input"));
+        cfg_log(cfg, log_info, LOG_FMT_JSON_C("failed to parse input"));
         return EX_DATAERR;
     }
 

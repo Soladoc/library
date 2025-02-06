@@ -53,7 +53,7 @@ static void on_response(response_t const *response, void *t) {
         if (!test_case_eq_int(t, response->type, action_type_send, )) return;
         void *memory_owner_db;
         msg_t msg = { .id = response->body.send.msg_id };
-        if (!test_case(t, errstatus_ok == db_get_msg(test->db, &msg, &memory_owner_db), "sent msg id %d exists", msg.id)) return;
+        if (!test_case(t, errstatus_ok == db_get_msg(test->db, test->cfg, &msg, &memory_owner_db), "sent msg id %d exists", msg.id)) return;
         gs_msg_id = msg.id;
         gs_msg_sent_at = msg.sent_at;
         test_case_eq_int(t, msg.read_age, 0, );
@@ -91,6 +91,7 @@ TEST_SIGNATURE(NAME) {
         .t = test_start(STR(NAME)),
         .server = server,
         .db = db,
+        .cfg = cfg,
     };
 
     uuid4_t api_key_m1, api_key_p1;

@@ -6,7 +6,6 @@
 #ifndef UTIL_H
 #define UTIL_H
 
-#include "const.h"
 #include <stdarg.h>
 #include <stdio.h>
 #include <stdlib.h>

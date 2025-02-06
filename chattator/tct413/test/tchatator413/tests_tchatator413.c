@@ -7,6 +7,7 @@
 #include "tchatator413/json-helpers.h"
 #include <stdarg.h>
 #include <sys/types.h>
+#include <sysexits.h>
 
 bool uuid4_eq_repr(uuid4_t uuid, char const repr[static const UUID4_REPR_LENGTH]) {
     uuid4_t parsed_repr;
@@ -88,11 +89,10 @@ static inline json_object *reduce_fmt_v(json_object *obj, va_list *ap) {
     return obj;
 }
 
-json_object *load_json(char const *input_filename)
-{
+json_object *load_json(char const *input_filename) {
     json_object *obj = json_object_from_file(input_filename);
     if (!obj) {
-        put_error_json_c("failed to load %s", input_filename);
+        fprintf(stderr, LOG_FMT_JSON_C("failed to load %s", input_filename));
         exit(EX_DATAERR);
     }
     return obj;
@@ -114,7 +114,7 @@ json_object *load_jsonf(const char *input_filename, ...) {
 
     json_object *obj = json_tokener_parse(input);
     if (!obj) {
-        put_error_json_c("failed to load %s", input_filename);
+        fprintf(stderr, LOG_FMT_JSON_C("failed to load %s", input_filename));
         exit(EX_DATAERR);
     }
     free(input);
@@ -128,10 +128,10 @@ bool json_object_eq_fmt(json_object *obj_actual, json_object *obj_expected) {
     if (fmt) {
         // json object -> arguments
         char const *str = json_object_get_string(obj_actual);
-        #pragma GCC diagnostic push
-        #pragma GCC diagnostic ignored "-Wformat-security" // The format string that we get is a the contents of a local file, under our control.
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wformat-security" // The format string that we get is a the contents of a local file, under our control.
         int n = sscanf(str, fmt);
-        #pragma GCC diagnostic pop
+#pragma GCC diagnostic pop
         assert(n == 0 || n == EOF);
         return n != EOF;
     }
@@ -173,7 +173,7 @@ bool json_object_eq_fmt(json_object *obj_actual, json_object *obj_expected) {
 bool test_output_json_file(test_t *test, json_object *obj_output, char const *expected_output_filename) {
     json_object *obj_output_expected = json_object_from_file(expected_output_filename);
     if (!obj_output_expected) {
-        put_error_json_c("failed to parse test output JSON file at '%s'\n", expected_output_filename);
+        fprintf(stderr, LOG_FMT_JSON_C("failed to parse test output JSON file at '%s'", expected_output_filename));
         exit(EX_DATAERR);
     }
 

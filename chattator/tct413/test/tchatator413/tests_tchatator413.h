@@ -97,6 +97,7 @@ typedef struct {
     int n_actions, n_responses;
     server_t *server;
     db_t *db;
+    cfg_t *cfg;
 } test_t;
 _Static_assert(offsetof(test_t, t) == 0, "backing test must be at start of struct for implicit base type punning");
 
