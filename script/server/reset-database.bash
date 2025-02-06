@@ -9,6 +9,7 @@ cd /docker/sae/data
 
 sudo git fetch --all
 sudo git reset --hard origin/main
+sudo git submodule update --remote --merge
 
 # the "sae" database is now an empty placeholder for connection
 
