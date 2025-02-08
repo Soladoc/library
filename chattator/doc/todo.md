@@ -2,9 +2,9 @@
 
 ## bugs
 
-- [ ] does output formet check the values
-- [ ] when object fmt input or output, order of JSON objects is not defined, so for multiple arguments, we don't know which argument will go where
-  - [ ] solution : for output : only check : no more varargs : use global static variables set in onresponse
+- [x] does output formet check the values
+- [x] when object fmt input or output, order of JSON objects is not defined, so for multiple arguments, we don't know which argument will go where
+  - [x] solution : for output : only check : no more varargs : use global static variables set in onresponse
 
 ## stuff
 
@@ -14,8 +14,9 @@
 
 - [x] use a `db_memory_owner` pointer on `action_t` pointing to read-only memory instead of `strcpy`ing ourselves into oblivion.
 
-- [ ] multiaction requests shouldn't increase rate limits that much
-- [ ] rate limits should work with IPS so that the server can deny abusive requests immediately.
+- [x] multiaction requests shouldn't increase rate limits that much\
+rate limits should work with IPS so that the server can deny abusive requests immediately.\
+so make rate limits part of the socket server system. we don't need them in interactive mode anyway.
 
 - [x] elegant error handling
   - [x] think of an approach that suits JSON, DB and other sources of errors
@@ -28,8 +29,6 @@
 
 - [x] write respone schema
 
-- [ ] configuration
-  - [ ] dynamic message string length
 - [x] unit tests
   - [x] uuid
 

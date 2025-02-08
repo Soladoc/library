@@ -177,6 +177,11 @@ typedef struct {
 /// @param response The response to destroy.
 void response_destroy(response_t *response);
 
+/// @brief Builds a response for a rate limit error
+/// @param next_request_at The time at which the next request will be allowed.
+/// @return A new response.
+response_t response_for_rate_limit(time_t next_request_at);
+
 /// @brief Put an user role.
 /// @param role The role flags
 /// @param stream The stream to write to.

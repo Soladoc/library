@@ -127,7 +127,7 @@ int main(int argc, char **argv) {
             getenv_or("DB_ROOT_PASSWORD", FALLBACK_DB_ROOT_PASSWORD));
         if (!db) return EX_NODB;
 
-        server_t *server = server_create(server_rate_limiting);
+        server_t *server = server_create();
 
         result = interactive
             ? tchatator413_run_interactive(cfg, db, server, argc, argv)

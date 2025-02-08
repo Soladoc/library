@@ -88,8 +88,8 @@ cfg_t *cfg_defaults(void) {
     cfg->page_inbox = 20;
     cfg->page_outbox = 20;
     cfg->port = 4113;
-    cfg->rate_limit_h = 12;
-    cfg->rate_limit_m = 90;
+    cfg->rate_limit_h = 90;
+    cfg->rate_limit_m = 12;
     return cfg;
 }
 

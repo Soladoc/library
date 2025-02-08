@@ -30,6 +30,19 @@ void response_destroy(response_t *response) {
     }
 }
 
+response_t response_for_rate_limit(time_t next_request_at)
+{
+    return (response_t) {
+        .type = action_type_error,
+        .body.error = {
+            .type = action_error_type_rate_limit,
+            .info.rate_limit = {
+                .next_request_at = next_request_at,
+            }
+        }
+    };
+}
+
 #define putln_error_rate_limit_exceeded(action_name, remaining_seconds) \
     put_error(action_name, ": rate limit exceeded. Next request in %d second%s.", remaining_seconds, remaining_seconds == 1 ? "s" : "");
 
@@ -101,7 +114,6 @@ response_t action_evaluate(action_t const *action, cfg_t *cfg, db_t *db, server_
         return rep;
     }
 
-
 #define DO login
     case ACTION_TYPE(DO):
         switch (auth_api_key(&user, cfg, db, action->with.DO.api_key)) {
@@ -110,7 +122,6 @@ response_t action_evaluate(action_t const *action, cfg_t *cfg, db_t *db, server_
         default: check_role(role_all);
         }
 
-        turnstile_rate_limit();
         errstatus_t a = db_check_password(db, cfg, user.id, action->with.DO.password.val);
         switch (a) {
         case errstatus_handled: fail(status_internal_server_error);
@@ -129,8 +140,6 @@ response_t action_evaluate(action_t const *action, cfg_t *cfg, db_t *db, server_
         default: check_role(role_all);
         }
 
-        turnstile_rate_limit();
-
         if (!server_logout(server, action->with.DO.token)) fail(status_unauthorized);
         break;
 #undef DO
@@ -141,8 +150,6 @@ response_t action_evaluate(action_t const *action, cfg_t *cfg, db_t *db, server_
         case errstatus_error: fail(status_unauthorized);
         default: check_role(role_all);
         }
-
-        turnstile_rate_limit();
 
         rep.body.DO.user.id = action->with.DO.user_id;
         switch (db_get_user(db, cfg, &rep.body.DO.user)) {
@@ -159,8 +166,6 @@ response_t action_evaluate(action_t const *action, cfg_t *cfg, db_t *db, server_
         case errstatus_error: fail(status_unauthorized);
         default: check_role(role_all);
         }
-
-        turnstile_rate_limit();
 
         int dest_role;
         switch (dest_role = db_get_user_role(db, cfg, action->with.DO.dest_user_id)) {
@@ -195,8 +200,6 @@ response_t action_evaluate(action_t const *action, cfg_t *cfg, db_t *db, server_
         default: check_role(role_all);
         }
 
-        turnstile_rate_limit();
-
         break;
 #undef DO
 #define DO inbox
@@ -206,8 +209,6 @@ response_t action_evaluate(action_t const *action, cfg_t *cfg, db_t *db, server_
         case errstatus_error: fail(status_unauthorized);
         default: check_role(role_all);
         }
-
-        turnstile_rate_limit();
 
         if (!(rep.body.DO = db_get_inbox(db, cfg,
                   cfg_page_inbox(cfg),
@@ -226,8 +227,6 @@ response_t action_evaluate(action_t const *action, cfg_t *cfg, db_t *db, server_
         default: check_role(role_all);
         }
 
-        turnstile_rate_limit();
-
         break;
 #undef DO
 #define DO edit
@@ -238,8 +237,6 @@ response_t action_evaluate(action_t const *action, cfg_t *cfg, db_t *db, server_
         default: check_role(role_all);
         }
 
-        turnstile_rate_limit();
-
         break;
 #undef DO
 #define DO rm
@@ -249,8 +246,6 @@ response_t action_evaluate(action_t const *action, cfg_t *cfg, db_t *db, server_
         case errstatus_error: fail(status_unauthorized);
         default: check_role(role_all);
         }
-
-        turnstile_rate_limit();
 
         switch (db_rm_msg(db, cfg, action->with.DO.msg_id)) {
         case errstatus_handled: fail(status_internal_server_error);
@@ -268,8 +263,6 @@ response_t action_evaluate(action_t const *action, cfg_t *cfg, db_t *db, server_
         default: check_role(role_admin | role_pro);
         }
 
-        turnstile_rate_limit();
-
         break;
 #undef DO
 #define DO unblock
@@ -279,8 +272,6 @@ response_t action_evaluate(action_t const *action, cfg_t *cfg, db_t *db, server_
         case errstatus_error: fail(status_unauthorized);
         default: check_role(role_admin | role_pro);
         }
-
-        turnstile_rate_limit();
 
         break;
 #undef DO
@@ -292,8 +283,6 @@ response_t action_evaluate(action_t const *action, cfg_t *cfg, db_t *db, server_
         default: check_role(role_admin | role_pro);
         }
 
-        turnstile_rate_limit();
-
         break;
 #undef DO
 #define DO unban
@@ -304,8 +293,6 @@ response_t action_evaluate(action_t const *action, cfg_t *cfg, db_t *db, server_
         default: check_role(role_admin | role_pro);
         }
 
-        turnstile_rate_limit();
-
         break;
     }
 
@@ -314,8 +301,6 @@ response_t action_evaluate(action_t const *action, cfg_t *cfg, db_t *db, server_
 
 #ifndef NDEBUG
 void action_explain(action_t const *action, FILE *output) {
-    // todo...
-
     switch (action->type) {
     case action_type_error:
         fprintf(output, "(none)\n");
