@@ -359,7 +359,7 @@ msg_list_t db_get_inbox(db_t *db, cfg_t *cfg,
     return msg_list;
 }
 
-errstatus_t db_get_msg(db_t *db, cfg_t *cfg, msg_t *msg, void **memory_owner_db) {
+errstatus_t db_get_msg(db_t *db, cfg_t *cfg, msg_t *msg, void **out_memory_owner_db) {
     uint32_t const arg1 = pq_send_l(msg->id);
     char const *const args[] = { (char const *)&arg1 };
     int const args_len[array_len(args)] = { sizeof arg1 };
@@ -382,7 +382,7 @@ errstatus_t db_get_msg(db_t *db, cfg_t *cfg, msg_t *msg, void **memory_owner_db)
         msg->deleted_age = PQgetisnull(result, 0, 4) ? 0 : pq_recv_l(int32_t, PQgetvalue(result, 0, 4));
         msg->user_id_sender = PQgetisnull(result, 0, 5) ? 0 : pq_recv_l(serial_t, PQgetvalue(result, 0, 5));
         msg->user_id_recipient = pq_recv_l(serial_t, PQgetvalue(result, 0, 6));
-        *memory_owner_db = result;
+        *out_memory_owner_db = result;
         return errstatus_ok;
     }
 
@@ -426,7 +426,7 @@ errstatus_t db_transaction(db_t *db, cfg_t *cfg, fn_transaction_t body, void *ct
         
         // We begun the transaction.
         
-        res = body(db, ctx);
+        res = body(db, cfg, ctx);
         
         // End the transaction now.
         result = PQexec(db, res == errstatus_ok ? "commit" : "rollback");

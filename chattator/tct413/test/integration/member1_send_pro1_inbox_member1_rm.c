@@ -29,7 +29,7 @@ static void on_action(action_t const *action, void *t) {
         if (!test_case_eq_int(t, action->type, action_type_send, )) return;
         test_case_eq_int64(t, action->with.send.token, gs_token_member1, );
         test_case_eq_str(t, action->with.send.content.val, MSG_CONTENT, );
-        test_case_eq_int(t, action->with.send.dest_user_id, 1, );
+        test_case_eq_int(t, action->with.send.dest_user_id, USER_ID_PRO1, );
         break;
     case 2: // inbox
         if (!test_case_eq_int(t, action->type, action_type_inbox, )) return;
@@ -59,8 +59,8 @@ static void on_response(response_t const *response, void *t) {
         test_case_eq_int(t, msg.read_age, 0, );
         test_case_eq_int(t, msg.edited_age, 0, );
         test_case_eq_int(t, msg.deleted_age, 0, );
-        test_case_eq_int(t, msg.user_id_sender, 5, );
-        test_case_eq_int(t, msg.user_id_recipient, 1, );
+        test_case_eq_int(t, msg.user_id_sender, USER_ID_MEMBER1, );
+        test_case_eq_int(t, msg.user_id_recipient, USER_ID_PRO1, );
         test_case_eq_str(t, msg.content, MSG_CONTENT, );
         db_collect(memory_owner_db);
         break;
@@ -74,8 +74,8 @@ static void on_response(response_t const *response, void *t) {
         test_case_eq_int(t, msg.read_age, 0, );
         test_case_eq_int(t, msg.edited_age, 0, );
         test_case_eq_int(t, msg.deleted_age, 0, );
-        test_case_eq_int(t, msg.user_id_sender, 5, );
-        test_case_eq_int(t, msg.user_id_recipient, 1, );
+        test_case_eq_int(t, msg.user_id_sender, USER_ID_MEMBER1, );
+        test_case_eq_int(t, msg.user_id_recipient, USER_ID_PRO1, );
         test_case_eq_str(t, msg.content, MSG_CONTENT, );
         break;
     }
@@ -87,12 +87,7 @@ static void on_response(response_t const *response, void *t) {
 }
 
 TEST_SIGNATURE(NAME) {
-    test_t test = {
-        .t = test_start(STR(NAME)),
-        .server = server,
-        .db = db,
-        .cfg = cfg,
-    };
+    test_t test = TEST_INIT(NAME);
 
     uuid4_t api_key_m1, api_key_p1;
     assert(uuid4_parse(&api_key_m1, API_KEY_MEMBER1));

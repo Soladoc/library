@@ -23,7 +23,7 @@ static void on_response(response_t const *response, void *t) {
 }
 
 TEST_SIGNATURE(NAME) {
-    test_t test = { .t = test_start(STR(NAME)) };
+    test_t test = TEST_INIT(NAME);
 
     json_object *obj_input = load_json(IN_JSON(NAME, ));
 

@@ -11,7 +11,7 @@
 static void on_action(action_t const *action, void *t) {
     base_on_action(t);
     if (!test_case_eq_int(t, action->type, action_type_login, )) return;
-    test_case_eq_uuid(t, action->with.login.api_key, API_KEY_NONE1, );
+    test_case_eq_uuid(t, action->with.login.api_key, API_KEY_NONE1_UUID, );
     test_case_eq_str(t, action->with.login.password.val, "", "password");
 }
 
@@ -24,7 +24,7 @@ static void on_response(response_t const *response, void *t) {
 }
 
 TEST_SIGNATURE(NAME) {
-    test_t test = { .t = test_start(STR(NAME)) };
+    test_t test = TEST_INIT(NAME);
 
     json_object *obj_input = load_json(IN_JSON(NAME, ));
 

@@ -13,11 +13,11 @@ static void on_action_login(action_t const *action, void *t) {
     if (!test_case_eq_int(t, action->type, action_type_login, )) return;
     switch (test->n_actions) {
     case 1:
-        test_case_eq_uuid(t, action->with.login.api_key, API_KEY_MEMBER1, );
+        test_case_eq_uuid(t, action->with.login.api_key, API_KEY_MEMBER1_UUID, );
         test_case_eq_str(t, action->with.login.password.val, "member1_mdp", );
         break;
     case 2:
-        test_case_eq_uuid(t, action->with.login.api_key, API_KEY_MEMBER2, );
+        test_case_eq_uuid(t, action->with.login.api_key, API_KEY_MEMBER2_UUID, );
         test_case_eq_str(t, action->with.login.password.val, "member2_mdp", );
         break;
     default:
@@ -47,10 +47,7 @@ static void on_response_logout(response_t const *response, void *t) {
 }
 
 TEST_SIGNATURE(NAME) {
-    test_t test = {
-        .t = test_start(STR(NAME)),
-        .server = server,
-    };
+    test_t test = TEST_INIT(NAME);
 
 #define STOP()                       \
     do {                             \

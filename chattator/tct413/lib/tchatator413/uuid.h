@@ -22,7 +22,7 @@ typedef struct {
 /// @brief Generate the representation of a version 4 UUID.
 /// @param uuid The UUID.
 /// @param repr The representation buffer.
-/// @return @p repr.
+/// @return @p {repr}.
 /// @remark This function doesn't add a null terminator at the end of @p repr.
 char *uuid4_repr(uuid4_t uuid, char repr[static const UUID4_REPR_LENGTH]);
 

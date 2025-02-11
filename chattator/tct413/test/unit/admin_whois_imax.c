@@ -11,7 +11,7 @@
 static void on_action(action_t const *action, void *t) {
     base_on_action(t);
     if (!test_case(t, action->type == action_type_whois, "type")) return;
-    test_case_eq_uuid(t, action->with.whois.api_key, API_KEY_ADMIN, );
+    test_case_eq_uuid(t, action->with.whois.api_key, API_KEY_ADMIN_UUID, );
     test_case_eq_int(t, action->with.whois.user_id, 2147483647, );
 }
 
@@ -24,7 +24,7 @@ static void on_response(response_t const *response, void *t) {
 }
 
 TEST_SIGNATURE(NAME) {
-    test_t test = { .t = test_start(STR(NAME)) };
+    test_t test = TEST_INIT(NAME);
 
     json_object *obj_input = load_json(IN_JSON(NAME, ));
 

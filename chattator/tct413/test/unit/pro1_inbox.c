@@ -36,8 +36,8 @@ static void on_response(response_t const *response, void *t) {
         test_case_eq_int(t, msg.read_age, 0, );
         test_case_eq_int(t, msg.edited_age, 0, );
         test_case_eq_int(t, msg.deleted_age, 0, );
-        test_case_eq_int(t, msg.user_id_sender, 5, );
-        test_case_eq_int(t, msg.user_id_recipient, 1, );
+        test_case_eq_int(t, msg.user_id_sender, USER_ID_MEMBER1, );
+        test_case_eq_int(t, msg.user_id_recipient, USER_ID_PRO1, );
         test_case_eq_str(t, msg.content, MSG_CONTENT, );
         break;
     }
@@ -46,11 +46,7 @@ static void on_response(response_t const *response, void *t) {
 }
 
 TEST_SIGNATURE(NAME) {
-    test_t test = {
-        .t = test_start(STR(NAME)),
-        .server = server,
-        .db = db,
-    };
+    test_t test = TEST_INIT(NAME);
 
     uuid4_t api_key_p1;
     assert(uuid4_parse(&api_key_p1, API_KEY_PRO1));

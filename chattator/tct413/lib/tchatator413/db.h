@@ -80,14 +80,24 @@ serial_t db_get_user_id_by_email(db_t *db, cfg_t *cfg, char const *email);
 /// @return @ref errstatus_error No user of name @p name exists in the database.
 serial_t db_get_user_id_by_name(db_t *db, cfg_t *cfg, char const *name);
 
-/// @brief Fills a user record from its ID. If @p user->user_id is undefined, the behavior is undefined.
+/// @brief Fills a user record from its ID. If @p user->id is undefined, the behavior is undefined.
 /// @param db The database.
 /// @param cfg The configuration.
 /// @param user The user record to fill.
 /// @return @ref errstatus_handled A database error occured. A message has been shown. @p user is untouched.
-/// @return @ref errstatus_error No user of ID @p user->user_id exists in the database. @p user is untouched.
+/// @return @ref errstatus_error No user of ID @p user->id exists in the database. @p user is untouched.
 /// @return @ref errstatus_ok Success.
 errstatus_t db_get_user(db_t *db, cfg_t *cfg, user_t *user);
+
+/// @brief Retrieves a message from the database. If @p msg->id is undefined, the behavior is undefined.
+/// @param db The database.
+/// @param cfg The configuration.
+/// @param msg The message to be filled with the retrieved data.
+/// @param out_memory_owner_db Assigned to the owner of the memory allocated for the message data.
+/// @return @ref errstatus_ok The message was successfully retrieved.
+/// @return @ref errstatus_error The message could not be retrieved. No message of ID @p msg->id exists in the database.
+/// @return @ref errstatus_handled A database error occured. A message has been shown. @p msg and @p out_memory_owner_db are untouched.
+errstatus_t db_get_msg(db_t *db, cfg_t *cfg, msg_t *msg, void **out_memory_owner_db);
 
 /// @brief Check a password against the stored hash for an user.
 /// @param db The database.
@@ -140,15 +150,6 @@ msg_list_t db_get_inbox(db_t *db, cfg_t *cfg,
     int32_t offset,
     serial_t recipient_id);
 
-/// @brief Retrieves a message from the database.
-/// @param db The database.
-/// @param cfg The configuration.
-/// @param msg The message to be filled with the retrieved data.
-/// @param memory_owner_db The owner of the memory allocated for the message data.
-/// @return @ref errstatus_ok The message was successfully retrieved.
-/// @return @ref errstatus_error The message could not be retrieved.
-errstatus_t db_get_msg(db_t *db, cfg_t *cfg, msg_t *msg, void **memory_owner_db);
-
 /// @brief Removes a message from the database.
 /// @param db The database.
 /// @param cfg The configuration.
@@ -161,7 +162,7 @@ errstatus_t db_rm_msg(db_t *db, cfg_t *cfg, serial_t msg_id);
 ///
 /// This function is called by @ref db_transaction.
 /// If this function returns something else than @ref errstatus_ok, the transaction is @b {aborted}. A @c ROLLBACK is issued. Otherwise the transaction is considered @b {valid}. A @c COMMIT is issued.
-typedef errstatus_t (*fn_transaction_t)(db_t *db, void *ctx);
+typedef errstatus_t (*fn_transaction_t)(db_t *db, cfg_t *cfg, void *ctx);
 
 /// @brief Perform a transaction.
 /// @param db The database.
