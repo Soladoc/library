@@ -1,25 +1,26 @@
 /// @file
 /// @author Raphaël
-/// @brief Tchatator413 test - login by member 1
+/// @brief Tchatator413 test - login by member 1, wrong password
 /// @date 1/02/2025
 
-#include "tests_tchatator413.h"
+#include "../tests.h"
 #include <tchatator413/tchatator413.h>
 
-#define NAME member1_login
+#define NAME member1_login_wrong_password
 
 static void on_action(action_t const *action, void *t) {
     base_on_action(t);
     if (!test_case_eq_int(t, action->type, action_type_login, )) return;
     test_case_eq_uuid(t, action->with.login.api_key, API_KEY_MEMBER1, );
-    test_case_eq_str(t, action->with.login.password.val, "member1_mdp", );
+    test_case_eq_str(t, action->with.login.password.val, "member1_mdp_suffix_that_makes_it_wrong", );
 }
 
 static void on_response(response_t const *response, void *t) {
-    test_t *test = base_on_response(t);
+    base_on_response(t);
     test_case(t, !response->has_next_page, "");
-    if (!test_case_eq_int(t, response->type, action_type_login, )) return;
-    test_case(t, -1 != server_verify_token(test->server, response->body.login.token), "server verifies token %ld", response->body.login.token);
+    if (!test_case_eq_int(t, response->type, action_type_error, )) return;
+    if (!test_case_eq_int(t, response->body.error.type, action_error_type_other, )) return;
+    test_case_eq_int(t, response->body.error.info.other.status, status_forbidden, );
 }
 
 TEST_SIGNATURE(NAME) {

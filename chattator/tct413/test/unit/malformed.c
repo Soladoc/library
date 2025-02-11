@@ -3,7 +3,7 @@
 /// @brief Tchatator413 test - maformed request
 /// @date 1/02/2025
 
-#include "tests_tchatator413.h"
+#include "../tests.h"
 #include <tchatator413/tchatator413.h>
 
 #define NAME malformed

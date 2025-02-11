@@ -11,6 +11,8 @@ CFLAGS = -pedantic -std=c23 -isystem /work/lib -Wall -Wextra -Wcast-qual -Wcast-
 # CLFAGS += -fanalyzer # takes time
 # CLFAGS += -fsanitize=address,leak,undefined # messes with debugging
 
+#todo: -lto
+
 #i spent a lot of time doing that but it's bad practice
 #let's not hardcode db configuration in the binary
 #define NEWLINE

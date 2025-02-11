@@ -1,31 +1,22 @@
 /// @file
 /// @author Raphaël
-/// @brief Tchatator413 test - login of two users simultenaously
+/// @brief Tchatator413 test - Member1 logs in twice and logs out twice (there should be errors)
 /// @date 1/02/2025
 
-#include "tests_tchatator413.h"
+#include "../tests.h"
 #include <tchatator413/tchatator413.h>
+#include <unistd.h>
 
-#define NAME member1_login_member2_login_member1_logout_member2_logout
-
-static void on_action_login(action_t const *action, void *t) {
-    test_t *test = base_on_action(t);
-    if (!test_case_eq_int(t, action->type, action_type_login, )) return;
-    switch (test->n_actions) {
-    case 1:
-        test_case_eq_uuid(t, action->with.login.api_key, API_KEY_MEMBER1, );
-        test_case_eq_str(t, action->with.login.password.val, "member1_mdp", );
-        break;
-    case 2:
-        test_case_eq_uuid(t, action->with.login.api_key, API_KEY_MEMBER2, );
-        test_case_eq_str(t, action->with.login.password.val, "member2_mdp", );
-        break;
-    default:
-        test_fail(t, "wrong test->n_actions: %d", test->n_actions);
-    }
-}
+#define NAME member1_login_login_logout_logout
 
 static token_t gs_tokens[2];
+
+static void on_action_login(action_t const *action, void *t) {
+    base_on_action(t);
+    if (!test_case_eq_int(t, action->type, action_type_login, )) return;
+    test_case_eq_uuid(t, action->with.login.api_key, API_KEY_MEMBER1, );
+    test_case_eq_str(t, action->with.login.password.val, "member1_mdp", );
+}
 
 static void on_response_login(response_t const *response, void *t) {
     test_t *test = base_on_response(t);
@@ -60,12 +51,27 @@ TEST_SIGNATURE(NAME) {
     } while (0)
 
     json_object *obj_input = json_object_from_file(IN_JSON(NAME, "1"));
+
     json_object *obj_output = tchatator413_interpret(obj_input, cfg, db, server, on_action_login, on_response_login, &test);
+    test_case_n_actions(&test, 1);
+    if (!test_output_json_file(&test, obj_output, OUT_JSON(NAME, "1"))) STOP();
+
+    sleep(1); // As per protocol specification, it is an error to try to login as the same user twice in the same second.
+
+    json_object_put(obj_output);
+    obj_output = tchatator413_interpret(obj_input, cfg, db, server, on_action_login, on_response_login, &test);
     test_case_n_actions(&test, 2);
     if (!test_output_json_file(&test, obj_output, OUT_JSON(NAME, "1"))) STOP();
 
     json_object_put(obj_input);
-    obj_input = load_jsonf(IN_JSONF(NAME, "2"), gs_tokens[0], gs_tokens[1]);
+    obj_input = load_jsonf(IN_JSONF(NAME, "2"), gs_tokens[0]);
+    json_object_put(obj_output);
+    obj_output = tchatator413_interpret(obj_input, cfg, db, server, on_action_logout, on_response_logout, &test);
+    test_case_n_actions(&test, 3);
+    if (!test_output_json_file(&test, obj_output, OUT_JSON(NAME, "2"))) STOP();
+
+    json_object_put(obj_input);
+    obj_input = load_jsonf(IN_JSONF(NAME, "2"), gs_tokens[1]);
     json_object_put(obj_output);
     obj_output = tchatator413_interpret(obj_input, cfg, db, server, on_action_logout, on_response_logout, &test);
     test_case_n_actions(&test, 4);

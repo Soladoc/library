@@ -157,4 +157,18 @@ errstatus_t db_get_msg(db_t *db, cfg_t *cfg, msg_t *msg, void **memory_owner_db)
 /// @return @ref errstatus_error The message could not be removed.
 errstatus_t db_rm_msg(db_t *db, cfg_t *cfg, serial_t msg_id);
 
+/// @brief A transaction body function
+///
+/// This function is called by @ref db_transaction.
+/// If this function returns something else than @ref errstatus_ok, the transaction is @b {aborted}. A @c ROLLBACK is issued. Otherwise the transaction is considered @b {valid}. A @c COMMIT is issued.
+typedef errstatus_t (*fn_transaction_t)(db_t *db, void *ctx);
+
+/// @brief Perform a transaction.
+/// @param db The database.
+/// @param cfg The configuration.
+/// @param body The transaction body function.
+/// @param ctx The context to pass to @p {body}. Can be @c {NULL}.
+/// @return The error status of @p {body}, or of the BEGIN, COMMIT or ROLLBACK action if they weren't successful.
+errstatus_t db_transaction(db_t *db, cfg_t *cfg, fn_transaction_t body, void *ctx);
+
 #endif // DB_H

@@ -3,7 +3,7 @@
 /// @brief Tchatator413 test - whois of 1 by admin
 /// @date 1/02/2025
 
-#include "tests_tchatator413.h"
+#include "../tests.h"
 #include <tchatator413/tchatator413.h>
 
 #define NAME admin_whois_1

@@ -3,13 +3,12 @@
 /// @brief Tchatator413 test - empty request
 /// @date 1/02/2025
 
-#include "tests_tchatator413.h"
+#include "../tests.h"
 #include <tchatator413/tchatator413.h>
 
-#define NAME zero
+#define NAME empty
 
-#define IN "[]"
-#define OUT "[]"
+#define IN ""
 
 static void on_action(action_t const *action, void *t) {
     base_on_action(t);
@@ -24,14 +23,14 @@ static void on_response(response_t const *response, void *t) {
 TEST_SIGNATURE(NAME) {
     test_t test = { .t = test_start(STR(NAME)) };
 
-    json_object *obj_input = json_tokener_parse(IN);
+    json_object *obj_input = json_object_from_file(IN);
+    test_case(&test.t, !obj_input, "input failed to parse");
 
     json_object *obj_output = tchatator413_interpret(obj_input, cfg, db, server, on_action, on_response, &test);
     test_case_n_actions(&test, 0);
 
-    json_object *obj_expected_output = json_tokener_parse(OUT);
-    test_output_json(&test.t, obj_output, obj_expected_output);
-    json_object_put(obj_expected_output);
+    test_output_json_file(&test, obj_output, OUT_JSON(NAME, ));
+
     json_object_put(obj_output);
     json_object_put(obj_input);
 

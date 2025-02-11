@@ -1,18 +1,17 @@
 /// @file
 /// @author Raphaël
-/// @brief Tchatator413 test - whois of 2147483647 by admin
+/// @brief Tchatator413 test - login by invalid
 /// @date 1/02/2025
 
-#include "tests_tchatator413.h"
+#include "../tests.h"
 #include <tchatator413/tchatator413.h>
 
-#define NAME admin_whois_imax
+#define NAME invalid_logout
 
 static void on_action(action_t const *action, void *t) {
     base_on_action(t);
-    if (!test_case(t, action->type == action_type_whois, "type")) return;
-    test_case_eq_uuid(t, action->with.whois.api_key, API_KEY_ADMIN, );
-    test_case_eq_int(t, action->with.whois.user_id, 2147483647, );
+    if (!test_case_eq_int(t, action->type, action_type_logout, )) return;
+    test_case_eq_int64(t, action->with.logout.token, 80085, );
 }
 
 static void on_response(response_t const *response, void *t) {
@@ -20,7 +19,7 @@ static void on_response(response_t const *response, void *t) {
     test_case(t, !response->has_next_page, "");
     if (!test_case_eq_int(t, response->type, action_type_error, )) return;
     if (!test_case_eq_int(t, response->body.error.type, action_error_type_other, )) return;
-    test_case_eq_int(t, response->body.error.info.other.status, status_not_found, );
+    test_case_eq_int(t, response->body.error.info.other.status, status_unauthorized, );
 }
 
 TEST_SIGNATURE(NAME) {

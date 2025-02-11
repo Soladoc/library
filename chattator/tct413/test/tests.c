@@ -3,8 +3,8 @@
 /// @brief Testing - implementation of testing utilities
 /// @date 1/02/2025
 
-#include "tests_tchatator413.h"
-#include "tchatator413/json-helpers.h"
+#include "tests.h"
+#include <tchatator413/json-helpers.h>
 #include <stdarg.h>
 #include <sys/types.h>
 #include <sysexits.h>

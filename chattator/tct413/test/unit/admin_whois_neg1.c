@@ -1,33 +1,32 @@
 /// @file
 /// @author Raphaël
-/// @brief Tchatator413 test - login by member 1, wrong password
+/// @brief Tchatator413 test - whois of -1 by admin
 /// @date 1/02/2025
 
-#include "tests_tchatator413.h"
+#include "../tests.h"
 #include <tchatator413/tchatator413.h>
 
-#define NAME member1_login_wrong_password
+#define NAME admin_whois_neg1
 
 static void on_action(action_t const *action, void *t) {
     base_on_action(t);
-    if (!test_case_eq_int(t, action->type, action_type_login, )) return;
-    test_case_eq_uuid(t, action->with.login.api_key, API_KEY_MEMBER1, );
-    test_case_eq_str(t, action->with.login.password.val, "member1_mdp_suffix_that_makes_it_wrong", );
+    if (!test_case_eq_int(t, action->type, action_type_error, )) return;
 }
 
 static void on_response(response_t const *response, void *t) {
     base_on_response(t);
     test_case(t, !response->has_next_page, "");
     if (!test_case_eq_int(t, response->type, action_type_error, )) return;
-    if (!test_case_eq_int(t, response->body.error.type, action_error_type_other, )) return;
-    test_case_eq_int(t, response->body.error.info.other.status, status_forbidden, );
+    if (!test_case_eq_int(t, response->body.error.type, action_error_type_invalid, )) return;
+    test_case_eq_str(t, response->body.error.info.invalid.location, "whois.with.user", );
+    test_case_eq_str(t, response->body.error.info.invalid.reason, "invalid user key", );
+    json_object *obj_bad = json_object_new_int(-1);
+    test_case_eq_json_object(t, response->body.error.info.invalid.obj_bad, obj_bad, );
+    json_object_put(obj_bad);
 }
 
 TEST_SIGNATURE(NAME) {
-    test_t test = {
-        .t = test_start(STR(NAME)),
-        .server = server,
-    };
+    test_t test = { .t = test_start(STR(NAME)) };
 
     json_object *obj_input = load_json(IN_JSON(NAME, ));
 

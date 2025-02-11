@@ -412,3 +412,32 @@ errstatus_t db_rm_msg(db_t *db, cfg_t *cfg, serial_t msg_id) {
     PQclear(result);
     return res;
 }
+
+errstatus_t db_transaction(db_t *db, cfg_t *cfg, fn_transaction_t body, void *ctx) {
+    PGresult *result = PQexec(db, "begin");
+
+    errstatus_t res;
+
+    if (PQresultStatus(result) != PGRES_COMMAND_OK) {
+        cfg_log(cfg, log_error, log_fmt_pq_result(result));
+        res = errstatus_handled;
+    } else {
+        PQclear(result);
+        
+        // We begun the transaction.
+        
+        res = body(db, ctx);
+        
+        // End the transaction now.
+        result = PQexec(db, res == errstatus_ok ? "commit" : "rollback");
+
+        if (PQresultStatus(result) != PGRES_COMMAND_OK) {
+            cfg_log(cfg, log_error, log_fmt_pq_result(result));
+            res = errstatus_handled;
+        }
+    }
+    
+    PQclear(result);
+
+    return res;
+}

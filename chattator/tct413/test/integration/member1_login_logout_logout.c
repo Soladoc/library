@@ -3,7 +3,7 @@
 /// @brief Tchatator413 test - member1 logs in an logs out twice. The second time should be an error.
 /// @date 1/02/2025
 
-#include "tests_tchatator413.h"
+#include "../tests.h"
 #include <tchatator413/tchatator413.h>
 
 #define NAME member1_login_logout_logout

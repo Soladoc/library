@@ -1,20 +1,20 @@
 /// @file
 /// @author Raphaël
-/// @brief Tchatator413 test - login and logout by admin
+/// @brief Tchatator413 test - login and logout by pro1
 /// @date 1/02/2025
 
-#include "tests_tchatator413.h"
+#include "../tests.h"
 #include <tchatator413/tchatator413.h>
 
-#define NAME admin_login_logout
+#define NAME pro1_login_logout
 
 static token_t gs_token;
 
 static void on_action_1(action_t const *action, void *t) {
     base_on_action(t);
     if (!test_case_eq_int(t, action->type, action_type_login, )) return;
-    test_case_eq_uuid(t, action->with.login.api_key, API_KEY_ADMIN, );
-    test_case_eq_str(t, action->with.login.password.val, "admin314317admin", );
+    test_case_eq_uuid(t, action->with.login.api_key, API_KEY_PRO1, );
+    test_case_eq_str(t, action->with.login.password.val, "pro1_mdp", );
 }
 
 static void on_response_1(response_t const *response, void *t) {

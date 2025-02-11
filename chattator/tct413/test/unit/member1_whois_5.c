@@ -1,12 +1,12 @@
 /// @file
 /// @author Raphaël
-/// @brief Tchatator413 test - whois of 5 (by email) by member1
+/// @brief Tchatator413 test - whois of 5 by member1
 /// @date 1/02/2025
 
-#include "tests_tchatator413.h"
+#include "../tests.h"
 #include <tchatator413/tchatator413.h>
 
-#define NAME member1_whois_5_by_email
+#define NAME member1_whois_5
 
 static void on_action(action_t const *action, void *t) {
     base_on_action(t);

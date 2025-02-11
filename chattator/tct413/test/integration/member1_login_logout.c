@@ -1,21 +1,21 @@
 /// @file
 /// @author Raphaël
-/// @brief Tchatator413 test - login and logout by pro1
+/// @brief Tchatator413 test - member1 logs in and logs out
 /// @date 1/02/2025
 
-#include "tests_tchatator413.h"
+#include "../tests.h"
 #include <tchatator413/tchatator413.h>
 
-#define NAME pro1_login_logout
-
-static token_t gs_token;
+#define NAME member1_login_logout
 
 static void on_action_1(action_t const *action, void *t) {
     base_on_action(t);
     if (!test_case_eq_int(t, action->type, action_type_login, )) return;
-    test_case_eq_uuid(t, action->with.login.api_key, API_KEY_PRO1, );
-    test_case_eq_str(t, action->with.login.password.val, "pro1_mdp", );
+    test_case_eq_uuid(t, action->with.login.api_key, API_KEY_MEMBER1, );
+    test_case_eq_str(t, action->with.login.password.val, "member1_mdp", );
 }
+
+static token_t gs_token;
 
 static void on_response_1(response_t const *response, void *t) {
     test_t *test = base_on_response(t);
@@ -42,7 +42,7 @@ TEST_SIGNATURE(NAME) {
         .server = server,
     };
 
-    json_object *obj_input = load_json(IN_JSON(NAME, "1"));
+    json_object *obj_input = json_object_from_file(IN_JSON(NAME, "1"));
     json_object *obj_output = tchatator413_interpret(obj_input, cfg, db, server, on_action_1, on_response_1, &test);
     test_case_n_actions(&test, 1);
     bool ok = test_output_json_file(&test, obj_output, OUT_JSON(NAME, "1"));
