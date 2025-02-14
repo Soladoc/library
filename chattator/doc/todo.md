@@ -1,5 +1,8 @@
 # Todo
 
+- [ ] change admin user id representation : there is a duplication : admin role + id = 0
+- [ ] use asprintf instead of bufffer_size and vstrfmt
+
 ## bugs
 
 - [x] does output formet check the values

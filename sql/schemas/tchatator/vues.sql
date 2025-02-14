@@ -20,7 +20,7 @@ select
 from
     msg
 order by
-    sent_at + make_interval(secs => coalesce(edited_age, 0));
+    sent_at;
 
 create view
     "user" as
