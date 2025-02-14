@@ -35,7 +35,7 @@ endif
 .PHONY: debug release all test clean debug
 
 debug: CONFIG=debug all
-release: CONFIG=relase all
+release: CONFIG=release all
 
 all: bin/tct413
 

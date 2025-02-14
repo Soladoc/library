@@ -43,9 +43,6 @@ response_t response_for_rate_limit(time_t next_request_at)
     };
 }
 
-#define putln_error_rate_limit_exceeded(action_name, remaining_seconds) \
-    put_error(action_name, ": rate limit exceeded. Next request in %d second%s.", remaining_seconds, remaining_seconds == 1 ? "s" : "");
-
 /// @return @ref errstatus_ok The API key is valid.
 /// @return @ref errstatus_error The API key isn't valid.
 /// @return @ref errstatus_handled DB error (handled).
@@ -93,17 +90,6 @@ response_t action_evaluate(action_t const *action, cfg_t *cfg, db_t *db, server_
 
 #define check_role(allowed_roles) \
     if (!(user.role & (allowed_roles))) fail(status_forbidden)
-
-#define turnstile_rate_limit()                                        \
-    do {                                                              \
-        time_t t = server_turnstile_rate_limit(server, user.id, cfg); \
-        if (t) {                                                      \
-            rep.type = action_type_error;                             \
-            rep.body.error.type = action_error_type_rate_limit;       \
-            rep.body.error.info.rate_limit.next_request_at = t;       \
-            return rep;                                               \
-        }                                                             \
-    } while (0)
 
     // Identify user
     user_identity_t user;

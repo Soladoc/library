@@ -141,7 +141,7 @@ function quote_string(string $string): string
 function where_clause(BoolOperator $operator, array $clauses, string $prefix = ''): string
 {
     return $clauses
-        ? ' where ' . implode(" $operator->value ", array_map(fn($attr) => elvis($prefix, '.') . "$attr = :$attr", $clauses)) . ' '
+        ? ' where ' . implode(" $operator->value ", array_map(fn($attr) => ifnntaws($prefix, '.') . "$attr = :$attr", $clauses)) . ' '
         : ' ';
 }
 
