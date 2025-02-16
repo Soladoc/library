@@ -13,4 +13,4 @@ readonly host="debian@$ARTIFACT_HOST" script="$1"
 shift
 
 # shellcheck disable=SC2029
-ssh "$host" 'bash -s' < "$script" "$@"
+ssh "$host" 'sudo bash -s' < "$script" "$@"
