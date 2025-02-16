@@ -33,17 +33,6 @@ enum {
     X(ban)           \
     X(unban)
 
-/// @brief Fallback database host if the corresponding environment variable isn't defined.
-#define FALLBACK_DB_HOST "413.ventsdouest.dev"
-/// @brief Fallback database post if the corresponding environment variable isn't defined.
-#define FALLBACK_PGDB_PORT "5432"
-/// @brief Fallback database name if the corresponding environment variable isn't defined.
-#define FALLBACK_DB_NAME "sae413_test" // Run on the test DB by default
-/// @brief Fallback database username if the corresponding environment variable isn't defined.
-#define FALLBACK_DB_USER "sae"
-/// @brief Fallback database password if the corresponding environment variable isn't defined.
-#define FALLBACK_DB_ROOT_PASSWORD "bib3loTs-CRues-rdv"
-
 /// @brief The name of the program.
 #define PROG "tct413"
 
@@ -71,11 +60,11 @@ DESCRIPTION\n\
     --version          Show version\n\
 \n\
 ENVIRONMENT\n\
-    DB_HOST            DB host      Fallback to: " FALLBACK_DB_HOST "\n\
-    PGDB_PORT          DB port      Fallback to: " FALLBACK_PGDB_PORT "\n\
-    DB_NAME            DB name      Fallback to: " FALLBACK_DB_NAME "\n\
-    DB_USER            DB username  Fallback to: " FALLBACK_DB_USER "\n\
-    DB_ROOT_PASSWORD   DB password  Fallback to: (it's a secret)"
+    DB_HOST            DB host     (required)\n\
+    PGDB_PORT          DB port     (required)\n\
+    DB_NAME            DB name     (required)\n\
+    DB_USER            DB username (required)\n\
+    DB_ROOT_PASSWORD   DB password (required)"
 
 /// @brief The program's versionstring.
 #define VERSION PROG " 1.0.1"

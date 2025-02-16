@@ -25,9 +25,13 @@ nc 127.0.0.1 4113 <<< '[]'
 
 */
 
-static inline char const *getenv_or(char const *name, char const *fallback) {
+static inline char const *require_env(cfg_t *cfg, char const *name) {
     char *value = getenv(name);
-    return value ? value : fallback;
+    if (!value) {
+        cfg_log(cfg, log_error, "envvar missing: %s\n", name);
+        exit(EX_USAGE);
+    }
+    return value;
 }
 
 int main(int argc, char **argv) {
@@ -120,11 +124,11 @@ int main(int argc, char **argv) {
         result = EX_OK;
     } else {
         db_t *db = db_connect(cfg, verbosity,
-            getenv_or("DB_HOST", FALLBACK_DB_HOST),
-            getenv_or("PGDB_PORT", FALLBACK_PGDB_PORT),
-            getenv_or("DB_NAME", FALLBACK_DB_NAME),
-            getenv_or("DB_USER", FALLBACK_DB_USER),
-            getenv_or("DB_ROOT_PASSWORD", FALLBACK_DB_ROOT_PASSWORD));
+            require_env(cfg, "DB_HOST"),
+            require_env(cfg, "PGDB_PORT"),
+            require_env(cfg, "DB_NAME"),
+            require_env(cfg, "DB_USER"),
+            require_env(cfg, "DB_ROOT_PASSWORD"));
         if (!db) return EX_NODB;
 
         server_t *server = server_create();
