@@ -8,8 +8,6 @@ cd /docker/sae/data
 . .env
 set +a
 
-cd data
-
 sudo git fetch --all
 sudo git reset --hard origin/main
 sudo git submodule init
