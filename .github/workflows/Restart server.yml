@@ -25,12 +25,13 @@ jobs:
         uses: alekangelov/secret-envfile@v1
         with:
           content: ${{ secrets.DOTENV }}
+          filename: "$GITHUB_WORKSPACE/.env"
 
       - name: Restart Server
         env:
           ARTIFACT_SSH_KEY: '${{secrets.ARTIFACT_SSH_KEY}}'
           ARTIFACT_HOST: '${{secrets.ARTIFACT_HOST}}'
-        run: 'cd "$GITHUB_WORKSPACE"/script && ./server-cp.bash .env /docker/sae/.env && ./server-run-script.bash ./server/restart.bash'
+        run: 'cd "$GITHUB_WORKSPACE"/script && ./server-cp.bash "$GITHUB_WORKSPACE"/.env /docker/sae/.env && ./server-run-script.bash ./server/restart.bash'
 
       - name: Send discord message after
         env:
