@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 
-# $1: env files contents
+# $1: env file contents
 
-set -eu
+set -xeu
 
 cd /docker/sae
 echo "$1" > .env
