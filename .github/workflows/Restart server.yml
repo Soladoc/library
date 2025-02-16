@@ -26,7 +26,7 @@ jobs:
           ARTIFACT_SSH_KEY: '${{secrets.ARTIFACT_SSH_KEY}}'
           ARTIFACT_HOST: '${{secrets.ARTIFACT_HOST}}'
           DOTENV: '${{secrets.DOTENV}}'
-        run: 'cd "$GITHUB_WORKSPACE"/script && ./server-run-script.bash ./server/restart.bash'
+        run: 'cd "$GITHUB_WORKSPACE"/script && ./server-run-script.bash ./server/restart.bash "$DOTENV"'
 
       - name: Send discord message after
         env:
