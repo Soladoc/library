@@ -20,18 +20,11 @@ function connect(): PDO
         return $_pdo;
     }
 
-    // Load .env file
-    {
-        $envfile = __DIR__ . (is_localhost() ? '/raphael-main.env' : '/.env');
-        foreach (notfalse(file($envfile, FILE_SKIP_EMPTY_LINES), "dotenv file missing at $envfile") as $line) {
-            notfalse(putenv(trim($line)));
-        }
-    }
-
     // Connect to the database
     $driver = 'pgsql';
 
-    $host     = getenv('DB_HOST') ?: 'postgresdb';  // for backwards compatibility with old .env
+    // dotenv variables
+    $host     = notfalse(getenv('DB_HOST'), 'DB_HOST unset');
     $port     = notfalse(getenv('PGDB_PORT'), 'PGDB_PORT unset');
     $dbname   = notfalse(getenv('DB_NAME'), 'DB_NAME unset');
     $username = notfalse(getenv('DB_USER'), 'DB_USER unset');

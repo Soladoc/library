@@ -1,7 +1,13 @@
 #!/usr/bin/env bash
 
-set -xeu
+set -eu
 
 cd /docker/sae
-docker compose down
-docker compose up -d
+echo "$DOTENV" > .env
+set -a
+#shellcheck source=/dev/null
+source .env
+set +a
+
+docker-compose -f data/docker-compose.yml down
+docker-compose -f data/docker-compose.yml up -d

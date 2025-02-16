@@ -1,11 +1,8 @@
 #!/usr/bin/env bash
 
-set -xeu
+set -eu
 
 cd /docker/sae/data
-
-# shellcheck disable=SC1091
-. include/.env
 
 sudo git fetch --all
 sudo git reset --hard origin/main

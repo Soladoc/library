@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-set -xeu
+set -eu
 
 cd /docker/sae/data
 sudo git fetch --all
