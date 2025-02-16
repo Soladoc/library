@@ -11,5 +11,7 @@ set -a
 . .env
 set +a
 
+env
+
 docker compose -f data/docker-compose.yml down
 docker compose -f data/docker-compose.yml up -d
