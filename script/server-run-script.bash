@@ -8,7 +8,8 @@ mkdir -p ~/.ssh
 echo "$ARTIFACT_SSH_KEY" >~/.ssh/id_rsa
 chmod 600 ~/.ssh/id_rsa
 ssh-keyscan -p 22 "$ARTIFACT_HOST" >>~/.ssh/known_hosts
-readonly script="$1"
+
+readonly host="debian@$ARTIFACT_HOST" script="$1" dist_script="/tmp/$1"
 shift
-# shellcheck disable=SC2029
-ssh "debian@$ARTIFACT_HOST" sudo bash "$@" <"$script"
+scp "$script" "$host:$dist_script"
+ssh "$host" sudo bash -- "$dist_script" "$@"
