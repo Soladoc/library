@@ -25,7 +25,6 @@ jobs:
         uses: alekangelov/secret-envfile@v1
         with:
           content: ${{ secrets.DOTENV }}
-          filename: "$GITHUB_WORKSPACE/.env"
 
       - name: Restart Server
         env:
