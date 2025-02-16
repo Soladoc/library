@@ -13,8 +13,8 @@ static token_t gs_token;
 static void on_action_1(action_t const *action, void *t) {
     base_on_action(t);
     if (!test_case_eq_int(t, action->type, action_type_login, )) return;
-    test_case_eq_uuid(t, action->with.login.api_key, API_KEY_ADMIN_UUID, );
-    test_case_eq_str(t, action->with.login.password.val, "admin314317admin", );
+    test_case_eq_uuid(t, action->with.login.api_key, API_KEY_TEST_ADMIN_UUID, );
+    test_case_eq_str(t, action->with.login.password.val, API_KEY_TEST_ADMIN_PASSWORD, );
 }
 
 static void on_response_1(response_t const *response, void *t) {
