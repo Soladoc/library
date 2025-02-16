@@ -1,5 +1,4 @@
-#!/bin/env bash
-
+#!/bin/env bash 
 set -eu
 cd "$(dirname "${BASH_SOURCE[0]}")"
 
