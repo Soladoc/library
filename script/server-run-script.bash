@@ -11,5 +11,6 @@ ssh-keyscan -p 22 "$ARTIFACT_HOST" >>~/.ssh/known_hosts
 
 readonly host="debian@$ARTIFACT_HOST" script="$1" dist_script="/tmp/$1"
 shift
+ssh "$host" sudo mkdir -p -- "$(dirname "$dist_script")"
 scp "$script" "$host:$dist_script"
 ssh "$host" sudo bash -- "$dist_script" "$@"
