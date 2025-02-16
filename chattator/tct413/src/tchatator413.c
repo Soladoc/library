@@ -10,13 +10,13 @@
 #include <unistd.h>
 #include <stdio.h>
 
-int tchatator413_run_console(cfg_t *cfg, db_t *db, server_t *server, int argc, char **argv) {
+int tchatator413_run_interactive(cfg_t *cfg, db_t *db, server_t *server, int argc, char **argv) {
     json_object *const obj_input = optind < argc
         ? json_tokener_parse(argv[optind])
         : json_object_from_fd(STDIN_FILENO);
 
     if (!obj_input) {
-        put_error_json_c("failed to parse input\n");
+        cfg_log(cfg, log_info, LOG_FMT_JSON_C("failed to parse input"));
         return EX_DATAERR;
     }
 
@@ -35,7 +35,7 @@ int tchatator413_run_console(cfg_t *cfg, db_t *db, server_t *server, int argc, c
 }
 
 static inline json_object *act(json_object *const obj_action, cfg_t *cfg, db_t *db, server_t *server, fn_on_action_t on_action, fn_on_response_t on_response, void *on_ctx) {
-    action_t action = action_parse(obj_action, db);
+    action_t action = action_parse(cfg, db, obj_action);
     if (on_action) on_action(&action, on_ctx);
 
     response_t response = action_evaluate(&action, cfg, db, server);

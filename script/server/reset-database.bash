@@ -1,20 +1,19 @@
 #!/usr/bin/env bash
 
-set -xeu
-
+set -eua
 cd /docker/sae/data
-
-# shellcheck disable=SC1091
-. include/.env
+#shellcheck source=/dev/null
+. .env
+set +a
 
 sudo git fetch --all
 sudo git reset --hard origin/main
-
-# the "sae" database is now an empty placeholder for connection
+sudo git submodule init
+sudo git submodule update --remote --merge
 
 for instance in main test; do
     db="sae413_$instance"
-    bash sql/unite.bash $instance | sudo docker exec -iw / postgresdb psql -v ON_ERROR_STOP=on -h localhost -wU "$DB_USER" \
+    bash sql/unite.bash $instance | sudo docker exec -iw / postgresdb psql -d postgres -v ON_ERROR_STOP=on -h localhost -wU "$DB_USER" \
         -c "drop database if exists $db" \
         -c "create database $db" \
         -c "\c $db" \

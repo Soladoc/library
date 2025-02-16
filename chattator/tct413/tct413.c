@@ -25,9 +25,13 @@ nc 127.0.0.1 4113 <<< '[]'
 
 */
 
-static inline char const *getenv_or(char const *name, char const *fallback) {
+static inline char const *require_env(cfg_t *cfg, char const *name) {
     char *value = getenv(name);
-    return value ? value : fallback;
+    if (!value) {
+        cfg_log(cfg, log_error, "envvar missing: %s\n", name);
+        exit(EX_USAGE);
+    }
+    return value;
 }
 
 int main(int argc, char **argv) {
@@ -80,7 +84,7 @@ int main(int argc, char **argv) {
         };
 
         int opt;
-        while (-1 != (opt = getopt_long(argc, argv, "qvh:", long_options, NULL))) {
+        while (-1 != (opt = getopt_long(argc, argv, "qvic:", long_options, NULL))) {
             switch (opt) {
             case opt_help:
                 puts(HELP);
@@ -96,7 +100,7 @@ int main(int argc, char **argv) {
             case opt_interactive: interactive = true; break;
             case opt_config:
                 if (cfg) {
-                    put_error("config already specified by previous argument\n");
+                    cfg_log(cfg, log_error, "config already specified by previous argument\n");
                     return EX_USAGE;
                 }
                 cfg = cfg_from_file(optarg);
@@ -113,23 +117,31 @@ int main(int argc, char **argv) {
 
     int result;
 
+    cfg_set_verbosity(cfg, verbosity);
+
     if (dump_config) {
         cfg_dump(cfg);
         result = EX_OK;
     } else {
-        db_t *db = db_connect(verbosity,
-            getenv_or("DB_HOST", FALLBACK_DB_HOST),
-            getenv_or("PGDB_PORT", FALLBACK_PGDB_PORT),
-            getenv_or("DB_NAME", FALLBACK_DB_NAME), // Run on the test DB by default
-            getenv_or("DB_USER", FALLBACK_DB_USER),
-            getenv_or("DB_ROOT_PASSWORD", FALLBACK_DB_ROOT_PASSWORD));
+        db_t *db = db_connect(cfg, verbosity,
+            require_env(cfg, "DB_HOST"),
+            require_env(cfg, "PGDB_PORT"),
+            require_env(cfg, "DB_NAME"),
+            require_env(cfg, "DB_USER"),
+            require_env(cfg, "DB_ROOT_PASSWORD"));
         if (!db) return EX_NODB;
+        
+        api_key_t admin_api_key;
+        if (!uuid4_parse(&admin_api_key, require_env(cfg, "ADMIN_API_KEY"))) {
+            cfg_log(cfg, log_error, "invalid ADMIN_API_KEY\n");
+            return EX_USAGE;
+        }
 
-        server_t *server = server_create(server_rate_limiting);
+        server_t *server = server_create(admin_api_key, require_env(cfg, "ADMIN_PASSWORD"));
 
         result = interactive
-            ? tchatator413_run_console(cfg, db, server, argc, argv)
-            : tchatator413_run_server(cfg, db, server);
+            ? tchatator413_run_interactive(cfg, db, server, argc, argv)
+            : tchatator413_run_socket(cfg, db, server);
 
         server_destroy(server);
         db_destroy(db);

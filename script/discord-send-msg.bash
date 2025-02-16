@@ -6,7 +6,7 @@
 # Env:
 # DISCORD_WEBHOOK_URL
 
-set -xeuo pipefail
+set -euo pipefail
 cd "$(dirname "${BASH_SOURCE[0]}")"
 
 . lib/discord.bash

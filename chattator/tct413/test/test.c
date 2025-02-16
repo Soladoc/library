@@ -4,7 +4,6 @@
 /// @date 1/02/2025
 
 #include "tchatator413/const.h"
-#include "tchatator413/tests_tchatator413.h"
 #include "tests.h"
 #include <stdlib.h>
 #include <tchatator413/cfg.h>
@@ -23,10 +22,10 @@ int main(void) {
     struct test t;
     bool success = true;
     cfg_t *cfg = cfg_defaults();
-    db_t *db = db_connect(0, DB_HOST, PGDB_PORT, DB_NAME, DB_USER, DB_ROOT_PASSWORD);
+    db_t *db = db_connect(cfg, 0, DB_HOST, PGDB_PORT, DB_NAME, DB_USER, DB_ROOT_PASSWORD);
     if (!db) return EX_NODB;
 
-    server_t *server = server_create(server_regular);
+    server_t *server = server_create(API_KEY_TEST_ADMIN_UUID, API_KEY_TEST_ADMIN_PASSWORD);
 
 #define test(new_test)                \
     do {                              \

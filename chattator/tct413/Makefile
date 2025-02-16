@@ -6,10 +6,12 @@ SRC_TEST = $(call rwildcard,test, *.c *.h)
 
 CC = gcc
 LFLAGS = -ljson-c -I/usr/include/postgresql -L/usr/lib/x86_64-linux-gnu -lpq
-CFLAGS = -pedantic -std=c23 -isystem /work/lib -Wall -Wextra -Wcast-qual -Wcast-align -Wstrict-aliasing -Wpointer-arith -Winit-self -Wshadow -Wstrict-prototypes -Wmissing-prototypes -Wredundant-decls -Wfloat-equal -Wundef -Wvla
+CFLAGS = -pedantic -std=c23 -isystem /work/lib -Wall -Wextra -Wcast-qual -Wcast-align -Wstrict-aliasing -Wpointer-arith -Winit-self -Wshadow -Wstrict-prototypes -Wmissing-prototypes -Wredundant-decls -Wfloat-equal -Wundef -Wvla -Wno-parentheses
 
 # CLFAGS += -fanalyzer # takes time
 # CLFAGS += -fsanitize=address,leak,undefined # messes with debugging
+
+#todo: -lto
 
 #i spent a lot of time doing that but it's bad practice
 #let's not hardcode db configuration in the binary
@@ -33,7 +35,7 @@ endif
 .PHONY: debug release all test clean debug
 
 debug: CONFIG=debug all
-release: CONFIG=relase all
+release: CONFIG=release all
 
 all: bin/tct413
 

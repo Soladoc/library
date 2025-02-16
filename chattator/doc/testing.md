@@ -13,64 +13,26 @@
   - 1 private pro
   - 1 member
 
-## I/O expected JSON format
+## The jsonf format
 
-I/O json files are compared as JSON objects (objects are unordered).
+The JSONf format is like JSON expect printf format specifers can appear anywhere.
 
-A special object can be used instead of any value for input, validation and extraction of runtime-known values:
+The contents of a JSONf file is a format string.
 
-```json
-{
-  "$fmt_number": "%*ld"
-}
-```
+## JSON format objects
 
-where the value at key `$fmt` is a `scanf` conversion specifier for output, or a `printf` conversion specifier for input.
-
-When inputting format JSON, the formatted value is parses as JSON, in order to create a JSON object of the appropriate type.
+When the exact output isn't known, one can use *JSON format objects*. Basically, any value can be replaced by a special object with a single key `$fmt_quoted` or `$fmt`, as such:
 
 ```json
 {
-  "$fmt_number": "%d"
+  "$fmt_quoted": "%*ld"
 }
 ```
 
-Becomes with arg `177`:
+The value of the property is treated as a *scanf* format string; Each conversion specifier **must** have the assignment-suppression (`*`) modifier, as the values of the argument are not used. `sscanf` is only called to validate the string.
 
-```json
-177
-```
+The values retrieved cannot be used, as since JSON object order is undefined, the order of appearance of format objects in the source file, the iteration order in the C function, and the order of the variadic arguments passed to it may not be identical.
 
-Another example:
+This is also the reason why we can't use JSON format objects for input - we have to use the custom `jsonf` format, which treats the input as a string, formats it, and then parses it a JSON. JSON format objects parse the object first, then apply validate formatting, thus we loose the initial order. While testing has shown that it seems to works on practice, and the file order is preserved, JSON object iteration order is not something you want to rely on.
 
-```json
-{
-  "$fmt": "%s"
-}
-```
-
-Becomes with arg `177`:
-
-```json
-"177"
-```
-
-More complex example:
-
-```json
-{
-  "$fmt": {
-    "a":"%s",
-    "b":"%d"
-  }
-}
-```
-
-Becomes, given the arguments `"hello"` and `14`:
-
-```json
-{
-  "a": "hello",
-  "b": 14
-}
-```
+The difference between `$fmt_quoted` and `$fmt` is that `$fmt_quoted` includes the quotes around the string in the format string passed to `sscanf`.

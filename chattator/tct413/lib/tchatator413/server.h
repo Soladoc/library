@@ -6,7 +6,6 @@
 #ifndef SERVER_STATE_H
 #define SERVER_STATE_H
 
-#include "cfg.h"
 #include "types.h"
 #include <stdbool.h>
 #include <time.h>
@@ -23,28 +22,15 @@ typedef struct {
 /// @brief Opaque type handle representing a server instance.
 typedef struct server server_t;
 
-/// @brief A bit flags enumeration that configures the server.
-typedef enum {
-    server_regular, ///< @brief Regular settings.
-    server_rate_limiting = 1 << 0, ///< @brief Enable rate limiting.
-} server_flags_t;
-
-/// @brief Creates a new server instance with the specified configuration flags.
-/// @param flags The configuration flags for the server.
+/// @brief Creates a new server instance.
+/// @param admin_api_key The admin API key.
+/// @param admin_password The admin password.
 /// @return A new server instance.
-server_t *server_create(server_flags_t flags);
+server_t *server_create(api_key_t admin_api_key, char const *admin_password);
 
 /// @brief Destroys the specified server instance.
 /// @param server The server instance to destroy.
 void server_destroy(server_t *server);
-
-/// @brief Checks and increments the rate limit for the specified user.
-/// @param server The server.
-/// @param user_id The ID of the user performing the request.
-/// @param cfg The configuration.
-/// @return @c 0 The turnstile passes (the rate limit hasn't been reached)
-/// @return > @c 0 The turnstile blocks (the rate limit has been reached). An error has been put. The return value is time of the next allowed request.
-time_t server_turnstile_rate_limit(server_t *server, serial_t user_id, cfg_t *cfg);
 
 /// @brief Creates a new session, logging in an user.
 /// @param server The server.
@@ -52,6 +38,20 @@ time_t server_turnstile_rate_limit(server_t *server, serial_t user_id, cfg_t *cf
 /// @return The new session token.
 /// @return @c 0 if the the session could not be created. This happens if the same user tries logs in twice in the same second.
 token_t server_login(server_t *server, serial_t user_id);
+
+/// @brief Checks if an API key is the admin API key.
+/// @param server The server.
+/// @param api_key The API key to check.
+/// @return @c true if @p api_key is the admin API key.
+/// @return @c false otherwise.
+bool server_is_admin_api_key(server_t *server, api_key_t api_key);
+
+/// @brief Check a password against the admin password.
+/// @param server The server.
+/// @param password The password to check. 
+/// @return @c true if the provided password matches the admin password.
+/// @return @c false otherwise.
+bool server_check_admin_password(server_t *server, char const *password);
 
 /// @brief Deletes a session, logging out an user
 /// @param server The server.
