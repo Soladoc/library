@@ -1,8 +1,10 @@
 #!/usr/bin/env bash
 
-set -eu
-
+set -eua
 cd /docker/sae/data
+#shellcheck source=/dev/null
+. .env
+set +a
 
 sudo git fetch --all
 sudo git reset --hard origin/main
