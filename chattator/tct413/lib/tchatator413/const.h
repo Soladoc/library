@@ -14,9 +14,6 @@ enum {
     EX_NODB = EX__MAX + 1,
 };
 
-/// @brief The bcrypt hash of the administrator password.
-#define ADMIN_PASSWORD_HASH "$2y$10$uggPw5mEgOJyxNVqkXF4uuGzFtT2xmgHKMstdMxsYObPjOlR1143O"
-
 /// @brief X-macro that expands to the list of actions
 #define X_ACTIONS(X) \
     X(login)         \
@@ -59,12 +56,14 @@ DESCRIPTION\n\
     --help             Show this help\n\
     --version          Show version\n\
 \n\
-ENVIRONMENT\n\
-    DB_HOST            DB host     (required)\n\
-    PGDB_PORT          DB port     (required)\n\
-    DB_NAME            DB name     (required)\n\
-    DB_USER            DB username (required)\n\
-    DB_ROOT_PASSWORD   DB password (required)"
+REQUIRED ENVIRONMENT VARIABLES\n\
+    DB_HOST            DB host\n\
+    PGDB_PORT          DB port\n\
+    DB_NAME            DB name\n\
+    DB_USER            DB username\n\
+    DB_ROOT_PASSWORD   DB password\n\
+    ADMIN_API_KEY      Administrator API key\n\
+    ADMIN_PASSWORD     Administrator password"
 
 /// @brief The program's versionstring.
 #define VERSION PROG " 1.0.1"

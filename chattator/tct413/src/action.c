@@ -30,16 +30,14 @@ void response_destroy(response_t *response) {
     }
 }
 
-response_t response_for_rate_limit(time_t next_request_at)
-{
+response_t response_for_rate_limit(time_t next_request_at) {
     return (response_t) {
         .type = action_type_error,
         .body.error = {
             .type = action_error_type_rate_limit,
             .info.rate_limit = {
                 .next_request_at = next_request_at,
-            }
-        }
+            } }
     };
 }
 
@@ -47,8 +45,8 @@ response_t response_for_rate_limit(time_t next_request_at)
 /// @return @ref errstatus_error The API key isn't valid.
 /// @return @ref errstatus_handled DB error (handled).
 /// @note If the admin API is provided, the return user ID is @c 0.
-static inline errstatus_t auth_api_key(user_identity_t *out_user, cfg_t *cfg, db_t *db, uuid4_t api_key) {
-    if (uuid4_eq(api_key, cfg_admin_api_key(cfg))) {
+static inline errstatus_t auth_api_key(user_identity_t *out_user, cfg_t *cfg, db_t *db, server_t *server, uuid4_t api_key) {
+    if (server_is_admin_api_key(server, api_key)) {
         out_user->role = role_admin;
         out_user->id = 0;
         return errstatus_ok;
@@ -73,12 +71,12 @@ static inline errstatus_t auth_token(user_identity_t *out_user, cfg_t *cfg, db_t
 response_t action_evaluate(action_t const *action, cfg_t *cfg, db_t *db, server_t *server) {
     response_t rep = { 0 };
 
-#define fail(return_status)                                 \
-    do {                                                    \
-        rep.type = action_type_error;                       \
+#define fail(return_status)                               \
+    do {                                                  \
+        rep.type = action_type_error;                     \
         rep.body.error.type = action_error_type_other;    \
         rep.body.error.info.other.status = return_status; \
-        return rep;                                         \
+        return rep;                                       \
     } while (0)
 
 #define fail_invariant(invariant_name)                       \
@@ -102,13 +100,15 @@ response_t action_evaluate(action_t const *action, cfg_t *cfg, db_t *db, server_
 
 #define DO login
     case ACTION_TYPE(DO):
-        switch (auth_api_key(&user, cfg, db, action->with.DO.api_key)) {
+        switch (auth_api_key(&user, cfg, db, server, action->with.DO.api_key)) {
         case errstatus_handled: fail(status_internal_server_error);
         case errstatus_error: fail(status_unauthorized);
         default: check_role(role_all);
         }
 
-        errstatus_t a = db_check_password(db, cfg, user.id, action->with.DO.password.val);
+        errstatus_t a = user.id == 0
+            ? server_check_admin_password(server, action->with.DO.password.val)
+            : db_check_password(db, cfg, user.id, action->with.DO.password.val);
         switch (a) {
         case errstatus_handled: fail(status_internal_server_error);
         // we know the user ID exists in the DB at this point since we fetched it from the DB
@@ -131,7 +131,7 @@ response_t action_evaluate(action_t const *action, cfg_t *cfg, db_t *db, server_
 #undef DO
 #define DO whois
     case ACTION_TYPE(DO):
-        switch (auth_api_key(&user, cfg, db, action->with.DO.api_key)) {
+        switch (auth_api_key(&user, cfg, db, server, action->with.DO.api_key)) {
         case errstatus_handled: fail(status_internal_server_error);
         case errstatus_error: fail(status_unauthorized);
         default: check_role(role_all);

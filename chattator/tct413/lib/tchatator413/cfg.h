@@ -6,7 +6,8 @@
 #ifndef CONFIG_H
 #define CONFIG_H
 
-#include "uuid.h"
+#include <stdbool.h>
+#include <stdint.h>
 #include <stdio.h>
 
 /// @brief An opaque handle to a configuration object.
@@ -61,10 +62,6 @@ bool _cfg_log(char const *file, int line,
 /// @param c A character.
 void cfg_log_putc(cfg_t *cfg, char c);
 
-/// @brief Get the configuration admin_api_key.
-/// @param cfg Configuration
-/// @return The configuration admin_api_key.
-uuid4_t cfg_admin_api_key(cfg_t const *cfg);
 /// @brief Get the configuration max_msg_length.
 /// @param cfg Configuration
 /// @return the configuration max_msg_length.

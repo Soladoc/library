@@ -15,7 +15,6 @@
 #define STD_LOG_STREAM stderr
 
 struct cfg {
-    uuid4_t admin_api_key;
     FILE *log_file;
     size_t max_msg_length;
     int page_inbox;
@@ -75,9 +74,6 @@ cfg_t *cfg_defaults(void) {
     cfg_t *cfg = malloc(sizeof *cfg);
     if (!cfg) errno_exit("malloc");
 
-    // ed33c143-5752-4543-a821-00a187955a28
-    cfg->admin_api_key = uuid4_of(0xed, 0x33, 0xc1, 0x43, 0x57, 0x52, 0x45, 0x43, 0xa8, 0x21, 0x00, 0xa1, 0x87, 0x95, 0x5a, 0x28);
-
     cfg->log_file = STD_LOG_STREAM;
     cfg->log_file_name = NULL;
     cfg->verbosity = 0;
@@ -115,15 +111,6 @@ cfg_t *cfg_from_file(char const *filename) {
         return cfg;
     }
 
-    if (json_object_object_get_ex(obj_cfg, "admin_api_key", &obj)) {
-        slice_t admin_api_key_repr;
-        if (!json_object_get_string_strict(obj, &admin_api_key_repr)) {
-            log(STD_LOG_STREAM, log_error, INTRO LOG_FMT_JSON_TYPE(json_type_string, json_object_get_type(obj), "admin_api_key"));
-        }
-        if (!uuid4_parse_slice(&cfg->admin_api_key, admin_api_key_repr)) {
-            log(STD_LOG_STREAM, log_error, INTRO "admin_api_key: invalid UUIDV4: %*s\n", slice_leni(admin_api_key_repr), admin_api_key_repr.val);
-        }
-    }
     if (json_object_object_get_ex(obj_cfg, "log_file", &obj)) {
         slice_t lfn;
         if (!json_object_get_string_strict(obj, &lfn)) {
@@ -173,9 +160,6 @@ cfg_t *cfg_from_file(char const *filename) {
 
 void cfg_dump(cfg_t const *cfg) {
     puts("CONFIGURATION");
-    printf("admin_api_key   ");
-    uuid4_put(cfg->admin_api_key, stdout);
-    putchar('\n');
     printf("backlog         %d\n", cfg->backlog);
     printf("block_for       %d seconds\n", cfg->block_for);
     printf("log_file        %s\n", COALESCE(cfg->log_file_name, "-"));
@@ -208,7 +192,6 @@ void cfg_log_putc(cfg_t *cfg, char c) {
         return cfg->attr;                \
     }
 
-DEFINE_CONFIG_GETTER(uuid4_t, admin_api_key)
 DEFINE_CONFIG_GETTER(size_t, max_msg_length)
 DEFINE_CONFIG_GETTER(int, page_inbox)
 DEFINE_CONFIG_GETTER(int, page_outbox)

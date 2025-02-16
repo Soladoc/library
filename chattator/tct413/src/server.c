@@ -13,11 +13,15 @@ struct server {
         token_t key;
         serial_t value;
     } *sessions;
+    api_key_t admin_api_key;
+    char const *admin_password;
 };
 
-server_t *server_create(void) {
+server_t *server_create(api_key_t admin_api_key, char const *admin_password) {
     server_t *server = calloc(1, sizeof *server);
     hmdefault(server->sessions, -1);
+    server->admin_api_key = admin_api_key;
+    server->admin_password = admin_password;
     return server;
 }
 
@@ -46,4 +50,15 @@ bool server_logout(server_t *server, token_t token) {
 
 serial_t server_verify_token(server_t *server, token_t token) {
     return hmget(server->sessions, token); // the default value is -1
+}
+
+
+bool server_is_admin_api_key(server_t *server, api_key_t api_key)
+{
+    return uuid4_eq(server->admin_api_key, api_key);
+}
+
+bool server_check_admin_password(server_t *server, char const *password)
+{
+    return streq(server->admin_password, password);
 }

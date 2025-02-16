@@ -130,8 +130,14 @@ int main(int argc, char **argv) {
             require_env(cfg, "DB_USER"),
             require_env(cfg, "DB_ROOT_PASSWORD"));
         if (!db) return EX_NODB;
+        
+        api_key_t admin_api_key;
+        if (!uuid4_parse(&admin_api_key, require_env(cfg, "ADMIN_API_KEY"))) {
+            cfg_log(cfg, log_error, "invalid ADMIN_API_KEY\n");
+            return EX_USAGE;
+        }
 
-        server_t *server = server_create();
+        server_t *server = server_create(admin_api_key, require_env(cfg, "ADMIN_PASSWORD"));
 
         result = interactive
             ? tchatator413_run_interactive(cfg, db, server, argc, argv)

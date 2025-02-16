@@ -23,8 +23,10 @@ typedef struct {
 typedef struct server server_t;
 
 /// @brief Creates a new server instance.
+/// @param admin_api_key The admin API key.
+/// @param admin_password The admin password.
 /// @return A new server instance.
-server_t *server_create(void);
+server_t *server_create(api_key_t admin_api_key, char const *admin_password);
 
 /// @brief Destroys the specified server instance.
 /// @param server The server instance to destroy.
@@ -36,6 +38,20 @@ void server_destroy(server_t *server);
 /// @return The new session token.
 /// @return @c 0 if the the session could not be created. This happens if the same user tries logs in twice in the same second.
 token_t server_login(server_t *server, serial_t user_id);
+
+/// @brief Checks if an API key is the admin API key.
+/// @param server The server.
+/// @param api_key The API key to check.
+/// @return @c true if @p api_key is the admin API key.
+/// @return @c false otherwise.
+bool server_is_admin_api_key(server_t *server, api_key_t api_key);
+
+/// @brief Check a password against the admin password.
+/// @param server The server.
+/// @param password The password to check. 
+/// @return @c true if the provided password matches the admin password.
+/// @return @c false otherwise.
+bool server_check_admin_password(server_t *server, char const *password);
 
 /// @brief Deletes a session, logging out an user
 /// @param server The server.

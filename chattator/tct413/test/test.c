@@ -25,7 +25,7 @@ int main(void) {
     db_t *db = db_connect(cfg, 0, DB_HOST, PGDB_PORT, DB_NAME, DB_USER, DB_ROOT_PASSWORD);
     if (!db) return EX_NODB;
 
-    server_t *server = server_create();
+    server_t *server = server_create(API_KEY_TEST_ADMIN_UUID, API_KEY_TEST_ADMIN_PASSWORD);
 
 #define test(new_test)                \
     do {                              \

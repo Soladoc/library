@@ -4,7 +4,6 @@
 /// @date 23/01/2025
 
 #include "tchatator413/cfg.h"
-#include "tchatator413/const.h"
 #include <assert.h>
 #include <bcrypt/bcrypt.h>
 #include <byteswap.h>
@@ -250,10 +249,6 @@ static inline bool check_password(char const *password, char const *hash) {
 }
 
 errstatus_t db_check_password(db_t *db, cfg_t *cfg, serial_t user_id, char const *password) {
-    if (!user_id) {
-        return check_password(password, ADMIN_PASSWORD_HASH);
-    }
-
     uint32_t const arg1 = pq_send_l(user_id);
     char const *const args[] = { (char const *)&arg1 };
     int const args_len[array_len(args)] = { sizeof arg1 };
