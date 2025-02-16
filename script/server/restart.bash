@@ -13,5 +13,5 @@ sudo git reset --hard origin/main
 sudo git submodule init
 sudo git submodule update --remote --merge
 
-docker compose down
-docker compose up -d
+sudo docker compose down
+sudo docker compose up -d
