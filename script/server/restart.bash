@@ -15,7 +15,5 @@ sudo git reset --hard origin/main
 sudo git submodule init
 sudo git submodule update --remote --merge
 
-cd ..
-
-docker compose -f data/docker-compose.yml down
-docker compose -f data/docker-compose.yml up -d
+docker compose down
+docker compose up -d
