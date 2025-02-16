@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-#1 Filename of the script to run with root permisions
+# $1 filename of the script to run with root permisions
 
 set -xeuo pipefail
 

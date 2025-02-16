@@ -2,16 +2,11 @@
 
 # $1: env file contents
 
-set -xeu
-
+set -eua
 cd /docker/sae
-echo "$1" > .env
-set -a
 #shellcheck source=/dev/null
 . .env
 set +a
-
-env | cut -d'=' -f1
 
 docker compose -f data/docker-compose.yml down
 docker compose -f data/docker-compose.yml up -d
