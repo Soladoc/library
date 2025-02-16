@@ -2,7 +2,7 @@
 
 #1 Filename of the script to run with root permisions
 
-set -euo pipefail
+set -xeuo pipefail
 
 mkdir -p ~/.ssh
 echo "$ARTIFACT_SSH_KEY" >~/.ssh/id_rsa
