@@ -85,6 +85,8 @@ db_t *db_connect(cfg_t *cfg, int verbosity, char const *host, char const *port, 
     }
 
     cfg_log(cfg, log_info, "connected to db '%s' on %s:%s as %s\n", database, host, port, username);
+
+    return db;
 }
 
 void db_destroy(db_t *db) {
