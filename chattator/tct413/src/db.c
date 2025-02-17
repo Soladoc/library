@@ -84,19 +84,7 @@ db_t *db_connect(cfg_t *cfg, int verbosity, char const *host, char const *port, 
         return NULL;
     }
 
-    if (cfg_log(cfg, log_info, "connected to db '%s' on %s:%s as %s, password ", database, host, port, username)) {
-        size_t const len = strlen(password);
-        for (size_t i = 0; i < len; i++) {
-            if (i < len - 2) {
-                cfg_log_putc(cfg, '*');
-            } else {
-                cfg_log_putc(cfg, password[i]);
-            }
-        }
-        cfg_log_putc(cfg, '\n');
-    }
-
-    return db;
+    cfg_log(cfg, log_info, "connected to db '%s' on %s:%s as %s\n", database, host, port, username);
 }
 
 void db_destroy(db_t *db) {
