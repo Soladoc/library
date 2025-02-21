@@ -8,7 +8,7 @@
 <body>
     <section class="Preanbule">
 
-        <p>
+        <p> 
             Bonjour Benoit, j'ai vu ta détresse et je suis déterminé a te donner le repos que tu mérite!
             Ici rien n'est atroce, c'est juste une page html sans php, sans js et sans css. En bref c'est un havre de paix 
             simple, qui te détendra.
