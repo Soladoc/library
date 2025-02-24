@@ -23,6 +23,15 @@ function connect(): PDO
     // Connect to the database
     $driver = 'pgsql';
 
+    /// Load .env
+    $env   = file_get_contents(__DIR__ . '/../.env');
+    $lines = explode("\n", $env);
+
+    foreach ($lines as $line) {
+        preg_match('/([^#]+)\=(.*)/', $line, $matches);
+        if (isset($matches[2])) { putenv(trim($line)); }
+    }
+
     // dotenv variables
     $host     = notfalse(getenv('DB_HOST'), 'DB_HOST unset');
     $port     = notfalse(getenv('PGDB_PORT'), 'PGDB_PORT unset');
