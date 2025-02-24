@@ -1,6 +1,5 @@
 *.env
 bin
 *.o
-#info.php
-db.php
+#info.php*
 .vscode
