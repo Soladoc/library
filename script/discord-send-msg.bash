@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-# Send a discord message
+# Send a discord message.
 # $1: Message content
 
 # Env:
