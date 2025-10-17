@@ -38,7 +38,7 @@ create table _livre (
         constraint livre_pk primary key,        -- identifiant auto-généré
     titre varchar(255) not null,                -- titre du livre (obligatoire)
     auteurs varchar(255) not null,              -- un ou plusieurs auteurs (obligatoire)
-    id_image int
+    id_image int unique
         constraint livre_fk_image references _image,  -- image optionnelle
     note numeric(2,1) check (note >= 0 and note <= 10), -- note sur 10 (optionnelle)
     numero_compte int
