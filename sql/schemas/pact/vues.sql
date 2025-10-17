@@ -4,7 +4,8 @@ set schema 'bibliotheque';
 create or replace view v_compte as
 select
     numero_compte,
-    email
+    email,
+    mdp_hash
 from _compte;
 
 comment on view v_compte is
