@@ -1,4 +1,4 @@
-set schema 'pact';
+set schema 'bibliotheque';
 
 with
     id_adresse as (
