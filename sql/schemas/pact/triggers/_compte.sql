@@ -22,7 +22,7 @@ begin
     );
 
     -- Nom du fichier : par exemple /sauvegardes/compte_<num>.sql
-    fichier := format('/var/lib/postgresql/sauvegardes/compte_%s.sql', new.numero_compte);
+    fichier := format('/library/sql/instances/main/pact/compte_%s.sql', new.numero_compte);
 
     -- Écrit dans le fichier
     execute format(
@@ -64,7 +64,7 @@ begin
     );
 
     -- Nom du fichier correspondant
-    fichier := format('/var/lib/postgresql/sauvegardes/compte_%s.sql', old.numero_compte);
+    fichier := format('/library/sql/instances/main/pact/compte_%s.sql', old.numero_compte);
 
     -- Réécrit le fichier avec la version mise à jour
     execute format(
@@ -101,7 +101,7 @@ begin
     where numero_compte = old.numero_compte;
 
     -- Détermine le chemin du fichier de sauvegarde
-    fichier := format('/var/lib/postgresql/sauvegardes/compte_%s.sql', old.numero_compte);
+    fichier := format('/library/sql/instances/main/pact/compte_%s.sql', old.numero_compte);
 
     -- Supprime le fichier associé au compte
     execute format($$COPY (select pg_stat_file(%L)) TO '/dev/null';$$, fichier);

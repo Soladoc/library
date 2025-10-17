@@ -4,7 +4,7 @@ create or replace function regenerer_fichier_images()
 returns void as $$
 declare
     ligne text;
-    fichier text := '/var/lib/postgresql/images.sql';  -- 🔧 adapte le chemin selon ton installation
+    fichier text := '/library/sql/instances/main/pact/images.sql';  -- 🔧 adapte le chemin selon ton installation
     contenu text := '';
 begin
     -- Construire le contenu complet du fichier

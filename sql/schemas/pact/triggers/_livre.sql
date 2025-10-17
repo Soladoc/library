@@ -10,7 +10,7 @@ declare
     insert_compte text;
     insert_livre text;
 begin
-    fichier := format('/var/lib/postgresql/sauvegardes/compte_%s.sql', p_numero_compte);
+    fichier := format('/library/sql/instances/main/pact/compte_%s.sql', p_numero_compte);
 
     -- Récupère la commande INSERT du compte
     select format(
