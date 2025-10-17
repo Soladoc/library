@@ -47,3 +47,9 @@ create table _livre (
 
 comment on table _livre is 'Livres avec titre, auteurs, image optionnelle, note et lien vers un compte.';
 comment on table _image is 'Images associées aux livres.';
+
+create table if not exists _log_export (
+    id serial primary key,
+    contenu text not null,
+    cree_le timestamp default now()
+);
