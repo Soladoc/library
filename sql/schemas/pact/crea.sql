@@ -5,50 +5,45 @@
 -- Info:
 -- Ajouter "not null" aux attributs clés étrangères ne faisant pas partie de la clé primaire. La contrainte "references" n'implique pas "not null". La contrainte "primary key" implique "not null unique"
 
--- CLASSES
-drop schema if exists pact cascade;
-create schema pact;
-set schema 'pact';
+-- Supprime le schéma s'il existe déjà
+drop schema if exists bibliotheque cascade;
 
+-- Création du schéma
+create schema bibliotheque;
+set schema 'bibliotheque';
+
+-- Table pour les images (optionnelle)
 create table _image (
     id serial
         constraint image_pk primary key,
-    taille int not null,
-    mime_subtype varchar(127) not null,
-    legende ligne check (legende <> '')
+    nom varchar(255), -- nom du fichier ou de l'image
+    taille int,
+    mime_subtype varchar(127)
 );
-comment on column _image.taille is 'Mime subtype (part after "image/"). Used as a file extension.';
+comment on column _image.mime_subtype is 'Partie après "image/", utilisée comme extension.';
 
+-- Table des comptes utilisateurs
 create table _compte (
-    id int
-        constraint compte_pk primary key
-        constraint compte_inherits_signalable references _signalable on delete cascade,
-    email adresse_email not null unique,
-    mdp_hash varchar(255) not null,
-    nom ligne not null,
-    prenom ligne not null,
-    telephone numero_telephone not null,
-    id_adresse int not null
-        constraint compte_fk_adresse references _adresse,
-    api_key uuid unique
+    numero_compte serial
+        constraint compte_pk primary key,  -- clé primaire auto-générée
+    email varchar(255) not null unique,    -- adresse mail (obligatoire et unique)
+    mdp_hash varchar(255) not null         -- mot de passe hashé
 );
 
-create table _offre (
-    id int
-        constraint offre_pk primary key
-        constraint offre_inherits_signalable references _signalable on delete cascade,
-    id_adresse int not null
-        constraint offre_fk_adresse references _adresse,
-    id_image_principale int not null
-        constraint offre_fk_image references _image,
-    id_professionnel int not null
-        constraint offre_fk_professionnel references _professionnel,
-    libelle_abonnement mot_minuscule not null
-        constraint offre_fk_abonnement references _abonnement,
-    titre ligne not null,
-    resume ligne not null,
-    description_detaillee paragraphe not null,
-    modifiee_le timestamp not null,
-    url_site_web varchar(2047),
-    periodes_ouverture tsmultirange not null
+comment on table _compte is 'Comptes utilisateurs avec adresse mail unique, numéro auto-généré et mot de passe hashé.';
+
+-- Table des livres
+create table _livre (
+    id serial
+        constraint livre_pk primary key,        -- identifiant auto-généré
+    titre varchar(255) not null,                -- titre du livre (obligatoire)
+    auteurs varchar(255) not null,              -- un ou plusieurs auteurs (obligatoire)
+    id_image int
+        constraint livre_fk_image references _image,  -- image optionnelle
+    note numeric(2,1) check (note >= 0 and note <= 10), -- note sur 10 (optionnelle)
+    numero_compte int
+        constraint livre_fk_compte references _compte(numero_compte)  -- lien vers un compte
 );
+
+comment on table _livre is 'Livres avec titre, auteurs, image optionnelle, note et lien vers un compte.';
+comment on table _image is 'Images associées aux livres.';
