@@ -1,4 +1,4 @@
-set schema 'pact';
+set schema 'bibliotheque';
 
 set plpgsql.extra_errors to 'all';
 

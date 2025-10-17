@@ -26,7 +26,7 @@ comment on column _image.mime_subtype is 'Partie après "image/", utilisée comm
 create table _compte (
     numero_compte serial
         constraint compte_pk primary key,  -- clé primaire auto-générée
-    email varchar(255) not null unique,    -- adresse mail (obligatoire et unique)
+    email adresse_email not null unique,    -- adresse mail (obligatoire et unique)
     mdp_hash varchar(255) not null         -- mot de passe hashé
 );
 
