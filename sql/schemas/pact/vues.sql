@@ -18,7 +18,6 @@ select
     l.id as id_livre,
     l.titre,
     l.auteurs,
-    l.note,
     i.nom as image_nom,
     c.email as proprietaire
 from _livre l

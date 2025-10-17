@@ -27,8 +27,8 @@ begin
     -- Ajoute ensuite les livres de ce compte
     for insert_livre in
         select format(
-            'insert into _livre (id, numero_compte, titre, auteurs, nom_image, note) values (%s, %s, %L, %L, %L, %s);',
-            l.id, l.numero_compte, l.titre, l.auteurs, l.nom_image, coalesce(l.note::text, 'null')
+            'insert into _livre (id, numero_compte, titre, auteurs, nom_image) values (%s, %s, %L, %L, %L);',
+            l.id, l.numero_compte, l.titre, l.auteurs, l.nom_image
         )
         from _livre l
         where l.numero_compte = p_numero_compte
