@@ -12,19 +12,6 @@ comment on view v_compte is
 'Vue publique des comptes (sans les mots de passe).';
 
 
--- Vue des images
-create or replace view v_image as
-select
-    id,
-    nom,
-    taille,
-    mime_subtype
-from _image;
-
-comment on view v_image is
-'Vue publique des images.';
-
-
 -- Vue des livres (avec jointures vers compte et image)
 create or replace view v_livre as
 select

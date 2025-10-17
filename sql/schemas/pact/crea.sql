@@ -16,8 +16,6 @@ set schema 'bibliotheque';
 create table _image (
     id serial
         constraint image_pk primary key,
-    nom varchar(255), -- nom du fichier ou de l'image
-    taille int,
     mime_subtype varchar(127)
 );
 comment on column _image.mime_subtype is 'Partie après "image/", utilisée comme extension.';

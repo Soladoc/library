@@ -42,10 +42,18 @@ $$ language plpgsql;
 -- Créé un livre et modifie le fichier du compte correspondant
 create or replace function v_livre_insert()
 returns trigger as $$
+declare
+    new_image_id int;
 begin
-    -- Insère le livre dans la table réelle
-    insert into _livre (numero_compte, titre, auteurs, nom_image, note)
-    values (new.numero_compte, new.titre, new.auteurs, new.nom_image, new.note)
+    -- Si une image est précisée, l'ajouter dans _image
+    if new.nom_image is not null then
+        insert into _image (mime_subtype) values (new.nom_image)
+        returning id into new_image_id;
+    end if;
+
+    -- Insère le livre avec le lien vers l'image
+    insert into _livre (numero_compte, titre, auteurs, nom_image, note, id_image)
+    values (new.numero_compte, new.titre, new.auteurs, new.nom_image, new.note, new_image_id)
     returning id into new.id;
 
     -- Régénère le fichier du compte
@@ -60,24 +68,40 @@ instead of insert on v_livre
 for each row
 execute function v_livre_insert();
 
-comment on function v_livre_insert() is
-'Insère un livre dans la table _livre et régénère le fichier du compte correspondant.';
-
 -- Modifie un livre et modifie le fichier du compte correspondant
 create or replace function v_livre_update()
 returns trigger as $$
+declare
+    new_image_id int;
 begin
-    -- Interdire tout changement de compte
+    -- Interdire le changement de compte
     if old.numero_compte <> new.numero_compte then
         raise exception 'Un livre ne peut pas changer de compte.';
     end if;
 
-    -- Mise à jour des autres champs
+    -- Si le nom de l'image change, supprimer l'ancienne et insérer la nouvelle
+    if new.nom_image is distinct from old.nom_image then
+        -- Supprime l’ancienne image si elle existait
+        if old.id_image is not null then
+            delete from _image where id = old.id_image;
+        end if;
+
+        -- Insère la nouvelle image si spécifiée
+        if new.nom_image is not null then
+            insert into _image (mime_subtype) values (new.nom_image)
+            returning id into new_image_id;
+        end if;
+    else
+        new_image_id := old.id_image;
+    end if;
+
+    -- Met à jour les infos du livre
     update _livre
     set titre = new.titre,
         auteurs = new.auteurs,
         nom_image = new.nom_image,
-        note = new.note
+        note = new.note,
+        id_image = new_image_id
     where id = old.id;
 
     -- Régénère le fichier du compte
@@ -91,10 +115,6 @@ create or replace trigger tg_v_livre_update
 instead of update on v_livre
 for each row
 execute function v_livre_update();
-
-comment on function v_livre_update() is
-'Met à jour les informations d''un livre via la vue v_livre. 
-Empêche tout changement de compte et régénère le fichier du compte.';
 
 -- =============================
 --  Fonction Trigger pour _livre
