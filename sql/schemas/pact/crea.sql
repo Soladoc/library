@@ -36,7 +36,6 @@ create table _livre (
     id serial
         constraint livre_pk primary key,        -- identifiant auto-généré
     titre varchar(255) not null,                -- titre du livre (obligatoire)
-    auteurs varchar(255) not null,              -- un ou plusieurs auteurs (obligatoire)
     nom_image int unique
         constraint livre_fk_image references _image(id),  -- image optionnelle
     numero_compte int
@@ -76,3 +75,26 @@ comment on column _avis.note_ecriture is 'Sous-note sur la qualité de l''écrit
 comment on column _avis.note_intrigue is 'Sous-note sur la qualité de l''intrigue (0 à 5).';
 comment on column _avis.note_personnages is 'Sous-note sur la profondeur des personnages (0 à 5).';
 comment on column _avis.id_livre is 'Référence unique vers le livre concerné.';
+
+create table _auteur (
+    id serial primary key,
+    prenom varchar(127) not null,
+    nom varchar(127) not null,
+    constraint auteur_unique unique (prenom, nom)
+);
+
+comment on table _auteur is 'Auteurs avec prénom et nom. La combinaison prénom+nom est unique.';
+comment on column _auteur.prenom is 'Prénom de l''auteur.';
+comment on column _auteur.nom is 'Nom de l''auteur.';
+
+create table _livre_auteur (
+    id_livre int not null
+        constraint livre_auteur_fk_livre references _livre(id)
+        on delete cascade,
+    id_auteur int not null
+        constraint livre_auteur_fk_auteur references _auteur(id)
+        on delete cascade,
+    primary key (id_livre, id_auteur)
+);
+
+comment on table _livre_auteur is 'Liaison entre livres et auteurs : un livre peut avoir plusieurs auteurs et un auteur peut avoir écrit plusieurs livres.';

@@ -1,6 +1,5 @@
 set schema 'bibliotheque';
 
--- Vue des comptes (sans mot de passe)
 create or replace view v_compte as
 select
     numero_compte,
@@ -9,23 +8,19 @@ select
 from _compte;
 
 comment on view v_compte is
-'Vue publique des comptes (sans les mots de passe).';
+'Vue publique des comptes.';
 
-
--- Vue des livres (avec jointures vers compte et image)
-create or replace view v_livre as
+create or replace view v_livre_complet as
 select
-    l.id as id_livre,
+    l.id,
     l.titre,
-    l.auteurs,
-    i.nom as image_nom,
-    c.email as proprietaire
+    string_agg(a.prenom || ' ' || a.nom, ', ') as auteurs,
+    l.nom_image,
+    l.numero_compte
 from _livre l
-left join _image i on l.id_image = i.id
-left join _compte c on l.numero_compte = c.numero_compte;
-
-comment on view v_livre is
-'Vue publique des livres avec titre, auteurs, note, image et propriétaire (email du compte).';
+join _livre_auteur la on la.id_livre = l.id
+join _auteur a on a.id = la.id_auteur
+group by l.id, l.titre, l.nom_image, l.numero_compte;
 
 create or replace view v_avis as
 select
