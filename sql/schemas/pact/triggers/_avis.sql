@@ -1,4 +1,4 @@
-set schema 'bibliotheque';
+set schema 'pact';
 
 set
     plpgsql.extra_errors to 'all';
@@ -113,89 +113,28 @@ begin
 end;
 $$ language plpgsql;
 
--- =========================================
--- Fonction d'insertion dans la vue v_compte
--- =========================================
-create or replace function v_compte_insert()
-returns trigger as $$
-declare
-    v_numero int;
+-- Update
+create function avis_update () returns trigger as $$
 begin
-    -- Insertion du compte dans la table _compte
-    insert into _compte (email, mdp_hash)
-    values (new.email, new.mdp_hash)
-    returning numero_compte into v_numero;
-
-    -- Appel de la fonction de génération du fichier
-    perform regenerer_fichier_compte(v_numero);
-
-    -- Retourne la ligne complète (y compris le numéro auto-généré)
-    new.numero_compte := v_numero;
-    return new;
-end;
-$$ language plpgsql;
-
--- =========================================
--- Trigger sur la vue v_compte
--- =========================================
-create or replace trigger tg_v_compte_insert
-instead of insert on v_compte
-for each row
-execute function v_compte_insert();
-
--- =========================================
--- Fonction de mise à jour sur la vue v_compte
--- =========================================
-create or replace function v_compte_update()
-returns trigger as $$
-begin
-    -- Interdiction de modifier l'email ou le numéro
-    if old.email <> new.email or old.numero_compte <> new.numero_compte then
-        raise exception 'Seul le mot de passe peut être modifié dans un compte.';
+    if old.id_offre <> new.id_offre then
+        raise 'Ne peut pas modifier id_offre';
     end if;
-
-    -- Mise à jour du mot de passe dans la table réelle
-    update _compte
-    set mdp_hash = new.mdp_hash
-    where numero_compte = old.numero_compte;
-
-    -- Régénération du fichier du compte après modification
-    perform regenerer_fichier_compte(old.numero_compte);
-
+    new = update_avis(old, new);
     return new;
-end;
+end
 $$ language plpgsql;
 
--- =========================================
--- Trigger sur la vue v_compte
--- =========================================
-create or replace trigger tg_v_compte_update
-instead of update on v_compte
-for each row
-execute function v_compte_update();
+create trigger tg_avis_update instead of update on avis for each row
+execute function avis_update ();
 
--- =========================================
--- Fonction de suppression sur la vue v_compte
--- =========================================
-create or replace function v_compte_delete()
-returns trigger as $$
+-- Delete
+
+create function avis_delete () returns trigger as $$
 begin
-    -- Suppression du compte
-    delete from _compte
-    where numero_compte = old.numero_compte;
-
-    -- Régénération du fichier (pour supprimer les livres/avis associés)
-    perform regenerer_fichier_compte(old.numero_compte);
-
+    delete from _signalable where id = old.id;
     return old;
-end;
+end
 $$ language plpgsql;
 
--- =========================================
--- Trigger sur la vue v_compte
--- =========================================
-create or replace trigger tg_v_compte_delete
-instead of delete on v_compte
-for each row
-execute function v_compte_delete();
-
+create trigger tg_avis_delete instead of delete on avis for each row
+execute function avis_delete ();

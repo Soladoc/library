@@ -26,3 +26,17 @@ left join _compte c on l.numero_compte = c.numero_compte;
 
 comment on view v_livre is
 'Vue publique des livres avec titre, auteurs, note, image et propriétaire (email du compte).';
+
+create or replace view v_avis as
+select
+    a.id,
+    a.titre_avis,
+    a.commentaire,
+    a.note,
+    a.note_ecriture,
+    a.note_intrigue,
+    a.note_personnages,
+    a.id_livre,
+    l.titre as titre_livre
+from _avis a
+join _livre l on l.id = a.id_livre;
