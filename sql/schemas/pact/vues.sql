@@ -35,3 +35,7 @@ select
     l.titre as titre_livre
 from _avis a
 join _livre l on l.id = a.id_livre;
+
+create or replace view v_auteur as
+select id, prenom, nom
+from _auteur;
