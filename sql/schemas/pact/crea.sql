@@ -18,8 +18,7 @@ create table _image (
         constraint image_pk primary key,
     mime_subtype varchar(127)
 );
-comment on column _image.mime_subtype is 'Partie après "image/", utilisée comme extension.';
-comment on table _image is 'Images associées aux livres.';
+comment on table _image is 'Images associées aux livres. L''image sera enregistrée en tant que id.mime_subtype dans le système de fichiers.';
 
 -- Table des comptes utilisateurs
 create table _compte (
@@ -98,3 +97,22 @@ create table _livre_auteur (
 );
 
 comment on table _livre_auteur is 'Liaison entre livres et auteurs : un livre peut avoir plusieurs auteurs et un auteur peut avoir écrit plusieurs livres.';
+
+create table _genre (
+    id serial
+        constraint genre_pk primary key,
+    nom varchar(255) not null unique
+);
+
+comment on table _genre is 'Genres de livres, chaque nom est unique.';
+comment on column _genre.nom is 'Nom du genre, unique.';
+
+create table _livre_genre (
+    id_livre int not null
+        constraint livre_genre_fk_livre references _livre(id) on delete cascade,
+    id_genre int not null
+        constraint livre_genre_fk_genre references _genre(id) on delete cascade,
+    primary key (id_livre, id_genre)
+);
+
+comment on table _livre_genre is 'Liaison entre livres et genres : un livre peut avoir plusieurs genres, et un genre plusieurs livres.';

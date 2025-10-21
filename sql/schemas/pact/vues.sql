@@ -14,12 +14,15 @@ create or replace view v_livre_complet as
 select
     l.id,
     l.titre,
-    string_agg(a.prenom || ' ' || a.nom, ', ') as auteurs,
+    string_agg(distinct a.prenom || ' ' || a.nom, ', ') as auteurs,
+    string_agg(distinct g.nom, ', ') as genres,
     l.nom_image,
     l.numero_compte
 from _livre l
-join _livre_auteur la on la.id_livre = l.id
-join _auteur a on a.id = la.id_auteur
+left join _livre_auteur la on la.id_livre = l.id
+left join _auteur a on a.id = la.id_auteur
+left join _livre_genre lg on lg.id_livre = l.id
+left join _genre g on g.id = lg.id_genre
 group by l.id, l.titre, l.nom_image, l.numero_compte;
 
 create or replace view v_avis as

@@ -10,29 +10,33 @@ declare
     v_contenu text := '';
     r_auteur record;
 begin
+    -- En-tête du fichier
     v_contenu := '-- =====================================' || E'\n';
-    v_contenu := v_contenu || '--  Tous les auteurs' || E'\n';
+    v_contenu := v_contenu || '--  Sauvegarde complète des auteurs' || E'\n';
     v_contenu := v_contenu || '-- =====================================' || E'\n\n';
 
+    -- Génération des instructions INSERT avec ID explicite
     for r_auteur in
-        select prenom, nom
+        select id, prenom, nom
         from _auteur
         order by id
     loop
         v_contenu := v_contenu || format(
-            'insert into _auteur (prenom, nom) values (%L, %L);' || E'\n',
+            'insert into _auteur (id, prenom, nom) values (%s, %L, %L);' || E'\n',
+            r_auteur.id,
             r_auteur.prenom,
             r_auteur.nom
         );
     end loop;
 
+    -- Écriture dans le fichier
     perform pg_catalog.pg_file_write(v_path, v_contenu, false);
 
     raise notice 'Fichier auteurs généré : %', v_path;
 end;
 $$ language plpgsql;
 
-create or replace function v_auteur_insert()
+create or replace function auteur_insert()
 returns trigger as $$
 begin
     insert into _auteur (prenom, nom)
@@ -46,7 +50,7 @@ begin
 end;
 $$ language plpgsql;
 
-create or replace function v_auteur_update()
+create or replace function auteur_update()
 returns trigger as $$
 begin
     update _auteur
@@ -61,7 +65,7 @@ begin
 end;
 $$ language plpgsql;
 
-create or replace function v_auteur_delete()
+create or replace function auteur_delete()
 returns trigger as $$
 begin
     delete from _auteur
@@ -75,19 +79,19 @@ end;
 $$ language plpgsql;
 
 -- Trigger pour INSERT
-create trigger tg_v_auteur_insert
-instead of insert on v_auteur
+create trigger tg_auteur_insert
+instead of insert on _auteur
 for each row
-execute function v_auteur_insert();
+execute function auteur_insert();
 
 -- Trigger pour UPDATE
-create trigger tg_v_auteur_update
-instead of update on v_auteur
+create trigger tg_auteur_update
+instead of update on _auteur
 for each row
-execute function v_auteur_update();
+execute function auteur_update();
 
 -- Trigger pour DELETE
-create trigger tg_v_auteur_delete
-instead of delete on v_auteur
+create trigger tg_auteur_delete
+instead of delete on _auteur
 for each row
-execute function v_auteur_delete();
+execute function auteur_delete();
