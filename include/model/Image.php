@@ -18,31 +18,25 @@ final class Image extends Model
     protected static function fields()
     {
         return [
-            'taille'       => [null, 'taille',       PDO::PARAM_INT],
             'mime_subtype' => [null, 'mime_subtype', PDO::PARAM_STR],
-            'legende'      => [null, 'legende',      PDO::PARAM_STR],
         ];
     }
 
     function __construct(
         protected ?int $id,
-        public int $taille,
         public string $mime_subtype,
-        public ?string $legende,
         private ?string $tmp_name = null,  // Not even a field - used internally
     ) {}
 
     static function from_db(int $id_image): self|false
     {
-        $stmt = notfalse(DB\connect()->prepare('select taille, mime_subtype, legende from ' . self::TABLE . ' where id = ?'));
+        $stmt = notfalse(DB\connect()->prepare('select mime_subtype from ' . self::TABLE . ' where id = ?'));
         DB\bind_values($stmt, [1 => [$id_image, PDO::PARAM_INT]]);
         notfalse($stmt->execute());
         $row = $stmt->fetch();
         return $row === false ? false : new self(
             $id_image,
-            $row['taille'],
-            $row['mime_subtype'],
-            $row['legende'],
+            $row['mime_subtype']
         );
     }
 
