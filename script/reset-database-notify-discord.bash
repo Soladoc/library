@@ -63,10 +63,10 @@ readonly failure_jokes=(
     '> faut dormir'
     '> this is fine'
     '> allo allo la terre appelle'
-    '> on attend que @Raph repare ça'
+    '> on attend que @Soladoc repare ça'
     '> chui pas venu ici pour souffrir ok'
     "> c'est l'heure de la pause café :coffee:"
-    '> @Marius cherche pas les données sont perdues'
+    '> Cherche pas les données sont perdues'
     '> According to all known laws of aviation, there is no way a bee should be able to fly.'
     '> **Demoman**: "One crossed wire, one wayward pinch of potassium chlorate, one errant twitch... and KABLOOIE!'
     "> j'aurais tendance à penser que si la seule chose qui t'empêche de te jeter d'une falaise c'est le fait que ça ferait du mal à ta famille, c'est que tu as des problèmes de santé mentale"
