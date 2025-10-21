@@ -14,7 +14,7 @@ notfalse(session_start());
 
 function location_home(): string
 {
-    return est_connecte_pro() ? '/autres_pages/accPro.php' : '/autres_pages/accueil.php';
+    return '/autres_pages/connexion.php';
 }
 
 /**
@@ -33,106 +33,42 @@ function se_deconnecter(): never
 
 /**
  * Sommes-nous connectés?
- * @return bool `true` si nous (la session courante) sommes connectés en tant que membre ou professionnel, `false` sinon.
+ * @return bool `true` si nous (la session courante) sommes connectés, `false` sinon.
  */
 function est_connecte(): bool
 {
-    return est_connecte_pro() || est_connecte_membre();
+    return isset($_SESSION['id']);
 }
 
-// Professionnel
-
 /**
- * Marque la session comme connectée à une compte professionnel.
- * @param int $id_pro L'ID du professionnel qui sera désormais connecté sur la session actuelLe.
+ * Marque la session comme connectée à une compte.
+ * @param int $id L'ID du compte qui sera désormais connecté sur la session actuelLe. Correspond à numero_compte dans la bdd.
  * @return void
  */
-function se_connecter_pro(int $id_pro): void
+function se_connecter(int $id): void
 {
-    $_SESSION['id_pro'] = $id_pro;
+    $_SESSION['id'] = $id;
 }
 
 /**
- * Retourne l'ID du membre actuellement connecté, redirigeant vers la page de connexion sinon.
+ * Retourne l'ID du compte actuellement connecté, redirigeant vers la page de connexion sinon.
  * Cette fonction appelle <i>header</i>. Elle doit donc être appelée <b>avant</b> tout envoi de HTML.
- * @return int L'ID du professionnel actuellement connecté.
+ * @return int L'ID du compte actuellement connecté.
  */
-function exiger_connecte_pro(): int
+function exiger_connecte(): int
 {
-    if (($id = id_pro_connecte()) !== null) {
+    if (($id = id_connecte()) !== null) {
         return $id;
     }
-    redirect_to(location_connexion(return_url: $_SERVER['REQUEST_URI'] ?? null));
+    redirect_to('/autres_pages/connexion.php');
     exit;
 }
 
 /**
- * Retourne l'ID du professionnel actuellement connecté.
- * @return ?int L'ID du professionnel actuellement connecté, ou `null` si la session actuelle n'est pas connectée en tant que professionnel.
+ * Retourne l'ID du compte actuellement connecté.
+ * @return ?int L'ID du compte actuellement connecté, ou `null` si la session actuelle n'est pas connectée en tant que professionnel.
  */
-function id_pro_connecte(): ?int
+function id_connecte(): ?int
 {
-    return $_SESSION['id_pro'] ?? null;
-}
-
-/**
- * Retourne l'ID du compte (membre ou professionnel) actuellement connecté.
- * @return ?int L'ID du compte actuellement connecté, ou `null` s la session actuelle n'est pas connectée.
- */
-function id_compte_connecte(): ?int
-{
-    return id_pro_connecte() ?? id_membre_connecte();
-}
-
-/**
- * Sommes-nous connectés en tant que professionnel?
- * @return bool `true` si nous (la session courante) sommes connectés en tant que professionnel, `false` sinon.
- */
-function est_connecte_pro(): bool
-{
-    return isset($_SESSION['id_pro']);
-}
-
-// Membre
-
-/**
- * Marque la session comme connectée à une compte membre.
- * @param int $id_pro L'ID du membre qui sera désormais connecté sur la session actuelLe.
- * @return void
- */
-function se_connecter_membre(int $id_membre): void
-{
-    $_SESSION['id_membre'] = $id_membre;
-}
-
-/**
- * Retourne l'ID du professionnel actuellement connecté, redirigeant vers la page de connexion sinon.
- * Cette fonction appelle <i>header</i>. Elle doit donc être appelée <b>avant</b> tout envoi de HTML.
- * @return int L'ID du membre actuellement connecté.
- */
-function exiger_connecte_membre(): int
-{
-    if (($id = id_membre_connecte()) !== null) {
-        return $id;
-    }
-    redirect_to(location_connexion(return_url: $_SERVER['REQUEST_URI']));
-    exit;
-}
-
-/**
- * Retourne l'ID du membre actuellement connecté.
- * @return ?int L'ID du membre actuellement connecté, ou `null` si la session actuelle n'est pas connectée en tant que professionnel.
- */
-function id_membre_connecte(): ?int
-{
-    return $_SESSION['id_membre'] ?? null;
-}
-
-/**
- * Sommes-nous connectés en tant que membre?
- * @return bool `true` si nous (la session courante) sommes connectés en tant que membre, `false` sinon.
- */
-function est_connecte_membre(): bool
-{
-    return isset($_SESSION['id_membre']);
+    return $_SESSION['id'] ?? null;
 }

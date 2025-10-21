@@ -35,7 +35,7 @@ function location_detail_offre(int $id_offre): string
 }
 
 /**
- * Obtient l'URL de la page de détaille d'offre professionnel.
+ * Obtient l'URL de la page de détail d'offre professionnel.
  * @param int $id_offre L'ID de l'offre détaillée.
  * @return string L'URL de la page de détail d'offre professionnel.
  */
@@ -47,11 +47,6 @@ function location_detail_offre_pro(int $id_offre): string
 function location_creation_offre(): string
 {
     return '/autres_pages/choix_categorie_creation_offre.php';
-}
-
-function location_facturation(?int $id_offre = null): string
-{
-    return '/autres_pages/facturation.php?' . http_build_query(['id_offre' => $id_offre]);
 }
 
 function location_detail_compte(): string
@@ -74,11 +69,6 @@ function location_supprimer_compte(int $id_compte): string
     return '/auto/supprimer_compte.php?' . http_build_query(['id_compte' => $id_compte]);
 }
 
-function location_signaler(int $id_compte, int $id_signalable, string $raison): string
-{
-    return '/auto/signaler.php?' . http_build_query(['id_compte' => $id_compte, 'id_signalable' => $id_signalable, 'raison' => $raison, 'return_url' => $_SERVER['REQUEST_URI']]);
-}
-
 function location_login(): string
 {
     return '/auto/login.php';
@@ -87,21 +77,6 @@ function location_login(): string
 function location_logout(): string
 {
     return '/auto/logout.php';
-}
-
-function location_modifier_avis(int $id_offre, int $id_avis)
-{
-    return '/autres_pages/avis/modifier.php?' . http_build_query(['id_offre' => $id_offre, 'id_avis' => $id_avis]);
-}
-
-function location_repondre_avis(int $id_avis)
-{
-    return '/auto/avis/repondre.php?' . http_build_query(['id_avis' => $id_avis, 'return_url' => $_SERVER['REQUEST_URI']]);
-}
-
-function location_avis_supprimer(int $id_avis, string $return_url)
-{
-    return '/auto/avis/supprimer.php?' . http_build_query(['id_avis' => $id_avis, 'return_url' => $return_url]);
 }
 
 function location_mentions_legales()
