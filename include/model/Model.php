@@ -7,33 +7,35 @@ abstract class Model
      * Table name.
      * @var string
      */
-    const TABLE = null;  // abstract constant
+    const TABLE = null;  // abstract constant, chaque sous-classe doit le définir
 
     /**
-     * Stuff that you can set.
+     * Colonnes pouvant être insérées/mises à jour.
      * column name => [map from PHP attribute value to DB column or `null` for identity, attribute name, PDO param type]
      * @return array<string, array{?callable(mixed): mixed, string, int}>
      */
-    protected static function fields() { return []; }
+    protected static function fields(): array { return []; }
 
     /**
-     * Key fields that uniquely identify a row in the DB table.
+     * Colonnes clé identifiant de manière unique une ligne.
      * column name => [map from DB column to PHP attribute value or null for identity, attribute name, PDO param type]
      * @return array<string, array{?callable(mixed): mixed, string, int}>
      */
-    protected static function key_fields() { return []; }
+    protected static function key_fields(): array { return []; }
 
     /**
-     * Additional fields to set with the insertion RETURNING clause.
+     * Colonnes supplémentaires à récupérer lors d'un RETURNING.
      * column name => [map from DB column to PHP attribute value, attribute name, PDO param type]
-     * @return array<string, array{?callable(mixed): mixed, string, int, }>
+     * @return array<string, array{?callable(mixed): mixed, string, int}>
      */
-    protected static function computed_fields() { return []; }
+    protected static function computed_fields(): array { return []; }
 
     function __get(string $name): mixed
     {
-        if (array_some($this->key_fields(), fn($f) => $f[1] === $name)
-                || array_some($this->computed_fields(), fn($f) => $f[1] === $name)) {
+        if (
+            in_array($name, array_column(static::key_fields(), 1), true) ||
+            in_array($name, array_column(static::computed_fields(), 1), true)
+        ) {
             return $this->$name;
         }
         throw new Exception('Undefined property: ' . static::class . "::\$$name");
@@ -57,7 +59,9 @@ abstract class Model
                 array_keys($returning_fields),
             );
         }
+
         notfalse($stmt->execute());
+
         if ($returning_fields) {
             $row = notfalse($stmt->fetch());
             foreach ($returning_fields as $column => [$db_to_php, $attr, $type]) {
@@ -68,22 +72,22 @@ abstract class Model
 
     function delete(): void
     {
-        if (!$this->exists_in_db()) {
-            return;
-        }
+        if (!$this->exists_in_db()) return;
+
         $stmt = DB\delete_from(
             static::TABLE,
-            $this->key_args(),
+            $this->key_args()
         );
         notfalse($stmt->execute());
-        foreach (array_keys(static::key_fields()) as $attr) {
+
+        foreach (array_column(static::key_fields(), 1) as $attr) {
             $this->$attr = null;
         }
     }
 
     private function exists_in_db(): bool
     {
-        return array_every(array_keys(static::key_fields()), fn($attr) => $this->$attr !== null);
+        return array_every(static::key_fields(), fn($f) => $this->{$f[1]} !== null);
     }
 
     private function key_args(): array
