@@ -53,16 +53,18 @@ begin
 
     -- Sauvegarde des livres et liaisons auteurs/genres
     for r_livre in
-        select l.id, l.titre, l.nom_image
+        select l.id, l.titre, l.nom_image, l.genre_principal, l.cote
         from _livre l
         where l.numero_compte = p_numero
         order by l.id
     loop
-        -- Insert du livre
+        -- Insert du livre avec genre_principal et cote
         v_contenu := v_contenu || format(
-            'insert into _livre (titre, nom_image, numero_compte) values (%L, %s, new_num) returning id into v_livre_id;' || E'\n',
+            'insert into _livre (titre, nom_image, numero_compte, genre_principal, cote) values (%L, %s, new_num, %s, %L) returning id into v_livre_id;' || E'\n',
             r_livre.titre,
-            case when r_livre.nom_image is not null then r_livre.nom_image::text else 'null' end
+            case when r_livre.nom_image is not null then r_livre.nom_image::text else 'null' end,
+            coalesce(r_livre.genre_principal::text,'null'),
+            r_livre.cote
         );
 
         -- Liaisons auteurs
@@ -78,7 +80,7 @@ begin
             );
         end loop;
 
-        -- Liaisons genres
+        -- Liaisons genres secondaires
         for r_genre in
             select g.id
             from _genre g
@@ -160,7 +162,6 @@ begin
 end;
 $$ language plpgsql;
 
--- Créé un livre et modifie le fichier du compte correspondant
 create or replace function v_livre_complet_insert()
 returns trigger as $$
 declare
@@ -172,11 +173,13 @@ begin
         insert into _image (mime_subtype)
         values (new.nom_image)
         returning id into new_image_id;
+    else
+        new_image_id := null;
     end if;
 
-    -- Insère le livre
-    insert into _livre (titre, nom_image, numero_compte)
-    values (new.titre, new.nom_image, new.numero_compte)
+    -- Insère le livre avec genre_principal (et laisse cote générée automatiquement par le trigger)
+    insert into _livre (titre, nom_image, numero_compte, genre_principal)
+    values (new.titre, new_image_id, new.numero_compte, new.genre_principal)
     returning id into v_id_livre;
 
     -- Gère les auteurs
@@ -184,7 +187,7 @@ begin
         perform v_livre_complet_insert_auteurs(v_id_livre, new.auteurs);
     end if;
 
-    -- Gère les genres
+    -- Gère les genres secondaires
     if new.genres is not null then
         perform v_livre_complet_insert_genres(v_id_livre, new.genres);
     end if;
@@ -196,7 +199,6 @@ begin
 end;
 $$ language plpgsql;
 
--- Modifie un livre et modifie le fichier du compte correspondant
 create or replace function v_livre_complet_update()
 returns trigger as $$
 declare
@@ -210,21 +212,24 @@ begin
     -- Si une nouvelle image est fournie, supprimer l’ancienne et insérer la nouvelle
     if new.nom_image is distinct from old.nom_image then
         if old.nom_image is not null then
-            delete from _image where id = (select id from _image where mime_subtype = old.nom_image);
+            delete from _image where id = old.nom_image;
         end if;
         if new.nom_image is not null then
             insert into _image (mime_subtype)
             values (new.nom_image)
             returning id into new_image_id;
+        else
+            new_image_id := null;
         end if;
     else
-        new_image_id := (select id from _image where mime_subtype = new.nom_image);
+        new_image_id := old.nom_image;
     end if;
 
-    -- Met à jour le livre
+    -- Met à jour le livre, y compris genre_principal
     update _livre
     set titre = new.titre,
-        nom_image = new.nom_image
+        nom_image = new_image_id,
+        genre_principal = new.genre_principal
     where id = old.id;
 
     -- Met à jour les auteurs
@@ -233,7 +238,7 @@ begin
         perform v_livre_complet_insert_auteurs(old.id, new.auteurs);
     end if;
 
-    -- Met à jour les genres
+    -- Met à jour les genres secondaires
     delete from _livre_genre where id_livre = old.id;
     if new.genres is not null then
         perform v_livre_complet_insert_genres(old.id, new.genres);
@@ -254,7 +259,7 @@ begin
 
     -- Supprime l'image associée si elle existe
     if old.nom_image is not null then
-        delete from _image where mime_subtype = old.nom_image;
+        delete from _image where id = old.nom_image;
     end if;
 
     -- Sauvegarde du compte

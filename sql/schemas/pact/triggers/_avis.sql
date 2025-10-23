@@ -53,16 +53,18 @@ begin
 
     -- Sauvegarde des livres et liaisons auteurs/genres
     for r_livre in
-        select l.id, l.titre, l.nom_image
+        select l.id, l.titre, l.nom_image, l.genre_principal, l.cote
         from _livre l
         where l.numero_compte = p_numero
         order by l.id
     loop
-        -- Insert du livre
+        -- Insert du livre avec genre_principal et cote
         v_contenu := v_contenu || format(
-            'insert into _livre (titre, nom_image, numero_compte) values (%L, %s, new_num) returning id into v_livre_id;' || E'\n',
+            'insert into _livre (titre, nom_image, numero_compte, genre_principal, cote) values (%L, %s, new_num, %s, %L) returning id into v_livre_id;' || E'\n',
             r_livre.titre,
-            case when r_livre.nom_image is not null then r_livre.nom_image::text else 'null' end
+            case when r_livre.nom_image is not null then r_livre.nom_image::text else 'null' end,
+            coalesce(r_livre.genre_principal::text,'null'),
+            r_livre.cote
         );
 
         -- Liaisons auteurs
@@ -78,7 +80,7 @@ begin
             );
         end loop;
 
-        -- Liaisons genres
+        -- Liaisons genres secondaires
         for r_genre in
             select g.id
             from _genre g
