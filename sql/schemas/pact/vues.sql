@@ -15,7 +15,13 @@ select
     l.id,
     l.titre,
     string_agg(distinct a.prenom || ' ' || a.nom, ', ') as auteurs,
-    string_agg(distinct g.nom, ', ') as genres,
+    -- Genres secondaires (hors principal)
+    string_agg(distinct
+        case when g.id <> l.genre_principal then g.nom end, ', '
+    ) as genres_secondaires,
+    -- Genre principal
+    gp.nom as genre_principal,
+    l.cote,
     l.nom_image,
     l.numero_compte
 from _livre l
@@ -23,7 +29,8 @@ left join _livre_auteur la on la.id_livre = l.id
 left join _auteur a on a.id = la.id_auteur
 left join _livre_genre lg on lg.id_livre = l.id
 left join _genre g on g.id = lg.id_genre
-group by l.id, l.titre, l.nom_image, l.numero_compte;
+left join _genre gp on gp.id = l.genre_principal
+group by l.id, l.titre, l.nom_image, l.numero_compte, gp.nom, l.cote;
 
 create or replace view v_avis as
 select
