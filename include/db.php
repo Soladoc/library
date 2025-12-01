@@ -107,7 +107,7 @@ function is_localhost(): bool
 }
 
 /**
- * Le chemin absolu de du dossier racine du serveur.
+ * Le chemin absolu du dossier racine du serveur.
  * @return string
  */
 function document_root(): string

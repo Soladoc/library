@@ -164,7 +164,7 @@ function getarg(array $source, string $nom, ?callable $filter = null, bool $requ
 }
 
 /**
- * Crée un filtre pour `getarg` qui valide l'argument via prédicat.
+ * Crée un filtre pour `getarg` qui valide l'argument via un prédicat.
  * @param callable(mixed): bool $check Une fonction prédicat.
  * @return callable(string, mixed): mixed Un filtre utilisable par la fonction `getarg`.
  */
@@ -240,7 +240,7 @@ function parse_float(?string $output, ?float $min_range = null): float|null|fals
 }
 
 /**
- * Crée un filtre pour `getarg` qui applique un filtre PHP à l'argument agec la fonction `filter_var`.
+ * Crée un filtre pour `getarg` qui applique un filtre PHP à l'argument avec la fonction `filter_var`.
  * @param int $filter Le filtre à appliquer à l'argument.
  * @param array|int $options Les options du filtre. Voir la documentation PHP pour les valeurs possibles.
  * @return callable(string, mixed): mixed Un filtre utilisable par la fonction `getarg`.
@@ -257,7 +257,7 @@ function arg_filter(int $filter, array|int $options = 0): callable
 }
 
 /**
- * Affiche un message d'erreur HTML et jette une exception.
+ * Affiche un message d'erreur HTML et lance une exception.
  * @param mixed $arg La valeur à inclure avec le message d'erreur. Si c'est une instance de `Throwable`, est est aussi jetée. Sinon, elle est englobée dans une `DomainException` puis jetée.
  * @throws DomainException
  */
@@ -284,7 +284,7 @@ function ifnntaws(?string $chaine, ?string $suffixe): string
 }
 
 /**
- * Retourne une fonction prédicat qui vérifie qu'une chaîne est contenue dans une liste de valeurs autoriséess.
+ * Renvoie une fonction prédicat qui vérifie qu'une chaîne est contenue dans une liste de valeurs autorisées.
  * @param string[] $allowed_values Les valeurs autorisées.
  * @return callable(string): bool Une fonction prédicat validant une chaîne.
  */
@@ -294,7 +294,7 @@ function f_is_in(array $allowed_values): callable
 }
 
 /**
- * Returns a function prédicat qui vérifie qu'un tableau contient toutes les clés spécifiées
+ * Renvoie une fonction prédicat qui vérifie qu'un tableau contient toutes les clés spécifiées
  * @param array $keys Les clés devant être dans le tableau.
  * @return callable(array): bool Un fonction prédicat validant un tableau.
  */
@@ -304,7 +304,7 @@ function f_array_has_keys(array $keys): callable
 }
 
 /**
- * Retourne le seul élément d'un tableau.
+ * Renvoie le seul élément d'un tableau.
  * @template T
  * @param array<T> $array Un tableau devant contenir extactement 1 élément.
  * @return T Le seul élément de $array.
@@ -319,7 +319,7 @@ function single(array $array): mixed
 }
 
 /**
- * Retourne le seul élément d'un tableau, ou une valeur par défaut si le tableau est vide.
+ * Renvoie le seul élément d'un tableau, ou une valeur par défaut si le tableau est vide.
  * @template T
  * @param array<T> $array Un tableau devant contenir 0 ou 1 élément.
  * @param T $default La valeur par défaut à retourner quand $array est vide.

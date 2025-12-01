@@ -25,16 +25,6 @@ function location_connexion(?string $error = null, ?string $return_url = null, ?
 }
 
 /**
- * Obtient l'URL de la page de détail d'offre.
- * @param int $id_offre L'ID de l'offre détaillée.
- * @return string L'URL de la page de détail d'offre.
- */
-function location_detail_offre(int $id_offre): string
-{
-    return '/autres_pages/detail_offre.php?' . http_build_query(['id' => $id_offre]);
-}
-
-/**
  * Obtient l'URL de la page de détail d'offre professionnel.
  * @param int $id_offre L'ID de l'offre détaillée.
  * @return string L'URL de la page de détail d'offre professionnel.
